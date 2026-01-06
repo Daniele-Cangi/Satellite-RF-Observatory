@@ -1,0 +1,34 @@
+
+# Core
+fastapi>=0.100.0
+uvicorn>=0.23.0
+pydantic[email]>=2.0.0
+pydantic-settings>=2.0.0  # Required for BaseSettings in Pydantic V2
+PyYAML>=6.0
+python-dotenv>=1.0.0
+
+# Database
+SQLAlchemy>=2.0.0
+geoalchemy2>=0.14.0
+psycopg2-binary>=2.9.0
+alembic>=1.11.0
+
+# Data Science / SDR
+numpy>=1.24.0
+scipy>=1.10.0
+pandas>=2.0.0
+
+# Optional / External
+# soapysdr  # Usually installed via system package manager, python bindings can be tricky via pip. 
+# If available via pip:
+# soapysdr>=0.8.0
+
+# Utilities
+requests>=2.31.0
+loguru>=0.7.0
+
+# Tracking & Correlation
+redis>=4.5.0
+sgp4>=2.20
+skyfield>=1.45
+aiohttp>=3.8.0

@@ -1,0 +1,193 @@
+# Satellite Intelligence System - .gitignore
+
+# ============================================================================
+# SECURITY: Sensitive Files (NEVER COMMIT)
+# ============================================================================
+
+# Encryption keys
+keys/
+*.key
+*.pem
+*.p12
+collection.key
+
+# Configuration with credentials
+.env
+.env.*
+config.yaml
+config/*.yaml
+*_credentials.json
+
+# IQ Data & Recordings
+*.iq
+*.cf32
+*.wav
+*.bin
+recordings/
+iq_captures/
+/data/
+
+# Analysis Results (may contain classified data)
+analysis.db
+*.db
+*.sqlite
+*.sqlite3
+results/
+intelligence_reports/
+
+# Logs (may leak operational details)
+*.log
+logs/
+
+# ============================================================================
+# Python
+# ============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# ============================================================================
+# IDEs
+# ============================================================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ============================================================================
+# Operating System
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ============================================================================
+# Database & Cache
+# ============================================================================
+
+# SQLite
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Redis
+dump.rdb
+
+# PostgreSQL
+*.sql
+
+# ============================================================================
+# Temporary Files
+# ============================================================================
+
+# Temporary analysis
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# ============================================================================
+# Hardware-specific
+# ============================================================================
+
+# SDR configurations (may reveal hardware capabilities)
+sdr_config_*.json
+
+# Calibration data
+calibration/
+*.cal
+
+# ============================================================================
+# Operational Security
+# ============================================================================
+
+# Location data
+locations.json
+observer_*.json
+
+# TLE cache (may reveal collection targets)
+tle_cache.json
+tle_cache_*.json
+
+# Session data
+sessions/
+*.session
+
+# Export packages
+exports/
+transfer/
+*.tar.gz.gpg
+*.zip.enc
