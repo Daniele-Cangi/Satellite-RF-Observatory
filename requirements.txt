@@ -1,34 +1,60 @@
+# ============================================================================
+# Satellite Intelligence System - Python Dependencies
+# ============================================================================
 
-# Core
-fastapi>=0.100.0
-uvicorn>=0.23.0
-pydantic[email]>=2.0.0
-pydantic-settings>=2.0.0  # Required for BaseSettings in Pydantic V2
-PyYAML>=6.0
-python-dotenv>=1.0.0
+# ----------------------------------------------------------------------------
+# Core (Gray System - Required)
+# ----------------------------------------------------------------------------
+numpy>=1.24.0              # Numerical computing, DSP
+scipy>=1.10.0              # Signal processing (FFT, CFAR)
+sgp4>=2.20                 # Satellite propagation (NORAD TLEs)
+skyfield>=1.45             # High-precision orbital mechanics
+pydantic>=2.0.0            # Configuration validation
+pydantic-settings>=2.0.0   # Settings management
+python-dotenv>=1.0.0       # Environment variable loading
 
-# Database
-SQLAlchemy>=2.0.0
-geoalchemy2>=0.14.0
-psycopg2-binary>=2.9.0
-alembic>=1.11.0
+# ----------------------------------------------------------------------------
+# Database (Offline Analysis)
+# ----------------------------------------------------------------------------
+SQLAlchemy>=2.0.0          # ORM for SQLite results database
 
-# Data Science / SDR
-numpy>=1.24.0
-scipy>=1.10.0
-pandas>=2.0.0
+# ----------------------------------------------------------------------------
+# Network & Async (Optional - Legacy API Mode)
+# ----------------------------------------------------------------------------
+# NOTE: Gray system does NOT use these, but kept for compatibility
+fastapi>=0.100.0           # Web framework (legacy)
+uvicorn>=0.23.0            # ASGI server (legacy)
+aiohttp>=3.8.0             # Async HTTP (TLE fetching)
+redis>=4.5.0               # Cache (legacy)
+psycopg2-binary>=2.9.0     # PostgreSQL driver (legacy)
+geoalchemy2>=0.14.0        # Geospatial support (legacy)
+alembic>=1.11.0            # Database migrations (legacy)
 
-# Optional / External
-# soapysdr  # Usually installed via system package manager, python bindings can be tricky via pip. 
-# If available via pip:
-# soapysdr>=0.8.0
-
+# ----------------------------------------------------------------------------
 # Utilities
-requests>=2.31.0
-loguru>=0.7.0
+# ----------------------------------------------------------------------------
+requests>=2.31.0           # HTTP library (TLE downloads)
+PyYAML>=6.0                # Configuration files
+loguru>=0.7.0              # Logging (optional)
 
-# Tracking & Correlation
-redis>=4.5.0
-sgp4>=2.20
-skyfield>=1.45
-aiohttp>=3.8.0
+# ----------------------------------------------------------------------------
+# SDR Hardware Interface
+# ----------------------------------------------------------------------------
+# SoapySDR: MUST be installed via system package manager
+# Ubuntu/Debian: sudo apt install python3-soapysdr
+# macOS: brew install soapysdr
+# Windows: Download from https://github.com/pothosware/SoapySDR/wiki
+#
+# DO NOT install via pip - binary compatibility issues
+
+# ----------------------------------------------------------------------------
+# Optional: Data Analysis
+# ----------------------------------------------------------------------------
+pandas>=2.0.0              # Data manipulation (optional)
+
+# ----------------------------------------------------------------------------
+# Optional: Enhanced Features
+# ----------------------------------------------------------------------------
+# psutil>=5.9.0            # System monitoring (network isolation checks)
+# cryptography>=41.0.0     # Encryption (AES-256-GCM for IQ files)
+# GPy>=1.10.0              # Gaussian processes (advanced correlation)
