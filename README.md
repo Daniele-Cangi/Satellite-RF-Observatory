@@ -1,204 +1,243 @@
-# Satellite Intelligence System (SIS-PRO)
+# Satellite Intelligence System (SIS)
 
-> **Gray System - Passive RF Collection & Offline Analysis Framework**
-> *Zero Network Footprint | Air-Gapped Processing | Operational Security by Design*
+> Experimental passive satellite RF collection and analysis prototype.
 
-## ⚠️ NOTICE
+SIS explores a practical question:
 
-**This is a gray system architecture for authorized defensive security research and educational purposes.**
+> Can a locally captured radio-frequency signal be compared with orbital and frequency data to produce a defensible list of possible satellite sources?
 
-- ✅ **Legal Use**: Spectrum monitoring, amateur radio, authorized SIGINT research
-- ✅ **Educational**: Signal processing, orbital mechanics, RF engineering
-- ❌ **Prohibited**: Unauthorized interception, malicious surveillance, export violations
+The repository contains early implementations of SDR capture, offline spectrum analysis, signal detection, orbital propagation, and Doppler-based candidate scoring.
 
-**Operator Responsibility**: Ensure compliance with local regulations and authorization requirements.
+It is **not an operational intelligence platform**, a finished monitoring product, or a validated satellite-identification system. Several components are incomplete, some belong to an older real-time architecture, and the current correlation logic still requires significant work before its results can be treated as reliable.
 
----
+## Project status
 
-## 1. Executive Summary
+**Stage:** experimental proof of concept
 
-SIS-PRO is a **passive SIGINT collection and analysis framework** designed for environments requiring operational security. The system operates in three distinct phases:
+**Primary direction:** deterministic offline processing of locally captured IQ data
 
-1. **COLLECTION**: Headless RF capture with zero network footprint
-2. **ANALYSIS**: Air-gapped batch processing on isolated workstation
-3. **EXPORT**: Sanitized intelligence product for secure transfer
+| Component | Current state | Notes |
+|---|---|---|
+| SDR IQ capture | Prototype implemented | Requires SoapySDR and compatible hardware; not covered by automated hardware tests. |
+| IQ file format | Partially implemented | Header-based files can be analyzed; metadata-scrubbed files are not yet compatible with the current reader. |
+| Offline DSP | Prototype implemented | Periodogram, CA-CFAR-style detection, peak clustering, SQLite storage, and JSON export are present. |
+| Synthetic DSP check | Implemented | Demonstrates detection of a strong synthetic carrier; it is not a full system validation. |
+| TLE propagation | Partially implemented | The legacy path uses Skyfield/SGP4; the offline processor does not yet perform full propagation. |
+| Satellite correlation | Experimental | Current scoring is based mainly on Doppler residuals and does not yet use a complete, verified downlink-frequency catalog. |
+| Encryption | Not implemented | The encryption option currently passes data through unchanged. Do not treat captures as encrypted. |
+| Secure export | Placeholder | Packaging, sanitization, checksums, and encryption still need implementation. |
+| FastAPI/WebSocket system | Legacy and incomplete | Retained as architectural reference; it is not the recommended execution path. |
+| Frontend | Not implemented | No supported dashboard is included. |
 
-Unlike traditional monitoring systems with network APIs and real-time dashboards, SIS-PRO eliminates attribution risk through complete network isolation and encrypted storage.
+The engineering plan for turning this prototype into a credible system is documented in [`ROADMAP.md`](ROADMAP.md).
 
-### Key Capabilities
+## What the repository is trying to build
 
-**Operational Security**:
-- ✅ Zero network footprint during collection
-- ✅ Encrypted storage (AES-256-GCM)
-- ✅ Air-gapped batch processing
-- ✅ Metadata scrubbing (OPSEC)
-- ✅ Randomized filenames (stealth mode)
+The intended system is an offline-first satellite RF observatory:
 
-**Technical Capabilities**:
-- **Passive Collection**: Direct-to-disk IQ recording with SDR hardware
-- **Signal Processing**: CFAR detection, FFT analysis, peak extraction
-- **Orbital Mechanics**: Vectorized SGP4 propagation for 20,000+ objects
-- **Correlation Engine**: Bayesian Doppler-based satellite identification
-- **Offline Analysis**: Complete processing without network dependency
-
----
-
-## 2. System Architecture
-
-The system is modular, designed for stability and scalability:
-
-```mermaid
-graph TD
-    subgraph Hardware Layer
-        SDR[SDR Device] -->|I/Q Samples| RW[Receiver Worker]
-    end
-
-    subgraph "Backend Core (Python/FastAPI)"
-        RW -->|SharedQueue| SCH[Scheduler & DSP]
-        SCH -->|FFT & Peak Detect| CE[Correlation Engine]
-        TM[TLE Manager] -->|Orbital State| CE
-        CE -->|Matches| WS[WebSocket Manager]
-        WS -->|JSON Stream| CLIENT[Frontend Dashboard]
-    end
-
-    subgraph "Data Persistence"
-        TSDB[(TimescaleDB)]
-        REDIS[(Redis Cache)]
-    end
-
-    SCH -->|.add()| TSDB
-    TM -->|.set()| REDIS
+```text
+SDR hardware or recorded IQ data
+                |
+                v
+       Versioned IQ capture
+                |
+                v
+   Deterministic DSP pipeline
+  FFT/PSD -> detection -> tracks
+                |
+                v
+ Candidate generation and scoring
+ orbit + known carrier + Doppler
+                |
+                v
+       SQLite and JSON results
 ```
 
-### 2.1 Component Breakdown
+The key word is **candidate**. A measured frequency and a predicted Doppler shift are not, by themselves, sufficient to identify an arbitrary transmitter. Credible attribution also requires known nominal carrier frequencies, accurate timestamps, observer coordinates, receiver calibration, orbital visibility, and continuity across multiple observations.
 
-#### **Receiver Worker (`workers/receiver_worker.py`)**
-*   **Role**: Interfaces with hardware (RTL-SDR, Airspy, USP) via `SoapySDR`.
-*   **Design**: Runs as a separate OS process. Detaches from appropriate locks/GIL to handle high-throughput I/Q streams.
-*   **Output**: Pushes raw IQ buffers or computed FFT frames to a multiprocessing `Queue`.
+## Current repository structure
 
-#### **Scheduler (`workers/scheduler.py`)**
-*   **Role**: The "Heartbeat" of the system.
-*   **DSP**: Performs FFT (`scipy.signal.periodogram`), noise floor estimation, and Peak Detection.
-*   **Logic**: 
-    1.  Ingests signal peaks.
-    2.  Queries `CorrelationEngine` for matches.
-    3.  Broadcasts events (`spectrum`, `tracking`, `alerts`) via WebSockets.
-    4.  Persists observations to TimescaleDB.
+```text
+analysis/
+  offline_processor.py     Offline IQ analysis and local result storage
 
-#### **TLE Manager (`trackers/tle_manager.py`)**
-*   **Role**: Manages the "Catalog of Objects".
-*   **Tech**: Fetches TLEs from Space-Track/Celestrak. Updates every 6 hours.
-*   **Optimization**: 
-    *   **Vectorized Propagation**: Propagates all 23,000+ satellites in batches using `numpy` vs scalar loops.
-    *   **Horizon Filtering**: Quickly discards objects below the observer's horizon (-5° margin).
+collectors/
+  passive_collector.py     Direct-to-disk SDR IQ capture
 
-#### **Correlation Engine (`processors/correlation_engine.py`)**
-*   **Role**: The "Brain". Matches a generic RF signal (freq X) to a specific object (NORAD ID Y).
-*   **Algorithm**:
-    *   **Input**: Measured Frequency ($f_m$), Observer Location.
-    *   **Prediction**: For every visible satellite, calculate Range Rate ($\dot{r}$) and expected Doppler shift ($\Delta f = - \frac{\dot{r}}{c} f_c$).
-    *   **Scoring**: Gaussian Probability Density Function based on the residual $|f_m - (f_c + \Delta f)|$.
-    *   **Output**: Best match if Confidence > Threshold (0.8).
+processors/
+  correlation_engine.py    Experimental Doppler-based candidate scoring
 
----
+trackers/
+  tle_manager.py           TLE download, propagation, and visibility logic
 
-## 3. Installation
+receivers/
+  base_receiver.py         Receiver abstraction
+  ku_band_receiver.py      Experimental Ku-band/Starlink receiver path
+  sdr_manager.py           Receiver factory prototype
 
-### 3.1 Prerequisites
-*   **Python 3.10+**
-*   **Redis** (for TLE caching)
-*   **PostgreSQL + TimescaleDB** (for historic storage)
-*   **SoapySDR** (Drivers for your specific hardware)
+workers/                   Legacy real-time acquisition and DSP workers
+api/                       Legacy FastAPI and WebSocket layer
+scripts/                   Synthetic checks and exploratory simulations
+gray_system_main.py        Offline-first command-line entry point
+```
 
-### 3.2 Setup
-1.  **Clone Repository**
-    ```bash
-    git clone https://github.com/your-org/satellite-intelligence.git
-    cd satellite-intelligence
-    ```
+## Supported development path
 
-2.  **Install Dependencies**
-    ```bash
-    pip install -r requirements.txt
-    ```
-    *Key libs: `fastapi`, `uvicorn`, `numpy`, `scipy`, `skyfield`, `sgp4`, `sqlalchemy`, `orjson`.*
+For now, work should focus on the offline path:
 
-3.  **Environment Configuration**
-    Create a `.env` file:
-    ```ini
-    # Database
-    DATABASE_URL=postgresql://user:pass@localhost:5432/sis_db
-    
-    # Receiver
-    RECEIVER_ENABLED=true
-    RECEIVER_DEVICE="driver=rtlsdr"
-    RECEIVER_FREQ=137500000 
-    
-    # TLE Sources
-    SPACE_TRACK_USER="..."
-    SPACE_TRACK_PASSWORD="..."
-    ```
+1. capture or provide IQ samples;
+2. process them locally;
+3. store signal detections;
+4. compare detections with a prepared local catalog;
+5. export reproducible results.
 
----
+The legacy API, Redis, PostgreSQL, TimescaleDB, and WebSocket components should be treated as reference code until the offline core is correct and tested.
 
-## 4. Usage
+## Installation
 
-### 4.1 Running the Core System
-Start the FastAPI server (which automatically spawns the Workers):
+### Requirements
+
+- Python 3.10 or newer
+- NumPy and SciPy
+- Skyfield and SGP4
+- SQLite, included with Python
+- SoapySDR only when using physical SDR hardware
+
+Create an environment and install the Python dependencies:
 
 ```bash
-uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
-```
-*   **Startup Sequence**:
-    1.  Database Init.
-    2.  TLE Manager fetches fresh catalog.
-    3.  Receiver Worker starts (if SDR found).
-    4.  Scheduler loop begins.
+python -m venv .venv
 
-### 4.2 Simulation Mode
-To test logic without hardware, use the Simulation Runner. This injects synthetic "perfect" signals:
+# Linux/macOS
+source .venv/bin/activate
+
+# Windows PowerShell
+# .venv\Scripts\Activate.ps1
+
+pip install -r requirements.txt
+```
+
+SoapySDR should be installed through the operating system or hardware vendor packages rather than through `pip`.
+
+## Running the existing checks
+
+### Synthetic DSP check
+
+```bash
+python scripts/verify_dsp.py
+```
+
+This generates complex Gaussian noise plus a strong synthetic carrier and verifies that the current spectral detector can locate the carrier. It tests only the DSP detection example.
+
+### Import check
+
+```bash
+python scripts/verify_setup.py
+```
+
+This script reports import problems, but it is not currently a strict automated test and may still exit successfully after printing failures.
+
+### Exploratory correlation simulation
 
 ```bash
 python scripts/simulation_runner.py
 ```
-*   *Verification*: This script creates a fake signal matching the ISS (International Space Station) and asserts that the Correlation Engine correctly identifies it among 23,000 other objects.
 
-### 4.3 API Endpoints
-*   **WebSocket**: `ws://localhost:8000/ws/spectrum` (Real-time FFT)
-*   **WebSocket**: `ws://localhost:8000/ws/tracking` (Live Object Matches)
-*   **REST**: `GET /observations/` (Historic Data)
-*   **REST**: `GET /satellites/` (Catalog)
+The simulation uses the same orbital model to generate and score a synthetic signal. It is useful for inspecting the intended data flow, but it should not be interpreted as independent evidence that the identification method works on real captures.
+
+## Offline collection and analysis
+
+### Capture IQ data
+
+```bash
+python gray_system_main.py collect \
+  --freq 145.8 \
+  --rate 2.4 \
+  --gain 40 \
+  --duration 60 \
+  --storage ./iq_data
+```
+
+This requires a compatible SDR device and SoapySDR installation.
+
+### Analyze captured files
+
+```bash
+python gray_system_main.py analyze \
+  --input ./iq_data \
+  --database ./analysis.db \
+  --export ./results.json
+```
+
+### Important current limitations
+
+- Do **not** rely on `--encrypt`; encryption is not implemented.
+- Do **not** use `--stealth` for data intended for the current offline analyzer. That mode removes the technical header that the analyzer expects.
+- Do **not** treat a high correlation score as confirmed satellite identity.
+- Do **not** treat example performance figures in older documentation as benchmark results unless they are reproduced and measured again.
+
+## Signal processing prototype
+
+The current offline processor performs the following operations:
+
+1. reads complex64 IQ samples;
+2. estimates power spectral density with a Hann-windowed periodogram;
+3. estimates a local noise floor using a CA-CFAR-style convolution kernel;
+4. detects bins above an adaptive threshold;
+5. clusters adjacent bins into candidate peaks;
+6. estimates frequency, power, bandwidth, and SNR;
+7. stores detections in SQLite;
+8. optionally exports results to JSON.
+
+This is a useful starting point, but it still needs deterministic timestamps per chunk, configurable detector parameters, edge handling, track formation across time, receiver calibration, reproducible datasets, and quantitative validation.
+
+## Correlation model: current limits
+
+The repository explores a Gaussian score based on the residual between measured and predicted frequency:
+
+```text
+residual = measured_frequency - predicted_frequency
+score = exp(-0.5 * (residual / sigma)^2)
+```
+
+A serious implementation must calculate the predicted frequency from a known nominal carrier assigned to a candidate satellite:
+
+```text
+predicted_frequency = nominal_downlink_frequency + predicted_doppler_shift
+```
+
+The current code does not yet provide a complete, verified mapping between satellites and active downlink frequencies. Until that exists, the correlation engine is an experiment in candidate ranking, not a general identification engine.
+
+Future scoring should combine multiple pieces of evidence:
+
+- known frequency compatibility;
+- predicted visibility and elevation;
+- Doppler residual after receiver calibration;
+- continuity of the Doppler curve over time;
+- signal bandwidth and modulation characteristics;
+- pass timing;
+- antenna pointing or direction-of-arrival data, when available.
+
+## Design principles going forward
+
+- **Offline core first.** Networking and dashboards come after the analysis pipeline is correct.
+- **Claims follow tests.** Documentation must describe measured behavior, not intended behavior.
+- **Deterministic processing.** The same input and configuration should produce the same result.
+- **Hardware-independent testing.** Synthetic and recorded IQ fixtures must cover the core pipeline.
+- **Evidence, not labels.** Results should expose scores, residuals, assumptions, and alternative candidates.
+- **Security features must be real.** Encryption and sanitization should not be advertised before implementation and review.
+- **Clear separation of concerns.** Collection, DSP, orbital prediction, scoring, storage, and presentation should be independently testable.
+
+## Legal and ethical use
+
+This repository is intended for lawful education, amateur-radio experimentation, spectrum research, and analysis of signals the operator is authorized to receive and process.
+
+It contains passive reception code and does not provide transmission, interference, decryption, or access-control bypass capabilities. Laws governing radio reception, recording, data retention, and satellite communications vary by jurisdiction. Users are responsible for obtaining any required authorization and complying with applicable regulations.
+
+## License
+
+Licensed under the Apache License 2.0. See [`LICENSE`](LICENSE).
 
 ---
 
-## 5. Development Status
-
-| Module | Status | Notes |
-| :--- | :--- | :--- |
-| **SDR Interface** | ✅ Active | Supports SoapySDR (RTL/Airspy). |
-| **TLE Engine** | ✅ Active | Full catalog, Vectorized SGP4. |
-| **Correlation** | ✅ Active | Logic verified via Simulation. |
-| **API Layer** | ✅ Active | FastAPI + WebSockets + ORJSON. |
-| **Database** | ✅ Active | SQLAlchemy + TimescaleDB schema. |
-| **Frontend** | 🚧 Planned | Designing React + WebGL + Deck.gl Dashboard. |
-
----
-
-## 6. Mathematical Appendix: Correlation Logic
-
-The correlation score $S$ for a satellite $i$ is calculated as:
-
-$$ S_i = e^{-\frac{(f_{measured} - f_{predicted, i})^2}{2\sigma^2}} $$
-
-Where:
-*   $f_{predicted}$ is the downlink frequency adjusted for Doppler shift derived from the SGP4 state vector velocity.
-*   $\sigma$ is the system frequency tolerance (e.g., 500 Hz for narrow band).
-
-This probabilistic approach allows the system to differentiate between two satellites that are close in the sky but moving at different relative velocities (and thus different Doppler shifts).
-
----
-
-**© 2025 Satellite Intelligence Project**
-**© 2025 Satellite Intelligence Project**
-*Educational Proof of Concept & SIGINT Research Demo.*
+This repository should be read as an early technical exploration. Its value is the combination of RF collection, offline DSP, orbital prediction, and evidence-based candidate scoring. The next phase is not to add more features, but to make that narrow core correct, reproducible, and measurable.
