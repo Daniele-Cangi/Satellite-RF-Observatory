@@ -10,6 +10,12 @@ The repository contains early implementations of SDR capture, offline spectrum a
 
 It is **not an operational intelligence platform**, a finished monitoring product, or a validated satellite-identification system. Several components are incomplete, some belong to an older real-time architecture, and the current correlation logic still requires significant work before its results can be treated as reliable.
 
+## Early interface proof of concept
+
+![Early SIS map-based interface proof of concept](docs/images/sis-proof-of-concept.webp)
+
+*Early map-based interface prototype created during the first SIS exploration. It documents the original visualization and interaction direction of the project. The labels, confidence value, sensor status, locations, and events shown are demonstration output and should not be interpreted as validated satellite identifications or production telemetry.*
+
 ## Project status
 
 **Stage:** experimental proof of concept
