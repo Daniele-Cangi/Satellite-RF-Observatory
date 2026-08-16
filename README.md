@@ -80,6 +80,13 @@ capability is absent. No topology, feature, plan or DDC hypothesis was
 admitted. See
 [`GATE_F2_5_1_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_1_OUTCOME_1.md).
 
+Gate F2.5.2 addresses that outcome strictly offline. It records reference and
+perturbed opening as separate atomic receipts, hashes every ephemeral SND
+frame before decode, and preserves any single-branch readiness witness even
+when the peer fails. It does not change the candidates, tuning policy,
+thresholds or DDC question, and no new live connection has been made. See
+[`GATE_F2_5_2_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_2_OFFLINE.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:

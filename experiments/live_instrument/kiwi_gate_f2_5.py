@@ -174,6 +174,7 @@ class PhaseReceipt:
     direct_perturbed_attempted: bool = False
     direct_reference_opened: bool = False
     direct_perturbed_opened: bool = False
+    atomic_branch_receipts: tuple[object, ...] = ()
 
     def __post_init__(self) -> None:
         if f2._utc(self.completed_at) < f2._utc(self.started_at):
@@ -187,6 +188,8 @@ class PhaseReceipt:
             )
         ):
             raise ValueError("only direct dual-SND qualification may describe channel attempts")
+        if self.phase is not F25Phase.DIRECT_DUAL_SND_QUALIFICATION and self.atomic_branch_receipts:
+            raise ValueError("only direct dual-SND qualification may contain atomic branch receipts")
 
 
 @dataclass(frozen=True, slots=True)
@@ -258,6 +261,11 @@ def direct_dual_snd_qualification(
     mother: f2.MotherPlan,
     *,
     center_resolver: Callable[[kiwi.KiwiEndpoint, dict[str, str]], float] | None = None,
+    dual_opener: Callable[
+        [kiwi.KiwiEndpoint, float, dict[str, str], f2.MotherPlan],
+        f24._DualConnections,
+    ]
+    | None = None,
 ) -> _TopologyContext | PhaseReceipt:
     """Attempt R and P directly. No ext_api value can short-circuit this call."""
 
@@ -301,7 +309,7 @@ def direct_dual_snd_qualification(
         )
 
     try:
-        dual = f24._open_dual(endpoint, center, status, mother)
+        dual = (dual_opener or f24._open_dual)(endpoint, center, status, mother)
     except Exception as error:
         completed = datetime.now(timezone.utc)
         description = f"{type(error).__name__}: {error}"
@@ -1015,6 +1023,8 @@ def run_once(
                 else topology_or_receipt
             )
             receipts.append(direct_receipt)
+            for atomic_branch_receipt in direct_receipt.atomic_branch_receipts:
+                emit_jsonl(event("atomic_snd_branch_receipt"), atomic_branch_receipt, sink=sink)
             emit_jsonl(event("direct_dual_snd_qualification"), direct_receipt, sink=sink)
             if (
                 not isinstance(topology_or_receipt, _TopologyContext)

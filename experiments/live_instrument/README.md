@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py`, `kiwi_gate_f2_4.py`, `kiwi_gate_f2_5.py`, `kiwi_gate_f2_5_1.py` | topology audit, frozen outcomes and direct-SND bootstrap correction |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py`, `kiwi_gate_f2_4.py`, `kiwi_gate_f2_5.py`, `kiwi_gate_f2_5_1.py`, `kiwi_gate_f2_5_2.py` | topology audit, frozen outcomes and atomic direct-SND qualification |
 
 ## Reading order
 
@@ -45,6 +45,7 @@ Tests are offline. Do not add live probes to pytest or CI.
     [`GATE_F2_5_OUTCOME_1.md`](GATE_F2_5_OUTCOME_1.md) — direct-SND design and the remaining center-policy failure.
 11. [`GATE_F2_5_1_OFFLINE.md`](GATE_F2_5_1_OFFLINE.md) — status-independent bootstrap prepared without a new live session.
 12. [`GATE_F2_5_1_OUTCOME_1.md`](GATE_F2_5_1_OUTCOME_1.md) — direct SND reached, but branch-level readiness remained indeterminate.
+13. [`GATE_F2_5_2_OFFLINE.md`](GATE_F2_5_2_OFFLINE.md) — atomic branch receipts and pre-decode readiness hashing, with no new live run.
 
 ## Frozen-outcome rule
 

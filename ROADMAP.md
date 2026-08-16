@@ -91,21 +91,29 @@ The execution terminated as `QUALIFICATION_INCOMPLETE`. It produced no
 experiment, and the terminal state is supported by the receipts. No second
 session is authorized.
 
-## Next gate: branch-level receipt audit, offline only
+## Completed gate: branch-level receipt audit, offline only
 
-The live outcome exposed that `_open_dual()` collapses the two concurrent
-opening histories when either branch fails. The next minimum change should:
+The live outcome exposed that `_open_dual()` collapsed the two concurrent
+opening histories when either branch failed. Gate F2.5.2 now:
 
-1. preserve a separate receipt for reference and perturbed opening;
-2. distinguish handshake, channel allocation, GNSS IQ readiness and close;
-3. hash the first ephemeral IQ block before it is used as a readiness witness
+1. preserves a separate receipt for reference and perturbed opening;
+2. distinguishes handshake, channel allocation, GNSS IQ readiness and close;
+3. hashes every ephemeral SND frame before decode and separately hashes the
+   first valid IQ block before it is used as a readiness witness
    or destroyed;
-4. compose the topology decision from the two atomic branch receipts;
-5. preserve the frozen candidate set, center policy, retry policy and physical
+4. composes the pair decision from the two atomic branch receipts;
+5. preserves the frozen candidate set, center policy, retry policy and physical
    question.
 
-This work must remain offline. It must not reinterpret F2.5.1 outcome 1, add a
-new endpoint or authorize another live execution.
+The gate remained offline and did not reinterpret F2.5.1 outcome 1.
+
+## Next checkpoint: review before any execution
+
+Review the atomic receipt schema, the readiness hashing boundary and the
+composition table in `GATE_F2_5_2_OFFLINE.md`. No new live execution is
+authorized by this roadmap. Any future session must be explicitly approved
+after the new runtime commit is frozen; it must retain the existing candidates,
+centers, retry policy, thresholds and one-outcome stop condition.
 
 ## Only after one valid prospective outcome
 

@@ -201,6 +201,15 @@ branch histories into one exception. A possible ready branch and its first
 GNSS IQ block are therefore not independently receipted or hashed. This blocks
 topology inference even though it does not imply zero RF persistence.
 
+Gate F2.5.2 moves that boundary one step earlier. Each SND branch now emits an
+atomic `BranchOpenReceipt`; every raw SND frame is hashed before decode with a
+length-delimited stream digest, and the GNSS readiness frame has its own hash.
+The pair is composed only after both branch states exist. A ready sibling may
+be closed after peer failure without erasing its channel/readiness evidence,
+while any qualification error keeps aggregate availability indeterminate.
+These receipts remain local to this vertical probe rather than becoming a
+generic capability framework.
+
 ## 8. Prospective freeze and outcomes
 
 Before plan freeze, a declared retry budget may cover only timeout, transport,
@@ -244,6 +253,7 @@ Pre-freeze terminal states include `QUALIFICATION_INCOMPLETE`,
 | `kiwi_gate_f2_4.py` | first same-Kiwi two-channel runtime |
 | `kiwi_gate_f2_5.py` | direct-SND-first causal path |
 | `kiwi_gate_f2_5_1.py` | status-independent SND bootstrap policy |
+| `kiwi_gate_f2_5_2.py` | atomic per-branch opening and readiness hashes |
 
 ## 10. Non-goals
 
