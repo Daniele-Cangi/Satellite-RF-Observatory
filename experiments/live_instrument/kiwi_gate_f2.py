@@ -488,6 +488,16 @@ class FrozenPlan:
         "reference-root continuity",
         "relative target/witness spacing",
     )
+    reference_hardware_root: str = ""
+    perturbed_hardware_root: str = ""
+    a1_duration_s: float = 0.0
+    b_duration_s: float = 0.0
+    a2_duration_s: float = 0.0
+    prediction_intervals_hz: tuple[tuple[str, float, float], ...] = ()
+    thresholds: tuple[tuple[str, float], ...] = ()
+    ttl_s: float = 0.0
+    transform_versions: tuple[str, ...] = ()
+    artifact_policy: str = ""
 
     def __post_init__(self) -> None:
         if self.axis_orientation not in (-1, 1):
@@ -509,6 +519,14 @@ class FrozenPlan:
             raise ValueError("RF-frame and baseband-frame decision regions overlap")
         if _utc(self.expires_at) <= _utc(self.frozen_at):
             raise ValueError("frozen plan must have a future expiry")
+        if not self.reference_hardware_root or not self.perturbed_hardware_root:
+            raise ValueError("frozen plan requires two declared hardware roots")
+        if min(self.a1_duration_s, self.b_duration_s, self.a2_duration_s, self.ttl_s) <= 0:
+            raise ValueError("frozen plan durations and TTL must be positive")
+        if not self.prediction_intervals_hz or not self.thresholds or not self.transform_versions:
+            raise ValueError("frozen plan must preserve prediction, threshold and transform ledgers")
+        if not self.artifact_policy:
+            raise ValueError("frozen plan requires an artifact policy")
 
     @property
     def plan_hash(self) -> str:
@@ -527,6 +545,8 @@ class SegmentReceipt:
     center_frequency_hz: float
     sample_rate_hz: float
     sequence_range: tuple[int, int]
+    gap_count: int
+    overflow_count: int
     transform_version: str
 
 
@@ -625,6 +645,13 @@ class _SegmentArtifact:
     byte_count: int
 
     def receipt(self) -> SegmentReceipt:
+        blocks = self.capture.blocks
+        tolerance_s = max(2.0 / self.capture.sample_rate_hz, 0.001)
+        gap_count = sum(
+            ((previous.sequence + 1) & 0xFFFFFFFF) != current.sequence
+            or abs((current.event_start - previous.event_end).total_seconds()) > tolerance_s
+            for previous, current in zip(blocks, blocks[1:])
+        )
         return SegmentReceipt(
             root_id=self.root_id,
             segment=self.segment,
@@ -636,6 +663,8 @@ class _SegmentArtifact:
             center_frequency_hz=self.capture.center_frequency_hz,
             sample_rate_hz=self.capture.sample_rate_hz,
             sequence_range=(self.capture.blocks[0].sequence, self.capture.blocks[-1].sequence),
+            gap_count=gap_count,
+            overflow_count=sum(block.adc_overflow for block in blocks),
             transform_version=TRANSFORM_VERSION,
         )
 
@@ -1692,6 +1721,13 @@ def freeze_plan(
     prediction_tolerance_hz: float,
 ) -> FrozenPlan:
     expected_translation = axis_orientation * (-delta_f_hz)
+    rf_prediction = target.baseband_position_a_hz + expected_translation
+    baseband_prediction = target.baseband_position_a_hz
+    intervals = (
+        ("RF_FRAME_B", rf_prediction - prediction_tolerance_hz, rf_prediction + prediction_tolerance_hz),
+        ("BASEBAND_FRAME_B", baseband_prediction - prediction_tolerance_hz, baseband_prediction + prediction_tolerance_hz),
+        ("A_RETURN", target.baseband_position_a_hz - prediction_tolerance_hz, target.baseband_position_a_hz + prediction_tolerance_hz),
+    )
     return FrozenPlan(
         mother.plan_hash,
         _hash(asdict(protocol_audit())),
@@ -1703,8 +1739,8 @@ def freeze_plan(
         axis_orientation,
         target,
         witness,
-        target.baseband_position_a_hz + expected_translation,
-        target.baseband_position_a_hz,
+        rf_prediction,
+        baseband_prediction,
         target.baseband_position_a_hz - expected_translation,
         target.baseband_position_a_hz + expected_translation / 2.0,
         target.baseband_position_a_hz + expected_translation * 2.5,
@@ -1713,6 +1749,21 @@ def freeze_plan(
         mother.confirmation_segment_s,
         _utc(frozen_at),
         _utc(frozen_at) + timedelta(seconds=mother.offer_ttl_s),
+        reference_hardware_root=f"kiwi:{reference.host}:{reference.port}",
+        perturbed_hardware_root=f"kiwi:{perturbed.host}:{perturbed.port}",
+        a1_duration_s=mother.confirmation_segment_s,
+        b_duration_s=mother.confirmation_segment_s,
+        a2_duration_s=mother.confirmation_segment_s,
+        prediction_intervals_hz=intervals,
+        thresholds=(
+            ("minimum_contrast_db", mother.minimum_contrast_db),
+            ("minimum_witness_contrast_db", mother.minimum_witness_contrast_db),
+            ("minimum_fingerprint_correlation", mother.minimum_fingerprint_correlation),
+            ("prediction_tolerance_hz", prediction_tolerance_hz),
+        ),
+        ttl_s=mother.offer_ttl_s,
+        transform_versions=(TRANSFORM_VERSION,),
+        artifact_policy="SHA-256 before analysis; IQ remains in RAM and is destroyed after receipt",
     )
 
 

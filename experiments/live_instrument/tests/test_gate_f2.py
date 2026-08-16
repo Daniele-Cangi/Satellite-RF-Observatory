@@ -75,7 +75,7 @@ def _segment_receipts(plan: f2.FrozenPlan) -> tuple[f2.SegmentReceipt, ...]:
                     f"kiwi:{root}", phase, f"{root}-{phase}-hash", NOW - timedelta(seconds=1),
                     4096, start, start + timedelta(seconds=3),
                     plan.center_b_hz if root == "perturbed" and phase == "B" else plan.center_a_hz,
-                    12_000.0, (index * 10, index * 10 + 9), f2.TRANSFORM_VERSION,
+                    12_000.0, (index * 10, index * 10 + 9), 0, 0, f2.TRANSFORM_VERSION,
                 )
             )
     return tuple(receipts)
