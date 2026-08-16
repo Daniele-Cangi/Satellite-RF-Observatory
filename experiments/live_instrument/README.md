@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_3.py` | topology audit, atomic direct-SND qualification and structured receipt control |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_3_1.py` | topology audit, atomic direct-SND qualification and verifiable receipt control |
 
 ## Reading order
 
@@ -48,6 +48,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 13. [`GATE_F2_5_2_OFFLINE.md`](GATE_F2_5_2_OFFLINE.md) — atomic branch receipts and pre-decode readiness hashing, with no new live run.
 14. [`GATE_F2_5_2_OUTCOME_1.md`](GATE_F2_5_2_OUTCOME_1.md) — one ready branch preserved, peer rejection, and the remaining structured-control failures.
 15. [`GATE_F2_5_3_OFFLINE.md`](GATE_F2_5_3_OFFLINE.md) — typed retry control and bounded receipt-only JSONL retention, prepared without network activity.
+16. [`GATE_F2_5_3_1_OFFLINE.md`](GATE_F2_5_3_1_OFFLINE.md) — terminal manifest, prefix hash and guaranteed receipt closure, prepared without network activity.
 
 ## Frozen-outcome rule
 

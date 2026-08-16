@@ -265,6 +265,7 @@ Pre-freeze terminal states include `QUALIFICATION_INCOMPLETE`,
 | `kiwi_gate_f2_5_1.py` | status-independent SND bootstrap policy |
 | `kiwi_gate_f2_5_2.py` | atomic per-branch opening and readiness hashes |
 | `kiwi_gate_f2_5_3.py` | typed retry selection and bounded receipt-only JSONL sink |
+| `kiwi_gate_f2_5_3_1.py` | in-band terminal manifest and closed-artifact receipt |
 
 ## 10. Non-goals
 

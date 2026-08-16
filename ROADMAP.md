@@ -147,6 +147,15 @@ and cannot change the physical decision. See `GATE_F2_5_3_OFFLINE.md`.
 
 No live F2.5.3 execution is authorised by this checkpoint.
 
+The pre-execution review then found that F2.5.3 returned the final artifact
+hash and error ledger only in memory, while its CLI discarded that object.
+Gate F2.5.3.1 corrects only this closure gap: a reserved terminal JSONL record
+commits to every preceding byte and persists retention/error state; the CLI
+then exposes the overall closed-file hash. Finalization also occurs on an
+unexpected runtime exception. See `GATE_F2_5_3_1_OFFLINE.md`.
+
+No live F2.5.3.1 execution is authorised by this roadmap entry.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

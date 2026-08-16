@@ -105,6 +105,15 @@ serialization failure is descriptive and cannot alter the physical result.
 No live connection was made. See
 [`GATE_F2_5_3_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_3_OFFLINE.md).
 
+The pre-execution review found that F2.5.3's final artifact hash and emission
+errors were returned in memory but discarded by its command-line entry point.
+Gate F2.5.3.1 closes that final audit gap offline: the same JSONL ends with a
+reserved terminal manifest containing a byte-exact prefix hash and retention
+state, while the CLI exposes the closed file's overall hash. Runtime,
+serialization and mirror failures remain descriptive. No network activity was
+performed. See
+[`GATE_F2_5_3_1_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_3_1_OFFLINE.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:
