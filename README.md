@@ -141,6 +141,16 @@ it fails closed as `SOURCE_BASIS_INCOMPLETE`; no implementation or live run is
 authorised. See
 [`GATE_F2_5_5_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_5_OFFLINE.md).
 
+Gate F2.5.6 then retrieved only the two official repositories at their frozen
+commits; it made no Kiwi connection and acquired no RF. The minimal server
+source is now retained and verified byte-for-byte. The exact kiwiclient paths
+are resolved and hash-audited, but its source is not copied because no license
+grant was found at the pinned revision. The correct fail-closed result is
+`SOURCE_RETENTION_BLOCKED_BY_LICENSE`: protocol semantics are narrower and
+better grounded, while the complete source basis is still not locally
+reproducible. See
+[`GATE_F2_5_6_SOURCE_REPRODUCTION.md`](experiments/live_instrument/GATE_F2_5_6_SOURCE_REPRODUCTION.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:

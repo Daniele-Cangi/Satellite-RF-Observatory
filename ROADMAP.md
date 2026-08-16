@@ -180,6 +180,13 @@ kiwiclient control path are not present locally, so the gate terminates
 `SOURCE_BASIS_INCOMPLETE`. Implementation and live execution remain
 unauthorised until a separately reviewed source-reproduction step succeeds.
 
+Gate F2.5.6 completed that separately authorised source retrieval without any
+Kiwi or RF access. The exact server subset is retained with license notices and
+verified hashes. The kiwiclient control path is resolved and hash-audited, but
+its source is excluded because no license grant was found at the frozen commit.
+The gate therefore stops at `SOURCE_RETENTION_BLOCKED_BY_LICENSE`: the ordered
+receipt is still not authorised for integration and no live run is authorised.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

@@ -268,6 +268,22 @@ Pre-freeze terminal states include `QUALIFICATION_INCOMPLETE`,
 | `kiwi_gate_f2_5_3_1.py` | in-band terminal manifest and closed-artifact receipt |
 | `kiwi_gate_f2_5_4.py` | pure offline attribution of the SND control boundary and exit semantics |
 | `kiwi_gate_f2_5_5.py` | fail-closed source basis and ordered SND control-receipt contract |
+| `kiwi_gate_f2_5_6.py` | strict offline verification of the pinned server archive and hash-only client source audit |
+
+## 9.1 Pinned protocol source boundary
+
+Gate F2.5.6 resolves the exact server and client control paths without touching
+a Kiwi endpoint. The retained server subset proves that `badp=0` is auth
+success, `badp=5` is the no-multiple-connections policy, `too_busy` is a
+capacity response, and `SET mod` addresses `conn->rx_channel`. These facts do
+not imply that a frozen session reached IQ readiness.
+
+The server archive is verified by whole-archive and per-member SHA-256, exact
+membership, byte counts and line counts. The client checkout was inspected
+ephemerally; only commit, blob IDs, paths, spans, hashes and sizes are retained
+because no license grant was found. Therefore the exit remains
+`SOURCE_RETENTION_BLOCKED_BY_LICENSE`, implementation stays unauthorized and
+the eleven historical closures remain causally unresolved.
 
 ## 10. Non-goals
 

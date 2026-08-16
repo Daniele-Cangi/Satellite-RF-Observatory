@@ -89,6 +89,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 .pytest-tmp-*/
+pytest-gate-*/
 
 # Jupyter Notebook
 .ipynb_checkpoints
