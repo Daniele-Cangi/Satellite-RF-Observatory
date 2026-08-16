@@ -11,6 +11,7 @@ from dataclasses import asdict, dataclass, field, is_dataclass
 from datetime import datetime, timezone
 from enum import Enum
 import json
+import math
 from typing import Any, Callable
 
 
@@ -19,6 +20,17 @@ class ClauseStatus(str, Enum):
     UNSATISFIED = "UNSATISFIED"
     UNRESOLVED = "UNRESOLVED"
     UNOBSERVABLE = "UNOBSERVABLE"
+    NOT_EVALUATED = "NOT_EVALUATED"
+
+
+class NumericState(str, Enum):
+    NOT_A_NUMBER = "NOT_A_NUMBER"
+    POSITIVE_INFINITY = "POSITIVE_INFINITY"
+    NEGATIVE_INFINITY = "NEGATIVE_INFINITY"
+
+
+class DescriptiveSerializationError(ValueError):
+    """The evidence exists, but its descriptive representation is invalid."""
 
 
 class ModelAvailability(str, Enum):
@@ -228,13 +240,21 @@ def emit_jsonl(
     *,
     sink: Callable[[str], None] = print,
 ) -> None:
-    sink(
-        json.dumps(
+    try:
+        line = json.dumps(
             {"event": event_type, "payload": _jsonable(payload)},
             allow_nan=False,
             sort_keys=True,
         )
-    )
+    except (TypeError, ValueError) as error:
+        raise DescriptiveSerializationError(str(error)) from error
+    sink(line)
+
+
+def strict_json_value(value: Any) -> Any:
+    """Return the exact JSON-safe value used by receipts and JSON Lines."""
+
+    return _jsonable(value)
 
 
 def _utc(value: datetime) -> datetime:
@@ -244,20 +264,33 @@ def _utc(value: datetime) -> datetime:
 
 
 def _jsonable(value: Any) -> Any:
+    # Normalize NumPy scalar types before any ordinary Python numeric handling.
+    # Arrays are intentionally not supported: raw RF must never cross this
+    # descriptive boundary merely because a dataclass contains samples.
+    if value.__class__.__module__.startswith("numpy"):
+        if callable(getattr(value, "item", None)) and not hasattr(value, "shape"):
+            return _jsonable(value.item())
+        if getattr(value, "shape", None) == () and callable(getattr(value, "item", None)):
+            return _jsonable(value.item())
+        raise DescriptiveSerializationError(
+            "NumPy arrays are not descriptive receipt values; hash the ephemeral artifact instead"
+        )
     if isinstance(value, datetime):
         return _utc(value).isoformat().replace("+00:00", "Z")
     if isinstance(value, Enum):
         return value.value
+    if isinstance(value, float) and not math.isfinite(value):
+        if math.isnan(value):
+            state = NumericState.NOT_A_NUMBER
+        elif value > 0:
+            state = NumericState.POSITIVE_INFINITY
+        else:
+            state = NumericState.NEGATIVE_INFINITY
+        return {"numeric_state": state.value}
     if is_dataclass(value):
         return _jsonable(asdict(value))
     if isinstance(value, dict):
         return {str(key): _jsonable(item) for key, item in value.items()}
     if isinstance(value, (tuple, list, set)):
         return [_jsonable(item) for item in value]
-    # NumPy scalar diagnostics must become JSON primitives without making the
-    # shared epistemic records depend on NumPy itself.
-    if value.__class__.__module__.startswith("numpy") and callable(
-        getattr(value, "item", None)
-    ):
-        return _jsonable(value.item())
     return value

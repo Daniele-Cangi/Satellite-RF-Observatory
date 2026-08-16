@@ -9,7 +9,7 @@ The final plan is frozen inside that stream, before the target window opens.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timedelta, timezone
 from enum import Enum
 from hashlib import sha256
@@ -49,6 +49,17 @@ class GateEOutcomeKind(str, Enum):
     NOT_DETECTED = "NOT_DETECTED"
     OBSERVATIONAL_PREDICTION_FALSIFIED = "OBSERVATIONAL_PREDICTION_FALSIFIED"
     RECEIPT_INVALIDATED = "RECEIPT_INVALIDATED"
+
+
+class QualificationDecision(str, Enum):
+    QUALIFIED = "QUALIFIED"
+    CAPABILITY_REJECTED = "CAPABILITY_REJECTED"
+    QUALIFICATION_ERROR = "QUALIFICATION_ERROR"
+
+
+class DescriptionState(str, Enum):
+    DESCRIBED = "DESCRIBED"
+    DESCRIPTION_ERROR = "DESCRIPTION_ERROR"
 
 
 @dataclass(frozen=True, slots=True)
@@ -182,6 +193,25 @@ class GateECapabilityOffer:
 
 
 @dataclass(frozen=True, slots=True)
+class CandidateQualification:
+    candidate_id: str
+    endpoint: kiwi.KiwiEndpoint
+    center_frequency_hz: float
+    artifact_hash: str
+    decision: QualificationDecision
+    reason: str
+    offer: GateECapabilityOffer | None
+
+
+@dataclass(frozen=True, slots=True)
+class QualificationDescription:
+    candidate_id: str
+    physical_decision: QualificationDecision
+    description_state: DescriptionState
+    error: str | None
+
+
+@dataclass(frozen=True, slots=True)
 class GateEFrozenPlan:
     mother_plan_hash: str
     offer_id: str
@@ -250,8 +280,13 @@ def offer_from_capture(
     mother: GateEMotherPlan,
     capture: kiwi.KiwiCapture,
     now: datetime,
+    *,
+    artifact_hash: str | None = None,
 ) -> GateECapabilityOffer:
     now = _utc(now)
+    # Hash while the ephemeral IQ still exists and before any transform can
+    # fail.  The caller may then destroy the samples without losing lineage.
+    artifact_hash = artifact_hash or kiwi._capture_hash(capture)
     audit_plan = kiwi.ScoutPlan(
         center_frequencies_hz=(capture.center_frequency_hz,),
         scout_duration_s=mother.scout_duration_s,
@@ -292,9 +327,10 @@ def offer_from_capture(
         margins.append(metrics.timecode_contrast_db - mother.minimum_generic_path_contrast_db)
     robust_margin = min(margins) if margins else -math.inf
     same_path = audit.usable and bool(stations)
+    descriptive_audit = replace(audit, blocks=())
     offer_id = (
         f"kiwi:{capture.endpoint.name}:{capture.center_frequency_hz:.0f}:"
-        f"{kiwi._capture_hash(capture)[:12]}"
+        f"{artifact_hash[:12]}"
     )
     return GateECapabilityOffer(
         offer_id,
@@ -304,7 +340,7 @@ def offer_from_capture(
         now + timedelta(seconds=mother.offer_ttl_s),
         stations,
         metrics,
-        audit,
+        descriptive_audit,
         same_path,
         tuple(cuts),
         robust_margin,
@@ -314,7 +350,120 @@ def offer_from_capture(
             metrics.wwv_tick_contrast_db,
             metrics.wwvh_tick_contrast_db,
         ),
-        kiwi._capture_hash(capture),
+        artifact_hash,
+    )
+
+
+def qualify_ephemeral_capture(
+    mother: GateEMotherPlan,
+    capture: kiwi.KiwiCapture,
+    now: datetime,
+) -> CandidateQualification:
+    """Hash first, then distinguish physical rejection from software error."""
+
+    artifact_hash = kiwi._capture_hash(capture)
+    candidate_id = (
+        f"kiwi:{capture.endpoint.name}:{capture.center_frequency_hz:.0f}:"
+        f"{artifact_hash[:12]}"
+    )
+    try:
+        offer = offer_from_capture(
+            mother,
+            capture,
+            now,
+            artifact_hash=artifact_hash,
+        )
+    except Exception as error:
+        return CandidateQualification(
+            candidate_id,
+            capture.endpoint,
+            capture.center_frequency_hz,
+            artifact_hash,
+            QualificationDecision.QUALIFICATION_ERROR,
+            f"qualification transform failed: {error}",
+            None,
+        )
+    # Qualification records retain diagnostics, never RF blocks.  This also
+    # ensures that deleting the capture releases the only sample references.
+    if offer.audit.blocks:
+        offer = replace(offer, audit=replace(offer.audit, blocks=()))
+    numeric_values = (
+        offer.metrics.tone_500_contrast_db,
+        offer.metrics.tone_600_contrast_db,
+        offer.metrics.wwv_tick_contrast_db,
+        offer.metrics.wwvh_tick_contrast_db,
+        offer.metrics.carrier_contrast_db,
+        offer.metrics.timecode_contrast_db,
+        offer.robust_margin_db,
+        offer.information_gain_proxy,
+    )
+    if not all(math.isfinite(value) for value in numeric_values):
+        return CandidateQualification(
+            candidate_id,
+            capture.endpoint,
+            capture.center_frequency_hz,
+            artifact_hash,
+            QualificationDecision.QUALIFICATION_ERROR,
+            "one or more required qualification metrics are not computable",
+            offer,
+        )
+    if not offer.audit.usable:
+        return CandidateQualification(
+            candidate_id,
+            capture.endpoint,
+            capture.center_frequency_hz,
+            artifact_hash,
+            QualificationDecision.CAPABILITY_REJECTED,
+            "; ".join(offer.audit.reasons) or "capture audit rejected the capability",
+            offer,
+        )
+    if not offer.same_path_witness:
+        return CandidateQualification(
+            candidate_id,
+            capture.endpoint,
+            capture.center_frequency_hz,
+            artifact_hash,
+            QualificationDecision.CAPABILITY_REJECTED,
+            "no station-specific marker closes the same source path",
+            offer,
+        )
+    return CandidateQualification(
+        candidate_id,
+        capture.endpoint,
+        capture.center_frequency_hz,
+        artifact_hash,
+        QualificationDecision.QUALIFIED,
+        "capability closes the frozen admission cuts",
+        offer,
+    )
+
+
+def emit_qualification_description(
+    qualification: CandidateQualification,
+    *,
+    sink: Callable[[str], None] = print,
+) -> QualificationDescription:
+    """Description is orthogonal: failure cannot rewrite physical decision."""
+
+    event = {
+        QualificationDecision.QUALIFIED: "gate_e_capability_qualified",
+        QualificationDecision.CAPABILITY_REJECTED: "gate_e_capability_rejected",
+        QualificationDecision.QUALIFICATION_ERROR: "gate_e_qualification_error",
+    }[qualification.decision]
+    try:
+        emit_jsonl(event, _qualification_value(qualification), sink=sink)
+    except Exception as error:
+        return QualificationDescription(
+            qualification.candidate_id,
+            qualification.decision,
+            DescriptionState.DESCRIPTION_ERROR,
+            str(error),
+        )
+    return QualificationDescription(
+        qualification.candidate_id,
+        qualification.decision,
+        DescriptionState.DESCRIBED,
+        None,
     )
 
 
@@ -577,6 +726,8 @@ def falsifiability_not_entered(
     reason: str,
     *,
     now: datetime,
+    candidate_artifact_hashes: tuple[str, ...] = (),
+    candidate_measurement_roots: tuple[str, ...] = (),
 ) -> GateEOutcome:
     contract = gate_e_contract()
     event_start, event_end, now = _utc(event_start), _utc(event_end), _utc(now)
@@ -589,15 +740,23 @@ def falsifiability_not_entered(
             Constraint("mother_plan_hash", "sha256", mother.plan_hash, None, "method fixed before discovery", "serialized GateEMotherPlan"),
         ),
         (Transform("capability_preflight", "incomplete", reason),),
-        () if offer is None else (f"kiwi:{offer.endpoint.name}",),
+        (
+            tuple(dict.fromkeys(candidate_measurement_roots))
+            if offer is None
+            else (f"kiwi:{offer.endpoint.name}",)
+        ),
         ("nist:wwv-wwvh-broadcast-format", f"gate-e:mother:{mother.plan_hash[:16]}"),
-        () if offer is None else (offer.artifact_hash,),
+        (
+            tuple(dict.fromkeys(candidate_artifact_hashes))
+            if offer is None
+            else (offer.artifact_hash,)
+        ),
         (reason, "no second execution is opened after this outcome"),
     )
     assessments = tuple(
         ClauseAssessment(
             clause.name,
-            ClauseStatus.UNOBSERVABLE,
+            ClauseStatus.NOT_EVALUATED,
             f"Gate E did not enter the falsifiable state: {reason}",
             (),
         )
@@ -761,7 +920,7 @@ def run_gate_e_once(
     emit_jsonl("gate_e_schedule_registered", schedule, sink=sink)
     _wait_until(discovery_start, "capability_discovery", sink)
 
-    offers: list[GateECapabilityOffer] = []
+    qualifications: list[CandidateQualification] = []
     for endpoint in endpoints:
         for frequency in mother.candidate_frequencies_hz:
             if datetime.now(timezone.utc) >= schedule.stream_start - timedelta(seconds=15):
@@ -773,20 +932,34 @@ def run_gate_e_once(
                     mother.scout_duration_s,
                     mother.maximum_gps_solution_age_s,
                 )
-                offer = offer_from_capture(mother, capture, datetime.now(timezone.utc))
-                offers.append(offer)
-                emit_jsonl("gate_e_capability_offer", _offer_value(offer), sink=sink)
+                qualification = qualify_ephemeral_capture(
+                    mother,
+                    capture,
+                    datetime.now(timezone.utc),
+                )
+                qualifications.append(qualification)
+                # The capture is intentionally not retained by the
+                # qualification record.  Only metrics and its pre-analysis
+                # artifact hash survive this iteration.
+                del capture
+                emit_qualification_description(qualification, sink=sink)
             except Exception as error:
                 emit_jsonl(
-                    "gate_e_capability_refused",
+                    "gate_e_acquisition_error",
                     {"endpoint": asdict(endpoint), "center_frequency_hz": frequency, "reason": str(error)},
                     sink=sink,
                 )
         if datetime.now(timezone.utc) >= schedule.stream_start - timedelta(seconds=15):
             break
 
+    qualified_offers = tuple(
+        qualification.offer
+        for qualification in qualifications
+        if qualification.decision is QualificationDecision.QUALIFIED
+        and qualification.offer is not None
+    )
     selected = select_capability_offer(
-        offers,
+        qualified_offers,
         now=datetime.now(timezone.utc),
         required_until=schedule.post_end,
     )
@@ -798,6 +971,13 @@ def run_gate_e_once(
             datetime.now(timezone.utc),
             "no fresh capability offer closes a station-specific causal path through minute 31",
             now=datetime.now(timezone.utc),
+            candidate_artifact_hashes=tuple(
+                qualification.artifact_hash for qualification in qualifications
+            ),
+            candidate_measurement_roots=tuple(
+                f"kiwi:{qualification.endpoint.name}"
+                for qualification in qualifications
+            ),
         )
         emit_jsonl("gate_e_first_outcome", outcome, sink=sink)
         return outcome
@@ -1214,6 +1394,24 @@ def _offer_value(offer: GateECapabilityOffer) -> dict[str, object]:
     value["audit"]["selected_block_count"] = len(offer.audit.blocks)  # type: ignore[index]
     value["falsification_rank"] = offer.falsification_rank
     return value
+
+
+def _qualification_value(
+    qualification: CandidateQualification,
+) -> dict[str, object]:
+    return {
+        "candidate_id": qualification.candidate_id,
+        "endpoint": asdict(qualification.endpoint),
+        "center_frequency_hz": qualification.center_frequency_hz,
+        "artifact_hash": qualification.artifact_hash,
+        "decision": qualification.decision,
+        "reason": qualification.reason,
+        "offer": (
+            None
+            if qualification.offer is None
+            else _offer_value(qualification.offer)
+        ),
+    }
 
 
 def _clause_statement(clause: str, satisfied: bool, unobservable: bool) -> str:
