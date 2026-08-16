@@ -1,0 +1,8 @@
+# Minimal offline verification environment for experiments/live_instrument.
+numpy>=1.24.0
+scipy>=1.10.0
+sgp4>=2.20
+skyfield>=1.45
+Pillow>=10.0.0
+websocket-client>=1.8.0
+pytest>=8.0.0

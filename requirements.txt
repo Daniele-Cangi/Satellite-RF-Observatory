@@ -36,6 +36,8 @@ alembic>=1.11.0            # Database migrations (legacy)
 requests>=2.31.0           # HTTP library (TLE downloads)
 PyYAML>=6.0                # Configuration files
 loguru>=0.7.0              # Logging (optional)
+Pillow>=10.0.0             # In-memory SatNOGS waterfall inspection
+websocket-client>=1.8.0    # Short public KiwiSDR IQ probes
 
 # ----------------------------------------------------------------------------
 # SDR Hardware Interface
