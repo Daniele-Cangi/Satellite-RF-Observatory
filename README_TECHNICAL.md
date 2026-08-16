@@ -210,6 +210,16 @@ while any qualification error keeps aggregate availability indeterminate.
 These receipts remain local to this vertical probe rather than becoming a
 generic capability framework.
 
+The first F2.5.2 live outcome validated the new boundary: one reference branch
+was `READY` with a hashed GNSS IQ witness while its perturbed peer was
+`CAPABILITY_REJECTED`. It also showed that structured evidence was not yet
+driving all control. The legacy retry selector searched aggregate statement
+text, so replacing that prose with an atomic summary silently disabled the
+declared retries. Receipt JSONL was also stdout-only and one console segment
+was not retained. Future correction must use structured branch error types for
+retry eligibility and a bounded strict-JSON receipt sink; neither change
+requires RF persistence.
+
 ## 8. Prospective freeze and outcomes
 
 Before plan freeze, a declared retry budget may cover only timeout, transport,

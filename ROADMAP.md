@@ -115,6 +115,29 @@ authorized by this roadmap. Any future session must be explicitly approved
 after the new runtime commit is frozen; it must retain the existing candidates,
 centers, retry policy, thresholds and one-outcome stop condition.
 
+The separately authorised F2.5.2 execution has now occurred and is frozen as
+`GATE_F2_5_2_OUTCOME_1.md`. It terminated `QUALIFICATION_INCOMPLETE`; no second
+session is authorised.
+
+## Next gate: structured control and receipt retention, offline only
+
+The next minimum correction must:
+
+1. derive retry eligibility from atomic `BranchOpenState` and typed branch
+   errors, never from aggregate statement text;
+2. prove that the unchanged budget of two retries, maximum one per endpoint,
+   is materialised exactly for allowed transport/software failures;
+3. persist one bounded strict-JSONL session artifact containing only receipts
+   and hashes;
+4. exclude raw SND frames, IQ arrays, waterfall and STFT from that sink;
+5. classify sink/serialization failure descriptively without changing the
+   physical branch or pair decision;
+6. leave candidates, centers, thresholds, physical question and stop condition
+   unchanged.
+
+This gate must remain offline and must not reconstruct the missing Hill receipt
+or reinterpret F2.5.2 outcome 1.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

@@ -87,6 +87,15 @@ when the peer fails. It does not change the candidates, tuning policy,
 thresholds or DDC question, and no new live connection has been made. See
 [`GATE_F2_5_2_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_2_OFFLINE.md).
 
+The single F2.5.2 live session ended as `QUALIFICATION_INCOMPLETE`, but its
+atomic boundary exposed a real asymmetric result: one KFS reference branch
+reached GNSS IQ readiness with two pre-decode-hashed frames while its perturbed
+peer was explicitly rejected. No pair or DDC hypothesis was admitted. The run
+also exposed two descriptive-control failures: retry eligibility still
+depended on aggregate prose, and stdout-only receipts were not fully retained.
+See
+[`GATE_F2_5_2_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_2_OUTCOME_1.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:
