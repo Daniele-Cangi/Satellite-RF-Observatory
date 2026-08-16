@@ -19,6 +19,7 @@ import struct
 from threading import Event
 import time
 from typing import Callable, Iterable, Sequence
+from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
@@ -63,6 +64,12 @@ CLAUSE_NAMES = (
     "no_invalidating_overflow",
 )
 
+PHASE_CLAUSE_NAMES = (
+    "qualification_completed",
+    "capability_admitted",
+    "falsifiable_intervention_available",
+)
+
 
 class CapabilityState(str, Enum):
     CAPABILITY_DISCOVERED = "CAPABILITY_DISCOVERED"
@@ -72,7 +79,33 @@ class CapabilityState(str, Enum):
     CAPABILITY_REJECTED = "CAPABILITY_REJECTED"
 
 
+class GatePhase(str, Enum):
+    BOOTSTRAP = "BOOTSTRAP"
+    DISCOVERY = "DISCOVERY"
+    QUALIFICATION = "QUALIFICATION"
+    ADMISSION = "ADMISSION"
+    PLAN_FREEZE = "PLAN_FREEZE"
+    EXPERIMENT = "EXPERIMENT"
+
+
+class DiscoveryResponseStatus(str, Enum):
+    TRANSPORT_ERROR = "TRANSPORT_ERROR"
+    PROTOCOL_ERROR = "PROTOCOL_ERROR"
+    DESCRIPTION_ERROR = "DESCRIPTION_ERROR"
+    VALID_EMPTY_RESULT = "VALID_EMPTY_RESULT"
+    VALID_CANDIDATE_RESULT = "VALID_CANDIDATE_RESULT"
+
+
+class DiscoveryOutcomeKind(str, Enum):
+    DISCOVERY_PATH_FAILED = "DISCOVERY_PATH_FAILED"
+    NO_CAPABILITY_DISCOVERED = "NO_CAPABILITY_DISCOVERED"
+    CANDIDATES_DISCOVERED = "CANDIDATES_DISCOVERED"
+
+
 class OutcomeKind(str, Enum):
+    DISCOVERY_PATH_FAILED = "DISCOVERY_PATH_FAILED"
+    NO_CAPABILITY_DISCOVERED = "NO_CAPABILITY_DISCOVERED"
+    NO_CAPABILITY_QUALIFIED = "NO_CAPABILITY_QUALIFIED"
     NO_CAPABILITY_ADMITTED = "NO_CAPABILITY_ADMITTED"
     NO_FALSIFIABLE_EXPERIMENT_AVAILABLE = "NO_FALSIFIABLE_EXPERIMENT_AVAILABLE"
     RF_FRAME_PREDICTION_SUPPORTED = "RF_FRAME_PREDICTION_SUPPORTED"
@@ -173,6 +206,224 @@ class MotherPlan:
 
 
 @dataclass(frozen=True, slots=True)
+class DiscoveryReceipt:
+    """One transport attempt against one ephemeral inventory path."""
+
+    provider: str
+    inventory_root: str
+    transport_route: str
+    access_mode: str
+    started_at: datetime
+    completed_at: datetime
+    response_status: DiscoveryResponseStatus
+    candidate_count: int
+    response_hash: str | None
+    error_class: str | None
+    error_detail: str | None
+    retry_index: int
+    expires_at: datetime
+
+    def __post_init__(self) -> None:
+        started = _utc(self.started_at)
+        completed = _utc(self.completed_at)
+        expires = _utc(self.expires_at)
+        if not all((self.provider, self.inventory_root, self.transport_route, self.access_mode)):
+            raise ValueError("discovery lineage fields cannot be empty")
+        if not isinstance(self.response_status, DiscoveryResponseStatus):
+            raise ValueError("response_status must be a DiscoveryResponseStatus")
+        if completed < started:
+            raise ValueError("discovery completion precedes its start")
+        if expires <= completed:
+            raise ValueError("discovery receipt must expire after completion")
+        if self.candidate_count < 0 or self.retry_index < 0:
+            raise ValueError("discovery counts cannot be negative")
+        valid = self.response_status in (
+            DiscoveryResponseStatus.VALID_EMPTY_RESULT,
+            DiscoveryResponseStatus.VALID_CANDIDATE_RESULT,
+        )
+        if self.response_status is DiscoveryResponseStatus.TRANSPORT_ERROR and self.response_hash is not None:
+            raise ValueError("a transport failure without a response cannot invent a response hash")
+        if self.response_hash is not None and re.fullmatch(r"[0-9a-f]{64}", self.response_hash) is None:
+            raise ValueError("response_hash must be a lowercase SHA-256 digest")
+        if self.response_status is DiscoveryResponseStatus.VALID_EMPTY_RESULT and self.candidate_count != 0:
+            raise ValueError("VALID_EMPTY_RESULT requires zero candidates")
+        if self.response_status is DiscoveryResponseStatus.VALID_CANDIDATE_RESULT and self.candidate_count <= 0:
+            raise ValueError("VALID_CANDIDATE_RESULT requires at least one candidate")
+        if valid and self.response_hash is None:
+            raise ValueError("a valid discovery response requires its response hash")
+        if valid and (self.error_class is not None or self.error_detail is not None):
+            raise ValueError("a valid discovery result cannot carry an error")
+        if not valid and (not self.error_class or not self.error_detail):
+            raise ValueError("a discovery error requires class and detail")
+
+    @property
+    def successful(self) -> bool:
+        return self.response_status in (
+            DiscoveryResponseStatus.VALID_EMPTY_RESULT,
+            DiscoveryResponseStatus.VALID_CANDIDATE_RESULT,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class DiscoveryAttempt:
+    receipt: DiscoveryReceipt
+    candidates: tuple[kiwi.KiwiEndpoint, ...]
+
+    def __post_init__(self) -> None:
+        if len(self.candidates) != self.receipt.candidate_count:
+            raise ValueError("candidate payload does not match its atomic discovery receipt")
+
+
+@dataclass(frozen=True, slots=True)
+class GateProgress:
+    phase_reached: GatePhase
+    successful_discovery_paths: int
+    candidates_discovered: int
+    qualifications_completed: int
+    capabilities_admitted: int
+
+    def __post_init__(self) -> None:
+        counts = (
+            self.successful_discovery_paths,
+            self.candidates_discovered,
+            self.qualifications_completed,
+            self.capabilities_admitted,
+        )
+        if any(value < 0 for value in counts):
+            raise ValueError("Gate phase counts cannot be negative")
+        if self.candidates_discovered > 0 and self.successful_discovery_paths == 0:
+            raise ValueError("candidates require a successful discovery path")
+        if self.qualifications_completed > self.candidates_discovered:
+            raise ValueError("completed qualifications cannot exceed discovered candidates")
+        if self.capabilities_admitted > self.qualifications_completed:
+            raise ValueError("admitted capabilities require completed qualifications")
+        phase_rank = {
+            GatePhase.BOOTSTRAP: 0,
+            GatePhase.DISCOVERY: 1,
+            GatePhase.QUALIFICATION: 2,
+            GatePhase.ADMISSION: 3,
+            GatePhase.PLAN_FREEZE: 4,
+            GatePhase.EXPERIMENT: 5,
+        }
+        reached = phase_rank[self.phase_reached]
+        if self.candidates_discovered > 0 and reached < phase_rank[GatePhase.QUALIFICATION]:
+            raise ValueError("discovered candidates require entry into qualification")
+        if self.qualifications_completed > 0 and reached < phase_rank[GatePhase.ADMISSION]:
+            raise ValueError("completed qualifications require entry into admission")
+        if self.capabilities_admitted > 0 and reached < phase_rank[GatePhase.ADMISSION]:
+            raise ValueError("admitted capabilities require the admission phase")
+
+
+@dataclass(frozen=True, slots=True)
+class CapabilityLineage:
+    """Causal identities remain distinct; listing diversity is not hardware diversity."""
+
+    inventory_root: str
+    listing_transport: str
+    endpoint_identity: str | None = None
+    hardware_root: str | None = None
+    direct_probe_succeeded: bool = False
+    measurement_root: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.direct_probe_succeeded and (self.endpoint_identity is None or self.hardware_root is None):
+            raise ValueError("a successful direct probe must establish endpoint and hardware identities")
+        if self.hardware_root is not None and not self.direct_probe_succeeded:
+            raise ValueError("a listing cannot establish a hardware root")
+        if self.measurement_root is not None and not self.direct_probe_succeeded:
+            raise ValueError("an endpoint becomes a measurement root only after a successful direct probe")
+
+
+def inventory_root_count(lineages: Sequence[CapabilityLineage]) -> int:
+    """Transport mirrors of one registry contribute one inventory root."""
+
+    return len({lineage.inventory_root for lineage in lineages})
+
+
+def discovery_outcome(
+    receipts: Sequence[DiscoveryReceipt],
+    *,
+    unique_candidate_count: int,
+) -> DiscoveryOutcomeKind:
+    if unique_candidate_count < 0:
+        raise ValueError("unique candidate count cannot be negative")
+    successful = [receipt for receipt in receipts if receipt.successful]
+    if not successful:
+        if unique_candidate_count:
+            raise ValueError("candidates cannot emerge without a valid discovery result")
+        return DiscoveryOutcomeKind.DISCOVERY_PATH_FAILED
+    if unique_candidate_count == 0:
+        return DiscoveryOutcomeKind.NO_CAPABILITY_DISCOVERED
+    if not any(receipt.response_status is DiscoveryResponseStatus.VALID_CANDIDATE_RESULT for receipt in successful):
+        raise ValueError("candidate count conflicts with valid discovery receipts")
+    return DiscoveryOutcomeKind.CANDIDATES_DISCOVERED
+
+
+def validate_prefreeze_outcome(outcome: OutcomeKind, progress: GateProgress) -> None:
+    """Prevent a downstream absence label from crossing an unreached phase."""
+
+    if outcome is OutcomeKind.DISCOVERY_PATH_FAILED:
+        valid = progress.successful_discovery_paths == 0
+        expected_phase = GatePhase.DISCOVERY
+    elif outcome is OutcomeKind.NO_CAPABILITY_DISCOVERED:
+        valid = progress.successful_discovery_paths > 0 and progress.candidates_discovered == 0
+        expected_phase = GatePhase.DISCOVERY
+    elif outcome is OutcomeKind.NO_CAPABILITY_QUALIFIED:
+        valid = progress.candidates_discovered > 0 and progress.qualifications_completed == 0
+        expected_phase = GatePhase.QUALIFICATION
+    elif outcome is OutcomeKind.NO_CAPABILITY_ADMITTED:
+        valid = progress.qualifications_completed > 0 and progress.capabilities_admitted == 0
+        expected_phase = GatePhase.ADMISSION
+    elif outcome is OutcomeKind.NO_FALSIFIABLE_EXPERIMENT_AVAILABLE:
+        valid = progress.capabilities_admitted > 0
+        expected_phase = GatePhase.ADMISSION
+    else:
+        raise ValueError("outcome is not a pre-freeze stop outcome")
+    if not valid:
+        raise ValueError(f"{outcome.value} is inconsistent with the recorded phase counts")
+    if progress.phase_reached is not expected_phase:
+        raise ValueError(f"{outcome.value} requires phase_reached={expected_phase.value}")
+
+
+def _phase_stop_assessments(outcome: OutcomeKind) -> tuple[ClauseAssessment, ...]:
+    if outcome in (OutcomeKind.DISCOVERY_PATH_FAILED, OutcomeKind.NO_CAPABILITY_DISCOVERED):
+        statuses = (
+            ClauseStatus.NOT_EVALUATED,
+            ClauseStatus.NOT_EVALUATED,
+            ClauseStatus.NOT_EVALUATED,
+        )
+    elif outcome is OutcomeKind.NO_CAPABILITY_QUALIFIED:
+        statuses = (
+            ClauseStatus.UNSATISFIED,
+            ClauseStatus.NOT_EVALUATED,
+            ClauseStatus.NOT_EVALUATED,
+        )
+    elif outcome is OutcomeKind.NO_CAPABILITY_ADMITTED:
+        statuses = (
+            ClauseStatus.SATISFIED,
+            ClauseStatus.UNSATISFIED,
+            ClauseStatus.NOT_EVALUATED,
+        )
+    elif outcome is OutcomeKind.NO_FALSIFIABLE_EXPERIMENT_AVAILABLE:
+        statuses = (
+            ClauseStatus.SATISFIED,
+            ClauseStatus.SATISFIED,
+            ClauseStatus.UNSATISFIED,
+        )
+    else:
+        raise ValueError("phase stop assessments require a pre-freeze stop outcome")
+    statements = {
+        ClauseStatus.SATISFIED: "phase gate completed positively",
+        ClauseStatus.UNSATISFIED: "phase was entered but its gate was not satisfied",
+        ClauseStatus.NOT_EVALUATED: "previous phase was not completed; this gate was not evaluated",
+    }
+    return tuple(
+        ClauseAssessment(name, status, statements[status], ())
+        for name, status in zip(PHASE_CLAUSE_NAMES, statuses)
+    )
+
+
+@dataclass(frozen=True, slots=True)
 class EndpointCapability:
     endpoint: kiwi.KiwiEndpoint
     state: CapabilityState
@@ -182,6 +433,11 @@ class EndpointCapability:
     gps_good: bool | None
     location: tuple[float, float] | None
     reason: str
+    expires_at: datetime
+
+    def __post_init__(self) -> None:
+        if _utc(self.expires_at) <= _utc(self.verified_at):
+            raise ValueError("candidate capability receipt must have a positive TTL")
 
 
 @dataclass(frozen=True, slots=True)
@@ -343,6 +599,10 @@ class GateF2Result:
     abstractions_surviving: tuple[str, ...]
     abstraction_eliminated: str
     shock: str
+    phase_reached: GatePhase = GatePhase.EXPERIMENT
+    progress: GateProgress | None = None
+    phase_clause_assessments: tuple[ClauseAssessment, ...] = ()
+    discovery_receipts: tuple[DiscoveryReceipt, ...] = ()
 
 
 @dataclass(slots=True)
@@ -734,12 +994,7 @@ class _WaterfallArtifact:
     arrived_end: datetime
 
 
-def discover_directory_endpoints(mother: MotherPlan) -> tuple[kiwi.KiwiEndpoint, ...]:
-    """One ephemeral directory read; no catalog is written or retained."""
-
-    request = Request(mother.directory_url, headers={"User-Agent": "Satellite-RF-Observatory-Gate-F2/0.1"})
-    with urlopen(request, timeout=8.0) as response:
-        text = response.read().decode("utf-8", errors="replace")
+def _parse_directory_endpoints(text: str, mother: MotherPlan) -> tuple[kiwi.KiwiEndpoint, ...]:
     urls = re.findall(r"https?://[^\s<>\"']+", text)
     endpoints: dict[tuple[str, int], kiwi.KiwiEndpoint] = {}
     for raw in urls:
@@ -752,6 +1007,102 @@ def discover_directory_endpoints(mother: MotherPlan) -> tuple[kiwi.KiwiEndpoint,
     # Directory order must not become an implicit planner preference.
     ordered = sorted(endpoints.values(), key=lambda endpoint: sha256(f"{endpoint.host}:{endpoint.port}".encode()).hexdigest())
     return tuple(ordered[: mother.maximum_directory_candidates])
+
+
+def discover_directory_attempt(
+    mother: MotherPlan,
+    *,
+    retry_index: int,
+    now: Callable[[], datetime] = lambda: datetime.now(timezone.utc),
+) -> DiscoveryAttempt:
+    """Read one listing route and return an atomic result, including failures."""
+
+    provider = "KiwiSDR public directory"
+    inventory_root = "kiwisdr-public-registry"
+    access_mode = "public HTTPS GET"
+    started = _utc(now())
+    try:
+        request = Request(mother.directory_url, headers={"User-Agent": "Satellite-RF-Observatory-Gate-F2/0.1"})
+        with urlopen(request, timeout=8.0) as response:
+            payload = response.read()
+            status_code = getattr(response, "status", 200)
+        completed = _utc(now())
+        response_hash = sha256(payload).hexdigest()
+        if status_code is not None and not 200 <= int(status_code) < 300:
+            receipt = DiscoveryReceipt(
+                provider, inventory_root, mother.directory_url, access_mode,
+                started, completed, DiscoveryResponseStatus.PROTOCOL_ERROR, 0,
+                response_hash, "HTTPStatusError", f"HTTP status {status_code}",
+                retry_index, completed + timedelta(seconds=mother.offer_ttl_s),
+            )
+            return DiscoveryAttempt(receipt, ())
+        try:
+            text = payload.decode("utf-8", errors="strict")
+            endpoints = _parse_directory_endpoints(text, mother)
+        except Exception as error:
+            receipt = DiscoveryReceipt(
+                provider, inventory_root, mother.directory_url, access_mode,
+                started, completed, DiscoveryResponseStatus.DESCRIPTION_ERROR, 0,
+                response_hash, type(error).__name__, str(error), retry_index,
+                completed + timedelta(seconds=mother.offer_ttl_s),
+            )
+            return DiscoveryAttempt(receipt, ())
+        result_status = (
+            DiscoveryResponseStatus.VALID_CANDIDATE_RESULT
+            if endpoints
+            else DiscoveryResponseStatus.VALID_EMPTY_RESULT
+        )
+        receipt = DiscoveryReceipt(
+            provider, inventory_root, mother.directory_url, access_mode,
+            started, completed, result_status, len(endpoints), response_hash,
+            None, None, retry_index,
+            completed + timedelta(seconds=mother.offer_ttl_s),
+        )
+        return DiscoveryAttempt(receipt, endpoints)
+    except HTTPError as error:
+        completed = _utc(now())
+        try:
+            payload = error.read()
+        except Exception:
+            payload = None
+        receipt = DiscoveryReceipt(
+            provider, inventory_root, mother.directory_url, access_mode,
+            started, completed, DiscoveryResponseStatus.PROTOCOL_ERROR, 0,
+            sha256(payload).hexdigest() if payload is not None else None,
+            type(error).__name__, str(error), retry_index,
+            completed + timedelta(seconds=mother.offer_ttl_s),
+        )
+        return DiscoveryAttempt(receipt, ())
+    except (URLError, OSError, TimeoutError) as error:
+        completed = _utc(now())
+        receipt = DiscoveryReceipt(
+            provider, inventory_root, mother.directory_url, access_mode,
+            started, completed, DiscoveryResponseStatus.TRANSPORT_ERROR, 0,
+            None, type(error).__name__, str(error), retry_index,
+            completed + timedelta(seconds=mother.offer_ttl_s),
+        )
+        return DiscoveryAttempt(receipt, ())
+    except Exception as error:
+        completed = _utc(now())
+        receipt = DiscoveryReceipt(
+            provider, inventory_root, mother.directory_url, access_mode,
+            started, completed, DiscoveryResponseStatus.DESCRIPTION_ERROR, 0,
+            None, type(error).__name__, str(error), retry_index,
+            completed + timedelta(seconds=mother.offer_ttl_s),
+        )
+        return DiscoveryAttempt(receipt, ())
+
+
+def discover_directory_endpoints(mother: MotherPlan) -> tuple[kiwi.KiwiEndpoint, ...]:
+    """Compatibility helper: one atomic attempt, with no hidden retry."""
+
+    attempt = discover_directory_attempt(mother, retry_index=0)
+    if not attempt.receipt.successful:
+        raise RuntimeError(
+            f"{attempt.receipt.response_status.value}: "
+            f"{attempt.receipt.error_class}: {attempt.receipt.error_detail}"
+        )
+    return attempt.candidates
 
 
 def _status_location(status: dict[str, str]) -> tuple[float, float] | None:
@@ -773,6 +1124,7 @@ def qualify_endpoint_descriptions(
 ) -> tuple[EndpointCapability, ...]:
     def one(endpoint: kiwi.KiwiEndpoint) -> EndpointCapability:
         now = datetime.now(timezone.utc)
+        expires_at = now + timedelta(seconds=mother.offer_ttl_s)
         try:
             status = kiwi.fetch_kiwi_status(endpoint, timeout_s=5.0)
             artifact_hash = _hash(status)
@@ -781,14 +1133,14 @@ def qualify_endpoint_descriptions(
             gps_good = None if gps_good_value is None else int(gps_good_value or 0) > 0
             location = _status_location(status)
             if ext_api <= 0:
-                return EndpointCapability(endpoint, CapabilityState.CAPABILITY_REJECTED, now, artifact_hash, ext_api, gps_good, location, "no external API slot")
+                return EndpointCapability(endpoint, CapabilityState.CAPABILITY_REJECTED, now, artifact_hash, ext_api, gps_good, location, "no external API slot", expires_at)
             if gps_good is False:
-                return EndpointCapability(endpoint, CapabilityState.CAPABILITY_REJECTED, now, artifact_hash, ext_api, gps_good, location, "GNSS status is not good")
+                return EndpointCapability(endpoint, CapabilityState.CAPABILITY_REJECTED, now, artifact_hash, ext_api, gps_good, location, "GNSS status is not good", expires_at)
             if location is None:
-                return EndpointCapability(endpoint, CapabilityState.CAPABILITY_REJECTED, now, artifact_hash, ext_api, gps_good, location, "hardware location unavailable; independence cannot be checked")
-            return EndpointCapability(endpoint, CapabilityState.CAPABILITY_QUALIFIED, now, artifact_hash, ext_api, gps_good, location, "description closes API/GNSS/location admission")
+                return EndpointCapability(endpoint, CapabilityState.CAPABILITY_REJECTED, now, artifact_hash, ext_api, gps_good, location, "hardware location unavailable; independence cannot be checked", expires_at)
+            return EndpointCapability(endpoint, CapabilityState.CAPABILITY_QUALIFIED, now, artifact_hash, ext_api, gps_good, location, "description closes API/GNSS/location admission", expires_at)
         except Exception as error:
-            return EndpointCapability(endpoint, CapabilityState.QUALIFICATION_ERROR, now, _hash({"endpoint": asdict(endpoint), "error_type": type(error).__name__}), None, None, None, str(error))
+            return EndpointCapability(endpoint, CapabilityState.QUALIFICATION_ERROR, now, _hash({"endpoint": asdict(endpoint), "error_type": type(error).__name__}), None, None, None, str(error), expires_at)
 
     with ThreadPoolExecutor(max_workers=min(8, max(1, len(endpoints)))) as pool:
         futures = [pool.submit(one, endpoint) for endpoint in endpoints]
@@ -806,8 +1158,16 @@ def _haversine_km(left: tuple[float, float], right: tuple[float, float]) -> floa
 def enumerate_hardware_pairs(
     capabilities: Sequence[EndpointCapability],
     mother: MotherPlan,
+    *,
+    at: datetime | None = None,
 ) -> tuple[tuple[EndpointCapability, EndpointCapability], ...]:
-    qualified = [item for item in capabilities if item.state is CapabilityState.CAPABILITY_QUALIFIED and item.location is not None]
+    evaluated_at = _utc(at or datetime.now(timezone.utc))
+    qualified = [
+        item for item in capabilities
+        if item.state is CapabilityState.CAPABILITY_QUALIFIED
+        and item.location is not None
+        and _utc(item.expires_at) > evaluated_at
+    ]
     pairs: list[tuple[float, str, EndpointCapability, EndpointCapability]] = []
     for index, left in enumerate(qualified):
         for right in qualified[index + 1 :]:
@@ -1546,27 +1906,46 @@ def no_experiment_result(
     outcome: OutcomeKind,
     reason: str,
     *,
+    progress: GateProgress,
+    discovery_receipts: tuple[DiscoveryReceipt, ...],
     candidate_hashes: tuple[str, ...] = (),
     evaluated_at: datetime | None = None,
 ) -> GateF2Result:
-    if outcome not in (
-        OutcomeKind.NO_CAPABILITY_ADMITTED,
-        OutcomeKind.NO_FALSIFIABLE_EXPERIMENT_AVAILABLE,
-    ):
-        raise ValueError("no_experiment_result requires a pre-freeze stop outcome")
+    validate_prefreeze_outcome(outcome, progress)
+    if not discovery_receipts:
+        raise ValueError("a pre-freeze stop requires atomic discovery receipts")
+    successful_paths = len({
+        (receipt.provider, receipt.inventory_root, receipt.transport_route)
+        for receipt in discovery_receipts
+        if receipt.successful
+    })
+    if successful_paths != progress.successful_discovery_paths:
+        raise ValueError("successful discovery path count conflicts with discovery receipts")
+    described_candidates = sum(receipt.candidate_count for receipt in discovery_receipts if receipt.successful)
+    if progress.candidates_discovered > described_candidates:
+        raise ValueError("discovered candidate count exceeds the atomic discovery receipts")
     now = _utc(evaluated_at or datetime.now(timezone.utc))
     assessments = tuple(
-        ClauseAssessment(name, ClauseStatus.NOT_EVALUATED, "no plan entered confirmation", ())
+        ClauseAssessment(name, ClauseStatus.NOT_EVALUATED, "plan freeze was not reached", ())
         for name in CLAUSE_NAMES
     )
+    phase_assessments = _phase_stop_assessments(outcome)
+    model_roots = tuple(sorted({
+        f"inventory:{item.inventory_root}" for item in discovery_receipts
+    }))
+    if progress.qualifications_completed > 0:
+        model_roots += (f"kiwi-server:{KIWI_SERVER_COMMIT}",)
     receipt = ConstraintReceipt(
         "gate-f2-targetless-retune",
         now,
         now,
-        (Constraint("experiment_admission", "stopped_before_freeze", outcome, None, reason, "Gate F2 budget and admission"),),
-        (Transform("qualification", "stopped", reason),),
+        (
+            Constraint("phase_reached", "terminal_phase", progress.phase_reached, None, reason, "Gate F2.1 phase ledger"),
+            Constraint("terminal_outcome", "stopped_before_freeze", outcome, None, reason, "Gate F2.1 phase invariants"),
+        ),
+        (Transform(progress.phase_reached.value.lower(), "stopped", reason),),
         (),
-        (f"kiwi-server:{KIWI_SERVER_COMMIT}",),
+        model_roots,
         candidate_hashes,
         ("no confirmation samples exist",),
     )
@@ -1578,7 +1957,7 @@ def no_experiment_result(
         (),
         (),
         receipt,
-        ("capability descriptions and qualification receipts only",),
+        (f"atomic discovery receipts; terminal phase={progress.phase_reached.value}",),
         ("no physical frame classification was derived",),
         ("mother method, budget, admission order and retry policy",),
         (reason,),
@@ -1586,6 +1965,10 @@ def no_experiment_result(
         ("atomic receipts", "strict descriptive boundary", "artifact hashes"),
         "central planner",
         "correct termination without an experiment is itself an epistemic result",
+        phase_reached=progress.phase_reached,
+        progress=progress,
+        phase_clause_assessments=phase_assessments,
+        discovery_receipts=discovery_receipts,
     )
 
 
@@ -1659,6 +2042,41 @@ class _RetryBudget:
     retried_keys: set[str]
 
 
+def _discover_directory_with_retry(
+    mother: MotherPlan,
+    budget: _RetryBudget,
+    sink: Callable[[str], None],
+) -> tuple[tuple[kiwi.KiwiEndpoint, ...], tuple[DiscoveryReceipt, ...]]:
+    """Run one transport path with at most one predeclared retry."""
+
+    key = "directory"
+    receipts: list[DiscoveryReceipt] = []
+    for retry_index in range(2):
+        attempt = discover_directory_attempt(mother, retry_index=retry_index)
+        receipts.append(attempt.receipt)
+        emit_jsonl("gate_f2_discovery_receipt", attempt.receipt, sink=sink)
+        if attempt.receipt.successful:
+            return attempt.candidates, tuple(receipts)
+        can_retry = retry_index == 0 and budget.remaining > 0 and key not in budget.retried_keys
+        emit_jsonl(
+            "gate_f2_prefreeze_failure",
+            {
+                "candidate_key": key,
+                "error_type": attempt.receipt.error_class,
+                "reason": attempt.receipt.error_detail,
+                "response_status": attempt.receipt.response_status,
+                "retry_authorized": can_retry,
+            },
+            sink=sink,
+        )
+        if not can_retry:
+            break
+        budget.remaining -= 1
+        budget.retried_keys.add(key)
+        emit_jsonl("gate_f2_prefreeze_retry", {"candidate_key": key, "retries_remaining": budget.remaining}, sink=sink)
+    return (), tuple(receipts)
+
+
 def _prefreeze_call(
     key: str,
     operation: Callable[[], object],
@@ -1692,12 +2110,31 @@ def run_once(*, mother: MotherPlan | None = None, sink: Callable[[str], None] = 
     emit_jsonl("gate_f2_protocol_audit_frozen", audit, sink=sink)
     emit_jsonl("gate_f2_mother_plan_frozen", mother, sink=sink)
 
-    try:
-        endpoints = tuple(_prefreeze_call("directory", lambda: discover_directory_endpoints(mother), retries, sink))  # type: ignore[arg-type]
-    except Exception as error:
+    endpoints, discovery_receipts = _discover_directory_with_retry(mother, retries, sink)
+    discovery_terminal = discovery_outcome(discovery_receipts, unique_candidate_count=len(endpoints))
+    emit_jsonl("gate_f2_discovery_outcome", discovery_terminal, sink=sink)
+    successful_discovery_paths = len({
+        (receipt.provider, receipt.inventory_root, receipt.transport_route)
+        for receipt in discovery_receipts
+        if receipt.successful
+    })
+    if discovery_terminal is DiscoveryOutcomeKind.DISCOVERY_PATH_FAILED:
+        reason = "all frozen discovery transport attempts failed before producing a valid inventory response"
         result = no_experiment_result(
-            OutcomeKind.NO_CAPABILITY_ADMITTED,
-            f"ephemeral directory discovery failed within retry budget: {error}",
+            OutcomeKind.DISCOVERY_PATH_FAILED,
+            reason,
+            progress=GateProgress(GatePhase.DISCOVERY, 0, 0, 0, 0),
+            discovery_receipts=discovery_receipts,
+        )
+        emit_jsonl("gate_f2_first_outcome", result, sink=sink)
+        return result
+    if discovery_terminal is DiscoveryOutcomeKind.NO_CAPABILITY_DISCOVERED:
+        reason = "at least one frozen discovery path returned a valid empty candidate inventory"
+        result = no_experiment_result(
+            OutcomeKind.NO_CAPABILITY_DISCOVERED,
+            reason,
+            progress=GateProgress(GatePhase.DISCOVERY, successful_discovery_paths, 0, 0, 0),
+            discovery_receipts=discovery_receipts,
         )
         emit_jsonl("gate_f2_first_outcome", result, sink=sink)
         return result
@@ -1706,11 +2143,38 @@ def run_once(*, mother: MotherPlan | None = None, sink: Callable[[str], None] = 
     for description in descriptions:
         emit_jsonl("gate_f2_capability_description", description, sink=sink)
     description_hashes = tuple(item.status_hash for item in descriptions)
+    qualifications_completed = sum(
+        item.state is CapabilityState.CAPABILITY_QUALIFIED for item in descriptions
+    )
+    if qualifications_completed == 0:
+        result = no_experiment_result(
+            OutcomeKind.NO_CAPABILITY_QUALIFIED,
+            "candidates were discovered, but no direct description probe completed qualification positively",
+            progress=GateProgress(
+                GatePhase.QUALIFICATION,
+                successful_discovery_paths,
+                len(endpoints),
+                0,
+                0,
+            ),
+            discovery_receipts=discovery_receipts,
+            candidate_hashes=description_hashes,
+        )
+        emit_jsonl("gate_f2_first_outcome", result, sink=sink)
+        return result
     pairs = enumerate_hardware_pairs(descriptions, mother)
     if not pairs:
         result = no_experiment_result(
             OutcomeKind.NO_CAPABILITY_ADMITTED,
             "no two current descriptions establish independent, GNSS-capable hardware roots within the frozen path-separation envelope",
+            progress=GateProgress(
+                GatePhase.ADMISSION,
+                successful_discovery_paths,
+                len(endpoints),
+                qualifications_completed,
+                0,
+            ),
+            discovery_receipts=discovery_receipts,
             candidate_hashes=description_hashes,
         )
         emit_jsonl("gate_f2_first_outcome", result, sink=sink)
@@ -1826,13 +2290,24 @@ def run_once(*, mother: MotherPlan | None = None, sink: Callable[[str], None] = 
             emit_jsonl("gate_f2_first_outcome", result, sink=sink)
             return result
 
-    outcome = OutcomeKind.NO_FALSIFIABLE_EXPERIMENT_AVAILABLE if saw_physically_qualified_pair else OutcomeKind.NO_CAPABILITY_ADMITTED
     reason = (
-        "current admitted roots produced no target/witness geometry with non-overlapping frame predictions before the frozen deadline"
+        "qualified roots exposed coarse RF structure, but no capability completed the full admission envelope before the frozen deadline"
         if saw_physically_qualified_pair
-        else "no capability pair completed physical qualification before the frozen deadline"
+        else "no capability pair completed the full admission envelope before the frozen deadline"
     )
-    result = no_experiment_result(outcome, reason, candidate_hashes=tuple(dict.fromkeys(qualification_hashes)))
+    result = no_experiment_result(
+        OutcomeKind.NO_CAPABILITY_ADMITTED,
+        reason,
+        progress=GateProgress(
+            GatePhase.ADMISSION,
+            successful_discovery_paths,
+            len(endpoints),
+            qualifications_completed,
+            0,
+        ),
+        discovery_receipts=discovery_receipts,
+        candidate_hashes=tuple(dict.fromkeys(qualification_hashes)),
+    )
     emit_jsonl("gate_f2_first_outcome", result, sink=sink)
     return result
 

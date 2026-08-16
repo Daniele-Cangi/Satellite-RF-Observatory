@@ -175,9 +175,17 @@ def test_reference_loss_is_not_detectable_not_a_negative_frame_result() -> None:
 
 
 def test_no_plan_marks_all_downstream_clauses_not_evaluated() -> None:
+    discovery = f2.DiscoveryReceipt(
+        "fixture", "inventory", "https://inventory.invalid/list", "fixture",
+        NOW - timedelta(seconds=2), NOW - timedelta(seconds=1),
+        f2.DiscoveryResponseStatus.VALID_CANDIDATE_RESULT, 2, "0" * 64,
+        None, None, 0, NOW + timedelta(seconds=599),
+    )
     result = f2.no_experiment_result(
         f2.OutcomeKind.NO_FALSIFIABLE_EXPERIMENT_AVAILABLE,
         "no witness",
+        progress=f2.GateProgress(f2.GatePhase.ADMISSION, 1, 2, 2, 1),
+        discovery_receipts=(discovery,),
         candidate_hashes=("description-hash",),
         evaluated_at=NOW,
     )
