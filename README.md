@@ -1,115 +1,94 @@
-# Satellite Intelligence System (SIS)
+# Satellite RF Observatory
 
-> Experimental passive satellite RF collection and analysis prototype.
+An experimental laboratory for building **falsifiable RF observations** from
+capabilities that are actually available in the current session.
 
-SIS explores a practical question:
+The project began as a satellite-identification prototype. The experiments in
+this repository changed the question:
 
-> Can a locally captured radio-frequency signal be compared with orbital and frequency data to produce a defensible list of possible satellite sources?
+> Given a finite time budget and live Internet-accessible RF capabilities, can
+> we freeze one prospective physical experiment whose positive **and negative**
+> outcomes are interpretable?
 
-The repository contains early implementations of SDR capture, offline spectrum analysis, signal detection, orbital propagation, and Doppler-based candidate scoring.
+Targets, frequencies, endpoints and even the phenomenon under test may emerge
+only after capability qualification. A satellite is one possible model, not a
+required starting point.
 
-It is **not an operational intelligence platform**, a finished monitoring product, or a validated satellite-identification system. Several components are incomplete, some belong to an older real-time architecture, and the current correlation logic still requires significant work before its results can be treated as reliable.
+This is research software. It is not an operational monitoring platform, a
+signal-identification service or evidence that any transmitter has been
+identified.
 
-## Early interface proof of concept
+## Current direction
 
-![Early SIS map-based interface proof of concept](docs/images/sis-proof-of-concept.webp)
+The supported research surface is [`experiments/live_instrument`](experiments/live_instrument/README.md).
+It contains two deliberately different branches:
 
-*Early map-based interface prototype created during the first SIS exploration. It documents the original visualization and interaction direction of the project. The labels, confidence value, sensor status, locations, and events shown are demonstration output and should not be interpreted as validated satellite identifications or production telemetry.*
-
-## Project status
-
-**Stage:** experimental proof of concept
-
-**Primary direction:** deterministic offline processing of locally captured IQ data
-
-| Component | Current state | Notes |
+| Branch | Starting point | What it tests |
 |---|---|---|
-| SDR IQ capture | Prototype implemented | Requires SoapySDR and compatible hardware; not covered by automated hardware tests. |
-| IQ file format | Partially implemented | Header-based files can be analyzed; metadata-scrubbed files are not yet compatible with the current reader. |
-| Offline DSP | Prototype implemented | Periodogram, CA-CFAR-style detection, peak clustering, SQLite storage, and JSON export are present. |
-| Synthetic DSP check | Implemented | Demonstrates detection of a strong synthetic carrier; it is not a full system validation. |
-| TLE propagation | Partially implemented | The legacy path uses Skyfield/SGP4; the offline processor does not yet perform full propagation. |
-| Satellite correlation | Experimental | Current scoring is based mainly on Doppler residuals and does not yet use a complete, verified downlink-frequency catalog. |
-| Encryption | Not implemented | The encryption option currently passes data through unchanged. Do not treat captures as encrypted. |
-| Secure export | Placeholder | Packaging, sanitization, checksums, and encryption still need implementation. |
-| FastAPI/WebSocket system | Legacy and incomplete | Retained as architectural reference; it is not the recommended execution path. |
-| Frontend | Not implemented | No supported dashboard is included. |
+| SatNOGS | model-conditioned published measurements | whether clause-driven continuity and corroboration survive source revocation and TTL expiry |
+| KiwiSDR | targetless live IQ | whether a shared or intervened RF structure is distinguishable under explicit temporal, transform and causal controls |
 
-The engineering plan for turning this prototype into a credible system is documented in [`ROADMAP.md`](ROADMAP.md).
+The two branches share only the primitives that survived both:
 
-## What the repository is trying to build
+- evaluation by contract clause, not one global health label;
+- atomic receipts;
+- event time and TTL;
+- transform ledger;
+- causal lineage;
+- separation of physical decisions from descriptive/software errors;
+- artifact hashing with zero RF persistence.
 
-The intended system is an offline-first satellite RF observatory:
+These are not promoted to a general framework. Each experiment must continue
+to justify them.
 
-```text
-SDR hardware or recorded IQ data
-                |
-                v
-       Versioned IQ capture
-                |
-                v
-   Deterministic DSP pipeline
-  FFT/PSD -> detection -> tracks
-                |
-                v
- Candidate generation and scoring
- orbit + known carrier + Doppler
-                |
-                v
-       SQLite and JSON results
-```
+## Latest checkpoint
 
-The key word is **candidate**. A measured frequency and a predicted Doppler shift are not, by themselves, sufficient to identify an arbitrary transmitter. Credible attribution also requires known nominal carrier frequencies, accurate timestamps, observer coordinates, receiver calibration, orbital visibility, and continuity across multiple observations.
-
-## Current repository structure
+Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
+for same-Kiwi multichannel qualification. Its intended path is:
 
 ```text
-analysis/
-  offline_processor.py     Offline IQ analysis and local result storage
-
-collectors/
-  passive_collector.py     Direct-to-disk SDR IQ capture
-
-processors/
-  correlation_engine.py    Experimental Doppler-based candidate scoring
-
-trackers/
-  tle_manager.py           TLE download, propagation, and visibility logic
-
-receivers/
-  base_receiver.py         Receiver abstraction
-  ku_band_receiver.py      Experimental Ku-band/Starlink receiver path
-  sdr_manager.py           Receiver factory prototype
-
-workers/                   Legacy real-time acquisition and DSP workers
-api/                       Legacy FastAPI and WebSocket layer
-scripts/                   Synthetic checks and exploratory simulations
-gray_system_main.py        Offline-first command-line entry point
+frozen affordances
+  -> direct simultaneous SND reference + perturbed attempt
+  -> two IQ streams
+  -> local in-memory STFT/PSD
+  -> targetless feature + witness
+  -> per-channel retune qualification
+  -> immutable plan
+  -> one prospective A1/B/A2 confirmation
+  -> one outcome
 ```
 
-## Supported development path
+The first and only live F2.5 execution ended correctly as
+`QUALIFICATION_INCOMPLETE`: all six `/status` requests succeeded, but the
+frozen center policy expected a `bandwidth` field that the responses did not
+contain. No SND channel was attempted, no IQ was acquired and
+`NO_MULTI_CHANNEL_CAPABILITY` was therefore forbidden. See
+[`GATE_F2_5_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_OUTCOME_1.md).
 
-For now, work should focus on the offline path:
+That failure is useful: removing W/F was not enough while information formerly
+learned from its handshake was still required before the direct SND probe.
 
-1. capture or provide IQ samples;
-2. process them locally;
-3. store signal detections;
-4. compare detections with a prepared local catalog;
-5. export reproducible results.
+## What can be claimed
 
-The legacy API, Redis, PostgreSQL, TimescaleDB, and WebSocket components should be treated as reference code until the offline core is correct and tested.
+Receipts may support narrow statements such as:
 
-## Installation
+- a measurement satisfied a named clause before its TTL expired;
+- two SND streams were simultaneous and independently sequenced;
+- a feature behaved consistently with being upstream of a per-channel DDC;
+- an observation was unavailable, unresolved, not detectable or not evaluated.
 
-### Requirements
+They do **not** automatically support:
 
-- Python 3.10 or newer
-- NumPy and SciPy
-- Skyfield and SGP4
-- SQLite, included with Python
-- SoapySDR only when using physical SDR hardware
+- transmitter or satellite identity;
+- external-RF origin;
+- common physical cause;
+- geolocation or TDoA;
+- absence of a phenomenon when detectability was not established;
+- multichannel unavailability when a second channel was never attempted.
 
-Create an environment and install the Python dependencies:
+## Quick start: offline verification
+
+Python 3.11 or 3.12 is recommended.
 
 ```bash
 python -m venv .venv
@@ -120,130 +99,85 @@ source .venv/bin/activate
 # Windows PowerShell
 # .venv\Scripts\Activate.ps1
 
-pip install -r requirements.txt
+python -m pip install -r requirements-live-instrument.txt
+python -m pytest experiments/live_instrument/tests -q
 ```
 
-SoapySDR should be installed through the operating system or hardware vendor packages rather than through `pip`.
+The test suite is offline. It uses deterministic fixtures and synthetic IQ;
+it does not contact SatNOGS, KiwiSDR or any other remote service.
 
-## Running the existing checks
+## Live execution policy
 
-### Synthetic DSP check
+Live runners are disposable experiment materializations, not daemons.
 
-```bash
-python scripts/verify_dsp.py
-```
+- Never run them as part of installation, import, tests or CI.
+- Freeze candidates, order, transforms, thresholds, retry budget and stop
+  condition before network access.
+- Use only public capabilities and respect receiver-owner access limits.
+- Retry only pre-freeze software/transport failures allowed by the frozen plan.
+- After plan freeze: zero retry, endpoint change, frequency change, threshold
+  change or second confirmation window.
+- Hash ephemeral RF artifacts before analysis and destruction; persist only
+  strict JSON receipts and hashes.
 
-This generates complex Gaussian noise plus a strong synthetic carrier and verifies that the current spectral detector can locate the carrier. It tests only the DSP detection example.
+Every new live session requires explicit authorization. The repository's
+documented outcomes must remain unchanged after the fact; fixes belong to a
+new gate and a new commit.
 
-### Import check
-
-```bash
-python scripts/verify_setup.py
-```
-
-This script reports import problems, but it is not currently a strict automated test and may still exit successfully after printing failures.
-
-### Exploratory correlation simulation
-
-```bash
-python scripts/simulation_runner.py
-```
-
-The simulation uses the same orbital model to generate and score a synthetic signal. It is useful for inspecting the intended data flow, but it should not be interpreted as independent evidence that the identification method works on real captures.
-
-## Offline collection and analysis
-
-### Capture IQ data
-
-```bash
-python gray_system_main.py collect \
-  --freq 145.8 \
-  --rate 2.4 \
-  --gain 40 \
-  --duration 60 \
-  --storage ./iq_data
-```
-
-This requires a compatible SDR device and SoapySDR installation.
-
-### Analyze captured files
-
-```bash
-python gray_system_main.py analyze \
-  --input ./iq_data \
-  --database ./analysis.db \
-  --export ./results.json
-```
-
-### Important current limitations
-
-- Do **not** rely on `--encrypt`; encryption is not implemented.
-- Do **not** use `--stealth` for data intended for the current offline analyzer. That mode removes the technical header that the analyzer expects.
-- Do **not** treat a high correlation score as confirmed satellite identity.
-- Do **not** treat example performance figures in older documentation as benchmark results unless they are reproduced and measured again.
-
-## Signal processing prototype
-
-The current offline processor performs the following operations:
-
-1. reads complex64 IQ samples;
-2. estimates power spectral density with a Hann-windowed periodogram;
-3. estimates a local noise floor using a CA-CFAR-style convolution kernel;
-4. detects bins above an adaptive threshold;
-5. clusters adjacent bins into candidate peaks;
-6. estimates frequency, power, bandwidth, and SNR;
-7. stores detections in SQLite;
-8. optionally exports results to JSON.
-
-This is a useful starting point, but it still needs deterministic timestamps per chunk, configurable detector parameters, edge handling, track formation across time, receiver calibration, reproducible datasets, and quantitative validation.
-
-## Correlation model: current limits
-
-The repository explores a Gaussian score based on the residual between measured and predicted frequency:
+## Repository map
 
 ```text
-residual = measured_frequency - predicted_frequency
-score = exp(-0.5 * (residual / sigma)^2)
+experiments/live_instrument/
+  models.py                 strict receipts, clause and JSON boundary
+  orbital_kernel.py         stateless Skyfield geometry/Doppler kernel
+  satnogs_probe.py          model-conditioned published artifacts
+  satnogs_failover.py       clause-driven continuity/corroboration failover
+  kiwi_probe.py             targetless dual-Kiwi capture and in-session nulls
+  kiwi_prospective.py       discovery/prediction/confirmation separation
+  kiwi_gate_e.py            detectability and qualification experiments
+  kiwi_gate_f2*.py          capability-first and same-Kiwi DDC interventions
+  tests/                     offline deterministic test suite
+  CHECKPOINT_*.md            checkpoint evidence
+  GATE_*.md                  frozen plans, outcomes and postmortems
+
+analysis/, collectors/, processors/, trackers/
+  original offline satellite-first prototype
+
+api/, workers/, core/, receivers/
+  legacy architecture retained for reference; not the supported path
 ```
 
-A serious implementation must calculate the predicted frequency from a known nominal carrier assigned to a candidate satellite:
+For mechanisms and state semantics, read
+[`README_TECHNICAL.md`](README_TECHNICAL.md). For the next bounded work, read
+[`ROADMAP.md`](ROADMAP.md).
 
-```text
-predicted_frequency = nominal_downlink_frequency + predicted_doppler_shift
-```
+## Original proof of concept
 
-The current code does not yet provide a complete, verified mapping between satellites and active downlink frequencies. Until that exists, the correlation engine is an experiment in candidate ranking, not a general identification engine.
+![Early map-based interface proof of concept](docs/images/sis-proof-of-concept.webp)
 
-Future scoring should combine multiple pieces of evidence:
+The image records the original product exploration. Its labels, confidence,
+locations and events are demonstration output, not validated telemetry or
+satellite identifications. No supported frontend is currently included.
 
-- known frequency compatibility;
-- predicted visibility and elevation;
-- Doppler residual after receiver calibration;
-- continuity of the Doppler curve over time;
-- signal bandwidth and modulation characteristics;
-- pass timing;
-- antenna pointing or direction-of-arrival data, when available.
+## Legacy offline prototype
 
-## Design principles going forward
+The original SDR-to-disk and satellite-candidate code remains available through
+`gray_system_main.py`. It is exploratory and is not the validated output of
+the live-instrument gates. In particular:
 
-- **Offline core first.** Networking and dashboards come after the analysis pipeline is correct.
-- **Claims follow tests.** Documentation must describe measured behavior, not intended behavior.
-- **Deterministic processing.** The same input and configuration should produce the same result.
-- **Hardware-independent testing.** Synthetic and recorded IQ fixtures must cover the core pipeline.
-- **Evidence, not labels.** Results should expose scores, residuals, assumptions, and alternative candidates.
-- **Security features must be real.** Encryption and sanitization should not be advertised before implementation and review.
-- **Clear separation of concerns.** Collection, DSP, orbital prediction, scoring, storage, and presentation should be independently testable.
+- encryption and secure export are not implemented;
+- metadata-scrubbed captures are incompatible with the current reader;
+- Doppler proximity is candidate ranking, not identification;
+- old API, Redis, PostgreSQL and frontend documents are historical.
 
 ## Legal and ethical use
 
-This repository is intended for lawful education, amateur-radio experimentation, spectrum research, and analysis of signals the operator is authorized to receive and process.
-
-It contains passive reception code and does not provide transmission, interference, decryption, or access-control bypass capabilities. Laws governing radio reception, recording, data retention, and satellite communications vary by jurisdiction. Users are responsible for obtaining any required authorization and complying with applicable regulations.
+Use this repository only for lawful education, amateur-radio experimentation,
+spectrum research and signals you are authorized to receive and process. It
+does not transmit, jam, decrypt or bypass access controls. Public receiver
+availability is not a blanket license to record or redistribute content.
+Operators are responsible for applicable radio, privacy and data-retention law.
 
 ## License
 
-Licensed under the Apache License 2.0. See [`LICENSE`](LICENSE).
-
----
-
-This repository should be read as an early technical exploration. Its value is the combination of RF collection, offline DSP, orbital prediction, and evidence-based candidate scoring. The next phase is not to add more features, but to make that narrow core correct, reproducible, and measurable.
+Apache License 2.0. See [`LICENSE`](LICENSE).
