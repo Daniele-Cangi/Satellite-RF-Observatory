@@ -49,6 +49,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 14. [`GATE_F2_5_2_OUTCOME_1.md`](GATE_F2_5_2_OUTCOME_1.md) — one ready branch preserved, peer rejection, and the remaining structured-control failures.
 15. [`GATE_F2_5_3_OFFLINE.md`](GATE_F2_5_3_OFFLINE.md) — typed retry control and bounded receipt-only JSONL retention, prepared without network activity.
 16. [`GATE_F2_5_3_1_OFFLINE.md`](GATE_F2_5_3_1_OFFLINE.md) — terminal manifest, prefix hash and guaranteed receipt closure, prepared without network activity.
+17. [`GATE_F2_5_3_1_OUTCOME_1.md`](GATE_F2_5_3_1_OUTCOME_1.md) — one live run materialised the exact retry budget and ended `QUALIFICATION_INCOMPLETE` before any IQ readiness or DDC experiment.
 
 ## Frozen-outcome rule
 

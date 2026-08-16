@@ -156,6 +156,13 @@ unexpected runtime exception. See `GATE_F2_5_3_1_OFFLINE.md`.
 
 No live F2.5.3.1 execution is authorised by this roadmap entry.
 
+The separately authorised first F2.5.3.1 execution is now complete and frozen
+as `GATE_F2_5_3_1_OUTCOME_1.md`. It materialised exactly two structured
+pre-freeze retries, retained a complete terminal-manifest JSONL artifact, and
+ended `QUALIFICATION_INCOMPLETE`: no branch delivered IQ readiness, so no
+topology, feature, plan or DDC hypothesis entered evaluation. No second session
+is authorised.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

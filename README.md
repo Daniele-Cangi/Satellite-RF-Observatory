@@ -114,6 +114,15 @@ serialization and mirror failures remain descriptive. No network activity was
 performed. See
 [`GATE_F2_5_3_1_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_3_1_OFFLINE.md).
 
+The single authorised F2.5.3.1 session then exercised all six frozen
+candidates and exactly the two allowed structured retries. No branch delivered
+an IQ frame: explicit branch rejections coexisted with transport closures or a
+timeout, so the correct outcome is `QUALIFICATION_INCOMPLETE`, not absence of
+multichannel capability. No topology, feature, plan or DDC hypothesis was
+evaluated. The 53-line receipt artifact closed `COMPLETE`, with matching prefix
+and whole-file hashes and zero RF persistence. See
+[`GATE_F2_5_3_1_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_3_1_OUTCOME_1.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:
