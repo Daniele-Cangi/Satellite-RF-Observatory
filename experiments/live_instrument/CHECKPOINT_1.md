@@ -30,7 +30,7 @@ Le primitive sono record in memoria, non una DSL e non un registry persistente.
 | `DecisionContract` | domanda, `valid_at`, osservabili necessari, età massima, incertezza massima, regole di rifiuto | non prescrive una sorgente o un satellite |
 | `CapabilityOffer` | osservabili disponibili ora, TTL calcolato da `event_end`, qualità dei transform, radici causali, costo e motivi di rigetto | non sopravvive al probe e non è un plugin registrato |
 | `EvidenceEvent` | finestra dell'evento, arrival time, URL/hash/dimensione, stazione, transform ledger, radici e tag di circolarità | non equivale automaticamente a una credenza |
-| `BeliefSnapshot` | esito separato per ogni clausola (`SATISFIED`, `UNSATISFIED`, `UNRESOLVED`), `valid_at`, measurement age, incertezza e radici attive | non comprime disponibilità e supporto causale in uno stato globale |
+| `BeliefSnapshot` | esito separato per ogni clausola (`SATISFIED`, `UNSATISFIED`, `UNRESOLVED`, `UNOBSERVABLE`), `valid_at`, measurement age, incertezza e radici attive | non comprime disponibilità e supporto causale in uno stato globale |
 | `ObservationLease` | offer selezionata, scadenza, stato di accesso e motivo di revoca | non promette una prenotazione remota inesistente |
 | `Transform` | operazione, input/output, stato `known/partial/unknown/model_conditioned`, parametri, modello e versione | non cancella dipendenze condivise |
 

@@ -9,10 +9,10 @@ from __future__ import annotations
 
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timedelta, timezone
 from hashlib import sha256
-import math
+import json
 import struct
 from threading import Event
 import time
@@ -62,6 +62,7 @@ class IQBlock:
     gps_timestamp_available: bool
     adc_overflow: bool
     sequence: int
+    arrived_at: datetime | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,6 +86,113 @@ class KiwiCapture:
     @property
     def samples(self) -> np.ndarray:
         return np.concatenate([block.samples for block in self.blocks])
+
+
+@dataclass(frozen=True, slots=True)
+class ScoutPlan:
+    """Frozen CP3 search/calibration plan; changing it creates a new trial."""
+
+    center_frequencies_hz: tuple[float, ...] = (
+        5_000_000.0,
+        10_000_000.0,
+        15_000_000.0,
+    )
+    scout_duration_s: float = 2.5
+    nperseg: int = 512
+    noverlap: int = 384
+    region_shapes: tuple[tuple[int, int], ...] = ((7, 8), (15, 16))
+    null_shift_count: int = 99
+    significance_alpha: float = 0.01
+    max_gps_solution_age_s: int = 30
+    max_arrival_latency_s: float = 5.0
+    min_overlap_s: float = 2.0
+    salience_clip: float = 12.0
+
+    def __post_init__(self) -> None:
+        if not self.center_frequencies_hz or any(
+            frequency <= 0 for frequency in self.center_frequencies_hz
+        ):
+            raise ValueError("the scout needs positive predeclared center frequencies")
+        if self.scout_duration_s <= 0 or self.min_overlap_s <= 0:
+            raise ValueError("scout and overlap durations must be positive")
+        if self.nperseg <= 0 or not 0 <= self.noverlap < self.nperseg:
+            raise ValueError("invalid STFT geometry")
+        if self.null_shift_count < 1 or not 0 < self.significance_alpha <= 1:
+            raise ValueError("invalid frozen null-test rule")
+        if any(frequency_bins < 1 or time_frames < 2 for frequency_bins, time_frames in self.region_shapes):
+            raise ValueError("region shapes must contain positive frequency/time extents")
+
+    @property
+    def plan_hash(self) -> str:
+        payload = json.dumps(asdict(self), sort_keys=True, separators=(",", ":"))
+        return sha256(payload.encode("utf-8")).hexdigest()
+
+
+@dataclass(frozen=True, slots=True)
+class CaptureAudit:
+    usable: bool
+    reasons: tuple[str, ...]
+    blocks: tuple[IQBlock, ...]
+    sequence_gap_count: int
+    timestamp_gap_count: int
+    dropped_block_count: int
+    overlap_ready_duration_s: float
+    effective_sample_rate_hz: float
+    sample_rate_drift_ppm: float
+    cumulative_timing_drift_s: float
+    arrival_latency_median_s: float | None
+    arrival_latency_p95_s: float | None
+    gps_solution_age_max_s: int | None
+
+
+@dataclass(frozen=True, slots=True)
+class ScoutRegion:
+    event_start: datetime
+    event_end: datetime
+    frequency_low_hz: float
+    frequency_high_hz: float
+    score: float
+    frequency_bins: int
+    time_frames: int
+
+
+@dataclass(frozen=True, slots=True)
+class ScoutResult:
+    region: ScoutRegion | None
+    observed_score: float | None
+    left_score: float | None
+    right_score: float | None
+    time_null_p: float | None
+    frequency_null_p: float | None
+    time_null_count: int
+    frequency_null_count: int
+    self_consistent: bool
+    even_odd_frequency_iou: float | None
+    relative_frequency_offset_hz: float | None
+    relative_frequency_drift_hz_s: float | None
+    alignable: bool
+    similarity_exceeds_null: bool
+    failures: tuple[str, ...]
+    plan_hash: str
+
+
+@dataclass(frozen=True, slots=True)
+class _SpectralGrid:
+    frequencies_hz: np.ndarray
+    event_times_s: np.ndarray
+    log_power: np.ndarray
+    dynamic: np.ndarray
+    time_step_s: float
+    frequency_step_hz: float
+
+
+@dataclass(frozen=True, slots=True)
+class _RegionIndex:
+    frequency_start: int
+    time_start: int
+    frequency_bins: int
+    time_frames: int
+    score: float
 
 
 class IQBlockRing:
@@ -130,6 +238,7 @@ def capture_dual_kiwi(
     center_frequency_hz: float,
     duration_s: float = 8.0,
     ready_timeout_s: float = 18.0,
+    max_gps_solution_age_s: int = 30,
 ) -> tuple[KiwiCapture, KiwiCapture]:
     """Open both receivers concurrently and retain only a synchronized RAM window."""
 
@@ -144,6 +253,7 @@ def capture_dual_kiwi(
                 duration_s,
                 start_event,
                 ready_events[index],
+                max_gps_solution_age_s,
             )
             for index, endpoint in enumerate(endpoints)
         ]
@@ -163,65 +273,89 @@ def compare_rf_structure(
     left: KiwiCapture,
     right: KiwiCapture,
     now: datetime,
+    *,
+    plan: ScoutPlan | None = None,
 ) -> tuple[EvidenceEvent, BeliefSnapshot, CausalGraph]:
-    """Test same-phenomenon plausibility; equal tuning alone never passes."""
+    """Run the first and only calibrated comparison under a frozen plan."""
 
-    overlap_start = max(left.event_start, right.event_start)
-    overlap_end = min(left.event_end, right.event_end)
+    if plan is None:
+        plan = replace(
+            ScoutPlan(),
+            center_frequencies_hz=(left.center_frequency_hz,),
+        )
+    left_audit = audit_capture(left, plan)
+    right_audit = audit_capture(right, plan)
+    overlap_start = max(
+        left_audit.blocks[0].event_start if left_audit.blocks else left.event_start,
+        right_audit.blocks[0].event_start if right_audit.blocks else right.event_start,
+    )
+    overlap_end = min(
+        left_audit.blocks[-1].event_end if left_audit.blocks else left.event_end,
+        right_audit.blocks[-1].event_end if right_audit.blocks else right.event_end,
+    )
+    if overlap_end < overlap_start:
+        overlap_end = overlap_start
     overlap_s = (overlap_end - overlap_start).total_seconds()
     fresh = contract.accepts_age(overlap_end, now)
-    gps_recent = all(
-        block.gps_timestamp_available and block.gps_solution_age_s <= 30
-        for capture in (left, right)
-        for block in capture.blocks
+    same_acquisition_band = math_isclose(
+        left.center_frequency_hz, right.center_frequency_hz, absolute=0.5
     )
-    overflow_fractions = tuple(
-        sum(block.adc_overflow for block in capture.blocks) / len(capture.blocks)
-        for capture in (left, right)
-    )
-    adc_clean_enough = all(fraction <= 0.05 for fraction in overflow_fractions)
-    features = _paired_features(left, right, overlap_start, overlap_end)
-    supporting = sum(
-        (
-            features["envelope_correlation"] >= 0.45,
-            features["entropy_correlation"] >= 0.35,
-            features["spectral_dynamics_correlation"] >= 0.35,
-            features["shared_transient_fraction"] >= 0.05,
-        )
-    )
-    plausible_same_phenomenon = (
-        overlap_s >= 2.0
-        and gps_recent
-        and adc_clean_enough
+    measurement_available = (
+        left_audit.usable
+        and right_audit.usable
+        and overlap_s >= plan.min_overlap_s
         and fresh
-        and supporting >= 2
-        and left.center_frequency_hz == right.center_frequency_hz
+        and same_acquisition_band
     )
+    if measurement_available:
+        scout = scout_targetless_region(
+            left,
+            right,
+            plan,
+            audits=(left_audit, right_audit),
+        )
+    else:
+        failures = list(left_audit.reasons + right_audit.reasons)
+        if overlap_s < plan.min_overlap_s:
+            failures.append("insufficient common continuous GNSS interval")
+        if not fresh:
+            failures.append("measurement expired by event time")
+        if not same_acquisition_band:
+            failures.append("receivers were not tuned to one acquisition band")
+        scout = _empty_scout(plan, failures)
+    similarity_exceeds_null = measurement_available and scout.similarity_exceeds_null
 
     measurement_roots = (
         f"kiwi:{left.endpoint.name}",
         f"kiwi:{right.endpoint.name}",
     )
-    conditioning_roots = ("kiwi:shared-hardware-protocol-ddc", "probe-b:stft-feature-code")
+    conditioning_roots = (
+        "kiwi:shared-hardware-protocol-ddc",
+        "probe-b:targetless-scout-null-code",
+        f"probe-b:scout-plan:{plan.plan_hash[:16]}",
+    )
     constraints = (
-        Constraint("gnss_event_time", "recent_for_all_blocks", gps_recent, None, "solution age must be <=30 s; GPS week is inferred from arrival with a fixed 18 s offset", "Kiwi IQ block headers"),
-        Constraint("adc_overflow_fraction", "<=0.05_each", overflow_fractions, "fraction", "the receiver flag detects ADC overload, not every downstream distortion", "Kiwi IQ block flags"),
-        Constraint("temporal_overlap", ">=", overlap_s, "s", "block boundary/sample-rate approximation", "GNSS-aligned interval intersection"),
+        Constraint("frozen_scout_plan", "sha256", plan.plan_hash, None, "parameters are fixed before live samples; a changed hash is a new trial", "serialized ScoutPlan"),
+        Constraint("left_capture_audit", "must_be_usable", _audit_value(left_audit), None, "one block cannot independently estimate rate drift", "IQ sequence, GNSS headers, arrival and sample geometry"),
+        Constraint("right_capture_audit", "must_be_usable", _audit_value(right_audit), None, "one block cannot independently estimate rate drift", "IQ sequence, GNSS headers, arrival and sample geometry"),
+        Constraint("temporal_overlap", ">=", overlap_s, "s", "only the longest common gap-free segment is compared", "GNSS event-time intersection"),
         Constraint("measurement_fresh", "==", fresh, None, "event end, never arrival time", "DecisionContract age rule"),
-        Constraint("same_tuned_band", "prerequisite_only", left.center_frequency_hz, "Hz", "receiver oscillators and DDC can differ", "control setting; never sufficient"),
-        Constraint("envelope_correlation", ">=0.45_supports", features["envelope_correlation"], None, "HF fading can erase or fabricate envelope similarity", "maximum lagged correlation"),
-        Constraint("spectral_entropy_correlation", ">=0.35_supports", features["entropy_correlation"], None, "different SNR/front-ends bias entropy", "maximum lagged correlation"),
-        Constraint("spectral_dynamics_correlation", ">=0.35_supports", features["spectral_dynamics_correlation"], None, "frequency-shift search reduces specificity", "robust station-normalized STFT correlation"),
-        Constraint("best_frequency_alignment", "estimated", features["best_frequency_shift_hz"], "Hz", "receiver oscillators, propagation and binning are confounded", "bounded shift maximizing dynamic spectral agreement"),
-        Constraint("shared_transient_fraction", ">=0.05_supports", features["shared_transient_fraction"], "fraction", "local impulsive noise can overlap by chance", "simultaneous robust envelope excursions"),
-        Constraint("same_physical_phenomenon", "plausible_not_proven", plausible_same_phenomenon, None, "no transmitter identity or propagation model", f"{supporting}/4 structural properties support"),
+        Constraint("same_acquisition_band", "prerequisite_only", same_acquisition_band, None, "nominal tuning is control, never evidence", f"{left.center_frequency_hz} / {right.center_frequency_hz} Hz"),
+        Constraint("targetless_region", "selected_by_joint_salience", _region_value(scout.region), None, "the region has no assigned transmitter or target", "maximum of the frozen simultaneous min-salience search"),
+        Constraint("time_shift_null", "p<=frozen_alpha", scout.time_null_p, None, "in-session shifts preserve station-local structure", f"{scout.time_null_count} shifts; alpha={plan.significance_alpha}"),
+        Constraint("frequency_shift_null", "p<=frozen_alpha", scout.frequency_null_p, None, "wrong-frequency shifts test specificity without retuning", f"{scout.frequency_null_count} shifts; alpha={plan.significance_alpha}"),
+        Constraint("self_consistency", "even_odd_frequency_overlap", scout.self_consistent, None, "interleaved folds are not independent roots", f"frequency IoU={scout.even_odd_frequency_iou}"),
+        Constraint("frequency_alignability", "one_resolution_element", scout.alignable, None, "offset and drift are diagnostics, never post-hoc corrections", f"offset={scout.relative_frequency_offset_hz} Hz; drift={scout.relative_frequency_drift_hz_s} Hz/s"),
+        Constraint("shared_structure_beyond_null", "resolved_or_unresolved", similarity_exceeds_null, None, "the in-session null is conditional on this band, plan and session", "; ".join(scout.failures) or "both frozen nulls and consistency checks passed"),
+        Constraint("common_physical_cause", "unresolved", None, None, "no identity, emitter geometry, TDoA or propagation model", "similarity beyond the null is support, not causal identification"),
     )
     transforms = (
         Transform("kiwi_rf_chain", "partial", "independent antennas/front-ends feed common Kiwi ADC/DDC design"),
-        Transform("iq_tuning", "known_conditioned", "same nominal center and IQ passband; oscillator truth differs"),
+        Transform("iq_tuning", "known_conditioned", "the predeclared live scout picks an acquisition band; one later pair is calibrated"),
         Transform("gnss_timestamp", "partial", "seconds-of-week is real; absolute GPS week is inferred from arrival"),
-        Transform("ring_buffer", "known", "bounded RAM only; older blocks are evicted"),
-        Transform("stft_features", "known_lossy", "phase is discarded and station spectra are robustly normalized", conditioning_roots[-1:]),
+        Transform("continuity_audit", "known", "invalid/overflow blocks split segments and are never interpolated across"),
+        Transform("targetless_stft_region", "known_lossy", "phase is discarded; station log power is mapped to a common event-time/RF grid and robustly normalized", conditioning_roots[1:]),
+        Transform("in_session_nulls", "known", "the complete region selector is repeated at frozen wrong-time and wrong-frequency shifts", conditioning_roots[1:]),
     )
     receipt = ConstraintReceipt(
         branch="dual-kiwi",
@@ -233,20 +367,17 @@ def compare_rf_structure(
         model_roots=conditioning_roots,
         artifact_hashes=(_capture_hash(left), _capture_hash(right)),
         caveats=(
-            "equal frequency is only a control prerequisite, never a coincidence claim",
+            "the acquisition center and selected region are controls/observables, never identity evidence",
             "HF multipath, selective fading, polarization, path delay, Doppler, and local interference can decorrelate one real emitter",
             "two unrelated emitters or common impulsive interference can imitate short structural agreement",
-            "unknown transmitter geometry prevents propagation-delay compensation",
-            "IQ phase is not comparable across unsynchronized receiver oscillators",
+            "no time lag is optimized and no TDoA or propagation-delay correction is attempted",
+            "shared Kiwi hardware/protocol and scout code remain common conditioning roots",
         ),
     )
     evidence = EvidenceEvent(
         source="dual-kiwi-live-iq",
         arrived_at=max(left.arrived_end, right.arrived_end),
         receipt=receipt,
-    )
-    measurement_available = (
-        overlap_s >= 2.0 and gps_recent and adc_clean_enough and fresh
     )
     belief = contract.snapshot_from_evidence(
         receipt,
@@ -257,28 +388,46 @@ def compare_rf_structure(
                 status=(
                     ClauseStatus.SATISFIED
                     if measurement_available
-                    else ClauseStatus.UNSATISFIED
+                    else ClauseStatus.UNOBSERVABLE
                 ),
                 statement=(
-                    "Two receivers produced fresh, defensibly timed simultaneous RF measurements."
+                    "Two receivers produced fresh, continuous and defensibly timed simultaneous RF measurements."
                     if measurement_available
-                    else "The capture lacks enough fresh, defensibly timed dual-receiver measurement."
+                    else "The capture lacks a fresh, continuous, alignable dual-receiver measurement."
+                ),
+                measurement_roots=measurement_roots if measurement_available else (),
+            ),
+            ClauseAssessment(
+                clause="shared_structure_beyond_null",
+                status=(
+                    ClauseStatus.SATISFIED
+                    if similarity_exceeds_null
+                    else (
+                        ClauseStatus.UNRESOLVED
+                        if measurement_available
+                        else ClauseStatus.UNOBSERVABLE
+                    )
+                ),
+                statement=(
+                    "One targetless time-frequency region beats both frozen in-session nulls."
+                    if similarity_exceeds_null
+                    else "The available measurements do not exceed both frozen in-session nulls."
                 ),
                 measurement_roots=measurement_roots if measurement_available else (),
             ),
             ClauseAssessment(
                 clause="common_physical_cause",
                 status=(
-                    ClauseStatus.SATISFIED
-                    if plausible_same_phenomenon
-                    else ClauseStatus.UNRESOLVED
+                    ClauseStatus.UNRESOLVED
+                    if measurement_available
+                    else ClauseStatus.UNOBSERVABLE
                 ),
                 statement=(
-                    "Temporally aligned RF structure is compatible with one physical phenomenon; identity is neither required nor inferred."
-                    if plausible_same_phenomenon
-                    else "The available measurements do not resolve whether both receivers observed one physical phenomenon."
+                    "Similarity beyond the null supports, but does not resolve, a common physical cause under the remaining HF ambiguities."
+                    if measurement_available
+                    else "A common physical cause cannot be evaluated without usable dual measurements."
                 ),
-                measurement_roots=measurement_roots,
+                measurement_roots=measurement_roots if measurement_available else (),
             ),
         ),
         uncertainty=receipt.caveats,
@@ -295,23 +444,68 @@ def run_probe_b(
         KiwiEndpoint("hooksiel", "dl1bajkiwisdr.ddns.net", 8074),
         KiwiEndpoint("doncaster", "g0ghk.uk", 8050),
     ),
-    center_frequency_hz: float = 9_996_000.0,
+    center_frequency_hz: float | None = None,
     duration_s: float = 8.0,
+    plan: ScoutPlan | None = None,
 ) -> tuple[EvidenceEvent, BeliefSnapshot, CausalGraph]:
+    """Scout a frozen center grid, then stop after one calibrated IQ comparison."""
+
+    plan = plan or ScoutPlan()
+    if center_frequency_hz is not None:
+        plan = replace(plan, center_frequencies_hz=(center_frequency_hz,))
     emit_jsonl("intent_received", contract.intent)
     emit_jsonl(
         "capability_probe",
         {
             "source": "dual-kiwi",
             "endpoints": [endpoint.name for endpoint in endpoints],
-            "center_frequency_hz": center_frequency_hz,
-            "duration_s": duration_s,
+            "center_frequency_candidates_hz": plan.center_frequencies_hz,
+            "scout_duration_s": plan.scout_duration_s,
+            "comparison_duration_s": duration_s,
+            "plan_hash": plan.plan_hash,
+        },
+    )
+    scout_candidates: list[tuple[float, float]] = []
+    for candidate_frequency_hz in plan.center_frequencies_hz:
+        short_captures = capture_dual_kiwi(
+            endpoints,
+            center_frequency_hz=candidate_frequency_hz,
+            duration_s=plan.scout_duration_s,
+            max_gps_solution_age_s=plan.max_gps_solution_age_s,
+        )
+        score, reason = _quick_joint_scout_score(short_captures, plan)
+        emit_jsonl(
+            "capability_offer" if score is not None else "capability_rejected",
+            {
+                "source": "dual-kiwi-scout",
+                "center_frequency_hz": candidate_frequency_hz,
+                "joint_salience": score,
+                "reason": reason,
+                "plan_hash": plan.plan_hash,
+            },
+        )
+        if score is not None:
+            scout_candidates.append((score, candidate_frequency_hz))
+    if not scout_candidates:
+        raise RuntimeError("no predeclared center produced an auditable dual-station scout")
+    _score, winner_frequency_hz = max(
+        scout_candidates,
+        key=lambda item: (item[0], -item[1]),
+    )
+    emit_jsonl(
+        "lease_acquired",
+        {
+            "source": "dual-kiwi",
+            "center_frequency_hz": winner_frequency_hz,
+            "reason": "highest joint salience in frozen center grid",
+            "plan_hash": plan.plan_hash,
         },
     )
     captures = capture_dual_kiwi(
         endpoints,
-        center_frequency_hz=center_frequency_hz,
+        center_frequency_hz=winner_frequency_hz,
         duration_s=duration_s,
+        max_gps_solution_age_s=plan.max_gps_solution_age_s,
     )
     for capture in captures:
         emit_jsonl(
@@ -330,7 +524,13 @@ def run_probe_b(
             },
         )
     now = datetime.now(timezone.utc)
-    evidence, belief, graph = compare_rf_structure(contract, captures[0], captures[1], now)
+    evidence, belief, graph = compare_rf_structure(
+        contract,
+        captures[0],
+        captures[1],
+        now,
+        plan=plan,
+    )
     emit_jsonl("evidence_assimilated", evidence.receipt)
     emit_jsonl("belief_updated", belief)
     emit_jsonl("causal_graph_snapshot", graph.snapshot())
@@ -343,6 +543,7 @@ def _capture_one(
     duration_s: float,
     start_event: Event,
     ready_event: Event,
+    max_gps_solution_age_s: int,
 ) -> KiwiCapture:
     import websocket
 
@@ -396,9 +597,13 @@ def _capture_one(
                         "SET keepalive",
                     ):
                         ws.send(command)
-                    ready_event.set()
             elif tag == b"SND" and sample_rate > 0.0:
                 block = _decode_iq_block(body, sample_rate, arrival)
+                if (
+                    block.gps_timestamp_available
+                    and block.gps_solution_age_s <= max_gps_solution_age_s
+                ):
+                    ready_event.set()
                 if start_event.is_set():
                     if capture_started is None:
                         capture_started = time.monotonic()
@@ -456,6 +661,7 @@ def _decode_iq_block(body: bytes, sample_rate_hz: float, arrival: datetime) -> I
         gps_timestamp_available=gps_seconds > 0 and gps_solution_age_s <= 252,
         adc_overflow=bool(flags & 0x02),
         sequence=int(sequence),
+        arrived_at=arrival,
     )
 
 
@@ -483,65 +689,523 @@ def _msg_params(body: bytes) -> dict[str, str | None]:
     return params
 
 
-def _paired_features(
+def audit_capture(capture: KiwiCapture, plan: ScoutPlan) -> CaptureAudit:
+    """Choose one defensible continuous segment and expose every dropped block."""
+
+    if capture.sample_rate_hz <= 0 or not capture.blocks:
+        return CaptureAudit(
+            False,
+            ("capture has no positive sample rate or IQ blocks",),
+            (),
+            0,
+            0,
+            len(capture.blocks),
+            0.0,
+            capture.sample_rate_hz,
+            0.0,
+            0.0,
+            None,
+            None,
+            None,
+        )
+    tolerance_s = max(2.0 / capture.sample_rate_hz, 0.001)
+    segments: list[list[IQBlock]] = []
+    current: list[IQBlock] = []
+    sequence_gaps = 0
+    timestamp_gaps = 0
+    dropped = 0
+    arrival_latencies: list[float] = []
+    gps_ages: list[int] = []
+
+    def finish_segment() -> None:
+        nonlocal current
+        if current:
+            segments.append(current)
+            current = []
+
+    for block in capture.blocks:
+        gps_ages.append(block.gps_solution_age_s)
+        valid = (
+            block.gps_timestamp_available
+            and block.gps_solution_age_s <= plan.max_gps_solution_age_s
+            and not block.adc_overflow
+            and len(block.samples) > 0
+        )
+        if block.arrived_at is not None:
+            latency = (block.arrived_at - block.event_end).total_seconds()
+            arrival_latencies.append(latency)
+            valid = valid and -tolerance_s <= latency <= plan.max_arrival_latency_s
+        if not valid:
+            dropped += 1
+            finish_segment()
+            continue
+        if current:
+            previous = current[-1]
+            expected_sequence = (previous.sequence + 1) & 0xFFFFFFFF
+            sequence_ok = block.sequence == expected_sequence
+            gap_s = (block.event_start - previous.event_end).total_seconds()
+            timestamp_ok = abs(gap_s) <= tolerance_s
+            if not sequence_ok or not timestamp_ok:
+                sequence_gaps += int(not sequence_ok)
+                timestamp_gaps += int(not timestamp_ok)
+                finish_segment()
+        current.append(block)
+    finish_segment()
+    if not segments:
+        reasons = ("no GNSS-recent, overflow-free continuous IQ segment",)
+        return CaptureAudit(
+            False,
+            reasons,
+            (),
+            sequence_gaps,
+            timestamp_gaps,
+            dropped,
+            0.0,
+            capture.sample_rate_hz,
+            0.0,
+            0.0,
+            _median_or_none(arrival_latencies),
+            _percentile_or_none(arrival_latencies, 95),
+            max(gps_ages) if gps_ages else None,
+        )
+    chosen = max(
+        segments,
+        key=lambda blocks: (
+            (blocks[-1].event_end - blocks[0].event_start).total_seconds(),
+            len(blocks),
+        ),
+    )
+    duration_s = (chosen[-1].event_end - chosen[0].event_start).total_seconds()
+    rate_estimates = []
+    for previous, current_block in zip(chosen, chosen[1:]):
+        delta_s = (current_block.event_start - previous.event_start).total_seconds()
+        if delta_s > 0:
+            rate_estimates.append(len(previous.samples) / delta_s)
+    effective_rate = (
+        float(np.median(rate_estimates))
+        if rate_estimates
+        else capture.sample_rate_hz
+    )
+    drift_ppm = 1e6 * (effective_rate - capture.sample_rate_hz) / capture.sample_rate_hz
+    cumulative_drift_s = (
+        abs(effective_rate - capture.sample_rate_hz)
+        / capture.sample_rate_hz
+        * duration_s
+    )
+    hop_s = (plan.nperseg - plan.noverlap) / capture.sample_rate_hz
+    reasons_list: list[str] = []
+    if duration_s < plan.min_overlap_s:
+        reasons_list.append("longest continuous segment is shorter than the frozen minimum")
+    if rate_estimates and cumulative_drift_s > hop_s / 2.0:
+        reasons_list.append("sample-clock drift exceeds half an STFT hop")
+    return CaptureAudit(
+        not reasons_list,
+        tuple(reasons_list),
+        tuple(chosen),
+        sequence_gaps,
+        timestamp_gaps,
+        dropped + sum(len(segment) for segment in segments if segment is not chosen),
+        duration_s,
+        effective_rate,
+        drift_ppm,
+        cumulative_drift_s,
+        _median_or_none(arrival_latencies),
+        _percentile_or_none(arrival_latencies, 95),
+        max(gps_ages) if gps_ages else None,
+    )
+
+
+def scout_targetless_region(
     left: KiwiCapture,
     right: KiwiCapture,
-    overlap_start: datetime,
-    overlap_end: datetime,
-) -> dict[str, float]:
-    left_samples = _trim_to_interval(left, overlap_start, overlap_end)
-    right_samples = _trim_to_interval(right, overlap_start, overlap_end)
-    left_features = _spectral_features(left_samples, left.sample_rate_hz)
-    right_features = _spectral_features(right_samples, right.sample_rate_hz)
-    length = min(left_features["envelope"].size, right_features["envelope"].size)
-    if length < 8:
-        raise ValueError("not enough overlapping spectrogram frames")
-    envelope_corr = _max_lag_correlation(left_features["envelope"][:length], right_features["envelope"][:length])
-    entropy_corr = _max_lag_correlation(left_features["entropy"][:length], right_features["entropy"][:length])
-    left_z = left_features["dynamic"][:, :length]
-    right_z = right_features["dynamic"][:, :length]
-    bins = min(left_z.shape[0], right_z.shape[0])
-    left_z, right_z = left_z[:bins], right_z[:bins]
-    spectral_corr, best_shift_bins = _max_spectral_shift_correlation(left_z, right_z)
-    shift_resolution_hz = min(left.sample_rate_hz, right.sample_rate_hz) / 512.0
-    left_transient = _robust_z(left_features["envelope"][:length]) > 2.0
-    right_transient = _robust_z(right_features["envelope"][:length]) > 2.0
-    shared_transient = float(np.mean(left_transient & right_transient))
-    return {
-        "envelope_correlation": round(envelope_corr, 6),
-        "entropy_correlation": round(entropy_corr, 6),
-        "spectral_dynamics_correlation": round(spectral_corr, 6),
-        "best_frequency_shift_hz": round(best_shift_bins * shift_resolution_hz, 3),
-        "shared_transient_fraction": round(shared_transient, 6),
-    }
+    plan: ScoutPlan,
+    *,
+    audits: tuple[CaptureAudit, CaptureAudit] | None = None,
+) -> ScoutResult:
+    """Select one simultaneous region and calibrate it against frozen nulls."""
+
+    audits = audits or (audit_capture(left, plan), audit_capture(right, plan))
+    if not all(audit.usable for audit in audits):
+        return _empty_scout(
+            plan,
+            audits[0].reasons + audits[1].reasons,
+        )
+    try:
+        (
+            left_dynamic,
+            right_dynamic,
+            frequencies_hz,
+            event_times_s,
+            time_step_s,
+            frequency_step_hz,
+        ) = _common_spectral_grids(left, right, audits, plan)
+    except ValueError as error:
+        return _empty_scout(plan, (str(error),))
+    joint = np.minimum(left_dynamic, right_dynamic)
+    selected = _select_region(joint, plan.region_shapes)
+    if selected is None:
+        return _empty_scout(plan, ("no frozen region shape fits the common grid",))
+
+    time_shifts = _frozen_shifts(
+        joint.shape[1],
+        max(time_frames for _frequency_bins, time_frames in plan.region_shapes),
+        plan.null_shift_count,
+    )
+    frequency_shifts = _frozen_shifts(
+        joint.shape[0],
+        max(frequency_bins for frequency_bins, _time_frames in plan.region_shapes),
+        plan.null_shift_count,
+    )
+    failures: list[str] = []
+    if len(time_shifts) < plan.null_shift_count:
+        failures.append("insufficient in-session time shifts for the frozen null")
+    if len(frequency_shifts) < plan.null_shift_count:
+        failures.append("insufficient in-session frequency shifts for the frozen null")
+    time_scores = _shift_null_scores(
+        left_dynamic,
+        right_dynamic,
+        axis=1,
+        shifts=time_shifts,
+        shapes=plan.region_shapes,
+    )
+    frequency_scores = _shift_null_scores(
+        left_dynamic,
+        right_dynamic,
+        axis=0,
+        shifts=frequency_shifts,
+        shapes=plan.region_shapes,
+    )
+    time_p = _empirical_p(selected.score, time_scores)
+    frequency_p = _empirical_p(selected.score, frequency_scores)
+    self_consistent, fold_iou = _self_consistency(
+        left_dynamic,
+        right_dynamic,
+        selected,
+        plan.region_shapes,
+    )
+    offset_hz, drift_hz_s, frequency_alignable = _relative_frequency_motion(
+        left_dynamic,
+        right_dynamic,
+        frequencies_hz,
+        event_times_s,
+        selected,
+        frequency_step_hz,
+    )
+    timing_alignable = max(
+        audits[0].cumulative_timing_drift_s,
+        audits[1].cumulative_timing_drift_s,
+    ) <= time_step_s / 2.0
+    alignable = timing_alignable and frequency_alignable
+    if not self_consistent:
+        failures.append("selected region is not self-consistent across even/odd frames")
+    if not alignable:
+        failures.append("timestamp/frequency drift is not alignable at scout resolution")
+    if time_p is None or time_p > plan.significance_alpha:
+        failures.append("time-shift null is not exceeded at the frozen alpha")
+    if frequency_p is None or frequency_p > plan.significance_alpha:
+        failures.append("frequency-shift null is not exceeded at the frozen alpha")
+    if selected.score <= 0:
+        failures.append("best simultaneous region is not positively salient at both stations")
+
+    f_start = selected.frequency_start
+    f_stop = f_start + selected.frequency_bins
+    t_start = selected.time_start
+    t_stop = t_start + selected.time_frames
+    region = ScoutRegion(
+        event_start=datetime.fromtimestamp(
+            event_times_s[t_start] - time_step_s / 2.0,
+            tz=timezone.utc,
+        ),
+        event_end=datetime.fromtimestamp(
+            event_times_s[t_stop - 1] + time_step_s / 2.0,
+            tz=timezone.utc,
+        ),
+        frequency_low_hz=float(frequencies_hz[f_start] - frequency_step_hz / 2.0),
+        frequency_high_hz=float(frequencies_hz[f_stop - 1] + frequency_step_hz / 2.0),
+        score=round(selected.score, 6),
+        frequency_bins=selected.frequency_bins,
+        time_frames=selected.time_frames,
+    )
+    left_score = float(np.mean(left_dynamic[f_start:f_stop, t_start:t_stop]))
+    right_score = float(np.mean(right_dynamic[f_start:f_stop, t_start:t_stop]))
+    return ScoutResult(
+        region,
+        round(selected.score, 6),
+        round(left_score, 6),
+        round(right_score, 6),
+        None if time_p is None else round(time_p, 6),
+        None if frequency_p is None else round(frequency_p, 6),
+        len(time_scores),
+        len(frequency_scores),
+        self_consistent,
+        None if fold_iou is None else round(fold_iou, 6),
+        None if offset_hz is None else round(offset_hz, 3),
+        None if drift_hz_s is None else round(drift_hz_s, 6),
+        alignable,
+        not failures,
+        tuple(failures),
+        plan.plan_hash,
+    )
 
 
-def _trim_to_interval(capture: KiwiCapture, start: datetime, end: datetime) -> np.ndarray:
-    samples = capture.samples
-    begin = max(0, int((start - capture.event_start).total_seconds() * capture.sample_rate_hz))
-    finish = min(len(samples), int((end - capture.event_start).total_seconds() * capture.sample_rate_hz))
-    return samples[begin:finish]
+def _quick_joint_scout_score(
+    captures: tuple[KiwiCapture, KiwiCapture],
+    plan: ScoutPlan,
+) -> tuple[float | None, str]:
+    audits = tuple(audit_capture(capture, plan) for capture in captures)
+    if not all(audit.usable for audit in audits):
+        return None, "; ".join(audits[0].reasons + audits[1].reasons)
+    try:
+        left, right, _frequencies, _times, _dt, _df = _common_spectral_grids(
+            captures[0], captures[1], audits, plan  # type: ignore[arg-type]
+        )
+    except ValueError as error:
+        return None, str(error)
+    region = _select_region(np.minimum(left, right), plan.region_shapes)
+    if region is None:
+        return None, "no frozen region shape fits"
+    return round(region.score, 6), "joint targetless salience; not yet calibrated"
 
 
-def _spectral_features(samples: np.ndarray, sample_rate_hz: float) -> dict[str, np.ndarray]:
-    _freq, _time, spectrum = signal.spectrogram(
+def _common_spectral_grids(
+    left: KiwiCapture,
+    right: KiwiCapture,
+    audits: tuple[CaptureAudit, CaptureAudit],
+    plan: ScoutPlan,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, float, float]:
+    overlap_start = max(audits[0].blocks[0].event_start, audits[1].blocks[0].event_start)
+    overlap_end = min(audits[0].blocks[-1].event_end, audits[1].blocks[-1].event_end)
+    if (overlap_end - overlap_start).total_seconds() < plan.min_overlap_s:
+        raise ValueError("not enough common gap-free GNSS overlap")
+    left_grid = _spectral_grid(left, audits[0].blocks, overlap_start, overlap_end, plan)
+    right_grid = _spectral_grid(right, audits[1].blocks, overlap_start, overlap_end, plan)
+    time_step_s = max(left_grid.time_step_s, right_grid.time_step_s)
+    frequency_step_hz = max(left_grid.frequency_step_hz, right_grid.frequency_step_hz)
+    time_low = max(left_grid.event_times_s[0], right_grid.event_times_s[0])
+    time_high = min(left_grid.event_times_s[-1], right_grid.event_times_s[-1])
+    frequency_low = max(left_grid.frequencies_hz[0], right_grid.frequencies_hz[0])
+    frequency_high = min(left_grid.frequencies_hz[-1], right_grid.frequencies_hz[-1])
+    event_times_s = np.arange(time_low, time_high + 0.25 * time_step_s, time_step_s)
+    frequencies_hz = np.arange(
+        frequency_low,
+        frequency_high + 0.25 * frequency_step_hz,
+        frequency_step_hz,
+    )
+    if event_times_s.size < max(shape[1] for shape in plan.region_shapes):
+        raise ValueError("common event-time grid is too short for the frozen scout")
+    if frequencies_hz.size < max(shape[0] for shape in plan.region_shapes):
+        raise ValueError("common RF grid is too narrow for the frozen scout")
+    left_log = _interpolate_grid(left_grid, frequencies_hz, event_times_s)
+    right_log = _interpolate_grid(right_grid, frequencies_hz, event_times_s)
+    left_dynamic = np.clip(
+        _robust_z(left_log, axis=1),
+        -plan.salience_clip,
+        plan.salience_clip,
+    )
+    right_dynamic = np.clip(
+        _robust_z(right_log, axis=1),
+        -plan.salience_clip,
+        plan.salience_clip,
+    )
+    return (
+        left_dynamic,
+        right_dynamic,
+        frequencies_hz,
+        event_times_s,
+        time_step_s,
+        frequency_step_hz,
+    )
+
+
+def _spectral_grid(
+    capture: KiwiCapture,
+    blocks: tuple[IQBlock, ...],
+    start: datetime,
+    end: datetime,
+    plan: ScoutPlan,
+) -> _SpectralGrid:
+    samples = np.concatenate([block.samples for block in blocks])
+    segment_start = blocks[0].event_start
+    begin = max(0, int(round((start - segment_start).total_seconds() * capture.sample_rate_hz)))
+    finish = min(len(samples), int(round((end - segment_start).total_seconds() * capture.sample_rate_hz)))
+    samples = samples[begin:finish]
+    if samples.size < plan.nperseg:
+        raise ValueError("continuous IQ segment is shorter than one frozen STFT window")
+    frequency_offsets, frame_times, spectrum = signal.spectrogram(
         samples,
-        fs=sample_rate_hz,
+        fs=capture.sample_rate_hz,
         window="hann",
-        nperseg=512,
-        noverlap=384,
+        nperseg=plan.nperseg,
+        noverlap=plan.noverlap,
         detrend=False,
         return_onesided=False,
         scaling="spectrum",
         mode="magnitude",
     )
+    frequency_offsets = np.fft.fftshift(frequency_offsets)
+    spectrum = np.fft.fftshift(spectrum, axes=0)
     power = np.abs(spectrum) ** 2 + 1e-15
-    log_power = 10.0 * np.log10(power)
-    dynamic = _robust_z(log_power, axis=1)
-    normalized = power / power.sum(axis=0, keepdims=True)
-    entropy = -np.sum(normalized * np.log(normalized + 1e-15), axis=0) / math.log(power.shape[0])
-    envelope = 10.0 * np.log10(power.sum(axis=0))
-    return {"dynamic": dynamic, "entropy": entropy, "envelope": envelope}
+    actual_start = segment_start + timedelta(seconds=begin / capture.sample_rate_hz)
+    return _SpectralGrid(
+        capture.center_frequency_hz + frequency_offsets,
+        actual_start.timestamp() + frame_times,
+        10.0 * np.log10(power),
+        np.empty((0, 0)),
+        (plan.nperseg - plan.noverlap) / capture.sample_rate_hz,
+        capture.sample_rate_hz / plan.nperseg,
+    )
+
+
+def _interpolate_grid(
+    source: _SpectralGrid,
+    target_frequencies_hz: np.ndarray,
+    target_times_s: np.ndarray,
+) -> np.ndarray:
+    by_time = np.vstack(
+        [
+            np.interp(target_times_s, source.event_times_s, row)
+            for row in source.log_power
+        ]
+    )
+    return np.column_stack(
+        [
+            np.interp(target_frequencies_hz, source.frequencies_hz, by_time[:, index])
+            for index in range(by_time.shape[1])
+        ]
+    )
+
+
+def _select_region(
+    joint: np.ndarray,
+    shapes: tuple[tuple[int, int], ...],
+) -> _RegionIndex | None:
+    best: _RegionIndex | None = None
+    for frequency_bins, time_frames in shapes:
+        means = _window_means(joint, frequency_bins, time_frames)
+        if means.size == 0 or not np.isfinite(means).any():
+            continue
+        flat_index = int(np.nanargmax(means))
+        frequency_start, time_start = np.unravel_index(flat_index, means.shape)
+        candidate = _RegionIndex(
+            int(frequency_start),
+            int(time_start),
+            frequency_bins,
+            time_frames,
+            float(means[frequency_start, time_start]),
+        )
+        if best is None or candidate.score > best.score:
+            best = candidate
+    return best
+
+
+def _window_means(values: np.ndarray, height: int, width: int) -> np.ndarray:
+    if values.shape[0] < height or values.shape[1] < width:
+        return np.empty((0, 0))
+    finite = np.isfinite(values)
+    clean = np.where(finite, values, 0.0)
+    total = np.pad(clean, ((1, 0), (1, 0))).cumsum(0).cumsum(1)
+    count = np.pad(finite.astype(np.int32), ((1, 0), (1, 0))).cumsum(0).cumsum(1)
+    sums = total[height:, width:] - total[:-height, width:] - total[height:, :-width] + total[:-height, :-width]
+    counts = count[height:, width:] - count[:-height, width:] - count[height:, :-width] + count[:-height, :-width]
+    return np.where(counts == height * width, sums / (height * width), -np.inf)
+
+
+def _frozen_shifts(size: int, guard: int, count: int) -> tuple[int, ...]:
+    limit = size // 3
+    positive = list(range(guard + 1, limit + 1))
+    candidates = [-value for value in reversed(positive)] + positive
+    if len(candidates) <= count:
+        return tuple(candidates)
+    indices = np.linspace(0, len(candidates) - 1, count, dtype=int)
+    return tuple(candidates[int(index)] for index in indices)
+
+
+def _shift_null_scores(
+    left: np.ndarray,
+    right: np.ndarray,
+    *,
+    axis: int,
+    shifts: tuple[int, ...],
+    shapes: tuple[tuple[int, int], ...],
+) -> tuple[float, ...]:
+    scores: list[float] = []
+    for shift in shifts:
+        shifted = np.roll(right, shift, axis=axis).copy()
+        invalid = [slice(None), slice(None)]
+        invalid[axis] = slice(0, shift) if shift > 0 else slice(shift, None)
+        shifted[tuple(invalid)] = np.nan
+        region = _select_region(np.minimum(left, shifted), shapes)
+        if region is not None and np.isfinite(region.score):
+            scores.append(region.score)
+    return tuple(scores)
+
+
+def _empirical_p(observed: float, null_scores: tuple[float, ...]) -> float | None:
+    if not null_scores:
+        return None
+    return (1.0 + sum(score >= observed for score in null_scores)) / (1.0 + len(null_scores))
+
+
+def _self_consistency(
+    left: np.ndarray,
+    right: np.ndarray,
+    selected: _RegionIndex,
+    shapes: tuple[tuple[int, int], ...],
+) -> tuple[bool, float | None]:
+    selected_joint = np.minimum(left, right)[
+        selected.frequency_start:selected.frequency_start + selected.frequency_bins,
+        selected.time_start:selected.time_start + selected.time_frames,
+    ]
+    even_score = float(np.mean(selected_joint[:, 0::2]))
+    odd_score = float(np.mean(selected_joint[:, 1::2]))
+    folded_shapes = tuple(
+        (frequency_bins, max(2, (time_frames + 1) // 2))
+        for frequency_bins, time_frames in shapes
+    )
+    even = _select_region(np.minimum(left[:, 0::2], right[:, 0::2]), folded_shapes)
+    odd = _select_region(np.minimum(left[:, 1::2], right[:, 1::2]), folded_shapes)
+    if even is None or odd is None:
+        return False, None
+    even_set = set(range(even.frequency_start, even.frequency_start + even.frequency_bins))
+    odd_set = set(range(odd.frequency_start, odd.frequency_start + odd.frequency_bins))
+    union = even_set | odd_set
+    iou = len(even_set & odd_set) / len(union) if union else 0.0
+    return bool(even_score > 0.0 and odd_score > 0.0 and iou > 0.0), iou
+
+
+def _relative_frequency_motion(
+    left: np.ndarray,
+    right: np.ndarray,
+    frequencies_hz: np.ndarray,
+    event_times_s: np.ndarray,
+    selected: _RegionIndex,
+    frequency_step_hz: float,
+) -> tuple[float | None, float | None, bool]:
+    f_slice = slice(selected.frequency_start, selected.frequency_start + selected.frequency_bins)
+    t_slice = slice(selected.time_start, selected.time_start + selected.time_frames)
+    frequency = frequencies_hz[f_slice]
+    left_weights = np.clip(left[f_slice, t_slice], 0.0, None)
+    right_weights = np.clip(right[f_slice, t_slice], 0.0, None)
+    left_sum = left_weights.sum(axis=0)
+    right_sum = right_weights.sum(axis=0)
+    valid = (left_sum > 1e-9) & (right_sum > 1e-9)
+    if np.count_nonzero(valid) < 3:
+        return None, None, False
+    left_centroid = (left_weights[:, valid] * frequency[:, None]).sum(axis=0) / left_sum[valid]
+    right_centroid = (right_weights[:, valid] * frequency[:, None]).sum(axis=0) / right_sum[valid]
+    offsets = left_centroid - right_centroid
+    times = event_times_s[t_slice][valid]
+    relative_times = times - times[0]
+    slope, intercept = np.polyfit(relative_times, offsets, 1)
+    residual = offsets - (slope * relative_times + intercept)
+    residual_scale = 1.4826 * np.median(np.abs(residual - np.median(residual)))
+    total_motion = abs(float(slope)) * max(float(relative_times[-1]), 0.0) + residual_scale
+    bandwidth_hz = selected.frequency_bins * frequency_step_hz
+    alignable = (
+        abs(float(np.median(offsets))) <= bandwidth_hz
+        and total_motion <= frequency_step_hz
+    )
+    return float(np.median(offsets)), float(slope), bool(alignable)
 
 
 def _robust_z(values: np.ndarray, axis: int | None = None) -> np.ndarray:
@@ -550,50 +1214,48 @@ def _robust_z(values: np.ndarray, axis: int | None = None) -> np.ndarray:
     return (values - median) / (1.4826 * mad + 1e-9)
 
 
-def _max_lag_correlation(left: np.ndarray, right: np.ndarray, max_lag: int = 6) -> float:
-    scores = []
-    for lag in range(-max_lag, max_lag + 1):
-        if lag < 0:
-            a, b = left[-lag:], right[:lag]
-        elif lag > 0:
-            a, b = left[:-lag], right[lag:]
-        else:
-            a, b = left, right
-        if len(a) >= 4:
-            scores.append(_correlation(a, b))
-    return float(max(scores)) if scores else 0.0
+def _empty_scout(plan: ScoutPlan, failures: tuple[str, ...] | list[str]) -> ScoutResult:
+    return ScoutResult(
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        0,
+        0,
+        False,
+        None,
+        None,
+        None,
+        False,
+        False,
+        tuple(dict.fromkeys(failures)),
+        plan.plan_hash,
+    )
 
 
-def _max_spectral_shift_correlation(
-    left: np.ndarray,
-    right: np.ndarray,
-    max_shift_bins: int = 24,
-) -> tuple[float, int]:
-    best = (-1.0, 0)
-    for shift in range(-max_shift_bins, max_shift_bins + 1):
-        if shift < 0:
-            first, second = left[-shift:, :], right[:shift, :]
-        elif shift > 0:
-            first, second = left[:-shift, :], right[shift:, :]
-        else:
-            first, second = left, right
-        if first.shape[0] < 16:
-            continue
-        score = float(np.nanmedian([
-            _correlation(first[:, index], second[:, index])
-            for index in range(first.shape[1])
-        ]))
-        if score > best[0]:
-            best = (score, shift)
-    return best
+def _audit_value(audit: CaptureAudit) -> dict[str, Any]:
+    value = asdict(audit)
+    value.pop("blocks", None)
+    value["selected_block_count"] = len(audit.blocks)
+    return value
 
 
-def _correlation(left: np.ndarray, right: np.ndarray) -> float:
-    left = np.asarray(left, dtype=float)
-    right = np.asarray(right, dtype=float)
-    if np.std(left) < 1e-12 or np.std(right) < 1e-12:
-        return 0.0
-    return float(np.corrcoef(left, right)[0, 1])
+def _region_value(region: ScoutRegion | None) -> dict[str, Any] | None:
+    return None if region is None else asdict(region)
+
+
+def _median_or_none(values: list[float]) -> float | None:
+    return None if not values else float(np.median(values))
+
+
+def _percentile_or_none(values: list[float], percentile: float) -> float | None:
+    return None if not values else float(np.percentile(values, percentile))
+
+
+def math_isclose(left: float, right: float, *, absolute: float) -> bool:
+    return abs(left - right) <= absolute
 
 
 def _capture_hash(capture: KiwiCapture) -> str:
@@ -637,9 +1299,15 @@ def main() -> None:
                 2,
             ),
             DecisionClause(
-                "common_physical_cause",
+                "shared_structure_beyond_null",
                 "the simultaneous similarity exceeds an in-session null model",
                 ("rf_structure",),
+                2,
+            ),
+            DecisionClause(
+                "common_physical_cause",
+                "one physical cause remains plausible after propagation ambiguities",
+                ("causal_support",),
                 2,
             ),
         ),

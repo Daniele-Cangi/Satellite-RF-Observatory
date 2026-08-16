@@ -18,6 +18,7 @@ class ClauseStatus(str, Enum):
     SATISFIED = "SATISFIED"
     UNSATISFIED = "UNSATISFIED"
     UNRESOLVED = "UNRESOLVED"
+    UNOBSERVABLE = "UNOBSERVABLE"
 
 
 class ModelAvailability(str, Enum):
@@ -253,4 +254,10 @@ def _jsonable(value: Any) -> Any:
         return {str(key): _jsonable(item) for key, item in value.items()}
     if isinstance(value, (tuple, list, set)):
         return [_jsonable(item) for item in value]
+    # NumPy scalar diagnostics must become JSON primitives without making the
+    # shared epistemic records depend on NumPy itself.
+    if value.__class__.__module__.startswith("numpy") and callable(
+        getattr(value, "item", None)
+    ):
+        return _jsonable(value.item())
     return value

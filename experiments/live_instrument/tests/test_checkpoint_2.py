@@ -148,6 +148,7 @@ def test_dual_kiwi_requires_structure_not_equal_frequency_alone() -> None:
     )
 
     assert belief.assessment("measurement_availability").status is ClauseStatus.SATISFIED
+    assert belief.assessment("shared_structure_beyond_null").status is ClauseStatus.UNRESOLVED
     assert belief.assessment("common_physical_cause").status is ClauseStatus.UNRESOLVED
 
 
@@ -172,7 +173,8 @@ def test_dual_kiwi_accepts_multiple_aligned_structural_properties() -> None:
     )
 
     assert belief.assessment("measurement_availability").status is ClauseStatus.SATISFIED
-    assert belief.assessment("common_physical_cause").status is ClauseStatus.SATISFIED
+    assert belief.assessment("shared_structure_beyond_null").status is ClauseStatus.SATISFIED
+    assert belief.assessment("common_physical_cause").status is ClauseStatus.UNRESOLVED
     assert belief.target is None
     assert len(graph.root_ids("measurement_root")) == 2
 
@@ -219,6 +221,14 @@ def test_jsonl_uses_a_decimal_point_for_measurement_age_seconds() -> None:
 
     assert '"measurement_age_s": 77.638' in lines[0]
     assert "77,638" not in lines[0]
+
+
+def test_jsonl_normalizes_numpy_scalar_diagnostics() -> None:
+    lines: list[str] = []
+
+    emit_jsonl("diagnostic", {"alignable": np.bool_(True)}, sink=lines.append)
+
+    assert '"alignable": true' in lines[0]
 
 
 def _satnogs_payload(
@@ -286,7 +296,8 @@ def _kiwi_contract() -> DecisionContract:
         Intent("same phenomenon?"),
         (
             DecisionClause("measurement_availability", "two IQ streams", ("iq",), 2),
-            DecisionClause("common_physical_cause", "same cause", ("rf_structure",), 2),
+            DecisionClause("shared_structure_beyond_null", "beats null", ("rf_structure",), 2),
+            DecisionClause("common_physical_cause", "same cause", ("causal_support",), 2),
         ),
         30.0,
     )

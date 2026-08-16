@@ -17,7 +17,7 @@ Il grafo causale è un oggetto locale in RAM; distingue radici hardware della
 misura e radici condivise del modello. Il receipt conserva event time, arrival
 time, hash, trasformazioni, vincoli e caveat, ma non conserva i payload.
 L'osservabilità non è uno stato globale: ogni clausola del `DecisionContract`
-ha un esito `SATISFIED`, `UNSATISFIED` o `UNRESOLVED`.
+ha un esito `SATISFIED`, `UNSATISFIED`, `UNRESOLVED` o `UNOBSERVABLE`.
 
 ## Probe A — SatNOGS, TTL 600 s
 
