@@ -163,6 +163,15 @@ ended `QUALIFICATION_INCOMPLETE`: no branch delivered IQ readiness, so no
 topology, feature, plan or DDC hypothesis entered evaluation. No second session
 is authorised.
 
+Gate F2.5.4 then audits only that frozen code and artifact. It classifies four
+atomic receipts as explicit server-reported rejection, one as a transport
+timeout before any retained MSG, and eleven post-configuration closures as
+`NOT_DIAGNOSABLE_WITH_CURRENT_RECEIPT`. The local command shape is consistent
+with the prior single-channel path, but official source conformance is not
+reproducible from this repository. The resulting exit is
+`STOP_PENDING_CONTROL_DISCRIMINATORS`: no new endpoint, rerun or client fix is
+authorised by this audit.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

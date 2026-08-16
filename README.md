@@ -123,6 +123,15 @@ evaluated. The 53-line receipt artifact closed `COMPLETE`, with matching prefix
 and whole-file hashes and zero RF persistence. See
 [`GATE_F2_5_3_1_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_3_1_OUTCOME_1.md).
 
+Gate F2.5.4 audits that frozen outcome without network activity. Four branch
+receipts are explicit server-reported rejections, one is a timeout before any
+server MSG, and eleven are not causally diagnosable from the retained fields.
+In particular, `configuration_sent` records a local action, not remote
+acceptance. Because all endpoints share one client implementation root and the
+official frozen source revisions are not present locally, the correct exit is
+`STOP_PENDING_CONTROL_DISCRIMINATORS`, not a protocol fix or another run. See
+[`GATE_F2_5_4_PROTOCOL_AUDIT.md`](experiments/live_instrument/GATE_F2_5_4_PROTOCOL_AUDIT.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:

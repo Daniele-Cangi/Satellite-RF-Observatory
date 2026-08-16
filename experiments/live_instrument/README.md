@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_3_1.py` | topology audit, atomic direct-SND qualification and verifiable receipt control |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_4.py` | topology audit, atomic direct-SND qualification, verifiable receipts and offline failure attribution |
 
 ## Reading order
 
@@ -50,6 +50,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 15. [`GATE_F2_5_3_OFFLINE.md`](GATE_F2_5_3_OFFLINE.md) — typed retry control and bounded receipt-only JSONL retention, prepared without network activity.
 16. [`GATE_F2_5_3_1_OFFLINE.md`](GATE_F2_5_3_1_OFFLINE.md) — terminal manifest, prefix hash and guaranteed receipt closure, prepared without network activity.
 17. [`GATE_F2_5_3_1_OUTCOME_1.md`](GATE_F2_5_3_1_OUTCOME_1.md) — one live run materialised the exact retry budget and ended `QUALIFICATION_INCOMPLETE` before any IQ readiness or DDC experiment.
+18. [`GATE_F2_5_4_PROTOCOL_AUDIT.md`](GATE_F2_5_4_PROTOCOL_AUDIT.md) — offline control-boundary attribution: four explicit rejections, one pre-handshake timeout and eleven failures not diagnosable by the frozen receipt.
 
 ## Frozen-outcome rule
 
