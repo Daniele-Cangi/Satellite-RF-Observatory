@@ -269,6 +269,7 @@ Pre-freeze terminal states include `QUALIFICATION_INCOMPLETE`,
 | `kiwi_gate_f2_5_4.py` | pure offline attribution of the SND control boundary and exit semantics |
 | `kiwi_gate_f2_5_5.py` | fail-closed source basis and ordered SND control-receipt contract |
 | `kiwi_gate_f2_5_6.py` | strict offline verification of the pinned server archive and hash-only client source audit |
+| `kiwi_gate_f2_5_7.py` | gate-specific server-wire transcript and official-client necessity audit |
 
 ## 9.1 Pinned protocol source boundary
 
@@ -284,6 +285,21 @@ ephemerally; only commit, blob IDs, paths, spans, hashes and sizes are retained
 because no license grant was found. Therefore the exit remains
 `SOURCE_RETENTION_BLOCKED_BY_LICENSE`, implementation stays unauthorized and
 the eleven historical closures remain causally unresolved.
+
+## 9.2 Server wire versus reference client
+
+Gate F2.5.7 removes the retained official client from the physical evidence
+requirements. The minimum causal chain is server-defined auth/channel/rate,
+an observed local `mod_iq` send and a later pre-decode-hashed IQ frame. Client
+source cannot substitute for the last witness and is therefore not a required
+root.
+
+The synthetic contract requires `badp=0`, the channel number carried by
+`is_local`, and `sample_rate` before `mod_iq`; an IQ frame must follow it. It
+also keeps clean WebSocket close separate from typed transport loss. The
+current runtime has not yet been changed to emit this sequence. The result
+`SERVER_WIRE_CONTRACT_SUFFICIENT` authorises only an offline receipt-integration
+gate, not a live run.
 
 ## 10. Non-goals
 

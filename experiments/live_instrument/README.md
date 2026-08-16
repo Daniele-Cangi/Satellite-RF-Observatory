@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_6.py` | topology audit, atomic direct-SND qualification, failure attribution and pinned-source reproduction |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_7.py` | topology audit, atomic direct-SND qualification, failure attribution and server-wire necessity audit |
 
 ## Reading order
 
@@ -53,6 +53,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 18. [`GATE_F2_5_4_PROTOCOL_AUDIT.md`](GATE_F2_5_4_PROTOCOL_AUDIT.md) — offline control-boundary attribution: four explicit rejections, one pre-handshake timeout and eleven failures not diagnosable by the frozen receipt.
 19. [`GATE_F2_5_5_OFFLINE.md`](GATE_F2_5_5_OFFLINE.md) — fail-closed official-source clause plus an ordered, redacted control-receipt contract; no runtime or network activity.
 20. [`GATE_F2_5_6_SOURCE_REPRODUCTION.md`](GATE_F2_5_6_SOURCE_REPRODUCTION.md) — exact server source archive, hash-only client audit and the explicit license-retention boundary; no Kiwi or RF activity.
+21. [`GATE_F2_5_7_SERVER_WIRE_AUDIT.md`](GATE_F2_5_7_SERVER_WIRE_AUDIT.md) — why the server-defined ordered receipt is sufficient for the DDC question without retaining the official client source; offline only.
 
 ## Frozen-outcome rule
 

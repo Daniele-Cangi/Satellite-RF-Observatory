@@ -187,6 +187,15 @@ its source is excluded because no license grant was found at the frozen commit.
 The gate therefore stops at `SOURCE_RETENTION_BLOCKED_BY_LICENSE`: the ordered
 receipt is still not authorised for integration and no live run is authorised.
 
+Gate F2.5.7 then asks whether the missing client retention is epistemically
+necessary. Synthetic ordered transcripts show that it is not: the server
+archive defines auth, allocation and per-channel tuning semantics; local send
+results describe client actions; only later IQ can witness a usable branch.
+The result is `SERVER_WIRE_CONTRACT_SUFFICIENT`. A following offline gate may
+integrate the ordered receipt into the local path, but no connection or RF
+acquisition is authorised until that implementation receives a separate
+review.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

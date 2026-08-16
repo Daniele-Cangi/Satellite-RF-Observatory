@@ -151,6 +151,16 @@ better grounded, while the complete source basis is still not locally
 reproducible. See
 [`GATE_F2_5_6_SOURCE_REPRODUCTION.md`](experiments/live_instrument/GATE_F2_5_6_SOURCE_REPRODUCTION.md).
 
+Gate F2.5.7 audits whether that client-retention limit actually blocks the
+physical question. It does not: server semantics, ordered local sends and a
+later hashed IQ witness are sufficient, while the reference client cannot
+manufacture a configuration ACK the protocol does not expose. Synthetic
+transcripts now distinguish auth, channel allocation, local `mod_iq`, IQ,
+clean close and transport loss. The offline result is
+`SERVER_WIRE_CONTRACT_SUFFICIENT`; receipt implementation may be prepared in a
+separate gate, but no live execution is authorised. See
+[`GATE_F2_5_7_SERVER_WIRE_AUDIT.md`](experiments/live_instrument/GATE_F2_5_7_SERVER_WIRE_AUDIT.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:
