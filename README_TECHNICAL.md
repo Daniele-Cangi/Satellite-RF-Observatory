@@ -192,6 +192,15 @@ and cannot itself prove that tuning or IQ delivery succeeded. Those facts must
 come from the direct SND streams. The older runtime and outcome remain
 reproducible and immutable.
 
+Its first live outcome reached both SND attempts for all frozen candidates but
+admitted no pair. One candidate produced an explicit access rejection; the
+remaining candidates produced transport/protocol errors, so the terminal
+state is `QUALIFICATION_INCOMPLETE`. The run also exposed a narrower receipt
+problem: if either concurrent branch fails, `_open_dual()` collapses both
+branch histories into one exception. A possible ready branch and its first
+GNSS IQ block are therefore not independently receipted or hashed. This blocks
+topology inference even though it does not imply zero RF persistence.
+
 ## 8. Prospective freeze and outcomes
 
 Before plan freeze, a declared retry budget may cover only timeout, transport,

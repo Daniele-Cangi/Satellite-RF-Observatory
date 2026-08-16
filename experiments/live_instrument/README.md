@@ -44,6 +44,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 10. [`GATE_F2_5_OFFLINE.md`](GATE_F2_5_OFFLINE.md) and
     [`GATE_F2_5_OUTCOME_1.md`](GATE_F2_5_OUTCOME_1.md) — direct-SND design and the remaining center-policy failure.
 11. [`GATE_F2_5_1_OFFLINE.md`](GATE_F2_5_1_OFFLINE.md) — status-independent bootstrap prepared without a new live session.
+12. [`GATE_F2_5_1_OUTCOME_1.md`](GATE_F2_5_1_OUTCOME_1.md) — direct SND reached, but branch-level readiness remained indeterminate.
 
 ## Frozen-outcome rule
 

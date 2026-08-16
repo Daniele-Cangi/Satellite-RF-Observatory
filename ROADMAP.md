@@ -18,6 +18,10 @@ detectability mechanisms were established.
 - Gate F2.5 removed W/F and `ext_api` as multichannel truth sources, but its
   first live run stopped before SND because `/status` did not materialize the
   assumed `bandwidth` field.
+- Gate F2.5.1 removed that status dependency and its single live run reached
+  both SND attempts on every candidate. No pair was admitted: one candidate
+  explicitly rejected public SND and the rest remained indeterminate after
+  transport/protocol errors.
 
 ## Completed gate: F2.5.1, offline only
 
@@ -54,7 +58,7 @@ The implementation and evidence are in
 `experiments/live_instrument/GATE_F2_5_1_OFFLINE.md`. No connection or
 acquisition occurred while completing this gate.
 
-## Next gate: one separately authorized live execution
+## Completed: one separately authorized live execution
 
 After offline review, authorize at most one new session.
 
@@ -83,8 +87,25 @@ Correct terminal outcomes include:
 - `INTERVENTION_INVALID`;
 - `NOT_DETECTABLE`.
 
-The gate succeeds scientifically even if it produces no experiment, provided
-the terminal state is supported by the receipts.
+The execution terminated as `QUALIFICATION_INCOMPLETE`. It produced no
+experiment, and the terminal state is supported by the receipts. No second
+session is authorized.
+
+## Next gate: branch-level receipt audit, offline only
+
+The live outcome exposed that `_open_dual()` collapses the two concurrent
+opening histories when either branch fails. The next minimum change should:
+
+1. preserve a separate receipt for reference and perturbed opening;
+2. distinguish handshake, channel allocation, GNSS IQ readiness and close;
+3. hash the first ephemeral IQ block before it is used as a readiness witness
+   or destroyed;
+4. compose the topology decision from the two atomic branch receipts;
+5. preserve the frozen candidate set, center policy, retry policy and physical
+   question.
+
+This work must remain offline. It must not reinterpret F2.5.1 outcome 1, add a
+new endpoint or authorize another live execution.
 
 ## Only after one valid prospective outcome
 

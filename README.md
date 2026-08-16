@@ -68,9 +68,17 @@ contain. No SND channel was attempted, no IQ was acquired and
 Gate F2.5.1 now removes that last pre-SND dependency offline. It freezes a
 conservative Kiwi-family tuning interval and derives a qualification-only
 coordinate without reading `status.bandwidth`; W/F remains absent and
-`ext_api` remains a hint. The original outcome is unchanged, and no new live
-connection has been made. See
+`ext_api` remains a hint. The original outcome is unchanged, and no live
+connection was made while preparing that offline checkpoint. See
 [`GATE_F2_5_1_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_1_OFFLINE.md).
+
+The single authorised F2.5.1 live session then reached real dual-SND attempts
+on every frozen candidate. One endpoint explicitly rejected public SND access;
+the others remained indeterminate after WebSocket timeout/closure errors. The
+terminal result is `QUALIFICATION_INCOMPLETE`, not a claim that multichannel
+capability is absent. No topology, feature, plan or DDC hypothesis was
+admitted. See
+[`GATE_F2_5_1_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_1_OUTCOME_1.md).
 
 ## What can be claimed
 
