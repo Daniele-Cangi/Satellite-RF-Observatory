@@ -483,6 +483,17 @@ def _decorate_direct_result(
         direct_reference_opened=reference.state is BranchOpenState.READY,
         direct_perturbed_opened=perturbed.state is BranchOpenState.READY,
         atomic_branch_receipts=branch_receipts,
+        qualification_error_types=tuple(
+            dict.fromkeys(
+                receipt.qualification_error_types
+                + tuple(
+                    item.error_type
+                    for item in branch_receipts
+                    if item.state is BranchOpenState.QUALIFICATION_ERROR
+                    and item.error_type is not None
+                )
+            )
+        ),
     )
     if isinstance(result, f25._TopologyContext):
         result.phase_receipt = decorated

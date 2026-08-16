@@ -96,6 +96,15 @@ depended on aggregate prose, and stdout-only receipts were not fully retained.
 See
 [`GATE_F2_5_2_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_2_OUTCOME_1.md).
 
+Gate F2.5.3 corrects those two control failures offline. Retry eligibility now
+comes only from atomic branch state and typed transport errors; aggregate prose
+cannot enable or disable it. A future session writes one bounded,
+exclusive-create, strict-JSONL artifact containing descriptive receipts and
+hashes while rejecting RF arrays and raw/derived sample fields. Sink or
+serialization failure is descriptive and cannot alter the physical result.
+No live connection was made. See
+[`GATE_F2_5_3_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_3_OFFLINE.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:

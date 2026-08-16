@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py`, `kiwi_gate_f2_4.py`, `kiwi_gate_f2_5.py`, `kiwi_gate_f2_5_1.py`, `kiwi_gate_f2_5_2.py` | topology audit, frozen outcomes and atomic direct-SND qualification |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_3.py` | topology audit, atomic direct-SND qualification and structured receipt control |
 
 ## Reading order
 
@@ -47,6 +47,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 12. [`GATE_F2_5_1_OUTCOME_1.md`](GATE_F2_5_1_OUTCOME_1.md) — direct SND reached, but branch-level readiness remained indeterminate.
 13. [`GATE_F2_5_2_OFFLINE.md`](GATE_F2_5_2_OFFLINE.md) — atomic branch receipts and pre-decode readiness hashing, with no new live run.
 14. [`GATE_F2_5_2_OUTCOME_1.md`](GATE_F2_5_2_OUTCOME_1.md) — one ready branch preserved, peer rejection, and the remaining structured-control failures.
+15. [`GATE_F2_5_3_OFFLINE.md`](GATE_F2_5_3_OFFLINE.md) — typed retry control and bounded receipt-only JSONL retention, prepared without network activity.
 
 ## Frozen-outcome rule
 

@@ -175,6 +175,7 @@ class PhaseReceipt:
     direct_reference_opened: bool = False
     direct_perturbed_opened: bool = False
     atomic_branch_receipts: tuple[object, ...] = ()
+    qualification_error_types: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if f2._utc(self.completed_at) < f2._utc(self.started_at):
@@ -306,6 +307,7 @@ def direct_dual_snd_qualification(
             tuple(item for item in (status_hash, error_hash) if item is not None),
             (("status_access", "NOT_EVALUATED" if status_hash is None else "SATISFIED"),),
             hint,
+            qualification_error_types=(type(error).__name__,),
         )
 
     try:
@@ -346,6 +348,7 @@ def direct_dual_snd_qualification(
             True,
             opened_but_invalid,
             opened_but_invalid,
+            qualification_error_types=(type(error).__name__,),
         )
 
     try:
@@ -441,6 +444,7 @@ def direct_dual_snd_qualification(
             True,
             True,
             True,
+            qualification_error_types=(type(error).__name__,),
         )
 
 
@@ -981,6 +985,8 @@ def run_once(
     direct_qualifier: Callable[[kiwi.KiwiEndpoint, f2.MotherPlan], _TopologyContext | PhaseReceipt] | None = None,
     event_prefix: str = "gate_f2_5",
     terminal_instrument: str = "gate-f2.5-direct-dual-snd",
+    retry_selector: Callable[[PhaseReceipt], bool] | None = None,
+    event_emitter: Callable[[str, object], None] | None = None,
 ) -> F25Result:
     """Future one-shot materialisation with Gate-specific evolution hooks."""
 
@@ -991,9 +997,12 @@ def run_once(
         created_at=datetime.now(timezone.utc),
     )
     qualifier = direct_qualifier or direct_dual_snd_qualification
+    retryable = retry_selector or _retryable_phase
     event = lambda suffix: f"{event_prefix}_{suffix}"
-    strict_json_value(bootstrap)
-    emit_jsonl(
+    emit_event = event_emitter or (lambda event_type, payload: emit_jsonl(event_type, payload, sink=sink))
+    if event_emitter is None:
+        strict_json_value(bootstrap)
+    emit_event(
         event("bootstrap_frozen"),
         {
             "receipt": bootstrap,
@@ -1001,7 +1010,6 @@ def run_once(
             "root_topology_requirement": f23.gate_f2_root_topology_requirement(),
             f"network_activity_in_{event_prefix}": "NONE_UNTIL_SEPARATELY_AUTHORISED",
         },
-        sink=sink,
     )
     deadline = time.monotonic() + f24.QUALIFICATION_BUDGET_S
     receipts: list[PhaseReceipt] = []
@@ -1024,20 +1032,23 @@ def run_once(
             )
             receipts.append(direct_receipt)
             for atomic_branch_receipt in direct_receipt.atomic_branch_receipts:
-                emit_jsonl(event("atomic_snd_branch_receipt"), atomic_branch_receipt, sink=sink)
-            emit_jsonl(event("direct_dual_snd_qualification"), direct_receipt, sink=sink)
+                emit_event(event("atomic_snd_branch_receipt"), atomic_branch_receipt)
+            emit_event(event("direct_dual_snd_qualification"), direct_receipt)
             if (
                 not isinstance(topology_or_receipt, _TopologyContext)
-                and _retryable_phase(direct_receipt)
+                and retryable(direct_receipt)
                 and retries_remaining > 0
                 and identity not in retried
             ):
                 retries_remaining -= 1
                 retried.add(identity)
-                emit_jsonl(
+                emit_event(
                     event("prefreeze_retry"),
-                    {"endpoint": identity, "global_retries_remaining": retries_remaining},
-                    sink=sink,
+                    {
+                        "endpoint": identity,
+                        "global_retries_remaining": retries_remaining,
+                        "qualification_error_types": direct_receipt.qualification_error_types,
+                    },
                 )
                 continue
             break
@@ -1046,7 +1057,7 @@ def run_once(
             blocked = downstream_not_evaluated(identity, (F25Phase.DIRECT_DUAL_SND_QUALIFICATION,))
             receipts.extend(blocked)
             for item in blocked:
-                emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
+                emit_event(event("phase_not_evaluated"), item)
             continue
 
         context = topology_or_receipt
@@ -1061,12 +1072,12 @@ def run_once(
             )
             receipts.append(discovery_receipt)
             completed.append(F25Phase.LOCAL_IQ_FEATURE_DISCOVERY)
-            emit_jsonl(event("local_iq_feature_discovery"), discovery_receipt, sink=sink)
+            emit_event(event("local_iq_feature_discovery"), discovery_receipt)
             if not isinstance(discovery_or_receipt, _DiscoveryContext):
                 blocked = downstream_not_evaluated(identity, tuple(completed))
                 receipts.extend(blocked)
                 for item in blocked:
-                    emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
+                    emit_event(event("phase_not_evaluated"), item)
                 continue
             discovery = discovery_or_receipt
             saw_discovery = True
@@ -1079,12 +1090,12 @@ def run_once(
             )
             receipts.append(retune_receipt)
             completed.append(F25Phase.PER_CHANNEL_RETUNE_QUALIFICATION)
-            emit_jsonl(event("per_channel_retune_qualification"), retune_receipt, sink=sink)
+            emit_event(event("per_channel_retune_qualification"), retune_receipt)
             if not isinstance(retune_or_receipt, _RetuneQualification):
                 blocked = downstream_not_evaluated(identity, tuple(completed))
                 receipts.extend(blocked)
                 for item in blocked:
-                    emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
+                    emit_event(event("phase_not_evaluated"), item)
                 continue
             retune = retune_or_receipt
             saw_retune = True
@@ -1108,11 +1119,11 @@ def run_once(
                 )
                 receipts.append(freeze_receipt)
                 completed.append(F25Phase.PLAN_FREEZE)
-                emit_jsonl(event("plan_freeze_failed"), freeze_receipt, sink=sink)
+                emit_event(event("plan_freeze_failed"), freeze_receipt)
                 blocked = downstream_not_evaluated(identity, tuple(completed))
                 receipts.extend(blocked)
                 for item in blocked:
-                    emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
+                    emit_event(event("phase_not_evaluated"), item)
                 continue
             plan_receipt = PhaseReceipt(
                 identity,
@@ -1126,10 +1137,9 @@ def run_once(
             )
             receipts.append(plan_receipt)
             completed.append(F25Phase.PLAN_FREEZE)
-            emit_jsonl(
+            emit_event(
                 event("plan_frozen"),
                 {"plan": plan, "plan_hash": plan.plan_hash, "zero_postfreeze_retry": True},
-                sink=sink,
             )
             confirmation_started = datetime.now(timezone.utc)
             try:
@@ -1173,8 +1183,9 @@ def run_once(
             )
             receipts.append(confirmation_receipt)
             result = _f25_from_physical(physical, tuple(receipts))
-            strict_json_value(result)
-            emit_jsonl(event("first_outcome"), result, sink=sink)
+            if event_emitter is None:
+                strict_json_value(result)
+            emit_event(event("first_outcome"), result)
             return result
         finally:
             context.close()
@@ -1213,7 +1224,7 @@ def run_once(
         reason,
         instrument=terminal_instrument,
     )
-    emit_jsonl(event("first_outcome"), result, sink=sink)
+    emit_event(event("first_outcome"), result)
     return result
 
 

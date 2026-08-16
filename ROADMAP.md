@@ -138,6 +138,15 @@ The next minimum correction must:
 This gate must remain offline and must not reconstruct the missing Hill receipt
 or reinterpret F2.5.2 outcome 1.
 
+Gate F2.5.3 now implements and tests this correction offline. Retry eligibility
+comes from atomic state plus a frozen typed-error allowlist; its tests
+materialise exactly two total retries and at most one per endpoint. A private
+bounded writer retains strict JSONL receipts and hashes while rejecting RF
+fields and arrays. Serialization, file and mirror failures remain descriptive
+and cannot change the physical decision. See `GATE_F2_5_3_OFFLINE.md`.
+
+No live F2.5.3 execution is authorised by this checkpoint.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
