@@ -172,6 +172,14 @@ reproducible from this repository. The resulting exit is
 `STOP_PENDING_CONTROL_DISCRIMINATORS`: no new endpoint, rerun or client fix is
 authorised by this audit.
 
+Gate F2.5.5 materialises those discriminators as an offline contract while
+keeping official-source provenance as an independent clause. Command results,
+allowlisted server fields, WebSocket close, TCP loss and IQ witness are ordered
+without retaining credentials or RF. The source artifacts and the exact
+kiwiclient control path are not present locally, so the gate terminates
+`SOURCE_BASIS_INCOMPLETE`. Implementation and live execution remain
+unauthorised until a separately reviewed source-reproduction step succeeds.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

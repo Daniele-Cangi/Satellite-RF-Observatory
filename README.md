@@ -132,6 +132,15 @@ official frozen source revisions are not present locally, the correct exit is
 `STOP_PENDING_CONTROL_DISCRIMINATORS`, not a protocol fix or another run. See
 [`GATE_F2_5_4_PROTOCOL_AUDIT.md`](experiments/live_instrument/GATE_F2_5_4_PROTOCOL_AUDIT.md).
 
+Gate F2.5.5 now specifies the missing control boundary offline. It keeps an
+official-source clause separate from the ordered receipt clause, distinguishes
+local command result, remote server field, WebSocket close, TCP loss and first
+IQ, and forbids credentials or RF persistence. Because the pinned official
+source artifacts and exact kiwiclient control path are not retained locally,
+it fails closed as `SOURCE_BASIS_INCOMPLETE`; no implementation or live run is
+authorised. See
+[`GATE_F2_5_5_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_5_OFFLINE.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:
