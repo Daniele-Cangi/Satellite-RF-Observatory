@@ -65,8 +65,12 @@ contain. No SND channel was attempted, no IQ was acquired and
 `NO_MULTI_CHANNEL_CAPABILITY` was therefore forbidden. See
 [`GATE_F2_5_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_OUTCOME_1.md).
 
-That failure is useful: removing W/F was not enough while information formerly
-learned from its handshake was still required before the direct SND probe.
+Gate F2.5.1 now removes that last pre-SND dependency offline. It freezes a
+conservative Kiwi-family tuning interval and derives a qualification-only
+coordinate without reading `status.bandwidth`; W/F remains absent and
+`ext_api` remains a hint. The original outcome is unchanged, and no new live
+connection has been made. See
+[`GATE_F2_5_1_OFFLINE.md`](experiments/live_instrument/GATE_F2_5_1_OFFLINE.md).
 
 ## What can be claimed
 

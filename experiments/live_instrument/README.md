@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py`, `kiwi_gate_f2_4.py`, `kiwi_gate_f2_5.py` | topology audit and frozen outcomes |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py`, `kiwi_gate_f2_4.py`, `kiwi_gate_f2_5.py`, `kiwi_gate_f2_5_1.py` | topology audit, frozen outcomes and direct-SND bootstrap correction |
 
 ## Reading order
 
@@ -43,6 +43,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 9. [`GATE_F2_4_OUTCOME_1.md`](GATE_F2_4_OUTCOME_1.md) — W/F blocked the desired SND question.
 10. [`GATE_F2_5_OFFLINE.md`](GATE_F2_5_OFFLINE.md) and
     [`GATE_F2_5_OUTCOME_1.md`](GATE_F2_5_OUTCOME_1.md) — direct-SND design and the remaining center-policy failure.
+11. [`GATE_F2_5_1_OFFLINE.md`](GATE_F2_5_1_OFFLINE.md) — status-independent bootstrap prepared without a new live session.
 
 ## Frozen-outcome rule
 

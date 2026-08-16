@@ -185,6 +185,13 @@ selection expected `bandwidth` in `/status`, so direct SND was never attempted.
 This is a policy/transform failure. It says nothing about multichannel
 availability.
 
+Gate F2.5.1 removes only that dependency. A frozen 0–30 MHz Kiwi-family
+interval supplies a deterministic interior coordinate for qualification; the
+coordinate is independent of status, is not a target or discovered feature,
+and cannot itself prove that tuning or IQ delivery succeeded. Those facts must
+come from the direct SND streams. The older runtime and outcome remain
+reproducible and immutable.
+
 ## 8. Prospective freeze and outcomes
 
 Before plan freeze, a declared retry budget may cover only timeout, transport,
@@ -227,6 +234,7 @@ Pre-freeze terminal states include `QUALIFICATION_INCOMPLETE`,
 | `kiwi_gate_f2_3.py` | causal topology audit |
 | `kiwi_gate_f2_4.py` | first same-Kiwi two-channel runtime |
 | `kiwi_gate_f2_5.py` | direct-SND-first causal path |
+| `kiwi_gate_f2_5_1.py` | status-independent SND bootstrap policy |
 
 ## 10. Non-goals
 

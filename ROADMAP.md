@@ -8,7 +8,8 @@ detectability mechanisms were established.
 
 - The Gate B through F2.5 history is preserved as immutable plans, receipts,
   outcomes and postmortems.
-- The offline live-instrument suite contains 154 deterministic tests.
+- The offline live-instrument suite contains deterministic tests with no live
+  network activity.
 - SatNOGS demonstrated clause-driven continuity/failover semantics.
 - Dual-Kiwi work demonstrated the need for in-session nulls and explicit time
   and frequency alignment.
@@ -18,19 +19,17 @@ detectability mechanisms were established.
   first live run stopped before SND because `/status` did not materialize the
   assumed `bandwidth` field.
 
-## Next gate: F2.5.1, offline only
+## Completed gate: F2.5.1, offline only
 
 Goal: remove every precondition that is not necessary to attempt two direct
 SND/IQ allocations.
 
-Required work:
+Completed work:
 
 1. Audit the frozen Kiwi client/server protocol evidence for the legal initial
    tuning interval and where bandwidth is actually learned.
-2. Replace `status.bandwidth` with either:
-   - a conservative protocol invariant frozen before execution; or
-   - information negotiated and witnessed by the same SND handshake that
-     constitutes the capability.
+2. Replaced `status.bandwidth` with a conservative 0–30 MHz Kiwi-family
+   protocol invariant frozen before execution.
 3. Ensure status fields and `ext_api` remain descriptive only.
 4. Prove offline that missing/malformed status bandwidth cannot block
    `_open_dual()`.
@@ -38,7 +37,8 @@ Required work:
    - direct second-channel refusal;
    - transport/software failure;
    - two opened but causally inadmissible streams.
-6. Freeze a new runtime commit. Do not reinterpret or amend F2.5 outcome 1.
+6. Prepare a new runtime checkpoint without reinterpreting or amending F2.5
+   outcome 1.
 
 Exit criteria:
 
@@ -49,7 +49,12 @@ Exit criteria:
   topology admission;
 - all RF arrays remain in RAM and outside strict JSON receipts.
 
-## One separately authorized live execution
+The implementation and evidence are in
+`experiments/live_instrument/kiwi_gate_f2_5_1.py` and
+`experiments/live_instrument/GATE_F2_5_1_OFFLINE.md`. No connection or
+acquisition occurred while completing this gate.
+
+## Next gate: one separately authorized live execution
 
 After offline review, authorize at most one new session.
 

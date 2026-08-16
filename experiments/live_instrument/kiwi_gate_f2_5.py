@@ -256,6 +256,8 @@ def _relabel_baseline(artifacts: f24._DualArtifacts, phase: str) -> f24._DualArt
 def direct_dual_snd_qualification(
     endpoint: kiwi.KiwiEndpoint,
     mother: f2.MotherPlan,
+    *,
+    center_resolver: Callable[[kiwi.KiwiEndpoint, dict[str, str]], float] | None = None,
 ) -> _TopologyContext | PhaseReceipt:
     """Attempt R and P directly. No ext_api value can short-circuit this call."""
 
@@ -280,7 +282,7 @@ def direct_dual_snd_qualification(
                 (("status_access", "SATISFIED"), ("public_access", "REJECTED")),
                 hint,
             )
-        center = center_from_status(endpoint, status)
+        center = (center_resolver or center_from_status)(endpoint, status)
     except Exception as error:
         completed = datetime.now(timezone.utc)
         error_hash = f2._hash(
@@ -841,6 +843,8 @@ def _terminal_result(
     outcome: F25Outcome,
     phase_receipts: tuple[PhaseReceipt, ...],
     reason: str,
+    *,
+    instrument: str = "gate-f2.5-direct-dual-snd",
 ) -> F25Result:
     now = datetime.now(timezone.utc)
     starts = tuple(item.started_at for item in phase_receipts)
@@ -877,7 +881,7 @@ def _terminal_result(
         ),
     )
     evidence = ConstraintReceipt(
-        "gate-f2.5-direct-dual-snd",
+        instrument,
         min(starts, default=now),
         max(ends, default=now),
         constraints,
@@ -965,20 +969,29 @@ def run_once(
     mother: f2.MotherPlan | None = None,
     runtime_commit: str | None = None,
     sink: Callable[[str], None] = print,
+    bootstrap_receipt: F25BootstrapReceipt | None = None,
+    direct_qualifier: Callable[[kiwi.KiwiEndpoint, f2.MotherPlan], _TopologyContext | PhaseReceipt] | None = None,
+    event_prefix: str = "gate_f2_5",
+    terminal_instrument: str = "gate-f2.5-direct-dual-snd",
 ) -> F25Result:
-    """Future one-shot materialisation. Gate F2.5 does not invoke this function."""
+    """Future one-shot materialisation with Gate-specific evolution hooks."""
 
     mother = mother or f2.MotherPlan()
     commit = runtime_commit or f22.runtime_commit()
-    bootstrap = build_bootstrap_receipt(runtime_commit=commit, created_at=datetime.now(timezone.utc))
+    bootstrap = bootstrap_receipt or build_bootstrap_receipt(
+        runtime_commit=commit,
+        created_at=datetime.now(timezone.utc),
+    )
+    qualifier = direct_qualifier or direct_dual_snd_qualification
+    event = lambda suffix: f"{event_prefix}_{suffix}"
     strict_json_value(bootstrap)
     emit_jsonl(
-        "gate_f2_5_bootstrap_frozen",
+        event("bootstrap_frozen"),
         {
             "receipt": bootstrap,
             "receipt_hash": bootstrap.receipt_hash,
             "root_topology_requirement": f23.gate_f2_root_topology_requirement(),
-            "network_activity_in_gate_f2_5": "NONE_UNTIL_SEPARATELY_AUTHORISED",
+            f"network_activity_in_{event_prefix}": "NONE_UNTIL_SEPARATELY_AUTHORISED",
         },
         sink=sink,
     )
@@ -995,14 +1008,14 @@ def run_once(
             break
         identity = _endpoint_identity(endpoint)
         while True:
-            topology_or_receipt = direct_dual_snd_qualification(endpoint, mother)
+            topology_or_receipt = qualifier(endpoint, mother)
             direct_receipt = (
                 topology_or_receipt.phase_receipt
                 if isinstance(topology_or_receipt, _TopologyContext)
                 else topology_or_receipt
             )
             receipts.append(direct_receipt)
-            emit_jsonl("gate_f2_5_direct_dual_snd_qualification", direct_receipt, sink=sink)
+            emit_jsonl(event("direct_dual_snd_qualification"), direct_receipt, sink=sink)
             if (
                 not isinstance(topology_or_receipt, _TopologyContext)
                 and _retryable_phase(direct_receipt)
@@ -1012,7 +1025,7 @@ def run_once(
                 retries_remaining -= 1
                 retried.add(identity)
                 emit_jsonl(
-                    "gate_f2_5_prefreeze_retry",
+                    event("prefreeze_retry"),
                     {"endpoint": identity, "global_retries_remaining": retries_remaining},
                     sink=sink,
                 )
@@ -1023,7 +1036,7 @@ def run_once(
             blocked = downstream_not_evaluated(identity, (F25Phase.DIRECT_DUAL_SND_QUALIFICATION,))
             receipts.extend(blocked)
             for item in blocked:
-                emit_jsonl("gate_f2_5_phase_not_evaluated", item, sink=sink)
+                emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
             continue
 
         context = topology_or_receipt
@@ -1038,12 +1051,12 @@ def run_once(
             )
             receipts.append(discovery_receipt)
             completed.append(F25Phase.LOCAL_IQ_FEATURE_DISCOVERY)
-            emit_jsonl("gate_f2_5_local_iq_feature_discovery", discovery_receipt, sink=sink)
+            emit_jsonl(event("local_iq_feature_discovery"), discovery_receipt, sink=sink)
             if not isinstance(discovery_or_receipt, _DiscoveryContext):
                 blocked = downstream_not_evaluated(identity, tuple(completed))
                 receipts.extend(blocked)
                 for item in blocked:
-                    emit_jsonl("gate_f2_5_phase_not_evaluated", item, sink=sink)
+                    emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
                 continue
             discovery = discovery_or_receipt
             saw_discovery = True
@@ -1056,12 +1069,12 @@ def run_once(
             )
             receipts.append(retune_receipt)
             completed.append(F25Phase.PER_CHANNEL_RETUNE_QUALIFICATION)
-            emit_jsonl("gate_f2_5_per_channel_retune_qualification", retune_receipt, sink=sink)
+            emit_jsonl(event("per_channel_retune_qualification"), retune_receipt, sink=sink)
             if not isinstance(retune_or_receipt, _RetuneQualification):
                 blocked = downstream_not_evaluated(identity, tuple(completed))
                 receipts.extend(blocked)
                 for item in blocked:
-                    emit_jsonl("gate_f2_5_phase_not_evaluated", item, sink=sink)
+                    emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
                 continue
             retune = retune_or_receipt
             saw_retune = True
@@ -1085,11 +1098,11 @@ def run_once(
                 )
                 receipts.append(freeze_receipt)
                 completed.append(F25Phase.PLAN_FREEZE)
-                emit_jsonl("gate_f2_5_plan_freeze_failed", freeze_receipt, sink=sink)
+                emit_jsonl(event("plan_freeze_failed"), freeze_receipt, sink=sink)
                 blocked = downstream_not_evaluated(identity, tuple(completed))
                 receipts.extend(blocked)
                 for item in blocked:
-                    emit_jsonl("gate_f2_5_phase_not_evaluated", item, sink=sink)
+                    emit_jsonl(event("phase_not_evaluated"), item, sink=sink)
                 continue
             plan_receipt = PhaseReceipt(
                 identity,
@@ -1104,7 +1117,7 @@ def run_once(
             receipts.append(plan_receipt)
             completed.append(F25Phase.PLAN_FREEZE)
             emit_jsonl(
-                "gate_f2_5_plan_frozen",
+                event("plan_frozen"),
                 {"plan": plan, "plan_hash": plan.plan_hash, "zero_postfreeze_retry": True},
                 sink=sink,
             )
@@ -1151,7 +1164,7 @@ def run_once(
             receipts.append(confirmation_receipt)
             result = _f25_from_physical(physical, tuple(receipts))
             strict_json_value(result)
-            emit_jsonl("gate_f2_5_first_outcome", result, sink=sink)
+            emit_jsonl(event("first_outcome"), result, sink=sink)
             return result
         finally:
             context.close()
@@ -1184,8 +1197,13 @@ def run_once(
         )
         outcome = F25Outcome.QUALIFICATION_INCOMPLETE if has_error else F25Outcome.NO_FALSIFIABLE_INTERVENTION
         reason = "retune qualification existed but the exact preselected plan could not be frozen"
-    result = _terminal_result(outcome, frozen_receipts, reason)
-    emit_jsonl("gate_f2_5_first_outcome", result, sink=sink)
+    result = _terminal_result(
+        outcome,
+        frozen_receipts,
+        reason,
+        instrument=terminal_instrument,
+    )
+    emit_jsonl(event("first_outcome"), result, sink=sink)
     return result
 
 
