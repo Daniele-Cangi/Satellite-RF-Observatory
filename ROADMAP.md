@@ -284,6 +284,17 @@ authority is implied or consumed. A later authorization must name the commit
 that freezes F2.5.15 and permits only the one dual-SND qualification outcome,
 not discovery, retune or A1/B/A2.
 
+That exact authority has now been consumed once. All six candidates received
+one concurrent reference/perturbed attempt and no retry occurred. Four atomic
+branches contain explicit `badp` rejection. The other eight observed channel
+allocation and local `mod=iq`, then an empty close with no peer status. The
+semantic layer records exactly zero SND frames across all twelve branches, so
+the old ambiguity between no SND and a discarded stale/malformed SND is closed;
+the unobserved cause of the empty closes is not inferred. No candidate produced
+two IQ readiness roots, therefore the terminal outcome is
+`QUALIFICATION_INCOMPLETE`, not `NO_MULTI_CHANNEL_CAPABILITY`. The terminal
+receipt is complete with zero RF persistence. This authority cannot be reused.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

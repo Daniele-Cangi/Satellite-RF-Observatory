@@ -263,6 +263,12 @@ authority surface. It is ready to be reviewed for a separate exact live
 authorization, but importing, assessing, testing or committing it performs no
 network activity.
 
+The single F2.5.15 authority has since been consumed. Its frozen outcome is
+`QUALIFICATION_INCOMPLETE`: all candidates were attempted without retry, four
+branches were explicitly rejected, eight closed after allocation without any
+SND frame, and no dual-IQ pair was admitted. No cause is assigned to the empty
+peer closes.
+
 ## Repository map
 
 ```text
