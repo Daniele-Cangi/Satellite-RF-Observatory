@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_8.py` | topology audit, atomic direct-SND qualification, source/wire audit and ordered receipt integration |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_9.py` | topology audit, atomic direct-SND qualification, source/wire audit and ordered one-shot materialisation |
 
 ## Reading order
 
@@ -55,6 +55,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 20. [`GATE_F2_5_6_SOURCE_REPRODUCTION.md`](GATE_F2_5_6_SOURCE_REPRODUCTION.md) — exact server source archive, hash-only client audit and the explicit license-retention boundary; no Kiwi or RF activity.
 21. [`GATE_F2_5_7_SERVER_WIRE_AUDIT.md`](GATE_F2_5_7_SERVER_WIRE_AUDIT.md) — why the server-defined ordered receipt is sufficient for the DDC question without retaining the official client source; offline only.
 22. [`GATE_F2_5_8_ORDERED_RECEIPT.md`](GATE_F2_5_8_ORDERED_RECEIPT.md) — integration of the ordered auth/channel/rate/command/IQ receipt with synthetic frames and zero RF persistence; no live execution.
+23. [`GATE_F2_5_9_PRELIVE_RUNNER.md`](GATE_F2_5_9_PRELIVE_RUNNER.md) — pre-live call-graph review and one-shot materialisation using only the ordered opener; execution remains separately gated.
 
 ## Frozen-outcome rule
 

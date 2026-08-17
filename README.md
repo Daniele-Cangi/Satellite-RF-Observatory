@@ -170,6 +170,14 @@ use synthetic WebSocket frames; no endpoint was contacted. The result is
 `ORDERED_WIRE_RECEIPT_IMPLEMENTED`, still with no live authorization. See
 [`GATE_F2_5_8_ORDERED_RECEIPT.md`](experiments/live_instrument/GATE_F2_5_8_ORDERED_RECEIPT.md).
 
+Gate F2.5.9 completes the offline pre-live composition review. The disposable
+one-shot wrapper now injects only the ordered F2.5.8 opener, maps atomic receipt
+states without parsing aggregate exception prose, retains typed pre-freeze
+retry and terminal JSONL closure, and preserves the first-outcome stop. Calls
+without a separate live authority fail before artifact creation or network
+entry. No live execution occurred. See
+[`GATE_F2_5_9_PRELIVE_RUNNER.md`](experiments/live_instrument/GATE_F2_5_9_PRELIVE_RUNNER.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:

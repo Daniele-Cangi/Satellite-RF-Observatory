@@ -204,6 +204,14 @@ local send error, control timeout, close frame and transport loss. The exit is
 `ORDERED_WIRE_RECEIPT_IMPLEMENTED`; a separate pre-live review is still
 required and no session is authorised by this roadmap entry.
 
+Gate F2.5.9 completes that review by replacing the single stale dependency in
+the future one-shot path. The new wrapper reaches only the ordered opener,
+derives retry from ordered branch state and typed errors, retains terminal
+receipt closure, and stops at the first outcome. It also refuses before file
+or network I/O unless a later caller supplies separate live authority. The
+offline exit is `ORDERED_ONE_SHOT_RUNNER_MATERIALIZED`; no live session is
+authorised or executed by this roadmap entry.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
