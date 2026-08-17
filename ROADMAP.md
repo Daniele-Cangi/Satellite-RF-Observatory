@@ -315,6 +315,14 @@ corrected sequence does not. Dual composition and post-commit sealing remain
 required before a separately authorised qualification; no live authority is
 present.
 
+Gate F2.5.18 performs the dual composition offline. Exactly two corrected SND
+branches start concurrently per candidate and must still demonstrate distinct
+connections, server channels and sequences plus overlapping GNSS event time.
+The frozen candidate order, data-independent centers, zero retry and terminal
+receipt are preserved. Status and waterfall remain outside admission. The
+result is an injected, synthetic-only qualification envelope; a post-commit
+seal is still mandatory and no live authority is present.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

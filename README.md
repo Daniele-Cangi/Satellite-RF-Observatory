@@ -285,6 +285,13 @@ keepalive only afterwards. Its receipt distinguishes local emission from the
 still-unobservable remote setup state. The implementation is synthetic-only,
 has no live connector and grants no acquisition authority.
 
+Gate F2.5.18 composes two corrected branches concurrently, preserves the
+same-Kiwi channel/connection/sequence/event-time topology clauses and runs the
+unchanged candidate order into one terminal receipt. Both retry budgets remain
+zero; status and waterfall remain outside the direct-SND admission path. The
+module still requires injected connectors and post-commit review, so it cannot
+contact a receiver or claim live authority.
+
 ## Repository map
 
 ```text
