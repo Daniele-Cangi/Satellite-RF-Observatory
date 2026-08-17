@@ -228,6 +228,16 @@ allocation and local `mod_iq` followed by a close before the qualifying IQ
 witness. The receipt is terminally complete with zero RF persistence. No rerun
 is authorised by this roadmap entry.
 
+Gate F2.5.11 attributes that frozen failure boundary without network activity.
+All eight close artifact hashes equal the recorder's exact empty-payload
+encoding, so their displayed `1005` values were local no-status sentinels, not
+peer-supplied status codes. The receipt nevertheless omits the per-hash frame
+tag and the clause result for discarded SND frames; it cannot distinguish no
+SND from SND excluded by the GNSS/readiness predicate. The offline exit is
+`FROZEN_FAILURE_BOUNDARY_ATTRIBUTED_CAUSE_UNRESOLVED`. A future receipt would
+need hash-bound categorical clause transitions, not retained RF. No runner is
+changed and no new session is authorised.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

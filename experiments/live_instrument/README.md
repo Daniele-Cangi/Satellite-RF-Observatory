@@ -25,7 +25,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 | Prospective Kiwi | `kiwi_prospective.py` | discovery/model/prediction/confirmation split |
 | Detectability | `kiwi_gate_e.py` | Gate E outcomes and E.1 hardening |
 | Capability-first synthesis | `kiwi_gate_f2.py`, `kiwi_gate_f2_2.py` | Gate F/F2 outcomes |
-| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_10.py` | topology audit, ordered direct-SND qualification and exact one-shot execution review |
+| Same-Kiwi DDC cut | `kiwi_gate_f2_3.py` through `kiwi_gate_f2_5_11.py` | topology audit, ordered direct-SND qualification, one-shot execution and frozen failure attribution |
 
 ## Reading order
 
@@ -58,6 +58,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 23. [`GATE_F2_5_9_PRELIVE_RUNNER.md`](GATE_F2_5_9_PRELIVE_RUNNER.md) — pre-live call-graph review and one-shot materialisation using only the ordered opener; execution remains separately gated.
 24. [`GATE_F2_5_10_EXECUTION_REVIEW.md`](GATE_F2_5_10_EXECUTION_REVIEW.md) — exact candidate, timing, source, environment and authority envelope; no caller overrides and no live execution.
 25. [`GATE_F2_5_10_OUTCOME_1.md`](GATE_F2_5_10_OUTCOME_1.md) — the single authorised run ended `QUALIFICATION_INCOMPLETE`: six dual attempts, zero readiness witnesses, zero retry and a complete terminal receipt.
+26. [`GATE_F2_5_11_FAILURE_ATTRIBUTION.md`](GATE_F2_5_11_FAILURE_ATTRIBUTION.md) — offline attribution proves the recorded `1005` values were local sentinels for empty close payloads, while SND presence and the failure cause remain unresolved by the frozen receipt.
 
 ## Frozen-outcome rule
 
