@@ -258,6 +258,11 @@ branches are composed concurrently, evaluated by explicit topology clauses and
 fed through the frozen candidate order to one terminal receipt. Its envelope
 still requires post-commit causal-source review; it is not live authority.
 
+Gate F2.5.15 now supplies that offline post-commit seal and a boolean-only
+authority surface. It is ready to be reviewed for a separate exact live
+authorization, but importing, assessing, testing or committing it performs no
+network activity.
+
 ## Repository map
 
 ```text

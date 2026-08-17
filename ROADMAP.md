@@ -272,6 +272,18 @@ both retry budgets to zero. The exit is
 bind this new causal source and envelope before a specific live authority can
 exist; no prior generic authorization is consumed.
 
+Gate F2.5.15 performs that post-commit review without network activity. It
+seals the F2.5.14 commit, a complete 17-file causal allowlist with canonical-LF
+SHA-256, the exact numerical environment and the F2.5.14 control-surface hash.
+The sole public execution surface is
+`run_reviewed_once(live_authorised=False)`: it exposes no endpoint, frequency,
+threshold, retry, receipt-path or connector override, and guard order places
+explicit authority and the seal before receipt creation and connector access.
+The exit is `EXACT_AUTHORITY_SURFACE_READY_FOR_SEPARATE_AUTHORITY`; no live
+authority is implied or consumed. A later authorization must name the commit
+that freezes F2.5.15 and permits only the one dual-SND qualification outcome,
+not discovery, retune or A1/B/A2.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
