@@ -196,6 +196,14 @@ integrate the ordered receipt into the local path, but no connection or RF
 acquisition is authorised until that implementation receives a separate
 review.
 
+Gate F2.5.8 has now implemented that successor path offline. It hashes every
+incoming control/IQ frame before analysis, preserves ordered allowlisted
+fields, extracts channel identity from `is_local`, and sends `mod_iq` only
+after auth, channel and rate witnesses exist. Synthetic tests also separate
+local send error, control timeout, close frame and transport loss. The exit is
+`ORDERED_WIRE_RECEIPT_IMPLEMENTED`; a separate pre-live review is still
+required and no session is authorised by this roadmap entry.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

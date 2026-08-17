@@ -161,6 +161,15 @@ clean close and transport loss. The offline result is
 separate gate, but no live execution is authorised. See
 [`GATE_F2_5_7_SERVER_WIRE_AUDIT.md`](experiments/live_instrument/GATE_F2_5_7_SERVER_WIRE_AUDIT.md).
 
+Gate F2.5.8 now integrates that contract in a new local successor path. It
+preserves ordered allowlisted MSG fields, reads the real channel number from
+`is_local`, delays `mod_iq` until auth/channel/rate are all witnessed, and
+hashes the first qualifying IQ frame before decode. Local send errors,
+control timeouts, close frames and transport loss remain distinct. All tests
+use synthetic WebSocket frames; no endpoint was contacted. The result is
+`ORDERED_WIRE_RECEIPT_IMPLEMENTED`, still with no live authorization. See
+[`GATE_F2_5_8_ORDERED_RECEIPT.md`](experiments/live_instrument/GATE_F2_5_8_ORDERED_RECEIPT.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:

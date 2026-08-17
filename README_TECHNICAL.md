@@ -270,6 +270,7 @@ Pre-freeze terminal states include `QUALIFICATION_INCOMPLETE`,
 | `kiwi_gate_f2_5_5.py` | fail-closed source basis and ordered SND control-receipt contract |
 | `kiwi_gate_f2_5_6.py` | strict offline verification of the pinned server archive and hash-only client source audit |
 | `kiwi_gate_f2_5_7.py` | gate-specific server-wire transcript and official-client necessity audit |
+| `kiwi_gate_f2_5_8.py` | ordered auth/channel/rate/command/IQ receipt integration tested with synthetic frames |
 
 ## 9.1 Pinned protocol source boundary
 
@@ -300,6 +301,19 @@ also keeps clean WebSocket close separate from typed transport loss. The
 current runtime has not yet been changed to emit this sequence. The result
 `SERVER_WIRE_CONTRACT_SUFFICIENT` authorises only an offline receipt-integration
 gate, not a live run.
+
+## 9.3 Ordered receipt integration
+
+Gate F2.5.8 implements a successor branch opener without rewriting the frozen
+F2.5.2 outcome. Incoming MSG, SND and close frames are hashed before analysis;
+only allowlisted fields and artifact hashes enter the receipt. Configuration
+waits for `badp=0`, the channel number inside `is_local`, and `sample_rate`.
+The first valid IQ then witnesses a usable ordered branch.
+
+The integration also distinguishes local send error and control timeout from
+WebSocket close and transport loss. Dual composition requires two complete
+transcripts with different server channel numbers. This implementation is
+offline-tested only and has no automatic runner or live authorization.
 
 ## 10. Non-goals
 

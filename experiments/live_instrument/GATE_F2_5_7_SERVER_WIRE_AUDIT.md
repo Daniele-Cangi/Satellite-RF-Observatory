@@ -158,6 +158,14 @@ receipt per:
 Solo dopo un nuovo review checkpoint potrà essere chiesta l'autorizzazione a
 una singola sessione live.
 
+### Nota di implementazione F2.5.8
+
+L'integrazione successiva ha reso espliciti anche
+`LOCAL_SEND_ERROR_OBSERVED` e `CONTROL_TIMEOUT_OBSERVED`. Sono terminali
+descrittivi distinti da close frame e perdita TCP. Non cambiano la decisione
+sulla sufficienza della sorgente server; completano il receipt quando il
+controllo fallisce prima di un IQ.
+
 ## SHOCK
 
 La conformità a un reference client e la falsificabilità dell'esperimento non

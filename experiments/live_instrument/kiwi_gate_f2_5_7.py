@@ -40,6 +40,8 @@ class WireEventKind(str, Enum):
     SAMPLE_RATE_OBSERVED = "SAMPLE_RATE_OBSERVED"
     MOD_IQ_SENT = "MOD_IQ_SENT"
     IQ_FRAME_OBSERVED = "IQ_FRAME_OBSERVED"
+    LOCAL_SEND_ERROR_OBSERVED = "LOCAL_SEND_ERROR_OBSERVED"
+    CONTROL_TIMEOUT_OBSERVED = "CONTROL_TIMEOUT_OBSERVED"
     WEBSOCKET_CLOSE_OBSERVED = "WEBSOCKET_CLOSE_OBSERVED"
     TRANSPORT_LOSS_OBSERVED = "TRANSPORT_LOSS_OBSERVED"
 
@@ -145,11 +147,16 @@ class WireEvent:
         elif self.artifact_hash is not None:
             raise ValueError("artifact hash is limited to IQ and close witnesses")
 
-        if self.kind is WireEventKind.TRANSPORT_LOSS_OBSERVED:
+        typed_error_kinds = {
+            WireEventKind.LOCAL_SEND_ERROR_OBSERVED,
+            WireEventKind.CONTROL_TIMEOUT_OBSERVED,
+            WireEventKind.TRANSPORT_LOSS_OBSERVED,
+        }
+        if self.kind in typed_error_kinds:
             if not self.error_type:
-                raise ValueError("transport loss requires a typed local error")
+                raise ValueError("control and transport failures require a typed local error")
         elif self.error_type is not None:
-            raise ValueError("typed errors are limited to transport loss")
+            raise ValueError("typed errors are limited to control or transport failures")
         if self.kind is not WireEventKind.IQ_FRAME_OBSERVED and self.sequence is not None:
             raise ValueError("sequence is limited to IQ witnesses")
         if self.kind is not WireEventKind.WEBSOCKET_CLOSE_OBSERVED and self.close_code is not None:
@@ -173,9 +180,14 @@ class WireTranscript:
             raise ValueError("wire monotonic time runs backwards")
         if self.events[0].kind is not WireEventKind.WEBSOCKET_OPENED:
             raise ValueError("wire transcript must begin at WebSocket open")
-        if len(self.events) < 2 or self.events[1].kind is not WireEventKind.AUTH_SENT_REDACTED:
-            raise ValueError("redacted auth send must immediately follow WebSocket open")
+        if len(self.events) < 2 or self.events[1].kind not in {
+            WireEventKind.AUTH_SENT_REDACTED,
+            WireEventKind.LOCAL_SEND_ERROR_OBSERVED,
+        }:
+            raise ValueError("auth success or its local send error must follow WebSocket open")
         terminals = {
+            WireEventKind.LOCAL_SEND_ERROR_OBSERVED,
+            WireEventKind.CONTROL_TIMEOUT_OBSERVED,
             WireEventKind.WEBSOCKET_CLOSE_OBSERVED,
             WireEventKind.TRANSPORT_LOSS_OBSERVED,
         }
@@ -265,6 +277,8 @@ def claim_bridges() -> tuple[ClaimBridge, ...]:
             (
                 WireEventKind.WEBSOCKET_CLOSE_OBSERVED,
                 WireEventKind.TRANSPORT_LOSS_OBSERVED,
+                WireEventKind.LOCAL_SEND_ERROR_OBSERVED,
+                WireEventKind.CONTROL_TIMEOUT_OBSERVED,
             ),
             False,
             "clean close and typed transport loss are distinct receipt alternatives",
@@ -421,6 +435,8 @@ def assess_branch_wire(transcript: WireTranscript) -> BranchWireAssessment:
             "auth, channel, rate, local IQ send and later remote IQ are ordered",
         )
     if kinds[-1] in {
+        WireEventKind.LOCAL_SEND_ERROR_OBSERVED,
+        WireEventKind.CONTROL_TIMEOUT_OBSERVED,
         WireEventKind.WEBSOCKET_CLOSE_OBSERVED,
         WireEventKind.TRANSPORT_LOSS_OBSERVED,
     }:
