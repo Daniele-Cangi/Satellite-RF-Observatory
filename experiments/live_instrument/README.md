@@ -61,6 +61,8 @@ Tests are offline. Do not add live probes to pytest or CI.
 26. [`GATE_F2_5_11_FAILURE_ATTRIBUTION.md`](GATE_F2_5_11_FAILURE_ATTRIBUTION.md) — offline attribution proves the recorded `1005` values were local sentinels for empty close payloads, while SND presence and the failure cause remain unresolved by the frozen receipt.
 27. [`GATE_F2_5_12_SEMANTIC_RECEIPT.md`](GATE_F2_5_12_SEMANTIC_RECEIPT.md) — a future frame receipt now binds its pre-analysis hash to MSG/SND/CLOSE class and clause-by-clause readiness transitions, without retaining RF or changing a live runner.
 28. [`GATE_F2_5_13_ORDERED_INTEGRATION.md`](GATE_F2_5_13_ORDERED_INTEGRATION.md) — the semantic receipt is integrated into the real ordered opener through a mandatory injected connector, verified only with synthetic sockets and still stopped before dual composition or live authority.
+29. [`GATE_F2_5_15_OUTCOME_1.md`](GATE_F2_5_15_OUTCOME_1.md) — the exact sealed authority was consumed once: eight allocated branches produced zero semantic SND frames and physical capability remained unevaluated.
+30. [`GATE_F2_5_16_CONTROL_SEQUENCE_POSTMORTEM.md`](GATE_F2_5_16_CONTROL_SEQUENCE_POSTMORTEM.md) — offline command-hash/source attribution falsifies neutral keepalive semantics while keeping the remote close cause explicitly inconclusive.
 
 ## Frozen-outcome rule
 

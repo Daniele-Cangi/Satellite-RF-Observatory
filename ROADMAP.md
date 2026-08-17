@@ -295,6 +295,15 @@ two IQ readiness roots, therefore the terminal outcome is
 `QUALIFICATION_INCOMPLETE`, not `NO_MULTI_CHANNEL_CAPABILITY`. The terminal
 receipt is complete with zero RF persistence. This authority cannot be reused.
 
+Gate F2.5.16 audits the frozen control sequence and pinned server source without
+network activity. Every allocated branch locally emitted 15 or 16 keepalives
+before `AR OK`. The pinned server model increments that counter and has an
+incomplete-setup removal path after more than four, so the plan's neutral
+keepalive assumption is locally falsified. Because the live server revision,
+remote command receipt, `cmd_recv` state and close reason were not witnessed,
+the remote causal attribution remains `INCONCLUSIVE` and physical dual-SND
+capability remains `NOT_EVALUATED`. No rerun is authorized.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

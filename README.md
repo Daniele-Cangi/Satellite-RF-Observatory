@@ -269,6 +269,14 @@ branches were explicitly rejected, eight closed after allocation without any
 SND frame, and no dual-IQ pair was admitted. No cause is assigned to the empty
 peer closes.
 
+Gate F2.5.16 attributes that outcome offline. Ordered command hashes show that
+all eight allocated branches emitted 15 or 16 keepalives before `AR OK`; the
+pinned server source increments that count and contains an incomplete-setup
+removal predicate above four. This falsifies the local assumption that
+keepalive was neutral during setup, but it does not identify the live peer's
+close cause: remote revision, command receipt, setup mask and close reason were
+not observed. Physical dual-SND capability remains `NOT_EVALUATED`.
+
 ## Repository map
 
 ```text
