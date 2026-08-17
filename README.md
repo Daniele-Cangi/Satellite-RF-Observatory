@@ -277,6 +277,14 @@ keepalive was neutral during setup, but it does not identify the live peer's
 close cause: remote revision, command receipt, setup mask and close reason were
 not observed. Physical dual-SND capability remains `NOT_EVALUATED`.
 
+Gate F2.5.17 closes the missing source definition and repairs only that local
+control defect. The pinned `CMD_SND_ALL` mask requires frequency, mode,
+passband, AGC and `AR OK`. The successor waits for every required metadata
+field, emits the complete setup exactly once, and permits a time-paced
+keepalive only afterwards. Its receipt distinguishes local emission from the
+still-unobservable remote setup state. The implementation is synthetic-only,
+has no live connector and grants no acquisition authority.
+
 ## Repository map
 
 ```text

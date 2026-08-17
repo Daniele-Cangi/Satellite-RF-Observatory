@@ -63,6 +63,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 28. [`GATE_F2_5_13_ORDERED_INTEGRATION.md`](GATE_F2_5_13_ORDERED_INTEGRATION.md) — the semantic receipt is integrated into the real ordered opener through a mandatory injected connector, verified only with synthetic sockets and still stopped before dual composition or live authority.
 29. [`GATE_F2_5_15_OUTCOME_1.md`](GATE_F2_5_15_OUTCOME_1.md) — the exact sealed authority was consumed once: eight allocated branches produced zero semantic SND frames and physical capability remained unevaluated.
 30. [`GATE_F2_5_16_CONTROL_SEQUENCE_POSTMORTEM.md`](GATE_F2_5_16_CONTROL_SEQUENCE_POSTMORTEM.md) — offline command-hash/source attribution falsifies neutral keepalive semantics while keeping the remote close cause explicitly inconclusive.
+31. [`GATE_F2_5_17_PHASE_AWARE_CONTROL.md`](GATE_F2_5_17_PHASE_AWARE_CONTROL.md) — the exact pinned setup mask closes the source gap and a synthetic-only successor emits setup once before permitting time-paced liveness.
 
 ## Frozen-outcome rule
 

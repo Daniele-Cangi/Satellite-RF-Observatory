@@ -304,6 +304,17 @@ remote command receipt, `cmd_recv` state and close reason were not witnessed,
 the remote causal attribution remains `INCONCLUSIVE` and physical dual-SND
 capability remains `NOT_EVALUATED`. No rerun is authorized.
 
+Gate F2.5.17 retrieves only the missing licensed header from the same pinned
+server commit and materialises a corrected branch opener offline. The exact
+setup mask is now known: frequency, mode, passband, AGC and `AR OK`. All
+required metadata must be observed before the setup is emitted once; keepalive
+is absent from setup and becomes time-paced only after local completion. The
+receipt never promotes local sends to a remote acknowledgement. Synthetic
+tests prove the frozen failed sequence exposes the retained guard while the
+corrected sequence does not. Dual composition and post-commit sealing remain
+required before a separately authorised qualification; no live authority is
+present.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

@@ -1,0 +1,24 @@
+{
+  "schema_version": "gate-f2.5.17-source-manifest-v1",
+  "gate": "F2.5.17",
+  "retrieved_at": "2026-08-17T23:02Z",
+  "network_scope": "GitHub source retrieval only; no KiwiSDR endpoint or RF acquisition",
+  "repository": "https://github.com/jks-prv/KiwiSDR",
+  "commit": "c40ecb471dced33689e335689f8ffd35a54f47fa",
+  "source_path": "rx/rx_sound_cmd.h",
+  "git_blob": "3a4bc5b8674f40fa205a1f8f7a12ff7ea09e2027",
+  "sha256": "351e40f6a10940ad9239e99bd1d62b406d93d7dd50b8a8f7cd2974f76b549b64",
+  "size_bytes": 2004,
+  "line_count": 58,
+  "license_evidence": "File-level GNU Library General Public License version 2 or later notice retained verbatim in rx_sound_cmd.h.",
+  "finding": {
+    "id": "EXACT_CMD_SND_ALL",
+    "claim": "CMD_SND_ALL is exactly CMD_FREQ | CMD_MODE | CMD_PASSBAND | CMD_AGC | CMD_AR_OK.",
+    "line_span": "31-36"
+  },
+  "retention_policy": {
+    "rf_persisted": false,
+    "credentials_persisted": false,
+    "source_scope_expanded_beyond_required_header": false
+  }
+}
