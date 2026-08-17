@@ -238,6 +238,16 @@ SND from SND excluded by the GNSS/readiness predicate. The offline exit is
 need hash-bound categorical clause transitions, not retained RF. No runner is
 changed and no new session is authorised.
 
+Gate F2.5.12 implements that narrow future receipt offline. Each transient
+frame hash is now bound to MSG/SND/CLOSE class and separate header, IQ mode,
+sample decode, GPS-seconds, GPS-age and readiness states. Empty close payloads
+carry `EMPTY_NO_STATUS` and no invented `1005`; descriptive transform errors
+leave readiness `NOT_EVALUATED` and cannot become physical rejection. Samples
+remain ephemeral, strict JSON contains no RF surface, and the 30-second GPS
+limit has no caller override. The exit is
+`HASH_BOUND_SEMANTIC_RECEIPT_IMPLEMENTED`. Integration into an ordered opener,
+pre-live review and any network authority remain separate future gates.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
