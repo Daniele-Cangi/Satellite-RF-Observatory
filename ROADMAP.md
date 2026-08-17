@@ -220,6 +220,14 @@ writes that envelope as the first receipt. Its offline exit is
 `REVIEWED_ONE_SHOT_READY_FOR_SEPARATE_AUTHORITY`. A later live run still needs
 separate human authority and any mismatch must terminate before network entry.
 
+That single authority has now been consumed. The exact run attempted both SND
+branches once on all six candidates, used no retry, admitted no IQ-readiness
+root and stopped `QUALIFICATION_INCOMPLETE` before discovery or plan freeze.
+Four atomic branches contain explicit `badp` rejection; eight contain ordered
+allocation and local `mod_iq` followed by a close before the qualifying IQ
+witness. The receipt is terminally complete with zero RF persistence. No rerun
+is authorised by this roadmap entry.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

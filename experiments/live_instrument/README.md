@@ -57,6 +57,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 22. [`GATE_F2_5_8_ORDERED_RECEIPT.md`](GATE_F2_5_8_ORDERED_RECEIPT.md) — integration of the ordered auth/channel/rate/command/IQ receipt with synthetic frames and zero RF persistence; no live execution.
 23. [`GATE_F2_5_9_PRELIVE_RUNNER.md`](GATE_F2_5_9_PRELIVE_RUNNER.md) — pre-live call-graph review and one-shot materialisation using only the ordered opener; execution remains separately gated.
 24. [`GATE_F2_5_10_EXECUTION_REVIEW.md`](GATE_F2_5_10_EXECUTION_REVIEW.md) — exact candidate, timing, source, environment and authority envelope; no caller overrides and no live execution.
+25. [`GATE_F2_5_10_OUTCOME_1.md`](GATE_F2_5_10_OUTCOME_1.md) — the single authorised run ended `QUALIFICATION_INCOMPLETE`: six dual attempts, zero readiness witnesses, zero retry and a complete terminal receipt.
 
 ## Frozen-outcome rule
 

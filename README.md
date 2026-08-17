@@ -188,6 +188,15 @@ and the first-outcome stop are explicit. The offline exit is
 performed or authorised. See
 [`GATE_F2_5_10_EXECUTION_REVIEW.md`](experiments/live_instrument/GATE_F2_5_10_EXECUTION_REVIEW.md).
 
+The single separately authorised Gate F2.5.10 run has now materialised that
+envelope and stopped `QUALIFICATION_INCOMPLETE`. All six candidates received a
+simultaneous dual-SND attempt; four branches returned explicit `badp`
+rejections and eight reached channel allocation plus local `mod_iq` before an
+observed close without a qualifying IQ-readiness event. No retry, discovery,
+plan freeze or confirmation occurred. The 46-line terminal artifact is
+complete and contains no persisted RF. See
+[`GATE_F2_5_10_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_10_OUTCOME_1.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:
