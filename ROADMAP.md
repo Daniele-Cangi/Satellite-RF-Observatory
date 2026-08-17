@@ -248,6 +248,17 @@ limit has no caller override. The exit is
 `HASH_BOUND_SEMANTIC_RECEIPT_IMPLEMENTED`. Integration into an ordered opener,
 pre-live review and any network authority remain separate future gates.
 
+Gate F2.5.13 performs the first of those steps with synthetic sockets only. The
+F2.5.10 causal-source guards correctly rejected an attempted additive hook in
+the frozen opener, so F2.5.8 remains byte-identical and a successor binds each
+ordered wire hash to its F2.5.12 semantic transition. Its wrapper requires an
+injected connector and framing module and exposes no live entry point. The
+sanitized receipt omits the legacy locally synthesized close code, requires
+exact cross-layer hash order and keeps explicit control rejection separate
+from typed qualification errors. The exit is
+`SEMANTIC_ORDERED_OPENER_INTEGRATED_OFFLINE`; dual composition, terminal
+receipt, exact execution envelope and network authority are still absent.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
