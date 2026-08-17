@@ -253,6 +253,11 @@ Every new live session requires explicit authorization. The repository's
 documented outcomes must remain unchanged after the fact; fixes belong to a
 new gate and a new commit.
 
+The latest offline materialization is Gate F2.5.14: two injected semantic SND
+branches are composed concurrently, evaluated by explicit topology clauses and
+fed through the frozen candidate order to one terminal receipt. Its envelope
+still requires post-commit causal-source review; it is not live authority.
+
 ## Repository map
 
 ```text

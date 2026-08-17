@@ -259,6 +259,19 @@ from typed qualification errors. The exit is
 `SEMANTIC_ORDERED_OPENER_INTEGRATED_OFFLINE`; dual composition, terminal
 receipt, exact execution envelope and network authority are still absent.
 
+Gate F2.5.14 performs the next composition step, still with synthetic sockets
+only. It starts reference and perturbed semantic SND openers concurrently on
+one candidate, admits the pair only with distinct connections and server
+channel IDs plus overlapping IQ event time, and preserves clause-level reasons
+for every failed branch. The frozen candidate loop makes exactly one two-branch
+attempt per endpoint, stops at the first ready pair or exhaustion, and closes a
+terminal strict-JSON receipt without RF persistence. Its immutable envelope
+keeps status, `ext_api` and waterfall outside the pre-SND causal path and sets
+both retry budgets to zero. The exit is
+`DUAL_ONE_SHOT_ENVELOPE_MATERIALIZED_OFFLINE`. A post-commit review must still
+bind this new causal source and envelope before a specific live authority can
+exist; no prior generic authorization is consumed.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
