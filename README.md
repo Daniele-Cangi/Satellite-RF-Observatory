@@ -292,6 +292,13 @@ zero; status and waterfall remain outside the direct-SND admission path. The
 module still requires injected connectors and post-commit review, so it cannot
 contact a receiver or claim live authority.
 
+Gate F2.5.19 seals the resulting commit, 21-file causal allowlist, numerical
+environment and exact dual execution surface. Its only public control is
+`run_reviewed_once(live_authorised=False)`; default refusal occurs before
+receipt or connector access. The maximum future scope is one corrected
+dual-SND qualification, stopping before discovery, retune or observation. The
+seal is ready for a separate commit-specific authority but does not imply one.
+
 ## Repository map
 
 ```text

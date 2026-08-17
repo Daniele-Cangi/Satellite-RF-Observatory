@@ -65,6 +65,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 30. [`GATE_F2_5_16_CONTROL_SEQUENCE_POSTMORTEM.md`](GATE_F2_5_16_CONTROL_SEQUENCE_POSTMORTEM.md) — offline command-hash/source attribution falsifies neutral keepalive semantics while keeping the remote close cause explicitly inconclusive.
 31. [`GATE_F2_5_17_PHASE_AWARE_CONTROL.md`](GATE_F2_5_17_PHASE_AWARE_CONTROL.md) — the exact pinned setup mask closes the source gap and a synthetic-only successor emits setup once before permitting time-paced liveness.
 32. [`GATE_F2_5_18_DUAL_PHASE_AWARE.md`](GATE_F2_5_18_DUAL_PHASE_AWARE.md) — two corrected branches are composed concurrently under the frozen topology, candidate order, zero-retry and terminal-receipt boundary.
+33. [`GATE_F2_5_19_POST_COMMIT_SEAL.md`](GATE_F2_5_19_POST_COMMIT_SEAL.md) — the corrected dual qualification is bound to its reviewed commit, causal hashes and environment behind one default-refusing authority bit.
 
 ## Frozen-outcome rule
 

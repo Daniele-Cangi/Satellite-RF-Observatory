@@ -323,6 +323,14 @@ receipt are preserved. Status and waterfall remain outside admission. The
 result is an injected, synthetic-only qualification envelope; a post-commit
 seal is still mandatory and no live authority is present.
 
+Gate F2.5.19 supplies that post-commit seal. It binds the F2.5.18 commit, 21
+causal source hashes, numerical environment and control-envelope hash to a
+boolean-only public surface. Default refusal precedes receipt creation and
+connector access; no endpoint, frequency, retry, connector or path override is
+exposed. A future explicit authority may consume exactly one corrected
+dual-SND qualification and must stop before feature discovery or observation.
+The seal itself remains offline and does not grant or consume that authority.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
