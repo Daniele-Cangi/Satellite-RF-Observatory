@@ -178,6 +178,16 @@ without a separate live authority fail before artifact creation or network
 entry. No live execution occurred. See
 [`GATE_F2_5_9_PRELIVE_RUNNER.md`](experiments/live_instrument/GATE_F2_5_9_PRELIVE_RUNNER.md).
 
+Gate F2.5.10 freezes the exact execution envelope around that runner. A narrow
+authority shim removes caller overrides for plan, receipt path and runtime
+commit, verifies the reviewed causal sources and numerical environment, writes
+the envelope as the first terminal-artifact receipt, and then invokes only the
+F2.5.9 qualifier/retry path. Candidate order, targetless centers, timing, retry
+and the first-outcome stop are explicit. The offline exit is
+`REVIEWED_ONE_SHOT_READY_FOR_SEPARATE_AUTHORITY`; no Kiwi network activity was
+performed or authorised. See
+[`GATE_F2_5_10_EXECUTION_REVIEW.md`](experiments/live_instrument/GATE_F2_5_10_EXECUTION_REVIEW.md).
+
 ## What can be claimed
 
 Receipts may support narrow statements such as:

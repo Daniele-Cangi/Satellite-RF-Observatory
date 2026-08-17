@@ -212,6 +212,14 @@ or network I/O unless a later caller supplies separate live authority. The
 offline exit is `ORDERED_ONE_SHOT_RUNNER_MATERIALIZED`; no live session is
 authorised or executed by this roadmap entry.
 
+Gate F2.5.10 then closes the remaining authority ambiguity: the reviewed live
+entry point accepts no plan, receipt-path, commit or retry overrides. Before
+entering the F2.5.9 qualifier/retry path it checks causal sources, numerical
+environment, repository root and the exact candidate/timing envelope, then
+writes that envelope as the first receipt. Its offline exit is
+`REVIEWED_ONE_SHOT_READY_FOR_SEPARATE_AUTHORITY`. A later live run still needs
+separate human authority and any mismatch must terminate before network entry.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
