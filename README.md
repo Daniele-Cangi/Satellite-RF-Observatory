@@ -353,9 +353,18 @@ qualifies the retune. Deterministic tests prove that changing the target at all
 predeclared control positions cannot change witness state, orientation or
 scores. The successor freezes distinct upstream/channel-fixed predictions,
 negative controls, one future confirmation and zero retry. It still has no
-connector or authority, and its confirmation evaluator is intentionally not
-implemented yet. See
+connector or authority. See
 [`GATE_F2_5_23_ONE_TARGET_SUCCESSOR.md`](experiments/live_instrument/GATE_F2_5_23_ONE_TARGET_SUCCESSOR.md).
+
+Gate F2.5.24 now implements the missing confirmation evaluator offline. Before
+examining the target it requires six distinct post-freeze artifacts, an exact
+channel/tune ledger, continuous event-time streams and a uniquely translating
+target-excluded distributed witness. Deterministic fixtures reach all five
+frozen outcomes without changing the plan and prove that invalid intervention
+clauses block target evaluation, while lost target detectability remains a
+separate `NOT_DETECTABLE` result. The evaluator has no connector, live runner
+or execution authority and persists no RF. See
+[`GATE_F2_5_24_CONFIRMATION_EVALUATOR.md`](experiments/live_instrument/GATE_F2_5_24_CONFIRMATION_EVALUATOR.md).
 
 ## Repository map
 

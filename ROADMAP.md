@@ -384,9 +384,17 @@ produce an immutable plan in deterministic fixtures. Altering the target in
 every tested lag leaves witness state and scores invariant. Missing target and
 channel-fixed witness fixtures stop with downstream phases `NOT_EVALUATED`.
 The plan freezes one independent future confirmation and the existing physical
-outcome set, but the post-freeze evaluator is deliberately absent. The next
-step is its offline integration and adversarial outcome tests; only then can a
-new commit-specific seal be considered.
+outcome set.
+
+Gate F2.5.24 now supplies the post-freeze evaluator offline. Admission is
+strictly ordered: event-time/artifact identity, command and tuning ledger,
+stream integrity, then the target-excluded distributed witness. Target
+predictions are inaccessible until those clauses pass. Adversarial fixtures
+reach every frozen outcome, including the distinct cuts
+`INTERVENTION_INVALID`, `NOT_DETECTABLE` and `AMBIGUOUS`, without changing the
+plan. No connector, acquisition or live authority was added. The next
+admissible step is a commit-specific seal of this evaluator; it is not an
+observation and it cannot broaden the single-window, zero-retry plan.
 
 ## Only after one valid prospective outcome
 
