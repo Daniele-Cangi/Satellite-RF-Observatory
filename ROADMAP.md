@@ -331,6 +331,16 @@ exposed. A future explicit authority may consume exactly one corrected
 dual-SND qualification and must stop before feature discovery or observation.
 The seal itself remains offline and does not grant or consume that authority.
 
+The separately authorised Gate F2.5.19 outcome has now consumed that surface
+once. The first candidate produced two corrected semantic SND/IQ readiness
+roots on distinct channels with 24.835 ms of event-time overlap, so the
+terminal outcome is `DUAL_SEMANTIC_PAIR_READY`. The stop condition prevented
+all later candidates and no retry occurred. This removes multichannel
+availability as the immediate blocker, but retune independence, local feature
+discovery and the physical A1/B/A2 intervention remain completely unevaluated.
+A future gate must freeze those as a new prospective experiment; it may not
+extend or rerun the consumed qualification.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

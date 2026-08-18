@@ -299,6 +299,15 @@ receipt or connector access. The maximum future scope is one corrected
 dual-SND qualification, stopping before discovery, retune or observation. The
 seal is ready for a separate commit-specific authority but does not imply one.
 
+That separate authority has now been consumed exactly once. The first frozen
+candidate supplied two simultaneous semantic SND/IQ streams on distinct server
+channels with distinct receipts and overlapping GNSS event time, yielding
+`DUAL_SEMANTIC_PAIR_READY`. The run stopped immediately, persisted no RF and
+did not perform feature discovery, retune or A1/B/A2. This qualifies the
+same-Kiwi multichannel topology only; it does not yet support a physical-signal
+or upstream/downstream claim. See
+[`GATE_F2_5_19_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_19_OUTCOME_1.md).
+
 ## Repository map
 
 ```text
