@@ -308,6 +308,15 @@ same-Kiwi multichannel topology only; it does not yet support a physical-signal
 or upstream/downstream claim. See
 [`GATE_F2_5_19_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_19_OUTCOME_1.md).
 
+Gate F2.5.20 now composes that exact qualified endpoint with the already tested
+prospective vertical, still entirely offline. The old readiness frames select
+the capability but cannot satisfy future admission: corrected dual SND must be
+requalified in the same session, followed by a new ephemeral discovery,
+witness-only retune qualification, immutable freeze and exactly one independent
+A1/B/A2. Thresholds are unchanged, both retry budgets are zero and the module
+has no live surface pending a separate post-commit seal. See
+[`GATE_F2_5_20_PROSPECTIVE_VERTICAL.md`](experiments/live_instrument/GATE_F2_5_20_PROSPECTIVE_VERTICAL.md).
+
 ## Repository map
 
 ```text

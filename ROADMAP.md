@@ -341,6 +341,15 @@ discovery and the physical A1/B/A2 intervention remain completely unevaluated.
 A future gate must freeze those as a new prospective experiment; it may not
 extend or rerun the consumed qualification.
 
+Gate F2.5.20 performs that next composition offline. It binds the frozen
+F2.5.19 outcome artifact and its sole winning endpoint, but requires fresh
+same-session corrected dual-SND admission before using any new sample. The
+prospective order is fixed: new local-IQ discovery, witness-only retune
+qualification, plan freeze and one independent A1/B/A2. Existing thresholds
+and geometric negative controls are retained unchanged, both retry budgets are
+zero, and no connector default or live authority exists. The next admissible
+step is a post-commit causal/environment seal, not an observation.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
