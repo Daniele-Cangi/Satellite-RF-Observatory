@@ -460,6 +460,32 @@ def test_terminal_json_contains_no_rf_payload_or_non_finite_number(
     assert documents[-1]["payload"]["physical_decision_affected"] is False
 
 
+def test_separate_authority_can_be_bound_as_the_first_receipt_event(
+    tmp_path: Path,
+) -> None:
+    receipt_path = tmp_path / "f2520-authority-first.jsonl"
+    result = f2520.execute_prospective_injected(
+        qualifier=lambda: _qualified(),
+        receipt_path=receipt_path,
+        discover=lambda *_args: _phase(
+            f25.F25Phase.LOCAL_IQ_FEATURE_DISCOVERY,
+            f25.F25PhaseState.UNSATISFIED,
+        ),
+        authority_event=(
+            "gate_f2_5_21_authority_envelope_frozen",
+            {"authority_envelope_hash": "a" * 64},
+        ),
+    )
+    documents = tuple(
+        json.loads(line)
+        for line in Path(result.receipt_artifact.path).read_text().splitlines()
+    )
+
+    assert documents[0]["event"] == "gate_f2_5_21_authority_envelope_frozen"
+    assert documents[0]["payload"]["authority_envelope_hash"] == "a" * 64
+    assert documents[1]["event"] == "gate_f2_5_20_prospective_envelope"
+
+
 def test_gate_remains_offline_and_requires_a_postcommit_seal() -> None:
     source = inspect.getsource(f2520)
     qualifier = inspect.signature(f2520.qualify_selected_capability_injected)

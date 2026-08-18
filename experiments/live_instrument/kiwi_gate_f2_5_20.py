@@ -563,6 +563,7 @@ def execute_prospective_injected(
     capture_dual: Callable[..., object] = f24._capture_dual,
     evaluate_confirmation: Callable[..., object] = f24.evaluate_confirmation,
     mirror_sink: Callable[[str], None] | None = None,
+    authority_event: tuple[str, object] | None = None,
 ) -> F2520Result:
     """Exercise the complete order only through explicitly injected dependencies."""
 
@@ -571,6 +572,8 @@ def execute_prospective_injected(
     receipts: list[f25.PhaseReceipt] = []
     context: f25._TopologyContext | None = None
     try:
+        if authority_event is not None:
+            emitter(*authority_event)
         emitter(f"{EVENT_PREFIX}_prospective_envelope", envelope)
         qualification = qualifier()
         emitter(f"{EVENT_PREFIX}_phase_aware_control_receipt", qualification.control_receipt)
