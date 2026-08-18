@@ -412,6 +412,24 @@ retune, freeze and confirmation are `NOT_EVALUATED`. No retry is authorized.
 The next work must be an offline failure attribution of temporal capability,
 not a threshold change or another acquisition.
 
+Gate F2.5.26 now completes that attribution offline. Pinned server source and
+the frozen receipt agree that the age byte is seconds since the latest GPS
+position solution. Both channel transports were active, decoded IQ and had
+gap-free local sequences; the terminal timeout followed the absence of any
+frame satisfying the frozen 30-second event-time clause. The physical cause of
+the stale server GPS state remains unknown, and every DDC hypothesis remains
+`NOT_EVALUATED`.
+
+The audit also exposes a contract-topology mismatch without changing the old
+result. A same-ADC per-channel DDC intervention needs relative simultaneity,
+continuity, command-boundary ordering and drift; absolute fresh GNSS was not
+explicitly derived from that claim. The frozen receipt does not retain actual
+server timestamps, monotonic arrivals, sample counts or command boundary times,
+so this alternative is `NOT_FALSIFIABLE_WITH_THIS_RECEIPT`. Any successor must
+first derive and freeze a new topology-specific temporal clause and its scalar
+sufficient statistics. It must not raise the old threshold or reuse the
+consumed authority.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

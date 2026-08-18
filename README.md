@@ -386,6 +386,17 @@ capability existed. It demonstrates that data availability and measurement
 admissibility are separate clauses. See
 [`GATE_F2_5_25_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_25_OUTCOME_1.md).
 
+Gate F2.5.26 attributes that failure offline. The pinned server source confirms
+that the recorded field is elapsed seconds since the latest GPS position
+solution, while the receipt proves both transports and decoders remained
+active. The timeout was a consequence of the frozen temporal clause, not the
+absence of SND/IQ. Absolute fresh GNSS was not explicitly derived from the
+same-ADC DDC hypothesis, but the receipt lacks the arrival, sample-clock and
+command-boundary statistics needed to test a relative-time alternative. The
+old outcome therefore remains unchanged and the alternative is
+`NOT_FALSIFIABLE_WITH_THIS_RECEIPT`. See
+[`GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md`](experiments/live_instrument/GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md).
+
 ## Repository map
 
 ```text
