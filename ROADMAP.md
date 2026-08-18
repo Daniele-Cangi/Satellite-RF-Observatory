@@ -507,6 +507,22 @@ control geometry must remain unchanged. `INTERVENTION_INVALID`,
 `NOT_DETECTABLE` and physical hypothesis outcomes must remain distinct. Only a
 later post-commit audit may expose a default-refusing authority bit.
 
+Gate F2.5.32 now completes that RF-response integration offline. After both
+scalar boundaries and full-session continuity pass, the reviewed distributed
+witness excludes the target at every predeclared control position and tests a
+fixed reference, unique perturbed translation, A2 return and even/odd
+consistency. Target B/A2 data is not matched until a plan containing both
+hypotheses and all negative controls has been immutably hashed.
+
+Synthetic tests now keep `INTERVENTION_INVALID`, `NOT_DETECTABLE`,
+`UPSTREAM_OF_CHANNEL_DDC_SUPPORTED`,
+`DOWNSTREAM_CHANNEL_FIXED_SUPPORTED` and `AMBIGUOUS` distinct while preserving
+zero RF persistence. This is evaluator/lifecycle evidence, not a live physical
+outcome. The next admissible work is a separate offline post-commit seal of
+this exact surface. It may add only a default-refusing authority bit; it must
+not add endpoint, frequency, timing, threshold, callback or retry controls, and
+must perform no network activity.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

@@ -449,6 +449,15 @@ The result still leaves RF response and DDC-location hypotheses
 the distributed RF-structure witness. See
 [`GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md`](experiments/live_instrument/GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md).
 
+Gate F2.5.32 closes the remaining offline RF-response integration cut. The
+existing distributed witness first excludes every target/control position and
+must show a fixed reference, one unique perturbed translation and an A2 return.
+Only then are target predictions hashed and B/A2 target matching allowed. The
+synthetic suite distinguishes `INTERVENTION_INVALID`, `NOT_DETECTABLE`, both
+directional DDC hypotheses and `AMBIGUOUS` without changing thresholds. All IQ
+is still ephemeral and no live authority exists. See
+[`GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md`](experiments/live_instrument/GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md).
+
 ## Repository map
 
 ```text
