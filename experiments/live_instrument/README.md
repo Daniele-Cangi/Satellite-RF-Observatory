@@ -80,6 +80,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 45. [`GATE_F2_5_28_INJECTED_ONE_SHOT.md`](GATE_F2_5_28_INJECTED_ONE_SHOT.md) — the relative-time plan is integrated into a sealed injected path: hash-before-decode, hard downstream call gates, two mandatory retune boundaries and unconditional RAM zeroization; no connector or live authority exists.
 46. [`GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md`](GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md) — two injected SND branches now obey the exact phase-aware auth/metadata/setup order, release transport bytes explicitly, enter the same-ADC relative gate without absolute-freshness leakage and retain no RF; no public execution surface exists.
 47. [`GATE_F2_5_30_SEALABILITY_AUDIT.md`](GATE_F2_5_30_SEALABILITY_AUDIT.md) — the exact post-commit audit refuses a nominal authority bit because both channel handles close before discovery and retune; relative-time admission survives, while live A1/B/A2 remains unsealable until an open-handle successor exists.
+48. [`GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md`](GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md) — one injected outer owner now spans A1 discovery and both scalar command boundaries, permits retune only on the private perturbed handle, audits every settling frame and closes everything in the outer `finally`; RF response remains deliberately unevaluated.
 
 ## Frozen-outcome rule
 

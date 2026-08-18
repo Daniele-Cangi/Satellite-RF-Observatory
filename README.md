@@ -439,6 +439,16 @@ failure. The relative-time work remains reusable, but no nominal live runner
 was created. See
 [`GATE_F2_5_30_SEALABILITY_AUDIT.md`](experiments/live_instrument/GATE_F2_5_30_SEALABILITY_AUDIT.md).
 
+Gate F2.5.31 repairs that lifetime exclusively with injected sockets. One
+outer owner keeps the two admitted handles open through local A1 discovery and
+both A1→B→A2 command boundaries; only a private executor can tune the
+perturbed branch. Settling frames remain in the full sequence-continuity
+ledger, while all IQ and both handles are released in the outer `finally`.
+The result still leaves RF response and DDC-location hypotheses
+`NOT_EVALUATED`: command topology is now valid, but it is not a substitute for
+the distributed RF-structure witness. See
+[`GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md`](experiments/live_instrument/GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md).
+
 ## Repository map
 
 ```text

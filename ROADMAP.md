@@ -491,6 +491,22 @@ injected socket lifetime and command-witness tests. Only its later post-commit
 seal may add one default-refusing authority bit. No network belongs in either
 offline step.
 
+Gate F2.5.31 now materializes that open-handle successor offline. The two
+injected branches remain open through A1 discovery and both commands; the
+reference branch receives zero retunes, both F2.5.27 scalar boundaries are
+witnessed, and all settling frames contribute to a full sequence/sample-clock
+continuity receipt. One outer `finally` zeroizes every decoded frame and closes
+both handles.
+
+This repairs the lifecycle cut but does not yet justify a live seal. The
+current positive outcome proves command/time topology only; it does not test
+whether RF structure moved in the perturbed baseband or stayed channel-fixed.
+The next admissible work is offline integration of the existing distributed,
+target-excluded RF witness over these exact A1/B/A2 arrays. Thresholds and
+control geometry must remain unchanged. `INTERVENTION_INVALID`,
+`NOT_DETECTABLE` and physical hypothesis outcomes must remain distinct. Only a
+later post-commit audit may expose a default-refusing authority bit.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
