@@ -76,6 +76,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 41. [`GATE_F2_5_25_POST_COMMIT_SEAL.md`](GATE_F2_5_25_POST_COMMIT_SEAL.md) — commit, causal sources, environment and the same-session one-target execution surface are sealed behind one default-refusing authority bit; no live authority is granted or consumed.
 42. [`GATE_F2_5_25_OUTCOME_1.md`](GATE_F2_5_25_OUTCOME_1.md) — the single authority received two SND/IQ streams but no temporally admissible readiness roots: GPS solution age was 92–103 seconds against the frozen 30-second limit, so every physical phase remained `NOT_EVALUATED`.
 43. [`GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md`](GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md) — the offline attribution verifies the server-defined age semantics, separates active data transport from failed measurement admission, and shows that a topology-derived relative-time alternative cannot be evaluated from the frozen receipt.
+44. [`GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md`](GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md) — a new offline plan derives temporal admission from the same-ADC causal cut: sample-count closure, reserved clock-state refusal, common overlap and command-boundary witnesses, with actual server timestamps retained only as scalar receipts.
 
 ## Frozen-outcome rule
 

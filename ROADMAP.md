@@ -430,6 +430,22 @@ first derive and freeze a new topology-specific temporal clause and its scalar
 sufficient statistics. It must not raise the old threshold or reuse the
 consumed authority.
 
+Gate F2.5.27 now freezes the new temporal admission offline. A future SND frame
+must be hashed before analysis and expose only endpoint/channel, sequence,
+actual server seconds/nanoseconds, GPS-age byte, sample count, sample rate and
+monotonic arrival in its retained receipt. Adjacent server timestamps must
+agree with sample counts within one sample period; both branches must be
+continuous, same-rate and overlap for at least two 1024-point STFT windows.
+Absolute freshness is `NOT_REQUIRED` only for this same-ADC cut, while reserved
+server clock states 253–255 remain explicit refusals.
+
+The A1/B/A2 command boundaries are also predeclared as scalar witnesses across
+both streams. This admits only the timing topology; it cannot prove that a
+retune occurred or decide feature location. The next admissible work is an
+offline post-commit integration/seal audit. It must show that the one-use path
+captures these scalars before RF destruction and blocks every downstream phase
+on temporal failure. No live authority or new observation exists yet.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

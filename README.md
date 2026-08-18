@@ -397,6 +397,17 @@ old outcome therefore remains unchanged and the alternative is
 `NOT_FALSIFIABLE_WITH_THIS_RECEIPT`. See
 [`GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md`](experiments/live_instrument/GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md).
 
+Gate F2.5.27 now materialises that new temporal contract offline. It does not
+relax the consumed run: the new causal cut requires actual server timestamps,
+sample counts and monotonic arrivals that the old receipt did not preserve.
+For a future same-ADC trial, timestamp steps must close against sample geometry
+within one sample, channel sequences must remain contiguous, reserved server
+clock states are refused, and the two streams must overlap for at least two
+existing STFT windows. Absolute GNSS freshness is explicitly `NOT_REQUIRED`
+for this cut, while command boundaries receive independent scalar witnesses.
+No connector or authority has been added. See
+[`GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md`](experiments/live_instrument/GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md).
+
 ## Repository map
 
 ```text
