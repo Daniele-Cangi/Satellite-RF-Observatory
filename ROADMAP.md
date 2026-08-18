@@ -392,9 +392,17 @@ stream integrity, then the target-excluded distributed witness. Target
 predictions are inaccessible until those clauses pass. Adversarial fixtures
 reach every frozen outcome, including the distinct cuts
 `INTERVENTION_INVALID`, `NOT_DETECTABLE` and `AMBIGUOUS`, without changing the
-plan. No connector, acquisition or live authority was added. The next
-admissible step is a commit-specific seal of this evaluator; it is not an
-observation and it cannot broaden the single-window, zero-retry plan.
+plan. No connector, acquisition or live authority was added.
+
+Gate F2.5.25 now seals that evaluator and the exact same-session execution
+surface. The audit found that the F2.5.23 offline materializer closes its
+channels before a future caller could confirm; the sealed composition therefore
+uses the reviewed primitives directly, keeps the two channels only through one
+confirmation, clears qualification command history at the freeze boundary and
+closes afterward. Commit, causal files, environment and control-source hashes
+all match. Default refusal precedes receipt and connector access. The gate is
+ready only for a separate, explicit, one-use live authority; none is implied by
+the seal itself.
 
 ## Only after one valid prospective outcome
 

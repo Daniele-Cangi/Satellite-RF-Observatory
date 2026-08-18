@@ -73,6 +73,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 38. [`GATE_F2_5_22_DISCOVERABILITY_AUDIT.md`](GATE_F2_5_22_DISCOVERABILITY_AUDIT.md) — offline attribution shows the frozen failure lacks input hashes and candidate margins, corrects a masked-width defect descriptively, and proves that an orthogonal witness need not be a second narrowband peak.
 39. [`GATE_F2_5_23_ONE_TARGET_SUCCESSOR.md`](GATE_F2_5_23_ONE_TARGET_SUCCESSOR.md) — injected synthetic sockets, one-target discovery and a target-excluded distributed witness now materialize an immutable pre-freeze plan.
 40. [`GATE_F2_5_24_CONFIRMATION_EVALUATOR.md`](GATE_F2_5_24_CONFIRMATION_EVALUATOR.md) — the post-freeze evaluator is integrated offline with target-independent intervention admission, all five frozen outcomes and strict zero-RF receipts; no observation or authority is added.
+41. [`GATE_F2_5_25_POST_COMMIT_SEAL.md`](GATE_F2_5_25_POST_COMMIT_SEAL.md) — commit, causal sources, environment and the same-session one-target execution surface are sealed behind one default-refusing authority bit; no live authority is granted or consumed.
 
 ## Frozen-outcome rule
 

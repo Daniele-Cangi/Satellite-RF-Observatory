@@ -366,6 +366,16 @@ separate `NOT_DETECTABLE` result. The evaluator has no connector, live runner
 or execution authority and persists no RF. See
 [`GATE_F2_5_24_CONFIRMATION_EVALUATOR.md`](experiments/live_instrument/GATE_F2_5_24_CONFIRMATION_EVALUATOR.md).
 
+Gate F2.5.25 supplies the post-commit seal and the only authority-facing
+composition. It binds F2.5.24, all causal source hashes, the numerical
+environment and the complete live surface. The composition keeps the same two
+SND channels open from requalification through the only confirmation, closes
+the diagnostic command ledger before confirmation, and always attempts channel
+closure afterward. Its sole public argument is a default-false authority bit.
+The seal was built and tested offline; it grants and consumes no live
+authority. See
+[`GATE_F2_5_25_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_25_POST_COMMIT_SEAL.md).
+
 ## Repository map
 
 ```text
