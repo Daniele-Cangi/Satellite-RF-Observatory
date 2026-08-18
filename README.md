@@ -376,6 +376,16 @@ The seal was built and tested offline; it grants and consumes no live
 authority. See
 [`GATE_F2_5_25_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_25_POST_COMMIT_SEAL.md).
 
+That authority has now been consumed once. The endpoint allocated two channels
+and delivered hundreds of decodable IQ/SND frames, but none supplied an
+admissible event-time witness: GPS solution age was 92–103 seconds against the
+frozen 30-second maximum. The terminal outcome is
+`QUALIFICATION_INCOMPLETE`; discovery, retune, plan freeze and confirmation are
+all `NOT_EVALUATED`. This is not evidence that no signal or multichannel
+capability existed. It demonstrates that data availability and measurement
+admissibility are separate clauses. See
+[`GATE_F2_5_25_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_25_OUTCOME_1.md).
+
 ## Repository map
 
 ```text

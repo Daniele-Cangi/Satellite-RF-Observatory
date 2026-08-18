@@ -404,6 +404,14 @@ all match. Default refusal precedes receipt and connector access. The gate is
 ready only for a separate, explicit, one-use live authority; none is implied by
 the seal itself.
 
+That authority has now been consumed. Both allocated channels delivered
+decodable SND/IQ, but their GPS solution age remained 92–103 seconds while the
+prospective contract required at most 30 seconds. No readiness root was
+admitted, so the run terminated `QUALIFICATION_INCOMPLETE` before discovery;
+retune, freeze and confirmation are `NOT_EVALUATED`. No retry is authorized.
+The next work must be an offline failure attribution of temporal capability,
+not a threshold change or another acquisition.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
