@@ -68,6 +68,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 33. [`GATE_F2_5_19_POST_COMMIT_SEAL.md`](GATE_F2_5_19_POST_COMMIT_SEAL.md) — the corrected dual qualification is bound to its reviewed commit, causal hashes and environment behind one default-refusing authority bit.
 34. [`GATE_F2_5_19_OUTCOME_1.md`](GATE_F2_5_19_OUTCOME_1.md) — the single authority produced two simultaneous semantic SND/IQ branches on one Kiwi at the first candidate, then stopped before discovery or retune.
 35. [`GATE_F2_5_20_PROSPECTIVE_VERTICAL.md`](GATE_F2_5_20_PROSPECTIVE_VERTICAL.md) — the qualified endpoint is composed offline with a new ephemeral discovery, witness-only retune qualification, immutable plan and one post-freeze A1/B/A2.
+36. [`GATE_F2_5_21_POST_COMMIT_SEAL.md`](GATE_F2_5_21_POST_COMMIT_SEAL.md) — commit, causal sources, numerical environment and the live wrapper itself are sealed behind one default-refusing authority bit.
 
 ## Frozen-outcome rule
 

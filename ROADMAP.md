@@ -350,6 +350,13 @@ and geometric negative controls are retained unchanged, both retry budgets are
 zero, and no connector default or live authority exists. The next admissible
 step is a post-commit causal/environment seal, not an observation.
 
+Gate F2.5.21 now supplies that seal. Besides the reviewed causal files and
+numerical environment, it hashes the authority-facing function sources so the
+wrapper itself cannot drift outside the review. Default refusal precedes all
+receipt and connector access. A future explicit authority may consume exactly
+one current-session requalification, discovery, witness-only retune
+qualification, freeze and A1/B/A2 outcome; the seal performs none of them.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

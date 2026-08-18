@@ -317,6 +317,14 @@ A1/B/A2. Thresholds are unchanged, both retry budgets are zero and the module
 has no live surface pending a separate post-commit seal. See
 [`GATE_F2_5_20_PROSPECTIVE_VERTICAL.md`](experiments/live_instrument/GATE_F2_5_20_PROSPECTIVE_VERTICAL.md).
 
+Gate F2.5.21 supplies the required post-commit seal. It binds the reviewed
+F2.5.20 commit, 22 causal files including the retained protocol artifacts, the
+numerical environment, prospective control surface and live-wrapper source.
+The sole future control is `run_reviewed_once(live_authorised=False)` and its
+default refusal occurs before receipt or connector access. The seal itself is
+offline and does not grant or consume the one observation authority. See
+[`GATE_F2_5_21_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_21_POST_COMMIT_SEAL.md).
+
 ## Repository map
 
 ```text
