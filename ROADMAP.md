@@ -377,6 +377,17 @@ fixed and A2 returns. This alternative is not live-qualified, changes no frozen
 threshold and grants no authority. The next admissible step is offline
 integration plus a new seal; it is not another observation.
 
+Gate F2.5.23 now materialises the pre-freeze successor offline. The real
+phase-aware control boundary is exercised with injected sockets, then a
+one-target descriptive discovery and a target-excluded distributed witness
+produce an immutable plan in deterministic fixtures. Altering the target in
+every tested lag leaves witness state and scores invariant. Missing target and
+channel-fixed witness fixtures stop with downstream phases `NOT_EVALUATED`.
+The plan freezes one independent future confirmation and the existing physical
+outcome set, but the post-freeze evaluator is deliberately absent. The next
+step is its offline integration and adversarial outcome tests; only then can a
+new commit-specific seal be considered.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

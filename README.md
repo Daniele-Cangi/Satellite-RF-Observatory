@@ -346,6 +346,17 @@ translation and A2 return can qualify the DDC coordinate transform. No live
 capability or target physics is thereby qualified. See
 [`GATE_F2_5_22_DISCOVERABILITY_AUDIT.md`](experiments/live_instrument/GATE_F2_5_22_DISCOVERABILITY_AUDIT.md).
 
+Gate F2.5.23 integrates that result into an offline successor. Injected
+phase-aware sockets establish the dual-channel topology; one stable target is
+then sufficient because a target-excluded distributed fingerprint separately
+qualifies the retune. Deterministic tests prove that changing the target at all
+predeclared control positions cannot change witness state, orientation or
+scores. The successor freezes distinct upstream/channel-fixed predictions,
+negative controls, one future confirmation and zero retry. It still has no
+connector or authority, and its confirmation evaluator is intentionally not
+implemented yet. See
+[`GATE_F2_5_23_ONE_TARGET_SUCCESSOR.md`](experiments/live_instrument/GATE_F2_5_23_ONE_TARGET_SUCCESSOR.md).
+
 ## Repository map
 
 ```text
