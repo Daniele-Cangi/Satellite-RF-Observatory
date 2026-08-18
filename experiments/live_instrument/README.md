@@ -70,6 +70,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 35. [`GATE_F2_5_20_PROSPECTIVE_VERTICAL.md`](GATE_F2_5_20_PROSPECTIVE_VERTICAL.md) — the qualified endpoint is composed offline with a new ephemeral discovery, witness-only retune qualification, immutable plan and one post-freeze A1/B/A2.
 36. [`GATE_F2_5_21_POST_COMMIT_SEAL.md`](GATE_F2_5_21_POST_COMMIT_SEAL.md) — commit, causal sources, numerical environment and the live wrapper itself are sealed behind one default-refusing authority bit.
 37. [`GATE_F2_5_21_OUTCOME_1.md`](GATE_F2_5_21_OUTCOME_1.md) — the single authority admitted two live SND/IQ channels, but local discovery found fewer than two distinct stable structures and stopped before retune, freeze or confirmation.
+38. [`GATE_F2_5_22_DISCOVERABILITY_AUDIT.md`](GATE_F2_5_22_DISCOVERABILITY_AUDIT.md) — offline attribution shows the frozen failure lacks input hashes and candidate margins, corrects a masked-width defect descriptively, and proves that an orthogonal witness need not be a second narrowband peak.
 
 ## Frozen-outcome rule
 

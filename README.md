@@ -334,6 +334,18 @@ valid refusal to synthesize an experiment, not evidence that the passband
 contained no signal. See
 [`GATE_F2_5_21_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_21_OUTCOME_1.md).
 
+Gate F2.5.22 audits that failure without new data. The frozen discovery receipt
+contains only the error-description hash, not the two ephemeral input hashes,
+candidate counts or threshold margins, so the underlying reason for “fewer
+than two structures” is not attributable. The audit also finds that legacy
+peak widths can be inflated by the admission mask sentinel. A synthetic-only
+alternative keeps the orthogonal-witness requirement but removes the needless
+assumption that it must be a second narrowband peak: a target-excluded
+distributed spectral fingerprint, fixed reference branch, unique perturbed
+translation and A2 return can qualify the DDC coordinate transform. No live
+capability or target physics is thereby qualified. See
+[`GATE_F2_5_22_DISCOVERABILITY_AUDIT.md`](experiments/live_instrument/GATE_F2_5_22_DISCOVERABILITY_AUDIT.md).
+
 ## Repository map
 
 ```text

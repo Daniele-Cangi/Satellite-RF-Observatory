@@ -365,6 +365,18 @@ downstream or external-RF claim. Any next step must begin offline from this
 observed detectability limit and cannot retry or reinterpret the consumed
 window.
 
+Gate F2.5.22 performs the required offline discoverability attribution. The
+frozen error is localised but not causally attributable because its discovery
+receipt retained only an error-description hash and no input hashes, stage
+counts or margins. A future successor must preserve those scalar sufficient
+statistics before destroying IQ. The audit also separates the causal need for
+an orthogonal witness from its old representation as a second narrowband peak.
+A target-excluded distributed spectral fingerprint can, in deterministic
+fixtures, witness a unique perturbed translation while the reference remains
+fixed and A2 returns. This alternative is not live-qualified, changes no frozen
+threshold and grants no authority. The next admissible step is offline
+integration plus a new seal; it is not another observation.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
