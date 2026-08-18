@@ -475,6 +475,22 @@ default-refusing live-facing surface. It may expose only one authority bit and
 must provide no caller-controlled endpoint, frequency, timing, threshold,
 callback or receipt path. No network activity belongs in that seal audit.
 
+Gate F2.5.30 attempted that seal audit and correctly refused to synthesize the
+authority surface. F2.5.29 closes each branch socket in the collector `finally`
+before the outer wrapper invokes discovery or retune. A deterministic test
+observes both sockets closed inside both callbacks. Because the callback sees
+only read-only IQ and no control handle, a live A1→B→A2 intervention cannot be
+issued or witnessed by this surface. The sealed outcome is
+`LIVE_SURFACE_NOT_SEALABLE`; it is not evidence against the Kiwi capability.
+
+The next admissible work is an offline open-handle successor. It should retain
+the two exact channel roots from initial temporal admission through discovery
+and both command boundaries, expose retune only to an internal frozen command
+executor, and close everything in one outer `finally`. It must first pass
+injected socket lifetime and command-witness tests. Only its later post-commit
+seal may add one default-refusing authority bit. No network belongs in either
+offline step.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

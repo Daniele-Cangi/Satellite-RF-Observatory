@@ -430,6 +430,15 @@ same-clock continuity and relative overlap decide access. No connector, public
 runtime override or live authority exists. See
 [`GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md`](experiments/live_instrument/GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md).
 
+Gate F2.5.30 audits whether that bridge can honestly receive a live authority
+bit. It cannot yet: both collectors close their channel sockets before the
+F2.5.28 discovery and retune callbacks run, and those callbacks receive no
+control handle. Commit, source and envelope seals all pass, so the terminal
+result is `LIVE_SURFACE_NOT_SEALABLE`, not a qualification or capability
+failure. The relative-time work remains reusable, but no nominal live runner
+was created. See
+[`GATE_F2_5_30_SEALABILITY_AUDIT.md`](experiments/live_instrument/GATE_F2_5_30_SEALABILITY_AUDIT.md).
+
 ## Repository map
 
 ```text
