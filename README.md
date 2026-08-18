@@ -408,6 +408,17 @@ for this cut, while command boundaries receive independent scalar witnesses.
 No connector or authority has been added. See
 [`GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md`](experiments/live_instrument/GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md).
 
+Gate F2.5.28 integrates that contract into an injected one-shot path. Every SND
+artifact is hashed before decode, the temporal receipt controls whether
+read-only in-RAM IQ can reach discovery, discovery controls retune access, and
+retune qualification requires both A1→B and B→A2 boundary witnesses. All IQ
+arrays are overwritten and verified in `finally`; the returned result contains
+only strict scalar/hash receipts. Tests measure zero downstream callback calls
+on temporal failure. The exact parser, one-shot surfaces, parent sources and
+numerical environment are sealed, but no connector or live authority is
+present. See
+[`GATE_F2_5_28_INJECTED_ONE_SHOT.md`](experiments/live_instrument/GATE_F2_5_28_INJECTED_ONE_SHOT.md).
+
 ## Repository map
 
 ```text

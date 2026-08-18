@@ -446,6 +446,21 @@ offline post-commit integration/seal audit. It must show that the one-use path
 captures these scalars before RF destruction and blocks every downstream phase
 on temporal failure. No live authority or new observation exists yet.
 
+Gate F2.5.28 now integrates the scalar contract into an injected one-shot
+control path. Raw SND input is hashed before decode; decoded IQ remains in
+private RAM and is exposed only through read-only callback views after temporal
+admission. Frame or clock failure produces zero discovery and retune calls.
+Discovery failure produces zero retune calls. Retune qualification additionally
+requires both `A1_TO_B` and `B_TO_A2` boundary receipts. Every array is
+zeroized and checked in `finally`, and only strict scalar/hash receipts return.
+
+The parent sources, environment and exact parser/one-shot surfaces are sealed.
+This is still synthetic integration: there is no connector, endpoint call,
+plan freeze, confirmation or live authority. The next admissible work is an
+offline live-facing wrapper audit with injected WebSocket frames, followed by
+a separate post-commit seal. It must expose no caller-controlled endpoint,
+frequency, timing, threshold, callback or receipt path.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
