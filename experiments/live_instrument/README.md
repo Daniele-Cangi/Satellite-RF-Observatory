@@ -69,6 +69,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 34. [`GATE_F2_5_19_OUTCOME_1.md`](GATE_F2_5_19_OUTCOME_1.md) — the single authority produced two simultaneous semantic SND/IQ branches on one Kiwi at the first candidate, then stopped before discovery or retune.
 35. [`GATE_F2_5_20_PROSPECTIVE_VERTICAL.md`](GATE_F2_5_20_PROSPECTIVE_VERTICAL.md) — the qualified endpoint is composed offline with a new ephemeral discovery, witness-only retune qualification, immutable plan and one post-freeze A1/B/A2.
 36. [`GATE_F2_5_21_POST_COMMIT_SEAL.md`](GATE_F2_5_21_POST_COMMIT_SEAL.md) — commit, causal sources, numerical environment and the live wrapper itself are sealed behind one default-refusing authority bit.
+37. [`GATE_F2_5_21_OUTCOME_1.md`](GATE_F2_5_21_OUTCOME_1.md) — the single authority admitted two live SND/IQ channels, but local discovery found fewer than two distinct stable structures and stopped before retune, freeze or confirmation.
 
 ## Frozen-outcome rule
 

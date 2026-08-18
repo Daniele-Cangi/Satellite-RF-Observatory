@@ -320,10 +320,19 @@ has no live surface pending a separate post-commit seal. See
 Gate F2.5.21 supplies the required post-commit seal. It binds the reviewed
 F2.5.20 commit, 22 causal files including the retained protocol artifacts, the
 numerical environment, prospective control surface and live-wrapper source.
-The sole future control is `run_reviewed_once(live_authorised=False)` and its
-default refusal occurs before receipt or connector access. The seal itself is
-offline and does not grant or consume the one observation authority. See
+The sole control was `run_reviewed_once(live_authorised=False)` and its default
+refusal occurred before receipt or connector access. See
 [`GATE_F2_5_21_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_21_POST_COMMIT_SEAL.md).
+
+That authority has now been consumed exactly once. Same-session direct SND
+again admitted two simultaneous IQ channels, but the independent four-second
+local discovery produced fewer than two distinct stable structures. The
+terminal outcome is `NO_FALSIFIABLE_INTERVENTION`: no retune occurred, no plan
+was frozen, no A1/B/A2 was run and neither DDC-boundary hypothesis was
+evaluated. The strict receipt is complete with zero RF persistence. This is a
+valid refusal to synthesize an experiment, not evidence that the passband
+contained no signal. See
+[`GATE_F2_5_21_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_21_OUTCOME_1.md).
 
 ## Repository map
 

@@ -353,9 +353,17 @@ step is a post-commit causal/environment seal, not an observation.
 Gate F2.5.21 now supplies that seal. Besides the reviewed causal files and
 numerical environment, it hashes the authority-facing function sources so the
 wrapper itself cannot drift outside the review. Default refusal precedes all
-receipt and connector access. A future explicit authority may consume exactly
-one current-session requalification, discovery, witness-only retune
-qualification, freeze and A1/B/A2 outcome; the seal performs none of them.
+receipt and connector access.
+
+The separate authority was consumed once. Current-session requalification
+proved the dual-SND topology again, while the independent local-IQ discovery
+found fewer than two distinct stable structures. It therefore terminated
+`NO_FALSIFIABLE_INTERVENTION` before retune qualification, plan freeze or
+A1/B/A2. This closes the authority without a physical-signal outcome: it
+supports multichannel availability only and does not permit an upstream,
+downstream or external-RF claim. Any next step must begin offline from this
+observed detectability limit and cannot retry or reinterpret the consumed
+window.
 
 ## Only after one valid prospective outcome
 
