@@ -419,6 +419,17 @@ numerical environment are sealed, but no connector or live authority is
 present. See
 [`GATE_F2_5_28_INJECTED_ONE_SHOT.md`](experiments/live_instrument/GATE_F2_5_28_INJECTED_ONE_SHOT.md).
 
+Gate F2.5.29 now supplies the missing phase-aware transport boundary, still
+entirely offline. Two injected SND branches execute the exact
+auth → metadata → one-shot setup → SND order concurrently. Each transport
+frame transfers through an explicit byte lease, its artifact is hashed, and
+the lease is released before analysis; bounded SND copies are cleared after
+the F2.5.28 call while decoded IQ is zeroized by that parent gate. The wrapper
+does not reuse the obsolete absolute-age rejection: distinct channels,
+same-clock continuity and relative overlap decide access. No connector, public
+runtime override or live authority exists. See
+[`GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md`](experiments/live_instrument/GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md).
+
 ## Repository map
 
 ```text

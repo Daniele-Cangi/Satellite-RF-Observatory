@@ -78,6 +78,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 43. [`GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md`](GATE_F2_5_26_TEMPORAL_FAILURE_ATTRIBUTION.md) — the offline attribution verifies the server-defined age semantics, separates active data transport from failed measurement admission, and shows that a topology-derived relative-time alternative cannot be evaluated from the frozen receipt.
 44. [`GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md`](GATE_F2_5_27_RELATIVE_TIME_ADMISSION.md) — a new offline plan derives temporal admission from the same-ADC causal cut: sample-count closure, reserved clock-state refusal, common overlap and command-boundary witnesses, with actual server timestamps retained only as scalar receipts.
 45. [`GATE_F2_5_28_INJECTED_ONE_SHOT.md`](GATE_F2_5_28_INJECTED_ONE_SHOT.md) — the relative-time plan is integrated into a sealed injected path: hash-before-decode, hard downstream call gates, two mandatory retune boundaries and unconditional RAM zeroization; no connector or live authority exists.
+46. [`GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md`](GATE_F2_5_29_PHASE_AWARE_INJECTED_BRIDGE.md) — two injected SND branches now obey the exact phase-aware auth/metadata/setup order, release transport bytes explicitly, enter the same-ADC relative gate without absolute-freshness leakage and retain no RF; no public execution surface exists.
 
 ## Frozen-outcome rule
 

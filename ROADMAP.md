@@ -461,6 +461,20 @@ offline live-facing wrapper audit with injected WebSocket frames, followed by
 a separate post-commit seal. It must expose no caller-controlled endpoint,
 frequency, timing, threshold, callback or receipt path.
 
+Gate F2.5.29 completes that offline wrapper audit. Two already-open injected
+SND branches run concurrently through the exact F2.5.17 auth, remote metadata,
+single setup and SND transfer phases. Explicit rejection, description error
+and inadmissible channel topology remain separate. The wrapper releases each
+transport-frame lease, clears every bounded transient SND input after the
+one-shot, and delegates IQ zeroization to F2.5.28. Absolute GPS-age freshness
+does not re-enter the same-ADC relative-time contract.
+
+There is still no connector, live runner, plan freeze or confirmation. The
+next admissible work is a separate offline post-commit seal of a
+default-refusing live-facing surface. It may expose only one authority bit and
+must provide no caller-controlled endpoint, frequency, timing, threshold,
+callback or receipt path. No network activity belongs in that seal audit.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
