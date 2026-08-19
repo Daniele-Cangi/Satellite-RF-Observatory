@@ -864,4 +864,3 @@ It does not exist to prove that every intermediate software system is perfectly 
 Use rigor to protect physical claims.
 
 Use freedom to reach them.
-
