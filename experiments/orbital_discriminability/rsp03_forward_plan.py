@@ -8,6 +8,7 @@ The accompanying prospective plan is the scientific authority.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from enum import Enum
 from hashlib import sha256
 import json
 from math import isfinite
@@ -17,7 +18,18 @@ DOPPLER_CORRECTION_CLASSIFICATION = (
     "PRE_CORRECTION_PATH_SUPPORTED_BY_OPERATOR_DOCUMENTATION"
 )
 PER_FILE_EXPLICIT_DOPPLER_FLAG = "ABSENT"
-PLAN_STATUS = "PROSPECTIVE_PLAN_BLOCKED"
+PLAN_FROZEN = "PLAN_FROZEN"
+DEVELOPMENT_READY = "DEVELOPMENT_READY"
+PRIMARY_BLOCKED = "PRIMARY_BLOCKED"
+
+
+class ArtifactOutcome(str, Enum):
+    """Keep transport/materialization failures outside measurement semantics."""
+
+    ARTIFACT_MATERIALIZATION_FAILED = "ARTIFACT_MATERIALIZATION_FAILED"
+    ARTIFACT_READY_FOR_DECODING = "ARTIFACT_READY_FOR_DECODING"
+    MEASUREMENT_INVALID = "MEASUREMENT_INVALID"
+    MEASUREMENT_VALID = "MEASUREMENT_VALID"
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,6 +48,18 @@ class NullFamily:
     name: str
     shape: str
     parameter_count: int
+
+
+@dataclass(frozen=True, slots=True)
+class DevelopmentAuthority:
+    """Exact authority surface for materializing only the development fixture."""
+
+    source_commit: str
+    structural_plan_hash: str
+    prospective_markdown_sha256: str
+    authorized_role: str = "DEVELOPMENT_FIXTURE"
+    retry_resume_before_complete_hash: bool = True
+    decoding_requires_complete_file_hash: bool = True
 
 
 @dataclass(frozen=True, slots=True)
@@ -244,31 +268,119 @@ def structural_errors(plan: RSP03ForwardPlan = PLAN) -> tuple[str, ...]:
     return tuple(errors)
 
 
-def primary_analysis_blockers(plan: RSP03ForwardPlan = PLAN) -> tuple[str, ...]:
+def primary_analysis_blockers(
+    plan: RSP03ForwardPlan = PLAN,
+    *,
+    detector_manifest_sha256: str | None = None,
+) -> tuple[str, ...]:
     """Return pre-primary blockers; this function never accesses a recording."""
 
     blockers = list(structural_errors(plan))
     if plan.absolute_time_error_bound_s is None:
         blockers.append("NO_DEFENSIBLE_FINITE_PPS_TO_ADC_UTC_ERROR_BOUND")
-    if plan.detector_manifest_sha256 is None:
+    manifest_hash = detector_manifest_sha256 or plan.detector_manifest_sha256
+    if manifest_hash is None:
         blockers.append("DEVELOPMENT_FIXTURE_DETECTOR_MANIFEST_NOT_FROZEN")
     return tuple(blockers)
 
 
+def lifecycle_states(
+    authority: DevelopmentAuthority | None = None,
+) -> tuple[str, ...]:
+    """Report independent plan, development, and primary lifecycle states."""
+
+    states = [PLAN_FROZEN]
+    if authority is not None and development_authority_errors(authority) == ():
+        states.append(DEVELOPMENT_READY)
+    states.append(PRIMARY_BLOCKED)
+    return tuple(states)
+
+
+def development_authority_errors(
+    authority: DevelopmentAuthority,
+) -> tuple[str, ...]:
+    errors: list[str] = []
+    if len(authority.source_commit) != 40 or any(
+        character not in "0123456789abcdef" for character in authority.source_commit
+    ):
+        errors.append("source commit must be one lowercase 40-character Git SHA")
+    if authority.structural_plan_hash != PLAN.plan_hash:
+        errors.append("development authority structural plan hash changed")
+    if len(authority.prospective_markdown_sha256) != 64 or any(
+        character not in "0123456789abcdef"
+        for character in authority.prospective_markdown_sha256
+    ):
+        errors.append("prospective Markdown hash must be one lowercase SHA-256")
+    if authority.authorized_role != DEVELOPMENT_FIXTURE.role:
+        errors.append("development authority expanded beyond the fixture")
+    if not authority.retry_resume_before_complete_hash:
+        errors.append("historical materialization retry/resume policy changed")
+    if not authority.decoding_requires_complete_file_hash:
+        errors.append("decode-before-complete-hash protection changed")
+    return tuple(errors)
+
+
+def materialization_retry_allowed(
+    *,
+    complete_file_sha256: str | None,
+    decoding_started: bool,
+) -> bool:
+    """Retry/resume is legal only before final hashing and any decoding."""
+
+    return complete_file_sha256 is None and not decoding_started
+
+
+def classify_artifact_outcome(
+    *,
+    complete_file_sha256: str | None,
+    decoding_started: bool,
+    measurement_valid: bool | None,
+) -> ArtifactOutcome:
+    """Classify materialization separately from decoded measurement validity."""
+
+    if complete_file_sha256 is None:
+        if decoding_started or measurement_valid is not None:
+            raise ValueError("an incomplete artifact cannot enter measurement semantics")
+        return ArtifactOutcome.ARTIFACT_MATERIALIZATION_FAILED
+    if len(complete_file_sha256) != 64:
+        raise ValueError("complete-file SHA-256 must contain 64 hexadecimal characters")
+    if any(character not in "0123456789abcdef" for character in complete_file_sha256):
+        raise ValueError("complete-file SHA-256 must be lowercase hexadecimal")
+    if not decoding_started:
+        if measurement_valid is not None:
+            raise ValueError("measurement validity requires decoding")
+        return ArtifactOutcome.ARTIFACT_READY_FOR_DECODING
+    if measurement_valid is None:
+        raise ValueError("a decoded artifact requires an explicit validity result")
+    return (
+        ArtifactOutcome.MEASUREMENT_VALID
+        if measurement_valid
+        else ArtifactOutcome.MEASUREMENT_INVALID
+    )
+
+
 __all__ = [
     "DEVELOPMENT_FIXTURE",
+    "DEVELOPMENT_READY",
     "DOPPLER_CORRECTION_CLASSIFICATION",
     "HISTORICAL_TLE_LINES",
     "NULL_FAMILIES",
     "PER_FILE_EXPLICIT_DOPPLER_FLAG",
     "PLAN",
-    "PLAN_STATUS",
+    "PLAN_FROZEN",
+    "PRIMARY_BLOCKED",
     "PRIMARY",
     "SEALED_REPLICATION_RESERVE",
     "SENSITIVITY_TLE_LINES",
     "NullFamily",
+    "ArtifactOutcome",
+    "DevelopmentAuthority",
     "RSP03ForwardPlan",
     "RecordingRole",
+    "classify_artifact_outcome",
+    "development_authority_errors",
+    "lifecycle_states",
+    "materialization_retry_allowed",
     "primary_analysis_blockers",
     "structural_errors",
 ]
