@@ -88,6 +88,13 @@ runtime refused to reconstruct relevance post-hoc and stopped
 or RF stream. See
 [`G1_3_SEARCH_OUTCOME_1.md`](experiments/orbital_discriminability/G1_3_SEARCH_OUTCOME_1.md).
 
+Gate G1.3.1 now freezes the minimum offline correction: one independent search
+invocation per query, each producing its own ordered URL-list hash. It performs
+no new search and cannot open result pages. Synthetic tests prove that bundled
+calls, duplicated invocation identities and reconstructed or unsafe URLs are
+refused. See
+[`G1_3_1_SEARCH_TRANSPORT.md`](experiments/orbital_discriminability/G1_3_1_SEARCH_TRANSPORT.md).
+
 Gate G0 remains the underlying physical result. It samples the existing
 stateless orbital kernel for multiple observers, separates fractional geometry
 from carrier scaling, fits only station offset and affine drift on a

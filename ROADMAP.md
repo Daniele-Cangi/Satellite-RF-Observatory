@@ -119,6 +119,18 @@ evidence that no inventory or capability exists. Any successor must freeze a
 transport that exposes one independently hashable ordered result set per
 query; it cannot retry or repair the consumed G1.3 run.
 
+## Gate G1.3.1 — independent-query transport: COMPLETE OFFLINE
+
+The minimum correction is frozen without network activity. Each unchanged
+query must run in a distinct invocation and expose at most five ordered public
+document URLs with its own canonical hash. Invocation identity and provider
+order are preserved; errors carry no URL set. Bundling, retry, page opening,
+status and RF are forbidden.
+
+The checkpoint `SEARCH_TRANSPORT_FROZEN` demonstrates only the receipt shape
+with synthetic responses. A later live execution requires separate authority
+and must consume exactly four independent calls with zero retry.
+
 ## Gate G2 — prospective plan freeze: BLOCKED ON CAPABILITY INVENTORY
 
 For one admitted orbit/capability intersection, freeze the station set,

@@ -61,6 +61,12 @@ received one merged result stream, so query membership could not be receipted.
 It stopped `INVENTORY_SEARCH_INCOMPLETE` before candidate, status or RF access;
 no relevance-based reconstruction was permitted.
 
+Gate G1.3.1 repairs only that interface offline. Four distinct invocation IDs
+must bind the unchanged queries one-to-one to four independently ordered and
+hashed URL lists. The pure materializer refuses bundling, duplicates, unsafe
+URLs, persistence and any search-error URL set. It adds no network client and
+does not modify the consumed G1.3 receipt.
+
 The sections below preserve the live-instrument mechanism because its controls
 remain candidate primitives for G1. They are not automatically a framework.
 
