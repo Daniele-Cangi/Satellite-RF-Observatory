@@ -484,6 +484,16 @@ needed descriptive shape, so no new framework or selector change is proposed.
 See
 [`GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md`](experiments/live_instrument/GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md).
 
+Gate F2.5.35 integrates the minimum future repair offline without touching the
+frozen runtime. The unchanged one-feature selector first emits its
+authoritative `DiscoveryReceipt`; a sibling scalar audit then records stage
+counts and finite threshold margins against the same 16 pre-analysis frame
+hashes. Audit construction failure becomes `DESCRIPTION_ERROR` and cannot
+change selection, retune control flow or physical outcome. Synthetic negative
+and positive full-vertical tests preserve the F2.5.32 decisions, while no IQ,
+STFT, spectrum or candidate patch persists. See
+[`GATE_F2_5_35_SCALAR_AUDIT_INTEGRATION.md`](experiments/live_instrument/GATE_F2_5_35_SCALAR_AUDIT_INTEGRATION.md).
+
 ## Repository map
 
 ```text

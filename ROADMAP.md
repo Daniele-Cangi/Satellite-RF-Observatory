@@ -566,6 +566,20 @@ retaining RF. Gate F2.5.22 already demonstrates the required shape, so a new
 framework is unnecessary. Any such repair belongs to a future separately
 reviewed experiment; Gate F2.5.34 adds no authority, runtime change or window.
 
+Gate F2.5.35 now materializes that repair as an offline successor. The
+authoritative selector decision is constructed first; a sibling scalar audit
+then records closed stage counts and best finite margins to the unchanged
+contrast, correlation and half-stability thresholds. Both receipts bind the
+same 16 A1 frame hashes. A description failure retains only its type and hash
+and is structurally unable to alter selection or downstream physical control
+flow.
+
+Deterministic negative and positive tests preserve the exact frozen discovery
+receipt, phase semantics and F2.5.32 physical evaluator outcomes. No connector
+or authority surface exists and no RF-derived array persists. The next
+admissible work is a separate offline post-commit seal of this exact successor;
+only later review may grant one new single-use live authority.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or
