@@ -54,6 +54,13 @@ The frozen G1.1 artifact and remembered endpoints fail this boundary. HTTPS
 manifest and authoritative-DNS fixtures pass only as contract forms, not as
 live sources. No adapter, registry or persistent capability catalog is added.
 
+Gate G1.3 adds a prospective boundary around the search transform itself.
+Candidate documents must be selected round-robin from independently ordered,
+hash-bound per-query result sets before page inspection. Its first execution
+received one merged result stream, so query membership could not be receipted.
+It stopped `INVENTORY_SEARCH_INCOMPLETE` before candidate, status or RF access;
+no relevance-based reconstruction was permitted.
+
 The sections below preserve the live-instrument mechanism because its controls
 remain candidate primitives for G1. They are not automatically a framework.
 

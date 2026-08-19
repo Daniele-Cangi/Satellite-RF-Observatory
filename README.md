@@ -80,6 +80,14 @@ forms without claiming that either source exists. The terminal state is
 `NOT_EVALUATED`. See
 [`G1_2_INVENTORY_REPORT.md`](experiments/orbital_discriminability/G1_2_INVENTORY_REPORT.md).
 
+Gate G1.3 then consumed one frozen bounded inventory search. The provider
+executed all four query strings but returned a single merged result stream,
+which could not support the predeclared per-query round-robin selector. The
+runtime refused to reconstruct relevance post-hoc and stopped
+`INVENTORY_SEARCH_INCOMPLETE` before opening any result page, `/status` route
+or RF stream. See
+[`G1_3_SEARCH_OUTCOME_1.md`](experiments/orbital_discriminability/G1_3_SEARCH_OUTCOME_1.md).
+
 Gate G0 remains the underlying physical result. It samples the existing
 stateless orbital kernel for multiple observers, separates fractional geometry
 from carrier scaling, fits only station offset and affine drift on a

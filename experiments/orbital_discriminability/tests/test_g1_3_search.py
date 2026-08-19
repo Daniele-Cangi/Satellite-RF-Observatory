@@ -4,6 +4,7 @@ from dataclasses import replace
 from datetime import datetime, timezone
 from hashlib import sha256
 import ast
+import json
 from pathlib import Path
 
 import pytest
@@ -268,3 +269,25 @@ def test_gate_receipt_module_has_no_network_or_persistence_imports() -> None:
     assert modules.isdisjoint(
         {"urllib", "requests", "httpx", "socket", "websocket", "pathlib", "sqlite3"}
     )
+
+
+def test_frozen_outcome_is_byte_exact_and_stops_before_candidates() -> None:
+    path = (
+        Path(__file__).resolve().parents[1]
+        / "session_receipts"
+        / "g1_3_search_outcome_1.jsonl"
+    )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    assert sha256(path.read_bytes()).hexdigest() == (
+        "b30643b95ff2e44519263fca9c1ae9a2e601bff93c328d9cf2c46290fb5db41e"
+    )
+    assert payload["plan_hash"] == g13.G13SearchPlan().plan_hash
+    assert payload["outcome"] == g13.G13Outcome.INVENTORY_SEARCH_INCOMPLETE.value
+    assert len(payload["search_receipts"]) == 4
+    assert all(item["state"] == "SEARCH_ERROR" for item in payload["search_receipts"])
+    assert payload["candidate_assessments"] == []
+    assert payload["admitted_mechanisms"] == []
+    assert payload["capability_admission_state"] == "NOT_EVALUATED"
+    assert payload["status_request_count"] == 0
+    assert payload["raw_rf_activity"] == "ZERO"

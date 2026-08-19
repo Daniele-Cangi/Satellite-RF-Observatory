@@ -106,6 +106,19 @@ operator-authorized machine-readable inventory. It may terminate
 `NO_LEGITIMATE_INVENTORY_FOUND`; it may not use remembered endpoints, browser
 token replay, RF probing or a persistent capability catalog.
 
+## Gate G1.3 — bounded inventory search: CONSUMED / INCOMPLETE
+
+The four frozen query strings were submitted once. The provider returned a
+merged result stream without per-query membership or ordering, so the frozen
+round-robin selector could not be evaluated. Inferring membership from apparent
+relevance would have changed candidate selection after seeing the result.
+
+The execution stopped `INVENTORY_SEARCH_INCOMPLETE` with zero candidate-page,
+receiver-status and RF requests. This is a search-transform failure, not
+evidence that no inventory or capability exists. Any successor must freeze a
+transport that exposes one independently hashable ordered result set per
+query; it cannot retry or repair the consumed G1.3 run.
+
 ## Gate G2 — prospective plan freeze: BLOCKED ON CAPABILITY INVENTORY
 
 For one admitted orbit/capability intersection, freeze the station set,
