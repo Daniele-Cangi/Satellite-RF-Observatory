@@ -59,16 +59,18 @@ qualification, then independent-pair differential detectability. It contains
 no discovery or network client and cannot acquire RF.
 
 The reference vertical selects a synthetic Berlin–Eindhoven pair with a
-`2802.398 Hz` conservative margin. A fully available local pair is correctly
-refused at `-243.172 Hz`; availability therefore cannot masquerade as
+`2807.799 Hz` conservative margin. A fully available local pair is correctly
+refused at `-243.201 Hz`; availability therefore cannot masquerade as
 falsification power. See
 [`G1_ADMISSION_REPORT.md`](experiments/orbital_discriminability/G1_ADMISSION_REPORT.md).
 
 Gate G0 remains the underlying physical result. It samples the existing
 stateless orbital kernel for multiple observers, separates fractional geometry
 from carrier scaling, fits only station offset and affine drift on a
-calibration prefix, and scores the untouched suffix on simultaneous station
-differences. Five frozen null families use the same split.
+calibration prefix, and scores the untouched suffix only on jointly visible
+station differences. Four non-redundant frozen null families use the same
+split, and clock uncertainty is propagated through direct `t ± delta_t`
+trajectories rather than a local slope approximation.
 
 The 128-case synthetic sweep contains both detectable and undetectable regions:
 81 cases are `ORBITAL_MODEL_PREDICTIVELY_PREFERRED` and 47 are
@@ -76,6 +78,10 @@ The 128-case synthetic sweep contains both detectable and undetectable regions:
 claim about a live signal or a satellite identity. G1 now turns that envelope
 into an admission procedure, but no current Internet capability has yet been
 queried or admitted.
+
+The G1.1–G1.3 inventory/search work is a concluded side investigation, not the
+critical path. The next physical choice is one satellite/pass and one bounded,
+predeclared capability set; no global receiver catalog is required.
 
 ## Preserved Gate F2.5 experimental history
 

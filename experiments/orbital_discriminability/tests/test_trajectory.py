@@ -21,6 +21,8 @@ from experiments.orbital_discriminability.trajectory import (
     TrajectoryError,
     apply_carrier_to_envelope,
     apply_carrier_hz,
+    build_time_shift_frequency_envelope,
+    differential_time_shift_uncertainty_hz,
     differential_trajectory,
     pairwise_differentials,
     sample_observer_network,
@@ -122,6 +124,39 @@ def test_controlled_orbit_ensemble_produces_frequency_envelope() -> None:
             strict=True,
         )
     )
+
+
+def test_clock_envelope_is_propagated_at_declared_time_endpoints(network) -> None:  # type: ignore[no-untyped-def]
+    carrier_hz = 145_800_000.0
+    delta_s = 30.0
+    left = build_time_shift_frequency_envelope(
+        ISS_TLE, network["COPENHAGEN"], carrier_hz, delta_s
+    )
+    right = build_time_shift_frequency_envelope(
+        ISS_TLE, network["BERLIN"], carrier_hz, delta_s
+    )
+    index = 12
+    endpoint_hz = tuple(
+        -compute_orbital_state(
+            COPENHAGEN,
+            ISS_TLE,
+            network["COPENHAGEN"].timestamps[index] + timedelta(seconds=direction * delta_s),
+        ).range_rate_km_s
+        / SPEED_OF_LIGHT_KM_S
+        * carrier_hz
+        for direction in (-1, 1)
+    )
+
+    assert left.time_shift_bound_s == delta_s
+    assert left.lower_hz[index] == pytest.approx(
+        min(left.nominal_hz[index], *endpoint_hz), abs=1e-9
+    )
+    assert left.upper_hz[index] == pytest.approx(
+        max(left.nominal_hz[index], *endpoint_hz), abs=1e-9
+    )
+    assert differential_time_shift_uncertainty_hz(
+        left, right, np.ones(len(left.timestamps), dtype=bool)
+    ) > 0.0
 
 
 @pytest.mark.parametrize(

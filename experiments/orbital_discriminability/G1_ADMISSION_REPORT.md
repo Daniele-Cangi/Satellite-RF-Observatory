@@ -31,10 +31,15 @@ coordinates, one hardware root, TTL valid through pass end, full pass availabili
 coverage, bounded time/frequency behavior, sequence continuity, complete
 transform affordances and the frozen witnesses may enter a pair.
 
-Pairs then face three separate clauses: independent hardware roots, sufficient
-joint held-out visibility and positive differential detectability margin. The
+Pairs then face four separate clauses: independent hardware roots, sufficient
+joint calibration visibility, sufficient joint held-out visibility and
+positive differential detectability margin. The
 selected pair is the admitted pair with the largest margin; input order cannot
 change the result.
+
+Event-time uncertainty uses the same direct `t - delta_t` / `t + delta_t`
+trajectory envelope as G0. Joint visibility gates both the affine prefix fit
+and every held-out score.
 
 ## Deterministic reference vertical
 
@@ -55,11 +60,11 @@ plan hash:        d239f12380ef09915c309ddd3a8e669fa673b4ba8a2bf6bad9dabf894bf9bd
 
 All three synthetic offers qualify individually. Pair results are:
 
-| Pair | Joint held-out samples | Signature | Threshold | Margin | Admission |
+| Pair | Joint calibration / held-out samples | Signature | Threshold | Margin | Admission |
 |---|---:|---:|---:|---:|---|
-| Berlin–Copenhagen | 37 | 1439.919 Hz | 63.943 Hz | 1375.976 Hz | admitted |
-| Berlin–Eindhoven | 45 | 2885.269 Hz | 82.871 Hz | 2802.398 Hz | selected |
-| Copenhagen–Eindhoven | 37 | 974.390 Hz | 77.246 Hz | 897.144 Hz | admitted |
+| Berlin–Copenhagen | 13 / 37 | 1439.919 Hz | 63.200 Hz | 1376.720 Hz | admitted |
+| Berlin–Eindhoven | 13 / 45 | 2885.269 Hz | 77.469 Hz | 2807.799 Hz | selected |
+| Copenhagen–Eindhoven | 13 / 37 | 974.390 Hz | 76.696 Hz | 897.694 Hz | admitted |
 
 The synthetic outcome is `CAPABILITY_SET_ADMITTED`, with
 Berlin–Eindhoven selected. This says only that the declared capability
@@ -73,10 +78,10 @@ individually qualified, but with 20 Hz resolution and a 5-second clock bound:
 ```text
 differential signature:       24.999 Hz
 frequency-bin envelope:       60.000 Hz
-event-time envelope:         206.171 Hz
+event-time envelope:         206.200 Hz
 orbital envelope:              2.000 Hz
-total threshold:             268.171 Hz
-detectability margin:       -243.172 Hz
+total threshold:             268.200 Hz
+detectability margin:       -243.201 Hz
 outcome:              NO_CAPABILITY_ADMITTED
 reason:               NO_PAIR_CLEARS_DETECTABILITY
 ```
@@ -121,8 +126,8 @@ received RF feature, transmitter identity or orbital origin.
 
 ## Next boundary
 
-The next possible checkpoint is G1.1: a separately reviewed, bounded,
-status-only qualification of current descriptive capabilities against current
-pass predictions. It must perform no SND/IQ/waterfall acquisition and may end
-`NO_CAPABILITY_ADMITTED`. The candidate and endpoints may be selected only by
-the frozen orbital-margin procedure, not by spectral convenience.
+G1.1–G1.3 are preserved as a concluded side investigation into capability
+discovery; they are not prerequisites for the forward experiment. The next
+physical decision is to select one satellite/pass and one explicitly scoped,
+predeclared capability set, then apply these clauses without requiring a
+global Internet inventory. No observation is authorized by this report.

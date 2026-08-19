@@ -35,11 +35,18 @@ first 20% of the samples.  The remaining 80% is never used for fitting.  The
 score is computed on simultaneous station differences, so an arbitrary common
 transmitter drift cancels rather than being mistaken for orbital error.
 
-The same prefix and holdout are used for five frozen nulls: station constants,
-station affine drift, a common cubic component with station affine terms, and
-two geometry-destroying observer permutations.  Null complexity and parameter
-counts are recorded; there is no post-result model selection or probability
-calibration.
+The same joint-visibility-gated prefix and holdout are used for four frozen,
+non-redundant nulls: station constants, station affine drift, independent
+station quadratics, and one geometry-destroying observer permutation. The
+former common-cubic null was removed because its common component cancelled
+identically in the differential score; the two-station duplicate permutation
+was also removed. Null complexity and parameter counts are recorded; there is
+no post-result model selection or probability calibration.
+
+Clock uncertainty is now propagated directly through the orbital kernel at
+each sample's `t - delta_t` and `t + delta_t` endpoints. The differential
+envelope combines the two station intervals conservatively. No local
+derivative is multiplied by a large clock bound.
 
 An orbital ensemble accepts adjacent element sets or controlled perturbations
 and produces per-sample fractional and frequency envelopes.  G0 never converts
@@ -61,7 +68,7 @@ cadence:               5 s
 calibration / holdout: 13 / 48 samples
 carriers:              137.5 MHz, 435 MHz
 frequency resolution:  1, 5, 20, 100 Hz
-clock-error envelope:  0, 1, 5, 30 s
+clock-error envelope:  direct trajectories at 0, 1, 5, 30 s
 synthetic noise:       0.2 Hz RMS per station
 orbit envelope input:  1 Hz per station
 detectability rule:    3 frequency bins plus clock/carrier/orbit envelope
@@ -90,8 +97,19 @@ ORBITAL_MODEL_NOT_DISCRIMINATIVE:           0
 ```
 
 The last two counts are expected because this sweep is generated from the
-nominal orbit.  Independent fixtures verify both outcomes using non-orbital
-data and a detectable but weak local geometry.
+nominal orbit. Independent fixtures verify both outcomes using non-orbital
+data and a detectable but weak local geometry. A separate, physically
+plausible adjacent-orbit stress changes mean anomaly by `+0.12 deg`, RAAN by
+`+0.03 deg`, and mean motion by `-0.0002 rev/day`; it produces
+`ORBITAL_PREDICTION_REJECTED` with `88.681 Hz` held-out RMSE against a
+`72.469 Hz` frozen tolerance. These offsets are a controlled mismatch, not a
+claim about empirical TLE error.
+
+The discrete 128-case outcome region is unchanged by the clock repair, but
+the envelope is not numerically equivalent to the previous local-slope
+approximation. Across nonzero-clock cases, direct minus local clock allowance
+ranges from `-52.838 Hz` to `+0.085 Hz`. No tested case lies close enough to a
+boundary for that correction to flip its outcome.
 
 Maximum tested resolution still producing predictive preference:
 
@@ -118,17 +136,18 @@ For Copenhagen, Berlin and Eindhoven at 145.8 MHz, 5 Hz resolution and a
 outcome:                         ORBITAL_MODEL_PREDICTIVELY_PREFERRED
 most discriminating pair:       Berlin–Eindhoven
 differential signature:         3138.710 Hz
-detectability threshold:          82.871 Hz
+detectability threshold:          77.469 Hz
 orbital held-out RMSE:              0.903 Hz
 best-null held-out RMSE:          969.833 Hz
 required preference margin:         5.000 Hz
 observed preference margin:       968.930 Hz
-plan hash: 466159143bcc6818fb2da6fc2b0514365bb3d1c5087fa5e0f0da7a359d196804
+plan hash: ec6e355f84b745e8646d1cd70bc946c9b50766f4086f02ce14beddd508573f4a
 ```
 
-The independent-affine and common-cubic nulls become equivalent in the
-differential score when the cubic component is truly common.  Their tiny
-floating-point ranking difference has no physical meaning.
+The best null remains station affine. The independent quadratic is genuinely
+distinct under differential scoring and extrapolates this reference holdout
+poorly (`3692.707 Hz` RMSE); it is retained as a smooth station-local
+alternative, not selected because it is convenient for this result.
 
 ## Discriminability map interpretation
 
@@ -195,8 +214,10 @@ G0 does not authorize claims that:
   behavior are absent.
 - Common transmitter drift is assumed simultaneous at the event-time scale;
   differential residuals from unequal propagation delay are not modeled.
-- Clock error is represented by a conservative slope envelope rather than a
-  fitted time shift.
+- Clock error is bounded by direct endpoint trajectories. Interior extrema
+  between `t - delta_t` and `t + delta_t` are not searched; a future pass with
+  a non-monotone interval wider than the local dynamics would require denser
+  declared envelope sampling.
 - Orbit uncertainty must be supplied by an explicit ensemble; it is not
   inferred from age.
 - The frozen null set is strong enough to test this mechanism, not exhaustive

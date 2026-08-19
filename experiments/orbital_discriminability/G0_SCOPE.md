@@ -39,8 +39,8 @@ be learned from the held-out interval.
 
 - one constant frequency offset per station;
 - one affine local drift per station;
-- bounded station clock error represented as a conservative prediction
-  envelope, never optimized on the holdout;
+- bounded station clock error represented by direct trajectory propagation at
+  `t - delta_t` and `t + delta_t`, never by a fitted holdout shift;
 - bounded carrier uncertainty;
 - bounded orbital-prediction uncertainty;
 - declared quantization, noise and missing samples in synthetic observations.
@@ -54,14 +54,17 @@ per-sample corrections are forbidden.
 |---|---|---:|
 | N0 | independent station constants | one per station |
 | N1 | independent station affine drift | two per station |
-| N2 | common cubic temporal component plus station affine terms | two per station plus two common curvature terms |
-| N3 | orbital predictions assigned to the wrong station labels | two affine nuisance terms per station |
-| N4 | orbital predictions under a different frozen observer permutation | two affine nuisance terms per station |
+| N2 | independent station quadratic trajectories | three per station |
+| N3 | orbital predictions assigned through one frozen wrong observer permutation | two affine nuisance terms per station |
 
 Every model uses the same calibration prefix and the same held-out interval.
-N3 and N4 test whether prediction uses observer geometry rather than merely a
-generic pass-shaped curve.  Alternative physical orbits are not nulls in G0;
-they belong to the later specific-orbit question.
+Every fit and score is restricted to the relevant station visibility mask;
+pairwise evidence requires joint visibility in both calibration and holdout.
+N2 replaces a common smooth term that cancelled identically under differential
+scoring. N3 tests whether prediction uses observer geometry rather than merely
+a generic pass-shaped curve. Alternative physical orbits are not generic
+nulls; controlled adjacent-orbit data are used separately as a model-mismatch
+stress case.
 
 ## Non-probabilistic decision semantics
 

@@ -51,12 +51,14 @@ A pair is admitted only when:
 
 1. both individual offers are qualified;
 2. their hardware roots are distinct;
-3. enough held-out samples are jointly above the frozen elevation mask;
-4. differential curvature after calibration-prefix affine removal exceeds:
+3. enough calibration and held-out samples are jointly above the frozen
+   elevation mask;
+4. differential curvature after a joint-visibility-gated calibration-prefix
+   affine removal exceeds:
 
 ```text
 minimum bins × coarser frequency resolution
-  + station-specific event-time error envelope
+  + station-specific direct `t ± delta_t` trajectory envelope
   + carrier interval envelope
   + declared orbital prediction envelope
 ```
@@ -78,6 +80,6 @@ acquisition.
 
 G1 stops after the offline mechanism, deterministic synthetic vertical and
 tests exist. No Internet status request, receiver connection, catalog query,
-TLE download or RF acquisition occurs. A later status-only qualification must
-be separately reviewed and must consume this exact admission logic without
-changing its clauses.
+TLE download or RF acquisition occurs. A future physical vertical may apply
+this logic to one explicitly scoped, predeclared capability set. A global
+receiver inventory is not a prerequisite.

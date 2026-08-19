@@ -67,6 +67,8 @@ def fit_affine_nuisance(
     observed_hz: tuple[float, ...] | np.ndarray,
     physical_prediction_hz: tuple[float, ...] | np.ndarray,
     split: CalibrationSplit,
+    *,
+    valid_mask: tuple[bool, ...] | np.ndarray | None = None,
 ) -> NuisanceFit:
     """Fit observed minus physical prediction on calibration data only."""
 
@@ -75,7 +77,8 @@ def fit_affine_nuisance(
         raise NuisanceError("calibration split does not match the series length")
     residual = observed - physical
     calibration = np.asarray(split.calibration_indices, dtype=np.int64)
-    valid = calibration[np.isfinite(residual[calibration])]
+    admitted = _valid_mask(valid_mask, len(times))
+    valid = calibration[np.isfinite(residual[calibration]) & admitted[calibration]]
     if valid.size < 2:
         raise NuisanceError("affine nuisance requires two finite calibration samples")
     design = np.column_stack((np.ones(valid.size), times[valid] - times[0]))
@@ -97,17 +100,21 @@ def fit_station_nuisance(
     observations_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     physical_predictions_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     split: CalibrationSplit,
+    *,
+    visibility_masks: Mapping[str, tuple[bool, ...] | np.ndarray] | None = None,
 ) -> dict[str, NuisanceFit]:
     if set(observations_hz) != set(physical_predictions_hz):
         raise NuisanceError("observations and predictions require identical station IDs")
     if len(observations_hz) < 2:
         raise NuisanceError("distributed fitting requires at least two stations")
+    masks = _station_masks(visibility_masks, observations_hz, split.sample_count)
     return {
         station: fit_affine_nuisance(
             elapsed_s,
             observations_hz[station],
             physical_predictions_hz[station],
             split,
+            valid_mask=masks[station],
         )
         for station in sorted(observations_hz)
     }
@@ -117,11 +124,13 @@ def affine_shape_residual(
     elapsed_s: tuple[float, ...] | np.ndarray,
     values: tuple[float, ...] | np.ndarray,
     split: CalibrationSplit,
+    *,
+    valid_mask: tuple[bool, ...] | np.ndarray | None = None,
 ) -> tuple[float, ...]:
     """Remove an affine calibration-prefix extrapolation from a finite shape."""
 
     times, series, zero = _coerce_equal(elapsed_s, values, np.zeros(len(values)))
-    fit = fit_affine_nuisance(times, series, zero, split)
+    fit = fit_affine_nuisance(times, series, zero, split, valid_mask=valid_mask)
     return tuple(float(value) for value in series - np.asarray(fit.prediction_hz))
 
 
@@ -173,12 +182,18 @@ def differential_network_heldout_rmse(
     observations_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     predictions_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     split: CalibrationSplit,
+    *,
+    visibility_masks: Mapping[str, tuple[bool, ...] | np.ndarray],
+    minimum_pair_samples: int = 1,
 ) -> tuple[float, int]:
     """Score station-pair differences so common transmitter drift cancels."""
 
     stations = sorted(observations_hz)
     if stations != sorted(predictions_hz) or len(stations) < 2:
         raise NuisanceError("differential scoring requires identical multi-station IDs")
+    if minimum_pair_samples < 1:
+        raise NuisanceError("minimum_pair_samples must be positive")
+    masks = _station_masks(visibility_masks, observations_hz, split.sample_count)
     squared_sum = 0.0
     sample_total = 0
     holdout = np.asarray(split.holdout_indices, dtype=np.int64)
@@ -204,7 +219,10 @@ def differential_network_heldout_rmse(
             valid_mask = np.isfinite(left_observed[holdout]) & np.isfinite(
                 right_observed[holdout]
             )
+            valid_mask &= masks[left][holdout] & masks[right][holdout]
             valid = holdout[valid_mask]
+            if valid.size < minimum_pair_samples:
+                continue
             observed_difference = left_observed[valid] - right_observed[valid]
             predicted_difference = left_predicted[valid] - right_predicted[valid]
             errors = observed_difference - predicted_difference
@@ -213,6 +231,36 @@ def differential_network_heldout_rmse(
     if sample_total == 0:
         raise NuisanceError("differential holdout contains no simultaneous finite observations")
     return sqrt(squared_sum / sample_total), sample_total
+
+
+def _station_masks(
+    visibility_masks: Mapping[str, tuple[bool, ...] | np.ndarray] | None,
+    series: Mapping[str, tuple[float, ...] | np.ndarray],
+    sample_count: int,
+) -> dict[str, np.ndarray]:
+    if visibility_masks is None:
+        return {
+            station: np.ones(sample_count, dtype=bool)
+            for station in series
+        }
+    if set(visibility_masks) != set(series):
+        raise NuisanceError("visibility masks require identical station IDs")
+    return {
+        station: _valid_mask(visibility_masks[station], sample_count)
+        for station in series
+    }
+
+
+def _valid_mask(
+    valid_mask: tuple[bool, ...] | np.ndarray | None,
+    sample_count: int,
+) -> np.ndarray:
+    if valid_mask is None:
+        return np.ones(sample_count, dtype=bool)
+    mask = np.asarray(valid_mask)
+    if mask.shape != (sample_count,) or mask.dtype.kind != "b":
+        raise NuisanceError("valid mask must be one boolean value per sample")
+    return mask.astype(bool, copy=False)
 
 
 def _coerce_equal(

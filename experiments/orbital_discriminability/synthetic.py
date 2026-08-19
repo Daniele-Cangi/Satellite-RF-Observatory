@@ -9,10 +9,16 @@ from typing import Mapping
 
 import numpy as np
 
-from experiments.live_instrument.orbital_kernel import Observer, TLEElements
+from experiments.live_instrument.orbital_kernel import Observer, OrbitalElements, TLEElements
 
 from .heldout import HeldoutPlan, HeldoutResult, evaluate_heldout
-from .trajectory import OrbitalTrajectory, apply_carrier_hz, sample_observer_network
+from .trajectory import (
+    FrequencyTrajectoryEnvelope,
+    OrbitalTrajectory,
+    apply_carrier_hz,
+    build_time_shift_frequency_envelope,
+    sample_observer_network,
+)
 
 
 ISS_TLE = TLEElements(
@@ -39,6 +45,15 @@ ISS_OMM = {
     "MEAN_MOTION_DOT": 1.764e-05,
     "MEAN_MOTION_DDOT": 0.0,
 }
+ISS_PLAUSIBLE_MISMATCH_OMM = {
+    **ISS_OMM,
+    # A controlled adjacent-orbit stress, not an empirical error estimate.
+    # The offsets correspond to a small along-track/plane mismatch while
+    # retaining the same LEO regime and epoch.
+    "MEAN_ANOMALY": ISS_OMM["MEAN_ANOMALY"] + 0.12,
+    "RA_OF_ASC_NODE": ISS_OMM["RA_OF_ASC_NODE"] + 0.03,
+    "MEAN_MOTION": ISS_OMM["MEAN_MOTION"] - 0.0002,
+}
 PASS_START = datetime(2019, 12, 9, 16, 38, 29, tzinfo=timezone.utc)
 PASS_END = PASS_START + timedelta(minutes=5)
 CADENCE_S = 5.0
@@ -62,6 +77,8 @@ class SyntheticScenario:
     noise_sigma_hz: float
     dropout_fraction: float
     generation: str
+    prediction_elements: OrbitalElements
+    truth_trajectories: dict[str, OrbitalTrajectory] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,15 +130,89 @@ def make_orbital_scenario(
         seed=seed,
     )
     return SyntheticScenario(
-        elapsed,
-        trajectories,
-        predictions,
-        observations,
-        float(carrier_hz),
-        float(noise_sigma_hz),
-        float(dropout_fraction),
-        "orbital_geometry_plus_predeclared_station_affine_nuisance",
+        elapsed_s=elapsed,
+        trajectories=trajectories,
+        orbital_predictions_hz=predictions,
+        observations_hz=observations,
+        carrier_hz=float(carrier_hz),
+        noise_sigma_hz=float(noise_sigma_hz),
+        dropout_fraction=float(dropout_fraction),
+        generation="orbital_geometry_plus_predeclared_station_affine_nuisance",
+        prediction_elements=ISS_TLE,
     )
+
+
+def make_orbital_model_mismatch_scenario(
+    observers: Mapping[str, Observer],
+    *,
+    carrier_hz: float = 145_800_000.0,
+    noise_sigma_hz: float = 0.2,
+    seed: int = 701,
+    start_time: datetime = PASS_START,
+    end_time: datetime = PASS_END,
+    cadence_s: float = CADENCE_S,
+) -> SyntheticScenario:
+    """Generate data from a nearby plausible orbit while scoring the nominal orbit."""
+
+    nominal = sample_observer_network(
+        ISS_TLE, observers, start_time, end_time, cadence_s
+    )
+    truth = sample_observer_network(
+        ISS_PLAUSIBLE_MISMATCH_OMM, observers, start_time, end_time, cadence_s
+    )
+    predictions = {
+        station: apply_carrier_hz(trajectory.fractional_doppler, carrier_hz)
+        for station, trajectory in nominal.items()
+    }
+    truth_hz = {
+        station: apply_carrier_hz(trajectory.fractional_doppler, carrier_hz)
+        for station, trajectory in truth.items()
+    }
+    elapsed = next(iter(nominal.values())).elapsed_s
+    observations = _orbital_observations(
+        elapsed,
+        truth_hz,
+        noise_sigma_hz=noise_sigma_hz,
+        dropout_fraction=0.0,
+        seed=seed,
+    )
+    return SyntheticScenario(
+        elapsed_s=elapsed,
+        trajectories=nominal,
+        orbital_predictions_hz=predictions,
+        observations_hz=observations,
+        carrier_hz=float(carrier_hz),
+        noise_sigma_hz=float(noise_sigma_hz),
+        dropout_fraction=0.0,
+        generation="plausible_adjacent_orbit_truth_scored_against_nominal_orbit",
+        prediction_elements=ISS_TLE,
+        truth_trajectories=truth,
+    )
+
+
+def heldout_physical_context(
+    scenario: SyntheticScenario,
+    maximum_clock_error_s: float,
+) -> tuple[
+    dict[str, tuple[bool, ...]],
+    dict[str, FrequencyTrajectoryEnvelope],
+]:
+    """Derive the visibility and direct timing envelope used by G0 scoring."""
+
+    visibility = {
+        station: trajectory.visibility_mask
+        for station, trajectory in scenario.trajectories.items()
+    }
+    envelopes = {
+        station: build_time_shift_frequency_envelope(
+            scenario.prediction_elements,
+            trajectory,
+            scenario.carrier_hz,
+            maximum_clock_error_s,
+        )
+        for station, trajectory in scenario.trajectories.items()
+    }
+    return visibility, envelopes
 
 
 def make_nonorbital_observations(
@@ -195,6 +286,19 @@ def run_discriminability_sweep(
         CADENCE_S,
     )
     elapsed = all_trajectories["COPENHAGEN"].elapsed_s
+    direct_clock_envelopes = {
+        (float(carrier_hz), float(clock_error_s), station): (
+            build_time_shift_frequency_envelope(
+                ISS_TLE,
+                trajectory,
+                carrier_hz,
+                clock_error_s,
+            )
+        )
+        for carrier_hz in carriers_hz
+        for clock_error_s in clock_errors_s
+        for station, trajectory in all_trajectories.items()
+    }
     cases: list[DiscriminabilityCase] = []
     for layout, second_observer in LAYOUTS.items():
         station_ids = ("COPENHAGEN", layout)
@@ -208,6 +312,10 @@ def run_discriminability_sweep(
                 )
                 for station in station_ids
             }
+            visibility = {
+                station: trajectories[station].visibility_mask
+                for station in station_ids
+            }
             observations = _orbital_observations(
                 elapsed,
                 predictions,
@@ -217,12 +325,25 @@ def run_discriminability_sweep(
             )
             for resolution_hz in resolutions_hz:
                 for clock_error_s in clock_errors_s:
+                    clock_envelopes = {
+                        station: direct_clock_envelopes[
+                            (float(carrier_hz), float(clock_error_s), station)
+                        ]
+                        for station in station_ids
+                    }
                     plan = HeldoutPlan(
                         frequency_resolution_hz=float(resolution_hz),
                         maximum_clock_error_s=float(clock_error_s),
                         orbital_prediction_uncertainty_hz=1.0,
                     )
-                    result = evaluate_heldout(elapsed, observations, predictions, plan)
+                    result = evaluate_heldout(
+                        elapsed,
+                        observations,
+                        predictions,
+                        plan,
+                        visibility_masks=visibility,
+                        clock_envelopes_hz=clock_envelopes,
+                    )
                     cases.append(
                         _case(
                             layout,

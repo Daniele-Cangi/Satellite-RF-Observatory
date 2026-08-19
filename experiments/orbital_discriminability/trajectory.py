@@ -82,6 +82,7 @@ class FrequencyTrajectoryEnvelope:
     upper_hz: tuple[float, ...]
     maximum_absolute_deviation_hz: float
     member_count: int
+    time_shift_bound_s: float | None = None
 
 
 def sample_orbital_trajectory(
@@ -278,6 +279,103 @@ def apply_carrier_to_envelope(
         float(envelope.maximum_absolute_deviation * carrier),
         envelope.member_count,
     )
+
+
+def build_time_shift_frequency_envelope(
+    orbital_elements: OrbitalElements,
+    nominal: OrbitalTrajectory,
+    carrier_hz: float,
+    maximum_clock_error_s: float,
+) -> FrequencyTrajectoryEnvelope:
+    """Bound timing error with direct trajectory samples at ``t ± Δt``.
+
+    This is deliberately not a local derivative approximation.  The nominal
+    event-time grid is propagated at both declared clock-error endpoints and
+    the resulting frequency interval is retained sample by sample.
+    """
+
+    carrier = _positive_finite(carrier_hz, "carrier_hz")
+    try:
+        clock_error = float(maximum_clock_error_s)
+    except (TypeError, ValueError) as error:
+        raise TrajectoryError(
+            "maximum_clock_error_s must be finite and non-negative"
+        ) from error
+    if not isfinite(clock_error) or clock_error < 0.0:
+        raise TrajectoryError("maximum_clock_error_s must be finite and non-negative")
+
+    nominal_hz = np.asarray(nominal.fractional_doppler, dtype=np.float64) * carrier
+    if clock_error == 0.0:
+        return FrequencyTrajectoryEnvelope(
+            nominal.timestamps,
+            _tuple(nominal_hz),
+            _tuple(nominal_hz),
+            _tuple(nominal_hz),
+            0.0,
+            1,
+            0.0,
+        )
+
+    delta = timedelta(seconds=clock_error)
+    try:
+        shifted_fractional = np.asarray(
+            [
+                [
+                    -compute_orbital_state(
+                        nominal.observer,
+                        orbital_elements,
+                        timestamp + direction * delta,
+                    ).range_rate_km_s
+                    / SPEED_OF_LIGHT_KM_S
+                    for timestamp in nominal.timestamps
+                ]
+                for direction in (-1, 1)
+            ],
+            dtype=np.float64,
+        )
+    except OrbitalKernelError as error:
+        raise TrajectoryError(str(error)) from error
+    shifted_hz = shifted_fractional * carrier
+    members = np.vstack((nominal_hz, shifted_hz))
+    _require_finite(members)
+    lower = np.min(members, axis=0)
+    upper = np.max(members, axis=0)
+    return FrequencyTrajectoryEnvelope(
+        nominal.timestamps,
+        _tuple(nominal_hz),
+        _tuple(lower),
+        _tuple(upper),
+        float(np.max(np.abs(members - nominal_hz))),
+        3,
+        clock_error,
+    )
+
+
+def differential_time_shift_uncertainty_hz(
+    left: FrequencyTrajectoryEnvelope,
+    right: FrequencyTrajectoryEnvelope,
+    valid_mask: tuple[bool, ...] | np.ndarray,
+) -> float:
+    """Return the worst pairwise differential deviation inside two envelopes."""
+
+    if left.timestamps != right.timestamps:
+        raise TrajectoryError("time-shift envelopes must share one event-time grid")
+    mask = np.asarray(valid_mask, dtype=bool)
+    if mask.shape != (len(left.timestamps),) or not np.any(mask):
+        raise TrajectoryError("time-shift uncertainty requires a non-empty valid mask")
+    left_nominal = np.asarray(left.nominal_hz, dtype=np.float64)
+    right_nominal = np.asarray(right.nominal_hz, dtype=np.float64)
+    nominal = left_nominal - right_nominal
+    lower = np.asarray(left.lower_hz, dtype=np.float64) - np.asarray(
+        right.upper_hz, dtype=np.float64
+    )
+    upper = np.asarray(left.upper_hz, dtype=np.float64) - np.asarray(
+        right.lower_hz, dtype=np.float64
+    )
+    values = np.maximum(np.abs(lower - nominal), np.abs(upper - nominal))
+    if not np.all(np.isfinite(values)):
+        raise TrajectoryError("time-shift uncertainty contains a non-finite value")
+    return float(np.max(values[mask]))
 
 
 def differential_trajectory(

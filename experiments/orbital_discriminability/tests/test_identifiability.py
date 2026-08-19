@@ -1,6 +1,7 @@
 """Held-out discriminability and no-leak tests for Gate G0."""
 
 from dataclasses import asdict
+from itertools import combinations
 import json
 
 import numpy as np
@@ -20,10 +21,26 @@ from experiments.orbital_discriminability.synthetic import (
     COPENHAGEN,
     LAYOUTS,
     add_holdout_curvature,
+    heldout_physical_context,
     make_nonorbital_observations,
+    make_orbital_model_mismatch_scenario,
     make_orbital_scenario,
     run_discriminability_sweep,
 )
+
+
+def _evaluate(scenario, plan, observations=None):  # type: ignore[no-untyped-def]
+    visibility, clock_envelopes = heldout_physical_context(
+        scenario, plan.maximum_clock_error_s
+    )
+    return evaluate_heldout(
+        scenario.elapsed_s,
+        scenario.observations_hz if observations is None else observations,
+        scenario.orbital_predictions_hz,
+        plan,
+        visibility_masks=visibility,
+        clock_envelopes_hz=clock_envelopes,
+    )
 
 
 @pytest.fixture(scope="module")
@@ -48,10 +65,8 @@ def local_pair():  # type: ignore[no-untyped-def]
 
 
 def test_detectable_orbital_geometry_wins_one_independent_holdout(distributed) -> None:  # type: ignore[no-untyped-def]
-    result = evaluate_heldout(
-        distributed.elapsed_s,
-        distributed.observations_hz,
-        distributed.orbital_predictions_hz,
+    result = _evaluate(
+        distributed,
         HeldoutPlan(frequency_resolution_hz=5.0, maximum_clock_error_s=1.0),
     )
 
@@ -64,10 +79,8 @@ def test_detectable_orbital_geometry_wins_one_independent_holdout(distributed) -
 
 
 def test_coarse_or_time_uncertain_capability_is_not_detectable(local_pair) -> None:  # type: ignore[no-untyped-def]
-    result = evaluate_heldout(
-        local_pair.elapsed_s,
-        local_pair.observations_hz,
-        local_pair.orbital_predictions_hz,
+    result = _evaluate(
+        local_pair,
         HeldoutPlan(frequency_resolution_hz=20.0, maximum_clock_error_s=5.0),
     )
 
@@ -85,18 +98,8 @@ def test_common_transmitter_drift_cancels_in_differential_score(distributed) -> 
         for station, values in distributed.observations_hz.items()
     }
     plan = HeldoutPlan(frequency_resolution_hz=5.0, maximum_clock_error_s=1.0)
-    original = evaluate_heldout(
-        distributed.elapsed_s,
-        distributed.observations_hz,
-        distributed.orbital_predictions_hz,
-        plan,
-    )
-    with_common_drift = evaluate_heldout(
-        distributed.elapsed_s,
-        observations,
-        distributed.orbital_predictions_hz,
-        plan,
-    )
+    original = _evaluate(distributed, plan)
+    with_common_drift = _evaluate(distributed, plan, observations)
 
     assert with_common_drift.outcome == G0Outcome.ORBITAL_MODEL_PREDICTIVELY_PREFERRED.value
     assert with_common_drift.orbital_score.holdout_rmse_hz == pytest.approx(
@@ -111,29 +114,22 @@ def test_nonorbital_data_rejects_orbital_prediction(distributed) -> None:  # typ
         tuple(distributed.trajectories),
         mode="common_cubic",
     )
-    result = evaluate_heldout(
-        distributed.elapsed_s,
-        observations,
-        distributed.orbital_predictions_hz,
+    result = _evaluate(
+        distributed,
         HeldoutPlan(frequency_resolution_hz=5.0, maximum_clock_error_s=0.0),
+        observations,
     )
 
     assert result.outcome == G0Outcome.ORBITAL_PREDICTION_REJECTED.value
-    # The common cubic cancels in the station difference, so the simpler
-    # affine differential null is correctly sufficient.
+    # The common cubic cancels in the station difference, so the affine
+    # differential null remains sufficient without duplicating it as N2.
     assert result.best_null_name == "N1_STATION_AFFINE"
-    assert result.null_scores[1].holdout_rmse_hz == pytest.approx(
-        result.null_scores[2].holdout_rmse_hz,
-        abs=1e-12,
-    )
     assert result.orbital_score.holdout_rmse_hz > result.orbital_tolerance_hz
 
 
 def test_detectable_but_weak_local_geometry_is_not_discriminative(local_pair) -> None:  # type: ignore[no-untyped-def]
-    result = evaluate_heldout(
-        local_pair.elapsed_s,
-        local_pair.observations_hz,
-        local_pair.orbital_predictions_hz,
+    result = _evaluate(
+        local_pair,
         HeldoutPlan(
             frequency_resolution_hz=20.0,
             maximum_clock_error_s=0.0,
@@ -160,6 +156,10 @@ def test_holdout_changes_cannot_refit_orbital_nuisance(distributed) -> None:  # 
         distributed.observations_hz,
         distributed.orbital_predictions_hz,
         split,
+        visibility_masks={
+            station: trajectory.visibility_mask
+            for station, trajectory in distributed.trajectories.items()
+        },
     )
     corrupted_observations = add_holdout_curvature(
         distributed,
@@ -171,13 +171,12 @@ def test_holdout_changes_cannot_refit_orbital_nuisance(distributed) -> None:  # 
         corrupted_observations,
         distributed.orbital_predictions_hz,
         split,
+        visibility_masks={
+            station: trajectory.visibility_mask
+            for station, trajectory in distributed.trajectories.items()
+        },
     )
-    result = evaluate_heldout(
-        distributed.elapsed_s,
-        corrupted_observations,
-        distributed.orbital_predictions_hz,
-        plan,
-    )
+    result = _evaluate(distributed, plan, corrupted_observations)
 
     assert corrupted.prediction_hz == original.prediction_hz
     assert corrupted.calibration_rmse_hz == pytest.approx(original.calibration_rmse_hz)
@@ -191,16 +190,35 @@ def test_declared_dropouts_reduce_receipt_support_without_imputation(distributed
     }
     observations["BERLIN"][20:24] = np.nan
     observations["EINDHOVEN"][32:35] = np.nan
-    result = evaluate_heldout(
-        distributed.elapsed_s,
-        observations,
-        distributed.orbital_predictions_hz,
+    result = _evaluate(
+        distributed,
         HeldoutPlan(frequency_resolution_hz=5.0, maximum_clock_error_s=1.0),
+        observations,
     )
 
     full_pair_samples = result.split.holdout_count * 3
     assert result.outcome == G0Outcome.ORBITAL_MODEL_PREDICTIVELY_PREFERRED.value
     assert 0 < result.orbital_score.holdout_valid_count < full_pair_samples
+
+
+def test_scoring_excludes_pairs_without_joint_holdout_visibility(distributed) -> None:  # type: ignore[no-untyped-def]
+    plan = HeldoutPlan(frequency_resolution_hz=5.0, maximum_clock_error_s=0.0)
+    visibility, clock_envelopes = heldout_physical_context(distributed, 0.0)
+    visibility = dict(visibility)
+    berlin = np.asarray(visibility["BERLIN"], dtype=bool).copy()
+    berlin[int(np.ceil(len(berlin) * plan.calibration_fraction)) :] = False
+    visibility["BERLIN"] = tuple(bool(value) for value in berlin)
+    result = evaluate_heldout(
+        distributed.elapsed_s,
+        distributed.observations_hz,
+        distributed.orbital_predictions_hz,
+        plan,
+        visibility_masks=visibility,
+        clock_envelopes_hz=clock_envelopes,
+    )
+
+    assert result.most_discriminating_pair == ("COPENHAGEN", "EINDHOVEN")
+    assert result.orbital_score.holdout_valid_count == result.split.holdout_count
 
 
 def test_nulls_are_frozen_declared_and_use_the_same_split(distributed) -> None:  # type: ignore[no-untyped-def]
@@ -210,40 +228,65 @@ def test_nulls_are_frozen_declared_and_use_the_same_split(distributed) -> None: 
         distributed.observations_hz,
         distributed.orbital_predictions_hz,
         split,
+        visibility_masks={
+            station: trajectory.visibility_mask
+            for station, trajectory in distributed.trajectories.items()
+        },
     )
 
     assert [item.name for item in nulls] == [
         "N0_STATION_CONSTANT",
         "N1_STATION_AFFINE",
-        "N2_COMMON_CUBIC_PLUS_STATION_AFFINE",
-        "N3_STATION_LABELS_PERMUTED",
-        "N4_OBSERVER_COORDINATES_PERMUTED",
+        "N2_STATION_QUADRATIC",
+        "N3_OBSERVER_GEOMETRY_PERMUTED",
     ]
-    assert [item.parameter_count for item in nulls] == [3, 6, 8, 6, 6]
+    assert [item.parameter_count for item in nulls] == [3, 6, 9, 6]
     assert all(item.calibration_valid_count == split.calibration_count * 3 for item in nulls)
-    assert nulls[3].prediction_hz != nulls[4].prediction_hz
+    station_pairs = tuple(combinations(sorted(distributed.trajectories), 2))
+    differential_predictions = tuple(
+        np.concatenate(
+            tuple(
+                np.asarray(model.prediction_hz[left])
+                - np.asarray(model.prediction_hz[right])
+                for left, right in station_pairs
+            )
+        )
+        for model in nulls
+    )
+    assert all(
+        not np.allclose(left, right, rtol=0.0, atol=1e-9)
+        for left, right in combinations(differential_predictions, 2)
+    )
 
 
 def test_receipt_is_deterministic_strict_finite_json(distributed) -> None:  # type: ignore[no-untyped-def]
     plan = HeldoutPlan(frequency_resolution_hz=5.0, maximum_clock_error_s=1.0)
-    first = evaluate_heldout(
-        distributed.elapsed_s,
-        distributed.observations_hz,
-        distributed.orbital_predictions_hz,
-        plan,
-    )
-    second = evaluate_heldout(
-        distributed.elapsed_s,
-        distributed.observations_hz,
-        distributed.orbital_predictions_hz,
-        plan,
-    )
+    first = _evaluate(distributed, plan)
+    second = _evaluate(distributed, plan)
     encoded = json.dumps(asdict(first), allow_nan=False, sort_keys=True)
 
     assert first == second
     assert first.plan_hash == plan.plan_hash
     assert len(first.plan_hash) == 64
     assert "NaN" not in encoded and "Infinity" not in encoded
+
+
+def test_plausible_orbit_mismatch_is_not_absorbed_by_station_nuisance() -> None:
+    scenario = make_orbital_model_mismatch_scenario(
+        {
+            "COPENHAGEN": COPENHAGEN,
+            "BERLIN": LAYOUTS["BERLIN"],
+            "EINDHOVEN": LAYOUTS["EINDHOVEN"],
+        }
+    )
+    result = _evaluate(
+        scenario,
+        HeldoutPlan(frequency_resolution_hz=5.0, maximum_clock_error_s=1.0),
+    )
+
+    assert scenario.truth_trajectories is not None
+    assert result.outcome == G0Outcome.ORBITAL_PREDICTION_REJECTED.value
+    assert result.orbital_score.holdout_rmse_hz > result.orbital_tolerance_hz
 
 
 def test_sweep_maps_both_usable_and_unusable_capability_regions() -> None:

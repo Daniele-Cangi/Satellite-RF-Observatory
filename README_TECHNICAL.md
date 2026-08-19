@@ -19,7 +19,9 @@ experiments/live_instrument
 `orbital_discriminability` owns the scientific prediction. It uses the
 stateless orbital kernel, derives fractional Doppler before applying a carrier,
 forms simultaneous station differences, fits bounded nuisance only on a
-calibration prefix and evaluates an untouched suffix against frozen nulls.
+jointly visible calibration prefix and evaluates a jointly visible untouched
+suffix against frozen nulls. Clock bounds are propagated as direct
+`t ± delta_t` orbital trajectories rather than local slope products.
 
 `live_instrument` is the frozen measurement-integrity substrate established by
 Gates B–F2.5. It does not select an endpoint, frequency, feature or target for
@@ -33,7 +35,7 @@ The current Gate G0 is entirely offline. Its scope and numerical limits are in
 Gate G1 adds a narrow admission boundary. An `OrbitalPassPlan` is propagated
 before any offer is considered. Each descriptive offer must first satisfy its
 own time, band, continuity, transform and witness clauses; only then may a pair
-be tested for distinct hardware roots, joint visibility and positive
+be tested for distinct hardware roots, joint calibration/holdout visibility and positive
 differential margin. The synthetic result is not a live capability claim. See
 `experiments/orbital_discriminability/G1_ADMISSION_REPORT.md`.
 

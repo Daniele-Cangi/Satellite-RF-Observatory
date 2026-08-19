@@ -26,7 +26,13 @@ from experiments.live_instrument.orbital_kernel import (
 from experiments.live_instrument.models import strict_json_value
 
 from .nuisance import NuisanceError, affine_shape_residual, make_calibration_split
-from .trajectory import OrbitalTrajectory, apply_carrier_hz, sample_observer_network
+from .trajectory import (
+    OrbitalTrajectory,
+    apply_carrier_hz,
+    build_time_shift_frequency_envelope,
+    differential_time_shift_uncertainty_hz,
+    sample_observer_network,
+)
 
 
 class G1Outcome(str, Enum):
@@ -185,6 +191,7 @@ class PairAssessment:
     hardware_roots: tuple[str, str]
     admitted: bool
     clauses: tuple[AdmissionClause, ...]
+    joint_visible_calibration_samples: int
     joint_visible_holdout_samples: int
     differential_signature_span_hz: float
     frequency_resolution_envelope_hz: float
@@ -375,32 +382,59 @@ def _assess_pair(
         minimum_holdout_samples=plan.minimum_holdout_samples,
     )
     holdout = np.asarray(split.holdout_indices, dtype=np.int64)
+    calibration = np.asarray(split.calibration_indices, dtype=np.int64)
     joint_visible = np.asarray(left_trajectory.visibility_mask, dtype=bool) & np.asarray(
         right_trajectory.visibility_mask,
         dtype=bool,
     )
+    visible_calibration = calibration[joint_visible[calibration]]
     visible_holdout = holdout[joint_visible[holdout]]
     differential = left_prediction - right_prediction
-    shape = np.asarray(
-        affine_shape_residual(elapsed, differential, split),
-        dtype=np.float64,
+    calibration_visibility_ok = (
+        visible_calibration.size >= plan.minimum_calibration_samples
+    )
+    shape = (
+        np.asarray(
+            affine_shape_residual(
+                elapsed,
+                differential,
+                split,
+                valid_mask=joint_visible,
+            ),
+            dtype=np.float64,
+        )
+        if calibration_visibility_ok
+        else np.zeros_like(differential)
     )
     signature = (
         float(np.max(shape[visible_holdout]) - np.min(shape[visible_holdout]))
         if visible_holdout.size
         else 0.0
     )
-    left_slope = np.gradient(left_prediction, elapsed, edge_order=2)
-    right_slope = np.gradient(right_prediction, elapsed, edge_order=2)
+    left_clock_envelope = build_time_shift_frequency_envelope(
+        plan.orbital_elements,
+        left_trajectory,
+        plan.carrier_hz,
+        float(left.maximum_event_time_error_s),
+    )
+    right_clock_envelope = build_time_shift_frequency_envelope(
+        plan.orbital_elements,
+        right_trajectory,
+        plan.carrier_hz,
+        float(right.maximum_event_time_error_s),
+    )
     resolution_envelope = plan.minimum_signature_bins * max(
         float(left.frequency_resolution_hz),
         float(right.frequency_resolution_hz),
     )
+    envelope_mask = np.zeros(elapsed.size, dtype=bool)
+    envelope_mask[visible_holdout] = True
     event_time_envelope = (
-        float(np.max(np.abs(left_slope[visible_holdout])))
-        * float(left.maximum_event_time_error_s)
-        + float(np.max(np.abs(right_slope[visible_holdout])))
-        * float(right.maximum_event_time_error_s)
+        differential_time_shift_uncertainty_hz(
+            left_clock_envelope,
+            right_clock_envelope,
+            envelope_mask,
+        )
         if visible_holdout.size
         else 0.0
     )
@@ -432,9 +466,10 @@ def _assess_pair(
 
     independent = left.hardware_root != right.hardware_root
     visibility_ok = visible_holdout.size >= plan.minimum_joint_holdout_samples
-    detectable = visibility_ok and margin > 0.0
+    detectable = calibration_visibility_ok and visibility_ok and margin > 0.0
     clauses = (
         _clause("independent_hardware_roots", independent, f"{left.hardware_root}|{right.hardware_root}", "two distinct roots"),
+        _clause("joint_calibration_visibility", calibration_visibility_ok, str(int(visible_calibration.size)), f">= {plan.minimum_calibration_samples} samples"),
         _clause("joint_holdout_visibility", visibility_ok, str(int(visible_holdout.size)), f">= {plan.minimum_joint_holdout_samples} samples"),
         _clause("differential_detectability", detectable, f"margin_hz={margin:.12f}", "positive conservative margin"),
     )
@@ -445,6 +480,7 @@ def _assess_pair(
         hardware_roots=roots,
         admitted=all(item.state == ClauseState.SATISFIED.value for item in clauses),
         clauses=clauses,
+        joint_visible_calibration_samples=int(visible_calibration.size),
         joint_visible_holdout_samples=int(visible_holdout.size),
         differential_signature_span_hz=signature,
         frequency_resolution_envelope_hz=resolution_envelope,
@@ -472,6 +508,12 @@ def _terminal_refusal_reason(
         for pair in pairs
     ):
         return "NO_INDEPENDENT_HARDWARE_ROOT_PAIR"
+    if pairs and all(
+        _clause_state(pair.clauses, "joint_calibration_visibility")
+        == ClauseState.UNSATISFIED.value
+        for pair in pairs
+    ):
+        return "NO_JOINTLY_VISIBLE_CALIBRATION"
     if pairs and all(
         _clause_state(pair.clauses, "joint_holdout_visibility")
         == ClauseState.UNSATISFIED.value

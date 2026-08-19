@@ -19,6 +19,11 @@ from .nuisance import (
     make_calibration_split,
 )
 from .null_models import FittedModel, fit_frozen_nulls, fit_orbital_model
+from .trajectory import (
+    FrequencyTrajectoryEnvelope,
+    TrajectoryError,
+    differential_time_shift_uncertainty_hz,
+)
 
 
 class G0Outcome(str, Enum):
@@ -33,6 +38,7 @@ class HeldoutPlan:
     calibration_fraction: float = 0.2
     minimum_calibration_samples: int = 6
     minimum_holdout_samples: int = 16
+    minimum_joint_holdout_samples: int = 12
     frequency_resolution_hz: float = 5.0
     minimum_signature_bins: float = 3.0
     maximum_clock_error_s: float = 1.0
@@ -60,7 +66,11 @@ class HeldoutPlan:
             raise NuisanceError("held-out scale and margin values must be finite and positive")
         if not 0.0 < self.calibration_fraction < 1.0:
             raise NuisanceError("calibration_fraction must be in (0, 1)")
-        if self.minimum_calibration_samples < 3 or self.minimum_holdout_samples < 3:
+        if min(
+            self.minimum_calibration_samples,
+            self.minimum_holdout_samples,
+            self.minimum_joint_holdout_samples,
+        ) < 3:
             raise NuisanceError("held-out partitions require at least three samples")
 
     @property
@@ -114,6 +124,9 @@ def evaluate_heldout(
     observations_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     orbital_predictions_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     plan: HeldoutPlan,
+    *,
+    visibility_masks: Mapping[str, tuple[bool, ...] | np.ndarray],
+    clock_envelopes_hz: Mapping[str, FrequencyTrajectoryEnvelope],
 ) -> HeldoutResult:
     """Evaluate one frozen calibration-prefix/held-out experiment."""
 
@@ -122,6 +135,10 @@ def evaluate_heldout(
     stations = tuple(sorted(observations_hz))
     if len(stations) < 2 or stations != tuple(sorted(orbital_predictions_hz)):
         raise NuisanceError("held-out evaluation requires identical multi-station IDs")
+    if stations != tuple(sorted(visibility_masks)) or stations != tuple(
+        sorted(clock_envelopes_hz)
+    ):
+        raise NuisanceError("physical context requires identical multi-station IDs")
     if times.ndim != 1 or times.size < 3 or not np.all(np.isfinite(times)):
         raise NuisanceError("elapsed_s must be one finite vector")
     if not np.all(np.diff(times) > 0.0):
@@ -133,6 +150,26 @@ def evaluate_heldout(
             raise NuisanceError("all station series must share the event-time grid")
         if not np.all(np.isfinite(prediction)):
             raise NuisanceError("orbital predictions must be finite")
+        mask = np.asarray(visibility_masks[station])
+        if mask.shape != times.shape or mask.dtype.kind != "b":
+            raise NuisanceError("visibility masks must be boolean vectors on the event-time grid")
+        envelope = clock_envelopes_hz[station]
+        if len(envelope.timestamps) != times.size:
+            raise NuisanceError("clock envelopes must share the event-time grid")
+        if envelope.time_shift_bound_s is None or not np.isclose(
+            envelope.time_shift_bound_s,
+            plan.maximum_clock_error_s,
+            rtol=0.0,
+            atol=1e-12,
+        ):
+            raise NuisanceError("clock envelope does not match the frozen timing bound")
+        if not np.allclose(
+            np.asarray(envelope.nominal_hz, dtype=np.float64),
+            prediction,
+            rtol=0.0,
+            atol=1e-9,
+        ):
+            raise NuisanceError("clock envelope nominal does not match orbital prediction")
 
     split = make_calibration_split(
         len(times),
@@ -145,15 +182,20 @@ def evaluate_heldout(
         observations_hz,
         orbital_predictions_hz,
         split,
+        visibility_masks=visibility_masks,
     )
     nulls = fit_frozen_nulls(
         times,
         observations_hz,
         orbital_predictions_hz,
         split,
+        visibility_masks=visibility_masks,
     )
-    orbital_score = _score(orbital, observations_hz, split)
-    null_scores = tuple(_score(model, observations_hz, split) for model in nulls)
+    orbital_score = _score(orbital, observations_hz, split, visibility_masks, plan)
+    null_scores = tuple(
+        _score(model, observations_hz, split, visibility_masks, plan)
+        for model in nulls
+    )
     best_null = min(null_scores, key=lambda item: (item.holdout_rmse_hz, item.name))
 
     (
@@ -166,6 +208,8 @@ def evaluate_heldout(
         orbital_predictions_hz,
         split,
         plan,
+        visibility_masks,
+        clock_envelopes_hz,
     )
     orbital_uncertainty = 2.0 * plan.orbital_prediction_uncertainty_hz
     detectability_threshold = (
@@ -239,11 +283,15 @@ def _score(
     model: FittedModel,
     observations_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     split: CalibrationSplit,
+    visibility_masks: Mapping[str, tuple[bool, ...] | np.ndarray],
+    plan: HeldoutPlan,
 ) -> ModelScore:
     holdout_rmse, valid_count = differential_network_heldout_rmse(
         observations_hz,
         model.prediction_hz,
         split,
+        visibility_masks=visibility_masks,
+        minimum_pair_samples=plan.minimum_joint_holdout_samples,
     )
     return ModelScore(
         name=model.name,
@@ -260,29 +308,50 @@ def _strongest_differential_signature(
     predictions_hz: Mapping[str, tuple[float, ...] | np.ndarray],
     split: CalibrationSplit,
     plan: HeldoutPlan,
+    visibility_masks: Mapping[str, tuple[bool, ...] | np.ndarray],
+    clock_envelopes_hz: Mapping[str, FrequencyTrajectoryEnvelope],
 ) -> tuple[tuple[str, str], float, float, float]:
     stations = sorted(predictions_hz)
+    calibration = np.asarray(split.calibration_indices, dtype=np.int64)
     holdout = np.asarray(split.holdout_indices, dtype=np.int64)
     ranked: list[tuple[float, tuple[str, str], float, float]] = []
     for left_index, left in enumerate(stations):
         left_values = np.asarray(predictions_hz[left], dtype=np.float64)
-        left_slope = np.gradient(left_values, times, edge_order=2)
         for right in stations[left_index + 1 :]:
             right_values = np.asarray(predictions_hz[right], dtype=np.float64)
-            right_slope = np.gradient(right_values, times, edge_order=2)
-            differential = left_values - right_values
-            shape = np.asarray(affine_shape_residual(times, differential, split))
-            holdout_shape = shape[holdout]
-            span = float(np.max(holdout_shape) - np.min(holdout_shape))
-            clock_uncertainty = float(
-                (
-                    np.max(np.abs(left_slope[holdout]))
-                    + np.max(np.abs(right_slope[holdout]))
-                )
-                * plan.maximum_clock_error_s
+            joint_visible = np.asarray(visibility_masks[left], dtype=bool) & np.asarray(
+                visibility_masks[right], dtype=bool
             )
+            visible_calibration = calibration[joint_visible[calibration]]
+            visible_holdout = holdout[joint_visible[holdout]]
+            if (
+                visible_calibration.size < plan.minimum_calibration_samples
+                or visible_holdout.size < plan.minimum_joint_holdout_samples
+            ):
+                continue
+            differential = left_values - right_values
+            shape = np.asarray(
+                affine_shape_residual(
+                    times,
+                    differential,
+                    split,
+                    valid_mask=joint_visible,
+                )
+            )
+            holdout_shape = shape[visible_holdout]
+            span = float(np.max(holdout_shape) - np.min(holdout_shape))
+            envelope_mask = np.zeros(times.size, dtype=bool)
+            envelope_mask[visible_holdout] = True
+            try:
+                clock_uncertainty = differential_time_shift_uncertainty_hz(
+                    clock_envelopes_hz[left],
+                    clock_envelopes_hz[right],
+                    envelope_mask,
+                )
+            except TrajectoryError as error:
+                raise NuisanceError(str(error)) from error
             carrier_uncertainty = float(
-                np.max(np.abs(differential[holdout]))
+                np.max(np.abs(differential[visible_holdout]))
                 * plan.carrier_relative_uncertainty
             )
             ranked.append(
@@ -301,8 +370,17 @@ def _strongest_differential_signature(
     )
     left_values = np.asarray(predictions_hz[pair[0]], dtype=np.float64)
     right_values = np.asarray(predictions_hz[pair[1]], dtype=np.float64)
+    selected_joint_visible = np.asarray(visibility_masks[pair[0]], dtype=bool) & np.asarray(
+        visibility_masks[pair[1]], dtype=bool
+    )
+    selected_holdout = holdout[selected_joint_visible[holdout]]
     selected_shape = np.asarray(
-        affine_shape_residual(times, left_values - right_values, split)
-    )[holdout]
+        affine_shape_residual(
+            times,
+            left_values - right_values,
+            split,
+            valid_mask=selected_joint_visible,
+        )
+    )[selected_holdout]
     span = float(np.max(selected_shape) - np.min(selected_shape))
     return pair, span, clock_uncertainty, carrier_uncertainty

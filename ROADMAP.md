@@ -38,9 +38,11 @@ this chain. They must not generate a new scientific target after the fact.
 ## Gate G0 — orbital discriminability: COMPLETE OFFLINE
 
 G0 implements deterministic multi-observer trajectories, fractional and
-differential Doppler, bounded nuisance, explicit orbital envelopes, five
-frozen nulls and a held-out synthetic sweep. The report demonstrates both a
-non-empty discriminative region and a non-empty below-detectability region.
+differential Doppler, joint-visibility-gated nuisance/scoring, direct
+time-shift trajectory envelopes, four non-redundant frozen nulls and a
+held-out synthetic sweep. The report demonstrates both a non-empty
+discriminative region and a non-empty below-detectability region, plus
+rejection of a controlled plausible adjacent-orbit mismatch.
 
 G0 authorizes only the mechanism claim: under the declared synthetic geometry
 and uncertainty, orbital prediction can beat the nulls. It authorizes no live
@@ -62,46 +64,34 @@ fully available coarse local pair. It performs no discovery, status request or
 RF acquisition. Valid terminal outcomes are `NO_CAPABILITY_ADMITTED` and
 `CAPABILITY_SET_ADMITTED`.
 
-## Gate G1.1 — current status-only qualification: NEXT
+## G1.1–G1.3 — capability-discovery side investigation: CONCLUDED
 
-After separate review, apply the frozen G1 clauses to a bounded set of current
-pass predictions and ephemeral capability descriptions. This checkpoint may
-query orbital-element lineage and receiver status/capability metadata, but it
-must not request SND, IQ, waterfall or any prospective observation window.
+The status, inventory and search branches are preserved as historical work.
+They are not on the active dependency chain, and repairing search-result
+partitioning is not a prerequisite for a physical observation. No successor
+inventory/search gate is planned.
 
-The candidate orbit, carrier and receiver pair must emerge from positive
-pass-specific detectability margin. Endpoint convenience and visible spectrum
-cannot alter the question. Offers expire by TTL and no capability catalog is
-persisted. G1.1 may correctly terminate `NO_CAPABILITY_ADMITTED`.
+## Next physical checkpoint — satellite/pass selection: REVIEW REQUIRED
 
-## Gate G2 — prospective plan freeze: BLOCKED ON G1.1
+Select one candidate satellite/pass/carrier and compare only explicitly
+scoped, predeclared capability sets. Apply the hardened G0/G1 geometry,
+visibility and direct clock-envelope primitives. The claim may be limited to
+the selected set; no global receiver inventory is required.
 
-For one admitted orbit/capability intersection, freeze the station set,
-carrier interval, calibration and confirmation windows, orbital ensemble,
-nuisance terms, nulls, witnesses, missing-data budget and all outcome rules.
-Demonstrate with synthetic injection that both a predicted track and a
-physically meaningful absence are resolvable through the exact transforms.
+Before any implementation, record:
 
-G2 ends with either `NO_FALSIFIABLE_PLAN` or one immutable plan hash. It does
-not acquire the confirmation window.
+```text
+Physical question:
+New information produced:
+Why existing experiment cannot answer it:
+Minimum experiment:
+Stop condition:
+```
 
-## Gate G3 — one distributed observation
-
-Execute the single frozen window once. Preserve only strict receipts, hashes,
-event-time metadata and bounded derived features; retain no raw RF. There are
-zero retries, endpoint changes, retunes, threshold changes or replacement
-windows after freeze.
-
-G3 ends after one acquisition outcome, including an honest unobservable or
-intervention-invalid result.
-
-## Gate G4 — held-out inference
-
-Apply the frozen transforms and compare the confirmation suffix with the
-candidate orbital prediction and every frozen null. The maximum claim is
-predictive preference for an orbit-conditioned observer geometry. Satellite
-identity requires later competition between specific orbit hypotheses and is
-not implied by G4.
+Only after that review may one prospective plan freeze the station set,
+calibration/confirmation windows, orbital ensemble, nuisance terms, nulls,
+witnesses, missing-data budget and outcome rules. This is a phase description,
+not a newly approved gate or authorization to acquire RF.
 
 ## Anti-drift stop
 
