@@ -523,6 +523,20 @@ this exact surface. It may add only a default-refusing authority bit; it must
 not add endpoint, frequency, timing, threshold, callback or retry controls, and
 must perform no network activity.
 
+Gate F2.5.33 now completes that post-commit seal offline. Commit, F2.5.32
+source, immutable plan, private integration surface, live-facing adapter and
+numerical environment are exact. The sole public execution signature exposes
+only `live_authorised=False`; refusal precedes assessment, receipt creation and
+network access. Mutable WebSocket payload ownership is transferred into the
+reviewed lease boundary, while partial dual-connector failure closes the peer
+and terminalizes the receipt.
+
+No authority was consumed. The next action requires a new explicit decision:
+either retain the sealed runner unused or authorize one live execution. If
+authorized, that run has zero retry, no changed endpoint/frequency/thresholds,
+and must stop after the first terminal outcome. No further implementation is
+needed before that decision.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

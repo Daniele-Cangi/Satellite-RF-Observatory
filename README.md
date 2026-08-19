@@ -458,6 +458,14 @@ directional DDC hypotheses and `AMBIGUOUS` without changing thresholds. All IQ
 is still ephemeral and no live authority exists. See
 [`GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md`](experiments/live_instrument/GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md).
 
+Gate F2.5.33 now seals that exact commit and execution surface. The only
+live-capable signature contains one keyword-only `live_authorised=False` bit;
+default refusal occurs before assessment, receipt creation or connector
+access. The endpoint, dual-channel topology, control geometry, thresholds,
+receipt path, zero-retry rule and one-outcome stop are not caller parameters.
+The assessment is offline and no authority has been consumed. See
+[`GATE_F2_5_33_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_33_POST_COMMIT_SEAL.md).
+
 ## Repository map
 
 ```text

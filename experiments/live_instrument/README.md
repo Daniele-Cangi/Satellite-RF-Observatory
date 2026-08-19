@@ -82,6 +82,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 47. [`GATE_F2_5_30_SEALABILITY_AUDIT.md`](GATE_F2_5_30_SEALABILITY_AUDIT.md) — the exact post-commit audit refuses a nominal authority bit because both channel handles close before discovery and retune; relative-time admission survives, while live A1/B/A2 remains unsealable until an open-handle successor exists.
 48. [`GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md`](GATE_F2_5_31_OPEN_HANDLE_SUCCESSOR.md) — one injected outer owner now spans A1 discovery and both scalar command boundaries, permits retune only on the private perturbed handle, audits every settling frame and closes everything in the outer `finally`; RF response remains deliberately unevaluated.
 49. [`GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md`](GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md) — the same open-handle A1/B/A2 arrays now pass first through the existing target-excluded distributed RF witness, then an immutable target plan and only then target matching; all five physical outcome semantics are exercised offline with unchanged thresholds and zero RF persistence.
+50. [`GATE_F2_5_33_POST_COMMIT_SEAL.md`](GATE_F2_5_33_POST_COMMIT_SEAL.md) — the reviewed F2.5.32 commit, source, plan, integration surface, numerical environment and minimal WebSocket ownership adapter are sealed behind one default-false authority bit; assessment is offline and no authority is consumed.
 
 ## Frozen-outcome rule
 
