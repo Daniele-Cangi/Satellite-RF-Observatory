@@ -587,10 +587,19 @@ are hash-bound. The public surface has one keyword-only default-false
 authority bit; refusal occurs before assessment, artifact creation or network
 access.
 
-No authority has been consumed. The next step is a user decision, not more
-implementation: retain the sealed runner unused or authorize one exact live
-execution. A future authority would have zero retry, no changed dimension and
-would stop after its first terminal outcome.
+The single authority has now been consumed with zero retry. The run admitted
+two same-clock SND branches and one common A1 feature, and witnessed both local
+retune boundaries, before ending `INTERVENTION_INVALID`. Both physical
+hypotheses remain `NOT_EVALUATED`. The exact one-per-branch continuity failure
+is reproducible from the leading-zero timestamp that initial admission counted
+and excluded but the full-session evaluator compared against the first valid
+timestamp. This is an offline-attributed `QUALIFICATION_ERROR`, not evidence
+of a remote clock jump.
+
+The next admissible work is offline only: unify the full-session continuity
+normalization with the already frozen initial-zero rule and add deterministic
+regression coverage. No new endpoint, threshold, feature, frequency, retry or
+live window is authorized by this outcome.
 
 ## Only after one valid prospective outcome
 

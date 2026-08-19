@@ -502,6 +502,17 @@ only `live_authorised=False`, and default refusal precedes assessment, receipt
 creation and connector access. No authority is granted or consumed. See
 [`GATE_F2_5_36_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_36_POST_COMMIT_SEAL.md).
 
+The single Gate F2.5.36 authority has now been consumed. Two simultaneous SND
+channels passed relative-time admission and the unchanged selector admitted a
+common feature with positive contrast, correlation and half-stability margins.
+Both retune boundaries were witnessed, but the final session-continuity check
+stopped `INTERVENTION_INVALID`, leaving both physical hypotheses
+`NOT_EVALUATED`. Receipt-only reconstruction exactly attributes its one
+violation per branch to a software evaluator that included the already counted
+leading-zero timestamp. The frozen live outcome is not evidence of a remote
+clock jump or of either DDC-location hypothesis. See
+[`GATE_F2_5_36_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_36_OUTCOME_1.md).
+
 ## Repository map
 
 ```text
