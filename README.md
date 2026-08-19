@@ -71,6 +71,15 @@ authorization header. The runner did not replay it and stopped
 `CAPABILITY_DISCOVERY_UNAVAILABLE` before any `/status` or RF request. See
 [`G1_1_STATUS_OUTCOME_1.md`](experiments/orbital_discriminability/G1_1_STATUS_OUTCOME_1.md).
 
+Gate G1.2 now audits that failure offline. It treats capability discovery as a
+receipted, expiring selection operation rather than hidden plumbing. The G1.1
+page and remembered F2 endpoints fail the frozen inventory clauses; operator
+manifest and authoritative-DNS fixtures demonstrate two admissible receipt
+forms without claiming that either source exists. The terminal state is
+`NO_LEGITIMATE_INVENTORY_MECHANISM`, with capability admission still
+`NOT_EVALUATED`. See
+[`G1_2_INVENTORY_REPORT.md`](experiments/orbital_discriminability/G1_2_INVENTORY_REPORT.md).
+
 Gate G0 remains the underlying physical result. It samples the existing
 stateless orbital kernel for multiple observers, separates fractional geometry
 from carrier scaling, fits only station offset and affine drift on a

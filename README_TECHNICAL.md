@@ -43,6 +43,17 @@ state is `CAPABILITY_DISCOVERY_UNAVAILABLE`: downstream endpoint,
 qualification, pair and RF clauses remain `NOT_EVALUATED`. An interactive web
 listing is not treated as a machine-readable capability offer.
 
+Gate G1.2 makes the upstream selection boundary explicit. An inventory
+mechanism must have operator-bound authority, documented automation intent, a
+non-interactive bounded schema, hash-before-parse integrity, finite TTL,
+declared complete scope and a deterministic endpoint-set hash. Only hashes and
+scalar receipts persist. The mechanism may expose an ephemeral candidate set
+to later `/status` qualification; it cannot itself admit a receiver.
+
+The frozen G1.1 artifact and remembered endpoints fail this boundary. HTTPS
+manifest and authoritative-DNS fixtures pass only as contract forms, not as
+live sources. No adapter, registry or persistent capability catalog is added.
+
 The sections below preserve the live-instrument mechanism because its controls
 remain candidate primitives for G1. They are not automatically a framework.
 

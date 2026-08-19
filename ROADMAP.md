@@ -85,6 +85,27 @@ Any successor starts offline by defining a legitimate non-interactive
 inventory receipt. It cannot import remembered F2 endpoints, simulate the
 directory gesture or weaken G1 admission clauses.
 
+## Gate G1.2 — inventory-mechanism receipt: COMPLETE OFFLINE
+
+Gate G1.2 defines the minimum evidence required before an endpoint set can
+enter status-only qualification. The mechanism must bind operator authority,
+document automation intent, avoid browser interaction, hash a bounded artifact
+before parsing, retain a TTL through the qualification budget, declare a
+complete selection scope and bind deterministic endpoint/status-route fields.
+Raw inventory artifacts and RF remain ephemeral/absent.
+
+The observed G1.1 route and remembered F2 endpoints fail. Non-live fixtures
+show that an operator HTTPS manifest and authoritative DNS service discovery
+could satisfy the same clauses through different authority roots. Fixtures do
+not materialize live sources. The result is
+`NO_LEGITIMATE_INVENTORY_MECHANISM`; capability admission remains
+`NOT_EVALUATED`.
+
+Any separately reviewed G1.3 may perform only a bounded search for an actually
+operator-authorized machine-readable inventory. It may terminate
+`NO_LEGITIMATE_INVENTORY_FOUND`; it may not use remembered endpoints, browser
+token replay, RF probing or a persistent capability catalog.
+
 ## Gate G2 — prospective plan freeze: BLOCKED ON CAPABILITY INVENTORY
 
 For one admitted orbit/capability intersection, freeze the station set,
