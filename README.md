@@ -530,6 +530,16 @@ live surface are hash-bound. The sole public execution signature contains only
 No network activity or authority consumption occurs. See
 [`GATE_F2_5_38_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_38_POST_COMMIT_SEAL.md).
 
+The separately authorised Gate F2.5.38 execution has now consumed that surface
+once, with zero retry. Two simultaneous SND/IQ channels and the corrected
+relative-time clauses passed. Local discovery then stopped
+`NO_FALSIFIABLE_INTERVENTION`: five complete candidates were evaluated, four
+passed the frozen correlation threshold, and none passed the unchanged
+minimum contrast in both temporal halves. No retune was emitted and both DDC
+hypotheses remain `NOT_EVALUATED`. The receipt contains scalar decisions and
+hashes only; RF persistence is zero. See
+[`GATE_F2_5_38_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_38_OUTCOME_1.md).
+
 ## Repository map
 
 ```text

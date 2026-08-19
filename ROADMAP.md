@@ -614,10 +614,20 @@ shape and complete live surface. Default refusal occurs before assessment,
 artifact creation and connector access; injected tests exercise only synthetic
 sockets and strict receipts.
 
-No authority has been consumed. The next step is a user decision, not another
-implementation: retain the sealed runner unused or authorize one exact live
-execution. Any later authority would allow zero retry, no endpoint/frequency/
-threshold/feature change and exactly one terminal outcome.
+The single later authority has now been consumed with zero retry. The run
+admitted two simultaneous branches and the corrected relative-time topology,
+then stopped `NO_FALSIFIABLE_INTERVENTION` before retune. The scalar sibling
+audit localizes the failure without changing it: all five patches were
+complete, four passed correlation, and none reached the inherited `3.0 dB`
+minimum in both temporal halves; the best such minimum was
+`2.0756149291992188 dB`.
+
+The measurement path was available, but no A1 feature satisfied the complete
+frozen proposition needed to authorize an intervention. Both DDC hypotheses
+therefore remain `NOT_EVALUATED`. This outcome must not be converted into a
+claim that no signal or physical phenomenon existed, and it grants no retry.
+Any successor begins with offline interpretation of this frozen receipt, not
+with another acquisition or threshold change.
 
 ## Only after one valid prospective outcome
 

@@ -90,6 +90,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 55. [`GATE_F2_5_36_OUTCOME_1.md`](GATE_F2_5_36_OUTCOME_1.md) — one feature passed the unchanged live discovery and both retune boundaries were witnessed, but the run stopped `INTERVENTION_INVALID`; offline reconstruction proves the final continuity evaluator counted each branch's excluded leading-zero timestamp, so the physical hypotheses remain `NOT_EVALUATED` and the block is attributed to software qualification.
 56. [`GATE_F2_5_37_CONTINUITY_NORMALIZATION.md`](GATE_F2_5_37_CONTINUITY_NORMALIZATION.md) — the full-session evaluator now reuses the existing leading-zero/GPS-week normalization without editing frozen sources; offline regressions remove only the false continuity block and add no connector or authority.
 57. [`GATE_F2_5_38_POST_COMMIT_SEAL.md`](GATE_F2_5_38_POST_COMMIT_SEAL.md) — commit, frozen-outcome attribution, continuity/scope/integration surfaces, connector, environment and strict one-outcome receipt are sealed behind a default-false authority bit; no network or authority consumption occurs.
+58. [`GATE_F2_5_38_OUTCOME_1.md`](GATE_F2_5_38_OUTCOME_1.md) — the single authority admitted two simultaneous SND/IQ branches and corrected relative timing, then stopped `NO_FALSIFIABLE_INTERVENTION`: four candidates passed correlation but none passed the unchanged half-window stability clause, so no retune or physical hypothesis evaluation occurred.
 
 ## Frozen-outcome rule
 
