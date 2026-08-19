@@ -84,6 +84,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 49. [`GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md`](GATE_F2_5_32_RF_RESPONSE_INTEGRATION.md) — the same open-handle A1/B/A2 arrays now pass first through the existing target-excluded distributed RF witness, then an immutable target plan and only then target matching; all five physical outcome semantics are exercised offline with unchanged thresholds and zero RF persistence.
 50. [`GATE_F2_5_33_POST_COMMIT_SEAL.md`](GATE_F2_5_33_POST_COMMIT_SEAL.md) — the reviewed F2.5.32 commit, source, plan, integration surface, numerical environment and minimal WebSocket ownership adapter are sealed behind one default-false authority bit; assessment is offline and no authority is consumed.
 51. [`GATE_F2_5_33_OUTCOME_1.md`](GATE_F2_5_33_OUTCOME_1.md) — the single authority admitted two simultaneous same-clock SND/IQ channels and relative timing, then stopped `NO_FALSIFIABLE_INTERVENTION` because unchanged discovery admitted no common A1 feature; no retune or physical hypothesis evaluation occurred.
+52. [`GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md`](GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md) — receipt-only attribution proves the sensor and transform path were operational and the composite feature rule failed, but the missing stage counts and margins make the specific rejection cut inconclusive; the DDC hypothesis remains not falsifiable from this receipt.
 
 ## Frozen-outcome rule
 

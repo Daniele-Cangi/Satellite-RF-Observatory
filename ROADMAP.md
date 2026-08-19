@@ -550,6 +550,22 @@ must begin with an offline attribution of what this receipt can and cannot
 distinguish. It must not lower thresholds, reinterpret the result as an empty
 passband or acquire new data.
 
+Gate F2.5.34 completes that receipt-only attribution. The committed artifact
+proves that both SND branches, relative timing and the normal discovery
+transform were operational, and that no candidate survived the complete
+frozen admission rule. It does not reveal whether the first lost predicate was
+joint contrast, patch validity, cross-branch correlation or half-window
+stability. That internal cause is `INCONCLUSIVE`; the DDC-location hypothesis
+is `NOT_FALSIFIABLE_WITH_THIS_RECEIPT` because no plan was frozen and no
+intervention occurred.
+
+The minimum future repair is descriptive, not observational: attach scalar
+stage counts and finite threshold margins to the same pre-analysis hashes,
+without allowing that sibling receipt to change selection and without
+retaining RF. Gate F2.5.22 already demonstrates the required shape, so a new
+framework is unnecessary. Any such repair belongs to a future separately
+reviewed experiment; Gate F2.5.34 adds no authority, runtime change or window.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

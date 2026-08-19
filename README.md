@@ -473,6 +473,17 @@ unchanged A1 discovery admitted no common feature. The run therefore stopped
 evaluation. This is not evidence that the passband contained no signals. See
 [`GATE_F2_5_33_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_33_OUTCOME_1.md).
 
+Gate F2.5.34 attributes that negative using only the committed receipt and
+source seals. The dual-channel measurement and spectral transform were
+operational, and the complete frozen feature rule was unsatisfied. The
+receipt does not retain peak counts, per-stage rejection counts or threshold
+margins, so contrast, patch validity, correlation and half-window stability
+remain indistinguishable. The physical DDC hypothesis is still
+`NOT_FALSIFIABLE_WITH_THIS_RECEIPT`. A prior scalar audit already contains the
+needed descriptive shape, so no new framework or selector change is proposed.
+See
+[`GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md`](experiments/live_instrument/GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md).
+
 ## Repository map
 
 ```text
