@@ -1,0 +1,145 @@
+{
+  "manifest_version": "rsp03-model-blind-ridge-detector-v1",
+  "strict_json_allow_nan": false,
+  "source_commit": "03af6172ba58c1132c263a0762fc5151388fb484",
+  "source_path": "experiments/orbital_discriminability/rsp03_ridge_detector.py",
+  "source_git_blob_sha256": "a272f203df874600237500038c43e65bb9696cef6e8475c909a7adcd800369e7",
+  "structural_plan_hash": "add5c2a3d5121d86978bc5d76ee07d1cc7484f9f533f4f1e04bdda0c8bd79dca",
+  "prospective_markdown_git_blob_sha256": "a8371ca061a5b4ed89f2114d7cbce3590439d32dad451fb5a0793d1646d7b8f3",
+  "development_authority_git_blob_sha256": "88b27b3838f324dae6f6d5da1f11ffb4f620dee38c9de9836c916584437725cb",
+  "authority_source_commit": "86e2f7bf5c4bcafd334e4d2593bdbca1f06d822c",
+  "authorized_role": "DEVELOPMENT_FIXTURE",
+  "primary_accessed": false,
+  "replication_reserve_accessed": false,
+  "orbital_model_input_used": false,
+  "absolute_time_error_bound_s": null,
+  "development_artifact": {
+    "data_url": "https://data.camras.nl/satellites/raw/rsp03_2026_02_08_11_48_41_436.950MHz_1.00Msps_ci16_le.chan1.sigmf-data",
+    "byte_count": 1759400000,
+    "sha256": "4875e4cfdf99beaa981238bdb6fff6ebe25ce5ddbe800aec58b26c598e479d9b",
+    "sample_count": 439850000,
+    "download_completed_utc": "2026-08-19T19:52:57.3883598Z",
+    "resume_observed": true,
+    "minimum_resume_count": 1,
+    "complete_hash_preceded_decoding": true,
+    "raw_iq_persistence_after_development": "ZERO_CONFIRMED_BEFORE_MANIFEST_COMMIT"
+  },
+  "development_metadata": {
+    "metadata_url": "https://data.camras.nl/satellites/raw/rsp03_2026_02_08_11_48_41_436.950MHz_1.00Msps_ci16_le.chan1.sigmf-meta",
+    "byte_count": 1859,
+    "sha256": "7bb2e45ad2263e23e5235c776d8e7ea5fdb0fdf5a8791544e5f31b1f9809a6e4",
+    "sample_zero_utc": "2026-02-08T11:48:41.560039Z",
+    "sample_rate_hz": 1000000,
+    "recording_center_hz": 436950000,
+    "datatype": "ci16_le",
+    "time_source": "pps",
+    "reference": "external",
+    "per_file_explicit_doppler_flag": "ABSENT"
+  },
+  "dependencies": {
+    "python": "3.13.5",
+    "numpy": "2.3.3",
+    "scipy": "1.17.1"
+  },
+  "transform_parameters": {
+    "ambiguity_score_ratio": 0.5,
+    "background_estimator": "channel_linear_power_median",
+    "binary_closing_bins": 65,
+    "bytes_per_complex_sample": 4,
+    "channel_edge_guard_hz": 2000.0,
+    "channel_high_rf_hz": 437085000,
+    "channel_low_rf_hz": 437015000,
+    "component_threshold_db": 5.0,
+    "datatype": "ci16_le",
+    "decimation_factor": 1,
+    "frequency_smoothing_bins": 31,
+    "maximum_clipped_scalar_fraction": 0.0001,
+    "maximum_component_width_hz": 30000.0,
+    "maximum_gap_frames": 2,
+    "maximum_slew_hz_s": 500.0,
+    "minimum_component_width_hz": 5000.0,
+    "minimum_coverage_fraction": 0.25,
+    "minimum_integrated_snr_db": 7.5,
+    "minimum_segment_points": 10,
+    "minimum_total_points": 120,
+    "nominal_carrier_hz": 437050000,
+    "output_frame_samples": 1000000,
+    "output_frame_time_reference": "center_sample",
+    "recording_center_hz": 436950000,
+    "ridge_quantization_hz": 250.0,
+    "sample_rate_hz": 1000000,
+    "stft_hop_samples": 125000,
+    "stft_length_samples": 125000,
+    "stft_subwindows_per_frame": 8,
+    "stft_window": "periodic_hann"
+  },
+  "derived_transform_properties": {
+    "channelization": "frequency-domain FFT-bin selection",
+    "resampling": "none",
+    "anti_alias_filter": "not_applicable_without_decimation",
+    "stft_overlap_samples": 0,
+    "output_frame_duration_s": 1.0,
+    "output_frame_cadence_s": 1.0,
+    "frame_event_time_formula": "t0 + frame_index * 1.0 s + 0.5 s",
+    "native_frequency_resolution_hz": 8.0,
+    "frequency_smoothing_span_hz": 248.0,
+    "effective_frequency_resolution_hz": 250.0,
+    "gap_rule": "never interpolate; split after more than 2 missing frames",
+    "sequence_gap_observability": "RAW_SIGMF_HAS_NO_PACKET_SEQUENCE_METADATA",
+    "edge_rule": "reject components within 2000 Hz of either frozen channel edge",
+    "clipping_rule": "reject frame above 0.0001 clipped scalar fraction; invalidate artifact above the same global fraction",
+    "ambiguity_rule": "exclude frame when second broad component score is at least 0.5 of the best"
+  },
+  "development_result": {
+    "status": "RIDGE_ADMITTED",
+    "complete_frame_count": 439,
+    "trailing_sample_count": 850000,
+    "candidate_frame_count": 278,
+    "ambiguous_frame_count": 4,
+    "clipped_frame_count": 0,
+    "clipped_scalar_fraction": 0.0,
+    "admitted_point_count": 275,
+    "admitted_coverage_fraction": 0.6264236902050114,
+    "segment_count": 5,
+    "segments": [
+      {
+        "point_count": 60,
+        "start_s": 28.5,
+        "end_s": 91.5,
+        "frequency_start_hz": 437059000.0,
+        "frequency_end_hz": 437057750.0
+      },
+      {
+        "point_count": 35,
+        "start_s": 94.5,
+        "end_s": 128.5,
+        "frequency_start_hz": 437057750.0,
+        "frequency_end_hz": 437056000.0
+      },
+      {
+        "point_count": 23,
+        "start_s": 131.5,
+        "end_s": 153.5,
+        "frequency_start_hz": 437056000.0,
+        "frequency_end_hz": 437054250.0
+      },
+      {
+        "point_count": 43,
+        "start_s": 239.5,
+        "end_s": 281.5,
+        "frequency_start_hz": 437046250.0,
+        "frequency_end_hz": 437043250.0
+      },
+      {
+        "point_count": 114,
+        "start_s": 292.5,
+        "end_s": 408.5,
+        "frequency_start_hz": 437043000.0,
+        "frequency_end_hz": 437040500.0
+      }
+    ]
+  },
+  "remaining_primary_blockers": [
+    "NO_DEFENSIBLE_FINITE_PPS_TO_ADC_UTC_ERROR_BOUND"
+  ]
+}
