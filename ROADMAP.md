@@ -62,7 +62,7 @@ fully available coarse local pair. It performs no discovery, status request or
 RF acquisition. Valid terminal outcomes are `NO_CAPABILITY_ADMITTED` and
 `CAPABILITY_SET_ADMITTED`.
 
-## Gate G1.1 — current status-only qualification: NEXT
+## Gate G1.1 — current status-only qualification: COMPLETE
 
 After separate review, apply the frozen G1 clauses to a bounded set of current
 pass predictions and ephemeral capability descriptions. This checkpoint may
@@ -74,7 +74,18 @@ pass-specific detectability margin. Endpoint convenience and visible spectrum
 cannot alter the question. Offers expire by TTL and no capability catalog is
 persisted. G1.1 may correctly terminate `NO_CAPABILITY_ADMITTED`.
 
-## Gate G2 — prospective plan freeze: BLOCKED ON G1.1
+The single execution instead terminated `CAPABILITY_DISCOVERY_UNAVAILABLE`.
+Three HF model candidates retained fresh OMM documents, but the official Kiwi
+entry required a user gesture and custom authorization header before exposing
+its inventory. The runner did not bypass that boundary and issued zero
+receiver-status or RF requests. This is not evidence that no capability
+exists, and no retry is authorized.
+
+Any successor starts offline by defining a legitimate non-interactive
+inventory receipt. It cannot import remembered F2 endpoints, simulate the
+directory gesture or weaken G1 admission clauses.
+
+## Gate G2 — prospective plan freeze: BLOCKED ON CAPABILITY INVENTORY
 
 For one admitted orbit/capability intersection, freeze the station set,
 carrier interval, calibration and confirmation windows, orbital ensemble,

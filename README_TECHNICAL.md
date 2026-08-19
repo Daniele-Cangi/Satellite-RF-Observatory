@@ -37,6 +37,12 @@ be tested for distinct hardware roots, joint visibility and positive
 differential margin. The synthetic result is not a live capability claim. See
 `experiments/orbital_discriminability/G1_ADMISSION_REPORT.md`.
 
+Gate G1.1 tested the descriptive boundary once. Model metadata materialized,
+but the capability inventory required interactive authorization. The correct
+state is `CAPABILITY_DISCOVERY_UNAVAILABLE`: downstream endpoint,
+qualification, pair and RF clauses remain `NOT_EVALUATED`. An interactive web
+listing is not treated as a machine-readable capability offer.
+
 The sections below preserve the live-instrument mechanism because its controls
 remain candidate primitives for G1. They are not automatically a framework.
 

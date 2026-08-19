@@ -64,6 +64,13 @@ refused at `-243.172 Hz`; availability therefore cannot masquerade as
 falsification power. See
 [`G1_ADMISSION_REPORT.md`](experiments/orbital_discriminability/G1_ADMISSION_REPORT.md).
 
+The single Gate G1.1 status-only session then tested whether current public
+metadata could instantiate real offers. Three HF model candidates retained
+fresh OMM documents, but the Kiwi directory required a user gesture and custom
+authorization header. The runner did not replay it and stopped
+`CAPABILITY_DISCOVERY_UNAVAILABLE` before any `/status` or RF request. See
+[`G1_1_STATUS_OUTCOME_1.md`](experiments/orbital_discriminability/G1_1_STATUS_OUTCOME_1.md).
+
 Gate G0 remains the underlying physical result. It samples the existing
 stateless orbital kernel for multiple observers, separates fractional geometry
 from carrier scaling, fits only station offset and affine drift on a

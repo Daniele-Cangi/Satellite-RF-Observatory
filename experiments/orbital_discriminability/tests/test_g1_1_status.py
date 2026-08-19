@@ -2,7 +2,9 @@
 
 from dataclasses import replace
 from datetime import datetime, timezone
+from hashlib import sha256
 import json
+from pathlib import Path
 
 import pytest
 
@@ -230,6 +232,26 @@ def test_response_over_byte_limit_is_a_descriptive_failure() -> None:
 
     assert result.outcome == g11.G11Outcome.MODEL_METADATA_UNAVAILABLE.value
     assert result.fetch_receipts[0].state == g11.FetchState.DESCRIPTION_ERROR.value
+
+
+def test_frozen_outcome_receipt_is_byte_exact_and_stopped_before_status() -> None:
+    path = (
+        Path(__file__).resolve().parents[1]
+        / "session_receipts"
+        / "g1_1_status_outcome_1.jsonl"
+    )
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    assert sha256(path.read_bytes()).hexdigest() == (
+        "a91f1a8b7fabf047f8cc70d0bf55732e2b1b0639241f190a73bd56fb29951504"
+    )
+    assert payload["plan_hash"] == g11.G11StatusPlan().plan_hash
+    assert payload["outcome"] == g11.G11Outcome.CAPABILITY_DISCOVERY_UNAVAILABLE.value
+    assert payload["directory_interaction_required"] is True
+    assert payload["status_request_count"] == 0
+    assert payload["raw_rf_activity"] == "ZERO"
+    assert len(payload["fetch_receipts"]) == 7
+    assert all(not item["requested_url"].endswith("/status") for item in payload["fetch_receipts"])
 
 
 @pytest.mark.parametrize(
