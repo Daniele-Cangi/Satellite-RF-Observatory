@@ -105,6 +105,15 @@ required by Gate G1.2. The scoped outcome is
 `NOT_EVALUATED`, with zero `/status` and RF activity. See
 [`G1_3_2_SEARCH_OUTCOME_1.md`](experiments/orbital_discriminability/G1_3_2_SEARCH_OUTCOME_1.md).
 
+G1.1–G1.3 are now a concluded capability-discovery side investigation. The
+project will not create a G1.4 merely to improve search, inventory completeness
+or endpoint authority. The next scientific objective is one forward satellite
+vertical: freeze a candidate orbit, pass and carrier; use a small predeclared
+set of independent receiver roots; verify the pass-specific G1 margin; then
+compare a held-out interval against frozen non-orbital nulls. A global receiver
+inventory is not a prerequisite for that scoped claim. Repository-wide agent
+rules are in [`AGENTS.md`](AGENTS.md).
+
 Gate G0 remains the underlying physical result. It samples the existing
 stateless orbital kernel for multiple observers, separates fractional geometry
 from carrier scaling, fits only station offset and affine drift on a
