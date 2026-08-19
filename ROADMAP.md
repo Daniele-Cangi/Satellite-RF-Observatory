@@ -596,10 +596,18 @@ and excluded but the full-session evaluator compared against the first valid
 timestamp. This is an offline-attributed `QUALIFICATION_ERROR`, not evidence
 of a remote clock jump.
 
-The next admissible work is offline only: unify the full-session continuity
-normalization with the already frozen initial-zero rule and add deterministic
-regression coverage. No new endpoint, threshold, feature, frequency, retry or
-live window is authorized by this outcome.
+Gate F2.5.37 now completes that offline repair without editing the frozen
+F2.5.31–36 sources. The full-session evaluator reuses the exact F2.5.27
+leading-zero/GPS-week normalization already used at initial admission. Tests
+reproduce both live residuals, prove that only leading zeros are excluded,
+preserve interior-zero refusal and GPS rollover, and carry the existing
+synthetic vertical beyond the former false continuity block with unchanged RF
+decisions and cleanup.
+
+No connector, public authority, retry, threshold or experiment dimension is
+added. The next admissible step is a post-commit seal offline of this exact
+corrected vertical. Only a later explicit decision could authorize one new
+window; Gate F2.5.37 itself authorizes none.
 
 ## Only after one valid prospective outcome
 

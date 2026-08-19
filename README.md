@@ -513,6 +513,15 @@ leading-zero timestamp. The frozen live outcome is not evidence of a remote
 clock jump or of either DDC-location hypothesis. See
 [`GATE_F2_5_36_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_36_OUTCOME_1.md).
 
+Gate F2.5.37 repairs only that duplicated timestamp semantics offline. The
+full-session evaluator reuses the existing F2.5.27 leading-zero and GPS-week
+normalization, retains every prior sequence/tolerance/receipt rule and leaves
+the frozen F2.5.31–36 sources untouched. Deterministic tests reproduce the
+exact live residual, reject interior zeros, preserve rollover and show the
+corrected synthetic vertical passing beyond the former false block. No live
+claim, connector or authority is added. See
+[`GATE_F2_5_37_CONTINUITY_NORMALIZATION.md`](experiments/live_instrument/GATE_F2_5_37_CONTINUITY_NORMALIZATION.md).
+
 ## Repository map
 
 ```text
