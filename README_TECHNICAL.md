@@ -30,6 +30,13 @@ The current Gate G0 is entirely offline. Its scope and numerical limits are in
 `experiments/orbital_discriminability/G0_SCOPE.md` and
 `experiments/orbital_discriminability/G0_IDENTIFIABILITY_REPORT.md`.
 
+Gate G1 adds a narrow admission boundary. An `OrbitalPassPlan` is propagated
+before any offer is considered. Each descriptive offer must first satisfy its
+own time, band, continuity, transform and witness clauses; only then may a pair
+be tested for distinct hardware roots, joint visibility and positive
+differential margin. The synthetic result is not a live capability claim. See
+`experiments/orbital_discriminability/G1_ADMISSION_REPORT.md`.
+
 The sections below preserve the live-instrument mechanism because its controls
 remain candidate primitives for G1. They are not automatically a framework.
 

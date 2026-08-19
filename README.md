@@ -53,18 +53,29 @@ against the pass-specific orbital prediction.
 
 ## Latest checkpoint
 
-Gate G0 is complete offline. It samples the existing stateless orbital kernel
-for multiple observers, separates fractional geometry from carrier scaling,
-fits only station offset and affine drift on a calibration prefix, and scores
-the untouched suffix on simultaneous station differences. Five frozen null
-families use the same split.
+Gate G1 is complete offline. It takes one immutable orbital pass and evaluates
+caller-supplied receiver descriptions in two stages: individual observability
+qualification, then independent-pair differential detectability. It contains
+no discovery or network client and cannot acquire RF.
+
+The reference vertical selects a synthetic Berlin–Eindhoven pair with a
+`2802.398 Hz` conservative margin. A fully available local pair is correctly
+refused at `-243.172 Hz`; availability therefore cannot masquerade as
+falsification power. See
+[`G1_ADMISSION_REPORT.md`](experiments/orbital_discriminability/G1_ADMISSION_REPORT.md).
+
+Gate G0 remains the underlying physical result. It samples the existing
+stateless orbital kernel for multiple observers, separates fractional geometry
+from carrier scaling, fits only station offset and affine drift on a
+calibration prefix, and scores the untouched suffix on simultaneous station
+differences. Five frozen null families use the same split.
 
 The 128-case synthetic sweep contains both detectable and undetectable regions:
 81 cases are `ORBITAL_MODEL_PREDICTIVELY_PREFERRED` and 47 are
 `ORBITAL_SIGNATURE_BELOW_DETECTABILITY`. This is a mechanism result, not a
-claim about a live signal or a satellite identity. The next gate may search
-for a capability only after propagating a concrete pass and deriving its
-minimum time-frequency envelope.
+claim about a live signal or a satellite identity. G1 now turns that envelope
+into an admission procedure, but no current Internet capability has yet been
+queried or admitted.
 
 ## Preserved Gate F2.5 experimental history
 
@@ -574,7 +585,9 @@ experiments/orbital_discriminability/
   null_models.py            frozen non-orbital and geometry-breaking nulls
   heldout.py                immutable plan and outcome semantics
   synthetic.py              deterministic discriminability sweep
-  G0_*.md                   scope, evidence, limits and next boundary
+  g1_admission.py            pass-specific receiver-pair admission
+  g1_synthetic.py            offline admission/refusal verticals
+  G0_*.md, G1_*.md           scope, evidence, limits and next boundaries
   tests/                    offline orbital-mechanism test suite
 
 experiments/live_instrument/

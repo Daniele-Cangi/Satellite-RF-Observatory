@@ -47,7 +47,7 @@ and uncertainty, orbital prediction can beat the nulls. It authorizes no live
 RF or identity claim. See
 `experiments/orbital_discriminability/G0_IDENTIFIABILITY_REPORT.md`.
 
-## Gate G1 — pass-specific capability admission: NEXT
+## Gate G1 — pass-specific capability admission: COMPLETE OFFLINE
 
 Choose candidate passes from orbital geometry, not from receiver convenience.
 For each candidate, compute the predicted differential curvature and admit a
@@ -55,11 +55,26 @@ receiver set only if its coordinates, event-time semantics, continuity,
 frequency resolution, independent measurement roots and transform ledger
 leave a positive conservative margin.
 
-G1 may use bounded capability/status qualification after separate review, but
-it performs no prospective RF acquisition. Valid terminal outcomes are
-`NO_CAPABILITY_ADMITTED` and `CAPABILITY_SET_ADMITTED`.
+The offline mechanism now evaluates atomic descriptive offers in two stages:
+individual observability qualification and independent-pair detectability.
+The deterministic vertical admits a high-margin synthetic pair and refuses a
+fully available coarse local pair. It performs no discovery, status request or
+RF acquisition. Valid terminal outcomes are `NO_CAPABILITY_ADMITTED` and
+`CAPABILITY_SET_ADMITTED`.
 
-## Gate G2 — prospective plan freeze
+## Gate G1.1 — current status-only qualification: NEXT
+
+After separate review, apply the frozen G1 clauses to a bounded set of current
+pass predictions and ephemeral capability descriptions. This checkpoint may
+query orbital-element lineage and receiver status/capability metadata, but it
+must not request SND, IQ, waterfall or any prospective observation window.
+
+The candidate orbit, carrier and receiver pair must emerge from positive
+pass-specific detectability margin. Endpoint convenience and visible spectrum
+cannot alter the question. Offers expire by TTL and no capability catalog is
+persisted. G1.1 may correctly terminate `NO_CAPABILITY_ADMITTED`.
+
+## Gate G2 — prospective plan freeze: BLOCKED ON G1.1
 
 For one admitted orbit/capability intersection, freeze the station set,
 carrier interval, calibration and confirmation windows, orbital ensemble,
