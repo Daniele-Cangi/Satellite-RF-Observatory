@@ -89,6 +89,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 54. [`GATE_F2_5_36_POST_COMMIT_SEAL.md`](GATE_F2_5_36_POST_COMMIT_SEAL.md) — the committed audited vertical, decision/audit boundary, inherited plan, connector, environment and strict receipt are sealed behind one default-false authority bit; no network activity or authority consumption occurs.
 55. [`GATE_F2_5_36_OUTCOME_1.md`](GATE_F2_5_36_OUTCOME_1.md) — one feature passed the unchanged live discovery and both retune boundaries were witnessed, but the run stopped `INTERVENTION_INVALID`; offline reconstruction proves the final continuity evaluator counted each branch's excluded leading-zero timestamp, so the physical hypotheses remain `NOT_EVALUATED` and the block is attributed to software qualification.
 56. [`GATE_F2_5_37_CONTINUITY_NORMALIZATION.md`](GATE_F2_5_37_CONTINUITY_NORMALIZATION.md) — the full-session evaluator now reuses the existing leading-zero/GPS-week normalization without editing frozen sources; offline regressions remove only the false continuity block and add no connector or authority.
+57. [`GATE_F2_5_38_POST_COMMIT_SEAL.md`](GATE_F2_5_38_POST_COMMIT_SEAL.md) — commit, frozen-outcome attribution, continuity/scope/integration surfaces, connector, environment and strict one-outcome receipt are sealed behind a default-false authority bit; no network or authority consumption occurs.
 
 ## Frozen-outcome rule
 

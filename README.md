@@ -522,6 +522,14 @@ corrected synthetic vertical passing beyond the former false block. No live
 claim, connector or authority is added. See
 [`GATE_F2_5_37_CONTINUITY_NORMALIZATION.md`](experiments/live_instrument/GATE_F2_5_37_CONTINUITY_NORMALIZATION.md).
 
+Gate F2.5.38 now seals that corrected vertical offline. The F2.5.37 commit,
+source, plan, continuity evaluator, temporary installation scope, integration,
+reviewed dual-SND connector, numerical environment, strict receipt and full
+live surface are hash-bound. The sole public execution signature contains only
+`live_authorised=False`, and its default refusal precedes every side effect.
+No network activity or authority consumption occurs. See
+[`GATE_F2_5_38_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_38_POST_COMMIT_SEAL.md).
+
 ## Repository map
 
 ```text

@@ -605,9 +605,19 @@ synthetic vertical beyond the former false continuity block with unchanged RF
 decisions and cleanup.
 
 No connector, public authority, retry, threshold or experiment dimension is
-added. The next admissible step is a post-commit seal offline of this exact
-corrected vertical. Only a later explicit decision could authorize one new
-window; Gate F2.5.37 itself authorizes none.
+added by F2.5.37.
+
+Gate F2.5.38 now completes the post-commit seal offline. It binds the F2.5.37
+commit, source, plan, continuity evaluator, temporary installation scope,
+corrected integration, reviewed connector, numerical environment, receipt
+shape and complete live surface. Default refusal occurs before assessment,
+artifact creation and connector access; injected tests exercise only synthetic
+sockets and strict receipts.
+
+No authority has been consumed. The next step is a user decision, not another
+implementation: retain the sealed runner unused or authorize one exact live
+execution. Any later authority would allow zero retry, no endpoint/frequency/
+threshold/feature change and exactly one terminal outcome.
 
 ## Only after one valid prospective outcome
 
