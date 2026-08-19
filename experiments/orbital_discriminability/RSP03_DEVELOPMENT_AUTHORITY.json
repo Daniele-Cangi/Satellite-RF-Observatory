@@ -1,0 +1,21 @@
+{
+  "authority_version": "rsp03-development-authority-v1",
+  "experiment_id": "RSP03-65732-20260209-PI9RD-SINGLE-STATION-FORWARD-V1",
+  "lifecycle_states": [
+    "PLAN_FROZEN",
+    "DEVELOPMENT_READY",
+    "PRIMARY_BLOCKED"
+  ],
+  "authorized_role": "DEVELOPMENT_FIXTURE",
+  "authorized_sample_zero_utc": "2026-02-08T11:48:41.560039Z",
+  "authorized_metadata_url": "https://data.camras.nl/satellites/raw/rsp03_2026_02_08_11_48_41_436.950MHz_1.00Msps_ci16_le.chan1.sigmf-meta",
+  "authorized_data_url": "https://data.camras.nl/satellites/raw/rsp03_2026_02_08_11_48_41_436.950MHz_1.00Msps_ci16_le.chan1.sigmf-data",
+  "source_commit": "86e2f7bf5c4bcafd334e4d2593bdbca1f06d822c",
+  "structural_plan_hash": "add5c2a3d5121d86978bc5d76ee07d1cc7484f9f533f4f1e04bdda0c8bd79dca",
+  "prospective_markdown_git_blob_sha256": "a8371ca061a5b4ed89f2114d7cbce3590439d32dad451fb5a0793d1646d7b8f3",
+  "retry_resume_before_complete_hash": true,
+  "decoding_requires_complete_file_hash": true,
+  "primary_access_authorized": false,
+  "replication_reserve_access_authorized": false,
+  "absolute_time_bound_may_be_invented_or_resolved": false
+}
