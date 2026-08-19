@@ -537,6 +537,19 @@ authorized, that run has zero retry, no changed endpoint/frequency/thresholds,
 and must stop after the first terminal outcome. No further implementation is
 needed before that decision.
 
+The one Gate F2.5.33 authority was consumed on 19 August 2026 and produced
+`NO_FALSIFIABLE_INTERVENTION`. Both SND handles opened with distinct channel
+IDs, identical sample rates and admissible relative timing. The unchanged A1
+discovery admitted no common feature, so the runtime emitted zero retune
+commands and left every physical hypothesis `NOT_EVALUATED`.
+
+The outcome is frozen in `GATE_F2_5_33_OUTCOME_1.md` and its strict receipt.
+No retry or second window is authorized. Because the negative discovery
+receipt contains no candidate-stage counts or threshold margins, future work
+must begin with an offline attribution of what this receipt can and cannot
+distinguish. It must not lower thresholds, reinterpret the result as an empty
+passband or acquire new data.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

@@ -466,6 +466,13 @@ receipt path, zero-retry rule and one-outcome stop are not caller parameters.
 The assessment is offline and no authority has been consumed. See
 [`GATE_F2_5_33_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_33_POST_COMMIT_SEAL.md).
 
+The single Gate F2.5.33 authority has now been consumed. Two simultaneous
+same-clock SND/IQ channels and relative temporal admission succeeded, but the
+unchanged A1 discovery admitted no common feature. The run therefore stopped
+`NO_FALSIFIABLE_INTERVENTION` before retune, plan freeze or physical-hypothesis
+evaluation. This is not evidence that the passband contained no signals. See
+[`GATE_F2_5_33_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_33_OUTCOME_1.md).
+
 ## Repository map
 
 ```text
