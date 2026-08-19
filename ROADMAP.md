@@ -1,8 +1,114 @@
-# Roadmap: the next falsifiable vertical experiment
+# Roadmap: satellite-first predictive observation
 
-This roadmap is intentionally narrow. It replaces the former feature roadmap,
-which assumed a satellite-identification product before the measurement and
-detectability mechanisms were established.
+## North Star
+
+The project has one scientific question:
+
+> Does a candidate orbit predict observer-coupled RF structure in a future,
+> held-out interval better than frozen non-orbital explanations?
+
+Work is admitted only if it closes one edge of this chain:
+
+```text
+orbit and observer geometry
+  -> fractional prediction
+  -> pass-specific detectability envelope
+  -> capability admission
+  -> immutable prospective plan
+  -> one distributed observation
+  -> held-out orbital-versus-null inference
+```
+
+Receiver discovery, protocol work and feature extraction are subordinate to
+this chain. They must not generate a new scientific target after the fact.
+
+## Gate discipline
+
+- No live RF activity before a pass-specific prediction clears a conservative
+  synthetic detectability envelope.
+- Calibration and confirmation windows are disjoint; confirmation never
+  changes the model, feature, threshold, station set or null family.
+- A valid negative requires continuous event-time coverage and same-path
+  witnesses showing that the predicted feature would have been detectable.
+- `NOT_DETECTABLE`, `PREDICTION_REJECTED` and `MODEL_NOT_DISCRIMINATIVE` remain
+  different outcomes.
+- Each gate ends at its declared stop condition. It cannot silently become a
+  receiver platform, catalog, general planner or signal-identification system.
+
+## Gate G0 — orbital discriminability: COMPLETE OFFLINE
+
+G0 implements deterministic multi-observer trajectories, fractional and
+differential Doppler, joint-visibility-gated nuisance/scoring, direct
+time-shift trajectory envelopes, four non-redundant frozen nulls and a
+held-out synthetic sweep. The report demonstrates both a non-empty
+discriminative region and a non-empty below-detectability region, plus
+rejection of a controlled plausible adjacent-orbit mismatch.
+
+G0 authorizes only the mechanism claim: under the declared synthetic geometry
+and uncertainty, orbital prediction can beat the nulls. It authorizes no live
+RF or identity claim. See
+`experiments/orbital_discriminability/G0_IDENTIFIABILITY_REPORT.md`.
+
+## Gate G1 — pass-specific capability admission: COMPLETE OFFLINE
+
+Choose candidate passes from orbital geometry, not from receiver convenience.
+For each candidate, compute the predicted differential curvature and admit a
+receiver set only if its coordinates, event-time semantics, continuity,
+frequency resolution, independent measurement roots and transform ledger
+leave a positive conservative margin.
+
+The offline mechanism now evaluates atomic descriptive offers in two stages:
+individual observability qualification and independent-pair detectability.
+The deterministic vertical admits a high-margin synthetic pair and refuses a
+fully available coarse local pair. It performs no discovery, status request or
+RF acquisition. Valid terminal outcomes are `NO_CAPABILITY_ADMITTED` and
+`CAPABILITY_SET_ADMITTED`.
+
+## G1.1–G1.3 — capability-discovery side investigation: CONCLUDED
+
+The status, inventory and search branches are preserved as historical work.
+They are not on the active dependency chain, and repairing search-result
+partitioning is not a prerequisite for a physical observation. No successor
+inventory/search gate is planned.
+
+## Next physical checkpoint — satellite/pass selection: REVIEW REQUIRED
+
+Select one candidate satellite/pass/carrier and compare only explicitly
+scoped, predeclared capability sets. Apply the hardened G0/G1 geometry,
+visibility and direct clock-envelope primitives. The claim may be limited to
+the selected set; no global receiver inventory is required.
+
+Before any implementation, record:
+
+```text
+Physical question:
+New information produced:
+Why existing experiment cannot answer it:
+Minimum experiment:
+Stop condition:
+```
+
+Only after that review may one prospective plan freeze the station set,
+calibration/confirmation windows, orbital ensemble, nuisance terms, nulls,
+witnesses, missing-data budget and outcome rules. This is a phase description,
+not a newly approved gate or authorization to acquire RF.
+
+## Anti-drift stop
+
+Stop the roadmap if no candidate pass produces a positive detectability margin
+with qualified capabilities. Do not return to targetless feature hunting to
+manufacture an experiment. The correct result is that the current Internet
+measurement substrate cannot test the orbital question.
+
+## Preserved Gates B–F2.5 history
+
+The remainder of this document preserves the measurement-integrity roadmap
+that made G0 possible. It is historical context, not the current project
+driver.
+
+This earlier roadmap was intentionally narrow. It replaced a former feature
+roadmap which assumed a satellite-identification product before measurement
+and detectability mechanisms were established.
 
 ## Current baseline
 
@@ -647,7 +753,7 @@ experiment needs them.
 
 ## Engineering integration
 
-- Run the offline live-instrument suite on pushes and pull requests.
+- Run both offline experiment suites on pushes and pull requests.
 - Keep live network activity out of CI.
 - Maintain strict JSON and zero-RF-persistence tests.
 - Keep frozen outcome documents append-only.

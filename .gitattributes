@@ -1,2 +1,5 @@
 # Receipt artifacts are byte-addressed evidence; never normalize line endings.
 experiments/live_instrument/session_receipts/*.jsonl -text
+
+# Pinned protocol evidence is also verified by its byte-exact SHA-256.
+experiments/live_instrument/protocol_sources/gate_f2_5_17/rx_sound_cmd.h -text

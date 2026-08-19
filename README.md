@@ -1,18 +1,24 @@
 # Satellite RF Observatory
 
-An experimental laboratory for building **falsifiable RF observations** from
-capabilities that are actually available in the current session.
+An experimental laboratory for testing whether a predicted satellite orbit
+leaves an observer-dependent RF structure that survives measurement nuisance
+and predicts an independent time interval better than non-orbital alternatives.
 
-The project began as a satellite-identification prototype. The experiments in
-this repository changed the question:
+The project now follows one satellite-first causal order:
 
-> Given a finite time budget and live Internet-accessible RF capabilities, can
-> we freeze one prospective physical experiment whose positive **and negative**
-> outcomes are interpretable?
+```text
+candidate orbit + observer geometry + event time
+  -> distributed fractional-Doppler prediction
+  -> pass-specific detectability requirement
+  -> qualified Internet measurement capability
+  -> prospective held-out observation
+  -> comparison with frozen non-orbital nulls
+```
 
-Targets, frequencies, endpoints and even the phenomenon under test may emerge
-only after capability qualification. A satellite is one possible model, not a
-required starting point.
+The orbit determines what an instrument must preserve before an endpoint,
+frequency or acquisition window is selected. A connected receiver, a visible
+spectral feature or a good fit on calibration data is not by itself evidence
+of orbital origin.
 
 This is research software. It is not an operational monitoring platform, a
 signal-identification service or evidence that any transmitter has been
@@ -20,15 +26,19 @@ identified.
 
 ## Current direction
 
-The supported research surface is [`experiments/live_instrument`](experiments/live_instrument/README.md).
-It contains two deliberately different branches:
+The primary scientific surface is
+[`experiments/orbital_discriminability`](experiments/orbital_discriminability/G0_SCOPE.md).
+Gate G0 asks offline whether multi-observer orbital geometry is discriminative
+at all, before searching for a receiver. Its synthetic map and limits are in
+[`G0_IDENTIFIABILITY_REPORT.md`](experiments/orbital_discriminability/G0_IDENTIFIABILITY_REPORT.md).
 
-| Branch | Starting point | What it tests |
-|---|---|---|
-| SatNOGS | model-conditioned published measurements | whether clause-driven continuity and corroboration survive source revocation and TTL expiry |
-| KiwiSDR | targetless live IQ | whether a shared or intervened RF structure is distinguishable under explicit temporal, transform and causal controls |
+[`experiments/live_instrument`](experiments/live_instrument/README.md) is a
+frozen measurement-integrity layer inherited from Gates B–F2.5. It established
+useful controls but no longer chooses the scientific question. Its SatNOGS and
+Kiwi branches remain separate historical experiments.
 
-The two branches share only the primitives that survived both:
+The primitives that survived those branches remain available to the orbital
+experiment:
 
 - evaluation by contract clause, not one global health label;
 - atomic receipts;
@@ -38,10 +48,42 @@ The two branches share only the primitives that survived both:
 - separation of physical decisions from descriptive/software errors;
 - artifact hashing with zero RF persistence.
 
-These are not promoted to a general framework. Each experiment must continue
-to justify them.
+They are not promoted to a general framework. Gate G1 must justify each one
+against the pass-specific orbital prediction.
 
 ## Latest checkpoint
+
+Gate G1 is complete offline. It takes one immutable orbital pass and evaluates
+caller-supplied receiver descriptions in two stages: individual observability
+qualification, then independent-pair differential detectability. It contains
+no discovery or network client and cannot acquire RF.
+
+The reference vertical selects a synthetic Berlin–Eindhoven pair with a
+`2807.799 Hz` conservative margin. A fully available local pair is correctly
+refused at `-243.201 Hz`; availability therefore cannot masquerade as
+falsification power. See
+[`G1_ADMISSION_REPORT.md`](experiments/orbital_discriminability/G1_ADMISSION_REPORT.md).
+
+Gate G0 remains the underlying physical result. It samples the existing
+stateless orbital kernel for multiple observers, separates fractional geometry
+from carrier scaling, fits only station offset and affine drift on a
+calibration prefix, and scores the untouched suffix only on jointly visible
+station differences. Four non-redundant frozen null families use the same
+split, and clock uncertainty is propagated through direct `t ± delta_t`
+trajectories rather than a local slope approximation.
+
+The 128-case synthetic sweep contains both detectable and undetectable regions:
+81 cases are `ORBITAL_MODEL_PREDICTIVELY_PREFERRED` and 47 are
+`ORBITAL_SIGNATURE_BELOW_DETECTABILITY`. This is a mechanism result, not a
+claim about a live signal or a satellite identity. G1 now turns that envelope
+into an admission procedure, but no current Internet capability has yet been
+queried or admitted.
+
+The G1.1–G1.3 inventory/search work is a concluded side investigation, not the
+critical path. The next physical choice is one satellite/pass and one bounded,
+predeclared capability set; no global receiver catalog is required.
+
+## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
 for same-Kiwi multichannel qualification. Its intended path is:
@@ -543,6 +585,17 @@ hashes only; RF persistence is zero. See
 ## Repository map
 
 ```text
+experiments/orbital_discriminability/
+  trajectory.py             synchronized orbital observables and envelopes
+  nuisance.py               calibration-only nuisance projection
+  null_models.py            frozen non-orbital and geometry-breaking nulls
+  heldout.py                immutable plan and outcome semantics
+  synthetic.py              deterministic discriminability sweep
+  g1_admission.py            pass-specific receiver-pair admission
+  g1_synthetic.py            offline admission/refusal verticals
+  G0_*.md, G1_*.md           scope, evidence, limits and next boundaries
+  tests/                    offline orbital-mechanism test suite
+
 experiments/live_instrument/
   models.py                 strict receipts, clause and JSON boundary
   orbital_kernel.py         stateless Skyfield geometry/Doppler kernel
@@ -557,7 +610,7 @@ experiments/live_instrument/
   GATE_*.md                  frozen plans, outcomes and postmortems
 
 analysis/, collectors/, processors/, trackers/
-  original offline satellite-first prototype
+  original offline satellite prototype, retained for reference
 
 api/, workers/, core/, receivers/
   legacy architecture retained for reference; not the supported path

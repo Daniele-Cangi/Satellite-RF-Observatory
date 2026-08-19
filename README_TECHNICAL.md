@@ -1,29 +1,68 @@
-# Technical model: evidence before architecture
+# Technical model: orbital prediction over a bounded measurement substrate
 
-This document describes the supported experimental mechanism in
-`experiments/live_instrument`. It intentionally does not describe a permanent
-platform architecture.
+This document describes an experimental mechanism, not a permanent platform
+architecture.
+
+## 0. Scientific layer and measurement layer
+
+The repository now has two deliberately ordered layers:
+
+```text
+experiments/orbital_discriminability
+  orbit -> observer-specific prediction -> detectability -> held-out null test
+                              |
+                              v
+experiments/live_instrument
+  event-time measurement -> transform ledger -> atomic evidence -> receipt
+```
+
+`orbital_discriminability` owns the scientific prediction. It uses the
+stateless orbital kernel, derives fractional Doppler before applying a carrier,
+forms simultaneous station differences, fits bounded nuisance only on a
+jointly visible calibration prefix and evaluates a jointly visible untouched
+suffix against frozen nulls. Clock bounds are propagated as direct
+`t ± delta_t` orbital trajectories rather than local slope products.
+
+`live_instrument` is the frozen measurement-integrity substrate established by
+Gates B–F2.5. It does not select an endpoint, frequency, feature or target for
+the orbital experiment. A future capability enters only when a propagated
+pass shows that the capability can preserve a discriminative orbital feature.
+
+The current Gate G0 is entirely offline. Its scope and numerical limits are in
+`experiments/orbital_discriminability/G0_SCOPE.md` and
+`experiments/orbital_discriminability/G0_IDENTIFIABILITY_REPORT.md`.
+
+Gate G1 adds a narrow admission boundary. An `OrbitalPassPlan` is propagated
+before any offer is considered. Each descriptive offer must first satisfy its
+own time, band, continuity, transform and witness clauses; only then may a pair
+be tested for distinct hardware roots, joint calibration/holdout visibility and positive
+differential margin. The synthetic result is not a live capability claim. See
+`experiments/orbital_discriminability/G1_ADMISSION_REPORT.md`.
+
+The sections below preserve the live-instrument mechanism because its controls
+remain candidate primitives for G1. They are not automatically a framework.
 
 ## 1. The unit of work
 
-The system does not begin with a source adapter. It begins with an intent:
+The current experiment begins with an orbital prediction, not a source
+adapter or an opportunistic RF feature:
 
 ```text
-find one physical experiment that Internet capabilities can falsifiably
-support now, within a finite budget
+determine whether one candidate orbit predicts observer-coupled RF structure
+that a qualified Internet measurement set can falsifiably test
 ```
 
-A capability is useful only if it can make a future negative interpretable.
-Information gain alone is insufficient.
+A capability is useful only when the propagated pass predicts a signal margin
+that its event time, frequency geometry, continuity and transforms can
+preserve. Information gain or receiver availability alone is insufficient.
 
 ```text
-physical hypothesis
-  -> emission or physical effect
-  -> propagation
+candidate orbit
+  -> observer-relative range rate
+  -> fractional and differential Doppler
   -> sensor capability
   -> conditioning transforms
-  -> detectable feature
-  -> prospective clause outcome
+  -> held-out orbital-versus-null outcome
 ```
 
 Before freeze, unknown quantities may be bounded, learned or cause admission
