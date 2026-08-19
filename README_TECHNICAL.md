@@ -185,6 +185,41 @@ selection expected `bandwidth` in `/status`, so direct SND was never attempted.
 This is a policy/transform failure. It says nothing about multichannel
 availability.
 
+Gate F2.5.1 removes only that dependency. A frozen 0–30 MHz Kiwi-family
+interval supplies a deterministic interior coordinate for qualification; the
+coordinate is independent of status, is not a target or discovered feature,
+and cannot itself prove that tuning or IQ delivery succeeded. Those facts must
+come from the direct SND streams. The older runtime and outcome remain
+reproducible and immutable.
+
+Its first live outcome reached both SND attempts for all frozen candidates but
+admitted no pair. One candidate produced an explicit access rejection; the
+remaining candidates produced transport/protocol errors, so the terminal
+state is `QUALIFICATION_INCOMPLETE`. The run also exposed a narrower receipt
+problem: if either concurrent branch fails, `_open_dual()` collapses both
+branch histories into one exception. A possible ready branch and its first
+GNSS IQ block are therefore not independently receipted or hashed. This blocks
+topology inference even though it does not imply zero RF persistence.
+
+Gate F2.5.2 moves that boundary one step earlier. Each SND branch now emits an
+atomic `BranchOpenReceipt`; every raw SND frame is hashed before decode with a
+length-delimited stream digest, and the GNSS readiness frame has its own hash.
+The pair is composed only after both branch states exist. A ready sibling may
+be closed after peer failure without erasing its channel/readiness evidence,
+while any qualification error keeps aggregate availability indeterminate.
+These receipts remain local to this vertical probe rather than becoming a
+generic capability framework.
+
+The first F2.5.2 live outcome validated the new boundary: one reference branch
+was `READY` with a hashed GNSS IQ witness while its perturbed peer was
+`CAPABILITY_REJECTED`. It also showed that structured evidence was not yet
+driving all control. The legacy retry selector searched aggregate statement
+text, so replacing that prose with an atomic summary silently disabled the
+declared retries. Receipt JSONL was also stdout-only and one console segment
+was not retained. Future correction must use structured branch error types for
+retry eligibility and a bounded strict-JSON receipt sink; neither change
+requires RF persistence.
+
 ## 8. Prospective freeze and outcomes
 
 Before plan freeze, a declared retry budget may cover only timeout, transport,
@@ -227,6 +262,58 @@ Pre-freeze terminal states include `QUALIFICATION_INCOMPLETE`,
 | `kiwi_gate_f2_3.py` | causal topology audit |
 | `kiwi_gate_f2_4.py` | first same-Kiwi two-channel runtime |
 | `kiwi_gate_f2_5.py` | direct-SND-first causal path |
+| `kiwi_gate_f2_5_1.py` | status-independent SND bootstrap policy |
+| `kiwi_gate_f2_5_2.py` | atomic per-branch opening and readiness hashes |
+| `kiwi_gate_f2_5_3.py` | typed retry selection and bounded receipt-only JSONL sink |
+| `kiwi_gate_f2_5_3_1.py` | in-band terminal manifest and closed-artifact receipt |
+| `kiwi_gate_f2_5_4.py` | pure offline attribution of the SND control boundary and exit semantics |
+| `kiwi_gate_f2_5_5.py` | fail-closed source basis and ordered SND control-receipt contract |
+| `kiwi_gate_f2_5_6.py` | strict offline verification of the pinned server archive and hash-only client source audit |
+| `kiwi_gate_f2_5_7.py` | gate-specific server-wire transcript and official-client necessity audit |
+| `kiwi_gate_f2_5_8.py` | ordered auth/channel/rate/command/IQ receipt integration tested with synthetic frames |
+
+## 9.1 Pinned protocol source boundary
+
+Gate F2.5.6 resolves the exact server and client control paths without touching
+a Kiwi endpoint. The retained server subset proves that `badp=0` is auth
+success, `badp=5` is the no-multiple-connections policy, `too_busy` is a
+capacity response, and `SET mod` addresses `conn->rx_channel`. These facts do
+not imply that a frozen session reached IQ readiness.
+
+The server archive is verified by whole-archive and per-member SHA-256, exact
+membership, byte counts and line counts. The client checkout was inspected
+ephemerally; only commit, blob IDs, paths, spans, hashes and sizes are retained
+because no license grant was found. Therefore the exit remains
+`SOURCE_RETENTION_BLOCKED_BY_LICENSE`, implementation stays unauthorized and
+the eleven historical closures remain causally unresolved.
+
+## 9.2 Server wire versus reference client
+
+Gate F2.5.7 removes the retained official client from the physical evidence
+requirements. The minimum causal chain is server-defined auth/channel/rate,
+an observed local `mod_iq` send and a later pre-decode-hashed IQ frame. Client
+source cannot substitute for the last witness and is therefore not a required
+root.
+
+The synthetic contract requires `badp=0`, the channel number carried by
+`is_local`, and `sample_rate` before `mod_iq`; an IQ frame must follow it. It
+also keeps clean WebSocket close separate from typed transport loss. The
+current runtime has not yet been changed to emit this sequence. The result
+`SERVER_WIRE_CONTRACT_SUFFICIENT` authorises only an offline receipt-integration
+gate, not a live run.
+
+## 9.3 Ordered receipt integration
+
+Gate F2.5.8 implements a successor branch opener without rewriting the frozen
+F2.5.2 outcome. Incoming MSG, SND and close frames are hashed before analysis;
+only allowlisted fields and artifact hashes enter the receipt. Configuration
+waits for `badp=0`, the channel number inside `is_local`, and `sample_rate`.
+The first valid IQ then witnesses a usable ordered branch.
+
+The integration also distinguishes local send error and control timeout from
+WebSocket close and transport loss. Dual composition requires two complete
+transcripts with different server channel numbers. This implementation is
+offline-tested only and has no automatic runner or live authorization.
 
 ## 10. Non-goals
 

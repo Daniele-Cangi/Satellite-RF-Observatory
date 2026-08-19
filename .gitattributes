@@ -1,0 +1,2 @@
+# Receipt artifacts are byte-addressed evidence; never normalize line endings.
+experiments/live_instrument/session_receipts/*.jsonl -text

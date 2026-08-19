@@ -1,0 +1,184 @@
+{
+  "schema_version": "gate-f2.5.6-source-manifest-v1",
+  "gate": "F2.5.6",
+  "retrieved_at": "2026-08-16T22:44:31.6352061Z",
+  "network_scope": "GitHub source retrieval only; no KiwiSDR endpoint or RF acquisition",
+  "frozen_parent_commit": "593fae7fe58ea4b1de847390fb897e688abcf0ac",
+  "outcome": "SOURCE_RETENTION_BLOCKED_BY_LICENSE",
+  "repositories": [
+    {
+      "project": "KiwiSDR server",
+      "repository": "https://github.com/jks-prv/KiwiSDR",
+      "commit": "c40ecb471dced33689e335689f8ffd35a54f47fa",
+      "github_license_metadata": null,
+      "license_evidence": "Selected source files contain GNU Library GPL version 2 or later notices; root _LICENSE directs readers to individual notices.",
+      "retention_state": "RETAINED_WITH_FILE_LEVEL_LICENSE_NOTICES",
+      "artifact": {
+        "path": "kiwisdr-c40ecb471dced33689e335689f8ffd35a54f47fa.zip",
+        "sha256": "d6a50adfce7f75133020de85635711dc6c2218e6f134d901ac13a450b57de7ea",
+        "size_bytes": 59311,
+        "members": [
+          {
+            "path": "_LICENSE",
+            "git_blob": "82e128cd590e58cdaf42af10cfdd1e4c090be6bd",
+            "sha256": "f53c97a2d65aeaee89a7613357ad6223f8294a0613be69cf174a91dc96cc0302",
+            "size_bytes": 289,
+            "line_count": 7
+          },
+          {
+            "path": "rx/",
+            "git_blob": null,
+            "sha256": null,
+            "size_bytes": 0,
+            "line_count": 0
+          },
+          {
+            "path": "rx/rx_cmd.cpp",
+            "git_blob": "74454be676c49846abd0ae7a32e5f01031a2849f",
+            "sha256": "66c78acef1eac2311e1cf156419e09546a81881e21f2b088d2cbc320631ba1a2",
+            "size_bytes": 105173,
+            "line_count": 2259
+          },
+          {
+            "path": "rx/rx_cmd.h",
+            "git_blob": "0b52cb4ca95b6b6665ea63a8221936fc44acb623",
+            "sha256": "9fa3ad554ab471214e3f2b648339169d127fd9dce3684118e3a241c270566c7f",
+            "size_bytes": 2257,
+            "line_count": 44
+          },
+          {
+            "path": "rx/rx_server.cpp",
+            "git_blob": "8c86ef5740733b1f414e3ff83e63d47d5a558481",
+            "sha256": "2960d47cd3b34d58c86087d1830b949bbf8a23af4b842879bff48845d8d60cc6",
+            "size_bytes": 33643,
+            "line_count": 876
+          },
+          {
+            "path": "rx/rx_sound.cpp",
+            "git_blob": "366a87f0b5c7737c5b546a296ea7bb27349637ed",
+            "sha256": "b749c91446a5c28e63b37997fa5d0912cf0bdb1a665a053810bf2cfc13547128",
+            "size_bytes": 73771,
+            "line_count": 1545
+          },
+          {
+            "path": "rx/rx_sound_cmd.cpp",
+            "git_blob": "e8387985c3f76ffb3fde513b669caf8afc603c7c",
+            "sha256": "66326d86723bc1db13c0066423ca406550d708f8383bf8093efb403d224fd795",
+            "size_bytes": 28997,
+            "line_count": 730
+          }
+        ]
+      }
+    },
+    {
+      "project": "kiwiclient",
+      "repository": "https://github.com/jks-prv/kiwiclient",
+      "commit": "4eb733e6b6147f7fbeb97ced64cdac029b202d18",
+      "github_license_metadata": null,
+      "license_evidence": "No root license file, GitHub license metadata or license notice in the selected source files was found at the pinned commit.",
+      "retention_state": "NOT_RETAINED_NO_LICENSE_GRANT_FOUND",
+      "audited_files": [
+        {
+          "path": "kiwi/client.py",
+          "git_blob": "136babae870108e750664f127345cb44f62468cb",
+          "sha256": "96ca913c540c40b3fa3a67bf5fc6a4e6d71975ba550439702b9b0696ea9d4e53",
+          "size_bytes": 40327,
+          "line_count": 953,
+          "relevant_spans": [
+            "187-203",
+            "313-371",
+            "434-527",
+            "550-592",
+            "594-718",
+            "887-925"
+          ]
+        },
+        {
+          "path": "kiwi/worker.py",
+          "git_blob": "917d20aa51fe6d451764c824f085cbe6224058ad",
+          "sha256": "77fe05184aad13ccc6ed8b1ad45ef2dc5ce240b7254c1ca1dd901868eab6d5ba",
+          "size_bytes": 5467,
+          "line_count": 129,
+          "relevant_spans": [
+            "14-100"
+          ]
+        },
+        {
+          "path": "README.md",
+          "git_blob": "a8697316b590e158e82dedfc99b8cc2004d38bf1",
+          "sha256": "dfb9bea8eda737b07a68b30205e9f60f8b20ac14fa172e18d1d0258573c2af12",
+          "size_bytes": 7389,
+          "line_count": 123,
+          "relevant_spans": []
+        }
+      ]
+    }
+  ],
+  "source_findings": [
+    {
+      "finding_id": "AUTH_GATE_ORDER",
+      "locations": [
+        "KiwiSDR:rx/rx_cmd.cpp:213-225",
+        "KiwiSDR:rx/rx_cmd.cpp:772-820"
+      ],
+      "claim": "Before authentication only keepalive, options and auth commands are accepted; successful BADP state enables conn->auth."
+    },
+    {
+      "finding_id": "BADP_SEMANTICS",
+      "locations": [
+        "KiwiSDR:rx/rx_cmd.h:31-44",
+        "KiwiSDR:rx/rx_cmd.cpp:704-791",
+        "kiwiclient:kiwi/client.py:475-494"
+      ],
+      "claim": "badp=0 is the pinned server's authentication-success value; badp=5 means multiple connections from the same IP are disallowed."
+    },
+    {
+      "finding_id": "CHANNEL_ALLOCATION",
+      "locations": [
+        "KiwiSDR:rx/rx_server.cpp:603-612",
+        "KiwiSDR:rx/rx_server.cpp:646-785"
+      ],
+      "claim": "Each independent SND connection is allocated a free receive channel or receives a capacity response such as too_busy."
+    },
+    {
+      "finding_id": "PER_CHANNEL_RETUNE",
+      "locations": [
+        "KiwiSDR:rx/rx_sound_cmd.cpp:73-85",
+        "KiwiSDR:rx/rx_sound_cmd.cpp:116-178"
+      ],
+      "claim": "The tune command resolves conn->rx_channel and writes the receive-frequency command for that channel."
+    },
+    {
+      "finding_id": "SND_SETUP_AND_IQ",
+      "locations": [
+        "KiwiSDR:rx/rx_sound.cpp:154-162",
+        "KiwiSDR:rx/rx_sound.cpp:214-245",
+        "KiwiSDR:rx/rx_sound.cpp:564-600",
+        "KiwiSDR:rx/rx_sound.cpp:1082-1136",
+        "kiwiclient:kiwi/client.py:503-514",
+        "kiwiclient:kiwi/client.py:585-718"
+      ],
+      "claim": "SND setup exposes rates; IQ frames carry sequence and GNSS fields that the official client parses separately per client instance."
+    },
+    {
+      "finding_id": "CHANNEL_IDENTIFIER_GAP",
+      "locations": [
+        "KiwiSDR:rx/rx_cmd.cpp:772-785"
+      ],
+      "claim": "Successful SND auth exposes the channel in is_local=channel,is_local,tlimit_exempt; the frozen local receipt did not retain this exact field shape."
+    },
+    {
+      "finding_id": "TERMINATION_DISTINCTION",
+      "locations": [
+        "kiwiclient:kiwi/client.py:910-925"
+      ],
+      "claim": "The official client distinguishes clean server termination from an unexpected connection termination."
+    }
+  ],
+  "retention_policy": {
+    "rf_persisted": false,
+    "client_source_persisted": false,
+    "credentials_persisted": false,
+    "temporary_clones_must_be_destroyed_after_verification": true
+  }
+}
