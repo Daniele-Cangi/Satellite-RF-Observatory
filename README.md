@@ -95,6 +95,16 @@ calls, duplicated invocation identities and reconstructed or unsafe URLs are
 refused. See
 [`G1_3_1_SEARCH_TRANSPORT.md`](experiments/orbital_discriminability/G1_3_1_SEARCH_TRANSPORT.md).
 
+Gate G1.3.2 consumed that correction once. All four independent query receipts
+were valid and the frozen round-robin selected six documents. Each document
+was fetched once, bounded to 1 MiB, hashed before descriptor extraction and
+destroyed. All six were evaluable, but none materialized the authority, TTL,
+versioned schema, complete declared scope and deterministic endpoint binding
+required by Gate G1.2. The scoped outcome is
+`NO_LEGITIMATE_INVENTORY_FOUND`; capability admission remains
+`NOT_EVALUATED`, with zero `/status` and RF activity. See
+[`G1_3_2_SEARCH_OUTCOME_1.md`](experiments/orbital_discriminability/G1_3_2_SEARCH_OUTCOME_1.md).
+
 Gate G0 remains the underlying physical result. It samples the existing
 stateless orbital kernel for multiple observers, separates fractional geometry
 from carrier scaling, fits only station offset and affine drift on a
