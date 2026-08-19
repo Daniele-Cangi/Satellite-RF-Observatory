@@ -1,8 +1,10 @@
-# Minimal offline verification environment for experiments/live_instrument.
-numpy>=1.24.0
-scipy>=1.10.0
-sgp4>=2.20
-skyfield>=1.45
-Pillow>=10.0.0
-websocket-client>=1.8.0
-pytest>=8.0.0
+# Reproducible offline verification environment for experiments/live_instrument.
+# Python itself is pinned to 3.13.5 in the GitHub Actions workflow. These are
+# the exact direct-dependency versions used by the frozen F2.5 seals.
+numpy==2.3.3
+scipy==1.17.1
+sgp4==2.25
+skyfield==1.53
+Pillow==11.3.0
+websocket-client==1.8.0
+pytest==8.4.2

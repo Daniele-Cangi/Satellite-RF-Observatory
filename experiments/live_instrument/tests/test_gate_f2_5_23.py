@@ -271,7 +271,10 @@ def test_synthetic_sockets_then_one_target_witness_and_plan_freeze() -> None:
         frozen_at=NOW,
     )
 
-    assert provider.calls == ["reference", "perturbed"]
+    # Both connectors are intentionally opened concurrently. Their scheduling
+    # order is not part of the causal contract and differs across platforms.
+    assert len(provider.calls) == 2
+    assert set(provider.calls) == {"reference", "perturbed"}
     assert all(socket.closed for socket in provider.sockets)
     assert experiment.diagnostic_called
     assert result.outcome == "PREFREEZE_PLAN_MATERIALIZED_OFFLINE"
