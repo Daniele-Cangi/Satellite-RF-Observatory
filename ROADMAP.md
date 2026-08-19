@@ -580,6 +580,18 @@ or authority surface exists and no RF-derived array persists. The next
 admissible work is a separate offline post-commit seal of this exact successor;
 only later review may grant one new single-use live authority.
 
+Gate F2.5.36 now seals the exact F2.5.35 commit offline. Source, inherited
+plan, decision/audit boundary, full injected integration, reviewed F2.5.33
+connector, numerical environment, endpoint, receipt shape and live call graph
+are hash-bound. The public surface has one keyword-only default-false
+authority bit; refusal occurs before assessment, artifact creation or network
+access.
+
+No authority has been consumed. The next step is a user decision, not more
+implementation: retain the sealed runner unused or authorize one exact live
+execution. A future authority would have zero retry, no changed dimension and
+would stop after its first terminal outcome.
+
 ## Only after one valid prospective outcome
 
 Review which abstractions were actually necessary. Candidates for deletion or

@@ -86,6 +86,7 @@ Tests are offline. Do not add live probes to pytest or CI.
 51. [`GATE_F2_5_33_OUTCOME_1.md`](GATE_F2_5_33_OUTCOME_1.md) — the single authority admitted two simultaneous same-clock SND/IQ channels and relative timing, then stopped `NO_FALSIFIABLE_INTERVENTION` because unchanged discovery admitted no common A1 feature; no retune or physical hypothesis evaluation occurred.
 52. [`GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md`](GATE_F2_5_34_DISCOVERY_FAILURE_ATTRIBUTION.md) — receipt-only attribution proves the sensor and transform path were operational and the composite feature rule failed, but the missing stage counts and margins make the specific rejection cut inconclusive; the DDC hypothesis remains not falsifiable from this receipt.
 53. [`GATE_F2_5_35_SCALAR_AUDIT_INTEGRATION.md`](GATE_F2_5_35_SCALAR_AUDIT_INTEGRATION.md) — an offline successor emits an authoritative discovery decision and a decision-independent scalar stage audit from the same ephemeral arrays; description failure cannot change the selector, downstream phases or physical outcome.
+54. [`GATE_F2_5_36_POST_COMMIT_SEAL.md`](GATE_F2_5_36_POST_COMMIT_SEAL.md) — the committed audited vertical, decision/audit boundary, inherited plan, connector, environment and strict receipt are sealed behind one default-false authority bit; no network activity or authority consumption occurs.
 
 ## Frozen-outcome rule
 

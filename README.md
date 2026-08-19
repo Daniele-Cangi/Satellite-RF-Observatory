@@ -494,6 +494,14 @@ and positive full-vertical tests preserve the F2.5.32 decisions, while no IQ,
 STFT, spectrum or candidate patch persists. See
 [`GATE_F2_5_35_SCALAR_AUDIT_INTEGRATION.md`](experiments/live_instrument/GATE_F2_5_35_SCALAR_AUDIT_INTEGRATION.md).
 
+Gate F2.5.36 seals that exact committed successor offline. The F2.5.35 source,
+inherited plan, decision/audit and full integration surfaces, reviewed dual-SND
+connector, numerical environment, endpoint, zero-retry policy and strict
+receipt shape are hash-bound. The sole public execution signature exposes
+only `live_authorised=False`, and default refusal precedes assessment, receipt
+creation and connector access. No authority is granted or consumed. See
+[`GATE_F2_5_36_POST_COMMIT_SEAL.md`](experiments/live_instrument/GATE_F2_5_36_POST_COMMIT_SEAL.md).
+
 ## Repository map
 
 ```text
