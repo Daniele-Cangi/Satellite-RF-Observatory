@@ -1,0 +1,48 @@
+{
+  "development_lidvid": "urn:nasa:pds:maven.rose.raw:data.rsr:mvn_rse_l0_rsr_20160712t124201::1.0",
+  "frozen_runtime": {
+    "numpy": "2.5.2",
+    "python": "3.13.5",
+    "spiceypy": "7.0.0"
+  },
+  "header_bytes": 260,
+  "manifest_version": "maven-dss45-rsr-header-whitelist-manifest-v1",
+  "non_finite_policy": {
+    "documented_hex_7fffffffffffffff": {
+      "state": "NOT_CALCULABLE",
+      "value": null
+    },
+    "other_non_finite": "REJECT"
+  },
+  "parser_contract_sha256": "50de0005bb26317ec94c2816ac8465b48370fbce2db555a28801dffead89317e",
+  "parser_source_sha256": "14d722b70ed43fbd039982185331b8aa9b8f9e9f53c76ae2fc6c80c32dcc1266",
+  "persisted_output": [
+    "first_sample_time_tags",
+    "station_rsr_subchannel_identity",
+    "sample_rate_and_resolution",
+    "lo_nco_override_state",
+    "frequency_and_phase_polynomials",
+    "filter_and_decimation_configuration",
+    "whitelisted_byte_hash"
+  ],
+  "prohibited_output": [
+    "FGAIN",
+    "DIG attenuation",
+    "DIG ADC RMS",
+    "DIG ADC peak",
+    "data error count",
+    "sample values",
+    "signal strength",
+    "signal-derived diagnostics",
+    "raw SFDU header"
+  ],
+  "range_access": {
+    "authorized_product_role": "DEVELOPMENT_ONLY",
+    "bytes_per_record": 260,
+    "response_requirement": "HTTP_206_EXACT_CONTENT_RANGE",
+    "sample_chdo_bytes_allowed": 0
+  },
+  "record_bytes": 4260,
+  "scope": "DSS45_DEVELOPMENT_HEADER_ONLY",
+  "spike_source_sha256": "33e36ce722ffbdced4f559e26851c608e60513e8ed3cf573d9a022bcca9e62eb"
+}

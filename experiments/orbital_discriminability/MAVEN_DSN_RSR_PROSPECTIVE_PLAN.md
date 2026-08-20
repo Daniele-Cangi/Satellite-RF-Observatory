@@ -1,8 +1,8 @@
 # MAVEN/DSN RSR prospective plan
 
-Status: **DSN_PROSPECTIVE_PLAN_BLOCKED**
+Status: **DSS45_DEVELOPMENT_COMPILER_READY; INDEPENDENT_PROSPECTIVE_PLAN_BLOCKED**
 Branch: `experiment/maven-dsn-rsr-prospective`
-Scope: metadata and control products only. No RSR `.dat` payload was downloaded, opened, decoded, ranged, or sampled.
+Scope: DSS-45 metadata/control plus exact header ranges only. Zero IQ/sample bytes were read; primary and reserve remain sealed.
 
 This is one scoped audit, not a new gate or archive adapter. The earlier approximate `2 x Doppler` curves are screening evidence only; none of their signatures, margins, windows, or timing limits enters this plan.
 
@@ -68,7 +68,7 @@ No ODF is linked by the RSR or FUP labels. TNF is the demonstrated tracking inpu
 
 ## Receiver channel and NCO transform
 
-The RSR architecture is shared analog IF and 256 Msps DIG ADC, a DDC producing a nominal 16 MHz complex channel, and a VDP FIR subchannel. Concrete FIR bandwidth/coefficients and exact decimation are **unknown**.
+The concrete DSS-45 development mode is now frozen: shared analog IF and 256 Msps ADC, 16 Msps DDC output, 1 ksps/1 kHz VDP FIR output, 16-bit samples and decimation 16000. Exact FIR coefficients are not encoded and remain unknown.
 
 The PDS label proves that every SFDU contains these fields, but not their concrete values:
 
@@ -82,7 +82,7 @@ For millisecond `m=0..999`, `F_NCO(m) = F1 + F2*((m+0.5)/1000) + F3*((m+0.5)/100
 
 Override/rate/offset controls are not added again because their effect is already embodied in the SFDU NCO coefficients. Phase polynomials are required for a later phase-continuity audit, not for the frequency-only kernel.
 
-**Frequency-transform admission: BLOCKED.** All concrete LO, NCO, override, filter and decimation values are inside unopened RSR SFDU headers; none is in the sidecar. A nominal X-band LO or assumed decimation would be invented data.
+**DSS-45 development frequency-transform admission: READY.** Seventy-five exact headers materialize LO, NCO, controls, sample mode and decimation with zero sample-byte access. This does not unseal or admit primary/reserve transforms.
 
 ## SPICE set and independence classification
 
@@ -97,7 +97,7 @@ The archive documents a predicted-SPK naming family, but its present collection 
 
 `RECONSTRUCTED; TARGET_PASS_ASSIMILATION_NOT_EXCLUDED; NOT_AN_INDEPENDENT_PROSPECTIVE_ORBIT`.
 
-The meta-kernels also do not freeze a historical DSN station SPK/Earth-orientation set for DSS-35/45/55. Coordinates above are from DSN 810-005 module 301, not an admitted historical station kernel.
+For DSS-45 development, station geometry is now frozen by earthstns_itrf93_050714.bsp plus earth_1962_260806_2126_combined.bpc, with exact hashes in the header-spike report. No corresponding primary/reserve access or admission occurred.
 
 ## Two-way causal ledger
 
@@ -120,22 +120,22 @@ Both nulls receive the identical event-time grid, FUP artifact, turnaround ratio
 1. **`N_RAMP_NCO_ONLY`** retains the nominal solved transmit epoch but sets both geometric frequency-transfer factors to one. It asks whether ramp plus receiver tracking alone explains the ridge.
 2. **`N_MARS_CENTER_GEOMETRY`** replaces MAVEN's Mars-relative orbital state with a frozen Mars-center state while retaining Earth--Mars light time, station rotation, the same ramp and receiver transform. It destroys spacecraft orbital geometry without replacing controls.
 
-No null may be refit after RSR access. The exact geometry-destroying state source cannot yet be selected because the nominal independent SPICE source is not admitted.
+No null may be refit after RSR access. The Mars-center alternative is now compiled through the same DSS-45 metadata transforms, but reconstructed MAVEN geometry prevents an independent held-out orbit claim.
 
 ## Detectability and stop result
 
-The conservative timing bound is admitted at 1 microsecond, but no exact recorded-baseband signature, null divergence, filter response, detectability margin, or maximum admissible timing error is reported. Each requires sealed SFDU transforms and an outcome-independent historical trajectory. Reusing preliminary screening curves would violate the plan.
+The DSS-45 metadata compiler now yields an exact recorded-baseband development curve and same-transform null curves. They are not prospective evidence: the only date-covering MAVEN SPK is reconstructed post-pass and target-pass assimilation is not excluded. Exact FIR coefficient shape and media terms also remain open.
 
 Exact blockers:
 
 1. `NO_OUTCOME_INDEPENDENT_2016_MAVEN_TRAJECTORY`: reconstructed SPKs do not exclude assimilation of target-pass tracking.
-2. `RSR_PER_SFDU_FREQUENCY_TRANSFORM_SEALED`: exact LO/NCO/control fields required for recorded baseband are only in unopened payload headers.
-3. `RSR_FILTER_DECIMATION_UNKNOWN`: concrete response and decimation required for detectability are absent from the sidecar.
-4. `HISTORICAL_DSN_STATION_GEOMETRY_NOT_FROZEN`: coordinates are documented, but exact historical Earth-orientation/station-kernel lineage is not admitted.
+2. DSS45_DEVELOPMENT_TRANSFORM_RESOLVED: development headers are admitted; primary and reserve transforms remain sealed.
+3. FIR_COEFFICIENT_SHAPE_UNKNOWN: 1 kHz mode and decimation 16000 are proven, but filter coefficients are not encoded.
+4. DSS45_STATION_GEOMETRY_RESOLVED_FOR_COMPILER: station/Earth-orientation lineage is frozen; no primary/reserve admission follows.
 
-Development access is not authorized by this plan; primary and reserve remain sealed.
+DSS-45 metadata-only header access is concluded. A later DSS-45 development-IQ access requires separate authorization; primary and reserve remain sealed.
 
-**DSN_PROSPECTIVE_PLAN_BLOCKED**
+**READY_FOR_DSS45_DEVELOPMENT_IQ** for compiler development; **DSN_PROSPECTIVE_PLAN_BLOCKED** for an independent orbital result.
 
 ## Authoritative sources
 
