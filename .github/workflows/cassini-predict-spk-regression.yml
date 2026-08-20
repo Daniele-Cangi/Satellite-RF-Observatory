@@ -1,0 +1,59 @@
+name: sealed Cassini type-1 PREDICT-SPK regression
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cassini-predict-spk-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SATELLITE_RF_CASSINI_KERNEL_ROOT: ${{ runner.temp }}/cassini-predict-kernels
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up frozen Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13.5"
+
+      - name: Install exact regression dependencies
+        run: python -m pip install numpy==2.3.3 pytest==8.4.2 spiceypy==7.0.0
+
+      - name: Materialize exact-hash public kernels
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$SATELLITE_RF_CASSINI_KERNEL_ROOT"
+          curl --fail --location --silent --show-error \
+            https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls \
+            --output "$SATELLITE_RF_CASSINI_KERNEL_ROOT/naif0012.tls"
+          curl --fail --location --silent --show-error \
+            https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/a_old_versions/earth_720101_070426.bpc \
+            --output "$SATELLITE_RF_CASSINI_KERNEL_ROOT/earth_720101_070426.bpc"
+          curl --fail --location --silent --show-error \
+            https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/stations/a_old_versions/earthstns_itrf93_050714.bsp \
+            --output "$SATELLITE_RF_CASSINI_KERNEL_ROOT/earthstns_itrf93_050714.bsp"
+          curl --fail --location --silent --show-error \
+            https://naif.jpl.nasa.gov/pub/naif/CASSINI/kernels/spk/050426AP_SCPSE_05116_05216.bsp \
+            --output "$SATELLITE_RF_CASSINI_KERNEL_ROOT/050426AP_SCPSE_05116_05216.bsp"
+          cd "$SATELLITE_RF_CASSINI_KERNEL_ROOT"
+          printf '%s  %s\n' \
+            678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b naif0012.tls \
+            1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e earth_720101_070426.bpc \
+            371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c earthstns_itrf93_050714.bsp \
+            065258e6982b10488604d97f02f9b5110d6b1e4760ff340211b50973ab8228f5 050426AP_SCPSE_05116_05216.bsp \
+            | sha256sum --check --strict
+
+      - name: Run non-optional real type-1 regression
+        run: >-
+          python -m pytest
+          experiments/orbital_discriminability/sealed_ci/test_cassini_predict_spk.py
+          -q

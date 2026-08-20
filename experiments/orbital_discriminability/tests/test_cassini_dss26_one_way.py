@@ -2,7 +2,7 @@
 
 from dataclasses import replace
 from hashlib import sha256
-import os
+from math import ulp
 from pathlib import Path
 
 import pytest
@@ -150,6 +150,30 @@ def test_receding_spacecraft_redshifts_the_one_way_carrier() -> None:
     assert event.kinematic_frequency_factor < 1.0
 
 
+def test_light_time_convergence_is_not_limited_by_absolute_et_ulp() -> None:
+    receive_et = 100_000_000.0
+    base_light_time_s = 10.123456789
+    radial_beta = 0.05
+    station = lambda _time: StateVector((0.0, 0.0, 0.0), (0.0, 0.0, 0.0))
+
+    def spacecraft(epoch_et: float) -> StateVector:
+        relative_s = epoch_et - receive_et
+        return StateVector(
+            (
+                SPEED_OF_LIGHT_M_S * (base_light_time_s + radial_beta * relative_s),
+                0.0,
+                0.0,
+            ),
+            (SPEED_OF_LIGHT_M_S * radial_beta, 0.0, 0.0),
+        )
+
+    event = solve_one_way_event(receive_et, station, spacecraft, tolerance_s=1e-9)
+    analytic_light_time = base_light_time_s / (1.0 + radial_beta)
+    # An absolute-ET subtraction at this epoch is quantized at about 15 ns.
+    assert ulp(receive_et) > 1e-9
+    assert event.geometric_light_time_s == pytest.approx(analytic_light_time, abs=1e-9)
+
+
 def test_all_bounded_terms_can_authorize_only_a_declared_envelope(tmp_path, monkeypatch) -> None:
     paths = _synthetic_kernel_set(tmp_path, monkeypatch)
     terms = tuple(
@@ -215,32 +239,3 @@ def test_manifest_freezes_predict_spk_and_forbids_outcome_conditioned_inputs() -
     assert "reconstructed" in forbidden
     assert "horizons" in forbidden
     assert len(compiler_manifest_sha256()) == 64
-
-
-def test_frozen_predict_kernel_three_epoch_numerical_regression() -> None:
-    """Exercise the real type-1 PREDICT SPK only when explicitly materialized."""
-
-    kernel_root_value = os.environ.get("SATELLITE_RF_CASSINI_KERNEL_ROOT")
-    if kernel_root_value is None:
-        pytest.skip("frozen Cassini kernel set was not explicitly materialized")
-    kernel_root = Path(kernel_root_value)
-    kernel_paths = {spec.name: kernel_root / spec.name for spec in one_way.CASSINI_DSS26_KERNELS}
-    carrier = USOCarrierModel(
-        nominal_rest_frequency_hz=1.0,
-        calibration_reference_utc=RECEIVE_UTC,
-        constant_offset_hz=0.0,
-        aging_rate_hz_s=0.0,
-    )
-    expected = (
-        ("2005-06-06T17:50:01Z", 4_907.510879427195, 0.9999299036421737),
-        ("2005-06-06T19:10:26Z", 4_907.850356847048, 0.9999293648478778),
-        ("2005-06-06T20:30:51Z", 4_908.192765682936, 0.9999286935663851),
-    )
-    for receive_utc, light_time_s, frequency_factor in expected:
-        prediction = compile_dss26_one_way(receive_utc, carrier, kernel_paths)
-        assert prediction.geometric_light_time_s == pytest.approx(light_time_s, abs=1e-6)
-        assert prediction.kinematic_frequency_factor == pytest.approx(
-            frequency_factor,
-            abs=1e-13,
-        )
-        assert not prediction.primary_prediction_authorized

@@ -167,6 +167,19 @@ def test_manifest_is_product_bound_strict_and_synthetic_only() -> None:
     }
     assert manifest["data_chdo_access"] == "PROHIBITED"
     assert manifest["fixture_policy"] == "SPECIFICATION_DERIVED_SYNTHETIC_ONLY_BEFORE_AUTHORITY"
+    assert manifest["utc_policy"] == {
+        "calendar": "PROLEPTIC_GREGORIAN",
+        "scale": "UTC",
+        "ordinary_second_of_day_interval": "0 <= second < 86400",
+        "day_rollover": (
+            "requires the next encoded year/day-of-year; second 86400 is never "
+            "silently normalized"
+        ),
+        "positive_leap_second": (
+            "REJECTED_UNTIL_THE_PRODUCT_SPECIFIC_SFDU_ENCODING_IS_EXPLICITLY IMPLEMENTED"
+        ),
+        "negative_leap_second": "REJECTED_UNTIL_EXPLICITLY IMPLEMENTED",
+    }
     assert len(parser_manifest_sha256()) == 64
     json.loads(strict_json(manifest))
 
@@ -175,3 +188,22 @@ def test_receipt_is_immutable() -> None:
     receipt = parse_dss26_header(_synthetic_header())
     with pytest.raises(FrozenInstanceError):
         receipt.sample_rate_hz = 2_000  # type: ignore[misc]
+
+
+def test_utc_boundary_and_leap_second_are_never_silently_normalized() -> None:
+    leap_boundary = _synthetic_header()
+    struct.pack_into(">d", leap_boundary, 80, 86_400.0)
+    with pytest.raises(CassiniRsrHeaderError, match="leap-second|normalization"):
+        parse_dss26_header(leap_boundary)
+
+    invalid_doy = _synthetic_header()
+    struct.pack_into(">H", invalid_doy, 76, 2005)
+    struct.pack_into(">H", invalid_doy, 78, 366)
+    with pytest.raises(CassiniRsrHeaderError, match="day-of-year"):
+        parse_dss26_header(invalid_doy)
+
+    last_ordinary_instant = _synthetic_header()
+    struct.pack_into(">d", last_ordinary_instant, 80, 86_399.999999)
+    assert parse_dss26_header(last_ordinary_instant).first_sample_utc.endswith(
+        "23:59:59.999999Z"
+    )

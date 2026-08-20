@@ -17,7 +17,7 @@ import struct
 from typing import Final, Literal
 
 
-PARSER_VERSION: Final = "cassini-sagr-dss26-rsr-header-whitelist-v1"
+PARSER_VERSION: Final = "cassini-sagr-dss26-rsr-header-whitelist-v2"
 DEVELOPMENT_LIDVID: Final = (
     "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:"
     "s11sags2005_157_1750nnnx26rd::1.0"
@@ -290,6 +290,20 @@ def parser_manifest() -> dict[str, object]:
         "raw_header_retention": "PROHIBITED",
         "data_chdo_access": "PROHIBITED",
         "fixture_policy": "SPECIFICATION_DERIVED_SYNTHETIC_ONLY_BEFORE_AUTHORITY",
+        "utc_policy": {
+            "calendar": "PROLEPTIC_GREGORIAN",
+            "scale": "UTC",
+            "ordinary_second_of_day_interval": "0 <= second < 86400",
+            "day_rollover": (
+                "requires the next encoded year/day-of-year; second 86400 is never "
+                "silently normalized"
+            ),
+            "positive_leap_second": (
+                "REJECTED_UNTIL_THE_PRODUCT_SPECIFIC_SFDU_ENCODING_IS_EXPLICITLY "
+                "IMPLEMENTED"
+            ),
+            "negative_leap_second": "REJECTED_UNTIL_EXPLICITLY IMPLEMENTED",
+        },
         "non_finite_policy": (
             "7fffffffffffffff becomes NOT_CALCULABLE with null value; "
             "all other non-finite encodings are rejected"
@@ -373,11 +387,18 @@ def _filter_decimation(sample_rate_hz: int) -> FilterDecimationState:
 
 
 def _utc_tag(year: int, day_of_year: int, second_of_day: float) -> str:
-    if not 1900 <= year <= 3000 or not 1 <= day_of_year <= 366:
+    if not 1900 <= year <= 3000:
         raise CassiniRsrHeaderError("first-sample date is outside the RSR domain")
-    if not 0.0 <= second_of_day <= 86_400.0:
-        raise CassiniRsrHeaderError("first-sample second is outside the RSR domain")
-    instant = datetime(year, 1, 1, tzinfo=timezone.utc) + timedelta(
+    year_start = datetime(year, 1, 1, tzinfo=timezone.utc)
+    next_year = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+    days_in_year = (next_year - year_start).days
+    if not 1 <= day_of_year <= days_in_year:
+        raise CassiniRsrHeaderError("first-sample day-of-year is invalid for its year")
+    if not 0.0 <= second_of_day < 86_400.0:
+        raise CassiniRsrHeaderError(
+            "SFDU UTC boundary/leap-second tag is unsupported; silent day normalization is prohibited"
+        )
+    instant = year_start + timedelta(
         days=day_of_year - 1,
         seconds=second_of_day,
     )
