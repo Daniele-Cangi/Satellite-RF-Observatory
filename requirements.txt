@@ -9,6 +9,7 @@ numpy>=1.24.0              # Numerical computing, DSP
 scipy>=1.10.0              # Signal processing (FFT, CFAR)
 sgp4>=2.20                 # Satellite propagation (NORAD TLEs)
 skyfield>=1.45             # High-precision orbital mechanics
+spiceypy==7.0.0            # CSPICE binding for pre-pass deep-space SPK type 1
 pydantic>=2.0.0            # Configuration validation
 pydantic-settings>=2.0.0   # Settings management
 python-dotenv>=1.0.0       # Environment variable loading

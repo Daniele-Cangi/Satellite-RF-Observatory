@@ -371,6 +371,68 @@ The reserve is a time-separated model replication, not a new station root: it
 shares DSS-14 with the primary.  That limitation is explicit and may not be
 promoted to independent-hardware corroboration.
 
+### Offline one-way compiler and synthetic DSS-26 parser
+
+The bounded offline implementation was completed without opening a real RSR
+header, data record, or sample payload and without making any network request.
+It produces no RF or orbital outcome. Its status is
+**`OFFLINE_COMPILER_AND_SYNTHETIC_PARSER_READY`**.
+
+The product-bound one-way compiler:
+
+- requires SpiceyPy/CSPICE and has no Horizons, Skyfield, or reconstructed-SPK
+  fallback;
+- admits only the frozen LSK, historical Earth-orientation BPC, DSS station
+  SPK, and pre-pass `050426AP_SCPSE_05116_05216.bsp` PREDICT kernel after exact
+  byte-count and SHA-256 verification;
+- converts RSR receive UTC to ET/TDB, solves the geometric one-way transmit
+  epoch, obtains Cassini and DSS-26 SSB/J2000 states through CSPICE, and applies
+  the exact flat-spacetime special-relativistic kinematic frequency factor;
+- keeps the declared USO rest frequency, constant calibration offset, and
+  aging rate in the emitter rest frame;
+- emits a steering-only sky-frequency null with the same carrier, calibration,
+  correction, timing, and receiver-control inputs as the orbital path.
+
+The first implementation deliberately leaves the following as explicit
+`OPEN_TERM` values rather than silently assigning zero: spacecraft/station
+proper-time and gravitational frequency effects, relativistic propagation
+delay, Earth troposphere, Earth ionosphere, interplanetary plasma, station
+hardware delay, available media calibration, and any undeclared USO offset or
+aging. Closing all sky-frequency terms is necessary but still insufficient
+for a primary claim: a concrete header-derived RF/IF/NCO transform, detector
+manifest, and detectability result are separately required. Consequently the
+compiler's `primary_prediction_authorized` field is always false.
+
+The new SFDU parser is intentionally separate from the MAVEN parser and is
+bound only to the DSS-26 development identity ending in `2A1`. Before any
+future header authorization it is tested only against specification-derived
+synthetic 260-byte headers. It exposes first-sample UTC, station/RSR/channel/
+subchannel, sample rate and actual sample resolution, RF-to-IF and DDC LO,
+override state, frequency and phase polynomials, and filter/decimation state.
+It rejects a complete 4,260-byte record and has no representation for ADC RMS,
+ADC peak, signal strength, FGAIN, samples, or signal-derived diagnostics.
+Unknown FIR coefficients remain unknown; no amplitude-response claim is made.
+
+Frozen implementation identities:
+
+- compiler source SHA-256:
+  `f397ef8d35431793ef8151e460fd5f4914ee812221288d1152d952d98ff61b7b`;
+- compiler manifest SHA-256:
+  `c9cb25a632a10d8f52a3a8f624f962fdd61c412c1ba5b146e6d750525680792b`;
+- parser source SHA-256:
+  `0ac072250ce681555a23737821302588daa89ee92e53c8216073e24de04a6830`;
+- parser manifest SHA-256:
+  `d77a9f96cd0290a8f22c97e12441d6d324be1944492ef180f90347e8d569eb83`.
+
+The focused synthetic suite passes `18` tests, and the complete orbital suite
+passes `113`. The present offline Python environment does not contain
+SpiceyPy, and no cached distribution was available, so no numerical CSPICE
+curve is claimed here. The next narrow blocker is to provision the pinned
+SpiceyPy/CSPICE runtime and materialize only the frozen kernel set so its exact
+type-1 trajectory and end-to-end numerical regression can be executed. A
+later, separately authorized header-only spike would then bind the concrete
+NCO/LO transform. Development IQ, primary, and reserve remain unopened.
+
 ### Decision and remaining blocker
 
 Outcome: **`TIME_AND_ORBIT_QUALIFIED_DATASET_FOUND`**.

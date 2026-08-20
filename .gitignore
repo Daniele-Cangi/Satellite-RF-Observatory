@@ -90,6 +90,7 @@ coverage.xml
 .pytest_cache/
 .pytest-tmp-*/
 .pytest_tmp_*/
+.pytest-cassini*/
 pytest-gate-*/
 
 # Jupyter Notebook
