@@ -424,14 +424,27 @@ Frozen implementation identities:
 - parser manifest SHA-256:
   `d77a9f96cd0290a8f22c97e12441d6d324be1944492ef180f90347e8d569eb83`.
 
-The focused synthetic suite passes `18` tests, and the complete orbital suite
-passes `113`. The present offline Python environment does not contain
-SpiceyPy, and no cached distribution was available, so no numerical CSPICE
-curve is claimed here. The next narrow blocker is to provision the pinned
-SpiceyPy/CSPICE runtime and materialize only the frozen kernel set so its exact
-type-1 trajectory and end-to-end numerical regression can be executed. A
-later, separately authorized header-only spike would then bind the concrete
-NCO/LO transform. Development IQ, primary, and reserve remain unopened.
+The initial focused synthetic suite passed `18` tests, and the complete orbital
+suite passed `113`. An isolated SpiceyPy `7.0.0` runtime subsequently loaded
+the four frozen kernels after all byte counts and SHA-256 values matched. With
+a unit rest-frame carrier, zero declared calibration offset and aging, and all
+physical media/hardware terms still open, the kernel-bound regression is:
+
+| Receive UTC | Geometric light time | Kinematic frequency factor |
+|---|---:|---:|
+| `2005-06-06T17:50:01Z` | `4,907.510879427195 s` | `0.9999299036421737` |
+| `2005-06-06T19:10:26Z` | `4,907.850356847048 s` | `0.9999293648478778` |
+| `2005-06-06T20:30:51Z` | `4,908.192765682936 s` | `0.9999286935663851` |
+
+The factor changes by approximately `-1.2100757886e-6`; scaling that only for
+comparison by the provisional `8.425 GHz` screening carrier gives about
+`-10.195 kHz`. This is diagnostic, not an asserted Cassini USO frequency. An
+opt-in test re-verifies all kernel identities and reproduces the three points.
+With that exact kernel set present, the complete orbital suite passes `114`
+tests.
+The remaining blocker is the concrete USO calibration and header-derived
+RF/IF/NCO ledger, followed by bounds or claim-scope exclusions for every open
+term. Development IQ, primary, and reserve remain unopened.
 
 ### Decision and remaining blocker
 
