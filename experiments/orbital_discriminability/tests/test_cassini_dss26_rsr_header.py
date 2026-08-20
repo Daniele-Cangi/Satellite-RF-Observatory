@@ -34,7 +34,7 @@ def _synthetic_header() -> bytearray:
     struct.pack_into(">H", value, 32, 104)
     struct.pack_into(">H", value, 34, 220)
     struct.pack_into(">H", value, 40, 17)
-    value[42:46] = bytes((40, 26, 2, 1))
+    value[42:46] = bytes((40, 26, 1, 1))
     value[56] = 0
     value[68] = 8
     struct.pack_into(">H", value, 70, 1)
@@ -64,12 +64,12 @@ def _synthetic_header() -> bytearray:
     return value
 
 
-def test_parser_exposes_only_dss26_2a1_control_metadata() -> None:
+def test_parser_exposes_only_dss26_1a1_control_metadata() -> None:
     receipt = parse_dss26_header(_synthetic_header())
     assert receipt.first_sample_utc == "2005-06-06T17:50:01.000000Z"
     assert (receipt.station_id, receipt.rsr_id, receipt.channel_id, receipt.subchannel_id) == (
         "DSS-26",
-        2,
+        1,
         "A",
         1,
     )
@@ -148,7 +148,7 @@ def test_product_binding_and_zero_data_chdo_access() -> None:
 
     wrong_subchannel = _synthetic_header()
     wrong_subchannel[45] = 2
-    with pytest.raises(CassiniRsrHeaderError, match="2A1"):
+    with pytest.raises(CassiniRsrHeaderError, match="1A1"):
         parse_dss26_header(wrong_subchannel)
 
     with pytest.raises(CassiniRsrHeaderError, match="260"):
@@ -160,10 +160,10 @@ def test_manifest_is_product_bound_strict_and_synthetic_only() -> None:
     assert manifest["scope"] == "CASSINI_SAGR_DSS26_DEVELOPMENT_HEADER_ONLY"
     assert manifest["identity"] == {
         "station": "DSS-26",
-        "rsr": 2,
+        "rsr": 1,
         "channel": "A",
         "subchannel": 1,
-        "channel_source": "frozen PDS source-product suffix 2A1",
+        "channel_source": "frozen PDS source-product suffix 1A1",
     }
     assert manifest["data_chdo_access"] == "PROHIBITED"
     assert manifest["fixture_policy"] == "SPECIFICATION_DERIVED_SYNTHETIC_ONLY_BEFORE_AUTHORITY"

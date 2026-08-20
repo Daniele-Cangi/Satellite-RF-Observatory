@@ -1,6 +1,6 @@
 """Synthetic-fixture-only SFDU whitelist for Cassini SAGR DSS-26 development.
 
-The parser is product-bound to the PDS3/PDS4 identity ending in ``2A1``.  It
+The parser is product-bound to the PDS3/PDS4 identity ending in ``1A1``.  It
 accepts exactly the 260-byte RSR header and never accepts or indexes the data
 CHDO.  Unlisted header bytes are structurally discarded; there is no generic
 field registry and no escape hatch that can expose them later.
@@ -17,20 +17,20 @@ import struct
 from typing import Final, Literal
 
 
-PARSER_VERSION: Final = "cassini-sagr-dss26-rsr-header-whitelist-v2"
+PARSER_VERSION: Final = "cassini-sagr-dss26-rsr-header-whitelist-v3"
 DEVELOPMENT_LIDVID: Final = (
     "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:"
     "s11sags2005_157_1750nnnx26rd::1.0"
 )
 DEVELOPMENT_PRODUCT_NAME: Final = "s11sags2005_157_1750nnnx26rd.dat"
 DEVELOPMENT_SOURCE_PRODUCT_ID: Final = (
-    "CO-S-RSS-1-SAGR1-V1.0:S11SAGS2005157_1750NNNX26RD.2A1"
+    "CO-S-RSS-1-SAGR1-V1.0:S11SAGS2005157_1750NNNX26RD.1A1"
 )
 RSR_HEADER_BYTES: Final = 260
 RSR_RECORD_BYTES: Final = 4_260
 RSR_DDC_OUTPUT_RATE_HZ: Final = 16_000_000
 EXPECTED_STATION_ID: Final = 26
-EXPECTED_RSR_ID: Final = 2
+EXPECTED_RSR_ID: Final = 1
 EXPECTED_CHANNEL_ID: Final = "A"
 EXPECTED_SUBCHANNEL_ID: Final = 1
 EXPECTED_SAMPLE_RATE_HZ: Final = 1_000
@@ -245,7 +245,7 @@ def parse_dss26_header(
         EXPECTED_CHANNEL_ID,
         EXPECTED_SUBCHANNEL_ID,
     ):
-        raise CassiniRsrHeaderError("header differs from frozen RSR/channel/subchannel 2A1")
+        raise CassiniRsrHeaderError("header differs from frozen RSR/channel/subchannel 1A1")
     if receipt.sample_rate_hz != EXPECTED_SAMPLE_RATE_HZ:
         raise CassiniRsrHeaderError("header differs from frozen 1 ksps product")
     if receipt.frequency_override_active:
@@ -274,7 +274,7 @@ def parser_manifest() -> dict[str, object]:
             "rsr": EXPECTED_RSR_ID,
             "channel": EXPECTED_CHANNEL_ID,
             "subchannel": EXPECTED_SUBCHANNEL_ID,
-            "channel_source": "frozen PDS source-product suffix 2A1",
+            "channel_source": "frozen PDS source-product suffix 1A1",
         },
         "header_bytes": RSR_HEADER_BYTES,
         "record_bytes": RSR_RECORD_BYTES,
