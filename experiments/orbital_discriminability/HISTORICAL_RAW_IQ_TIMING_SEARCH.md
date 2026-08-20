@@ -2,6 +2,8 @@
 
 Date: 2026-08-19
 
+Cassini one-way RSR pivot updated: 2026-08-20
+
 This is a bounded, metadata-only search inside the existing forward orbital
 work.  It is not a new gate or a receiver catalog.  No IQ file was downloaded,
 decoded, ranged, or opened.  In particular, the RSP-03 2026-02-09 primary and
@@ -206,9 +208,10 @@ honest one-minute direct-trajectory brackets, not interpolated point estimates.
   `NOT_COMPUTED_AFTER_TIMING_REFUSAL`.
 - **Decision:** **`REFUSED_NO_RECORDING_APPLICABLE_PPS_TO_ADC_BOUND`**.
 
-## Recommended role structure
+## Historical MAVEN role structure and closure
 
-The bounded search did find time-qualified data.  The recommended structure is:
+The first bounded search found time-qualified MAVEN data and froze this
+historical structure:
 
 ```text
 DEVELOPMENT
@@ -224,21 +227,175 @@ SEALED_REPLICATION_RESERVE
   independent date, station and reconstructed pass; second-ranked screen
 ```
 
-This is a role recommendation, not access authority.  Before any artifact is
-opened, the minimum remaining work is entirely prospective and orbital:
+The DSS-45 development artifact was subsequently materialized and a model-blind
+detector was frozen.  The available MAVEN trajectory was then confirmed to be a
+post-pass reconstructed SPK.  It can support receiver/compiler development but
+not an independent orbital prediction.  MAVEN is therefore closed as
+`DEVELOPMENT_ONLY_FOR_TWO_WAY_RSR_COMPILER`.  DSS-35 primary and DSS-55 reserve
+remain sealed and unchanged.
 
-1. replace the factor-of-two screen with one frozen coherent two-way
-   light-time/ramp predictor and hash its SPICE, Earth-orientation, station and
-   uplink-frequency inputs;
-2. freeze the exact subchannel, science interval, calibration/holdout split,
-   SFDU inverse-NCO transform, frequency resolution and existing null family;
-3. require complete-file materialization and SHA-256 before decoding;
-4. materialize **development only**, freeze a model-blind detector, then keep
-   primary and reserve sealed until their separate authorities exist.
+## Post-MAVEN independent-orbit pivot: Cassini one-way RSR
 
-No free time phase is allowed.  The candidate-specific absolute-time nuisance
-can be bounded by the documented `100 ns`; it may not be expanded after seeing
-any ridge.
+This second search was bounded to a single mechanism after the MAVEN closure.
+Only three PDS4 XML labels, two NAIF SPK labels, and two predicted SPK files were
+materialized.  No Cassini `.dat` payload was downloaded, ranged, decoded, or
+opened.
+
+The selected records are Saturn Gravity Science Experiment RSR products with
+`NNN` uplink and X-band downlink.  They are therefore one-way Cassini-USO
+observations rather than coherent two-way links.  This removes the uplink ramp
+and turnaround-ratio compiler from the prospective causal path.  The RSR NCO
+still applies a precomputed predicts-driven deramp; the per-SFDU frequency and
+phase polynomials remain mandatory for exact inversion.
+
+The Cassini Radio Science User's Guide states that this steering frequency was
+precomputed from the predicted ephemeris supplied by navigation.  More
+importantly, the concrete NAIF labels independently mark the candidate kernels
+as `PRODUCT_VERSION_TYPE = "PREDICT"` and place their creation before the
+recordings:
+
+- `050426AP_SCPSE_05116_05216.bsp`: created
+  `2005-04-26T11:10:12`, coverage `2005-04-26T11:04:46` through
+  `2005-08-04T00:00:00`, SHA-256
+  `065258e6982b10488604d97f02f9b5110d6b1e4760ff340211b50973ab8228f5`;
+- `060901AP_SCPSE_06244_06255.bsp`: created
+  `2006-09-01T09:44:12`, coverage `2006-09-01T09:37:45` through
+  `2006-09-12T08:16:51`, SHA-256
+  `0b7cc35d94b956602593106ed8aa62ce5f33cb178b8544036a841c5e53fc81dd`.
+
+Both kernels include Cassini, Earth and the planetary context needed by a
+future one-way light-time predictor.  Their predicted status is not inferred
+from filename syntax.  It is explicit in the producer labels.  No
+reconstructed Cassini SPK may replace either kernel after a prospective plan is
+frozen.
+
+### Shared measurement admission
+
+- Product class is raw DSN RSR complex I/Q in one-second SFDUs.
+- Each selected product contains exactly `1,000` I/Q pairs per record and one
+  record per second, hence `1,000 complex samples/s` for the selected
+  subchannel.
+- The container exposes 16-bit I and Q words.  Actual sample resolution is a
+  per-SFDU header field and remains **unknown before header access**.
+- Pipeline-compensated first-sample UTC is bound to DIG-ADC sample creation;
+  the RSR timing specification gives `100 ns` accuracy.
+- Downlink is one-way X-band, RCP.  The mission band table gives approximately
+  `8,425 MHz`; the exact received sky-frequency coordinate remains a function
+  of the unopened RF-to-IF, DDC-LO and NCO header fields.
+- No measurement-derived Doppler correction is present.  The predicts-driven
+  NCO is a known receiver transform, reversible only if the complete header
+  ledger is admitted.
+- PDS4 version is `1.0`; each label states that the PDS3 data bytes were not
+  changed during migration.  Published artifact MD5 values provide immutable
+  remote identity; a future authorized materialization must add full-file
+  SHA-256 before decoding.
+
+### Role-selection discriminability screen
+
+JPL Horizons current geometry was used only to rank the already admitted
+records.  It is reconstructed/operational screening output and is prohibited
+from the prospective predictor.  The screen used:
+
+- one-way topocentric range-rate at a provisional `8.4 GHz` scale;
+- one-minute geometry points and the documented DSN station coordinates;
+- first 20 percent as an affine calibration prefix and the remaining 80
+  percent as held out;
+- peak-to-peak held-out residual after extrapolating that frozen affine;
+- provisional `R_f = 1 Hz` solely for admission screening;
+- direct `t-B_t` and `t+B_t` trajectory envelopes, never local
+  slope-times-error;
+- `signature > 3 R_f + 2 E_t` as the conservative screen.
+
+The resulting physical rank is:
+
+| Rank | Product / station | Held-out residual p-p | Held-out RMS | Total Doppler span | Direct timing bracket |
+|---:|---|---:|---:|---:|---:|
+| 1 | `s23sags2006_251_1200nnnx14rd` / DSS-14 | `2,046.336 Hz` | `1,001.084 Hz` | `7,419.467 Hz` | `1,140 s <= B_t,max < 1,200 s` |
+| 2 | `s11sags2005_157_1750nnnx26rd` / DSS-26 | `1,851.173 Hz` | `909.095 Hz` | `10,104.246 Hz` | `720 s <= B_t,max < 780 s` |
+| 3 | `s10sags2005_122_1955nnnx14rd` / DSS-14 | `1,294.885 Hz` | `639.576 Hz` | `30,305.974 Hz` | `60 s <= B_t,max < 120 s` |
+
+Even the weakest direct bracket exceeds the documented RSR time error by more
+than eight orders of magnitude.  These numbers do not authorize a claim about
+the predicted SPKs; they only show that exact predicted-SPK compilation is
+worth doing.
+
+### Exact candidate records
+
+#### Development — DSS-26, 2005-06-06
+
+- LIDVID:
+  `urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s11sags2005_157_1750nnnx26rd::1.0`;
+- UTC: `2005-06-06T17:50:01Z` through `20:30:51Z`;
+- station: DSS-26 Goldstone, latitude `35.33568922 deg`, longitude
+  `243.12698351 deg` east, height `968.686 m`;
+- file: `41,113,260 bytes`, `9,651` one-second records, published MD5
+  `ce672e2258ffe8466389db36f9f6668f`;
+- XML-label SHA-256:
+  `b02dd0ff1aaa355fbe6faca191b898c91b2d99532864750ac6a50e30d93b70c1`;
+- predicted orbit: `050426AP_SCPSE_05116_05216.bsp`.
+
+This is the development role because it is a non-occultation one-way SAGR
+track, has a large timing/discriminability margin, and uses a different
+hardware root from the strongest primary candidate.
+
+#### Primary held out — DSS-14, 2006-09-08
+
+- LIDVID:
+  `urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200nnnx14rd::1.0`;
+- UTC: `2006-09-08T12:00:01Z` through `15:00:00Z`;
+- station: DSS-14 Goldstone, latitude `35.42590087 deg`, longitude
+  `243.11046179 deg` east, height `1,001.390 m`;
+- file: `46,008,000 bytes`, `10,800` one-second records, published MD5
+  `378f601ddbc057ebdc822cdb5fac4197`;
+- XML-label SHA-256:
+  `185d43fe474484d1ef29957c603a63feaab9ac5426043d588fe33716e871ca58`;
+- predicted orbit: `060901AP_SCPSE_06244_06255.bsp`.
+
+It is the primary recommendation because it ranks first on held-out curvature
+and on direct timing margin, while remaining independent of development in
+date, station hardware, and predicted-orbit delivery.
+
+#### Sealed reserve — DSS-14, 2005-05-02
+
+- LIDVID:
+  `urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s10sags2005_122_1955nnnx14rd::1.0`;
+- UTC: `2005-05-02T19:55:01Z` through `21:08:00Z`;
+- station coordinates: the same DSS-14 values above;
+- file: `18,658,800 bytes`, `4,380` one-second records, published MD5
+  `9b8b89c1e3a15ad742c828b51224b85f`;
+- XML-label SHA-256:
+  `b17cf1f4470630894988b9694284fcda7bad115d59018a29a40fe496ede3c6c9`;
+- predicted orbit: `050426AP_SCPSE_05116_05216.bsp`.
+
+The reserve is a time-separated model replication, not a new station root: it
+shares DSS-14 with the primary.  That limitation is explicit and may not be
+promoted to independent-hardware corroboration.
+
+### Decision and remaining blocker
+
+Outcome: **`TIME_AND_ORBIT_QUALIFIED_DATASET_FOUND`**.
+
+The recommended structure is:
+
+```text
+DEVELOPMENT       Cassini SAGR 2005-06-06 DSS-26
+PRIMARY_HELD_OUT  Cassini SAGR 2006-09-08 DSS-14
+SEALED_RESERVE    Cassini SAGR 2005-05-02 DSS-14
+```
+
+This is not access authority and no role is yet sealed by a prospective plan.
+The next minimum step is offline: compile the exact one-way received-sky and
+recorded-baseband curves from the two pre-pass predicted SPKs, Earth
+orientation/station kernels and the RSR inverse-NCO header contract; then
+freeze detector inputs, split and nulls before materializing development.
+
+The immediate software blocker is narrow and physical: the installed Skyfield
+reader does not support the type-1 Cassini spacecraft segment.  A future
+compiler must use a validated SPICE implementation that supports that segment;
+it may not substitute Horizons or a reconstructed trajectory.  Exact sample
+resolution, NCO override state and frequency-polynomial continuity also remain
+unknown until a separately authorized, amplitude-blind development-header
+spike.  Primary and reserve must remain unopened throughout both steps.
 
 ## Public sources
 
@@ -254,6 +411,14 @@ any ridge.
 - [2016-07-12 PDS label](https://pds-ppi.igpp.ucla.edu/data/maven-rose-raw/data/rsr/2016/07/mvn_rse_l0_rsr_20160712T124201_v01_r00.xml)
 - [NASA science-data licensing](https://science.data.nasa.gov/about/license)
 - [JPL Horizons API](https://ssd-api.jpl.nasa.gov/doc/horizons.html)
+- [Cassini Radio Science User's Guide](https://pds.nasa.gov/data/pds4/misc/document_cassini/Cassini_Radio_Science_Users_Guide_30Sep2018.pdf)
+- [Cassini SAGR bundle](https://atmos.nmsu.edu/data_and_services/atmospheres_data/Cassini/inst-rss_curr.html)
+- [Cassini operational SPK directory](https://naif.jpl.nasa.gov/pub/naif/CASSINI/kernels/spk/)
+- [DSS-26 development label](https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr01/2005/s11sags2005_157_1750nnnx26rd.xml)
+- [DSS-14 primary label](https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr01/2006/s23sags2006_251_1200nnnx14rd.xml)
+- [DSS-14 reserve label](https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr01/2005/s10sags2005_122_1955nnnx14rd.xml)
+- [2005 predicted-SPK label](https://naif.jpl.nasa.gov/pub/naif/CASSINI/kernels/spk/050426AP_SCPSE_05116_05216.bsp.lbl)
+- [2006 predicted-SPK label](https://naif.jpl.nasa.gov/pub/naif/CASSINI/kernels/spk/060901AP_SCPSE_06244_06255.bsp.lbl)
 - [GPS L1 Zenodo record](https://zenodo.org/records/6394603)
 - [GPS sample-zero timing analysis](https://destevez.net/2022/03/timing-sdr-recordings-with-gps/)
 - [CAMRAS satellite IQ catalog](https://data.camras.nl/satellites/raw/)
