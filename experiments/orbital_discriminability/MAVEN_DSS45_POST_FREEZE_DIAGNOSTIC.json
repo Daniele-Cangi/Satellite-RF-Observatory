@@ -1,0 +1,49 @@
+{
+  "claim_scope": "development compiler/tracker diagnostic only; no independent orbital or spacecraft-identity claim",
+  "comparison_count": 72,
+  "comparison_method": {
+    "fitted_frequency_offset": "NONE",
+    "fitted_time_offset": "NONE",
+    "interpolation": "NONE",
+    "matching": "nearest frozen detector frame by event time",
+    "threshold_or_parameter_change": "NONE"
+  },
+  "comparison_order": "DETECTOR_FROZEN_THEN_METADATA_CURVE_COMPARED",
+  "detector_manifest_sha256": "fee5b326f9a9a8a40545dd1e2bbc656cff1773ef01351dbc392aa66add3060c9",
+  "diagnostic_version": "maven-dss45-post-freeze-diagnostic-v1",
+  "frozen_null_diagnostic": {
+    "minimum_absolute_mars_center_residual_hz": 295.2873418935924,
+    "minimum_absolute_ramp_nco_only_residual_hz": 454519.6437372652
+  },
+  "maximum_absolute_time_separation_s": 0.45300000000000296,
+  "nominal_residual": {
+    "effective_frequency_resolution_hz": 0.3662109375,
+    "maximum_absolute_hz": 4.324251600832213,
+    "mean_hz": -0.117455851255929,
+    "native_bin_spacing_hz": 0.244140625,
+    "rmse_hz": 0.5303910306414129,
+    "within_effective_resolution_count": 70,
+    "within_native_bin_count": 70
+  },
+  "outliers_beyond_effective_resolution": [
+    {
+      "detector_baseband_frequency_hz": 48.828125,
+      "detector_event_time_offset_s": 710.0475,
+      "mars_center_null_residual_hz": 17432.496665249753,
+      "nominal_residual_hz": -1.0282895460841246,
+      "predicted_baseband_frequency_hz": 49.856414546084125,
+      "prediction_event_time_offset_s": 710.5005,
+      "ramp_nco_only_null_residual_hz": -455288.74067949207
+    },
+    {
+      "detector_baseband_frequency_hz": 45.8984375,
+      "detector_event_time_offset_s": 720.0475,
+      "mars_center_null_residual_hz": 18213.053450158506,
+      "nominal_residual_hz": -4.324251600832213,
+      "predicted_baseband_frequency_hz": 50.22268910083221,
+      "prediction_event_time_offset_s": 720.5005,
+      "ramp_nco_only_null_residual_hz": -454519.6437372652
+    }
+  ],
+  "spk_independence": "RECONSTRUCTED_POST_PASS_NOT_INDEPENDENT"
+}

@@ -1,0 +1,127 @@
+{
+  "admission_result": {
+    "admitted_frame_count": 721,
+    "ambiguous_frame_count": 7,
+    "below_snr_frame_count": 348,
+    "clipped_scalar_fraction": 0.0,
+    "complete_frame_count": 1076,
+    "edge_frame_count": 0,
+    "maximum_baseband_frequency_hz": 49.31640625,
+    "maximum_observed_slew_hz_s": 0.732421875,
+    "minimum_ambiguity_margin_db": 28.867268435486253,
+    "minimum_baseband_frequency_hz": 27.34375,
+    "minimum_peak_snr_db": 55.26086015657553,
+    "selected_duration_s": 720.0,
+    "selected_frame_count": 721,
+    "status": "CARRIER_ADMITTED"
+  },
+  "authority": {
+    "authority_receipt_sha256": "908f74d91876737859bddc3b703da6a7c13f9b608ec90044d9c5d07f61e01ec4",
+    "decode_rule": "complete-file identity, byte count and SHA-256 verified before any sample decoding",
+    "header_manifest_file_sha256": "df90255af923fd87a85da231764887052bf57686d0bc6a1aa72783fd7d3180d8",
+    "header_transform_ledger_sha256": "4749dcfe6b94c038db323290ff68c33be1467c9c3632c199f42705e4c922a086",
+    "parser_contract_sha256": "50de0005bb26317ec94c2816ac8465b48370fbce2db555a28801dffead89317e"
+  },
+  "claim_limit": "development carrier admission only; no orbital, spacecraft-identity, amplitude-response or independent-prediction claim",
+  "continuity_and_failure_semantics": {
+    "ambiguity": "reject a frame when the strongest disjoint peak is less than 10 dB below the candidate",
+    "clipping": "reject a frame above 0.0001 clipped scalar fraction and invalidate the measurement if the whole artifact exceeds the same fraction",
+    "edge": "reject a frame whose strongest full-passband peak lies within 50 Hz of either Nyquist edge",
+    "gap": "split immediately; never interpolate or bridge; non-contiguous RSR records are refused before tracking",
+    "outcome_if_no_eligible_run": "DEVELOPMENT_CARRIER_NOT_ADMITTED",
+    "run": "at least 30 consecutive admitted one-second-hop frames with no gap and no step above 1 Hz/s",
+    "snr": "candidate peak must be at least 20 dB above local median linear power"
+  },
+  "decoder": {
+    "baseband_coordinates_hz": {
+      "center": 0.0,
+      "lower": -500.0,
+      "upper": 500.0
+    },
+    "complex_convention": "I_plus_jQ",
+    "data_bytes_per_record": 4000,
+    "decimation_after_file_decode": "NONE",
+    "record_bytes": 4260,
+    "sample_encoding": "signed_int16_msb_Q_then_I",
+    "sample_scaling": "NONE; native signed ADC counts",
+    "samples_per_record": 1000
+  },
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5",
+    "pytest": "8.4.2"
+  },
+  "development_artifact": {
+    "bytes": 4600800,
+    "label_bytes": 73064,
+    "label_sha256": "a9b37dbc151e83106823d9da6edfa7bd135752caee1e950a3e6c3b551d82c014",
+    "lidvid": "urn:nasa:pds:maven.rose.raw:data.rsr:mvn_rse_l0_rsr_20160712t124201::1.0",
+    "sha256": "0e8113b6cf0e21759f74a61d944c27c5ecc55ec18281b2c88f0f8e601ed6917c"
+  },
+  "fir_scope": {
+    "amplitude_response_claim": "PROHIBITED",
+    "coefficient_state": "NOT_ENCODED_IN_SFDU",
+    "policy": "do not infer coefficients; use only the 50 Hz-guarded passband and local relative power"
+  },
+  "freeze_binding": {
+    "development_result_sha256": "f3729efb08caa83b641718767545c0a77849e772ba03f4c0e7c651c978213c10",
+    "detector_code_path": "experiments/orbital_discriminability/maven_rsr_carrier_tracker.py",
+    "detector_code_sha256": "8b7e45f19c3a4be1abb91b6057a57d2a3925fd6776bf0aa2c23b5bb9cd51a478",
+    "development_runner_sha256": "7e1b0ac8bc24ac012a62db675d6c6a046ec99a56c51c49d1a58d064e8a45d9b9",
+    "source_commit": "35e9fd1fb054c20d15f7e702d0dbff940fe424f9",
+    "test_source_sha256": "28db0ecb4f2a57ea79acf335fd92a85d0bb9bf36e097b8e2e0449b07b26dcbe5"
+  },
+  "manifest_version": "maven-dss45-carrier-detector-manifest-v1",
+  "model_blind_boundary": {
+    "allowed_inputs": [
+      "complex samples",
+      "sample rate",
+      "recorded baseband frequency coordinates",
+      "frozen receiver/header configuration"
+    ],
+    "forbidden_inputs": [
+      "spacecraft geometry",
+      "predicted baseband trajectory",
+      "uplink or light-time prediction",
+      "orbital residuals",
+      "non-development sample information"
+    ],
+    "orbital_model_input_used": false
+  },
+  "outcome": "DETECTOR_FROZEN_FOR_RSR_DEVELOPMENT",
+  "parameters": {
+    "background_estimator": "local_median_linear_power",
+    "candidate_exclusion_half_width_hz": 2.0,
+    "complex_convention": "I_plus_jQ",
+    "effective_frequency_resolution_hz": 0.3662109375,
+    "expected_sample_rate_hz": 1000,
+    "frame_first_offset_s": 2.0475,
+    "frame_hop_s": 1.0,
+    "frame_time_reference": "midpoint_of_first_and_last_sample_timestamps",
+    "frequency_estimator": "strongest_native_fft_bin_no_subbin_fit",
+    "local_background_half_width_hz": 50.0,
+    "maximum_clipped_scalar_fraction": 0.0001,
+    "maximum_gap_frames": 0,
+    "maximum_slew_hz_s": 1.0,
+    "minimum_ambiguity_margin_db": 10.0,
+    "minimum_contiguous_frames": 30,
+    "minimum_peak_snr_db": 20.0,
+    "native_bin_spacing_hz": 0.244140625,
+    "overlap_samples": 3096,
+    "passband_edge_guard_hz": 50.0,
+    "sample_encoding": "signed_int16_msb_Q_then_I",
+    "stft_hop_samples": 1000,
+    "stft_length_samples": 4096,
+    "stft_window": "periodic_hann",
+    "unknown_fir_policy": "no_coefficient_inference; no_amplitude_response_claim; use_interior_band_only",
+    "zero_padding_samples": 0
+  },
+  "time_semantics": {
+    "first_sample": "RSR header first-sample UTC",
+    "frame": "arithmetic midpoint of the first and last sample timestamps in each 4096-sample frame",
+    "frame_first_offset_s": 2.0475,
+    "frame_hop_s": 1.0,
+    "record_progression": "header UTC plus sample_index/sample_rate; verified one-second record continuity"
+  },
+  "tracker_version": "maven-dss45-model-blind-carrier-tracker-v1"
+}

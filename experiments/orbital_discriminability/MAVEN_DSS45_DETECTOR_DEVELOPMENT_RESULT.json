@@ -1,0 +1,5140 @@
+{
+  "claim_limit": "carrier admission only; no orbital, identity, amplitude-response, or independent-prediction claim",
+  "development_artifact": {
+    "bytes": 4600800,
+    "sha256": "0e8113b6cf0e21759f74a61d944c27c5ecc55ec18281b2c88f0f8e601ed6917c"
+  },
+  "measurement": {
+    "admitted_frame_count": 721,
+    "ambiguous_frame_count": 7,
+    "below_snr_frame_count": 348,
+    "clipped_frame_count": 0,
+    "clipped_scalar_fraction": 0.0,
+    "complete_frame_count": 1076,
+    "edge_frame_count": 0,
+    "gap_policy": "split_immediately_never_interpolate",
+    "orbital_model_input_used": false,
+    "sample_count": 1080000,
+    "segment_lengths": [
+      721
+    ],
+    "selected_segment": {
+      "duration_s": 720.0,
+      "first_event_time_offset_s": 2.0475,
+      "last_event_time_offset_s": 722.0475,
+      "maximum_baseband_frequency_hz": 49.31640625,
+      "maximum_observed_slew_hz_s": 0.732421875,
+      "minimum_ambiguity_margin_db": 28.867268435486253,
+      "minimum_baseband_frequency_hz": 27.34375,
+      "minimum_peak_snr_db": 55.26086015657553,
+      "point_count": 721,
+      "points": [
+        {
+          "ambiguity_margin_db": 46.41353938239176,
+          "baseband_frequency_hz": 27.34375,
+          "event_time_offset_s": 2.0475,
+          "frame_index": 0,
+          "peak_snr_db": 58.78373603723604
+        },
+        {
+          "ambiguity_margin_db": 45.55885497096845,
+          "baseband_frequency_hz": 27.34375,
+          "event_time_offset_s": 3.0475,
+          "frame_index": 1,
+          "peak_snr_db": 58.133983556346365
+        },
+        {
+          "ambiguity_margin_db": 43.04366767973495,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 4.0475,
+          "frame_index": 2,
+          "peak_snr_db": 57.96079551213598
+        },
+        {
+          "ambiguity_margin_db": 45.30567015968473,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 5.0475,
+          "frame_index": 3,
+          "peak_snr_db": 58.810862385656065
+        },
+        {
+          "ambiguity_margin_db": 42.751266386076196,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 6.0475,
+          "frame_index": 4,
+          "peak_snr_db": 58.88284818432106
+        },
+        {
+          "ambiguity_margin_db": 43.4556950136959,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 7.0475,
+          "frame_index": 5,
+          "peak_snr_db": 59.47421978981295
+        },
+        {
+          "ambiguity_margin_db": 46.658697109793856,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 8.0475,
+          "frame_index": 6,
+          "peak_snr_db": 58.94437375914059
+        },
+        {
+          "ambiguity_margin_db": 44.733503661874764,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 9.0475,
+          "frame_index": 7,
+          "peak_snr_db": 58.0902124366309
+        },
+        {
+          "ambiguity_margin_db": 47.921082598444926,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 10.0475,
+          "frame_index": 8,
+          "peak_snr_db": 58.721486140573475
+        },
+        {
+          "ambiguity_margin_db": 48.32681158689777,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 11.0475,
+          "frame_index": 9,
+          "peak_snr_db": 59.47135641223129
+        },
+        {
+          "ambiguity_margin_db": 46.65097055116326,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 12.0475,
+          "frame_index": 10,
+          "peak_snr_db": 59.30395442872914
+        },
+        {
+          "ambiguity_margin_db": 46.0552186481143,
+          "baseband_frequency_hz": 27.587890625,
+          "event_time_offset_s": 13.0475,
+          "frame_index": 11,
+          "peak_snr_db": 58.69668519887955
+        },
+        {
+          "ambiguity_margin_db": 44.18699771537404,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 14.0475,
+          "frame_index": 12,
+          "peak_snr_db": 59.20176519986576
+        },
+        {
+          "ambiguity_margin_db": 46.96862026777278,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 15.0475,
+          "frame_index": 13,
+          "peak_snr_db": 59.84271060612619
+        },
+        {
+          "ambiguity_margin_db": 48.182182359020146,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 16.0475,
+          "frame_index": 14,
+          "peak_snr_db": 60.15076015052873
+        },
+        {
+          "ambiguity_margin_db": 47.790040155143146,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 17.0475,
+          "frame_index": 15,
+          "peak_snr_db": 60.61811150821305
+        },
+        {
+          "ambiguity_margin_db": 46.567872059530046,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 18.0475,
+          "frame_index": 16,
+          "peak_snr_db": 60.54757299227
+        },
+        {
+          "ambiguity_margin_db": 46.73938633614952,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 19.0475,
+          "frame_index": 17,
+          "peak_snr_db": 60.48410617031682
+        },
+        {
+          "ambiguity_margin_db": 45.689481973980705,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 20.0475,
+          "frame_index": 18,
+          "peak_snr_db": 59.16157650625631
+        },
+        {
+          "ambiguity_margin_db": 44.26424840519637,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 21.0475,
+          "frame_index": 19,
+          "peak_snr_db": 59.56410044982816
+        },
+        {
+          "ambiguity_margin_db": 44.144359067852534,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 22.0475,
+          "frame_index": 20,
+          "peak_snr_db": 59.56370023126598
+        },
+        {
+          "ambiguity_margin_db": 46.22593494422088,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 23.0475,
+          "frame_index": 21,
+          "peak_snr_db": 59.452045232354365
+        },
+        {
+          "ambiguity_margin_db": 44.00427448653574,
+          "baseband_frequency_hz": 27.83203125,
+          "event_time_offset_s": 24.0475,
+          "frame_index": 22,
+          "peak_snr_db": 58.899999080071986
+        },
+        {
+          "ambiguity_margin_db": 45.154189886554256,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 25.0475,
+          "frame_index": 23,
+          "peak_snr_db": 59.428559113004205
+        },
+        {
+          "ambiguity_margin_db": 45.04923642001502,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 26.0475,
+          "frame_index": 24,
+          "peak_snr_db": 60.41802748076216
+        },
+        {
+          "ambiguity_margin_db": 48.495491966873516,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 27.0475,
+          "frame_index": 25,
+          "peak_snr_db": 59.63296728686807
+        },
+        {
+          "ambiguity_margin_db": 47.55286291196388,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 28.0475,
+          "frame_index": 26,
+          "peak_snr_db": 59.21803908128795
+        },
+        {
+          "ambiguity_margin_db": 46.98960942913939,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 29.0475,
+          "frame_index": 27,
+          "peak_snr_db": 59.72732564892258
+        },
+        {
+          "ambiguity_margin_db": 46.67906522354755,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 30.0475,
+          "frame_index": 28,
+          "peak_snr_db": 59.31968303438171
+        },
+        {
+          "ambiguity_margin_db": 45.94822865508376,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 31.0475,
+          "frame_index": 29,
+          "peak_snr_db": 59.0335236841259
+        },
+        {
+          "ambiguity_margin_db": 47.53737291729698,
+          "baseband_frequency_hz": 28.076171875,
+          "event_time_offset_s": 32.0475,
+          "frame_index": 30,
+          "peak_snr_db": 58.51000781207317
+        },
+        {
+          "ambiguity_margin_db": 45.808318440240974,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 33.0475,
+          "frame_index": 31,
+          "peak_snr_db": 57.91972310778509
+        },
+        {
+          "ambiguity_margin_db": 45.33114209569271,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 34.0475,
+          "frame_index": 32,
+          "peak_snr_db": 58.55720479840663
+        },
+        {
+          "ambiguity_margin_db": 43.35764919524423,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 35.0475,
+          "frame_index": 33,
+          "peak_snr_db": 58.76062419818739
+        },
+        {
+          "ambiguity_margin_db": 43.74223471882235,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 36.0475,
+          "frame_index": 34,
+          "peak_snr_db": 59.5099078919148
+        },
+        {
+          "ambiguity_margin_db": 48.291611096529294,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 37.0475,
+          "frame_index": 35,
+          "peak_snr_db": 60.07425303964153
+        },
+        {
+          "ambiguity_margin_db": 46.48507180198216,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 38.0475,
+          "frame_index": 36,
+          "peak_snr_db": 59.69107190326562
+        },
+        {
+          "ambiguity_margin_db": 46.0807533367265,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 39.0475,
+          "frame_index": 37,
+          "peak_snr_db": 59.506011663106136
+        },
+        {
+          "ambiguity_margin_db": 44.668295410549874,
+          "baseband_frequency_hz": 28.3203125,
+          "event_time_offset_s": 40.0475,
+          "frame_index": 38,
+          "peak_snr_db": 58.66878817744727
+        },
+        {
+          "ambiguity_margin_db": 42.238785379021316,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 41.0475,
+          "frame_index": 39,
+          "peak_snr_db": 58.07316789719319
+        },
+        {
+          "ambiguity_margin_db": 43.61396635456398,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 42.0475,
+          "frame_index": 40,
+          "peak_snr_db": 58.13668411894217
+        },
+        {
+          "ambiguity_margin_db": 47.83451393684728,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 43.0475,
+          "frame_index": 41,
+          "peak_snr_db": 58.27029694570081
+        },
+        {
+          "ambiguity_margin_db": 47.33659459999856,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 44.0475,
+          "frame_index": 42,
+          "peak_snr_db": 58.39907016371477
+        },
+        {
+          "ambiguity_margin_db": 46.71260157038155,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 45.0475,
+          "frame_index": 43,
+          "peak_snr_db": 59.6923223945338
+        },
+        {
+          "ambiguity_margin_db": 47.05659268063903,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 46.0475,
+          "frame_index": 44,
+          "peak_snr_db": 59.983686819515526
+        },
+        {
+          "ambiguity_margin_db": 47.88141489488129,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 47.0475,
+          "frame_index": 45,
+          "peak_snr_db": 59.87727792819328
+        },
+        {
+          "ambiguity_margin_db": 48.21718760774271,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 48.0475,
+          "frame_index": 46,
+          "peak_snr_db": 59.15760541914192
+        },
+        {
+          "ambiguity_margin_db": 47.16895699056168,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 49.0475,
+          "frame_index": 47,
+          "peak_snr_db": 58.844425777400446
+        },
+        {
+          "ambiguity_margin_db": 47.865995362591605,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 50.0475,
+          "frame_index": 48,
+          "peak_snr_db": 59.68360913919803
+        },
+        {
+          "ambiguity_margin_db": 47.32305526739387,
+          "baseband_frequency_hz": 28.564453125,
+          "event_time_offset_s": 51.0475,
+          "frame_index": 49,
+          "peak_snr_db": 59.61034504849985
+        },
+        {
+          "ambiguity_margin_db": 46.63370615179629,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 52.0475,
+          "frame_index": 50,
+          "peak_snr_db": 58.95949422832991
+        },
+        {
+          "ambiguity_margin_db": 46.501360483467444,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 53.0475,
+          "frame_index": 51,
+          "peak_snr_db": 58.859781298894056
+        },
+        {
+          "ambiguity_margin_db": 48.17869833931064,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 54.0475,
+          "frame_index": 52,
+          "peak_snr_db": 59.404141249484766
+        },
+        {
+          "ambiguity_margin_db": 48.654498703476776,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 55.0475,
+          "frame_index": 53,
+          "peak_snr_db": 60.51743937392632
+        },
+        {
+          "ambiguity_margin_db": 47.69011109724471,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 56.0475,
+          "frame_index": 54,
+          "peak_snr_db": 59.520345153918186
+        },
+        {
+          "ambiguity_margin_db": 47.04700344095017,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 57.0475,
+          "frame_index": 55,
+          "peak_snr_db": 59.43821050834239
+        },
+        {
+          "ambiguity_margin_db": 45.33259723253476,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 58.0475,
+          "frame_index": 56,
+          "peak_snr_db": 59.96210659392115
+        },
+        {
+          "ambiguity_margin_db": 43.21241915059049,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 59.0475,
+          "frame_index": 57,
+          "peak_snr_db": 58.56140924439278
+        },
+        {
+          "ambiguity_margin_db": 45.1464833750757,
+          "baseband_frequency_hz": 28.80859375,
+          "event_time_offset_s": 60.0475,
+          "frame_index": 58,
+          "peak_snr_db": 57.658995437619836
+        },
+        {
+          "ambiguity_margin_db": 45.69032949740753,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 61.0475,
+          "frame_index": 59,
+          "peak_snr_db": 57.81869863848505
+        },
+        {
+          "ambiguity_margin_db": 44.859297915310975,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 62.0475,
+          "frame_index": 60,
+          "peak_snr_db": 58.10794799642294
+        },
+        {
+          "ambiguity_margin_db": 42.33825715959826,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 63.0475,
+          "frame_index": 61,
+          "peak_snr_db": 58.49013831390599
+        },
+        {
+          "ambiguity_margin_db": 42.68742477327508,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 64.0475,
+          "frame_index": 62,
+          "peak_snr_db": 59.00781125964221
+        },
+        {
+          "ambiguity_margin_db": 42.0873182992988,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 65.0475,
+          "frame_index": 63,
+          "peak_snr_db": 59.92465951477289
+        },
+        {
+          "ambiguity_margin_db": 46.61108690420597,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 66.0475,
+          "frame_index": 64,
+          "peak_snr_db": 60.529224664352
+        },
+        {
+          "ambiguity_margin_db": 46.84745556532387,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 67.0475,
+          "frame_index": 65,
+          "peak_snr_db": 59.45358037191433
+        },
+        {
+          "ambiguity_margin_db": 45.97969275044033,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 68.0475,
+          "frame_index": 66,
+          "peak_snr_db": 59.260676734900926
+        },
+        {
+          "ambiguity_margin_db": 44.68560061754609,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 69.0475,
+          "frame_index": 67,
+          "peak_snr_db": 59.386580903921
+        },
+        {
+          "ambiguity_margin_db": 43.5757712072791,
+          "baseband_frequency_hz": 29.052734375,
+          "event_time_offset_s": 70.0475,
+          "frame_index": 68,
+          "peak_snr_db": 59.039058136806084
+        },
+        {
+          "ambiguity_margin_db": 42.44334069161518,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 71.0475,
+          "frame_index": 69,
+          "peak_snr_db": 58.65506989699103
+        },
+        {
+          "ambiguity_margin_db": 44.19334146665043,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 72.0475,
+          "frame_index": 70,
+          "peak_snr_db": 59.26164871781392
+        },
+        {
+          "ambiguity_margin_db": 46.24407722644338,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 73.0475,
+          "frame_index": 71,
+          "peak_snr_db": 59.01738167015247
+        },
+        {
+          "ambiguity_margin_db": 42.864021820585904,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 74.0475,
+          "frame_index": 72,
+          "peak_snr_db": 58.98101957003753
+        },
+        {
+          "ambiguity_margin_db": 37.791136397073075,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 75.0475,
+          "frame_index": 73,
+          "peak_snr_db": 60.70695994986374
+        },
+        {
+          "ambiguity_margin_db": 37.769232771608145,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 76.0475,
+          "frame_index": 74,
+          "peak_snr_db": 59.412924232596026
+        },
+        {
+          "ambiguity_margin_db": 40.19420784995893,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 77.0475,
+          "frame_index": 75,
+          "peak_snr_db": 58.55426811884971
+        },
+        {
+          "ambiguity_margin_db": 42.884456933181816,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 78.0475,
+          "frame_index": 76,
+          "peak_snr_db": 58.839710163313526
+        },
+        {
+          "ambiguity_margin_db": 44.422657288538744,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 79.0475,
+          "frame_index": 77,
+          "peak_snr_db": 58.6041857811274
+        },
+        {
+          "ambiguity_margin_db": 44.97643482863622,
+          "baseband_frequency_hz": 29.296875,
+          "event_time_offset_s": 80.0475,
+          "frame_index": 78,
+          "peak_snr_db": 58.6591627517857
+        },
+        {
+          "ambiguity_margin_db": 46.8296843811536,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 81.0475,
+          "frame_index": 79,
+          "peak_snr_db": 58.97634015391275
+        },
+        {
+          "ambiguity_margin_db": 44.62922427867514,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 82.0475,
+          "frame_index": 80,
+          "peak_snr_db": 59.71414079520229
+        },
+        {
+          "ambiguity_margin_db": 48.11161468133945,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 83.0475,
+          "frame_index": 81,
+          "peak_snr_db": 59.061811205217296
+        },
+        {
+          "ambiguity_margin_db": 44.26961706783316,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 84.0475,
+          "frame_index": 82,
+          "peak_snr_db": 59.81400215961891
+        },
+        {
+          "ambiguity_margin_db": 40.730112838338755,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 85.0475,
+          "frame_index": 83,
+          "peak_snr_db": 58.80366964588124
+        },
+        {
+          "ambiguity_margin_db": 41.880511655740946,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 86.0475,
+          "frame_index": 84,
+          "peak_snr_db": 58.98855236612822
+        },
+        {
+          "ambiguity_margin_db": 40.05953849359251,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 87.0475,
+          "frame_index": 85,
+          "peak_snr_db": 59.70788379392885
+        },
+        {
+          "ambiguity_margin_db": 39.438578802395156,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 88.0475,
+          "frame_index": 86,
+          "peak_snr_db": 58.528262718929184
+        },
+        {
+          "ambiguity_margin_db": 43.149249026696886,
+          "baseband_frequency_hz": 29.541015625,
+          "event_time_offset_s": 89.0475,
+          "frame_index": 87,
+          "peak_snr_db": 57.64079849788451
+        },
+        {
+          "ambiguity_margin_db": 46.77861478261495,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 90.0475,
+          "frame_index": 88,
+          "peak_snr_db": 58.09042311564881
+        },
+        {
+          "ambiguity_margin_db": 45.60016339363603,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 91.0475,
+          "frame_index": 89,
+          "peak_snr_db": 60.203026897199834
+        },
+        {
+          "ambiguity_margin_db": 45.6766120088258,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 92.0475,
+          "frame_index": 90,
+          "peak_snr_db": 60.51375458323032
+        },
+        {
+          "ambiguity_margin_db": 47.80948564019539,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 93.0475,
+          "frame_index": 91,
+          "peak_snr_db": 59.908452404937016
+        },
+        {
+          "ambiguity_margin_db": 46.15503802559404,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 94.0475,
+          "frame_index": 92,
+          "peak_snr_db": 60.40204478782614
+        },
+        {
+          "ambiguity_margin_db": 46.97360517064905,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 95.0475,
+          "frame_index": 93,
+          "peak_snr_db": 59.34010278176316
+        },
+        {
+          "ambiguity_margin_db": 46.94664659409189,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 96.0475,
+          "frame_index": 94,
+          "peak_snr_db": 58.76852325084861
+        },
+        {
+          "ambiguity_margin_db": 47.80984113835358,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 97.0475,
+          "frame_index": 95,
+          "peak_snr_db": 58.77792190519622
+        },
+        {
+          "ambiguity_margin_db": 46.51790034203522,
+          "baseband_frequency_hz": 29.78515625,
+          "event_time_offset_s": 98.0475,
+          "frame_index": 96,
+          "peak_snr_db": 58.0060916244696
+        },
+        {
+          "ambiguity_margin_db": 47.31312889188925,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 99.0475,
+          "frame_index": 97,
+          "peak_snr_db": 58.98944701207441
+        },
+        {
+          "ambiguity_margin_db": 46.88527663620163,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 100.0475,
+          "frame_index": 98,
+          "peak_snr_db": 58.95669518783869
+        },
+        {
+          "ambiguity_margin_db": 46.54416572753327,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 101.0475,
+          "frame_index": 99,
+          "peak_snr_db": 58.69695043790357
+        },
+        {
+          "ambiguity_margin_db": 45.2506189106942,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 102.0475,
+          "frame_index": 100,
+          "peak_snr_db": 59.510996934090116
+        },
+        {
+          "ambiguity_margin_db": 47.649384931300354,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 103.0475,
+          "frame_index": 101,
+          "peak_snr_db": 59.60202114226845
+        },
+        {
+          "ambiguity_margin_db": 46.94232332895524,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 104.0475,
+          "frame_index": 102,
+          "peak_snr_db": 59.077321699591195
+        },
+        {
+          "ambiguity_margin_db": 47.285932603493364,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 105.0475,
+          "frame_index": 103,
+          "peak_snr_db": 59.09703387161074
+        },
+        {
+          "ambiguity_margin_db": 44.949951174315544,
+          "baseband_frequency_hz": 30.029296875,
+          "event_time_offset_s": 106.0475,
+          "frame_index": 104,
+          "peak_snr_db": 58.98315337088676
+        },
+        {
+          "ambiguity_margin_db": 46.4964831025234,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 107.0475,
+          "frame_index": 105,
+          "peak_snr_db": 58.22849371570995
+        },
+        {
+          "ambiguity_margin_db": 47.41084204999957,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 108.0475,
+          "frame_index": 106,
+          "peak_snr_db": 59.70866387131732
+        },
+        {
+          "ambiguity_margin_db": 47.95252933905367,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 109.0475,
+          "frame_index": 107,
+          "peak_snr_db": 59.37655506441793
+        },
+        {
+          "ambiguity_margin_db": 43.91015717349228,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 110.0475,
+          "frame_index": 108,
+          "peak_snr_db": 59.39710079595371
+        },
+        {
+          "ambiguity_margin_db": 45.939765095592534,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 111.0475,
+          "frame_index": 109,
+          "peak_snr_db": 59.234309922178674
+        },
+        {
+          "ambiguity_margin_db": 48.592610708045356,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 112.0475,
+          "frame_index": 110,
+          "peak_snr_db": 59.333169473420966
+        },
+        {
+          "ambiguity_margin_db": 48.756697874331756,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 113.0475,
+          "frame_index": 111,
+          "peak_snr_db": 58.971115951134685
+        },
+        {
+          "ambiguity_margin_db": 47.19817324291579,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 114.0475,
+          "frame_index": 112,
+          "peak_snr_db": 58.311083666103144
+        },
+        {
+          "ambiguity_margin_db": 47.30082465752262,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 115.0475,
+          "frame_index": 113,
+          "peak_snr_db": 58.546047414363116
+        },
+        {
+          "ambiguity_margin_db": 45.84357736878644,
+          "baseband_frequency_hz": 30.2734375,
+          "event_time_offset_s": 116.0475,
+          "frame_index": 114,
+          "peak_snr_db": 57.68848289993248
+        },
+        {
+          "ambiguity_margin_db": 46.71523662626787,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 117.0475,
+          "frame_index": 115,
+          "peak_snr_db": 59.16741275254263
+        },
+        {
+          "ambiguity_margin_db": 45.49667811719681,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 118.0475,
+          "frame_index": 116,
+          "peak_snr_db": 59.50491270423637
+        },
+        {
+          "ambiguity_margin_db": 47.83719851333818,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 119.0475,
+          "frame_index": 117,
+          "peak_snr_db": 58.52757950168835
+        },
+        {
+          "ambiguity_margin_db": 47.87125777145235,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 120.0475,
+          "frame_index": 118,
+          "peak_snr_db": 59.410404309839535
+        },
+        {
+          "ambiguity_margin_db": 47.781868017000455,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 121.0475,
+          "frame_index": 119,
+          "peak_snr_db": 60.34157623600828
+        },
+        {
+          "ambiguity_margin_db": 46.77993977981351,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 122.0475,
+          "frame_index": 120,
+          "peak_snr_db": 59.87317339300055
+        },
+        {
+          "ambiguity_margin_db": 45.91154817609332,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 123.0475,
+          "frame_index": 121,
+          "peak_snr_db": 58.65897721647217
+        },
+        {
+          "ambiguity_margin_db": 45.06424107082697,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 124.0475,
+          "frame_index": 122,
+          "peak_snr_db": 58.55510618869182
+        },
+        {
+          "ambiguity_margin_db": 43.19181521441841,
+          "baseband_frequency_hz": 30.517578125,
+          "event_time_offset_s": 125.0475,
+          "frame_index": 123,
+          "peak_snr_db": 57.62436997454391
+        },
+        {
+          "ambiguity_margin_db": 45.12884919582336,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 126.0475,
+          "frame_index": 124,
+          "peak_snr_db": 59.27264891247556
+        },
+        {
+          "ambiguity_margin_db": 46.330089962780285,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 127.0475,
+          "frame_index": 125,
+          "peak_snr_db": 59.262265613593044
+        },
+        {
+          "ambiguity_margin_db": 47.077709921876696,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 128.0475,
+          "frame_index": 126,
+          "peak_snr_db": 59.7559271706431
+        },
+        {
+          "ambiguity_margin_db": 46.27796545769471,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 129.0475,
+          "frame_index": 127,
+          "peak_snr_db": 60.56462490009032
+        },
+        {
+          "ambiguity_margin_db": 46.88776367839233,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 130.0475,
+          "frame_index": 128,
+          "peak_snr_db": 60.27867402855205
+        },
+        {
+          "ambiguity_margin_db": 46.30251577540484,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 131.0475,
+          "frame_index": 129,
+          "peak_snr_db": 59.87732829611119
+        },
+        {
+          "ambiguity_margin_db": 45.571176930552,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 132.0475,
+          "frame_index": 130,
+          "peak_snr_db": 59.92704863686809
+        },
+        {
+          "ambiguity_margin_db": 47.58788226749529,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 133.0475,
+          "frame_index": 131,
+          "peak_snr_db": 59.630328971265556
+        },
+        {
+          "ambiguity_margin_db": 44.96165999045152,
+          "baseband_frequency_hz": 30.76171875,
+          "event_time_offset_s": 134.0475,
+          "frame_index": 132,
+          "peak_snr_db": 58.85634069181944
+        },
+        {
+          "ambiguity_margin_db": 43.709931505011134,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 135.0475,
+          "frame_index": 133,
+          "peak_snr_db": 58.871464345050015
+        },
+        {
+          "ambiguity_margin_db": 43.242212543520175,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 136.0475,
+          "frame_index": 134,
+          "peak_snr_db": 60.13155558826226
+        },
+        {
+          "ambiguity_margin_db": 46.68586386385236,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 137.0475,
+          "frame_index": 135,
+          "peak_snr_db": 59.324270847844005
+        },
+        {
+          "ambiguity_margin_db": 48.724275163996786,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 138.0475,
+          "frame_index": 136,
+          "peak_snr_db": 59.637854411207485
+        },
+        {
+          "ambiguity_margin_db": 47.46196932215256,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 139.0475,
+          "frame_index": 137,
+          "peak_snr_db": 60.13837407524278
+        },
+        {
+          "ambiguity_margin_db": 47.33019551481789,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 140.0475,
+          "frame_index": 138,
+          "peak_snr_db": 59.89745380698636
+        },
+        {
+          "ambiguity_margin_db": 48.098505872907836,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 141.0475,
+          "frame_index": 139,
+          "peak_snr_db": 59.151636920830946
+        },
+        {
+          "ambiguity_margin_db": 46.213609789379035,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 142.0475,
+          "frame_index": 140,
+          "peak_snr_db": 58.51229586699957
+        },
+        {
+          "ambiguity_margin_db": 46.69512381253799,
+          "baseband_frequency_hz": 31.005859375,
+          "event_time_offset_s": 143.0475,
+          "frame_index": 141,
+          "peak_snr_db": 58.048081986420634
+        },
+        {
+          "ambiguity_margin_db": 43.08348431632669,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 144.0475,
+          "frame_index": 142,
+          "peak_snr_db": 59.319381912255935
+        },
+        {
+          "ambiguity_margin_db": 42.75991664369512,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 145.0475,
+          "frame_index": 143,
+          "peak_snr_db": 59.97386341647044
+        },
+        {
+          "ambiguity_margin_db": 45.52007414568588,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 146.0475,
+          "frame_index": 144,
+          "peak_snr_db": 60.04709844247358
+        },
+        {
+          "ambiguity_margin_db": 45.67955690516574,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 147.0475,
+          "frame_index": 145,
+          "peak_snr_db": 60.328921976281194
+        },
+        {
+          "ambiguity_margin_db": 45.994955637594195,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 148.0475,
+          "frame_index": 146,
+          "peak_snr_db": 60.83993649299194
+        },
+        {
+          "ambiguity_margin_db": 46.599097139278726,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 149.0475,
+          "frame_index": 147,
+          "peak_snr_db": 59.848932189081594
+        },
+        {
+          "ambiguity_margin_db": 47.413546128093635,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 150.0475,
+          "frame_index": 148,
+          "peak_snr_db": 59.41827866111316
+        },
+        {
+          "ambiguity_margin_db": 46.57642344638157,
+          "baseband_frequency_hz": 31.25,
+          "event_time_offset_s": 151.0475,
+          "frame_index": 149,
+          "peak_snr_db": 58.205730707655164
+        },
+        {
+          "ambiguity_margin_db": 46.38551988552599,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 152.0475,
+          "frame_index": 150,
+          "peak_snr_db": 58.32178151486624
+        },
+        {
+          "ambiguity_margin_db": 47.90871213100204,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 153.0475,
+          "frame_index": 151,
+          "peak_snr_db": 59.28589585246053
+        },
+        {
+          "ambiguity_margin_db": 47.42533938144283,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 154.0475,
+          "frame_index": 152,
+          "peak_snr_db": 59.38364378946237
+        },
+        {
+          "ambiguity_margin_db": 45.29497666522523,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 155.0475,
+          "frame_index": 153,
+          "peak_snr_db": 59.39554771753685
+        },
+        {
+          "ambiguity_margin_db": 48.571098991172796,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 156.0475,
+          "frame_index": 154,
+          "peak_snr_db": 59.292750217050845
+        },
+        {
+          "ambiguity_margin_db": 47.85069643353796,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 157.0475,
+          "frame_index": 155,
+          "peak_snr_db": 59.017527341046154
+        },
+        {
+          "ambiguity_margin_db": 45.732399493341006,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 158.0475,
+          "frame_index": 156,
+          "peak_snr_db": 59.15386071885624
+        },
+        {
+          "ambiguity_margin_db": 47.550420090718575,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 159.0475,
+          "frame_index": 157,
+          "peak_snr_db": 59.67301706990676
+        },
+        {
+          "ambiguity_margin_db": 47.55453468530885,
+          "baseband_frequency_hz": 31.494140625,
+          "event_time_offset_s": 160.0475,
+          "frame_index": 158,
+          "peak_snr_db": 59.44546469733359
+        },
+        {
+          "ambiguity_margin_db": 47.65238068610817,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 161.0475,
+          "frame_index": 159,
+          "peak_snr_db": 59.08527832406687
+        },
+        {
+          "ambiguity_margin_db": 43.92153972223956,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 162.0475,
+          "frame_index": 160,
+          "peak_snr_db": 59.577284678901194
+        },
+        {
+          "ambiguity_margin_db": 43.762650318762354,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 163.0475,
+          "frame_index": 161,
+          "peak_snr_db": 59.04723791946996
+        },
+        {
+          "ambiguity_margin_db": 44.414737996113715,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 164.0475,
+          "frame_index": 162,
+          "peak_snr_db": 59.57896486650228
+        },
+        {
+          "ambiguity_margin_db": 46.79679512638466,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 165.0475,
+          "frame_index": 163,
+          "peak_snr_db": 59.52137506339716
+        },
+        {
+          "ambiguity_margin_db": 46.252421738005,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 166.0475,
+          "frame_index": 164,
+          "peak_snr_db": 58.92225712208706
+        },
+        {
+          "ambiguity_margin_db": 46.89029813071593,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 167.0475,
+          "frame_index": 165,
+          "peak_snr_db": 59.55717951977143
+        },
+        {
+          "ambiguity_margin_db": 46.364936239247584,
+          "baseband_frequency_hz": 31.73828125,
+          "event_time_offset_s": 168.0475,
+          "frame_index": 166,
+          "peak_snr_db": 58.87542448559866
+        },
+        {
+          "ambiguity_margin_db": 45.221771760470126,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 169.0475,
+          "frame_index": 167,
+          "peak_snr_db": 58.73068542918836
+        },
+        {
+          "ambiguity_margin_db": 47.67306262041784,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 170.0475,
+          "frame_index": 168,
+          "peak_snr_db": 59.231363263868374
+        },
+        {
+          "ambiguity_margin_db": 44.750478887251276,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 171.0475,
+          "frame_index": 169,
+          "peak_snr_db": 58.68705111990618
+        },
+        {
+          "ambiguity_margin_db": 43.34010642329644,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 172.0475,
+          "frame_index": 170,
+          "peak_snr_db": 59.276774173914994
+        },
+        {
+          "ambiguity_margin_db": 45.7254729965046,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 173.0475,
+          "frame_index": 171,
+          "peak_snr_db": 59.98800115199768
+        },
+        {
+          "ambiguity_margin_db": 47.32095548375503,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 174.0475,
+          "frame_index": 172,
+          "peak_snr_db": 59.58285506578879
+        },
+        {
+          "ambiguity_margin_db": 46.31304973209036,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 175.0475,
+          "frame_index": 173,
+          "peak_snr_db": 59.43914855796731
+        },
+        {
+          "ambiguity_margin_db": 47.19317434870034,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 176.0475,
+          "frame_index": 174,
+          "peak_snr_db": 59.20379703063843
+        },
+        {
+          "ambiguity_margin_db": 46.8761939565147,
+          "baseband_frequency_hz": 31.982421875,
+          "event_time_offset_s": 177.0475,
+          "frame_index": 175,
+          "peak_snr_db": 58.70644443167566
+        },
+        {
+          "ambiguity_margin_db": 46.24883365980122,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 178.0475,
+          "frame_index": 176,
+          "peak_snr_db": 57.73384089882133
+        },
+        {
+          "ambiguity_margin_db": 46.746101098061665,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 179.0475,
+          "frame_index": 177,
+          "peak_snr_db": 58.53178148014675
+        },
+        {
+          "ambiguity_margin_db": 47.95258966775877,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 180.0475,
+          "frame_index": 178,
+          "peak_snr_db": 59.28719545530037
+        },
+        {
+          "ambiguity_margin_db": 47.556429800691774,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 181.0475,
+          "frame_index": 179,
+          "peak_snr_db": 59.62446062915678
+        },
+        {
+          "ambiguity_margin_db": 45.464093572448654,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 182.0475,
+          "frame_index": 180,
+          "peak_snr_db": 59.68263631960653
+        },
+        {
+          "ambiguity_margin_db": 46.479001518375,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 183.0475,
+          "frame_index": 181,
+          "peak_snr_db": 59.80194581319462
+        },
+        {
+          "ambiguity_margin_db": 46.28235300429176,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 184.0475,
+          "frame_index": 182,
+          "peak_snr_db": 59.244373643662705
+        },
+        {
+          "ambiguity_margin_db": 45.77337377483458,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 185.0475,
+          "frame_index": 183,
+          "peak_snr_db": 59.86404986586599
+        },
+        {
+          "ambiguity_margin_db": 45.10987920546042,
+          "baseband_frequency_hz": 32.2265625,
+          "event_time_offset_s": 186.0475,
+          "frame_index": 184,
+          "peak_snr_db": 58.0574330156135
+        },
+        {
+          "ambiguity_margin_db": 46.553127240100736,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 187.0475,
+          "frame_index": 185,
+          "peak_snr_db": 58.344321297406495
+        },
+        {
+          "ambiguity_margin_db": 47.375713993738806,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 188.0475,
+          "frame_index": 186,
+          "peak_snr_db": 59.64044679815578
+        },
+        {
+          "ambiguity_margin_db": 47.063296048388196,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 189.0475,
+          "frame_index": 187,
+          "peak_snr_db": 60.163544994103034
+        },
+        {
+          "ambiguity_margin_db": 45.42265897105965,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 190.0475,
+          "frame_index": 188,
+          "peak_snr_db": 60.5327462957553
+        },
+        {
+          "ambiguity_margin_db": 45.936119808570474,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 191.0475,
+          "frame_index": 189,
+          "peak_snr_db": 58.936592058544484
+        },
+        {
+          "ambiguity_margin_db": 47.89328226772306,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 192.0475,
+          "frame_index": 190,
+          "peak_snr_db": 59.49317679526014
+        },
+        {
+          "ambiguity_margin_db": 46.21743376975122,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 193.0475,
+          "frame_index": 191,
+          "peak_snr_db": 60.16441827709453
+        },
+        {
+          "ambiguity_margin_db": 46.62150659513447,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 194.0475,
+          "frame_index": 192,
+          "peak_snr_db": 59.19553625089411
+        },
+        {
+          "ambiguity_margin_db": 47.56173470350609,
+          "baseband_frequency_hz": 32.470703125,
+          "event_time_offset_s": 195.0475,
+          "frame_index": 193,
+          "peak_snr_db": 58.74402667809859
+        },
+        {
+          "ambiguity_margin_db": 45.458239820001545,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 196.0475,
+          "frame_index": 194,
+          "peak_snr_db": 59.242123487565344
+        },
+        {
+          "ambiguity_margin_db": 46.54630294692777,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 197.0475,
+          "frame_index": 195,
+          "peak_snr_db": 59.360075876459774
+        },
+        {
+          "ambiguity_margin_db": 44.6009912978291,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 198.0475,
+          "frame_index": 196,
+          "peak_snr_db": 59.43810286394664
+        },
+        {
+          "ambiguity_margin_db": 46.661788508905985,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 199.0475,
+          "frame_index": 197,
+          "peak_snr_db": 59.606764732911174
+        },
+        {
+          "ambiguity_margin_db": 46.11996260596403,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 200.0475,
+          "frame_index": 198,
+          "peak_snr_db": 59.23108203774443
+        },
+        {
+          "ambiguity_margin_db": 46.68238935068615,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 201.0475,
+          "frame_index": 199,
+          "peak_snr_db": 60.19500053730815
+        },
+        {
+          "ambiguity_margin_db": 46.537436558840014,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 202.0475,
+          "frame_index": 200,
+          "peak_snr_db": 60.036964757254616
+        },
+        {
+          "ambiguity_margin_db": 44.116344317951366,
+          "baseband_frequency_hz": 32.71484375,
+          "event_time_offset_s": 203.0475,
+          "frame_index": 201,
+          "peak_snr_db": 58.956549416159405
+        },
+        {
+          "ambiguity_margin_db": 45.30041102549628,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 204.0475,
+          "frame_index": 202,
+          "peak_snr_db": 58.51251164801535
+        },
+        {
+          "ambiguity_margin_db": 48.09932888858553,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 205.0475,
+          "frame_index": 203,
+          "peak_snr_db": 59.08638956207079
+        },
+        {
+          "ambiguity_margin_db": 47.90431546252708,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 206.0475,
+          "frame_index": 204,
+          "peak_snr_db": 59.50254422784259
+        },
+        {
+          "ambiguity_margin_db": 48.87857666352205,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 207.0475,
+          "frame_index": 205,
+          "peak_snr_db": 59.57588669907763
+        },
+        {
+          "ambiguity_margin_db": 47.64586789569922,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 208.0475,
+          "frame_index": 206,
+          "peak_snr_db": 60.15768008571215
+        },
+        {
+          "ambiguity_margin_db": 46.73100929706851,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 209.0475,
+          "frame_index": 207,
+          "peak_snr_db": 59.52014559621585
+        },
+        {
+          "ambiguity_margin_db": 47.41688728983209,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 210.0475,
+          "frame_index": 208,
+          "peak_snr_db": 59.63484627331175
+        },
+        {
+          "ambiguity_margin_db": 46.84827837259816,
+          "baseband_frequency_hz": 32.958984375,
+          "event_time_offset_s": 211.0475,
+          "frame_index": 209,
+          "peak_snr_db": 57.9581571933748
+        },
+        {
+          "ambiguity_margin_db": 47.85758611906553,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 212.0475,
+          "frame_index": 210,
+          "peak_snr_db": 58.73787450953028
+        },
+        {
+          "ambiguity_margin_db": 46.392877404498705,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 213.0475,
+          "frame_index": 211,
+          "peak_snr_db": 59.74236217061651
+        },
+        {
+          "ambiguity_margin_db": 44.93419900982062,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 214.0475,
+          "frame_index": 212,
+          "peak_snr_db": 59.29843502029407
+        },
+        {
+          "ambiguity_margin_db": 45.20899721251026,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 215.0475,
+          "frame_index": 213,
+          "peak_snr_db": 59.225670623049666
+        },
+        {
+          "ambiguity_margin_db": 47.67006320324544,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 216.0475,
+          "frame_index": 214,
+          "peak_snr_db": 60.0756522638163
+        },
+        {
+          "ambiguity_margin_db": 47.98144307235304,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 217.0475,
+          "frame_index": 215,
+          "peak_snr_db": 59.69583668294988
+        },
+        {
+          "ambiguity_margin_db": 47.91653090509429,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 218.0475,
+          "frame_index": 216,
+          "peak_snr_db": 59.256538178689446
+        },
+        {
+          "ambiguity_margin_db": 47.696070358841936,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 219.0475,
+          "frame_index": 217,
+          "peak_snr_db": 58.366491159430026
+        },
+        {
+          "ambiguity_margin_db": 46.15784209197606,
+          "baseband_frequency_hz": 33.203125,
+          "event_time_offset_s": 220.0475,
+          "frame_index": 218,
+          "peak_snr_db": 59.380821448173705
+        },
+        {
+          "ambiguity_margin_db": 47.812417881492436,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 221.0475,
+          "frame_index": 219,
+          "peak_snr_db": 59.173129243374134
+        },
+        {
+          "ambiguity_margin_db": 45.37399029979649,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 222.0475,
+          "frame_index": 220,
+          "peak_snr_db": 58.1178430146103
+        },
+        {
+          "ambiguity_margin_db": 42.62032478129243,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 223.0475,
+          "frame_index": 221,
+          "peak_snr_db": 59.39482777560854
+        },
+        {
+          "ambiguity_margin_db": 46.79897321856441,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 224.0475,
+          "frame_index": 222,
+          "peak_snr_db": 59.284477554737556
+        },
+        {
+          "ambiguity_margin_db": 47.07810334044883,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 225.0475,
+          "frame_index": 223,
+          "peak_snr_db": 59.64726642042013
+        },
+        {
+          "ambiguity_margin_db": 48.40695889187401,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 226.0475,
+          "frame_index": 224,
+          "peak_snr_db": 59.511168793942
+        },
+        {
+          "ambiguity_margin_db": 48.0911932859508,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 227.0475,
+          "frame_index": 225,
+          "peak_snr_db": 57.90718609148945
+        },
+        {
+          "ambiguity_margin_db": 46.430490936031426,
+          "baseband_frequency_hz": 33.447265625,
+          "event_time_offset_s": 228.0475,
+          "frame_index": 226,
+          "peak_snr_db": 58.45037433745909
+        },
+        {
+          "ambiguity_margin_db": 45.17450671848241,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 229.0475,
+          "frame_index": 227,
+          "peak_snr_db": 59.76349945686768
+        },
+        {
+          "ambiguity_margin_db": 47.34395247928131,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 230.0475,
+          "frame_index": 228,
+          "peak_snr_db": 59.145470479950895
+        },
+        {
+          "ambiguity_margin_db": 45.7179156603855,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 231.0475,
+          "frame_index": 229,
+          "peak_snr_db": 59.758260455695115
+        },
+        {
+          "ambiguity_margin_db": 45.30440635298898,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 232.0475,
+          "frame_index": 230,
+          "peak_snr_db": 59.51207501593545
+        },
+        {
+          "ambiguity_margin_db": 48.363482640824856,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 233.0475,
+          "frame_index": 231,
+          "peak_snr_db": 59.219137872326336
+        },
+        {
+          "ambiguity_margin_db": 45.63146135163364,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 234.0475,
+          "frame_index": 232,
+          "peak_snr_db": 59.26280340536425
+        },
+        {
+          "ambiguity_margin_db": 44.68038705364049,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 235.0475,
+          "frame_index": 233,
+          "peak_snr_db": 59.684361695227025
+        },
+        {
+          "ambiguity_margin_db": 42.559299626871635,
+          "baseband_frequency_hz": 33.69140625,
+          "event_time_offset_s": 236.0475,
+          "frame_index": 234,
+          "peak_snr_db": 58.25170018813815
+        },
+        {
+          "ambiguity_margin_db": 43.0144321933106,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 237.0475,
+          "frame_index": 235,
+          "peak_snr_db": 57.310273921055234
+        },
+        {
+          "ambiguity_margin_db": 43.97169819113745,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 238.0475,
+          "frame_index": 236,
+          "peak_snr_db": 58.33402042210581
+        },
+        {
+          "ambiguity_margin_db": 45.02837420535034,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 239.0475,
+          "frame_index": 237,
+          "peak_snr_db": 59.191786933510514
+        },
+        {
+          "ambiguity_margin_db": 43.25128244114439,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 240.0475,
+          "frame_index": 238,
+          "peak_snr_db": 58.16836830976658
+        },
+        {
+          "ambiguity_margin_db": 46.36516912971853,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 241.0475,
+          "frame_index": 239,
+          "peak_snr_db": 59.299626081730985
+        },
+        {
+          "ambiguity_margin_db": 48.826642389852836,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 242.0475,
+          "frame_index": 240,
+          "peak_snr_db": 60.28722447366502
+        },
+        {
+          "ambiguity_margin_db": 45.997771739822475,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 243.0475,
+          "frame_index": 241,
+          "peak_snr_db": 58.95438444275339
+        },
+        {
+          "ambiguity_margin_db": 46.13377550388115,
+          "baseband_frequency_hz": 33.935546875,
+          "event_time_offset_s": 244.0475,
+          "frame_index": 242,
+          "peak_snr_db": 58.910843025657414
+        },
+        {
+          "ambiguity_margin_db": 44.644583910101055,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 245.0475,
+          "frame_index": 243,
+          "peak_snr_db": 57.83165766134034
+        },
+        {
+          "ambiguity_margin_db": 44.83181780775737,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 246.0475,
+          "frame_index": 244,
+          "peak_snr_db": 58.308627529565456
+        },
+        {
+          "ambiguity_margin_db": 45.903156546808546,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 247.0475,
+          "frame_index": 245,
+          "peak_snr_db": 59.42909832798139
+        },
+        {
+          "ambiguity_margin_db": 48.15880994639869,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 248.0475,
+          "frame_index": 246,
+          "peak_snr_db": 59.44623191561515
+        },
+        {
+          "ambiguity_margin_db": 47.08203201350183,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 249.0475,
+          "frame_index": 247,
+          "peak_snr_db": 59.70340607140069
+        },
+        {
+          "ambiguity_margin_db": 46.42097451073127,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 250.0475,
+          "frame_index": 248,
+          "peak_snr_db": 60.03938120242179
+        },
+        {
+          "ambiguity_margin_db": 46.87489151763148,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 251.0475,
+          "frame_index": 249,
+          "peak_snr_db": 59.369252330390665
+        },
+        {
+          "ambiguity_margin_db": 46.24120571648455,
+          "baseband_frequency_hz": 34.1796875,
+          "event_time_offset_s": 252.0475,
+          "frame_index": 250,
+          "peak_snr_db": 58.30388617776351
+        },
+        {
+          "ambiguity_margin_db": 46.687598343400495,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 253.0475,
+          "frame_index": 251,
+          "peak_snr_db": 59.128907891537885
+        },
+        {
+          "ambiguity_margin_db": 45.64975855089961,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 254.0475,
+          "frame_index": 252,
+          "peak_snr_db": 60.04433856406399
+        },
+        {
+          "ambiguity_margin_db": 48.05465276168107,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 255.0475,
+          "frame_index": 253,
+          "peak_snr_db": 60.47197453750697
+        },
+        {
+          "ambiguity_margin_db": 47.04830487499081,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 256.0475,
+          "frame_index": 254,
+          "peak_snr_db": 60.92472442545302
+        },
+        {
+          "ambiguity_margin_db": 46.8768169940133,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 257.0475,
+          "frame_index": 255,
+          "peak_snr_db": 60.81436991027204
+        },
+        {
+          "ambiguity_margin_db": 48.15791417524274,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 258.0475,
+          "frame_index": 256,
+          "peak_snr_db": 60.26136138640613
+        },
+        {
+          "ambiguity_margin_db": 47.24867198603421,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 259.0475,
+          "frame_index": 257,
+          "peak_snr_db": 59.75605689984392
+        },
+        {
+          "ambiguity_margin_db": 46.93899758679013,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 260.0475,
+          "frame_index": 258,
+          "peak_snr_db": 58.668463808502985
+        },
+        {
+          "ambiguity_margin_db": 44.51571027977238,
+          "baseband_frequency_hz": 34.423828125,
+          "event_time_offset_s": 261.0475,
+          "frame_index": 259,
+          "peak_snr_db": 58.922366423355626
+        },
+        {
+          "ambiguity_margin_db": 43.05133452283017,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 262.0475,
+          "frame_index": 260,
+          "peak_snr_db": 59.25251068266371
+        },
+        {
+          "ambiguity_margin_db": 43.38768782430735,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 263.0475,
+          "frame_index": 261,
+          "peak_snr_db": 59.5240022064533
+        },
+        {
+          "ambiguity_margin_db": 44.649983075852624,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 264.0475,
+          "frame_index": 262,
+          "peak_snr_db": 59.60126246835052
+        },
+        {
+          "ambiguity_margin_db": 46.69818673989752,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 265.0475,
+          "frame_index": 263,
+          "peak_snr_db": 60.36534288655695
+        },
+        {
+          "ambiguity_margin_db": 47.60101241739981,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 266.0475,
+          "frame_index": 264,
+          "peak_snr_db": 59.733039579625796
+        },
+        {
+          "ambiguity_margin_db": 46.23677010024498,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 267.0475,
+          "frame_index": 265,
+          "peak_snr_db": 59.42728227972532
+        },
+        {
+          "ambiguity_margin_db": 46.25576338537611,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 268.0475,
+          "frame_index": 266,
+          "peak_snr_db": 59.528323398901925
+        },
+        {
+          "ambiguity_margin_db": 46.25716459156286,
+          "baseband_frequency_hz": 34.66796875,
+          "event_time_offset_s": 269.0475,
+          "frame_index": 267,
+          "peak_snr_db": 58.317518570726904
+        },
+        {
+          "ambiguity_margin_db": 44.967872408272314,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 270.0475,
+          "frame_index": 268,
+          "peak_snr_db": 59.86614928725586
+        },
+        {
+          "ambiguity_margin_db": 46.34433606296828,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 271.0475,
+          "frame_index": 269,
+          "peak_snr_db": 59.591558525009816
+        },
+        {
+          "ambiguity_margin_db": 46.152735802186974,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 272.0475,
+          "frame_index": 270,
+          "peak_snr_db": 59.15850432480412
+        },
+        {
+          "ambiguity_margin_db": 46.85469876617767,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 273.0475,
+          "frame_index": 271,
+          "peak_snr_db": 59.532947123433864
+        },
+        {
+          "ambiguity_margin_db": 45.619344999536736,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 274.0475,
+          "frame_index": 272,
+          "peak_snr_db": 60.37442325515707
+        },
+        {
+          "ambiguity_margin_db": 44.06556971475471,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 275.0475,
+          "frame_index": 273,
+          "peak_snr_db": 59.59398607019289
+        },
+        {
+          "ambiguity_margin_db": 47.70155817631762,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 276.0475,
+          "frame_index": 274,
+          "peak_snr_db": 59.35179527433705
+        },
+        {
+          "ambiguity_margin_db": 47.5837941340643,
+          "baseband_frequency_hz": 34.912109375,
+          "event_time_offset_s": 277.0475,
+          "frame_index": 275,
+          "peak_snr_db": 59.18421577725092
+        },
+        {
+          "ambiguity_margin_db": 47.5770201289486,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 278.0475,
+          "frame_index": 276,
+          "peak_snr_db": 59.170052858967495
+        },
+        {
+          "ambiguity_margin_db": 47.87481480479517,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 279.0475,
+          "frame_index": 277,
+          "peak_snr_db": 59.339970524104615
+        },
+        {
+          "ambiguity_margin_db": 48.21303241797773,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 280.0475,
+          "frame_index": 278,
+          "peak_snr_db": 60.222870178672494
+        },
+        {
+          "ambiguity_margin_db": 45.42594897763516,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 281.0475,
+          "frame_index": 279,
+          "peak_snr_db": 60.4400125035818
+        },
+        {
+          "ambiguity_margin_db": 48.13170725298171,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 282.0475,
+          "frame_index": 280,
+          "peak_snr_db": 60.84400612913714
+        },
+        {
+          "ambiguity_margin_db": 47.93759043465847,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 283.0475,
+          "frame_index": 281,
+          "peak_snr_db": 60.737069990138004
+        },
+        {
+          "ambiguity_margin_db": 46.11582039308484,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 284.0475,
+          "frame_index": 282,
+          "peak_snr_db": 59.09853721243841
+        },
+        {
+          "ambiguity_margin_db": 46.99252926790062,
+          "baseband_frequency_hz": 35.15625,
+          "event_time_offset_s": 285.0475,
+          "frame_index": 283,
+          "peak_snr_db": 58.43160624901586
+        },
+        {
+          "ambiguity_margin_db": 46.95273848635158,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 286.0475,
+          "frame_index": 284,
+          "peak_snr_db": 58.697868675070126
+        },
+        {
+          "ambiguity_margin_db": 46.89851418416463,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 287.0475,
+          "frame_index": 285,
+          "peak_snr_db": 58.49148430255693
+        },
+        {
+          "ambiguity_margin_db": 46.93673221765435,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 288.0475,
+          "frame_index": 286,
+          "peak_snr_db": 59.115677234213244
+        },
+        {
+          "ambiguity_margin_db": 44.627976356064224,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 289.0475,
+          "frame_index": 287,
+          "peak_snr_db": 59.83601796552663
+        },
+        {
+          "ambiguity_margin_db": 46.17937094558978,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 290.0475,
+          "frame_index": 288,
+          "peak_snr_db": 60.206057212610666
+        },
+        {
+          "ambiguity_margin_db": 45.74363926929962,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 291.0475,
+          "frame_index": 289,
+          "peak_snr_db": 59.831841908194505
+        },
+        {
+          "ambiguity_margin_db": 47.23403628050437,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 292.0475,
+          "frame_index": 290,
+          "peak_snr_db": 59.21087263896912
+        },
+        {
+          "ambiguity_margin_db": 40.54446744932229,
+          "baseband_frequency_hz": 35.400390625,
+          "event_time_offset_s": 293.0475,
+          "frame_index": 291,
+          "peak_snr_db": 59.175164519281196
+        },
+        {
+          "ambiguity_margin_db": 36.94063254368279,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 294.0475,
+          "frame_index": 292,
+          "peak_snr_db": 59.48218765445744
+        },
+        {
+          "ambiguity_margin_db": 39.48559299511666,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 295.0475,
+          "frame_index": 293,
+          "peak_snr_db": 59.91979142685257
+        },
+        {
+          "ambiguity_margin_db": 44.991170313791415,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 296.0475,
+          "frame_index": 294,
+          "peak_snr_db": 59.727912982173635
+        },
+        {
+          "ambiguity_margin_db": 45.94271169791479,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 297.0475,
+          "frame_index": 295,
+          "peak_snr_db": 59.31556218158065
+        },
+        {
+          "ambiguity_margin_db": 45.58097445027978,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 298.0475,
+          "frame_index": 296,
+          "peak_snr_db": 59.315547808973974
+        },
+        {
+          "ambiguity_margin_db": 45.74322207082993,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 299.0475,
+          "frame_index": 297,
+          "peak_snr_db": 59.93326693291026
+        },
+        {
+          "ambiguity_margin_db": 48.44702913297476,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 300.0475,
+          "frame_index": 298,
+          "peak_snr_db": 59.89128587853118
+        },
+        {
+          "ambiguity_margin_db": 45.14269463883803,
+          "baseband_frequency_hz": 35.64453125,
+          "event_time_offset_s": 301.0475,
+          "frame_index": 299,
+          "peak_snr_db": 58.56756332149608
+        },
+        {
+          "ambiguity_margin_db": 43.02261866522304,
+          "baseband_frequency_hz": 35.888671875,
+          "event_time_offset_s": 302.0475,
+          "frame_index": 300,
+          "peak_snr_db": 58.864389656045745
+        },
+        {
+          "ambiguity_margin_db": 45.77500446826321,
+          "baseband_frequency_hz": 35.888671875,
+          "event_time_offset_s": 303.0475,
+          "frame_index": 301,
+          "peak_snr_db": 60.34188795876639
+        },
+        {
+          "ambiguity_margin_db": 44.85687237491065,
+          "baseband_frequency_hz": 35.888671875,
+          "event_time_offset_s": 304.0475,
+          "frame_index": 302,
+          "peak_snr_db": 59.34518313824007
+        },
+        {
+          "ambiguity_margin_db": 44.40264376551676,
+          "baseband_frequency_hz": 35.888671875,
+          "event_time_offset_s": 305.0475,
+          "frame_index": 303,
+          "peak_snr_db": 59.64045343816548
+        },
+        {
+          "ambiguity_margin_db": 47.10572266407172,
+          "baseband_frequency_hz": 35.888671875,
+          "event_time_offset_s": 306.0475,
+          "frame_index": 304,
+          "peak_snr_db": 60.12894467663307
+        },
+        {
+          "ambiguity_margin_db": 46.99918611133714,
+          "baseband_frequency_hz": 35.888671875,
+          "event_time_offset_s": 307.0475,
+          "frame_index": 305,
+          "peak_snr_db": 59.3351922694448
+        },
+        {
+          "ambiguity_margin_db": 45.33044962588515,
+          "baseband_frequency_hz": 35.888671875,
+          "event_time_offset_s": 308.0475,
+          "frame_index": 306,
+          "peak_snr_db": 59.30493507538013
+        },
+        {
+          "ambiguity_margin_db": 47.52605816754024,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 309.0475,
+          "frame_index": 307,
+          "peak_snr_db": 58.41990282127764
+        },
+        {
+          "ambiguity_margin_db": 47.63451770825611,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 310.0475,
+          "frame_index": 308,
+          "peak_snr_db": 58.65432078216146
+        },
+        {
+          "ambiguity_margin_db": 47.414305544174155,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 311.0475,
+          "frame_index": 309,
+          "peak_snr_db": 60.151091417329724
+        },
+        {
+          "ambiguity_margin_db": 46.78004762117852,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 312.0475,
+          "frame_index": 310,
+          "peak_snr_db": 60.060699685819856
+        },
+        {
+          "ambiguity_margin_db": 48.21345976667962,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 313.0475,
+          "frame_index": 311,
+          "peak_snr_db": 60.00186120789003
+        },
+        {
+          "ambiguity_margin_db": 47.965437425789865,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 314.0475,
+          "frame_index": 312,
+          "peak_snr_db": 58.912377409579896
+        },
+        {
+          "ambiguity_margin_db": 44.978757033029446,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 315.0475,
+          "frame_index": 313,
+          "peak_snr_db": 59.07352137639482
+        },
+        {
+          "ambiguity_margin_db": 43.55824490729514,
+          "baseband_frequency_hz": 36.1328125,
+          "event_time_offset_s": 316.0475,
+          "frame_index": 314,
+          "peak_snr_db": 58.11722830374728
+        },
+        {
+          "ambiguity_margin_db": 46.252106757114575,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 317.0475,
+          "frame_index": 315,
+          "peak_snr_db": 58.230566715909035
+        },
+        {
+          "ambiguity_margin_db": 47.56005915997862,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 318.0475,
+          "frame_index": 316,
+          "peak_snr_db": 58.82650673997435
+        },
+        {
+          "ambiguity_margin_db": 47.207708673702285,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 319.0475,
+          "frame_index": 317,
+          "peak_snr_db": 58.93617558039267
+        },
+        {
+          "ambiguity_margin_db": 48.078981434225426,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 320.0475,
+          "frame_index": 318,
+          "peak_snr_db": 59.64865236493487
+        },
+        {
+          "ambiguity_margin_db": 46.27027254195476,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 321.0475,
+          "frame_index": 319,
+          "peak_snr_db": 59.119770465491335
+        },
+        {
+          "ambiguity_margin_db": 45.63422292814212,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 322.0475,
+          "frame_index": 320,
+          "peak_snr_db": 58.73833747565936
+        },
+        {
+          "ambiguity_margin_db": 47.677827014127594,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 323.0475,
+          "frame_index": 321,
+          "peak_snr_db": 58.496018935196446
+        },
+        {
+          "ambiguity_margin_db": 47.683114858929,
+          "baseband_frequency_hz": 36.376953125,
+          "event_time_offset_s": 324.0475,
+          "frame_index": 322,
+          "peak_snr_db": 58.44249778234613
+        },
+        {
+          "ambiguity_margin_db": 46.46718640704872,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 325.0475,
+          "frame_index": 323,
+          "peak_snr_db": 59.24050408952337
+        },
+        {
+          "ambiguity_margin_db": 45.589751113573556,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 326.0475,
+          "frame_index": 324,
+          "peak_snr_db": 59.115432478473544
+        },
+        {
+          "ambiguity_margin_db": 47.7105435185491,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 327.0475,
+          "frame_index": 325,
+          "peak_snr_db": 59.92782891095109
+        },
+        {
+          "ambiguity_margin_db": 47.888372360305496,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 328.0475,
+          "frame_index": 326,
+          "peak_snr_db": 60.34912767578188
+        },
+        {
+          "ambiguity_margin_db": 48.9323015415366,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 329.0475,
+          "frame_index": 327,
+          "peak_snr_db": 59.990540397963784
+        },
+        {
+          "ambiguity_margin_db": 47.24571604885524,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 330.0475,
+          "frame_index": 328,
+          "peak_snr_db": 59.184012100822116
+        },
+        {
+          "ambiguity_margin_db": 47.66126877516365,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 331.0475,
+          "frame_index": 329,
+          "peak_snr_db": 59.46725488921341
+        },
+        {
+          "ambiguity_margin_db": 47.388282720367656,
+          "baseband_frequency_hz": 36.62109375,
+          "event_time_offset_s": 332.0475,
+          "frame_index": 330,
+          "peak_snr_db": 58.22274130981267
+        },
+        {
+          "ambiguity_margin_db": 44.52384148853581,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 333.0475,
+          "frame_index": 331,
+          "peak_snr_db": 58.5497627940407
+        },
+        {
+          "ambiguity_margin_db": 47.805575979820205,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 334.0475,
+          "frame_index": 332,
+          "peak_snr_db": 58.69902778585463
+        },
+        {
+          "ambiguity_margin_db": 46.977659024650094,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 335.0475,
+          "frame_index": 333,
+          "peak_snr_db": 59.704817980302906
+        },
+        {
+          "ambiguity_margin_db": 47.45934606931903,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 336.0475,
+          "frame_index": 334,
+          "peak_snr_db": 59.20606280689114
+        },
+        {
+          "ambiguity_margin_db": 46.56935697719605,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 337.0475,
+          "frame_index": 335,
+          "peak_snr_db": 58.5631269622289
+        },
+        {
+          "ambiguity_margin_db": 45.2467523781582,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 338.0475,
+          "frame_index": 336,
+          "peak_snr_db": 59.070866268789345
+        },
+        {
+          "ambiguity_margin_db": 44.47335488583404,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 339.0475,
+          "frame_index": 337,
+          "peak_snr_db": 58.76473066960196
+        },
+        {
+          "ambiguity_margin_db": 45.90946619725724,
+          "baseband_frequency_hz": 36.865234375,
+          "event_time_offset_s": 340.0475,
+          "frame_index": 338,
+          "peak_snr_db": 58.41332701252839
+        },
+        {
+          "ambiguity_margin_db": 46.9599079896669,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 341.0475,
+          "frame_index": 339,
+          "peak_snr_db": 59.15706336535942
+        },
+        {
+          "ambiguity_margin_db": 45.670420872970624,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 342.0475,
+          "frame_index": 340,
+          "peak_snr_db": 59.720734869808545
+        },
+        {
+          "ambiguity_margin_db": 46.234836235788066,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 343.0475,
+          "frame_index": 341,
+          "peak_snr_db": 59.575425549188665
+        },
+        {
+          "ambiguity_margin_db": 45.50992851284769,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 344.0475,
+          "frame_index": 342,
+          "peak_snr_db": 59.611776203790285
+        },
+        {
+          "ambiguity_margin_db": 48.36927688892777,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 345.0475,
+          "frame_index": 343,
+          "peak_snr_db": 60.0430158480404
+        },
+        {
+          "ambiguity_margin_db": 47.01642347758274,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 346.0475,
+          "frame_index": 344,
+          "peak_snr_db": 59.22755190467121
+        },
+        {
+          "ambiguity_margin_db": 42.92088168553819,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 347.0475,
+          "frame_index": 345,
+          "peak_snr_db": 58.40116607332063
+        },
+        {
+          "ambiguity_margin_db": 44.8196520023117,
+          "baseband_frequency_hz": 37.109375,
+          "event_time_offset_s": 348.0475,
+          "frame_index": 346,
+          "peak_snr_db": 58.632491122959976
+        },
+        {
+          "ambiguity_margin_db": 45.20239868313092,
+          "baseband_frequency_hz": 37.353515625,
+          "event_time_offset_s": 349.0475,
+          "frame_index": 347,
+          "peak_snr_db": 58.64843410823725
+        },
+        {
+          "ambiguity_margin_db": 45.659588097274764,
+          "baseband_frequency_hz": 37.353515625,
+          "event_time_offset_s": 350.0475,
+          "frame_index": 348,
+          "peak_snr_db": 59.527204338124946
+        },
+        {
+          "ambiguity_margin_db": 48.82102417956324,
+          "baseband_frequency_hz": 37.353515625,
+          "event_time_offset_s": 351.0475,
+          "frame_index": 349,
+          "peak_snr_db": 60.31580967940794
+        },
+        {
+          "ambiguity_margin_db": 48.41079966068306,
+          "baseband_frequency_hz": 37.353515625,
+          "event_time_offset_s": 352.0475,
+          "frame_index": 350,
+          "peak_snr_db": 60.17072387404034
+        },
+        {
+          "ambiguity_margin_db": 47.77857171096762,
+          "baseband_frequency_hz": 37.353515625,
+          "event_time_offset_s": 353.0475,
+          "frame_index": 351,
+          "peak_snr_db": 60.14171875807209
+        },
+        {
+          "ambiguity_margin_db": 45.93708009226055,
+          "baseband_frequency_hz": 37.353515625,
+          "event_time_offset_s": 354.0475,
+          "frame_index": 352,
+          "peak_snr_db": 59.79738642252868
+        },
+        {
+          "ambiguity_margin_db": 46.14698156349745,
+          "baseband_frequency_hz": 37.353515625,
+          "event_time_offset_s": 355.0475,
+          "frame_index": 353,
+          "peak_snr_db": 59.78623612966978
+        },
+        {
+          "ambiguity_margin_db": 45.414430148172414,
+          "baseband_frequency_hz": 37.59765625,
+          "event_time_offset_s": 356.0475,
+          "frame_index": 354,
+          "peak_snr_db": 58.9841036033815
+        },
+        {
+          "ambiguity_margin_db": 45.57680432212747,
+          "baseband_frequency_hz": 37.59765625,
+          "event_time_offset_s": 357.0475,
+          "frame_index": 355,
+          "peak_snr_db": 58.457328115434706
+        },
+        {
+          "ambiguity_margin_db": 46.10827302101473,
+          "baseband_frequency_hz": 37.59765625,
+          "event_time_offset_s": 358.0475,
+          "frame_index": 356,
+          "peak_snr_db": 60.82218594140733
+        },
+        {
+          "ambiguity_margin_db": 48.53423304427398,
+          "baseband_frequency_hz": 37.59765625,
+          "event_time_offset_s": 359.0475,
+          "frame_index": 357,
+          "peak_snr_db": 60.46940270704381
+        },
+        {
+          "ambiguity_margin_db": 45.02511294380807,
+          "baseband_frequency_hz": 37.59765625,
+          "event_time_offset_s": 360.0475,
+          "frame_index": 358,
+          "peak_snr_db": 59.61324026615571
+        },
+        {
+          "ambiguity_margin_db": 43.257714727111164,
+          "baseband_frequency_hz": 37.59765625,
+          "event_time_offset_s": 361.0475,
+          "frame_index": 359,
+          "peak_snr_db": 59.24245936220017
+        },
+        {
+          "ambiguity_margin_db": 45.485908768048596,
+          "baseband_frequency_hz": 37.59765625,
+          "event_time_offset_s": 362.0475,
+          "frame_index": 360,
+          "peak_snr_db": 58.26896711157892
+        },
+        {
+          "ambiguity_margin_db": 44.88399249695575,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 363.0475,
+          "frame_index": 361,
+          "peak_snr_db": 58.86692879161639
+        },
+        {
+          "ambiguity_margin_db": 47.66417174924272,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 364.0475,
+          "frame_index": 362,
+          "peak_snr_db": 60.09780509923743
+        },
+        {
+          "ambiguity_margin_db": 47.72974445930256,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 365.0475,
+          "frame_index": 363,
+          "peak_snr_db": 59.19456618847086
+        },
+        {
+          "ambiguity_margin_db": 47.784842450700616,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 366.0475,
+          "frame_index": 364,
+          "peak_snr_db": 58.910695073610455
+        },
+        {
+          "ambiguity_margin_db": 47.37425870552664,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 367.0475,
+          "frame_index": 365,
+          "peak_snr_db": 60.313076038730244
+        },
+        {
+          "ambiguity_margin_db": 46.877783301190775,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 368.0475,
+          "frame_index": 366,
+          "peak_snr_db": 59.92961314553184
+        },
+        {
+          "ambiguity_margin_db": 45.91050295213141,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 369.0475,
+          "frame_index": 367,
+          "peak_snr_db": 59.0166356387573
+        },
+        {
+          "ambiguity_margin_db": 47.29814733237948,
+          "baseband_frequency_hz": 37.841796875,
+          "event_time_offset_s": 370.0475,
+          "frame_index": 368,
+          "peak_snr_db": 58.661114731661286
+        },
+        {
+          "ambiguity_margin_db": 46.79001244790151,
+          "baseband_frequency_hz": 38.0859375,
+          "event_time_offset_s": 371.0475,
+          "frame_index": 369,
+          "peak_snr_db": 58.10343729970288
+        },
+        {
+          "ambiguity_margin_db": 46.70842016474129,
+          "baseband_frequency_hz": 38.0859375,
+          "event_time_offset_s": 372.0475,
+          "frame_index": 370,
+          "peak_snr_db": 58.877350180618
+        },
+        {
+          "ambiguity_margin_db": 43.89949722359927,
+          "baseband_frequency_hz": 38.0859375,
+          "event_time_offset_s": 373.0475,
+          "frame_index": 371,
+          "peak_snr_db": 59.57030459177247
+        },
+        {
+          "ambiguity_margin_db": 44.08649779537464,
+          "baseband_frequency_hz": 38.0859375,
+          "event_time_offset_s": 374.0475,
+          "frame_index": 372,
+          "peak_snr_db": 59.08652362970287
+        },
+        {
+          "ambiguity_margin_db": 44.66219267592764,
+          "baseband_frequency_hz": 38.0859375,
+          "event_time_offset_s": 375.0475,
+          "frame_index": 373,
+          "peak_snr_db": 59.33829840988576
+        },
+        {
+          "ambiguity_margin_db": 46.24868919146757,
+          "baseband_frequency_hz": 38.0859375,
+          "event_time_offset_s": 376.0475,
+          "frame_index": 374,
+          "peak_snr_db": 59.760521253908806
+        },
+        {
+          "ambiguity_margin_db": 44.710664834137795,
+          "baseband_frequency_hz": 38.0859375,
+          "event_time_offset_s": 377.0475,
+          "frame_index": 375,
+          "peak_snr_db": 59.52539103899462
+        },
+        {
+          "ambiguity_margin_db": 42.48643251168276,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 378.0475,
+          "frame_index": 376,
+          "peak_snr_db": 59.75902074879465
+        },
+        {
+          "ambiguity_margin_db": 43.26170499950254,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 379.0475,
+          "frame_index": 377,
+          "peak_snr_db": 59.084705134389075
+        },
+        {
+          "ambiguity_margin_db": 43.234270826309086,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 380.0475,
+          "frame_index": 378,
+          "peak_snr_db": 58.43608278820349
+        },
+        {
+          "ambiguity_margin_db": 46.236998065958694,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 381.0475,
+          "frame_index": 379,
+          "peak_snr_db": 59.455106664214625
+        },
+        {
+          "ambiguity_margin_db": 46.823023560071555,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 382.0475,
+          "frame_index": 380,
+          "peak_snr_db": 58.865773183989916
+        },
+        {
+          "ambiguity_margin_db": 47.48291638189503,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 383.0475,
+          "frame_index": 381,
+          "peak_snr_db": 59.29905975264569
+        },
+        {
+          "ambiguity_margin_db": 47.255701371506696,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 384.0475,
+          "frame_index": 382,
+          "peak_snr_db": 59.7855548063358
+        },
+        {
+          "ambiguity_margin_db": 47.355246706523026,
+          "baseband_frequency_hz": 38.330078125,
+          "event_time_offset_s": 385.0475,
+          "frame_index": 383,
+          "peak_snr_db": 58.667273153858865
+        },
+        {
+          "ambiguity_margin_db": 45.41878389759234,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 386.0475,
+          "frame_index": 384,
+          "peak_snr_db": 58.15058986835056
+        },
+        {
+          "ambiguity_margin_db": 43.44172561849814,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 387.0475,
+          "frame_index": 385,
+          "peak_snr_db": 58.96631415375026
+        },
+        {
+          "ambiguity_margin_db": 42.901189293175264,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 388.0475,
+          "frame_index": 386,
+          "peak_snr_db": 59.66880706787705
+        },
+        {
+          "ambiguity_margin_db": 44.09868585306605,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 389.0475,
+          "frame_index": 387,
+          "peak_snr_db": 59.352559891194936
+        },
+        {
+          "ambiguity_margin_db": 44.456725622801784,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 390.0475,
+          "frame_index": 388,
+          "peak_snr_db": 59.240418370620105
+        },
+        {
+          "ambiguity_margin_db": 44.01329133409221,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 391.0475,
+          "frame_index": 389,
+          "peak_snr_db": 60.01761466419658
+        },
+        {
+          "ambiguity_margin_db": 45.49226664889489,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 392.0475,
+          "frame_index": 390,
+          "peak_snr_db": 58.66268031768783
+        },
+        {
+          "ambiguity_margin_db": 43.78164731122558,
+          "baseband_frequency_hz": 38.57421875,
+          "event_time_offset_s": 393.0475,
+          "frame_index": 391,
+          "peak_snr_db": 59.31128343814041
+        },
+        {
+          "ambiguity_margin_db": 44.99877035795622,
+          "baseband_frequency_hz": 38.818359375,
+          "event_time_offset_s": 394.0475,
+          "frame_index": 392,
+          "peak_snr_db": 58.75661974826039
+        },
+        {
+          "ambiguity_margin_db": 45.781167040753274,
+          "baseband_frequency_hz": 38.818359375,
+          "event_time_offset_s": 395.0475,
+          "frame_index": 393,
+          "peak_snr_db": 60.37178926052925
+        },
+        {
+          "ambiguity_margin_db": 47.67425247638676,
+          "baseband_frequency_hz": 38.818359375,
+          "event_time_offset_s": 396.0475,
+          "frame_index": 394,
+          "peak_snr_db": 59.58743420004494
+        },
+        {
+          "ambiguity_margin_db": 47.37149726617857,
+          "baseband_frequency_hz": 38.818359375,
+          "event_time_offset_s": 397.0475,
+          "frame_index": 395,
+          "peak_snr_db": 59.610989552439754
+        },
+        {
+          "ambiguity_margin_db": 47.463792471416525,
+          "baseband_frequency_hz": 38.818359375,
+          "event_time_offset_s": 398.0475,
+          "frame_index": 396,
+          "peak_snr_db": 59.948508524821776
+        },
+        {
+          "ambiguity_margin_db": 46.54124189803835,
+          "baseband_frequency_hz": 38.818359375,
+          "event_time_offset_s": 399.0475,
+          "frame_index": 397,
+          "peak_snr_db": 59.7356382422134
+        },
+        {
+          "ambiguity_margin_db": 45.852466732057664,
+          "baseband_frequency_hz": 38.818359375,
+          "event_time_offset_s": 400.0475,
+          "frame_index": 398,
+          "peak_snr_db": 58.465020601219265
+        },
+        {
+          "ambiguity_margin_db": 45.73913865029966,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 401.0475,
+          "frame_index": 399,
+          "peak_snr_db": 58.261351888234415
+        },
+        {
+          "ambiguity_margin_db": 44.29560832929141,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 402.0475,
+          "frame_index": 400,
+          "peak_snr_db": 59.78083136353177
+        },
+        {
+          "ambiguity_margin_db": 48.06353254466109,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 403.0475,
+          "frame_index": 401,
+          "peak_snr_db": 59.80575690946288
+        },
+        {
+          "ambiguity_margin_db": 46.22676839617273,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 404.0475,
+          "frame_index": 402,
+          "peak_snr_db": 59.70764707463513
+        },
+        {
+          "ambiguity_margin_db": 46.99598552626429,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 405.0475,
+          "frame_index": 403,
+          "peak_snr_db": 59.94242134328622
+        },
+        {
+          "ambiguity_margin_db": 47.52370202979769,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 406.0475,
+          "frame_index": 404,
+          "peak_snr_db": 60.7777452543247
+        },
+        {
+          "ambiguity_margin_db": 45.741542833420006,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 407.0475,
+          "frame_index": 405,
+          "peak_snr_db": 59.75726581005027
+        },
+        {
+          "ambiguity_margin_db": 45.362778449853245,
+          "baseband_frequency_hz": 39.0625,
+          "event_time_offset_s": 408.0475,
+          "frame_index": 406,
+          "peak_snr_db": 59.05009585493505
+        },
+        {
+          "ambiguity_margin_db": 46.9202287638806,
+          "baseband_frequency_hz": 39.306640625,
+          "event_time_offset_s": 409.0475,
+          "frame_index": 407,
+          "peak_snr_db": 59.658132447499234
+        },
+        {
+          "ambiguity_margin_db": 46.3160512975484,
+          "baseband_frequency_hz": 39.306640625,
+          "event_time_offset_s": 410.0475,
+          "frame_index": 408,
+          "peak_snr_db": 59.36426795292683
+        },
+        {
+          "ambiguity_margin_db": 48.41639617544651,
+          "baseband_frequency_hz": 39.306640625,
+          "event_time_offset_s": 411.0475,
+          "frame_index": 409,
+          "peak_snr_db": 59.94200754843959
+        },
+        {
+          "ambiguity_margin_db": 48.57065647915829,
+          "baseband_frequency_hz": 39.306640625,
+          "event_time_offset_s": 412.0475,
+          "frame_index": 410,
+          "peak_snr_db": 59.00644206977493
+        },
+        {
+          "ambiguity_margin_db": 47.8521432509822,
+          "baseband_frequency_hz": 39.306640625,
+          "event_time_offset_s": 413.0475,
+          "frame_index": 411,
+          "peak_snr_db": 58.75532127422004
+        },
+        {
+          "ambiguity_margin_db": 47.251253082162506,
+          "baseband_frequency_hz": 39.306640625,
+          "event_time_offset_s": 414.0475,
+          "frame_index": 412,
+          "peak_snr_db": 59.287432024215406
+        },
+        {
+          "ambiguity_margin_db": 45.98861285263886,
+          "baseband_frequency_hz": 39.306640625,
+          "event_time_offset_s": 415.0475,
+          "frame_index": 413,
+          "peak_snr_db": 58.447216927795516
+        },
+        {
+          "ambiguity_margin_db": 46.437788967316216,
+          "baseband_frequency_hz": 39.55078125,
+          "event_time_offset_s": 416.0475,
+          "frame_index": 414,
+          "peak_snr_db": 57.945354163572574
+        },
+        {
+          "ambiguity_margin_db": 47.81280643722347,
+          "baseband_frequency_hz": 39.55078125,
+          "event_time_offset_s": 417.0475,
+          "frame_index": 415,
+          "peak_snr_db": 58.88120329803516
+        },
+        {
+          "ambiguity_margin_db": 45.90780039927397,
+          "baseband_frequency_hz": 39.55078125,
+          "event_time_offset_s": 418.0475,
+          "frame_index": 416,
+          "peak_snr_db": 59.6629158986657
+        },
+        {
+          "ambiguity_margin_db": 45.59272824865823,
+          "baseband_frequency_hz": 39.55078125,
+          "event_time_offset_s": 419.0475,
+          "frame_index": 417,
+          "peak_snr_db": 60.4321409442978
+        },
+        {
+          "ambiguity_margin_db": 47.39686917167796,
+          "baseband_frequency_hz": 39.55078125,
+          "event_time_offset_s": 420.0475,
+          "frame_index": 418,
+          "peak_snr_db": 60.27450960735329
+        },
+        {
+          "ambiguity_margin_db": 45.52101566450405,
+          "baseband_frequency_hz": 39.55078125,
+          "event_time_offset_s": 421.0475,
+          "frame_index": 419,
+          "peak_snr_db": 59.59597463087675
+        },
+        {
+          "ambiguity_margin_db": 44.86812691918894,
+          "baseband_frequency_hz": 39.55078125,
+          "event_time_offset_s": 422.0475,
+          "frame_index": 420,
+          "peak_snr_db": 58.78150226774544
+        },
+        {
+          "ambiguity_margin_db": 46.061836252537105,
+          "baseband_frequency_hz": 39.794921875,
+          "event_time_offset_s": 423.0475,
+          "frame_index": 421,
+          "peak_snr_db": 58.08778378715744
+        },
+        {
+          "ambiguity_margin_db": 47.437360493592934,
+          "baseband_frequency_hz": 39.794921875,
+          "event_time_offset_s": 424.0475,
+          "frame_index": 422,
+          "peak_snr_db": 58.69424372140898
+        },
+        {
+          "ambiguity_margin_db": 47.772955433973216,
+          "baseband_frequency_hz": 39.794921875,
+          "event_time_offset_s": 425.0475,
+          "frame_index": 423,
+          "peak_snr_db": 59.56644235051552
+        },
+        {
+          "ambiguity_margin_db": 48.069040658046156,
+          "baseband_frequency_hz": 39.794921875,
+          "event_time_offset_s": 426.0475,
+          "frame_index": 424,
+          "peak_snr_db": 58.873142232638955
+        },
+        {
+          "ambiguity_margin_db": 48.492424534200396,
+          "baseband_frequency_hz": 39.794921875,
+          "event_time_offset_s": 427.0475,
+          "frame_index": 425,
+          "peak_snr_db": 59.11771165042686
+        },
+        {
+          "ambiguity_margin_db": 47.84319204015259,
+          "baseband_frequency_hz": 39.794921875,
+          "event_time_offset_s": 428.0475,
+          "frame_index": 426,
+          "peak_snr_db": 58.602142256437716
+        },
+        {
+          "ambiguity_margin_db": 46.9162871108077,
+          "baseband_frequency_hz": 39.794921875,
+          "event_time_offset_s": 429.0475,
+          "frame_index": 427,
+          "peak_snr_db": 57.53748910287388
+        },
+        {
+          "ambiguity_margin_db": 46.347361914086854,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 430.0475,
+          "frame_index": 428,
+          "peak_snr_db": 58.18940199395815
+        },
+        {
+          "ambiguity_margin_db": 45.419565284668835,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 431.0475,
+          "frame_index": 429,
+          "peak_snr_db": 58.17822661531146
+        },
+        {
+          "ambiguity_margin_db": 47.0781340618081,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 432.0475,
+          "frame_index": 430,
+          "peak_snr_db": 58.890027545470076
+        },
+        {
+          "ambiguity_margin_db": 45.932172732915674,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 433.0475,
+          "frame_index": 431,
+          "peak_snr_db": 58.29690578776664
+        },
+        {
+          "ambiguity_margin_db": 46.508908319473264,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 434.0475,
+          "frame_index": 432,
+          "peak_snr_db": 60.250851717836575
+        },
+        {
+          "ambiguity_margin_db": 45.93272213261188,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 435.0475,
+          "frame_index": 433,
+          "peak_snr_db": 59.10898267729404
+        },
+        {
+          "ambiguity_margin_db": 46.667636146878465,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 436.0475,
+          "frame_index": 434,
+          "peak_snr_db": 60.022648459849755
+        },
+        {
+          "ambiguity_margin_db": 47.45214418352389,
+          "baseband_frequency_hz": 40.0390625,
+          "event_time_offset_s": 437.0475,
+          "frame_index": 435,
+          "peak_snr_db": 59.05543446479562
+        },
+        {
+          "ambiguity_margin_db": 48.299856226531205,
+          "baseband_frequency_hz": 40.283203125,
+          "event_time_offset_s": 438.0475,
+          "frame_index": 436,
+          "peak_snr_db": 58.66250360344716
+        },
+        {
+          "ambiguity_margin_db": 46.69875176457121,
+          "baseband_frequency_hz": 40.283203125,
+          "event_time_offset_s": 439.0475,
+          "frame_index": 437,
+          "peak_snr_db": 58.88739645184952
+        },
+        {
+          "ambiguity_margin_db": 47.578780401057216,
+          "baseband_frequency_hz": 40.283203125,
+          "event_time_offset_s": 440.0475,
+          "frame_index": 438,
+          "peak_snr_db": 59.07162416810724
+        },
+        {
+          "ambiguity_margin_db": 47.90024945280257,
+          "baseband_frequency_hz": 40.283203125,
+          "event_time_offset_s": 441.0475,
+          "frame_index": 439,
+          "peak_snr_db": 59.568262101134366
+        },
+        {
+          "ambiguity_margin_db": 45.80942080731247,
+          "baseband_frequency_hz": 40.283203125,
+          "event_time_offset_s": 442.0475,
+          "frame_index": 440,
+          "peak_snr_db": 59.26048728596289
+        },
+        {
+          "ambiguity_margin_db": 46.53341196001957,
+          "baseband_frequency_hz": 40.283203125,
+          "event_time_offset_s": 443.0475,
+          "frame_index": 441,
+          "peak_snr_db": 59.599733232611925
+        },
+        {
+          "ambiguity_margin_db": 45.67641353618551,
+          "baseband_frequency_hz": 40.283203125,
+          "event_time_offset_s": 444.0475,
+          "frame_index": 442,
+          "peak_snr_db": 58.69770954622767
+        },
+        {
+          "ambiguity_margin_db": 45.96981848005652,
+          "baseband_frequency_hz": 40.52734375,
+          "event_time_offset_s": 445.0475,
+          "frame_index": 443,
+          "peak_snr_db": 58.93567586770713
+        },
+        {
+          "ambiguity_margin_db": 46.35751176935954,
+          "baseband_frequency_hz": 40.52734375,
+          "event_time_offset_s": 446.0475,
+          "frame_index": 444,
+          "peak_snr_db": 59.801466529716684
+        },
+        {
+          "ambiguity_margin_db": 47.60808256541924,
+          "baseband_frequency_hz": 40.52734375,
+          "event_time_offset_s": 447.0475,
+          "frame_index": 445,
+          "peak_snr_db": 59.32592763656214
+        },
+        {
+          "ambiguity_margin_db": 46.955960217107446,
+          "baseband_frequency_hz": 40.52734375,
+          "event_time_offset_s": 448.0475,
+          "frame_index": 446,
+          "peak_snr_db": 59.84965113475625
+        },
+        {
+          "ambiguity_margin_db": 48.40767269098676,
+          "baseband_frequency_hz": 40.52734375,
+          "event_time_offset_s": 449.0475,
+          "frame_index": 447,
+          "peak_snr_db": 60.55343648399371
+        },
+        {
+          "ambiguity_margin_db": 48.06319701540023,
+          "baseband_frequency_hz": 40.52734375,
+          "event_time_offset_s": 450.0475,
+          "frame_index": 448,
+          "peak_snr_db": 59.82454018619084
+        },
+        {
+          "ambiguity_margin_db": 47.34710196090087,
+          "baseband_frequency_hz": 40.52734375,
+          "event_time_offset_s": 451.0475,
+          "frame_index": 449,
+          "peak_snr_db": 59.18063013255135
+        },
+        {
+          "ambiguity_margin_db": 45.33278156406667,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 452.0475,
+          "frame_index": 450,
+          "peak_snr_db": 59.18895802410337
+        },
+        {
+          "ambiguity_margin_db": 44.69040697812436,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 453.0475,
+          "frame_index": 451,
+          "peak_snr_db": 60.37083054925566
+        },
+        {
+          "ambiguity_margin_db": 48.517058102215735,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 454.0475,
+          "frame_index": 452,
+          "peak_snr_db": 60.34468586131059
+        },
+        {
+          "ambiguity_margin_db": 48.57389568022156,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 455.0475,
+          "frame_index": 453,
+          "peak_snr_db": 60.89413183842674
+        },
+        {
+          "ambiguity_margin_db": 47.9920116903932,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 456.0475,
+          "frame_index": 454,
+          "peak_snr_db": 61.21071025386753
+        },
+        {
+          "ambiguity_margin_db": 44.73467433375465,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 457.0475,
+          "frame_index": 455,
+          "peak_snr_db": 59.59618049572589
+        },
+        {
+          "ambiguity_margin_db": 43.61476106399739,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 458.0475,
+          "frame_index": 456,
+          "peak_snr_db": 60.292601201872515
+        },
+        {
+          "ambiguity_margin_db": 46.88064807285636,
+          "baseband_frequency_hz": 40.771484375,
+          "event_time_offset_s": 459.0475,
+          "frame_index": 457,
+          "peak_snr_db": 58.91651861832388
+        },
+        {
+          "ambiguity_margin_db": 45.244147076694894,
+          "baseband_frequency_hz": 41.015625,
+          "event_time_offset_s": 460.0475,
+          "frame_index": 458,
+          "peak_snr_db": 58.05610615473125
+        },
+        {
+          "ambiguity_margin_db": 43.67400423498026,
+          "baseband_frequency_hz": 41.015625,
+          "event_time_offset_s": 461.0475,
+          "frame_index": 459,
+          "peak_snr_db": 59.32989874248888
+        },
+        {
+          "ambiguity_margin_db": 47.63102462677338,
+          "baseband_frequency_hz": 41.015625,
+          "event_time_offset_s": 462.0475,
+          "frame_index": 460,
+          "peak_snr_db": 59.53124028482816
+        },
+        {
+          "ambiguity_margin_db": 47.0639673939617,
+          "baseband_frequency_hz": 41.015625,
+          "event_time_offset_s": 463.0475,
+          "frame_index": 461,
+          "peak_snr_db": 60.17720124554553
+        },
+        {
+          "ambiguity_margin_db": 47.076412963361165,
+          "baseband_frequency_hz": 41.015625,
+          "event_time_offset_s": 464.0475,
+          "frame_index": 462,
+          "peak_snr_db": 60.0090369123665
+        },
+        {
+          "ambiguity_margin_db": 47.00891324254186,
+          "baseband_frequency_hz": 41.015625,
+          "event_time_offset_s": 465.0475,
+          "frame_index": 463,
+          "peak_snr_db": 58.58201349074672
+        },
+        {
+          "ambiguity_margin_db": 45.63787583521389,
+          "baseband_frequency_hz": 41.259765625,
+          "event_time_offset_s": 466.0475,
+          "frame_index": 464,
+          "peak_snr_db": 57.42629906518309
+        },
+        {
+          "ambiguity_margin_db": 46.38636674244326,
+          "baseband_frequency_hz": 41.259765625,
+          "event_time_offset_s": 467.0475,
+          "frame_index": 465,
+          "peak_snr_db": 57.99802153548531
+        },
+        {
+          "ambiguity_margin_db": 47.90953752783692,
+          "baseband_frequency_hz": 41.259765625,
+          "event_time_offset_s": 468.0475,
+          "frame_index": 466,
+          "peak_snr_db": 58.80617004883072
+        },
+        {
+          "ambiguity_margin_db": 48.32857304866625,
+          "baseband_frequency_hz": 41.259765625,
+          "event_time_offset_s": 469.0475,
+          "frame_index": 467,
+          "peak_snr_db": 59.791625644353
+        },
+        {
+          "ambiguity_margin_db": 48.260080648024434,
+          "baseband_frequency_hz": 41.259765625,
+          "event_time_offset_s": 470.0475,
+          "frame_index": 468,
+          "peak_snr_db": 60.07663409462352
+        },
+        {
+          "ambiguity_margin_db": 47.10931397049998,
+          "baseband_frequency_hz": 41.259765625,
+          "event_time_offset_s": 471.0475,
+          "frame_index": 469,
+          "peak_snr_db": 60.327284139091724
+        },
+        {
+          "ambiguity_margin_db": 42.15030234288335,
+          "baseband_frequency_hz": 41.259765625,
+          "event_time_offset_s": 472.0475,
+          "frame_index": 470,
+          "peak_snr_db": 59.34613439601365
+        },
+        {
+          "ambiguity_margin_db": 37.22971640185244,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 473.0475,
+          "frame_index": 471,
+          "peak_snr_db": 58.100968284979395
+        },
+        {
+          "ambiguity_margin_db": 36.62468880865627,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 474.0475,
+          "frame_index": 472,
+          "peak_snr_db": 58.67910538098332
+        },
+        {
+          "ambiguity_margin_db": 41.591665632895115,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 475.0475,
+          "frame_index": 473,
+          "peak_snr_db": 58.48415361509299
+        },
+        {
+          "ambiguity_margin_db": 43.96567243604676,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 476.0475,
+          "frame_index": 474,
+          "peak_snr_db": 58.50705804901913
+        },
+        {
+          "ambiguity_margin_db": 46.357979524444474,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 477.0475,
+          "frame_index": 475,
+          "peak_snr_db": 59.32313217909099
+        },
+        {
+          "ambiguity_margin_db": 46.36215654545356,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 478.0475,
+          "frame_index": 476,
+          "peak_snr_db": 58.9950340349216
+        },
+        {
+          "ambiguity_margin_db": 45.13321402579191,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 479.0475,
+          "frame_index": 477,
+          "peak_snr_db": 59.01125393466365
+        },
+        {
+          "ambiguity_margin_db": 43.096403352792805,
+          "baseband_frequency_hz": 41.50390625,
+          "event_time_offset_s": 480.0475,
+          "frame_index": 478,
+          "peak_snr_db": 58.09994128300082
+        },
+        {
+          "ambiguity_margin_db": 42.832546964349945,
+          "baseband_frequency_hz": 41.748046875,
+          "event_time_offset_s": 481.0475,
+          "frame_index": 479,
+          "peak_snr_db": 58.823076207509
+        },
+        {
+          "ambiguity_margin_db": 46.359794325854466,
+          "baseband_frequency_hz": 41.748046875,
+          "event_time_offset_s": 482.0475,
+          "frame_index": 480,
+          "peak_snr_db": 59.39501683841816
+        },
+        {
+          "ambiguity_margin_db": 48.08154491986695,
+          "baseband_frequency_hz": 41.748046875,
+          "event_time_offset_s": 483.0475,
+          "frame_index": 481,
+          "peak_snr_db": 59.41280653026243
+        },
+        {
+          "ambiguity_margin_db": 46.05005325599236,
+          "baseband_frequency_hz": 41.748046875,
+          "event_time_offset_s": 484.0475,
+          "frame_index": 482,
+          "peak_snr_db": 59.59996111805276
+        },
+        {
+          "ambiguity_margin_db": 46.677456900930125,
+          "baseband_frequency_hz": 41.748046875,
+          "event_time_offset_s": 485.0475,
+          "frame_index": 483,
+          "peak_snr_db": 59.37185223807964
+        },
+        {
+          "ambiguity_margin_db": 45.47934145001236,
+          "baseband_frequency_hz": 41.748046875,
+          "event_time_offset_s": 486.0475,
+          "frame_index": 484,
+          "peak_snr_db": 59.61143066737165
+        },
+        {
+          "ambiguity_margin_db": 46.97603834806726,
+          "baseband_frequency_hz": 41.748046875,
+          "event_time_offset_s": 487.0475,
+          "frame_index": 485,
+          "peak_snr_db": 59.33657384421327
+        },
+        {
+          "ambiguity_margin_db": 46.607802327698636,
+          "baseband_frequency_hz": 41.9921875,
+          "event_time_offset_s": 488.0475,
+          "frame_index": 486,
+          "peak_snr_db": 58.94388105471192
+        },
+        {
+          "ambiguity_margin_db": 48.028183801961084,
+          "baseband_frequency_hz": 41.9921875,
+          "event_time_offset_s": 489.0475,
+          "frame_index": 487,
+          "peak_snr_db": 59.824195589022835
+        },
+        {
+          "ambiguity_margin_db": 47.10569859315803,
+          "baseband_frequency_hz": 41.9921875,
+          "event_time_offset_s": 490.0475,
+          "frame_index": 488,
+          "peak_snr_db": 59.34512340244541
+        },
+        {
+          "ambiguity_margin_db": 45.73556323495847,
+          "baseband_frequency_hz": 41.9921875,
+          "event_time_offset_s": 491.0475,
+          "frame_index": 489,
+          "peak_snr_db": 60.138782476633814
+        },
+        {
+          "ambiguity_margin_db": 43.20629302415853,
+          "baseband_frequency_hz": 41.9921875,
+          "event_time_offset_s": 492.0475,
+          "frame_index": 490,
+          "peak_snr_db": 59.4646070754075
+        },
+        {
+          "ambiguity_margin_db": 42.54400262025168,
+          "baseband_frequency_hz": 41.9921875,
+          "event_time_offset_s": 493.0475,
+          "frame_index": 491,
+          "peak_snr_db": 58.955688451654815
+        },
+        {
+          "ambiguity_margin_db": 40.63378376741309,
+          "baseband_frequency_hz": 41.9921875,
+          "event_time_offset_s": 494.0475,
+          "frame_index": 492,
+          "peak_snr_db": 59.12156852921859
+        },
+        {
+          "ambiguity_margin_db": 42.05188615281746,
+          "baseband_frequency_hz": 42.236328125,
+          "event_time_offset_s": 495.0475,
+          "frame_index": 493,
+          "peak_snr_db": 58.7253344042888
+        },
+        {
+          "ambiguity_margin_db": 46.980408608166115,
+          "baseband_frequency_hz": 42.236328125,
+          "event_time_offset_s": 496.0475,
+          "frame_index": 494,
+          "peak_snr_db": 59.06599627033809
+        },
+        {
+          "ambiguity_margin_db": 48.12900365216443,
+          "baseband_frequency_hz": 42.236328125,
+          "event_time_offset_s": 497.0475,
+          "frame_index": 495,
+          "peak_snr_db": 59.972211082650915
+        },
+        {
+          "ambiguity_margin_db": 48.61752140162176,
+          "baseband_frequency_hz": 42.236328125,
+          "event_time_offset_s": 498.0475,
+          "frame_index": 496,
+          "peak_snr_db": 59.893370552753524
+        },
+        {
+          "ambiguity_margin_db": 48.424792304917815,
+          "baseband_frequency_hz": 42.236328125,
+          "event_time_offset_s": 499.0475,
+          "frame_index": 497,
+          "peak_snr_db": 59.83032051237174
+        },
+        {
+          "ambiguity_margin_db": 47.777474965746094,
+          "baseband_frequency_hz": 42.236328125,
+          "event_time_offset_s": 500.0475,
+          "frame_index": 498,
+          "peak_snr_db": 59.940523404971806
+        },
+        {
+          "ambiguity_margin_db": 46.03919030908918,
+          "baseband_frequency_hz": 42.236328125,
+          "event_time_offset_s": 501.0475,
+          "frame_index": 499,
+          "peak_snr_db": 59.05360767354803
+        },
+        {
+          "ambiguity_margin_db": 44.21626214605063,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 502.0475,
+          "frame_index": 500,
+          "peak_snr_db": 58.65386003664113
+        },
+        {
+          "ambiguity_margin_db": 47.1304605710861,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 503.0475,
+          "frame_index": 501,
+          "peak_snr_db": 59.17112038016694
+        },
+        {
+          "ambiguity_margin_db": 47.98013773332407,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 504.0475,
+          "frame_index": 502,
+          "peak_snr_db": 59.17227463001428
+        },
+        {
+          "ambiguity_margin_db": 48.39830462235572,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 505.0475,
+          "frame_index": 503,
+          "peak_snr_db": 59.830281762496654
+        },
+        {
+          "ambiguity_margin_db": 48.50380749721427,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 506.0475,
+          "frame_index": 504,
+          "peak_snr_db": 58.593459129022136
+        },
+        {
+          "ambiguity_margin_db": 48.33169835690825,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 507.0475,
+          "frame_index": 505,
+          "peak_snr_db": 59.44764447836058
+        },
+        {
+          "ambiguity_margin_db": 46.5968890526875,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 508.0475,
+          "frame_index": 506,
+          "peak_snr_db": 58.19126216064251
+        },
+        {
+          "ambiguity_margin_db": 43.1355932377696,
+          "baseband_frequency_hz": 42.48046875,
+          "event_time_offset_s": 509.0475,
+          "frame_index": 507,
+          "peak_snr_db": 58.30353422098523
+        },
+        {
+          "ambiguity_margin_db": 45.1102918969925,
+          "baseband_frequency_hz": 42.724609375,
+          "event_time_offset_s": 510.0475,
+          "frame_index": 508,
+          "peak_snr_db": 58.99708520591578
+        },
+        {
+          "ambiguity_margin_db": 46.71287809683052,
+          "baseband_frequency_hz": 42.724609375,
+          "event_time_offset_s": 511.0475,
+          "frame_index": 509,
+          "peak_snr_db": 59.367247979150605
+        },
+        {
+          "ambiguity_margin_db": 46.742136589711045,
+          "baseband_frequency_hz": 42.724609375,
+          "event_time_offset_s": 512.0475,
+          "frame_index": 510,
+          "peak_snr_db": 60.00810369868054
+        },
+        {
+          "ambiguity_margin_db": 44.97326131524873,
+          "baseband_frequency_hz": 42.724609375,
+          "event_time_offset_s": 513.0475,
+          "frame_index": 511,
+          "peak_snr_db": 59.389961018952995
+        },
+        {
+          "ambiguity_margin_db": 44.47179368055136,
+          "baseband_frequency_hz": 42.724609375,
+          "event_time_offset_s": 514.0475,
+          "frame_index": 512,
+          "peak_snr_db": 58.47975397185909
+        },
+        {
+          "ambiguity_margin_db": 45.43440728459329,
+          "baseband_frequency_hz": 42.724609375,
+          "event_time_offset_s": 515.0475,
+          "frame_index": 513,
+          "peak_snr_db": 57.77503592565598
+        },
+        {
+          "ambiguity_margin_db": 47.24481085715026,
+          "baseband_frequency_hz": 42.96875,
+          "event_time_offset_s": 516.0475,
+          "frame_index": 514,
+          "peak_snr_db": 56.93694151471341
+        },
+        {
+          "ambiguity_margin_db": 47.4042361040113,
+          "baseband_frequency_hz": 42.96875,
+          "event_time_offset_s": 517.0475,
+          "frame_index": 515,
+          "peak_snr_db": 58.032343621409495
+        },
+        {
+          "ambiguity_margin_db": 47.33146504098153,
+          "baseband_frequency_hz": 42.96875,
+          "event_time_offset_s": 518.0475,
+          "frame_index": 516,
+          "peak_snr_db": 58.76990987279332
+        },
+        {
+          "ambiguity_margin_db": 47.91922319650483,
+          "baseband_frequency_hz": 42.96875,
+          "event_time_offset_s": 519.0475,
+          "frame_index": 517,
+          "peak_snr_db": 59.399984533296255
+        },
+        {
+          "ambiguity_margin_db": 48.10430834545534,
+          "baseband_frequency_hz": 42.96875,
+          "event_time_offset_s": 520.0475,
+          "frame_index": 518,
+          "peak_snr_db": 58.93802070677127
+        },
+        {
+          "ambiguity_margin_db": 46.393432716128686,
+          "baseband_frequency_hz": 42.96875,
+          "event_time_offset_s": 521.0475,
+          "frame_index": 519,
+          "peak_snr_db": 59.318461796241095
+        },
+        {
+          "ambiguity_margin_db": 45.05922739279174,
+          "baseband_frequency_hz": 42.96875,
+          "event_time_offset_s": 522.0475,
+          "frame_index": 520,
+          "peak_snr_db": 58.39104471658362
+        },
+        {
+          "ambiguity_margin_db": 46.195543183794555,
+          "baseband_frequency_hz": 43.212890625,
+          "event_time_offset_s": 523.0475,
+          "frame_index": 521,
+          "peak_snr_db": 57.63415199926547
+        },
+        {
+          "ambiguity_margin_db": 46.3685050615074,
+          "baseband_frequency_hz": 43.212890625,
+          "event_time_offset_s": 524.0475,
+          "frame_index": 522,
+          "peak_snr_db": 58.495517964276075
+        },
+        {
+          "ambiguity_margin_db": 46.48949716765063,
+          "baseband_frequency_hz": 43.212890625,
+          "event_time_offset_s": 525.0475,
+          "frame_index": 523,
+          "peak_snr_db": 59.24754583010146
+        },
+        {
+          "ambiguity_margin_db": 45.71163549146847,
+          "baseband_frequency_hz": 43.212890625,
+          "event_time_offset_s": 526.0475,
+          "frame_index": 524,
+          "peak_snr_db": 59.61783758846836
+        },
+        {
+          "ambiguity_margin_db": 45.46988376146453,
+          "baseband_frequency_hz": 43.212890625,
+          "event_time_offset_s": 527.0475,
+          "frame_index": 525,
+          "peak_snr_db": 59.772830900807705
+        },
+        {
+          "ambiguity_margin_db": 45.37166301855932,
+          "baseband_frequency_hz": 43.212890625,
+          "event_time_offset_s": 528.0475,
+          "frame_index": 526,
+          "peak_snr_db": 59.24934257694697
+        },
+        {
+          "ambiguity_margin_db": 46.581738255512604,
+          "baseband_frequency_hz": 43.212890625,
+          "event_time_offset_s": 529.0475,
+          "frame_index": 527,
+          "peak_snr_db": 58.32775567632431
+        },
+        {
+          "ambiguity_margin_db": 45.918876607982256,
+          "baseband_frequency_hz": 43.45703125,
+          "event_time_offset_s": 530.0475,
+          "frame_index": 528,
+          "peak_snr_db": 58.872533729398285
+        },
+        {
+          "ambiguity_margin_db": 47.2343023878474,
+          "baseband_frequency_hz": 43.45703125,
+          "event_time_offset_s": 531.0475,
+          "frame_index": 529,
+          "peak_snr_db": 59.363291070230076
+        },
+        {
+          "ambiguity_margin_db": 45.88202120127329,
+          "baseband_frequency_hz": 43.45703125,
+          "event_time_offset_s": 532.0475,
+          "frame_index": 530,
+          "peak_snr_db": 59.475267735307355
+        },
+        {
+          "ambiguity_margin_db": 43.15067957764004,
+          "baseband_frequency_hz": 43.45703125,
+          "event_time_offset_s": 533.0475,
+          "frame_index": 531,
+          "peak_snr_db": 59.69171509092345
+        },
+        {
+          "ambiguity_margin_db": 46.958388557150954,
+          "baseband_frequency_hz": 43.45703125,
+          "event_time_offset_s": 534.0475,
+          "frame_index": 532,
+          "peak_snr_db": 60.08005449532484
+        },
+        {
+          "ambiguity_margin_db": 45.2836830001069,
+          "baseband_frequency_hz": 43.45703125,
+          "event_time_offset_s": 535.0475,
+          "frame_index": 533,
+          "peak_snr_db": 59.04507024742501
+        },
+        {
+          "ambiguity_margin_db": 42.02877401529925,
+          "baseband_frequency_hz": 43.45703125,
+          "event_time_offset_s": 536.0475,
+          "frame_index": 534,
+          "peak_snr_db": 58.640124008828785
+        },
+        {
+          "ambiguity_margin_db": 44.73509963885608,
+          "baseband_frequency_hz": 43.701171875,
+          "event_time_offset_s": 537.0475,
+          "frame_index": 535,
+          "peak_snr_db": 58.36280401514165
+        },
+        {
+          "ambiguity_margin_db": 45.77195672008996,
+          "baseband_frequency_hz": 43.701171875,
+          "event_time_offset_s": 538.0475,
+          "frame_index": 536,
+          "peak_snr_db": 58.5103730084796
+        },
+        {
+          "ambiguity_margin_db": 46.60411877598537,
+          "baseband_frequency_hz": 43.701171875,
+          "event_time_offset_s": 539.0475,
+          "frame_index": 537,
+          "peak_snr_db": 59.907847655533175
+        },
+        {
+          "ambiguity_margin_db": 46.89119208631706,
+          "baseband_frequency_hz": 43.701171875,
+          "event_time_offset_s": 540.0475,
+          "frame_index": 538,
+          "peak_snr_db": 59.888541802847605
+        },
+        {
+          "ambiguity_margin_db": 48.52505736370317,
+          "baseband_frequency_hz": 43.701171875,
+          "event_time_offset_s": 541.0475,
+          "frame_index": 539,
+          "peak_snr_db": 60.68387516364949
+        },
+        {
+          "ambiguity_margin_db": 47.20242350266985,
+          "baseband_frequency_hz": 43.701171875,
+          "event_time_offset_s": 542.0475,
+          "frame_index": 540,
+          "peak_snr_db": 60.27557963264266
+        },
+        {
+          "ambiguity_margin_db": 45.73449410340247,
+          "baseband_frequency_hz": 43.701171875,
+          "event_time_offset_s": 543.0475,
+          "frame_index": 541,
+          "peak_snr_db": 58.549460619550786
+        },
+        {
+          "ambiguity_margin_db": 46.273383442808374,
+          "baseband_frequency_hz": 43.9453125,
+          "event_time_offset_s": 544.0475,
+          "frame_index": 542,
+          "peak_snr_db": 58.50473167439994
+        },
+        {
+          "ambiguity_margin_db": 48.089059978859,
+          "baseband_frequency_hz": 43.9453125,
+          "event_time_offset_s": 545.0475,
+          "frame_index": 543,
+          "peak_snr_db": 59.40430557601801
+        },
+        {
+          "ambiguity_margin_db": 48.595515125577144,
+          "baseband_frequency_hz": 43.9453125,
+          "event_time_offset_s": 546.0475,
+          "frame_index": 544,
+          "peak_snr_db": 60.26126645548584
+        },
+        {
+          "ambiguity_margin_db": 48.01972310821357,
+          "baseband_frequency_hz": 43.9453125,
+          "event_time_offset_s": 547.0475,
+          "frame_index": 545,
+          "peak_snr_db": 59.53097918976083
+        },
+        {
+          "ambiguity_margin_db": 47.361308006562,
+          "baseband_frequency_hz": 43.9453125,
+          "event_time_offset_s": 548.0475,
+          "frame_index": 546,
+          "peak_snr_db": 58.68728425846575
+        },
+        {
+          "ambiguity_margin_db": 46.97015731785203,
+          "baseband_frequency_hz": 43.9453125,
+          "event_time_offset_s": 549.0475,
+          "frame_index": 547,
+          "peak_snr_db": 59.15548994500065
+        },
+        {
+          "ambiguity_margin_db": 46.18655727881365,
+          "baseband_frequency_hz": 43.9453125,
+          "event_time_offset_s": 550.0475,
+          "frame_index": 548,
+          "peak_snr_db": 59.38473962866756
+        },
+        {
+          "ambiguity_margin_db": 47.18577260297624,
+          "baseband_frequency_hz": 44.189453125,
+          "event_time_offset_s": 551.0475,
+          "frame_index": 549,
+          "peak_snr_db": 58.9918356733882
+        },
+        {
+          "ambiguity_margin_db": 47.815668468465006,
+          "baseband_frequency_hz": 44.189453125,
+          "event_time_offset_s": 552.0475,
+          "frame_index": 550,
+          "peak_snr_db": 60.14144901981054
+        },
+        {
+          "ambiguity_margin_db": 47.88086582061431,
+          "baseband_frequency_hz": 44.189453125,
+          "event_time_offset_s": 553.0475,
+          "frame_index": 551,
+          "peak_snr_db": 60.48372879824954
+        },
+        {
+          "ambiguity_margin_db": 47.4553441713298,
+          "baseband_frequency_hz": 44.189453125,
+          "event_time_offset_s": 554.0475,
+          "frame_index": 552,
+          "peak_snr_db": 60.036917199184465
+        },
+        {
+          "ambiguity_margin_db": 48.19814151380007,
+          "baseband_frequency_hz": 44.189453125,
+          "event_time_offset_s": 555.0475,
+          "frame_index": 553,
+          "peak_snr_db": 59.97231743893427
+        },
+        {
+          "ambiguity_margin_db": 45.919483959381886,
+          "baseband_frequency_hz": 44.189453125,
+          "event_time_offset_s": 556.0475,
+          "frame_index": 554,
+          "peak_snr_db": 59.209046074481286
+        },
+        {
+          "ambiguity_margin_db": 44.935240481356956,
+          "baseband_frequency_hz": 44.189453125,
+          "event_time_offset_s": 557.0475,
+          "frame_index": 555,
+          "peak_snr_db": 58.88135428479636
+        },
+        {
+          "ambiguity_margin_db": 47.74073163809872,
+          "baseband_frequency_hz": 44.43359375,
+          "event_time_offset_s": 558.0475,
+          "frame_index": 556,
+          "peak_snr_db": 58.63179845541354
+        },
+        {
+          "ambiguity_margin_db": 46.64843135411559,
+          "baseband_frequency_hz": 44.43359375,
+          "event_time_offset_s": 559.0475,
+          "frame_index": 557,
+          "peak_snr_db": 59.837969285902986
+        },
+        {
+          "ambiguity_margin_db": 48.35072819729839,
+          "baseband_frequency_hz": 44.43359375,
+          "event_time_offset_s": 560.0475,
+          "frame_index": 558,
+          "peak_snr_db": 60.127243915233414
+        },
+        {
+          "ambiguity_margin_db": 47.34406373837062,
+          "baseband_frequency_hz": 44.43359375,
+          "event_time_offset_s": 561.0475,
+          "frame_index": 559,
+          "peak_snr_db": 60.11265377631176
+        },
+        {
+          "ambiguity_margin_db": 44.54848842198495,
+          "baseband_frequency_hz": 44.43359375,
+          "event_time_offset_s": 562.0475,
+          "frame_index": 560,
+          "peak_snr_db": 59.613942300048805
+        },
+        {
+          "ambiguity_margin_db": 44.02668365513415,
+          "baseband_frequency_hz": 44.43359375,
+          "event_time_offset_s": 563.0475,
+          "frame_index": 561,
+          "peak_snr_db": 59.11294116644712
+        },
+        {
+          "ambiguity_margin_db": 44.061274078590216,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 564.0475,
+          "frame_index": 562,
+          "peak_snr_db": 58.20439610963828
+        },
+        {
+          "ambiguity_margin_db": 46.144073035214774,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 565.0475,
+          "frame_index": 563,
+          "peak_snr_db": 58.98448278936753
+        },
+        {
+          "ambiguity_margin_db": 45.61525359509876,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 566.0475,
+          "frame_index": 564,
+          "peak_snr_db": 59.19289249063876
+        },
+        {
+          "ambiguity_margin_db": 44.1176893902703,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 567.0475,
+          "frame_index": 565,
+          "peak_snr_db": 60.55908194207
+        },
+        {
+          "ambiguity_margin_db": 47.27450826759476,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 568.0475,
+          "frame_index": 566,
+          "peak_snr_db": 59.83071535002129
+        },
+        {
+          "ambiguity_margin_db": 46.09282759627483,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 569.0475,
+          "frame_index": 567,
+          "peak_snr_db": 59.60115888967035
+        },
+        {
+          "ambiguity_margin_db": 45.03943382801404,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 570.0475,
+          "frame_index": 568,
+          "peak_snr_db": 59.921739800938276
+        },
+        {
+          "ambiguity_margin_db": 44.09878533376492,
+          "baseband_frequency_hz": 44.677734375,
+          "event_time_offset_s": 571.0475,
+          "frame_index": 569,
+          "peak_snr_db": 59.37155763091076
+        },
+        {
+          "ambiguity_margin_db": 44.86564631827686,
+          "baseband_frequency_hz": 44.921875,
+          "event_time_offset_s": 572.0475,
+          "frame_index": 570,
+          "peak_snr_db": 59.463510441470035
+        },
+        {
+          "ambiguity_margin_db": 45.79135349551291,
+          "baseband_frequency_hz": 44.921875,
+          "event_time_offset_s": 573.0475,
+          "frame_index": 571,
+          "peak_snr_db": 59.34452574455595
+        },
+        {
+          "ambiguity_margin_db": 47.89692794922863,
+          "baseband_frequency_hz": 44.921875,
+          "event_time_offset_s": 574.0475,
+          "frame_index": 572,
+          "peak_snr_db": 60.00761968839838
+        },
+        {
+          "ambiguity_margin_db": 48.51870085283346,
+          "baseband_frequency_hz": 44.921875,
+          "event_time_offset_s": 575.0475,
+          "frame_index": 573,
+          "peak_snr_db": 59.304196829907376
+        },
+        {
+          "ambiguity_margin_db": 47.26823437054041,
+          "baseband_frequency_hz": 44.921875,
+          "event_time_offset_s": 576.0475,
+          "frame_index": 574,
+          "peak_snr_db": 59.846032164193645
+        },
+        {
+          "ambiguity_margin_db": 47.86284704784812,
+          "baseband_frequency_hz": 44.921875,
+          "event_time_offset_s": 577.0475,
+          "frame_index": 575,
+          "peak_snr_db": 59.330151544840035
+        },
+        {
+          "ambiguity_margin_db": 44.808768433124946,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 578.0475,
+          "frame_index": 576,
+          "peak_snr_db": 58.439043852587254
+        },
+        {
+          "ambiguity_margin_db": 44.80806255818013,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 579.0475,
+          "frame_index": 577,
+          "peak_snr_db": 58.860305878424654
+        },
+        {
+          "ambiguity_margin_db": 46.276403483411734,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 580.0475,
+          "frame_index": 578,
+          "peak_snr_db": 59.35511080778142
+        },
+        {
+          "ambiguity_margin_db": 48.10070712406018,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 581.0475,
+          "frame_index": 579,
+          "peak_snr_db": 59.0168265507272
+        },
+        {
+          "ambiguity_margin_db": 47.07579868719559,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 582.0475,
+          "frame_index": 580,
+          "peak_snr_db": 59.48120007451847
+        },
+        {
+          "ambiguity_margin_db": 46.96200068903295,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 583.0475,
+          "frame_index": 581,
+          "peak_snr_db": 59.08473774192742
+        },
+        {
+          "ambiguity_margin_db": 46.34225921498409,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 584.0475,
+          "frame_index": 582,
+          "peak_snr_db": 58.54897860545853
+        },
+        {
+          "ambiguity_margin_db": 46.11449539344149,
+          "baseband_frequency_hz": 45.41015625,
+          "event_time_offset_s": 585.0475,
+          "frame_index": 583,
+          "peak_snr_db": 58.4795780118467
+        },
+        {
+          "ambiguity_margin_db": 45.03710789859763,
+          "baseband_frequency_hz": 45.41015625,
+          "event_time_offset_s": 586.0475,
+          "frame_index": 584,
+          "peak_snr_db": 59.88926680905942
+        },
+        {
+          "ambiguity_margin_db": 44.558550977324465,
+          "baseband_frequency_hz": 45.41015625,
+          "event_time_offset_s": 587.0475,
+          "frame_index": 585,
+          "peak_snr_db": 60.672762619812005
+        },
+        {
+          "ambiguity_margin_db": 43.240496545258736,
+          "baseband_frequency_hz": 45.41015625,
+          "event_time_offset_s": 588.0475,
+          "frame_index": 586,
+          "peak_snr_db": 60.20762155533288
+        },
+        {
+          "ambiguity_margin_db": 45.87445387874004,
+          "baseband_frequency_hz": 45.41015625,
+          "event_time_offset_s": 589.0475,
+          "frame_index": 587,
+          "peak_snr_db": 59.41872747544095
+        },
+        {
+          "ambiguity_margin_db": 47.13189757206876,
+          "baseband_frequency_hz": 45.41015625,
+          "event_time_offset_s": 590.0475,
+          "frame_index": 588,
+          "peak_snr_db": 58.984096243967976
+        },
+        {
+          "ambiguity_margin_db": 45.21533346428387,
+          "baseband_frequency_hz": 45.41015625,
+          "event_time_offset_s": 591.0475,
+          "frame_index": 589,
+          "peak_snr_db": 58.7159805977685
+        },
+        {
+          "ambiguity_margin_db": 45.63441468854647,
+          "baseband_frequency_hz": 45.654296875,
+          "event_time_offset_s": 592.0475,
+          "frame_index": 590,
+          "peak_snr_db": 59.82384654771743
+        },
+        {
+          "ambiguity_margin_db": 45.48535943432316,
+          "baseband_frequency_hz": 45.654296875,
+          "event_time_offset_s": 593.0475,
+          "frame_index": 591,
+          "peak_snr_db": 60.11773145137606
+        },
+        {
+          "ambiguity_margin_db": 45.458005186914,
+          "baseband_frequency_hz": 45.654296875,
+          "event_time_offset_s": 594.0475,
+          "frame_index": 592,
+          "peak_snr_db": 59.520272147313165
+        },
+        {
+          "ambiguity_margin_db": 45.207770624451044,
+          "baseband_frequency_hz": 45.654296875,
+          "event_time_offset_s": 595.0475,
+          "frame_index": 593,
+          "peak_snr_db": 58.949549209520136
+        },
+        {
+          "ambiguity_margin_db": 46.30147651572793,
+          "baseband_frequency_hz": 45.654296875,
+          "event_time_offset_s": 596.0475,
+          "frame_index": 594,
+          "peak_snr_db": 58.97754646523077
+        },
+        {
+          "ambiguity_margin_db": 47.71331833237145,
+          "baseband_frequency_hz": 45.654296875,
+          "event_time_offset_s": 597.0475,
+          "frame_index": 595,
+          "peak_snr_db": 58.52108473972262
+        },
+        {
+          "ambiguity_margin_db": 47.24938525504646,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 598.0475,
+          "frame_index": 596,
+          "peak_snr_db": 58.58145388409373
+        },
+        {
+          "ambiguity_margin_db": 46.22127538269939,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 599.0475,
+          "frame_index": 597,
+          "peak_snr_db": 59.45889488824867
+        },
+        {
+          "ambiguity_margin_db": 47.43992389494193,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 600.0475,
+          "frame_index": 598,
+          "peak_snr_db": 59.693447284841604
+        },
+        {
+          "ambiguity_margin_db": 47.2746834230565,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 601.0475,
+          "frame_index": 599,
+          "peak_snr_db": 59.52617730689458
+        },
+        {
+          "ambiguity_margin_db": 46.75147182888211,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 602.0475,
+          "frame_index": 600,
+          "peak_snr_db": 59.6949423832928
+        },
+        {
+          "ambiguity_margin_db": 44.48371590708122,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 603.0475,
+          "frame_index": 601,
+          "peak_snr_db": 58.81036247827894
+        },
+        {
+          "ambiguity_margin_db": 44.286410334737674,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 604.0475,
+          "frame_index": 602,
+          "peak_snr_db": 58.519353689054796
+        },
+        {
+          "ambiguity_margin_db": 47.8226355755278,
+          "baseband_frequency_hz": 46.142578125,
+          "event_time_offset_s": 605.0475,
+          "frame_index": 603,
+          "peak_snr_db": 58.576957955394576
+        },
+        {
+          "ambiguity_margin_db": 47.70141859864576,
+          "baseband_frequency_hz": 46.142578125,
+          "event_time_offset_s": 606.0475,
+          "frame_index": 604,
+          "peak_snr_db": 59.40816998907219
+        },
+        {
+          "ambiguity_margin_db": 45.06217439953525,
+          "baseband_frequency_hz": 46.142578125,
+          "event_time_offset_s": 607.0475,
+          "frame_index": 605,
+          "peak_snr_db": 59.838449819177875
+        },
+        {
+          "ambiguity_margin_db": 47.37921394042858,
+          "baseband_frequency_hz": 46.142578125,
+          "event_time_offset_s": 608.0475,
+          "frame_index": 606,
+          "peak_snr_db": 59.16996424148956
+        },
+        {
+          "ambiguity_margin_db": 45.51462465876537,
+          "baseband_frequency_hz": 46.142578125,
+          "event_time_offset_s": 609.0475,
+          "frame_index": 607,
+          "peak_snr_db": 59.022254415129666
+        },
+        {
+          "ambiguity_margin_db": 44.57857539356692,
+          "baseband_frequency_hz": 46.142578125,
+          "event_time_offset_s": 610.0475,
+          "frame_index": 608,
+          "peak_snr_db": 59.53262935454862
+        },
+        {
+          "ambiguity_margin_db": 44.27484717486089,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 611.0475,
+          "frame_index": 609,
+          "peak_snr_db": 59.292264978436975
+        },
+        {
+          "ambiguity_margin_db": 45.11422529086421,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 612.0475,
+          "frame_index": 610,
+          "peak_snr_db": 59.7532018035521
+        },
+        {
+          "ambiguity_margin_db": 46.92471316240206,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 613.0475,
+          "frame_index": 611,
+          "peak_snr_db": 59.48055116501824
+        },
+        {
+          "ambiguity_margin_db": 46.73177382586934,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 614.0475,
+          "frame_index": 612,
+          "peak_snr_db": 60.75879700573673
+        },
+        {
+          "ambiguity_margin_db": 46.92105837471307,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 615.0475,
+          "frame_index": 613,
+          "peak_snr_db": 60.02028486188314
+        },
+        {
+          "ambiguity_margin_db": 45.92182587534666,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 616.0475,
+          "frame_index": 614,
+          "peak_snr_db": 59.89658158579839
+        },
+        {
+          "ambiguity_margin_db": 43.0879556685113,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 617.0475,
+          "frame_index": 615,
+          "peak_snr_db": 58.773574113425056
+        },
+        {
+          "ambiguity_margin_db": 44.754555731772854,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 618.0475,
+          "frame_index": 616,
+          "peak_snr_db": 57.967400702567204
+        },
+        {
+          "ambiguity_margin_db": 47.50495655867041,
+          "baseband_frequency_hz": 46.630859375,
+          "event_time_offset_s": 619.0475,
+          "frame_index": 617,
+          "peak_snr_db": 59.26842735262977
+        },
+        {
+          "ambiguity_margin_db": 47.60515982337114,
+          "baseband_frequency_hz": 46.630859375,
+          "event_time_offset_s": 620.0475,
+          "frame_index": 618,
+          "peak_snr_db": 59.747861906129685
+        },
+        {
+          "ambiguity_margin_db": 47.99388435226366,
+          "baseband_frequency_hz": 46.630859375,
+          "event_time_offset_s": 621.0475,
+          "frame_index": 619,
+          "peak_snr_db": 60.14545673926331
+        },
+        {
+          "ambiguity_margin_db": 46.39823303509351,
+          "baseband_frequency_hz": 46.630859375,
+          "event_time_offset_s": 622.0475,
+          "frame_index": 620,
+          "peak_snr_db": 59.51338496037897
+        },
+        {
+          "ambiguity_margin_db": 44.6334938851699,
+          "baseband_frequency_hz": 46.630859375,
+          "event_time_offset_s": 623.0475,
+          "frame_index": 621,
+          "peak_snr_db": 59.65834342519486
+        },
+        {
+          "ambiguity_margin_db": 45.424421852095364,
+          "baseband_frequency_hz": 46.630859375,
+          "event_time_offset_s": 624.0475,
+          "frame_index": 622,
+          "peak_snr_db": 58.95089697833857
+        },
+        {
+          "ambiguity_margin_db": 45.27803260039051,
+          "baseband_frequency_hz": 46.630859375,
+          "event_time_offset_s": 625.0475,
+          "frame_index": 623,
+          "peak_snr_db": 58.76626850965032
+        },
+        {
+          "ambiguity_margin_db": 46.84789001839469,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 626.0475,
+          "frame_index": 624,
+          "peak_snr_db": 58.18814330811414
+        },
+        {
+          "ambiguity_margin_db": 46.26734507010575,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 627.0475,
+          "frame_index": 625,
+          "peak_snr_db": 59.21081995300396
+        },
+        {
+          "ambiguity_margin_db": 47.3159530629276,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 628.0475,
+          "frame_index": 626,
+          "peak_snr_db": 59.6980949132808
+        },
+        {
+          "ambiguity_margin_db": 48.20558360648928,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 629.0475,
+          "frame_index": 627,
+          "peak_snr_db": 59.93592853811208
+        },
+        {
+          "ambiguity_margin_db": 48.39889986575165,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 630.0475,
+          "frame_index": 628,
+          "peak_snr_db": 60.009492599611534
+        },
+        {
+          "ambiguity_margin_db": 48.23707804620903,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 631.0475,
+          "frame_index": 629,
+          "peak_snr_db": 58.937199275505485
+        },
+        {
+          "ambiguity_margin_db": 46.90606894237453,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 632.0475,
+          "frame_index": 630,
+          "peak_snr_db": 58.98157934065036
+        },
+        {
+          "ambiguity_margin_db": 45.56769325511802,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 633.0475,
+          "frame_index": 631,
+          "peak_snr_db": 57.25341317018302
+        },
+        {
+          "ambiguity_margin_db": 46.99382924107421,
+          "baseband_frequency_hz": 47.119140625,
+          "event_time_offset_s": 634.0475,
+          "frame_index": 632,
+          "peak_snr_db": 57.74253911032014
+        },
+        {
+          "ambiguity_margin_db": 48.175707381099606,
+          "baseband_frequency_hz": 47.119140625,
+          "event_time_offset_s": 635.0475,
+          "frame_index": 633,
+          "peak_snr_db": 58.32177651428873
+        },
+        {
+          "ambiguity_margin_db": 48.74159712094516,
+          "baseband_frequency_hz": 47.119140625,
+          "event_time_offset_s": 636.0475,
+          "frame_index": 634,
+          "peak_snr_db": 60.579985212799684
+        },
+        {
+          "ambiguity_margin_db": 46.105062809673186,
+          "baseband_frequency_hz": 47.119140625,
+          "event_time_offset_s": 637.0475,
+          "frame_index": 635,
+          "peak_snr_db": 60.04816093533664
+        },
+        {
+          "ambiguity_margin_db": 47.45925440852412,
+          "baseband_frequency_hz": 47.119140625,
+          "event_time_offset_s": 638.0475,
+          "frame_index": 636,
+          "peak_snr_db": 59.70674479775263
+        },
+        {
+          "ambiguity_margin_db": 46.836272195746105,
+          "baseband_frequency_hz": 47.119140625,
+          "event_time_offset_s": 639.0475,
+          "frame_index": 637,
+          "peak_snr_db": 58.016052928889536
+        },
+        {
+          "ambiguity_margin_db": 45.381426321250345,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 640.0475,
+          "frame_index": 638,
+          "peak_snr_db": 59.15260185041958
+        },
+        {
+          "ambiguity_margin_db": 46.24681999555187,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 641.0475,
+          "frame_index": 639,
+          "peak_snr_db": 59.28134076804808
+        },
+        {
+          "ambiguity_margin_db": 47.05844797966694,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 642.0475,
+          "frame_index": 640,
+          "peak_snr_db": 59.19981482073227
+        },
+        {
+          "ambiguity_margin_db": 46.71115377307327,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 643.0475,
+          "frame_index": 641,
+          "peak_snr_db": 59.025687540067615
+        },
+        {
+          "ambiguity_margin_db": 47.60981488178303,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 644.0475,
+          "frame_index": 642,
+          "peak_snr_db": 60.12218203817302
+        },
+        {
+          "ambiguity_margin_db": 47.24116181039061,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 645.0475,
+          "frame_index": 643,
+          "peak_snr_db": 60.388586200423056
+        },
+        {
+          "ambiguity_margin_db": 45.67593189082779,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 646.0475,
+          "frame_index": 644,
+          "peak_snr_db": 59.24267692892489
+        },
+        {
+          "ambiguity_margin_db": 44.81784204878465,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 647.0475,
+          "frame_index": 645,
+          "peak_snr_db": 59.2709664997519
+        },
+        {
+          "ambiguity_margin_db": 46.91846321807908,
+          "baseband_frequency_hz": 47.607421875,
+          "event_time_offset_s": 648.0475,
+          "frame_index": 646,
+          "peak_snr_db": 59.063394161068956
+        },
+        {
+          "ambiguity_margin_db": 45.614013140845074,
+          "baseband_frequency_hz": 47.607421875,
+          "event_time_offset_s": 649.0475,
+          "frame_index": 647,
+          "peak_snr_db": 59.54138831623631
+        },
+        {
+          "ambiguity_margin_db": 46.011467123850274,
+          "baseband_frequency_hz": 47.607421875,
+          "event_time_offset_s": 650.0475,
+          "frame_index": 648,
+          "peak_snr_db": 59.88351111660953
+        },
+        {
+          "ambiguity_margin_db": 44.28967553143623,
+          "baseband_frequency_hz": 47.607421875,
+          "event_time_offset_s": 651.0475,
+          "frame_index": 649,
+          "peak_snr_db": 61.01201717330936
+        },
+        {
+          "ambiguity_margin_db": 42.91812275955025,
+          "baseband_frequency_hz": 47.607421875,
+          "event_time_offset_s": 652.0475,
+          "frame_index": 650,
+          "peak_snr_db": 59.898915671500646
+        },
+        {
+          "ambiguity_margin_db": 42.784441032128264,
+          "baseband_frequency_hz": 47.607421875,
+          "event_time_offset_s": 653.0475,
+          "frame_index": 651,
+          "peak_snr_db": 59.311749165515614
+        },
+        {
+          "ambiguity_margin_db": 44.81690030422148,
+          "baseband_frequency_hz": 47.8515625,
+          "event_time_offset_s": 654.0475,
+          "frame_index": 652,
+          "peak_snr_db": 58.77273323750507
+        },
+        {
+          "ambiguity_margin_db": 46.26756641818729,
+          "baseband_frequency_hz": 47.8515625,
+          "event_time_offset_s": 655.0475,
+          "frame_index": 653,
+          "peak_snr_db": 59.28698171599477
+        },
+        {
+          "ambiguity_margin_db": 46.78702845800643,
+          "baseband_frequency_hz": 47.8515625,
+          "event_time_offset_s": 656.0475,
+          "frame_index": 654,
+          "peak_snr_db": 59.3466299173534
+        },
+        {
+          "ambiguity_margin_db": 46.96654723801519,
+          "baseband_frequency_hz": 47.8515625,
+          "event_time_offset_s": 657.0475,
+          "frame_index": 655,
+          "peak_snr_db": 59.72133910938037
+        },
+        {
+          "ambiguity_margin_db": 47.927548198966036,
+          "baseband_frequency_hz": 47.8515625,
+          "event_time_offset_s": 658.0475,
+          "frame_index": 656,
+          "peak_snr_db": 59.14967058711504
+        },
+        {
+          "ambiguity_margin_db": 45.28158609436594,
+          "baseband_frequency_hz": 47.8515625,
+          "event_time_offset_s": 659.0475,
+          "frame_index": 657,
+          "peak_snr_db": 58.59378060306674
+        },
+        {
+          "ambiguity_margin_db": 42.66017983572144,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 660.0475,
+          "frame_index": 658,
+          "peak_snr_db": 58.69809390811167
+        },
+        {
+          "ambiguity_margin_db": 43.81971241498606,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 661.0475,
+          "frame_index": 659,
+          "peak_snr_db": 58.129275971532465
+        },
+        {
+          "ambiguity_margin_db": 47.36447463460364,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 662.0475,
+          "frame_index": 660,
+          "peak_snr_db": 58.907054586638445
+        },
+        {
+          "ambiguity_margin_db": 47.018562332676545,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 663.0475,
+          "frame_index": 661,
+          "peak_snr_db": 59.7641386913146
+        },
+        {
+          "ambiguity_margin_db": 47.205605490960785,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 664.0475,
+          "frame_index": 662,
+          "peak_snr_db": 59.56387415316951
+        },
+        {
+          "ambiguity_margin_db": 46.78507903800471,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 665.0475,
+          "frame_index": 663,
+          "peak_snr_db": 58.215143945977005
+        },
+        {
+          "ambiguity_margin_db": 45.35482756554692,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 666.0475,
+          "frame_index": 664,
+          "peak_snr_db": 58.69207304818664
+        },
+        {
+          "ambiguity_margin_db": 44.0878610135958,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 667.0475,
+          "frame_index": 665,
+          "peak_snr_db": 59.02068182255313
+        },
+        {
+          "ambiguity_margin_db": 44.3626087815537,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 668.0475,
+          "frame_index": 666,
+          "peak_snr_db": 59.65744746736054
+        },
+        {
+          "ambiguity_margin_db": 45.608858632506355,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 669.0475,
+          "frame_index": 667,
+          "peak_snr_db": 58.771423863691396
+        },
+        {
+          "ambiguity_margin_db": 47.44102491433529,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 670.0475,
+          "frame_index": 668,
+          "peak_snr_db": 60.49962674147365
+        },
+        {
+          "ambiguity_margin_db": 46.34119527963219,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 671.0475,
+          "frame_index": 669,
+          "peak_snr_db": 59.64965487423122
+        },
+        {
+          "ambiguity_margin_db": 46.93389840878211,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 672.0475,
+          "frame_index": 670,
+          "peak_snr_db": 59.39736610967705
+        },
+        {
+          "ambiguity_margin_db": 47.340510445923066,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 673.0475,
+          "frame_index": 671,
+          "peak_snr_db": 59.59306731468085
+        },
+        {
+          "ambiguity_margin_db": 47.8157697004132,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 674.0475,
+          "frame_index": 672,
+          "peak_snr_db": 59.57514328036826
+        },
+        {
+          "ambiguity_margin_db": 47.390326967361666,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 675.0475,
+          "frame_index": 673,
+          "peak_snr_db": 60.30986470683736
+        },
+        {
+          "ambiguity_margin_db": 47.266958586593574,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 676.0475,
+          "frame_index": 674,
+          "peak_snr_db": 60.24657215350062
+        },
+        {
+          "ambiguity_margin_db": 48.37284101769373,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 677.0475,
+          "frame_index": 675,
+          "peak_snr_db": 59.52340433985907
+        },
+        {
+          "ambiguity_margin_db": 46.952046401543804,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 678.0475,
+          "frame_index": 676,
+          "peak_snr_db": 58.68810895145132
+        },
+        {
+          "ambiguity_margin_db": 46.763719659344225,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 679.0475,
+          "frame_index": 677,
+          "peak_snr_db": 59.44315752948452
+        },
+        {
+          "ambiguity_margin_db": 42.98289674510493,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 680.0475,
+          "frame_index": 678,
+          "peak_snr_db": 58.354129415869345
+        },
+        {
+          "ambiguity_margin_db": 43.134252188123774,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 681.0475,
+          "frame_index": 679,
+          "peak_snr_db": 58.61877330277175
+        },
+        {
+          "ambiguity_margin_db": 45.723813310229914,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 682.0475,
+          "frame_index": 680,
+          "peak_snr_db": 58.61707145219012
+        },
+        {
+          "ambiguity_margin_db": 46.72642105232374,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 683.0475,
+          "frame_index": 681,
+          "peak_snr_db": 59.28448199728934
+        },
+        {
+          "ambiguity_margin_db": 42.56629890010327,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 684.0475,
+          "frame_index": 682,
+          "peak_snr_db": 60.14863510007358
+        },
+        {
+          "ambiguity_margin_db": 38.745538399255814,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 685.0475,
+          "frame_index": 683,
+          "peak_snr_db": 57.80848295849221
+        },
+        {
+          "ambiguity_margin_db": 43.802428383275995,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 686.0475,
+          "frame_index": 684,
+          "peak_snr_db": 58.17302727169209
+        },
+        {
+          "ambiguity_margin_db": 45.07181607464134,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 687.0475,
+          "frame_index": 685,
+          "peak_snr_db": 58.28050048083347
+        },
+        {
+          "ambiguity_margin_db": 42.8893849328159,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 688.0475,
+          "frame_index": 686,
+          "peak_snr_db": 58.150818357587994
+        },
+        {
+          "ambiguity_margin_db": 44.74819978358773,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 689.0475,
+          "frame_index": 687,
+          "peak_snr_db": 59.25338130436114
+        },
+        {
+          "ambiguity_margin_db": 45.68431348164863,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 690.0475,
+          "frame_index": 688,
+          "peak_snr_db": 60.025201175457674
+        },
+        {
+          "ambiguity_margin_db": 47.12517978276571,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 691.0475,
+          "frame_index": 689,
+          "peak_snr_db": 59.22124268078819
+        },
+        {
+          "ambiguity_margin_db": 46.457209650799875,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 692.0475,
+          "frame_index": 690,
+          "peak_snr_db": 59.149912627301646
+        },
+        {
+          "ambiguity_margin_db": 46.554170170400454,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 693.0475,
+          "frame_index": 691,
+          "peak_snr_db": 58.91981617446494
+        },
+        {
+          "ambiguity_margin_db": 44.308365182377905,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 694.0475,
+          "frame_index": 692,
+          "peak_snr_db": 58.26726348631617
+        },
+        {
+          "ambiguity_margin_db": 44.737953247711715,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 695.0475,
+          "frame_index": 693,
+          "peak_snr_db": 57.937649025470044
+        },
+        {
+          "ambiguity_margin_db": 44.86510940472741,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 696.0475,
+          "frame_index": 694,
+          "peak_snr_db": 58.885081471524884
+        },
+        {
+          "ambiguity_margin_db": 42.04596871582147,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 697.0475,
+          "frame_index": 695,
+          "peak_snr_db": 59.344573962117536
+        },
+        {
+          "ambiguity_margin_db": 38.70624016691905,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 698.0475,
+          "frame_index": 696,
+          "peak_snr_db": 58.9034218134526
+        },
+        {
+          "ambiguity_margin_db": 40.28417471065134,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 699.0475,
+          "frame_index": 697,
+          "peak_snr_db": 58.98818129770988
+        },
+        {
+          "ambiguity_margin_db": 44.315848598416395,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 700.0475,
+          "frame_index": 698,
+          "peak_snr_db": 58.987191162998684
+        },
+        {
+          "ambiguity_margin_db": 45.61137998105367,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 701.0475,
+          "frame_index": 699,
+          "peak_snr_db": 59.121144114216136
+        },
+        {
+          "ambiguity_margin_db": 46.306807914632,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 702.0475,
+          "frame_index": 700,
+          "peak_snr_db": 58.30166572773534
+        },
+        {
+          "ambiguity_margin_db": 47.88526748102061,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 703.0475,
+          "frame_index": 701,
+          "peak_snr_db": 58.54280741062291
+        },
+        {
+          "ambiguity_margin_db": 45.64065433391296,
+          "baseband_frequency_hz": 49.31640625,
+          "event_time_offset_s": 704.0475,
+          "frame_index": 702,
+          "peak_snr_db": 58.96110278990808
+        },
+        {
+          "ambiguity_margin_db": 46.565292209750304,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 705.0475,
+          "frame_index": 703,
+          "peak_snr_db": 58.614457273661955
+        },
+        {
+          "ambiguity_margin_db": 47.79633157035214,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 706.0475,
+          "frame_index": 704,
+          "peak_snr_db": 59.26593485804281
+        },
+        {
+          "ambiguity_margin_db": 47.2221514627949,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 707.0475,
+          "frame_index": 705,
+          "peak_snr_db": 58.675054001079374
+        },
+        {
+          "ambiguity_margin_db": 43.56828887260026,
+          "baseband_frequency_hz": 49.072265625,
+          "event_time_offset_s": 708.0475,
+          "frame_index": 706,
+          "peak_snr_db": 58.23675557930901
+        },
+        {
+          "ambiguity_margin_db": 46.116665641624586,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 709.0475,
+          "frame_index": 707,
+          "peak_snr_db": 59.21021219866614
+        },
+        {
+          "ambiguity_margin_db": 43.10552654259921,
+          "baseband_frequency_hz": 48.828125,
+          "event_time_offset_s": 710.0475,
+          "frame_index": 708,
+          "peak_snr_db": 58.36659396787255
+        },
+        {
+          "ambiguity_margin_db": 42.98343484566915,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 711.0475,
+          "frame_index": 709,
+          "peak_snr_db": 58.93534587058661
+        },
+        {
+          "ambiguity_margin_db": 43.03924954792051,
+          "baseband_frequency_hz": 48.583984375,
+          "event_time_offset_s": 712.0475,
+          "frame_index": 710,
+          "peak_snr_db": 57.50951300487095
+        },
+        {
+          "ambiguity_margin_db": 44.16311136262054,
+          "baseband_frequency_hz": 48.33984375,
+          "event_time_offset_s": 713.0475,
+          "frame_index": 711,
+          "peak_snr_db": 58.366903327520056
+        },
+        {
+          "ambiguity_margin_db": 46.85790812342562,
+          "baseband_frequency_hz": 48.095703125,
+          "event_time_offset_s": 714.0475,
+          "frame_index": 712,
+          "peak_snr_db": 58.360619670999995
+        },
+        {
+          "ambiguity_margin_db": 45.826527373546504,
+          "baseband_frequency_hz": 47.8515625,
+          "event_time_offset_s": 715.0475,
+          "frame_index": 713,
+          "peak_snr_db": 58.11680171476886
+        },
+        {
+          "ambiguity_margin_db": 44.040959447732334,
+          "baseband_frequency_hz": 47.607421875,
+          "event_time_offset_s": 716.0475,
+          "frame_index": 714,
+          "peak_snr_db": 57.70372664904565
+        },
+        {
+          "ambiguity_margin_db": 42.453639997902506,
+          "baseband_frequency_hz": 47.36328125,
+          "event_time_offset_s": 717.0475,
+          "frame_index": 715,
+          "peak_snr_db": 56.621213337679954
+        },
+        {
+          "ambiguity_margin_db": 43.87460021136732,
+          "baseband_frequency_hz": 46.875,
+          "event_time_offset_s": 718.0475,
+          "frame_index": 716,
+          "peak_snr_db": 56.97768808937923
+        },
+        {
+          "ambiguity_margin_db": 41.26602093603128,
+          "baseband_frequency_hz": 46.38671875,
+          "event_time_offset_s": 719.0475,
+          "frame_index": 717,
+          "peak_snr_db": 56.031620260932684
+        },
+        {
+          "ambiguity_margin_db": 40.961070400947776,
+          "baseband_frequency_hz": 45.8984375,
+          "event_time_offset_s": 720.0475,
+          "frame_index": 718,
+          "peak_snr_db": 55.26086015657553
+        },
+        {
+          "ambiguity_margin_db": 35.644583861572045,
+          "baseband_frequency_hz": 45.166015625,
+          "event_time_offset_s": 721.0475,
+          "frame_index": 719,
+          "peak_snr_db": 55.83904458366312
+        },
+        {
+          "ambiguity_margin_db": 28.867268435486253,
+          "baseband_frequency_hz": 44.921875,
+          "event_time_offset_s": 722.0475,
+          "frame_index": 720,
+          "peak_snr_db": 57.12222558808171
+        }
+      ]
+    },
+    "selected_segment_index": 0,
+    "statement": "one model-blind narrowband carrier clears all frozen rules",
+    "status": "CARRIER_ADMITTED"
+  },
+  "parameters": {
+    "background_estimator": "local_median_linear_power",
+    "candidate_exclusion_half_width_hz": 2.0,
+    "complex_convention": "I_plus_jQ",
+    "effective_frequency_resolution_hz": 0.3662109375,
+    "expected_sample_rate_hz": 1000,
+    "frame_first_offset_s": 2.0475,
+    "frame_hop_s": 1.0,
+    "frame_time_reference": "midpoint_of_first_and_last_sample_timestamps",
+    "frequency_estimator": "strongest_native_fft_bin_no_subbin_fit",
+    "local_background_half_width_hz": 50.0,
+    "maximum_clipped_scalar_fraction": 0.0001,
+    "maximum_gap_frames": 0,
+    "maximum_slew_hz_s": 1.0,
+    "minimum_ambiguity_margin_db": 10.0,
+    "minimum_contiguous_frames": 30,
+    "minimum_peak_snr_db": 20.0,
+    "native_bin_spacing_hz": 0.244140625,
+    "overlap_samples": 3096,
+    "passband_edge_guard_hz": 50.0,
+    "sample_encoding": "signed_int16_msb_Q_then_I",
+    "stft_hop_samples": 1000,
+    "stft_length_samples": 4096,
+    "stft_window": "periodic_hann",
+    "unknown_fir_policy": "no_coefficient_inference; no_amplitude_response_claim; use_interior_band_only",
+    "zero_padding_samples": 0
+  },
+  "receiver_configuration": {
+    "complex_convention": "I_plus_jQ",
+    "development_lidvid": "urn:nasa:pds:maven.rose.raw:data.rsr:mvn_rse_l0_rsr_20160712t124201::1.0",
+    "filter_coefficient_state": "NOT_ENCODED_IN_SFDU",
+    "fir_treatment": "coefficients_not_encoded; no inference; no amplitude-response claim",
+    "first_record_sequence": 1,
+    "first_sample_utc": "2016-07-12T12:42:01.000000Z",
+    "last_record_sequence": 1080,
+    "record_count": 1080,
+    "record_duration_s": 1.0,
+    "rsr_id": 2,
+    "sample_encoding": "signed_int16_msb_Q_then_I",
+    "sample_rate_hz": 1000,
+    "sample_resolution_bits": 16,
+    "sequence_continuous": true,
+    "station_id": 45,
+    "subchannel_id": 1,
+    "timestamp_continuous": true
+  },
+  "recorded_baseband_coordinates": {
+    "center_hz": 0.0,
+    "frequency_sign": "positive_fft_frequency_of_I_plus_jQ",
+    "lower_hz": -500.0,
+    "upper_hz": 500.0
+  },
+  "result_version": "maven-dss45-detector-development-result-v1",
+  "scope": "DSS45_DEVELOPMENT_ONLY_MODEL_BLIND",
+  "tracker_version": "maven-dss45-model-blind-carrier-tracker-v1"
+}
