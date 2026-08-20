@@ -4,5 +4,7 @@ experiments/live_instrument/session_receipts/*.jsonl -text
 # Pinned protocol evidence is also verified by its byte-exact SHA-256.
 experiments/live_instrument/protocol_sources/gate_f2_5_17/rx_sound_cmd.h -text
 
-# This frozen development runner is bound by a byte-exact manifest hash.
+# These frozen development artifacts are joined by byte-exact manifest hashes.
 experiments/orbital_discriminability/maven_dss45_detector_develop.py -text
+experiments/orbital_discriminability/MAVEN_DSS45_CARRIER_DETECTOR_MANIFEST.json -text
+experiments/orbital_discriminability/MAVEN_DSS45_DETECTOR_DEVELOPMENT_RESULT.json -text
