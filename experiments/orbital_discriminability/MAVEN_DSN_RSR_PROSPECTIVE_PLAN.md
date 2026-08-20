@@ -1,8 +1,8 @@
 # MAVEN/DSN RSR prospective plan
 
-Status: **DSS45_DEVELOPMENT_COMPILER_READY; INDEPENDENT_PROSPECTIVE_PLAN_BLOCKED**
+Status: **DETECTOR_FROZEN_FOR_RSR_DEVELOPMENT; INDEPENDENT_PROSPECTIVE_PLAN_BLOCKED**
 Branch: `experiment/maven-dsn-rsr-prospective`
-Scope: DSS-45 metadata/control plus exact header ranges only. Zero IQ/sample bytes were read; primary and reserve remain sealed.
+Scope: DSS-45 development metadata and IQ were used under a hash-first authority receipt; the primary and reserve remain sealed.
 
 This is one scoped audit, not a new gate or archive adapter. The earlier approximate `2 x Doppler` curves are screening evidence only; none of their signatures, margins, windows, or timing limits enters this plan.
 
@@ -20,6 +20,36 @@ Exact labels: [development](https://pds-ppi.igpp.ucla.edu/data/maven-rose-raw/da
 
 The overview proves two-way X/X, same uplink/downlink station, receiver `1B`, subchannel `1`, 1000 complex samples/s, 16 bits, HGA, telemetry off and ingress for all three. Polarization is **unknown**; receiver-name suffixes are not decoded as polarization. Sample rate is not treated as filter bandwidth or spectral resolution.
 
+## DSS-45 development detector outcome
+
+Commit `f9aa7f5` was pushed before sample access. The complete development
+artifact was then materialized and verified before decoding: 4,600,800 bytes,
+SHA-256 `0e8113b6cf0e21759f74a61d944c27c5ecc55ec18281b2c88f0f8e601ed6917c`.
+The label is 73,064 bytes with SHA-256
+`a9b37dbc151e83106823d9da6edfa7bd135752caee1e950a3e6c3b551d82c014`.
+The authority receipt SHA-256 is
+`908f74d91876737859bddc3b703da6a7c13f9b608ec90044d9c5d07f61e01ec4`.
+
+The detector source is frozen at commit `35e9fd1`, source SHA-256
+`8b7e45f19c3a4be1abb91b6057a57d2a3925fd6776bf0aa2c23b5bb9cd51a478`.
+It uses signed big-endian Q-then-I words interpreted as `I+jQ`, the full
+recorded baseband with a 50 Hz edge guard, a periodic 4096-sample Hann window,
+1000-sample hop, no zero padding or sub-bin fit, native bin spacing
+0.244140625 Hz and effective `R_f = 0.3662109375 Hz`. Admission requires
+20 dB local peak SNR, 10 dB ambiguity margin, no bridged gap, at least 30
+contiguous frames and at most 1 Hz/s slew. Unknown FIR coefficients are not
+inferred and no amplitude-response claim is made.
+
+The model-blind development result admits 721 contiguous frames over 720 s,
+with zero clipping and no record gap. Only after manifest commit `350ea8b`
+was the derived ridge compared with the reconstructed-SPK metadata curve,
+without interpolation, fitted time/frequency offsets, or parameter changes.
+70 of 72 comparison points lie within one native bin; the final two residuals
+are 1.028 Hz and 4.324 Hz and remain in the artifact. This is a development
+diagnostic, not independent orbital evidence. The ephemeral label and IQ
+materialization was destroyed after analysis; only hashes, configuration and
+derived ridge/diagnostic artifacts remain.
+
 ## Sample-zero and timing admission
 
 The RSR specification directly states that the SFDU time tag denotes creation of the first sample by the DIG ADC, later samples advance by the sample period, DDC/FIR/record-task delays are compensated, and RSR time tags are accurate to 100 ns. This is the RSR-specific ADC link, not the separate DSN-wide inter-station reconstruction figure.
@@ -30,7 +60,7 @@ The RSR specification directly states that the SFDU time tag denotes creation of
 
 The planning bound is conservatively **1 microsecond end-to-end**, conditional on a structurally valid and continuous concrete SFDU header. It relaxes the documented 100 ns device claim and does not assert that station UTC error alone was measured as 1 microsecond. Clock envelopes must evaluate the full predictor at `t - 1 us` and `t + 1 us`, never local slope times error.
 
-The label start is retained as metadata, not silently promoted into a verified sample-zero value; the concrete first SFDU header remains sealed.
+The development first-sample tag was admitted only after concrete header validation. The label start alone is still not promoted to sample-zero evidence, and the concrete primary/reserve SFDU headers remain sealed.
 
 ## Occultation and media scope
 
