@@ -90,9 +90,7 @@ def test_model_blind_chirp_is_admitted() -> None:
 
 def test_noise_is_not_admitted() -> None:
     rng = np.random.default_rng(39378)
-    noise = 100.0 * (
-        rng.standard_normal(16_000) + 1j * rng.standard_normal(16_000)
-    )
+    noise = 100.0 * (rng.standard_normal(16_000) + 1j * rng.standard_normal(16_000))
     assert _run(np.asarray(noise, dtype=np.complex64)).status == "CARRIER_NOT_ADMITTED"
 
 

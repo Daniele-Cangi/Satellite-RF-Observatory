@@ -116,9 +116,7 @@ class CarrierTrackerParameters:
 
     @property
     def frame_first_offset_s(self) -> float:
-        return (self.stft_length_samples - 1) / (
-            2.0 * self.expected_sample_rate_hz
-        )
+        return (self.stft_length_samples - 1) / (2.0 * self.expected_sample_rate_hz)
 
     def validate(self) -> None:
         if self.expected_sample_rate_hz != 1_000:
@@ -279,7 +277,9 @@ def verify_and_decode_development_artifact(
         "sample_resolution_bits",
     )
     for receipt in receipts[1:]:
-        if any(getattr(receipt, name) != getattr(first, name) for name in invariant_fields):
+        if any(
+            getattr(receipt, name) != getattr(first, name) for name in invariant_fields
+        ):
             raise CarrierTrackerError("receiver configuration changed inside artifact")
 
     samples.flags.writeable = False
@@ -335,9 +335,10 @@ def track_narrowband_carrier(
     if values.size < parameters.stft_length_samples:
         raise CarrierTrackerError("samples contain no complete analysis frame")
 
-    frame_count = 1 + (
-        values.size - parameters.stft_length_samples
-    ) // parameters.stft_hop_samples
+    frame_count = (
+        1
+        + (values.size - parameters.stft_length_samples) // parameters.stft_hop_samples
+    )
     window = np.hanning(parameters.stft_length_samples + 1)[:-1]
     frequency_axis = baseband.center_hz + np.fft.fftshift(
         np.fft.fftfreq(parameters.stft_length_samples, d=1.0 / sample_rate_hz)
@@ -391,7 +392,9 @@ def track_narrowband_carrier(
     segments = _continuous_segments(candidates, parameters)
     selected_index = _select_segment(segments, parameters.minimum_contiguous_frames)
     return CarrierTrackerResult(
-        status="CARRIER_ADMITTED" if selected_index is not None else "CARRIER_NOT_ADMITTED",
+        status=(
+            "CARRIER_ADMITTED" if selected_index is not None else "CARRIER_NOT_ADMITTED"
+        ),
         statement=(
             "one model-blind narrowband carrier clears all frozen rules"
             if selected_index is not None
@@ -440,24 +443,30 @@ def development_result_object(
             "clipped_scalar_fraction": result.clipped_scalar_fraction,
             "segment_lengths": [len(segment.points) for segment in result.segments],
             "selected_segment_index": result.selected_segment_index,
-            "selected_segment": None if selected is None else {
-                "point_count": len(selected.points),
-                "duration_s": selected.duration_s,
-                "first_event_time_offset_s": selected.points[0].event_time_offset_s,
-                "last_event_time_offset_s": selected.points[-1].event_time_offset_s,
-                "minimum_baseband_frequency_hz": min(
-                    point.baseband_frequency_hz for point in selected.points
-                ),
-                "maximum_baseband_frequency_hz": max(
-                    point.baseband_frequency_hz for point in selected.points
-                ),
-                "minimum_peak_snr_db": min(point.peak_snr_db for point in selected.points),
-                "minimum_ambiguity_margin_db": min(
-                    point.ambiguity_margin_db for point in selected.points
-                ),
-                "maximum_observed_slew_hz_s": _maximum_slew(selected.points),
-                "points": [asdict(point) for point in selected.points],
-            },
+            "selected_segment": (
+                None
+                if selected is None
+                else {
+                    "point_count": len(selected.points),
+                    "duration_s": selected.duration_s,
+                    "first_event_time_offset_s": selected.points[0].event_time_offset_s,
+                    "last_event_time_offset_s": selected.points[-1].event_time_offset_s,
+                    "minimum_baseband_frequency_hz": min(
+                        point.baseband_frequency_hz for point in selected.points
+                    ),
+                    "maximum_baseband_frequency_hz": max(
+                        point.baseband_frequency_hz for point in selected.points
+                    ),
+                    "minimum_peak_snr_db": min(
+                        point.peak_snr_db for point in selected.points
+                    ),
+                    "minimum_ambiguity_margin_db": min(
+                        point.ambiguity_margin_db for point in selected.points
+                    ),
+                    "maximum_observed_slew_hz_s": _maximum_slew(selected.points),
+                    "points": [asdict(point) for point in selected.points],
+                }
+            ),
             "orbital_model_input_used": result.orbital_model_input_used,
             "gap_policy": result.gap_policy,
         },
@@ -575,8 +584,13 @@ def _continuous_segments(
         previous = raw_segments[-1][-1]
         frame_gap = point.frame_index - previous.frame_index - 1
         elapsed = point.event_time_offset_s - previous.event_time_offset_s
-        slew = abs(point.baseband_frequency_hz - previous.baseband_frequency_hz) / elapsed
-        if frame_gap <= parameters.maximum_gap_frames and slew <= parameters.maximum_slew_hz_s:
+        slew = (
+            abs(point.baseband_frequency_hz - previous.baseband_frequency_hz) / elapsed
+        )
+        if (
+            frame_gap <= parameters.maximum_gap_frames
+            and slew <= parameters.maximum_slew_hz_s
+        ):
             raw_segments[-1].append(point)
         else:
             raw_segments.append([point])
@@ -637,7 +651,9 @@ def _validate_detector_inputs(
     expected_lower = baseband.center_hz - sample_rate_hz / 2.0
     expected_upper = baseband.center_hz + sample_rate_hz / 2.0
     if baseband.lower_hz != expected_lower or baseband.upper_hz != expected_upper:
-        raise CarrierTrackerError("recorded-baseband coordinates conflict with sample rate")
+        raise CarrierTrackerError(
+            "recorded-baseband coordinates conflict with sample rate"
+        )
 
 
 def _clipped_scalar_count(samples: np.ndarray) -> int:
@@ -661,7 +677,9 @@ def _validate_record_continuity(
     for index in range(1, len(sequences)):
         if sequences[index] != sequences[index - 1] + 1:
             raise CarrierTrackerError("RSR record sequence gap or reordering")
-        if instants[index] - instants[index - 1] != timedelta(seconds=record_duration_s):
+        if instants[index] - instants[index - 1] != timedelta(
+            seconds=record_duration_s
+        ):
             raise CarrierTrackerError("RSR first-sample timestamp gap or reordering")
 
 
@@ -680,7 +698,10 @@ def _read_authority(path: Path) -> dict[str, object]:
         value = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise CarrierTrackerError("development authority is unreadable") from exc
-    if value.get("authority_version") != "maven-dss45-development-artifact-authority-v1":
+    if (
+        value.get("authority_version")
+        != "maven-dss45-development-artifact-authority-v1"
+    ):
         raise CarrierTrackerError("development authority version changed")
     if value.get("development_product", {}).get("role") != "DEVELOPMENT_ONLY":
         raise CarrierTrackerError("authority does not designate a development product")
