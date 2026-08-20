@@ -1,0 +1,47 @@
+{
+  "authority_version": "maven-dss45-development-artifact-authority-v1",
+  "branch": "experiment/maven-dsn-rsr-prospective",
+  "created_at_utc": "2026-08-20T00:27:38.5271431Z",
+  "decoding_boundary": {
+    "decode_allowed_after_receipt_validation": true,
+    "decode_allowed_before_full_file_hash": false,
+    "state_at_receipt_creation": "ARTIFACT_VERIFIED_DECODE_NOT_YET_STARTED"
+  },
+  "development_product": {
+    "ephemeral_materialization": true,
+    "label": {
+      "bytes": 73064,
+      "filename": "mvn_rse_l0_rsr_20160712T124201_v01_r00.xml",
+      "sha256": "a9b37dbc151e83106823d9da6edfa7bd135752caee1e950a3e6c3b551d82c014"
+    },
+    "lidvid": "urn:nasa:pds:maven.rose.raw:data.rsr:mvn_rse_l0_rsr_20160712t124201::1.0",
+    "payload": {
+      "bytes": 4600800,
+      "filename": "mvn_rse_l0_rsr_20160712T124201_v01_r00.dat",
+      "md5": "51ee5e4c95a42d7f477703c94a69b05c",
+      "sha256": "0e8113b6cf0e21759f74a61d944c27c5ecc55ec18281b2c88f0f8e601ed6917c"
+    },
+    "role": "DEVELOPMENT_ONLY"
+  },
+  "frozen_inputs": {
+    "header_manifest_file_sha256": "df90255af923fd87a85da231764887052bf57686d0bc6a1aa72783fd7d3180d8",
+    "header_transform_ledger_sha256": "4749dcfe6b94c038db323290ff68c33be1467c9c3632c199f42705e4c922a086",
+    "metadata_result_file_sha256": "161417730e00bcf259125655aadf5f1fb941d4d142ea56fb2060c70d5994b147",
+    "parser_contract_sha256": "50de0005bb26317ec94c2816ac8465b48370fbce2db555a28801dffead89317e",
+    "source_commit": "f9aa7f52a6a9c740670d37e0ea3487a3e28fcbe9"
+  },
+  "sample_authority": {
+    "allowed": [
+      "complex sample decoding",
+      "model-blind carrier detector development",
+      "DSS-45 development diagnostics after detector freeze"
+    ],
+    "forbidden": [
+      "DSS-35 primary access",
+      "DSS-55 reserve access",
+      "SPK input to detector",
+      "predicted trajectory input to detector",
+      "orbital claim from reconstructed SPK"
+    ]
+  }
+}
