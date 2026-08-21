@@ -157,6 +157,15 @@ def test_frozen_receipt_is_strict_and_matches_module_manifest():
         composite.strict_json({"value": float("nan")})
 
 
+def test_parent_receipt_hash_is_independent_of_git_checkout_line_endings():
+    lf = b'{\n  "outcome": "FROZEN"\n}\n'
+    crlf = lf.replace(b"\n", b"\r\n")
+
+    assert composite.repository_text_sha256(lf) == (
+        composite.repository_text_sha256(crlf)
+    )
+
+
 @pytest.mark.parametrize(
     "fx,fka",
     [

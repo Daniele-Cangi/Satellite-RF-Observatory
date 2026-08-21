@@ -31,18 +31,18 @@ OUTCOME_NOT_ADMITTED: Final = "CASSINI_COMPOSITE_OBSERVABLE_NOT_ADMITTED"
 COMPOSITION_ADMITTED: Final = "COMPOSITION_ALGEBRA_ADMITTED"
 PLASMA_NOT_EVALUATED: Final = "PLASMA_MEASUREMENT_NOT_EVALUATED_WITHOUT_IQ"
 
-PARENT_RECEIPTS: Final = {
+PARENT_RECEIPT_REPOSITORY_TEXT_SHA256: Final = {
     "CASSINI_SAGR3_DISTRIBUTED_HEADER_RECEIPT.json": (
-        "20e8b62437eb4afa501a3b9a967c6817eb57bf0ac1d112a6c5fab79a3fdb6976"
+        "eba267949a4aa3cb26996ac9664dfd3c68cf1f4e43d5ed0611e2e66adfa8655f"
     ),
     "CASSINI_SAGR3_TRANSITION_AUDIT_RECEIPT.json": (
-        "34e269c054ce65aa67c4b2263b89d2aec37ed8d37dbdd85c9ba50b0e72d15265"
+        "5250f5efbfa9cb7ccc577fc9bd08fb586e40cd4cf91dc08e08917c7aaccfbabe"
     ),
     "CASSINI_SAGR3_PRETRANSITION_OPEN_TERM_AUDIT_RECEIPT.json": (
-        "ee2f5fe4ec719a4272ef09d42f666908d2bc99846bb3a6efa9cd337ebc3ddd3c"
+        "8ee2f7ac55bb79586fc3d903bbc3c2777897834dae1d83bd20d548b3bc30a9e9"
     ),
     "CASSINI_SAGR3_DISTRIBUTED_GEOMETRY_RECEIPT.json": (
-        "680615c660ca22e068d61c4715daa80d44f62f94dc9f79a0dedc9941b275d59e"
+        "aeb65b82599d5d73b9367fe8b6a9adaebd9d63b09f1d5d4d4c4c8ff0721f111c"
     ),
 }
 
@@ -221,7 +221,11 @@ def build_audit_receipt() -> dict[str, object]:
             "PHYSICAL_NEGATIVE_NOT_INTERPRETABLE",
         ],
         "parent_receipts": {
-            name: {"sha256": digest} for name, digest in PARENT_RECEIPTS.items()
+            name: {
+                "repository_text_sha256": digest,
+                "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH",
+            }
+            for name, digest in PARENT_RECEIPT_REPOSITORY_TEXT_SHA256.items()
         },
         "physical_question": (
             "Can simultaneous DSS-25 X/Ka define a first-order dispersive-free "
@@ -364,9 +368,9 @@ def build_audit_receipt() -> dict[str, object]:
 def validate_parent_receipts() -> dict[str, dict[str, object]]:
     directory = Path(__file__).parent
     loaded: dict[str, dict[str, object]] = {}
-    for name, expected_sha256 in PARENT_RECEIPTS.items():
+    for name, expected_sha256 in PARENT_RECEIPT_REPOSITORY_TEXT_SHA256.items():
         raw = (directory / name).read_bytes()
-        actual = sha256(raw).hexdigest()
+        actual = repository_text_sha256(raw)
         if actual != expected_sha256:
             raise CassiniCompositeXKaError(
                 f"frozen parent receipt hash changed: {name}"
@@ -378,10 +382,19 @@ def validate_parent_receipts() -> dict[str, dict[str, object]]:
     return loaded
 
 
+def repository_text_sha256(raw: bytes) -> str:
+    """Hash repository text independently of Git's checkout EOL policy."""
+
+    return sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
+
+
 def audit_manifest_sha256() -> str:
     manifest = {
         "audit_version": AUDIT_VERSION,
-        "parent_receipts": PARENT_RECEIPTS,
+        "parent_receipt_repository_text_sha256": (
+            PARENT_RECEIPT_REPOSITORY_TEXT_SHA256
+        ),
+        "parent_receipt_line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH",
         "nominal_x_hz": geometry.X_BAND_HZ,
         "nominal_ka_hz": geometry.KA_BAND_HZ,
         "records": geometry.PRETRANSITION_RECORDS,

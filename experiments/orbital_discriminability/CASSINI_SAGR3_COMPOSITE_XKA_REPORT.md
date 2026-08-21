@@ -8,6 +8,10 @@ The proposed observable is mathematically useful but is not yet a physical RF
 measurement.  No network, RSR header, IQ, sample, amplitude, or detector input
 was accessed during this audit.
 
+Parent receipt identities use repository-text SHA-256: checkout `CRLF` is
+normalized to the Git-blob `LF` representation before hashing. JSON content
+and all scientific fields remain byte-sensitive after that explicit EOL rule.
+
 ## What survives
 
 For simultaneous fractional-frequency coordinates

@@ -1,6 +1,6 @@
 {
   "audit_version": "cassini-sagr3-composite-xka-offline-audit-v1",
-  "audit_manifest_sha256": "71d28034de8cd8caaa27598eda90ca56c8ec3912711f24491c5a4ef0cc3ea46a",
+  "audit_manifest_sha256": "73b6818c459fc426fdf6bab467ca7cacd6b08ac7a0c104c133f8177361477940",
   "scope": "FROZEN_AGGREGATE_METADATA_ONLY_NO_HEADER_REACCESS_NO_IQ",
   "outcome": "CASSINI_COMPOSITE_OBSERVABLE_NOT_ADMITTED",
   "sub_outcomes": [
@@ -11,16 +11,20 @@
   ],
   "parent_receipts": {
     "CASSINI_SAGR3_DISTRIBUTED_HEADER_RECEIPT.json": {
-      "sha256": "20e8b62437eb4afa501a3b9a967c6817eb57bf0ac1d112a6c5fab79a3fdb6976"
+      "repository_text_sha256": "eba267949a4aa3cb26996ac9664dfd3c68cf1f4e43d5ed0611e2e66adfa8655f",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
     },
     "CASSINI_SAGR3_TRANSITION_AUDIT_RECEIPT.json": {
-      "sha256": "34e269c054ce65aa67c4b2263b89d2aec37ed8d37dbdd85c9ba50b0e72d15265"
+      "repository_text_sha256": "5250f5efbfa9cb7ccc577fc9bd08fb586e40cd4cf91dc08e08917c7aaccfbabe",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
     },
     "CASSINI_SAGR3_PRETRANSITION_OPEN_TERM_AUDIT_RECEIPT.json": {
-      "sha256": "ee2f5fe4ec719a4272ef09d42f666908d2bc99846bb3a6efa9cd337ebc3ddd3c"
+      "repository_text_sha256": "8ee2f7ac55bb79586fc3d903bbc3c2777897834dae1d83bd20d548b3bc30a9e9",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
     },
     "CASSINI_SAGR3_DISTRIBUTED_GEOMETRY_RECEIPT.json": {
-      "sha256": "680615c660ca22e068d61c4715daa80d44f62f94dc9f79a0dedc9941b275d59e"
+      "repository_text_sha256": "aeb65b82599d5d73b9367fe8b6a9adaebd9d63b09f1d5d4d4c4c8ff0721f111c",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
     }
   },
   "physical_question": "Can simultaneous DSS-25 X/Ka define a first-order dispersive-free DSS-25 coordinate for the frozen DSS25-minus-DSS65 orbital test?",
