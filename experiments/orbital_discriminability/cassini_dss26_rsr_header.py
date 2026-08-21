@@ -1,6 +1,6 @@
 """Synthetic-fixture-only SFDU whitelist for Cassini SAGR DSS-26 development.
 
-The parser is product-bound to the PDS3/PDS4 identity ending in ``2A1``.  It
+The parser is product-bound to the PDS3/PDS4 identity ending in ``1A1``.  It
 accepts exactly the 260-byte RSR header and never accepts or indexes the data
 CHDO.  Unlisted header bytes are structurally discarded; there is no generic
 field registry and no escape hatch that can expose them later.
@@ -17,20 +17,20 @@ import struct
 from typing import Final, Literal
 
 
-PARSER_VERSION: Final = "cassini-sagr-dss26-rsr-header-whitelist-v1"
+PARSER_VERSION: Final = "cassini-sagr-dss26-rsr-header-whitelist-v3"
 DEVELOPMENT_LIDVID: Final = (
     "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:"
     "s11sags2005_157_1750nnnx26rd::1.0"
 )
 DEVELOPMENT_PRODUCT_NAME: Final = "s11sags2005_157_1750nnnx26rd.dat"
 DEVELOPMENT_SOURCE_PRODUCT_ID: Final = (
-    "CO-S-RSS-1-SAGR1-V1.0:S11SAGS2005157_1750NNNX26RD.2A1"
+    "CO-S-RSS-1-SAGR1-V1.0:S11SAGS2005157_1750NNNX26RD.1A1"
 )
 RSR_HEADER_BYTES: Final = 260
 RSR_RECORD_BYTES: Final = 4_260
 RSR_DDC_OUTPUT_RATE_HZ: Final = 16_000_000
 EXPECTED_STATION_ID: Final = 26
-EXPECTED_RSR_ID: Final = 2
+EXPECTED_RSR_ID: Final = 1
 EXPECTED_CHANNEL_ID: Final = "A"
 EXPECTED_SUBCHANNEL_ID: Final = 1
 EXPECTED_SAMPLE_RATE_HZ: Final = 1_000
@@ -245,7 +245,7 @@ def parse_dss26_header(
         EXPECTED_CHANNEL_ID,
         EXPECTED_SUBCHANNEL_ID,
     ):
-        raise CassiniRsrHeaderError("header differs from frozen RSR/channel/subchannel 2A1")
+        raise CassiniRsrHeaderError("header differs from frozen RSR/channel/subchannel 1A1")
     if receipt.sample_rate_hz != EXPECTED_SAMPLE_RATE_HZ:
         raise CassiniRsrHeaderError("header differs from frozen 1 ksps product")
     if receipt.frequency_override_active:
@@ -274,7 +274,7 @@ def parser_manifest() -> dict[str, object]:
             "rsr": EXPECTED_RSR_ID,
             "channel": EXPECTED_CHANNEL_ID,
             "subchannel": EXPECTED_SUBCHANNEL_ID,
-            "channel_source": "frozen PDS source-product suffix 2A1",
+            "channel_source": "frozen PDS source-product suffix 1A1",
         },
         "header_bytes": RSR_HEADER_BYTES,
         "record_bytes": RSR_RECORD_BYTES,
@@ -290,6 +290,20 @@ def parser_manifest() -> dict[str, object]:
         "raw_header_retention": "PROHIBITED",
         "data_chdo_access": "PROHIBITED",
         "fixture_policy": "SPECIFICATION_DERIVED_SYNTHETIC_ONLY_BEFORE_AUTHORITY",
+        "utc_policy": {
+            "calendar": "PROLEPTIC_GREGORIAN",
+            "scale": "UTC",
+            "ordinary_second_of_day_interval": "0 <= second < 86400",
+            "day_rollover": (
+                "requires the next encoded year/day-of-year; second 86400 is never "
+                "silently normalized"
+            ),
+            "positive_leap_second": (
+                "REJECTED_UNTIL_THE_PRODUCT_SPECIFIC_SFDU_ENCODING_IS_EXPLICITLY "
+                "IMPLEMENTED"
+            ),
+            "negative_leap_second": "REJECTED_UNTIL_EXPLICITLY IMPLEMENTED",
+        },
         "non_finite_policy": (
             "7fffffffffffffff becomes NOT_CALCULABLE with null value; "
             "all other non-finite encodings are rejected"
@@ -373,11 +387,18 @@ def _filter_decimation(sample_rate_hz: int) -> FilterDecimationState:
 
 
 def _utc_tag(year: int, day_of_year: int, second_of_day: float) -> str:
-    if not 1900 <= year <= 3000 or not 1 <= day_of_year <= 366:
+    if not 1900 <= year <= 3000:
         raise CassiniRsrHeaderError("first-sample date is outside the RSR domain")
-    if not 0.0 <= second_of_day <= 86_400.0:
-        raise CassiniRsrHeaderError("first-sample second is outside the RSR domain")
-    instant = datetime(year, 1, 1, tzinfo=timezone.utc) + timedelta(
+    year_start = datetime(year, 1, 1, tzinfo=timezone.utc)
+    next_year = datetime(year + 1, 1, 1, tzinfo=timezone.utc)
+    days_in_year = (next_year - year_start).days
+    if not 1 <= day_of_year <= days_in_year:
+        raise CassiniRsrHeaderError("first-sample day-of-year is invalid for its year")
+    if not 0.0 <= second_of_day < 86_400.0:
+        raise CassiniRsrHeaderError(
+            "SFDU UTC boundary/leap-second tag is unsupported; silent day normalization is prohibited"
+        )
+    instant = year_start + timedelta(
         days=day_of_year - 1,
         seconds=second_of_day,
     )

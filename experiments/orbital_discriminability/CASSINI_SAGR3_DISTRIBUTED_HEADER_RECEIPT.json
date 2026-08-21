@@ -1,0 +1,198 @@
+{
+  "access_audit": {
+    "authoritative_full_scan_header_bytes": 24024000,
+    "data_chdo_bytes_read": 0,
+    "data_chdo_bytes_requested": 0,
+    "descriptive_failure_header_bytes": 26000,
+    "earlier_full_scan_header_bytes": 24024000,
+    "iq_or_amplitude_fields_represented": false,
+    "label_metadata_bytes": 220473,
+    "raw_headers_persisted": false,
+    "transition_locator_header_bytes": 15340,
+    "total_rsr_header_bytes_read_during_spike": 48089340
+  },
+  "authority": {
+    "frozen_screen_commit": "66aca45",
+    "frozen_screen_manifest_sha256": "f63812b2366d5952d3590eef0e43148aa6b92ec6159a9504f5f57b01bd375aa7",
+    "full_scan_parser_source_sha256": "887756acbfcca3338e6b088636a01d1cc53ff78b4afe655661876d3efafc569e",
+    "full_scan_source_commit": "b4e04e8",
+    "parser_manifest_sha256": "2ef3b9fed0d104911b5a9059b263bca2a5e9117dd06650e2a6f4359e861d6b9e",
+    "transition_locator_source_commit": "f8eec48",
+    "transition_source_sha256": "2583b1813f3f222f2bcf997d8e8f66737b95d741140e26cd93443bc925b75db9"
+  },
+  "claim_scope": {
+    "authorized": [
+      "COMPLETE_SFDU_CONTROL_HEADER_CONTINUITY",
+      "THREE_PRODUCT_SAMPLE_AND_RECEIVER_CONFIGURATION",
+      "DSS25_AND_DSS65_ARE_INDEPENDENT_X_RECEIVE_ROOTS",
+      "DSS25_X_AND_KA_ARE_DISTINCT_SIMULTANEOUS_CHANNELS_NOT_A_THIRD_ROOT",
+      "PIECEWISE_EXPLICIT_RECORDED_BASEBAND_FREQUENCY_COORDINATES",
+      "COORDINATED_RECEIVER_COORDINATE_TRANSITION_AT_2006-09-08T14:57:32Z"
+    ],
+    "detector_authorized": false,
+    "iq_access_authorized": false,
+    "not_authorized": [
+      "CAUSE_OF_COORDINATE_TRANSITION",
+      "RF_OR_CARRIER_PRESENCE",
+      "AMPLITUDE_OR_FIR_RESPONSE",
+      "PHYSICAL_CORRECTION_MARGIN",
+      "ORBITAL_MODEL_PREFERENCE",
+      "SATELLITE_IDENTITY"
+    ],
+    "physical_margin_admitted": false
+  },
+  "clauses": {
+    "all_receiver_frequency_transforms_finite_and_explicit": true,
+    "all_streams_complete_and_continuous": true,
+    "distributed_x_common_start_and_overlap": true,
+    "dss25_dss65_x_independent_receive_roots": true,
+    "dss25_x_ka_distinct_receiver_channels": true,
+    "dss25_x_ka_simultaneous": true
+  },
+  "forward_experiment_status": "BLOCKED_BY_UNMODELED_COORDINATE_TRANSITION_INSIDE_HELDOUT",
+  "outcome": "CASSINI_SAGR3_HEADER_TOPOLOGY_QUALIFIED",
+  "products": [
+    {
+      "channel_id": "A",
+      "ddc_lo_hz": [328000000, 331000000],
+      "downlink_band": "X",
+      "event_time": {
+        "first_sample_utc": "2006-09-08T12:00:01.000000Z",
+        "last_first_sample_utc": "2006-09-08T22:30:00.000000Z",
+        "non_one_second_steps": 0
+      },
+      "filter_decimation": {
+        "coefficient_state": "NOT_ENCODED_IN_SFDU",
+        "decimation": 16000,
+        "input_rate_hz": 16000000,
+        "output_bandwidth_hz": 1000,
+        "output_rate_hz": 1000
+      },
+      "frequency_override_active": false,
+      "maximum_absolute_nco_boundary_residual_hz": 288061.4454467922,
+      "ordered_whitelist_receipts_sha256": "8bfd1427a54da1f3a5b2bff981e0d440dcf59f0e75bae326dc18d64c1c37be69",
+      "record_count": 37800,
+      "record_sequence": {
+        "first": 1,
+        "last": 37800,
+        "non_unit_steps_modulo_65536": 0
+      },
+      "rf_to_if_lo_hz": 8100000000,
+      "role": "MEASUREMENT_X_DSS25",
+      "rsr_id": 3,
+      "sample_rate_hz": 1000,
+      "sample_resolution_bits": 16,
+      "signal_processing_center_id": 10,
+      "station_id": "DSS-25",
+      "subchannel_id": 1,
+      "transition": {
+        "after_ddc_lo_hz": 331000000,
+        "before_ddc_lo_hz": 328000000,
+        "first_sample_utc": "2006-09-08T14:57:32.000000Z",
+        "receiver_transform_boundary_residual_hz": -2711938.5545539856,
+        "record_index_zero_based": 10651
+      }
+    },
+    {
+      "channel_id": "B",
+      "ddc_lo_hz": [326000000, 336000000],
+      "downlink_band": "KA",
+      "event_time": {
+        "first_sample_utc": "2006-09-08T12:00:01.000000Z",
+        "last_first_sample_utc": "2006-09-08T22:30:00.000000Z",
+        "non_one_second_steps": 0
+      },
+      "filter_decimation": {
+        "coefficient_state": "NOT_ENCODED_IN_SFDU",
+        "decimation": 16000,
+        "input_rate_hz": 16000000,
+        "output_bandwidth_hz": 1000,
+        "output_rate_hz": 1000
+      },
+      "frequency_override_active": false,
+      "maximum_absolute_nco_boundary_residual_hz": 305404.5833224602,
+      "ordered_whitelist_receipts_sha256": "f8749d8ec911f226f7aa43068a2662ba82114a719d96323efdcf3c2efc508d7a",
+      "record_count": 37800,
+      "record_sequence": {
+        "first": 1,
+        "last": 37800,
+        "non_unit_steps_modulo_65536": 0
+      },
+      "rf_to_if_lo_hz": 31700000000,
+      "role": "WITNESS_KA_DSS25",
+      "rsr_id": 4,
+      "sample_rate_hz": 1000,
+      "sample_resolution_bits": 16,
+      "signal_processing_center_id": 10,
+      "station_id": "DSS-25",
+      "subchannel_id": 1,
+      "transition": {
+        "after_ddc_lo_hz": 336000000,
+        "before_ddc_lo_hz": 326000000,
+        "first_sample_utc": "2006-09-08T14:57:32.000000Z",
+        "receiver_transform_boundary_residual_hz": -10305404.583320618,
+        "record_index_zero_based": 10651
+      }
+    },
+    {
+      "channel_id": "A",
+      "ddc_lo_hz": [328000000, 330000000],
+      "downlink_band": "X",
+      "event_time": {
+        "first_sample_utc": "2006-09-08T12:00:01.000000Z",
+        "last_first_sample_utc": "2006-09-08T16:40:00.000000Z",
+        "non_one_second_steps": 0
+      },
+      "filter_decimation": {
+        "coefficient_state": "NOT_ENCODED_IN_SFDU",
+        "decimation": 16000,
+        "input_rate_hz": 16000000,
+        "output_bandwidth_hz": 1000,
+        "output_rate_hz": 1000
+      },
+      "frequency_override_active": false,
+      "maximum_absolute_nco_boundary_residual_hz": 711933.3520462313,
+      "ordered_whitelist_receipts_sha256": "33eb2f2fdc046f8883c9705c397914f62a76e12c22f8c06dcf546684858bea7f",
+      "record_count": 16800,
+      "record_sequence": {
+        "first": 0,
+        "last": 16799,
+        "non_unit_steps_modulo_65536": 0
+      },
+      "rf_to_if_lo_hz": 8100000000,
+      "role": "MEASUREMENT_X_DSS65",
+      "rsr_id": 3,
+      "sample_rate_hz": 1000,
+      "sample_resolution_bits": 16,
+      "signal_processing_center_id": 60,
+      "station_id": "DSS-65",
+      "subchannel_id": 1,
+      "transition": {
+        "after_ddc_lo_hz": 330000000,
+        "before_ddc_lo_hz": 328000000,
+        "first_sample_utc": "2006-09-08T14:57:32.000000Z",
+        "receiver_transform_boundary_residual_hz": -2711933.3520469666,
+        "record_index_zero_based": 10651
+      }
+    }
+  ],
+  "remaining_blocker": {
+    "controlling_fact": "ALL_THREE_RECEIVER_COORDINATE_TRANSFORMS_STEP_AT_THE_SAME_EVENT_TIME_INSIDE_THE_FROZEN_HELDOUT_SUFFIX",
+    "exact_event_time": "2006-09-08T14:57:32.000000Z",
+    "inference_prohibited": "NO_CAUSE_IS_ASSIGNED_TO_THE_COORDINATED_TRANSITION_FROM_HEADERS_ALONE",
+    "minimum_resolution": "OUTCOME_INDEPENDENT_LINK_MODE_OR_RAMP_PROVENANCE_OR_A_PREDECLARED_PRETRANSITION_WINDOW_BEFORE_ANY_IQ_ACCESS"
+  },
+  "topology": {
+    "dss25_same_path_witness": {
+      "counts_as_third_measurement_root": false,
+      "ka_identity": [10, 25, 4, "B", 1],
+      "x_identity": [10, 25, 3, "A", 1]
+    },
+    "independent_x_receive_roots": ["DSS-25", "DSS-65"],
+    "shared_upstream": [
+      "DSS-14 X-band uplink",
+      "Cassini coherent transponder",
+      "interplanetary path before Earth-near divergence"
+    ]
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "best_case_ceiling_is_admission_requirement": false,
+  "best_case_detector_resolution_ceiling_hz": 0.10327413363661438,
+  "controlling_heldout_peak_to_peak_hz": 0.3098298838130291,
+  "coordinate": {
+    "cadence_s": 1.0,
+    "calibration_records": 3360,
+    "data_transform_required": "RESAMPLE_BOTH_RECEIVE_STREAMS_ONTO_THIS_FROZEN_AXIS; ALL_NULLS_RECEIVE_THE_SAME_RESAMPLING",
+    "event_axis": "COMMON_CASSINI_TRANSMIT_ET_TDB",
+    "first_transmit_utc": "2006-09-08T10:36:28.092247Z",
+    "holdout_records": 13440,
+    "last_transmit_utc": "2006-09-08T15:16:27.092250Z",
+    "receive_time_right_minus_left_s": {
+      "maximum": 0.015667885541915894,
+      "minimum": -0.015218615531921387,
+      "peak_to_peak": 0.03088650107383728
+    },
+    "records": 16800,
+    "suffix_refit": "PROHIBITED"
+  },
+  "detector_authorized": false,
+  "exact_remaining_blocker": "PREDECLARED_THREE_PRODUCT_HEADER_ONLY_QUALIFICATION_OF_RSN_TIME_CONTINUITY_SAMPLE_MODE_NCO_AND_INDEPENDENT_RSR_HARDWARE",
+  "independence": {
+    "dss25_x_ka_pair_is_second_observer": false,
+    "independent_measurement_roots": [
+      "DSS-25",
+      "DSS-65"
+    ],
+    "shared_upstream": [
+      "DSS-14 X-band uplink",
+      "Cassini transponder",
+      "interplanetary downlink path before Earth-near divergence"
+    ]
+  },
+  "iq_access_authorized": false,
+  "kernel_lineage": [
+    {
+      "bytes": 5257,
+      "independence": "TIME_SCALE_CONTROL",
+      "name": "naif0012.tls",
+      "role": "UTC_TO_ET_TDB",
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+    },
+    {
+      "bytes": 8603648,
+      "independence": "POST_PASS_EOP_INDEPENDENT_OF_TARGET_RF",
+      "name": "earth_720101_070426.bpc",
+      "role": "HISTORICAL_EARTH_ORIENTATION",
+      "sha256": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e"
+    },
+    {
+      "bytes": 38912,
+      "independence": "STATION_MODEL_INDEPENDENT_OF_TARGET_RF",
+      "name": "earthstns_itrf93_050714.bsp",
+      "role": "DSS14_STATION_STATE",
+      "sha256": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c"
+    },
+    {
+      "bytes": 3169280,
+      "independence": "PREDICT_CREATED_2006_09_01_BEFORE_PASS",
+      "name": "060901AP_SCPSE_06244_06255.bsp",
+      "role": "CASSINI_TRAJECTORY",
+      "sha256": "0b7cc35d94b956602593106ed8aa62ce5f33cb178b8544036a841c5e53fc81dd"
+    }
+  ],
+  "nulls": {
+    "prefix_affine": {
+      "maximum_absolute_hz": 9601.002914394832,
+      "peak_to_peak_hz": 9526.22742927171,
+      "prefix_rmse_hz": 33.02452850867059,
+      "rms_hz": 4544.624231766624
+    },
+    "saturn_barycenter_geometry_destroying": {
+      "maximum_absolute_hz": 0.2310881574125867,
+      "peak_to_peak_hz": 0.3098298838130291,
+      "prefix_rmse_hz": 0.003138125972269504,
+      "rms_hz": 0.07643001665480148
+    },
+    "station_swap": "REMOVED_AS_SIGN_REDUNDANT_UNDER_DIFFERENTIAL_SCORING"
+  },
+  "orbital_observable": {
+    "definition": "8425e6 * (kinematic_factor_DSS25 - kinematic_factor_DSS65)",
+    "raw_peak_to_peak_hz": 3278.6530131889685,
+    "raw_rms_hz": 15519.469701694834
+  },
+  "physical_admission": false,
+  "physical_question": "Does observer-coupled Cassini downlink geometry leave a nonlinear DSS-25 minus DSS-65 X-band signature after prefix-only affine nuisance?",
+  "products": [
+    {
+      "causal_role": "DISTRIBUTED_X_MEASUREMENT_LEFT_AND_DISPERSIVE_PAIR_MEMBER",
+      "data_file_name": "s23sags2006_251_1200x14x25rd.dat",
+      "downlink_band": "X",
+      "label_bytes": 73482,
+      "label_sha256": "f83b5c6bb499b99ae0139ccc6c3d45b61b112a8d865490b09a193c20ebae51bc",
+      "label_url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr01/2006/s23sags2006_251_1200x14x25rd.xml",
+      "lidvid": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14x25rd::1.0",
+      "published_md5": "2f62c3b792fd643124f1a7a7968eb549",
+      "receive_station": "DSS-25",
+      "record_length_bytes": 4260,
+      "records": 37800,
+      "role": "MEASUREMENT_X_DSS25",
+      "start_utc": "2006-09-08T12:00:01Z",
+      "stop_utc": "2006-09-08T22:30:00Z",
+      "uplink_band": "X",
+      "uplink_station": "DSS-14"
+    },
+    {
+      "causal_role": "SAME_PATH_DISPERSIVE_WITNESS_NOT_AN_INDEPENDENT_OBSERVER",
+      "data_file_name": "s23sags2006_251_1200x14k25rd.dat",
+      "downlink_band": "KA",
+      "label_bytes": 73482,
+      "label_sha256": "f8c0712750421d54bbb9d996bcb91e5bb0f844f928d94ba779366b21ba33fef0",
+      "label_url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr01/2006/s23sags2006_251_1200x14k25rd.xml",
+      "lidvid": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14k25rd::1.0",
+      "published_md5": "e6bc1d5485d97c0069e7bd40d036b843",
+      "receive_station": "DSS-25",
+      "record_length_bytes": 4260,
+      "records": 37800,
+      "role": "WITNESS_KA_DSS25",
+      "start_utc": "2006-09-08T12:00:01Z",
+      "stop_utc": "2006-09-08T22:30:00Z",
+      "uplink_band": "X",
+      "uplink_station": "DSS-14"
+    },
+    {
+      "causal_role": "DISTRIBUTED_X_MEASUREMENT_RIGHT_INDEPENDENT_RECEIVE_ROOT",
+      "data_file_name": "s23sags2006_251_1200x14x65rd.dat",
+      "downlink_band": "X",
+      "label_bytes": 73509,
+      "label_sha256": "5e6e7861dcc71552d4b7bebb07c63f03e2cc8968b7b3c0028ef0b3715f7a4419",
+      "label_url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr01/2006/s23sags2006_251_1200x14x65rd.xml",
+      "lidvid": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14x65rd::1.0",
+      "published_md5": "34e11aaab5265be5a5ae33a99b7e5e67",
+      "receive_station": "DSS-65",
+      "record_length_bytes": 4260,
+      "records": 16800,
+      "role": "MEASUREMENT_X_DSS65",
+      "start_utc": "2006-09-08T12:00:01Z",
+      "stop_utc": "2006-09-08T16:40:00Z",
+      "uplink_band": "X",
+      "uplink_station": "DSS-14"
+    }
+  ],
+  "rsr_header_access_authorized": false,
+  "same_path_witness": {
+    "model": "z_band(t) = g_common(t) + plasma(t) / f_band^2 + band_specific_hardware(t)",
+    "permitted_role": "Estimate dispersive structure and recover a common non-dispersive coordinate only after band-specific hardware is qualified",
+    "products": [
+      "MEASUREMENT_X_DSS25",
+      "WITNESS_KA_DSS25"
+    ],
+    "raw_cross_band_difference_is_orbital_measurement": false
+  },
+  "scope": "THREE_PREDECLARED_PDS_LABELS_AND_EXACT_HASH_SPICE_ONLY",
+  "screen_manifest_sha256": "f63812b2366d5952d3590eef0e43148aa6b92ec6159a9504f5f57b01bd375aa7",
+  "screen_outcome": "CASSINI_DISTRIBUTED_GEOMETRY_SCREEN_POSITIVE",
+  "screen_version": "cassini-sagr3-distributed-geometry-screen-v1",
+  "timing_envelope": {
+    "maximum_one_stream_absolute_hz": 3.7414515929867775e-06,
+    "method": "DIRECT_FORWARD_TRAJECTORY_AT_T_MINUS_AND_PLUS_BOUND",
+    "per_stream_event_time_bound_s": 1e-07,
+    "two_stream_two_sided_hz": 7.482903185973555e-06
+  },
+  "visibility": {
+    "dss25_elevation_deg": {
+      "maximum": 63.22516394901174,
+      "minimum": 8.280999142129408
+    },
+    "dss65_elevation_deg": {
+      "maximum": 59.354745203459316,
+      "minimum": 8.95415529692472
+    },
+    "joint_visibility_required": true,
+    "joint_visible_on_complete_grid": true
+  }
+}

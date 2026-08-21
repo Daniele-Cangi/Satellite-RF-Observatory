@@ -24,7 +24,7 @@ from typing import Final, Iterable, Iterator, Literal, Mapping, Protocol
 
 
 SPEED_OF_LIGHT_M_S: Final = 299_792_458.0
-COMPILER_VERSION: Final = "cassini-dss26-one-way-spiceypy-v1"
+COMPILER_VERSION: Final = "cassini-dss26-one-way-spiceypy-v2"
 DEVELOPMENT_LIDVID: Final = (
     "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:"
     "s11sags2005_157_1750nnnx26rd::1.0"
@@ -256,20 +256,26 @@ def solve_one_way_event(
         raise CassiniPredictionError("light-time iteration count must be positive")
 
     station = _validated_state(station_state(receive_et_tdb_s))
-    transmit = receive_et_tdb_s
+    spacecraft = _validated_state(spacecraft_state(receive_et_tdb_s))
+    # Iterate the relative light-time scalar.  Comparing two absolute ET
+    # epochs at nanosecond tolerance is numerically unsound: at Cassini-era
+    # ET magnitudes one binary64 ULP is already tens of nanoseconds.
+    light_time = _distance(spacecraft.position_m, station.position_m) / SPEED_OF_LIGHT_M_S
     for _ in range(maximum_iterations):
+        transmit = receive_et_tdb_s - light_time
         spacecraft = _validated_state(spacecraft_state(transmit))
-        next_transmit = receive_et_tdb_s - _distance(
+        next_light_time = _distance(
             spacecraft.position_m,
             station.position_m,
         ) / SPEED_OF_LIGHT_M_S
-        if abs(next_transmit - transmit) <= tolerance_s:
-            transmit = next_transmit
+        residual = abs(next_light_time - light_time)
+        light_time = next_light_time
+        if residual <= tolerance_s:
             break
-        transmit = next_transmit
     else:
         raise CassiniPredictionError("one-way light-time solution did not converge")
 
+    transmit = receive_et_tdb_s - light_time
     spacecraft = _validated_state(spacecraft_state(transmit))
     propagation = _unit_direction(spacecraft.position_m, station.position_m)
     distance = _distance(spacecraft.position_m, station.position_m)
@@ -281,7 +287,9 @@ def solve_one_way_event(
     return OneWayEvent(
         receive_et_tdb_s=receive_et_tdb_s,
         transmit_et_tdb_s=transmit,
-        geometric_light_time_s=receive_et_tdb_s - transmit,
+        # Preserve the converged relative scalar instead of recovering it by
+        # subtracting two large, nearly equal absolute ET values.
+        geometric_light_time_s=light_time,
         geometric_range_m=distance,
         kinematic_frequency_factor=factor,
     )
@@ -389,6 +397,11 @@ def compiler_manifest() -> dict[str, object]:
             "observer": STATE_OBSERVER,
             "aberration_correction": "NONE",
             "reason": "light time and frequency transfer are solved explicitly",
+        },
+        "light_time_solver": {
+            "iteration_variable": "relative geometric light time in seconds",
+            "convergence_tolerance_s": 1e-9,
+            "absolute_et_difference_convergence": "PROHIBITED",
         },
         "implemented_terms": [
             "UTC_TO_ET_TDB",

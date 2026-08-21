@@ -1,0 +1,89 @@
+{
+  "artifact": {
+    "bytes": 41113260,
+    "label_sha256": "b02dd0ff1aaa355fbe6faca191b898c91b2d99532864750ac6a50e30d93b70c1",
+    "lidvid": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s11sags2005_157_1750nnnx26rd::1.0",
+    "product_name": "s11sags2005_157_1750nnnx26rd.dat",
+    "published_md5": "ce672e2258ffe8466389db36f9f6668f",
+    "sha256": "dee30d34255f17c20f6aea7072bfd4b156db0d0e3378720e377f7bcec16ed424",
+    "source_product_id": "CO-S-RSS-1-SAGR1-V1.0:S11SAGS2005157_1750NNNX26RD.1A1"
+  },
+  "authority": {
+    "hardening_commit": "e491bdd",
+    "parser_binding_commit": "c574936",
+    "parser_manifest_sha256": "46a4c7ed236911f1ca949b564119d4d2ee3cdec2e04ba454ab620b0c235c3314",
+    "spike_manifest_sha256": "77ce25266ca003749e004f639a58588d80706b17a8d43834c63f1108dc9a9903",
+    "spike_source_commit": "a05cd3d",
+    "spike_source_sha256": "830e0775da0d6d4ace101339eb934dcb6f3b851e875f6fdb14f32ea85ba1a18b"
+  },
+  "causal_scope": {
+    "affine_baseband_null": "CONTROLLING_NONORBITAL_COMPARISON",
+    "header_nco": "MODEL_CONDITIONED_BY_DSN_FREQUENCY_PREDICTS",
+    "steering_only_separation": "NOT_INDEPENDENT_ORBIT_IDENTITY_EVIDENCE"
+  },
+  "header_continuity": {
+    "data_chdo_policy": "SEEKED_NOT_READ_NOT_DECODED_NOT_REPRESENTED",
+    "first_sample_utc": "2005-06-06T17:50:01.000000Z",
+    "frequency_polynomial_maximum_absolute_boundary_residual_hz": 2.578599378466606e-08,
+    "last_first_sample_utc": "2005-06-06T20:30:51.000000Z",
+    "non_one_second_time_steps": 0,
+    "non_unit_rsn_steps": 0,
+    "ordered_whitelist_receipts_sha256": "365b18ec2129524c143ee6ac0c10e38c73b64d96345d45547d49462676091275",
+    "phase_polynomial_maximum_absolute_boundary_residual_cycles": 2.384185791015625e-07,
+    "record_count": 9651,
+    "rsn_first": 0,
+    "rsn_last": 9650,
+    "unique_rsn": 9651
+  },
+  "measurement_configuration": {
+    "channel": "A",
+    "ddc_lo_hz": 327000000,
+    "decimation": 16000,
+    "filter_coefficients": "NOT_ENCODED_IN_SFDU",
+    "frequency_override_active": false,
+    "input_rate_hz": 16000000,
+    "output_bandwidth_hz": 1000,
+    "predicts_frequency_offset_hz": 40.0,
+    "predicts_frequency_override_hz": 0.0,
+    "predicts_frequency_rate_hz_s": 0.0,
+    "predicts_time_shift_s": 0.0,
+    "rf_to_if_lo_hz": 8100000000,
+    "rsr": 1,
+    "sample_mode": "COMPLEX_I_THEN_Q_MSB16",
+    "sample_rate_hz": 1000,
+    "sample_resolution_bits": 16,
+    "station": "DSS-26",
+    "subchannel": 1,
+    "subchannel_frequency_offset_hz": 0.0
+  },
+  "open_terms_without_numerical_bound": [
+    "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
+    "RELATIVISTIC_PROPAGATION_LIGHT_TIME",
+    "EARTH_TROPOSPHERE",
+    "EARTH_IONOSPHERE",
+    "INTERPLANETARY_PLASMA",
+    "STATION_HARDWARE_DELAY",
+    "AVAILABLE_MEDIA_CALIBRATION"
+  ],
+  "outcome": "CASSINI_OPEN_TERM_CAN_ABSORB_HELDOUT_SEPARATION",
+  "prediction": {
+    "bounded_correction_envelope_hz": 0.0,
+    "calibration_fraction": 0.2,
+    "calibration_records": 1931,
+    "free_time_phase": "PROHIBITED",
+    "heldout_orbital_vs_affine_baseband_peak_to_peak_hz": 0.06391264328448062,
+    "heldout_orbital_vs_affine_baseband_rms_hz": 0.03128496823674655,
+    "heldout_orbital_vs_saturn_barycenter_peak_to_peak_hz": 265.674355506897,
+    "heldout_orbital_vs_steering_only_peak_to_peak_hz": 1861.7376155853271,
+    "holdout_records": 7720,
+    "iq_access_authorized": false,
+    "nonlinear_separation_positive_before_open_terms": true,
+    "representative_sample_offset_s": 0.5005,
+    "suffix_refit": "PROHIBITED"
+  },
+  "sealed_roles": {
+    "development": "DSS-26_ACCESSED_HEADER_ONLY",
+    "primary_dss14": "SEALED_UNOPENED",
+    "reserve_dss14": "SEALED_UNOPENED"
+  }
+}
