@@ -1,0 +1,176 @@
+{
+  "screen_version": "cassini-gwe1-two-way-geometry-route-screen-v1",
+  "screen_manifest_sha256": "0997c2ec4cdfd4561cf70765ca889b945b36751197f779e4ae5dededdaf2defe",
+  "screen_outcome": "CASSINI_GWE1_GEOMETRY_ROUTE_POSITIVE",
+  "physical_question": "Does a pre-pass Cassini trajectory preserve non-affine two-way link structure against a frozen rectilinear-spacecraft alternative in an independent suffix at DSS-25?",
+  "scope": "OFFICIAL_PDS_LABELS_EXACT_HASH_SPICE_ONLY",
+  "access_ledger": {
+    "rsr_labels": "READ",
+    "path_delay_labels": "READ",
+    "spice_kernels": "READ",
+    "rsr_headers": "NOT_ACCESSED",
+    "rsr_payloads": "NOT_ACCESSED",
+    "path_delay_tables": "NOT_ACCESSED",
+    "iq": "NOT_ACCESSED"
+  },
+  "kernel_lineage": [
+    {
+      "name": "naif0012.tls",
+      "bytes": 5257,
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "role": "UTC_TO_ET_TDB"
+    },
+    {
+      "name": "de405s.bsp",
+      "bytes": 1426432,
+      "sha256": "0e3793cca287b75ce33bf6155a8fef912d1114de63b7cf39eded66afc08e8f98",
+      "role": "PLANETARY_STATE_CHAIN"
+    },
+    {
+      "name": "earth_720101_070426.bpc",
+      "bytes": 8603648,
+      "sha256": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e",
+      "role": "HISTORICAL_EARTH_ORIENTATION"
+    },
+    {
+      "name": "earthstns_itrf93_050714.bsp",
+      "bytes": 38912,
+      "sha256": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c",
+      "role": "DSS25_STATION_STATE"
+    },
+    {
+      "name": "010222A_SK_JP054_JP458.bsp",
+      "bytes": 1129472,
+      "sha256": "63c10d2ca02fae980a7932bac0e8b6e1731ba1eaa8c86fd58738cfe31d5a020d",
+      "role": "CASSINI_TRAJECTORY",
+      "independence": "PREDICT_CREATED_2001_02_22; PROPAGATED_ARC_THROUGH_2002_04_02; NO_RECONSTRUCTED_ARC; BEFORE_ALL_GWE1_SESSIONS"
+    }
+  ],
+  "coordinate": {
+    "event_axis": "RSR_RECEIVE_ET_TDB",
+    "grid_step_s": 10.0,
+    "calibration_fraction": 0.2,
+    "central_model": "DSS25_UPLINK_LIGHT_TIME_X_CASSINI_COHERENT_TURNAROUND_X_DSS25_DOWNLINK_LIGHT_TIME",
+    "exact_ramp_and_nco_applied": false,
+    "carrier_scalings_are_screening_only": true
+  },
+  "nulls": {
+    "prefix_affine": "CONSTANT_PLUS_LINEAR_FREQUENCY_FIT_ON_PREFIX_ONLY; NO_SUFFIX_REFIT",
+    "rectilinear_spacecraft": "CASSINI_POSITION_AND_VELOCITY_FROZEN_TO_INERTIAL_TANGENT_AT_PREFIX_END; SAME_TWO_WAY_SOLVER_AND_SEPARATE_PREFIX_AFFINE_FIT",
+    "controlling": "RECTILINEAR_SPACECRAFT"
+  },
+  "grid_convergence_primary_ka_hz": {
+    "step_20_s": 0.22866006440733222,
+    "step_10_s": 0.22840931771829498,
+    "step_5_s": 0.2283832959987936
+  },
+  "screens": [
+    {
+      "role": "DEVELOPMENT_CANDIDATE",
+      "day_of_year": 331,
+      "receive_start_utc": "2001-11-27T04:40:03Z",
+      "receive_stop_utc": "2001-11-27T15:13:48Z",
+      "records": 3804,
+      "calibration_records": 760,
+      "holdout_start_utc": "2001-11-27T06:46:43.000Z",
+      "visibility": {
+        "visible_on_complete_grid": true,
+        "minimum_elevation_deg": 11.35729684777238,
+        "maximum_elevation_deg": 77.57875174314458
+      },
+      "screening_carrier_scalings": {
+        "NOMINAL_X_8P4_GHZ": {
+          "orbital_vs_affine_peak_to_peak_hz": 14638.514071667312,
+          "orbital_vs_rectilinear_peak_to_peak_hz": 0.04520527261032839,
+          "orbital_vs_rectilinear_rms_hz": 0.021583815802472178
+        },
+        "NOMINAL_KA_32_GHZ": {
+          "orbital_vs_affine_peak_to_peak_hz": 55765.76789206595,
+          "orbital_vs_rectilinear_peak_to_peak_hz": 0.17221056232506055,
+          "orbital_vs_rectilinear_rms_hz": 0.08222406019989402
+        }
+      }
+    },
+    {
+      "role": "RESERVE_CANDIDATE",
+      "day_of_year": 342,
+      "receive_start_utc": "2001-12-08T03:52:58Z",
+      "receive_stop_utc": "2001-12-08T14:34:00Z",
+      "records": 3847,
+      "calibration_records": 769,
+      "holdout_start_utc": "2001-12-08T06:01:08.000Z",
+      "visibility": {
+        "visible_on_complete_grid": true,
+        "minimum_elevation_deg": 9.514165801337251,
+        "maximum_elevation_deg": 77.53471841225425
+      },
+      "screening_carrier_scalings": {
+        "NOMINAL_X_8P4_GHZ": {
+          "orbital_vs_affine_peak_to_peak_hz": 14133.469758436655,
+          "orbital_vs_rectilinear_peak_to_peak_hz": 0.05547898332956044,
+          "orbital_vs_rectilinear_rms_hz": 0.026492444498817037
+        },
+        "NOMINAL_KA_32_GHZ": {
+          "orbital_vs_affine_peak_to_peak_hz": 53841.78955594916,
+          "orbital_vs_rectilinear_peak_to_peak_hz": 0.211348507922135,
+          "orbital_vs_rectilinear_rms_hz": 0.10092359809073156
+        }
+      }
+    },
+    {
+      "role": "PRIMARY_CANDIDATE",
+      "day_of_year": 347,
+      "receive_start_utc": "2001-12-13T03:24:50Z",
+      "receive_stop_utc": "2001-12-13T14:04:00Z",
+      "records": 3836,
+      "calibration_records": 767,
+      "holdout_start_utc": "2001-12-13T05:32:40.000Z",
+      "visibility": {
+        "visible_on_complete_grid": true,
+        "minimum_elevation_deg": 10.925885160497375,
+        "maximum_elevation_deg": 77.51025187797981
+      },
+      "screening_carrier_scalings": {
+        "NOMINAL_X_8P4_GHZ": {
+          "orbital_vs_affine_peak_to_peak_hz": 15085.290920495765,
+          "orbital_vs_rectilinear_peak_to_peak_hz": 0.05995744590105243,
+          "orbital_vs_rectilinear_rms_hz": 0.028626391391793588
+        },
+        "NOMINAL_KA_32_GHZ": {
+          "orbital_vs_affine_peak_to_peak_hz": 57467.77493522196,
+          "orbital_vs_rectilinear_peak_to_peak_hz": 0.22840931771829498,
+          "orbital_vs_rectilinear_rms_hz": 0.1090529195877851
+        }
+      }
+    }
+  ],
+  "causal_topology": {
+    "independent_receive_roots": [
+      "DSS-25"
+    ],
+    "simultaneous_link_coordinates": [
+      "X/X",
+      "X/Ka",
+      "Ka/Ka"
+    ],
+    "same_path_media_witnesses": [
+      "AWVR1",
+      "AWVR2"
+    ],
+    "awvr_measurements_are_yet_qualified": false,
+    "awvr_products_are_independent_orbital_roots": false,
+    "claim_scope_if_later_admitted": "SINGLE_STATION_TWO_WAY_ORBITAL_MODEL_VERSUS_FROZEN_NULLS; NOT_DISTRIBUTED_CONFIRMATION_AND_NOT_IDENTITY"
+  },
+  "exact_remaining_blockers": [
+    "THREE_LINK_RSR_HEADER_CONTINUITY_AND_EXACT_RAMP_NCO_COORDINATE",
+    "AWVR1_AWVR2_TABLE_CONTINUITY_FLAGS_AND_OUTCOME_INDEPENDENT_UNCERTAINTY",
+    "BAND_SPECIFIC_RECEIVER_HARDWARE_DIFFERENTIAL_ENVELOPE",
+    "EXACT_TWO_WAY_TURNAROUND_RATIOS_AND_RAMP_PROVENANCE",
+    "RECORDED_BASEBAND_RECOMPUTATION_WITH_IDENTICAL_NULL_TRANSFORMS"
+  ],
+  "physical_admission": false,
+  "rsr_header_access_authorized": false,
+  "path_delay_table_access_authorized": false,
+  "iq_access_authorized": false,
+  "detector_authorized": false
+}

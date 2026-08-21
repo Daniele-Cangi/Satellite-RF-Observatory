@@ -83,6 +83,21 @@ The G1.1–G1.3 inventory/search work is a concluded side investigation, not the
 critical path. The next physical choice is one satellite/pass and one bounded,
 predeclared capability set; no global receiver catalog is required.
 
+The current historical-data route is Cassini radio science. The DSS-26 and
+DSS-14 single-station paths, and the SAGR3 DSS-25/DSS-65 distributed path,
+closed before IQ because their physical correction envelopes remained
+unresolved. The bounded GWE1 route screen now finds a different topology:
+DSS-25 simultaneously recorded X/X, X/Ka and Ka/Ka while two boresighted AWVR
+products covered the same interval. An exact-hash pre-pass PREDICT trajectory
+leaves `0.172–0.228 Hz` of Ka-band held-out separation from a frozen
+rectilinear-spacecraft null across three candidate sessions.
+
+This is not measurement admission. No GWE RSR header, path-delay table or IQ
+has been read. The route can advance only if exact ramp/NCO coordinates,
+three-link continuity, AWVR uncertainty and band-specific receiver hardware
+can be closed without looking at the RF outcome. See
+[`CASSINI_GWE1_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/CASSINI_GWE1_GEOMETRY_SCREEN_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
