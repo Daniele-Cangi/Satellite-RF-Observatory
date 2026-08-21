@@ -1,0 +1,100 @@
+{
+  "audit_version": "cassini-sagr3-coordinate-transition-audit-v1",
+  "outcome": "CASSINI_SAGR3_PRETRANSITION_GEOMETRY_SCREEN_POSITIVE_BUT_NOT_PHYSICALLY_ADMITTED",
+  "full_heldout_status": "BLOCKED_BY_UNMODELED_COORDINATE_TRANSITION_INSIDE_HELDOUT",
+  "transition_cause": "UNRESOLVED",
+  "coordinate_transition": {
+    "receive_utc": "2006-09-08T14:57:32.000000Z",
+    "record_index_zero_based": 10651,
+    "streams": [
+      {"stream": "DSS-25_X", "ddc_before_hz": 328000000.0, "ddc_after_hz": 331000000.0, "combined_coordinate_step_hz": -2711938.5545539856},
+      {"stream": "DSS-25_KA", "ddc_before_hz": 326000000.0, "ddc_after_hz": 336000000.0, "combined_coordinate_step_hz": -10305404.583320618},
+      {"stream": "DSS-65_X", "ddc_before_hz": 328000000.0, "ddc_after_hz": 330000000.0, "combined_coordinate_step_hz": -2711933.3520469666}
+    ]
+  },
+  "odf_ramp_audit": {
+    "lidvid": "urn:nasa:pds:cassini.rss.raw.sagr:data.odf:s23sags2006_251_1151x14v1::1.0",
+    "label_url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-odf/2006/s23sags2006_251_1151x14v1.xml",
+    "label_bytes": 136144,
+    "label_sha256": "4341e8c5a9f9fc5d261d261af8d287bcd62ec2170b4b9cf9c76afce159f7579a",
+    "data_bytes": 7257600,
+    "published_md5": "9f15d6824b2a90241521eec5982438bf",
+    "authorized_range": {
+      "first_record_one_based": 201366,
+      "last_record_one_based": 201425,
+      "start_byte": 7249140,
+      "end_byte_inclusive": 7251299,
+      "bytes": 2160,
+      "sha256": "136774e5b55002c2f5c78b614048b9177d14b3fb1215e4c59e39909745de485a"
+    },
+    "parser_manifest_sha256": "88adac47b77c2c9f7543a8ab42e150340a4bbbdd6c0852d56412d9638328f974",
+    "group_rows": {"DSS-14": 37, "DSS-25": 17, "DSS-43": 1, "DSS-65": 1},
+    "provenance_class": "INDEPENDENT_OF_TARGET_RF_AMPLITUDE_POSTPASS_CONTROL_METADATA",
+    "odf_observables_accessed": false,
+    "tnf_accessed": false
+  },
+  "ramp_temporal_compatibility": {
+    "common_uplink_station": "DSS-14",
+    "ramp_start_utc": "2006-09-08T12:10:15.000000Z",
+    "ramp_end_utc": "2006-09-08T12:11:21.000000Z",
+    "ramp_start_frequency_hz": 7174544992.57448,
+    "ramp_rate_hz_s": -152.324419999,
+    "DSS-25_turnaround_utc": "2006-09-08T13:33:59.788451Z",
+    "DSS-25_uplink_transmit_utc": "2006-09-08T12:10:27.105870Z",
+    "DSS-25_downlink_light_time_s": 5012.211547875726,
+    "DSS-25_uplink_light_time_s": 5012.682580162055,
+    "DSS-65_turnaround_utc": "2006-09-08T13:33:59.783705Z",
+    "DSS-65_uplink_transmit_utc": "2006-09-08T12:10:27.101124Z",
+    "DSS-65_downlink_light_time_s": 5012.216294406749,
+    "DSS-65_uplink_light_time_s": 5012.6825804818045,
+    "interpretation": "TEMPORALLY_COMPATIBLE_WITH_COMMON_DSS14_RAMP_NOT_CAUSALLY_IDENTIFIED",
+    "link_mode_or_lock_event_at_transition": "NOT_FOUND_IN_BOUNDED_OFFICIAL_METADATA"
+  },
+  "pretransition_screen": {
+    "manifest_sha256": "9d934499335f1ab0082f8173adead3b232d9820ed52076ff159b11c3b56d99bc",
+    "window_selection": "PREDECLARED_COORDINATE_CONTINUITY_BOUNDARY_BEFORE_IQ",
+    "records": 10651,
+    "calibration_records": 3360,
+    "holdout_records": 7291,
+    "first_receive_utc": "2006-09-08T12:00:01Z",
+    "last_receive_utc_inclusive": "2006-09-08T14:57:31Z",
+    "first_transmit_utc": "2006-09-08T10:36:28.092247Z",
+    "last_transmit_utc": "2006-09-08T13:33:58.092249Z",
+    "joint_visibility_all_records": true,
+    "DSS-25_elevation_deg": [8.280999142129408, 44.32811447534628],
+    "DSS-65_elevation_deg": [28.408368367219246, 59.354745203459316],
+    "orbital_raw_peak_to_peak_hz": 2731.3926883210097,
+    "affine_null_heldout_peak_to_peak_hz": 3266.45445769222,
+    "saturn_null_calibration_prefix_rmse_hz": 0.003138125972269504,
+    "saturn_null_heldout_peak_to_peak_hz": 0.07231370056321107,
+    "saturn_null_heldout_rms_hz": 0.05736675863455984,
+    "saturn_null_heldout_max_abs_hz": 0.07874172640044241,
+    "controlling_heldout_separation_hz_peak_to_peak": 0.07231370056321107,
+    "timing_envelope_two_stream_two_sided_hz": 0.000007482903185973555,
+    "best_case_detector_resolution_ceiling_hz_for_three_bins": 0.024102072553341698,
+    "screen_outcome": "CASSINI_SAGR3_PRETRANSITION_GEOMETRY_SCREEN_POSITIVE",
+    "physical_admission": false,
+    "exact_remaining_blocker": "PRETRANSITION_PHYSICAL_CORRECTION_ENVELOPE"
+  },
+  "kernel_sha256": {
+    "naif0012.tls": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+    "earth_720101_070426.bpc": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e",
+    "earthstns_itrf93_050714.bsp": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c",
+    "060901AP_SCPSE_06244_06255.bsp": "0b7cc35d94b956602593106ed8aa62ce5f33cb178b8544036a841c5e53fc81dd"
+  },
+  "authorized_claims": [
+    "The transitions are simultaneous on the server-tagged receive grid.",
+    "The inferred uplink epochs lie in one common DSS-14 ramp segment.",
+    "The pre-transition interval has positive geometry-only separation."
+  ],
+  "unauthorized_claims": [
+    "The ramp caused the receiver-coordinate transition.",
+    "A transponder lock or link-mode change occurred at the transition.",
+    "The pre-transition interval is physically admitted.",
+    "Cassini orbital preference is established by RF."
+  ],
+  "iq_accessed": false,
+  "amplitude_accessed": false,
+  "detector_implemented": false,
+  "new_gate_created": false
+}

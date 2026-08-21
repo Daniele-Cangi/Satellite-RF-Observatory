@@ -35,6 +35,12 @@ GRID_STEP_S: Final = 1.0
 RSR_TIMING_BOUND_S: Final = 100e-9
 DETECTOR_BINS_REQUIRED: Final = 3.0
 OUTCOME_POSITIVE: Final = "CASSINI_DISTRIBUTED_GEOMETRY_SCREEN_POSITIVE"
+PRETRANSITION_SCREEN_VERSION: Final = "cassini-sagr3-pretransition-geometry-screen-v1"
+PRETRANSITION_RECORDS: Final = 10_651
+PRETRANSITION_CALIBRATION_RECORDS: Final = 3_360
+PRETRANSITION_HOLDOUT_RECORDS: Final = 7_291
+PRETRANSITION_LAST_RECEIVE_UTC: Final = "2006-09-08T14:57:31Z"
+PRETRANSITION_OUTCOME_POSITIVE: Final = "CASSINI_SAGR3_PRETRANSITION_GEOMETRY_SCREEN_POSITIVE"
 
 
 class CassiniDistributedGeometryError(ValueError):
@@ -147,6 +153,15 @@ class ForwardEvent:
     elevation_rad: float
 
 
+@dataclass(frozen=True, slots=True)
+class TwoWayEpochs:
+    receive_et_tdb_s: float
+    turnaround_et_tdb_s: float
+    uplink_transmit_et_tdb_s: float
+    downlink_light_time_s: float
+    uplink_light_time_s: float
+
+
 def solve_forward_event(
     transmit_et_tdb_s: float,
     station_state,
@@ -208,8 +223,70 @@ def solve_forward_event(
     )
 
 
+def solve_two_way_epochs(
+    receive_et_tdb_s: float,
+    uplink_station_state,
+    receive_station_state,
+    spacecraft_state,
+    *,
+    tolerance_s: float = 1e-9,
+    maximum_iterations: int = 50,
+) -> TwoWayEpochs:
+    """Map a receive epoch to the corresponding zero-delay two-way uplink epoch.
+
+    The function performs geometry only.  It does not assert transponder lock,
+    coherent mode, or that a particular ramp caused a receiver-coordinate
+    transition.
+    """
+
+    if not isfinite(receive_et_tdb_s):
+        raise CassiniDistributedGeometryError("receive ET/TDB must be finite")
+    if not isfinite(tolerance_s) or tolerance_s <= 0.0:
+        raise CassiniDistributedGeometryError("light-time tolerance must be positive")
+    if maximum_iterations < 1:
+        raise CassiniDistributedGeometryError("light-time iteration count must be positive")
+
+    downlink = one_way.solve_one_way_event(
+        receive_et_tdb_s, receive_station_state, spacecraft_state,
+        tolerance_s=tolerance_s, maximum_iterations=maximum_iterations,
+    )
+    turnaround_et = downlink.transmit_et_tdb_s
+    spacecraft = spacecraft_state(turnaround_et)
+    spacecraft.validate()
+    station = uplink_station_state(turnaround_et)
+    station.validate()
+    uplink_light_time = (
+        _distance(station.position_m, spacecraft.position_m)
+        / one_way.SPEED_OF_LIGHT_M_S
+    )
+    for _ in range(maximum_iterations):
+        uplink_transmit_et = turnaround_et - uplink_light_time
+        station = uplink_station_state(uplink_transmit_et)
+        station.validate()
+        next_light_time = (
+            _distance(station.position_m, spacecraft.position_m)
+            / one_way.SPEED_OF_LIGHT_M_S
+        )
+        residual = abs(next_light_time - uplink_light_time)
+        uplink_light_time = next_light_time
+        if residual <= tolerance_s:
+            break
+    else:
+        raise CassiniDistributedGeometryError(
+            "reverse uplink light-time solution did not converge"
+        )
+
+    return TwoWayEpochs(
+        receive_et_tdb_s=receive_et_tdb_s,
+        turnaround_et_tdb_s=turnaround_et,
+        uplink_transmit_et_tdb_s=turnaround_et - uplink_light_time,
+        downlink_light_time_s=downlink.geometric_light_time_s,
+        uplink_light_time_s=uplink_light_time,
+    )
+
+
 def screen_distributed_geometry(
-    *, spice, kernel_paths: Mapping[str, Path]
+    *, spice, kernel_paths: Mapping[str, Path], _pretransition: bool = False
 ) -> dict[str, object]:
     """Evaluate the exact-hash trajectory without touching any RSR product."""
 
@@ -246,6 +323,8 @@ def screen_distributed_geometry(
             left_product.records,
             right_product.records,
         )
+        if _pretransition:
+            records = min(records, PRETRANSITION_RECORDS)
         if records < 10:
             raise CassiniDistributedGeometryError(
                 "no useful common-transmit interval exists"
@@ -312,7 +391,11 @@ def screen_distributed_geometry(
     saturn_curve = X_BAND_HZ * (
         np.asarray(saturn_left) - np.asarray(saturn_right)
     )
-    split = int(ceil(records * CALIBRATION_FRACTION))
+    split = (
+        PRETRANSITION_CALIBRATION_RECORDS
+        if _pretransition
+        else int(ceil(records * CALIBRATION_FRACTION))
+    )
     affine_metrics = _prefix_affine_metrics(orbital, split)
     saturn_metrics = _prefix_affine_metrics(orbital - saturn_curve, split)
     controlling_separation = min(
@@ -328,9 +411,20 @@ def screen_distributed_geometry(
         (controlling_separation - timing_two_sided) / DETECTOR_BINS_REQUIRED,
     )
     result = {
-        "screen_version": SCREEN_VERSION,
-        "screen_manifest_sha256": screen_manifest_sha256(),
-        "scope": "THREE_PREDECLARED_PDS_LABELS_AND_EXACT_HASH_SPICE_ONLY",
+        "screen_version": (
+            PRETRANSITION_SCREEN_VERSION if _pretransition else SCREEN_VERSION
+        ),
+        "screen_manifest_sha256": (
+            pretransition_screen_manifest_sha256()
+            if _pretransition
+            else screen_manifest_sha256()
+        ),
+        "scope": (
+            "THREE_PREDECLARED_PDS_LABELS_EXACT_HASH_SPICE_AND_FROZEN_"
+            "PRETRANSITION_WINDOW_ONLY"
+            if _pretransition
+            else "THREE_PREDECLARED_PDS_LABELS_AND_EXACT_HASH_SPICE_ONLY"
+        ),
         "physical_question": (
             "Does observer-coupled Cassini downlink geometry leave a nonlinear "
             "DSS-25 minus DSS-65 X-band signature after prefix-only affine nuisance?"
@@ -414,7 +508,9 @@ def screen_distributed_geometry(
             "dss25_x_ka_pair_is_second_observer": False,
         },
         "screen_outcome": (
-            OUTCOME_POSITIVE
+            (
+                PRETRANSITION_OUTCOME_POSITIVE if _pretransition else OUTCOME_POSITIVE
+            )
             if joint_visible and controlling_separation > timing_two_sided
             else "DISTRIBUTED_GEOMETRY_SCREEN_NONPOSITIVE"
         ),
@@ -423,12 +519,36 @@ def screen_distributed_geometry(
         "iq_access_authorized": False,
         "detector_authorized": False,
         "exact_remaining_blocker": (
-            "PREDECLARED_THREE_PRODUCT_HEADER_ONLY_QUALIFICATION_OF_RSN_TIME_"
-            "CONTINUITY_SAMPLE_MODE_NCO_AND_INDEPENDENT_RSR_HARDWARE"
+            "PRETRANSITION_PHYSICAL_CORRECTION_ENVELOPE"
+            if _pretransition
+            else (
+                "PREDECLARED_THREE_PRODUCT_HEADER_ONLY_QUALIFICATION_OF_RSN_TIME_"
+                "CONTINUITY_SAMPLE_MODE_NCO_AND_INDEPENDENT_RSR_HARDWARE"
+            )
         ),
     }
+    if _pretransition:
+        result["coordinate"]["frozen_receive_stop_inclusive"] = (
+            PRETRANSITION_LAST_RECEIVE_UTC
+        )
+        result["coordinate"]["excluded_coordinate_transition_utc"] = (
+            "2006-09-08T14:57:32.000000Z"
+        )
+        result["coordinate"]["window_selection_basis"] = (
+            "CONTROL_HEADER_TRANSITION_FROZEN_BEFORE_ANY_IQ_ACCESS"
+        )
     strict_json(result)
     return result
+
+
+def screen_pretransition_geometry(
+    *, spice, kernel_paths: Mapping[str, Path]
+) -> dict[str, object]:
+    """Evaluate the fixed 10,651-record window ending before the transition."""
+
+    return screen_distributed_geometry(
+        spice=spice, kernel_paths=kernel_paths, _pretransition=True
+    )
 
 
 def decompose_common_and_dispersive(
@@ -469,6 +589,41 @@ def screen_manifest_sha256() -> str:
             "amplitude diagnostics",
             "detector implementation",
             "suffix refit",
+            "null-specific resampling",
+        ],
+    }
+    return sha256(strict_json(manifest).encode("ascii")).hexdigest()
+
+
+def pretransition_screen_manifest_sha256() -> str:
+    manifest = {
+        "screen_version": PRETRANSITION_SCREEN_VERSION,
+        "parent_screen_manifest_sha256": screen_manifest_sha256(),
+        "products": [asdict(product) for product in PRODUCTS],
+        "trajectory_role": TRAJECTORY_ROLE,
+        "x_band_hz": X_BAND_HZ,
+        "ka_band_hz": KA_BAND_HZ,
+        "records": PRETRANSITION_RECORDS,
+        "calibration_records": PRETRANSITION_CALIBRATION_RECORDS,
+        "holdout_records": PRETRANSITION_HOLDOUT_RECORDS,
+        "last_receive_utc_inclusive": PRETRANSITION_LAST_RECEIVE_UTC,
+        "excluded_coordinate_transition_utc": "2006-09-08T14:57:32.000000Z",
+        "window_selection_basis": (
+            "CONTROL_HEADER_TRANSITION_FROZEN_BEFORE_ANY_IQ_ACCESS"
+        ),
+        "grid_step_s": GRID_STEP_S,
+        "timing_bound_s": RSR_TIMING_BOUND_S,
+        "nulls": [
+            "PREFIX_AFFINE_WITH_ORIGINAL_3360_RECORD_PREFIX",
+            "SATURN_BARYCENTER_GEOMETRY_DESTROYING",
+        ],
+        "forbidden": [
+            "RSR payload access",
+            "IQ decoding",
+            "amplitude diagnostics",
+            "detector implementation",
+            "suffix refit",
+            "post-transition samples",
             "null-specific resampling",
         ],
     }
