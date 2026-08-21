@@ -1,6 +1,6 @@
 {
-  "audit_manifest_sha256": "32fa639ee971fe35b83a5e1e43db8e702bab0474642a3acd3ea3cb63cb9c58ed",
-  "audit_version": "cassini-sagr3-pretransition-open-term-envelope-audit-v1",
+  "audit_manifest_sha256": "836cdcffc3fc7beae4f92236db538d1dc3af47a140eb6768eb88070e49aceafe",
+  "audit_version": "cassini-sagr3-pretransition-open-term-envelope-audit-v2",
   "authoritative_prior_outcome": "CASSINI_SAGR3_PRETRANSITION_GEOMETRY_SCREEN_POSITIVE_BUT_NOT_PHYSICALLY_ADMITTED",
   "scope": "SAGR3_PRETRANSITION_METADATA_ONLY_NO_RSR_OR_IQ_ACCESS",
   "outcome": "CASSINI_OPEN_TERM_BOUND_UNAVAILABLE",
@@ -21,6 +21,17 @@
     "common_Cassini_transponder": "CANCELS_FROM_DSS25_MINUS_DSS65_AT_COMMON_TRANSMIT_EPOCH",
     "spacecraft_USO": "NOT_APPLICABLE_WITHIN_THE_FROZEN_COHERENT_TOPOLOGY",
     "remaining_terms": "RECEIVER_RATE_PATH_MEDIA_AND_BRANCH_HARDWARE_DIFFERENTIALS"
+  },
+  "semantic_policy": {
+    "OBSERVABLE": "independent measured coordinate with an explicit measurement uncertainty and transform ledger",
+    "MODELED": "outcome-independent central model plus a frozen quantitative uncertainty family",
+    "UNRESOLVED": "missing measurement or missing defensible uncertainty family; never replaced by zero",
+    "CONTROL_ONLY": "non-additive coverage control, not a physical term"
+  },
+  "scientific_correction": {
+    "superseded_central_peak_to_peak_hz": 0.1927967947508092,
+    "error": "KINETIC_ENDPOINT_TERM_DOUBLE_COUNTED_AFTER_EXACT_SR_GAMMA",
+    "policy": "endpoint kinetic proper-time remains exclusively inside the exact special-relativistic frequency factor"
   },
   "source_identities": {
     "dsn_media_interface": {
@@ -51,30 +62,46 @@
     {
       "name": "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
       "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "epistemic_class": "MODELED",
       "central_model_heldout_non_affine": {
-        "peak_to_peak_hz": 0.1927967947508092,
-        "rms_hz": 0.1025986201605052,
-        "maximum_absolute_hz": 0.19862553726020776,
-        "calibration_prefix_rmse_hz": 0.0026599947674960625
+        "peak_to_peak_hz": 0.0005846983090055662,
+        "rms_hz": 0.00031034635243532395,
+        "maximum_absolute_hz": 0.0006021929434863421,
+        "calibration_prefix_rmse_hz": 7.97532473076569e-06
       },
       "partial_model_heldout_non_affine": null,
+      "uncertainty_family": {
+        "kind": "POINTWISE_FRACTIONAL_FREQUENCY_ENVELOPE",
+        "source": "https://iers-conventions.obspm.fr/content/chapter10/tn36_c10.pdf",
+        "source_statement": "external tidal terms omitted by the simplified terrestrial-clock expression are below 1e-15 in fractional frequency per receiver",
+        "per_receiver_absolute_fractional_bound": 1e-15,
+        "differential_raw_absolute_fractional_bound": 2e-15,
+        "differential_raw_absolute_bound_hz": 1.6850000000000003e-05,
+        "prefix_affine_maximum_absolute_gain": 9.040589085582225,
+        "heldout_non_affine_maximum_absolute_bound_hz": 0.0001523339260920605,
+        "heldout_non_affine_peak_to_peak_bound_hz": 0.000304667852184121,
+        "projection_policy": "exact infinity-norm propagation through the frozen prefix-only least-squares affine extrapolation",
+        "scope": "receiver proper-time model truncation only; station geometry, propagation media and receiver hardware remain separate terms"
+      },
       "central_or_partial_model_reduces_envelope": false,
-      "bound_state": "UNAVAILABLE",
-      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "bound_state": "BOUNDED_UNCERTAINTY_FAMILY",
+      "admitted_heldout_peak_to_peak_bound_hz": 0.000304667852184121,
       "admitted_heldout_rms_bound_hz": null,
       "combination_role": "ADDITIVE_PHYSICAL_TERM",
-      "reason": "The common spacecraft/source contribution cancels structurally, but the IERS weak-field receiver-rate differential has no pass-specific hard truncation bound."
+      "reason": "The exact SR frequency factor already contains both endpoint Lorentz gamma terms. The remaining potential-only receiver differential is modeled, while the IERS omitted tidal family is propagated through the frozen prefix-only affine projection."
     },
     {
       "name": "RELATIVISTIC_PROPAGATION_LIGHT_TIME",
       "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "epistemic_class": "UNRESOLVED",
       "central_model_heldout_non_affine": {
-        "peak_to_peak_hz": 0.00009447273990621622,
-        "rms_hz": 0.00005251315177958207,
-        "maximum_absolute_hz": 0.00009783140090249289,
-        "calibration_prefix_rmse_hz": 0.0000015562038543491523
+        "peak_to_peak_hz": 9.447273990621622e-05,
+        "rms_hz": 5.251315177958207e-05,
+        "maximum_absolute_hz": 9.783140090249289e-05,
+        "calibration_prefix_rmse_hz": 1.5562038543491523e-06
       },
       "partial_model_heldout_non_affine": null,
+      "uncertainty_family": null,
       "central_or_partial_model_reduces_envelope": false,
       "bound_state": "UNAVAILABLE",
       "admitted_heldout_peak_to_peak_bound_hz": null,
@@ -85,6 +112,7 @@
     {
       "name": "EARTH_TROPOSPHERE",
       "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "epistemic_class": "UNRESOLVED",
       "central_model_heldout_non_affine": null,
       "partial_model_heldout_non_affine": {
         "peak_to_peak_hz": 0.007539928126392502,
@@ -92,23 +120,39 @@
         "maximum_absolute_hz": 0.008144018438930117,
         "calibration_prefix_rmse_hz": 0.00038314492425158524
       },
+      "uncertainty_family": {
+        "kind": "INCOMPLETE_STATISTICAL_ZENITH_DELAY_DESCRIPTION",
+        "source": "https://deepspace.jpl.nasa.gov/files/820-100-H.pdf",
+        "zenith_delay_one_sigma_m": 0.01,
+        "frequency_family_state": "UNAVAILABLE",
+        "reason": "a point-delay sigma does not determine delay-rate covariance or one-second frequency curvature",
+        "missing": [
+          "historical applicability to both DSS-25 and DSS-65",
+          "temporal covariance or Allan-deviation model for both paths",
+          "wet and dry elevation-mapping uncertainty",
+          "complete DSS-65 central troposphere model"
+        ],
+        "promoted_to_bound": false
+      },
       "central_or_partial_model_reduces_envelope": false,
       "bound_state": "UNAVAILABLE",
       "admitted_heldout_peak_to_peak_bound_hz": null,
       "admitted_heldout_rms_bound_hz": null,
       "combination_role": "ADDITIVE_PHYSICAL_TERM",
-      "reason": "The TRO product supplies independent C10/C60 NUPART corrections, but the public frozen inputs do not contain the complete DSCC60 seasonal baseline or a deterministic residual/elevation-mapping bound."
+      "reason": "The TRO product supplies independent C10/C60 NUPART corrections, but the documented one-sigma zenith-delay accuracy supplies neither the historical DSS-65 delay-rate covariance nor a frequency-error family."
     },
     {
       "name": "EARTH_IONOSPHERE",
       "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "epistemic_class": "UNRESOLVED",
       "central_model_heldout_non_affine": {
         "peak_to_peak_hz": 0.0003817801467492578,
         "rms_hz": 0.00020164593643276913,
         "maximum_absolute_hz": 0.00038846708974371857,
-        "calibration_prefix_rmse_hz": 0.0000022734867082084603
+        "calibration_prefix_rmse_hz": 2.2734867082084603e-06
       },
       "partial_model_heldout_non_affine": null,
+      "uncertainty_family": null,
       "central_or_partial_model_reduces_envelope": false,
       "bound_state": "UNAVAILABLE",
       "admitted_heldout_peak_to_peak_bound_hz": null,
@@ -119,8 +163,10 @@
     {
       "name": "INTERPLANETARY_PLASMA",
       "provenance": "UNKNOWN",
+      "epistemic_class": "UNRESOLVED",
       "central_model_heldout_non_affine": null,
       "partial_model_heldout_non_affine": null,
+      "uncertainty_family": null,
       "central_or_partial_model_reduces_envelope": false,
       "bound_state": "UNAVAILABLE",
       "admitted_heldout_peak_to_peak_bound_hz": null,
@@ -131,8 +177,10 @@
     {
       "name": "STATION_HARDWARE_DELAY",
       "provenance": "UNKNOWN",
+      "epistemic_class": "UNRESOLVED",
       "central_model_heldout_non_affine": null,
       "partial_model_heldout_non_affine": null,
+      "uncertainty_family": null,
       "central_or_partial_model_reduces_envelope": false,
       "bound_state": "UNAVAILABLE",
       "admitted_heldout_peak_to_peak_bound_hz": null,
@@ -143,6 +191,7 @@
     {
       "name": "AVAILABLE_MEDIA_CALIBRATION",
       "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "epistemic_class": "CONTROL_ONLY",
       "central_model_heldout_non_affine": null,
       "partial_model_heldout_non_affine": {
         "peak_to_peak_hz": 0.00792170827314176,
@@ -150,40 +199,43 @@
         "maximum_absolute_hz": 0.008532485528673837,
         "calibration_prefix_rmse_hz": 0.00038492422363534085
       },
+      "uncertainty_family": null,
       "central_or_partial_model_reduces_envelope": false,
-      "bound_state": "UNAVAILABLE",
+      "bound_state": "NOT_APPLICABLE",
       "admitted_heldout_peak_to_peak_bound_hz": null,
       "admitted_heldout_rms_bound_hz": null,
       "combination_role": "NON_ADDITIVE_CONTROL_DO_NOT_DOUBLE_COUNT",
       "reason": "ION coverage is complete, but TRO remains a correction-only partial diagnostic and neither product supplies a hard residual bound."
     }
   ],
-  "timing_envelope_two_stream_two_sided_hz": 0.000007482903185973555,
+  "timing_envelope_two_stream_two_sided_hz": 7.482903185973555e-06,
   "conservative_combination": {
-    "admitted_open_term_names": [],
-    "admitted_open_term_peak_to_peak_hz": 0.0,
+    "admitted_modeled_term_names": [
+      "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY"
+    ],
+    "admitted_modeled_peak_to_peak_bound_hz": 0.000304667852184121,
     "unresolved_open_term_names": [
-      "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
       "RELATIVISTIC_PROPAGATION_LIGHT_TIME",
       "EARTH_TROPOSPHERE",
       "EARTH_IONOSPHERE",
       "INTERPLANETARY_PLASMA",
-      "STATION_HARDWARE_DELAY",
-      "AVAILABLE_MEDIA_CALIBRATION"
+      "STATION_HARDWARE_DELAY"
     ],
     "combined_open_term_envelope_state": "UNAVAILABLE",
     "remaining_physical_margin_hz": null,
     "maximum_admissible_detector_resolution_hz": null,
     "detector_criterion": "signature > 3 * R_f + timing_envelope + open_term_envelope",
-    "best_case_upper_ceiling_if_every_unavailable_term_were_zero_hz": 0.024102072553341698,
+    "best_case_upper_ceiling_if_every_unavailable_term_were_zero_hz": 0.024000516602613656,
     "best_case_ceiling_is_admission_requirement": false
   },
   "exact_remaining_blockers": [
-    "DIFFERENTIAL_INTERPLANETARY_PLASMA_BOUND",
-    "DIFFERENTIAL_RECEIVER_CHAIN_CURVATURE_BOUND",
-    "COMPLETE_TROPOSPHERE_MODEL_AND_HARD_RESIDUAL_BOUND"
+    "RELATIVISTIC_PROPAGATION_UNCERTAINTY_FAMILY",
+    "TROPOSPHERE_TEMPORAL_ERROR_MODEL_FOR_DSS25_AND_DSS65",
+    "DSS65_DISPERSIVE_PATH_OBSERVABLE_OR_UNCERTAINTY_FAMILY",
+    "DIFFERENTIAL_INTERPLANETARY_PLASMA_FAMILY",
+    "DIFFERENTIAL_RECEIVER_CHAIN_CURVATURE_FAMILY"
   ],
-  "next_smallest_physical_step": "CHANGE_OBSERVABLE_REVIEW_USING_THE_ALREADY_PREDECLARED_SIMULTANEOUS_DSS25_X_KA_WITNESS; DO_NOT_ACCESS_IQ_OR_IMPLEMENT_IT_YET",
+  "next_smallest_physical_step": "STOP_BEFORE_X_KA_OBSERVABLE_REVIEW_BECAUSE_THE_DISTRIBUTED_TROPOSPHERE_FREQUENCY_FAMILY_IS_STILL_UNRESOLVED",
   "iq_access_authorized": false,
   "detector_implementation_authorized": false,
   "new_gate_created": false

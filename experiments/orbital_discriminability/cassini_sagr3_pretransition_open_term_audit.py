@@ -22,7 +22,7 @@ from experiments.orbital_discriminability import cassini_dss14_header_evaluation
 from experiments.orbital_discriminability import cassini_sagr3_distributed_geometry as geometry
 
 
-AUDIT_VERSION: Final = "cassini-sagr3-pretransition-open-term-envelope-audit-v1"
+AUDIT_VERSION: Final = "cassini-sagr3-pretransition-open-term-envelope-audit-v2"
 RECEIPT_PATH: Final = Path(__file__).with_name(
     "CASSINI_SAGR3_TRANSITION_AUDIT_RECEIPT.json"
 )
@@ -32,13 +32,29 @@ OUTCOME_BOUND_UNAVAILABLE: Final = "CASSINI_OPEN_TERM_BOUND_UNAVAILABLE"
 OPEN_TERM_NAMES: Final = prior.OPEN_TERM_NAMES
 PROVENANCE_INDEPENDENT: Final = prior.PROVENANCE_INDEPENDENT
 PROVENANCE_UNKNOWN: Final = prior.PROVENANCE_UNKNOWN
+EPISTEMIC_OBSERVABLE: Final = "OBSERVABLE"
+EPISTEMIC_MODELED: Final = "MODELED"
+EPISTEMIC_UNRESOLVED: Final = "UNRESOLVED"
+EPISTEMIC_CONTROL_ONLY: Final = "CONTROL_ONLY"
+
+# IERS TN 36, chapter 10, states that the external tidal terms omitted when
+# using the simplified terrestrial-clock expression are below 1e-15 in
+# fractional frequency up to GPS altitude.  The two ground receivers are
+# allowed that full bound independently.  This is a bound on the omitted
+# receiver proper-time family, not on the central correction itself.
+IERS_OMITTED_TIDAL_FRACTIONAL_BOUND_PER_RECEIVER: Final = 1e-15
+
+# The current DSN service catalogue describes a one-sigma *zenith delay*
+# accuracy.  It is recorded as a candidate statistical input only: without a
+# temporal covariance or delay-rate model it cannot become a frequency bound.
+DSN_TROPOSPHERE_ZENITH_DELAY_ONE_SIGMA_M: Final = 0.01
 
 SOURCES: Final = {
     "iers_proper_time": prior.SOURCES["iers_proper_time"],
     "iers_gravitational_delay": prior.SOURCES["iers_gravitational_delay"],
     "dsn_frequency_timing": prior.SOURCES["dsn_frequency_timing"],
     "dsn_media_interface": prior.SOURCES["dsn_media_interface"],
-    "dsn_service_accuracy": "https://deepspace.jpl.nasa.gov/files/820-100-F1.pdf",
+    "dsn_service_accuracy": "https://deepspace.jpl.nasa.gov/files/820-100-H.pdf",
     "ion_product": (
         "https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr3-v10/cors_0147/"
         "sagr3_ancillary/ion/s23sagf2006_244_2006_273.ion"
@@ -218,15 +234,23 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
     ion_metrics = _projected_metrics(ionosphere)
     tro_partial_metrics = _projected_metrics(tro_partial)
     media_partial_metrics = _projected_metrics(media_partial)
+    proper_family = _proper_time_uncertainty_family()
+    tro_candidate_family = _troposphere_candidate_uncertainty_family()
 
     terms = [
         _term(
             OPEN_TERM_NAMES[0],
             PROVENANCE_INDEPENDENT,
             proper_metrics,
-            "The common spacecraft/source contribution cancels structurally, but "
-            "the IERS weak-field receiver-rate differential has no pass-specific "
-            "hard truncation bound.",
+            "The exact SR frequency factor already contains both endpoint Lorentz "
+            "gamma terms. The remaining potential-only receiver differential is "
+            "modeled, while the IERS omitted tidal family is propagated through "
+            "the frozen prefix-only affine projection.",
+            epistemic_class=EPISTEMIC_MODELED,
+            uncertainty_family=proper_family,
+            admitted_peak_to_peak_bound_hz=proper_family[
+                "heldout_non_affine_peak_to_peak_bound_hz"
+            ],
         ),
         _term(
             OPEN_TERM_NAMES[1],
@@ -234,15 +258,18 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
             relativistic_metrics,
             "The outcome-independent Sun/Earth/Saturn central path model omits "
             "unbounded moving-body and higher-order differential terms.",
+            epistemic_class=EPISTEMIC_UNRESOLVED,
         ),
         _term(
             OPEN_TERM_NAMES[2],
             PROVENANCE_INDEPENDENT,
             None,
             "The TRO product supplies independent C10/C60 NUPART corrections, but "
-            "the public frozen inputs do not contain the complete DSCC60 seasonal "
-            "baseline or a deterministic residual/elevation-mapping bound.",
+            "the documented one-sigma zenith-delay accuracy supplies neither the "
+            "historical DSS-65 delay-rate covariance nor a frequency-error family.",
             partial_diagnostic=tro_partial_metrics,
+            epistemic_class=EPISTEMIC_UNRESOLVED,
+            uncertainty_family=tro_candidate_family,
         ),
         _term(
             OPEN_TERM_NAMES[3],
@@ -251,6 +278,7 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
             "Applicable independent C10 and C60 line-of-sight models cover the grid, "
             "but FITSIG and DSN one-sigma accuracy are not deterministic residual-"
             "frequency bounds.",
+            epistemic_class=EPISTEMIC_UNRESOLVED,
         ),
         _term(
             OPEN_TERM_NAMES[4],
@@ -258,6 +286,7 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
             None,
             "No applicable outcome-independent finite bound on the differential "
             "interplanetary-plasma gradient across the two Earth receive paths was found.",
+            epistemic_class=EPISTEMIC_UNRESOLVED,
         ),
         _term(
             OPEN_TERM_NAMES[5],
@@ -265,6 +294,7 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
             None,
             "No pass-specific deterministic bound for differential DSS-25/DSS-65 "
             "receiver-chain frequency curvature was found.",
+            epistemic_class=EPISTEMIC_UNRESOLVED,
         ),
         _term(
             OPEN_TERM_NAMES[6],
@@ -274,6 +304,7 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
             "diagnostic and neither product supplies a hard residual bound.",
             role="NON_ADDITIVE_CONTROL_DO_NOT_DOUBLE_COUNT",
             partial_diagnostic=media_partial_metrics,
+            epistemic_class=EPISTEMIC_CONTROL_ONLY,
         ),
     ]
 
@@ -282,9 +313,24 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
     ]
     best_case = max(
         0.0,
-        (CONTROLLING_SEPARATION_HZ - timing) / DETECTOR_BINS_REQUIRED,
+        (
+            CONTROLLING_SEPARATION_HZ
+            - timing
+            - proper_family["heldout_non_affine_peak_to_peak_bound_hz"]
+        ) / DETECTOR_BINS_REQUIRED,
     )
-    unresolved = [term["name"] for term in terms]
+    unresolved = [
+        term["name"]
+        for term in terms
+        if term["epistemic_class"] == EPISTEMIC_UNRESOLVED
+    ]
+    admitted_modeled = [
+        term for term in terms if term["epistemic_class"] == EPISTEMIC_MODELED
+    ]
+    admitted_modeled_bound = sum(
+        float(term["admitted_heldout_peak_to_peak_bound_hz"])
+        for term in admitted_modeled
+    )
     result = {
         "audit_version": AUDIT_VERSION,
         "audit_manifest_sha256": audit_manifest_sha256(),
@@ -317,11 +363,36 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
                 "RECEIVER_RATE_PATH_MEDIA_AND_BRANCH_HARDWARE_DIFFERENTIALS"
             ),
         },
+        "semantic_policy": {
+            "OBSERVABLE": (
+                "independent measured coordinate with an explicit measurement "
+                "uncertainty and transform ledger"
+            ),
+            "MODELED": (
+                "outcome-independent central model plus a frozen quantitative "
+                "uncertainty family"
+            ),
+            "UNRESOLVED": (
+                "missing measurement or missing defensible uncertainty family; "
+                "never replaced by zero"
+            ),
+            "CONTROL_ONLY": "non-additive coverage control, not a physical term",
+        },
+        "scientific_correction": {
+            "superseded_central_peak_to_peak_hz": 0.1927967947508092,
+            "error": "KINETIC_ENDPOINT_TERM_DOUBLE_COUNTED_AFTER_EXACT_SR_GAMMA",
+            "policy": (
+                "endpoint kinetic proper-time remains exclusively inside the exact "
+                "special-relativistic frequency factor"
+            ),
+        },
         "terms": terms,
         "timing_envelope_two_stream_two_sided_hz": timing,
         "conservative_combination": {
-            "admitted_open_term_names": [],
-            "admitted_open_term_peak_to_peak_hz": 0.0,
+            "admitted_modeled_term_names": [
+                term["name"] for term in admitted_modeled
+            ],
+            "admitted_modeled_peak_to_peak_bound_hz": admitted_modeled_bound,
             "unresolved_open_term_names": unresolved,
             "combined_open_term_envelope_state": "UNAVAILABLE",
             "remaining_physical_margin_hz": None,
@@ -339,13 +410,15 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
         "detector_implementation_authorized": False,
         "new_gate_created": False,
         "exact_remaining_blockers": [
-            "DIFFERENTIAL_INTERPLANETARY_PLASMA_BOUND",
-            "DIFFERENTIAL_RECEIVER_CHAIN_CURVATURE_BOUND",
-            "COMPLETE_TROPOSPHERE_MODEL_AND_HARD_RESIDUAL_BOUND",
+            "RELATIVISTIC_PROPAGATION_UNCERTAINTY_FAMILY",
+            "TROPOSPHERE_TEMPORAL_ERROR_MODEL_FOR_DSS25_AND_DSS65",
+            "DSS65_DISPERSIVE_PATH_OBSERVABLE_OR_UNCERTAINTY_FAMILY",
+            "DIFFERENTIAL_INTERPLANETARY_PLASMA_FAMILY",
+            "DIFFERENTIAL_RECEIVER_CHAIN_CURVATURE_FAMILY",
         ],
         "next_smallest_physical_step": (
-            "CHANGE_OBSERVABLE_REVIEW_USING_THE_ALREADY_PREDECLARED_SIMULTANEOUS_"
-            "DSS25_X_KA_WITNESS; DO_NOT_ACCESS_IQ_OR_IMPLEMENT_IT_YET"
+            "STOP_BEFORE_X_KA_OBSERVABLE_REVIEW_BECAUSE_THE_DISTRIBUTED_"
+            "TROPOSPHERE_FREQUENCY_FAMILY_IS_STILL_UNRESOLVED"
         ),
     }
     strict_json(result)
@@ -364,6 +437,17 @@ def audit_manifest_sha256() -> str:
         "tro_corrections": {
             key: asdict(value) for key, value in TRO_CORRECTIONS.items()
         },
+        "epistemic_classes": [
+            EPISTEMIC_OBSERVABLE,
+            EPISTEMIC_MODELED,
+            EPISTEMIC_UNRESOLVED,
+            EPISTEMIC_CONTROL_ONLY,
+        ],
+        "proper_time_uncertainty": {
+            "per_receiver_fractional_bound": (
+                IERS_OMITTED_TIDAL_FRACTIONAL_BOUND_PER_RECEIVER
+            ),
+        },
         "source_identities": SOURCE_IDENTITIES,
         "forbidden": [
             "RSR header access",
@@ -372,6 +456,8 @@ def audit_manifest_sha256() -> str:
             "amplitude diagnostics",
             "detector implementation",
             "suffix refit",
+            "kinetic endpoint term outside exact SR gamma",
+            "free temporal covariance inferred from zenith-delay sigma",
             "FITSIG promoted to hard bound",
             "one-sigma accuracy promoted to hard bound",
         ],
@@ -402,10 +488,7 @@ def _compile_differential_geometry(
             "right_receive_et",
             "left_station",
             "right_station",
-            "left_station_velocity",
-            "right_station_velocity",
             "spacecraft",
-            "spacecraft_velocity",
             "earth_transmit",
             "sun_transmit",
             "saturn_transmit",
@@ -477,10 +560,7 @@ def _compile_differential_geometry(
                 "right_receive_et": right.receive_et_tdb_s,
                 "left_station": left_state.position_m,
                 "right_station": right_state.position_m,
-                "left_station_velocity": left_state.velocity_m_s,
-                "right_station_velocity": right_state.velocity_m_s,
                 "spacecraft": spacecraft_state.position_m,
-                "spacecraft_velocity": spacecraft_state.velocity_m_s,
                 "earth_transmit": earth_at_transmit.position_m,
                 "sun_transmit": sun_at_transmit.position_m,
                 "saturn_transmit": saturn_at_transmit.position_m,
@@ -530,16 +610,16 @@ def _compile_differential_geometry(
 
 
 def _proper_time_gravity_differential(compiled) -> np.ndarray:
-    left = _endpoint_clock_rate(compiled, "left")
-    right = _endpoint_clock_rate(compiled, "right")
+    """Potential-only correction after the exact SR gamma endpoint factors."""
+
+    left = _endpoint_gravitational_rate(compiled, "left")
+    right = _endpoint_gravitational_rate(compiled, "right")
     return geometry.X_BAND_HZ * (left - right)
 
 
-def _endpoint_clock_rate(compiled, side: str) -> np.ndarray:
+def _endpoint_gravitational_rate(compiled, side: str) -> np.ndarray:
     station = compiled[f"{side}_station"]
-    station_velocity = compiled[f"{side}_station_velocity"]
     spacecraft = compiled["spacecraft"]
-    spacecraft_velocity = compiled["spacecraft_velocity"]
     receive_potential = (
         prior.GM_SUN / _row_norm(station - compiled[f"sun_{side}_receive"])
         + prior.GM_EARTH / _row_norm(station - compiled[f"earth_{side}_receive"])
@@ -552,11 +632,7 @@ def _endpoint_clock_rate(compiled, side: str) -> np.ndarray:
         + prior.GM_SATURN_SYSTEM
         / _row_norm(spacecraft - compiled["saturn_transmit"])
     )
-    kinetic = 0.5 * (
-        np.sum(station_velocity * station_velocity, axis=1)
-        - np.sum(spacecraft_velocity * spacecraft_velocity, axis=1)
-    )
-    return (receive_potential - transmit_potential + kinetic) / (
+    return (receive_potential - transmit_potential) / (
         one_way.SPEED_OF_LIGHT_M_S**2
     )
 
@@ -680,6 +756,80 @@ def _normalized_delay(
     return result
 
 
+def _proper_time_uncertainty_family() -> dict[str, object]:
+    per_receiver = IERS_OMITTED_TIDAL_FRACTIONAL_BOUND_PER_RECEIVER
+    differential_fractional = 2.0 * per_receiver
+    raw_absolute_hz = geometry.X_BAND_HZ * differential_fractional
+    projection_gain = _prefix_affine_pointwise_bound_gain(
+        geometry.PRETRANSITION_RECORDS,
+        geometry.PRETRANSITION_CALIBRATION_RECORDS,
+    )
+    heldout_maximum_absolute_hz = projection_gain * raw_absolute_hz
+    return {
+        "kind": "POINTWISE_FRACTIONAL_FREQUENCY_ENVELOPE",
+        "source": SOURCES["iers_proper_time"],
+        "source_statement": (
+            "external tidal terms omitted by the simplified terrestrial-clock "
+            "expression are below 1e-15 in fractional frequency per receiver"
+        ),
+        "per_receiver_absolute_fractional_bound": per_receiver,
+        "differential_raw_absolute_fractional_bound": differential_fractional,
+        "differential_raw_absolute_bound_hz": raw_absolute_hz,
+        "prefix_affine_maximum_absolute_gain": projection_gain,
+        "heldout_non_affine_maximum_absolute_bound_hz": (
+            heldout_maximum_absolute_hz
+        ),
+        "heldout_non_affine_peak_to_peak_bound_hz": (
+            2.0 * heldout_maximum_absolute_hz
+        ),
+        "projection_policy": (
+            "exact infinity-norm propagation through the frozen prefix-only "
+            "least-squares affine extrapolation"
+        ),
+        "scope": (
+            "receiver proper-time model truncation only; station geometry, "
+            "propagation media and receiver hardware remain separate terms"
+        ),
+    }
+
+
+def _troposphere_candidate_uncertainty_family() -> dict[str, object]:
+    return {
+        "kind": "INCOMPLETE_STATISTICAL_ZENITH_DELAY_DESCRIPTION",
+        "source": SOURCES["dsn_service_accuracy"],
+        "zenith_delay_one_sigma_m": DSN_TROPOSPHERE_ZENITH_DELAY_ONE_SIGMA_M,
+        "frequency_family_state": "UNAVAILABLE",
+        "reason": (
+            "a point-delay sigma does not determine delay-rate covariance or "
+            "one-second frequency curvature"
+        ),
+        "missing": [
+            "historical applicability to both DSS-25 and DSS-65",
+            "temporal covariance or Allan-deviation model for both paths",
+            "wet and dry elevation-mapping uncertainty",
+            "complete DSS-65 central troposphere model",
+        ],
+        "promoted_to_bound": False,
+    }
+
+
+def _prefix_affine_pointwise_bound_gain(records: int, calibration: int) -> float:
+    if records <= calibration or calibration < 2:
+        raise CassiniSagr3OpenTermAuditError(
+            "prefix-affine bound requires a non-empty holdout"
+        )
+    prefix_elapsed = np.arange(calibration, dtype=np.float64)
+    design = np.column_stack((np.ones(calibration), prefix_elapsed))
+    normal_inverse = np.linalg.inv(design.T @ design)
+    projection = normal_inverse @ design.T
+    maximum_gain = 0.0
+    for instant in range(calibration, records):
+        weights = np.asarray((1.0, float(instant))) @ projection
+        gain = 1.0 + float(np.sum(np.abs(weights)))
+        maximum_gain = max(maximum_gain, gain)
+    return maximum_gain
+
+
 def _projected_metrics(curve: Sequence[float]) -> dict[str, float]:
     metrics = geometry._prefix_affine_metrics(
         curve, geometry.PRETRANSITION_CALIBRATION_RECORDS
@@ -700,19 +850,59 @@ def _term(
     *,
     role: str = "ADDITIVE_PHYSICAL_TERM",
     partial_diagnostic: dict[str, float] | None = None,
+    epistemic_class: str,
+    uncertainty_family: dict[str, object] | None = None,
+    admitted_peak_to_peak_bound_hz: float | None = None,
 ) -> dict[str, object]:
     if name not in OPEN_TERM_NAMES:
         raise CassiniSagr3OpenTermAuditError(
             "term is outside the frozen seven-entry ledger"
         )
+    valid_classes = {
+        EPISTEMIC_OBSERVABLE,
+        EPISTEMIC_MODELED,
+        EPISTEMIC_UNRESOLVED,
+        EPISTEMIC_CONTROL_ONLY,
+    }
+    if epistemic_class not in valid_classes:
+        raise CassiniSagr3OpenTermAuditError("unknown epistemic class")
+    if epistemic_class == EPISTEMIC_MODELED and (
+        uncertainty_family is None
+        or admitted_peak_to_peak_bound_hz is None
+        or not np.isfinite(admitted_peak_to_peak_bound_hz)
+        or admitted_peak_to_peak_bound_hz <= 0.0
+    ):
+        raise CassiniSagr3OpenTermAuditError(
+            "MODELED requires a quantitative uncertainty family"
+        )
+    if (
+        epistemic_class != EPISTEMIC_MODELED
+        and admitted_peak_to_peak_bound_hz is not None
+    ):
+        raise CassiniSagr3OpenTermAuditError(
+            "only MODELED may admit a model uncertainty bound in this audit"
+        )
+    bound_state = (
+        "BOUNDED_UNCERTAINTY_FAMILY"
+        if epistemic_class == EPISTEMIC_MODELED
+        else (
+            "NOT_APPLICABLE"
+            if epistemic_class == EPISTEMIC_CONTROL_ONLY
+            else "UNAVAILABLE"
+        )
+    )
     return {
         "name": name,
         "provenance": provenance,
+        "epistemic_class": epistemic_class,
         "central_model_heldout_non_affine": central_metrics,
         "partial_model_heldout_non_affine": partial_diagnostic,
+        "uncertainty_family": uncertainty_family,
         "central_or_partial_model_reduces_envelope": False,
-        "bound_state": "UNAVAILABLE",
-        "admitted_heldout_peak_to_peak_bound_hz": None,
+        "bound_state": bound_state,
+        "admitted_heldout_peak_to_peak_bound_hz": (
+            admitted_peak_to_peak_bound_hz
+        ),
         "admitted_heldout_rms_bound_hz": None,
         "combination_role": role,
         "reason": reason,
