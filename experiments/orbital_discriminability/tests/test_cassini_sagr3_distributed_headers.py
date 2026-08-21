@@ -56,22 +56,26 @@ def _header(*, station: int, rsr: int = 2, sequence: int = 0, second: float = 43
     return value
 
 
-def test_three_products_bind_station_rsr_and_label_declared_channel() -> None:
-    left = parse_distributed_header(_header(station=25), "MEASUREMENT_X_DSS25")
-    witness = parse_distributed_header(_header(station=25), "WITNESS_KA_DSS25")
-    right = parse_distributed_header(_header(station=65), "MEASUREMENT_X_DSS65")
+def test_three_products_bind_station_and_label_channel_but_learn_rsr_from_sfdu() -> None:
+    left = parse_distributed_header(_header(station=25, rsr=5), "MEASUREMENT_X_DSS25")
+    witness = parse_distributed_header(_header(station=25, rsr=6), "WITNESS_KA_DSS25")
+    right = parse_distributed_header(_header(station=65, rsr=3), "MEASUREMENT_X_DSS65")
     assert (left.station_id, left.rsr_id, left.channel_id, left.subchannel_id) == (
-        "DSS-25", 2, "A", 1,
+        "DSS-25", 5, "A", 1,
     )
-    assert (witness.downlink_band, witness.channel_id) == ("KA", "B")
-    assert (right.station_id, right.downlink_band) == ("DSS-65", "X")
+    assert (witness.downlink_band, witness.rsr_id, witness.channel_id) == (
+        "KA", 6, "B",
+    )
+    assert (right.station_id, right.rsr_id, right.downlink_band) == (
+        "DSS-65", 3, "X",
+    )
 
 
-def test_cross_product_station_and_rsr_are_refused() -> None:
-    with pytest.raises(CassiniDistributedHeaderError, match="station/RSR"):
+def test_cross_product_station_zero_rsr_and_unknown_role_are_refused() -> None:
+    with pytest.raises(CassiniDistributedHeaderError, match="station/subchannel"):
         parse_distributed_header(_header(station=65), "MEASUREMENT_X_DSS25")
-    with pytest.raises(CassiniDistributedHeaderError, match="station/RSR"):
-        parse_distributed_header(_header(station=25, rsr=3), "WITNESS_KA_DSS25")
+    with pytest.raises(CassiniDistributedHeaderError, match="RSR identity is zero"):
+        parse_distributed_header(_header(station=25, rsr=0), "WITNESS_KA_DSS25")
     with pytest.raises(CassiniDistributedHeaderError, match="three-product"):
         parse_distributed_header(_header(station=25), "OTHER")  # type: ignore[arg-type]
 
@@ -108,7 +112,7 @@ def test_incremental_summary_commits_controls_and_detects_a_gap() -> None:
         broken.finish()
 
 
-def _summary(*, station: int, channel: str, end: str) -> dict[str, object]:
+def _summary(*, station: int, rsr: int, channel: str, end: str) -> dict[str, object]:
     return {
         "event_time": {
             "first_sample_utc": "2006-09-08T12:00:01.000000Z",
@@ -119,7 +123,7 @@ def _summary(*, station: int, channel: str, end: str) -> dict[str, object]:
         "identity_and_sample_mode": {
             "signal_processing_center_id": [10],
             "deep_space_station_id": [station],
-            "rsr_id": [2],
+            "rsr_id": [rsr],
             "channel_id": [channel],
             "subchannel_id": [1],
         },
@@ -129,13 +133,13 @@ def _summary(*, station: int, channel: str, end: str) -> dict[str, object]:
 def test_topology_requires_distinct_dss25_channels_and_receive_roots() -> None:
     summaries = {
         "MEASUREMENT_X_DSS25": _summary(
-            station=25, channel="A", end="2006-09-08T22:30:00.000000Z"
+            station=25, rsr=5, channel="A", end="2006-09-08T22:30:00.000000Z"
         ),
         "WITNESS_KA_DSS25": _summary(
-            station=25, channel="B", end="2006-09-08T22:30:00.000000Z"
+            station=25, rsr=6, channel="B", end="2006-09-08T22:30:00.000000Z"
         ),
         "MEASUREMENT_X_DSS65": _summary(
-            station=65, channel="A", end="2006-09-08T16:40:00.000000Z"
+            station=65, rsr=3, channel="A", end="2006-09-08T16:40:00.000000Z"
         ),
     }
     result = qualify_topology(summaries)  # type: ignore[arg-type]
@@ -145,7 +149,7 @@ def test_topology_requires_distinct_dss25_channels_and_receive_roots() -> None:
 
     invalid = dict(summaries)
     invalid["WITNESS_KA_DSS25"] = _summary(
-        station=25, channel="A", end="2006-09-08T22:30:00.000000Z"
+        station=25, rsr=6, channel="A", end="2006-09-08T22:30:00.000000Z"
     )
     assert qualify_topology(invalid)["outcome"] == (
         "NO_ADMISSIBLE_DISTRIBUTED_HEADER_TOPOLOGY"

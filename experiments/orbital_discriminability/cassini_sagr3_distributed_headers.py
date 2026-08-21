@@ -69,7 +69,6 @@ class DistributedProductSpec:
     last_first_sample_utc: str
     downlink_band: Literal["X", "KA"]
     expected_station_id: int
-    expected_rsr_id: int
     declared_channel_id: Literal["A", "B"]
     expected_subchannel_id: int
     causal_role: str
@@ -99,7 +98,6 @@ PRODUCTS: Final[Mapping[ProductRole, DistributedProductSpec]] = {
         last_first_sample_utc="2006-09-08T22:30:00.000000Z",
         downlink_band="X",
         expected_station_id=25,
-        expected_rsr_id=2,
         declared_channel_id="A",
         expected_subchannel_id=1,
         causal_role="DISTRIBUTED_X_MEASUREMENT_LEFT",
@@ -127,7 +125,6 @@ PRODUCTS: Final[Mapping[ProductRole, DistributedProductSpec]] = {
         last_first_sample_utc="2006-09-08T22:30:00.000000Z",
         downlink_band="KA",
         expected_station_id=25,
-        expected_rsr_id=2,
         declared_channel_id="B",
         expected_subchannel_id=1,
         causal_role="SAME_PATH_DISPERSIVE_WITNESS",
@@ -155,7 +152,6 @@ PRODUCTS: Final[Mapping[ProductRole, DistributedProductSpec]] = {
         last_first_sample_utc="2006-09-08T16:40:00.000000Z",
         downlink_band="X",
         expected_station_id=65,
-        expected_rsr_id=2,
         declared_channel_id="A",
         expected_subchannel_id=1,
         causal_role="DISTRIBUTED_X_MEASUREMENT_RIGHT",
@@ -266,18 +262,13 @@ def parse_distributed_header(
         if isinstance(error, CassiniDistributedHeaderError):
             raise
         raise CassiniDistributedHeaderError(str(error)) from error
-    expected_identity = (
-        spec.expected_station_id,
-        spec.expected_rsr_id,
-        spec.expected_subchannel_id,
-    )
     if (
-        receipt.deep_space_station_id,
-        receipt.rsr_id,
-        receipt.subchannel_id,
-    ) != expected_identity:
+        receipt.deep_space_station_id != spec.expected_station_id
+        or receipt.subchannel_id != spec.expected_subchannel_id
+        or receipt.rsr_id == 0
+    ):
         raise CassiniDistributedHeaderError(
-            "SFDU station/RSR/subchannel differs from the frozen PDS product identity"
+            "SFDU station/subchannel is out of scope or RSR identity is zero"
         )
     if receipt.frequency_override_active:
         _required_number(
@@ -475,9 +466,9 @@ def qualify_topology(
         == right["event_time"]["first_sample_utc"]
     )
     dss25_distinct_channels = (
-        left_identity[0:3] == witness_identity[0:3]
+        left_identity[0:2] == witness_identity[0:2]
         and left_identity[3] != witness_identity[3]
-        and left_identity[4] == witness_identity[4]
+        and (left_identity[2:5] != witness_identity[2:5])
     )
     independent_x_roots = left_identity[1] != right_identity[1]
     clauses = {
@@ -502,8 +493,10 @@ def qualify_topology(
             ],
             "independent_x_receive_roots": ["DSS-25", "DSS-65"],
             "dss25_same_path_witness": {
-                "shared_station_and_rsr": True,
-                "independent_channels": ["2A1", "2B1"],
+                "shared_station": True,
+                "left_header_identity": list(left_identity),
+                "witness_header_identity": list(witness_identity),
+                "channel_lineage": ["PDS suffix A1", "PDS suffix B1"],
                 "counts_as_third_measurement_root": False,
             },
         },
@@ -566,7 +559,10 @@ def parser_manifest() -> dict[str, object]:
         "header_bytes": RSR_HEADER_BYTES,
         "record_bytes": RSR_RECORD_BYTES,
         "ranges_per_request": HEADER_RANGES_PER_REQUEST,
-        "channel_lineage": "PDS_EXTERNAL_SOURCE_PRODUCT_IDENTIFIER_SUFFIX",
+        "channel_lineage": "PDS_EXTERNAL_SOURCE_PRODUCT_IDENTIFIER_SUFFIX_A_OR_B",
+        "rsr_lineage": (
+            "SFDU_BYTE_44_ONLY; NUMERIC_SOURCE_PRODUCT_SUFFIX_IS_NOT_RSR_ID"
+        ),
         "station_rsr_subchannel_lineage": "WHITELISTED_SFDU_BYTES_43_45",
         "sample_mode": {
             "layout": "PDS_LABEL_DECLARED_COMPLEX_Q_THEN_I_WORD",

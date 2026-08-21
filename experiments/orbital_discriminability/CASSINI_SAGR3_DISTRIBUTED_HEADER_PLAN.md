@@ -11,13 +11,14 @@ RF, carrier, or orbital claim.
 
 | Role | Product | Frozen receiver identity |
 |---|---|---|
-| distributed X left | `s23sags2006_251_1200x14x25rd` | DSS-25 / RSR 2 / channel A / subchannel 1 |
-| same-path Ka witness | `s23sags2006_251_1200x14k25rd` | DSS-25 / RSR 2 / channel B / subchannel 1 |
-| distributed X right | `s23sags2006_251_1200x14x65rd` | DSS-65 / RSR 2 / channel A / subchannel 1 |
+| distributed X left | `s23sags2006_251_1200x14x25rd` | DSS-25 / RSR learned from SFDU / channel A / subchannel 1 |
+| same-path Ka witness | `s23sags2006_251_1200x14k25rd` | DSS-25 / RSR learned from SFDU / channel B / subchannel 1 |
+| distributed X right | `s23sags2006_251_1200x14x65rd` | DSS-65 / RSR learned from SFDU / channel A / subchannel 1 |
 
-The identities and channels above come from the exact-hash PDS labels. Station,
-RSR and subchannel must also agree with the real SFDU header bytes. Channel A/B
-is label metadata and is not misrepresented as an SFDU field.
+Station and channel A/B come from the exact-hash PDS labels and are checked or
+carried with their actual lineage. RSR and subchannel come from the real SFDU
+header bytes. The numeric prefix of the source-product suffix is explicitly not
+treated as the RSR ID; previous real-header work already disproved that mapping.
 
 ## Frozen access boundary
 
@@ -59,7 +60,7 @@ and IQ access false. Its sole next physical step is a bounded correction
 envelope evaluated on the exact real-NCO grids.
 
 Parser manifest SHA-256 before access:
-`01396e1a3a5ffd5acd21f14650e81b0c94b2daa90cb191bfc1bf4bb7013de26f`.
+`2ef3b9fed0d104911b5a9059b263bca2a5e9117dd06650e2a6f4359e861d6b9e`.
 
 Parser source SHA-256 before access:
-`41f8436ccaacc1958e7dd8e4dbb21cbd10355452594d80abfdff0f0c069ac616`.
+`67995719c89065178c0a28ecc1cef514695a5cb621f08980c0e285982acbf096`.
