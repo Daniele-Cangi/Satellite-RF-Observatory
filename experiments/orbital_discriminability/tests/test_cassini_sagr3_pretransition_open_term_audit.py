@@ -86,9 +86,7 @@ def test_exact_sr_factor_owns_endpoint_kinetic_proper_time():
     beta = transverse_speed / audit.one_way.SPEED_OF_LIGHT_M_S
 
     assert factor == pytest.approx(1.0 / np.sqrt(1.0 - beta * beta))
-    gravitational_source = inspect.getsource(
-        audit._endpoint_gravitational_rate
-    )
+    gravitational_source = inspect.getsource(audit._endpoint_gravitational_rate)
     assert "velocity" not in gravitational_source
     assert "kinetic" not in gravitational_source
 
@@ -116,21 +114,76 @@ def test_troposphere_delay_sigma_does_not_invent_frequency_covariance():
 
     assert family["zenith_delay_one_sigma_m"] == 0.01
     assert family["frequency_family_state"] == "UNAVAILABLE"
+    assert family["audit_outcome"] == (
+        "TROPOSPHERE_DSS65_SAME_PATH_TEMPORAL_FAMILY_UNAVAILABLE"
+    )
     assert family["promoted_to_bound"] is False
     assert (
-        "temporal covariance or Allan-deviation model for both paths"
+        "historical DSS-65 temporal covariance or Allan-deviation family"
         in family["missing"]
     )
+
+
+def test_troposphere_candidates_are_descriptive_not_admitted_bounds():
+    family = audit._troposphere_candidate_uncertainty_family()
+    candidates = {
+        candidate["candidate_id"]: candidate
+        for candidate in family["candidate_families"]
+    }
+
+    assert set(candidates) == {
+        "SAGR3_TRO_FITSIG",
+        "DSN_SEASONAL_TRO_MODEL",
+        "DSS25_GOLDSTONE_MCS_EMPIRICAL_ASD",
+        "DSS55_RELOCATED_AWVR1",
+        "GENERIC_WVR_TURBULENCE_MODEL",
+        "DSN_ONE_SIGMA_ZENITH_DELAY",
+    }
+    assert all(
+        candidate["promoted_to_bound"] is False for candidate in candidates.values()
+    )
+    assert all(
+        candidate["reduces_envelope"] is False for candidate in candidates.values()
+    )
+    assert candidates["SAGR3_TRO_FITSIG"]["refusal_reason"] == (
+        "POST_FIT_DELAY_RESIDUAL_WITHOUT_TEMPORAL_COVARIANCE_OR_SAMPLE_COUNT"
+    )
+    assert candidates["DSS25_GOLDSTONE_MCS_EMPIRICAL_ASD"]["refusal_reason"] == (
+        "NO_DSS65_SAME_PATH_APPLICABILITY"
+    )
+    assert candidates["DSS55_RELOCATED_AWVR1"]["refusal_reason"] == (
+        "NO_DOCUMENTED_SAGR3_DSS65_LINE_OF_SIGHT_BINDING_OR_RESIDUAL_ASD"
+    )
+
+
+def test_fitsig_values_remain_delay_metadata_not_frequency_bounds():
+    family = audit._troposphere_candidate_uncertainty_family()
+    fitsig = next(
+        candidate
+        for candidate in family["candidate_families"]
+        if candidate["candidate_id"] == "SAGR3_TRO_FITSIG"
+    )
+
+    assert fitsig["numerical_inputs"] == {
+        "DSS-25_C10_wet_fitsig_m": 0.0006464,
+        "DSS-25_C10_dry_fitsig_m": 0.0002454,
+        "DSS-65_C60_wet_fitsig_m": 0.0011061,
+        "DSS-65_C60_dry_fitsig_m": 0.0001421,
+    }
+    assert not any("hz" in key.casefold() for key in fitsig["numerical_inputs"])
 
 
 def test_prefix_projection_is_frozen_and_never_refits_holdout():
     elapsed = np.arange(geometry.PRETRANSITION_RECORDS, dtype=np.float64)
     curve = 4.0 + 0.1 * elapsed
-    curve[geometry.PRETRANSITION_CALIBRATION_RECORDS :] += np.linspace(
-        0.0,
-        1.0,
-        geometry.PRETRANSITION_HOLDOUT_RECORDS,
-    ) ** 2
+    curve[geometry.PRETRANSITION_CALIBRATION_RECORDS :] += (
+        np.linspace(
+            0.0,
+            1.0,
+            geometry.PRETRANSITION_HOLDOUT_RECORDS,
+        )
+        ** 2
+    )
 
     metrics = audit._projected_metrics(curve)
 
@@ -229,15 +282,19 @@ def test_frozen_receipt_separates_modeled_from_unresolved_terms():
     troposphere = receipt["terms"][2]
     assert proper_time["epistemic_class"] == "MODELED"
     assert proper_time["bound_state"] == "BOUNDED_UNCERTAINTY_FAMILY"
-    assert proper_time["central_model_heldout_non_affine"][
-        "peak_to_peak_hz"
-    ] == 0.0005846983090055662
+    assert (
+        proper_time["central_model_heldout_non_affine"]["peak_to_peak_hz"]
+        == 0.0005846983090055662
+    )
     assert proper_time["admitted_heldout_peak_to_peak_bound_hz"] == (
         0.000304667852184121
     )
     assert troposphere["epistemic_class"] == "UNRESOLVED"
     assert troposphere["bound_state"] == "UNAVAILABLE"
     assert troposphere["uncertainty_family"]["promoted_to_bound"] is False
+    assert troposphere["uncertainty_family"]["audit_outcome"] == (
+        "TROPOSPHERE_DSS65_SAME_PATH_TEMPORAL_FAMILY_UNAVAILABLE"
+    )
     assert receipt["scientific_correction"]["error"] == (
         "KINETIC_ENDPOINT_TERM_DOUBLE_COUNTED_AFTER_EXACT_SR_GAMMA"
     )
@@ -253,3 +310,7 @@ def test_frozen_receipt_separates_modeled_from_unresolved_terms():
     assert combination["maximum_admissible_detector_resolution_hz"] is None
     assert receipt["iq_access_authorized"] is False
     assert receipt["detector_implementation_authorized"] is False
+    assert (
+        "TROPOSPHERE_DSS65_SAME_PATH_TEMPORAL_FAMILY_UNAVAILABLE"
+        in (receipt["exact_remaining_blockers"])
+    )

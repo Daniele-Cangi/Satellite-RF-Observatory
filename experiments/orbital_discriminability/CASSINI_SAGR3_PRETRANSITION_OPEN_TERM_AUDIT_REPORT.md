@@ -71,15 +71,32 @@ exact frozen prefix-affine operator. Its worst-case gain is
 peak-to-peak family. This does not cover receiver hardware or branch
 propagation; those remain separate terms.
 
-### Troposphere remains unresolved
+### Troposphere remains unresolved after the bounded family audit
 
-The TRO archive contains simultaneous C10 and C60 normalized-polynomial
-corrections. The DSN Services Catalog gives a candidate `1 cm` one-sigma zenith
-wet-plus-dry delay accuracy, but that scalar does not specify the temporal
-covariance or delay-rate structure needed to bound a frequency residual after
-the frozen affine projection. Historical applicability to both paths, mapping
-uncertainty, and a complete DSS-65 central model also remain unproved. No
-arbitrary conversion from delay sigma to hertz was made.
+The audit evaluated six outcome-independent candidates. None was promoted to a
+bound:
+
+| Candidate | What it establishes | Exact refusal |
+|---|---|---|
+| SAGR3 C10/C60 `FITSIG` | post-fit residuals of the fitted wet/dry zenith-delay polynomials | no temporal covariance or sample count from which to derive delay-rate error |
+| DSN seasonal TRO file | a first-order wet/dry zenith-delay central model | central model only; no residual family |
+| DSS-25 Goldstone MCS statistics | observed fractional ASD below `1.1e-15` over `1000–10000 s` for the special DSS-25 MCS in 2001–2003 | no applicability to the DSS-65 SAGR3 path |
+| AWVR1 relocation | AWVR1 was installed beside DSS-55 in 2004 | no documented binding to the SAGR3 DSS-65 line of sight and no applicable residual ASD |
+| generic WVR turbulence model | a physical model for beam-separation error | historical `Cn`, wind, beam geometry, pointing and continuity are absent |
+| DSN `1 cm` service statistic | a point-delay one-sigma description | no temporal law for delay rate or non-affine frequency |
+
+The exact frozen SAGR3 TRO values are real metadata: DSS-25/C10 wet and dry
+`FITSIG` are `0.0006464 m` and `0.0002454 m`; DSS-65/C60 values are
+`0.0011061 m` and `0.0001421 m`. The DSN specification defines `FITSIG` as the
+post-fit residual of a fitted polynomial, not as an Allan deviation or a hard
+delay-rate bound. Converting any of these scalars directly to hertz would add a
+temporal model that the receipt does not contain.
+
+The seasonal file can improve the central delay model, but adding central-model
+plumbing does not reduce the uncertainty envelope. The DSS-25 MCS result is a
+useful station-specific family; the missing causal link is the corresponding
+same-path temporal family for DSS-65. The bounded result is therefore
+`TROPOSPHERE_DSS65_SAME_PATH_TEMPORAL_FAMILY_UNAVAILABLE`.
 
 The ION models cover both receive grids, but their FITSIG values and statistical
 accuracy are not hard residual bounds. No applicable independent finite family
@@ -106,7 +123,7 @@ unknown term as zero would convert a negative result into
 The remaining blockers are:
 
 1. a relativistic-propagation uncertainty family;
-2. a temporal tropospheric error model applicable to DSS-25 and DSS-65;
+2. a same-path temporal tropospheric family for DSS-65 applicable to SAGR3;
 3. a DSS-65 dispersive-path observable or uncertainty family;
 4. a finite differential interplanetary-plasma family;
 5. a finite differential DSS-25/DSS-65 receiver-chain curvature family.
@@ -115,7 +132,11 @@ This bounded pass stops before the X/Ka witness review because the
 non-dispersive tropospheric frequency family is still unresolved. The already
 predeclared simultaneous DSS-25 X/Ka witness may later turn part of the plasma
 term into an observable, but it cannot cancel proper-time/gravity or
-troposphere. That review is not implemented here and authorizes no IQ access.
+troposphere. SAGR3 should remain closed unless an archived calibration product
+can be bound explicitly to the DSS-65 SAGR3 line of sight with a temporal
+residual family. Otherwise the smaller physical move is a different
+predeclared distributed geometry with a larger separation or a same-path
+atmospheric witness—not detector work. No alternative is implemented here.
 
 No new gate was created.
 
@@ -124,6 +145,12 @@ No new gate was created.
 - [Cassini Radio Science User’s Guide](https://atmos.nmsu.edu/data_and_services/atmospheres_data/Cassini/logs/Cassini%20Radio%20Science%20Users%20Guide%20-%2030%20Sep%202018.pdf)
 - [IERS Conventions 2010, chapter 10](https://iers-conventions.obspm.fr/content/chapter10/tn36_c10.pdf)
 - [DSN media-calibration interface](https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr1-v10/cors_0103/document/trk_2_23_000531.txt)
+- [DSN ION/TRO specification, TRK-2-23 Rev. C](https://pds-geosciences.wustl.edu/insight/urn-nasa-pds-insight_documents/document_rise/trk-2-23-revc-l5_ion_tro.pdf)
+- [DSN multi-mission seasonal TRO file](https://pds-geosciences.wustl.edu/radiosciencedocs/urn-nasa-pds-jpl_dsn_mmm/tro/1972_001_2048_001_tro.csp)
 - [DSN Services Catalog, Rev. H](https://deepspace.jpl.nasa.gov/files/820-100-H.pdf)
+- [Cassini Media Calibration System, Part II](https://tmo.jpl.nasa.gov/progress_report/42-145/145J.pdf)
+- [Goldstone MCS statistical performance](https://ipnpr.jpl.nasa.gov/progress_report/42-158/158A.pdf)
+- [WVR beam-separation model](https://tmo.jpl.nasa.gov/progress_report/42-145/145M.pdf)
+- [AWVR1 relocation to DSS-55](https://ntrs.nasa.gov/api/citations/20060008091/downloads/20060008091.pdf)
 - [SAGR3 ION product](https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr3-v10/cors_0147/sagr3_ancillary/ion/s23sagf2006_244_2006_273.ion)
 - [SAGR3 TRO product](https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr3-v10/cors_0147/sagr3_ancillary/tro/s23sagf2006_244_2006_262.tro)

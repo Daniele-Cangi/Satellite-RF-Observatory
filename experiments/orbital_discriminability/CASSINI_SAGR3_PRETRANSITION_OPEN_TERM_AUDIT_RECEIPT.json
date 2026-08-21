@@ -1,9 +1,8 @@
 {
-  "audit_manifest_sha256": "836cdcffc3fc7beae4f92236db538d1dc3af47a140eb6768eb88070e49aceafe",
-  "audit_version": "cassini-sagr3-pretransition-open-term-envelope-audit-v2",
-  "authoritative_prior_outcome": "CASSINI_SAGR3_PRETRANSITION_GEOMETRY_SCREEN_POSITIVE_BUT_NOT_PHYSICALLY_ADMITTED",
+  "audit_version": "cassini-sagr3-pretransition-open-term-envelope-audit-v3",
+  "audit_manifest_sha256": "a25463ac9cc0f7904147cc4883a409cbe6f0341152798626cab08f91f6fa9840",
   "scope": "SAGR3_PRETRANSITION_METADATA_ONLY_NO_RSR_OR_IQ_ACCESS",
-  "outcome": "CASSINI_OPEN_TERM_BOUND_UNAVAILABLE",
+  "authoritative_prior_outcome": "CASSINI_SAGR3_PRETRANSITION_GEOMETRY_SCREEN_POSITIVE_BUT_NOT_PHYSICALLY_ADMITTED",
   "controlling_comparison": "DSS25_MINUS_DSS65_X_BAND_ORBITAL_VERSUS_SATURN_CENTER_AFTER_PREFIX_AFFINE_PROJECTION",
   "controlling_heldout_peak_to_peak_hz": 0.07231370056321107,
   "grid": {
@@ -15,6 +14,96 @@
     "last_transmit_utc": "2006-09-08T13:33:58.092249Z",
     "suffix_refit": "PROHIBITED"
   },
+  "source_identities": {
+    "dsn_media_interface": {
+      "bytes": 25915,
+      "sha256": "e2f8617eb454b0b057c3277806aaab339ff937bc3410495f2d0f0bac5b23ca22"
+    },
+    "ion_product": {
+      "bytes": 29160,
+      "sha256": "d643911892ee9a9d5b9f366e038d6705fd50769d9aa29c80f9192553c02c6aad"
+    },
+    "tro_product": {
+      "bytes": 133236,
+      "sha256": "5a3b116405157715e094075d99c4cb28c2c289490bfa93901a427faf52378dcb"
+    },
+    "calibration_inventory": {
+      "bytes": 1996,
+      "sha256": "afc3866c51a62292600bfb93c30372c60702be4353fbc70ec76a474c3160f3b3"
+    },
+    "dsn_tro_specification": {
+      "bytes": 290653,
+      "sha256": "828bd999dc3f16b0454877f03d7336cb2e9976ad67c870c77f34445158050793"
+    },
+    "dsn_tro_seasonal": {
+      "bytes": 5889,
+      "sha256": "e2d5022bb04345ae82c792e126e37648bac2947b86d42fb99534bdc366b221ba"
+    },
+    "cassini_mcs_part_ii": {
+      "bytes": 690251,
+      "sha256": "881f6e49f26f4ca85f32497fa5d64ef30619cc72956d6d2a493fcefc2b421bdd"
+    },
+    "goldstone_mcs_statistics": {
+      "bytes": 886180,
+      "sha256": "9380902c4e10af550ec7eb7e962fb20bf09151c0c835e0bdac091dd75f41d82b"
+    },
+    "wvr_beam_model": {
+      "bytes": 180649,
+      "sha256": "436419795195a7f442c815adb60df1f49547082b2b619b19d9d1bf7368a90209"
+    },
+    "awvr1_relocation_dss55": {
+      "bytes": 514578,
+      "sha256": "6330529a21dd6cfb706e120bbacd3fad4c7852a888e009821507ac5124a5a44f"
+    }
+  },
+  "sources": {
+    "iers_proper_time": "https://iers-conventions.obspm.fr/content/chapter10/tn36_c10.pdf",
+    "iers_gravitational_delay": "https://iers-conventions.obspm.fr/content/chapter11/tn36_c11.pdf",
+    "dsn_frequency_timing": "https://deepspace.jpl.nasa.gov/dsndocs/810-005/304/304C.pdf",
+    "dsn_media_interface": "https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr1-v10/cors_0103/document/trk_2_23_000531.txt",
+    "dsn_service_accuracy": "https://deepspace.jpl.nasa.gov/files/820-100-H.pdf",
+    "dsn_tro_specification": "https://pds-geosciences.wustl.edu/insight/urn-nasa-pds-insight_documents/document_rise/trk-2-23-revc-l5_ion_tro.pdf",
+    "dsn_tro_seasonal": "https://pds-geosciences.wustl.edu/radiosciencedocs/urn-nasa-pds-jpl_dsn_mmm/tro/1972_001_2048_001_tro.csp",
+    "cassini_mcs_part_ii": "https://tmo.jpl.nasa.gov/progress_report/42-145/145J.pdf",
+    "goldstone_mcs_statistics": "https://ipnpr.jpl.nasa.gov/progress_report/42-158/158A.pdf",
+    "wvr_beam_model": "https://tmo.jpl.nasa.gov/progress_report/42-145/145M.pdf",
+    "awvr1_relocation_dss55": "https://ntrs.nasa.gov/api/citations/20060008091/downloads/20060008091.pdf",
+    "ion_product": "https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr3-v10/cors_0147/sagr3_ancillary/ion/s23sagf2006_244_2006_273.ion",
+    "tro_product": "https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr3-v10/cors_0147/sagr3_ancillary/tro/s23sagf2006_244_2006_262.tro",
+    "calibration_inventory": "https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr3-v10/cors_0147/calib/calinfo.txt",
+    "jpl_gm": "https://ssd.jpl.nasa.gov/astro_par.html"
+  },
+  "kernel_lineage": [
+    {
+      "name": "naif0012.tls",
+      "bytes": 5257,
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "role": "UTC_TO_ET_TDB",
+      "independence": "TIME_SCALE_CONTROL"
+    },
+    {
+      "name": "earth_720101_070426.bpc",
+      "bytes": 8603648,
+      "sha256": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e",
+      "role": "HISTORICAL_EARTH_ORIENTATION",
+      "independence": "POST_PASS_EOP_INDEPENDENT_OF_TARGET_RF"
+    },
+    {
+      "name": "earthstns_itrf93_050714.bsp",
+      "bytes": 38912,
+      "sha256": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c",
+      "role": "DSN_STATION_STATES_DSS14_DSS25_DSS65",
+      "independence": "STATION_MODEL_INDEPENDENT_OF_TARGET_RF"
+    },
+    {
+      "name": "060901AP_SCPSE_06244_06255.bsp",
+      "bytes": 3169280,
+      "sha256": "0b7cc35d94b956602593106ed8aa62ce5f33cb178b8544036a841c5e53fc81dd",
+      "role": "CASSINI_TRAJECTORY",
+      "independence": "PREDICT_CREATED_2006_09_01_BEFORE_PASS"
+    }
+  ],
+  "outcome_conditioned_products_used": [],
   "structural_cancellation": {
     "topology_basis": "COHERENT_COMMON_SOURCE_FROZEN_IN_PARENT_HEADER_RECEIPT",
     "common_DSS14_uplink": "CANCELS_FROM_DSS25_MINUS_DSS65_AT_COMMON_TRANSMIT_EPOCH",
@@ -33,31 +122,6 @@
     "error": "KINETIC_ENDPOINT_TERM_DOUBLE_COUNTED_AFTER_EXACT_SR_GAMMA",
     "policy": "endpoint kinetic proper-time remains exclusively inside the exact special-relativistic frequency factor"
   },
-  "source_identities": {
-    "dsn_media_interface": {
-      "bytes": 25915,
-      "sha256": "e2f8617eb454b0b057c3277806aaab339ff937bc3410495f2d0f0bac5b23ca22"
-    },
-    "ion_product": {
-      "bytes": 29160,
-      "sha256": "d643911892ee9a9d5b9f366e038d6705fd50769d9aa29c80f9192553c02c6aad"
-    },
-    "tro_product": {
-      "bytes": 133236,
-      "sha256": "5a3b116405157715e094075d99c4cb28c2c289490bfa93901a427faf52378dcb"
-    },
-    "calibration_inventory": {
-      "bytes": 1996,
-      "sha256": "afc3866c51a62292600bfb93c30372c60702be4353fbc70ec76a474c3160f3b3"
-    }
-  },
-  "kernel_sha256": {
-    "naif0012.tls": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
-    "earth_720101_070426.bpc": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e",
-    "earthstns_itrf93_050714.bsp": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c",
-    "060901AP_SCPSE_06244_06255.bsp": "0b7cc35d94b956602593106ed8aa62ce5f33cb178b8544036a841c5e53fc81dd"
-  },
-  "outcome_conditioned_products_used": [],
   "terms": [
     {
       "name": "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
@@ -121,16 +185,85 @@
         "calibration_prefix_rmse_hz": 0.00038314492425158524
       },
       "uncertainty_family": {
-        "kind": "INCOMPLETE_STATISTICAL_ZENITH_DELAY_DESCRIPTION",
-        "source": "https://deepspace.jpl.nasa.gov/files/820-100-H.pdf",
+        "kind": "BOUNDED_OUTCOME_INDEPENDENT_CANDIDATE_FAMILY_AUDIT",
+        "audit_outcome": "TROPOSPHERE_DSS65_SAME_PATH_TEMPORAL_FAMILY_UNAVAILABLE",
         "zenith_delay_one_sigma_m": 0.01,
         "frequency_family_state": "UNAVAILABLE",
-        "reason": "a point-delay sigma does not determine delay-rate covariance or one-second frequency curvature",
+        "reason": "none of the inspected products binds a temporal residual family to both frozen receive paths; in particular DSS-65 has no documented same-path SAGR3 witness with a numerical delay-rate uncertainty",
         "missing": [
-          "historical applicability to both DSS-25 and DSS-65",
-          "temporal covariance or Allan-deviation model for both paths",
-          "wet and dry elevation-mapping uncertainty",
-          "complete DSS-65 central troposphere model"
+          "DSS-65 same-line-of-sight calibration binding",
+          "historical DSS-65 temporal covariance or Allan-deviation family",
+          "mapping and beam-separation uncertainty on the frozen grid"
+        ],
+        "candidate_families": [
+          {
+            "candidate_id": "SAGR3_TRO_FITSIG",
+            "provenance": "INDEPENDENT_OF_TARGET_RF",
+            "numerical_inputs": {
+              "DSS-25_C10_wet_fitsig_m": 0.0006464,
+              "DSS-25_C10_dry_fitsig_m": 0.0002454,
+              "DSS-65_C60_wet_fitsig_m": 0.0011061,
+              "DSS-65_C60_dry_fitsig_m": 0.0001421
+            },
+            "scope": "post-fit residual of each fitted zenith-delay polynomial",
+            "refusal_reason": "POST_FIT_DELAY_RESIDUAL_WITHOUT_TEMPORAL_COVARIANCE_OR_SAMPLE_COUNT",
+            "reduces_envelope": false,
+            "promoted_to_bound": false
+          },
+          {
+            "candidate_id": "DSN_SEASONAL_TRO_MODEL",
+            "provenance": "INDEPENDENT_OF_TARGET_RF",
+            "scope": "first-order wet and dry zenith-delay central model",
+            "refusal_reason": "CENTRAL_MODEL_ONLY_WITHOUT_RESIDUAL_FAMILY",
+            "reduces_envelope": false,
+            "promoted_to_bound": false
+          },
+          {
+            "candidate_id": "DSS25_GOLDSTONE_MCS_EMPIRICAL_ASD",
+            "provenance": "INDEPENDENT_OF_TARGET_RF",
+            "numerical_inputs": {
+              "observed_fractional_ASD_upper_hz_per_hz": 1.1e-15,
+              "timescale_lower_s": 1000,
+              "timescale_upper_s": 10000
+            },
+            "scope": "DSS-25 special MCS observations in 2001-2003",
+            "refusal_reason": "NO_DSS65_SAME_PATH_APPLICABILITY",
+            "reduces_envelope": false,
+            "promoted_to_bound": false
+          },
+          {
+            "candidate_id": "DSS55_RELOCATED_AWVR1",
+            "provenance": "INDEPENDENT_OF_TARGET_RF",
+            "scope": "AWVR1 relocated beside DSS-55 in 2004",
+            "refusal_reason": "NO_DOCUMENTED_SAGR3_DSS65_LINE_OF_SIGHT_BINDING_OR_RESIDUAL_ASD",
+            "reduces_envelope": false,
+            "promoted_to_bound": false
+          },
+          {
+            "candidate_id": "GENERIC_WVR_TURBULENCE_MODEL",
+            "provenance": "INDEPENDENT_OF_TARGET_RF",
+            "scope": "theoretical beam-separation and turbulence spectrum",
+            "required_session_inputs": [
+              "historical Cn",
+              "wind speed and direction",
+              "receiver and WVR beam geometry",
+              "WVR pointing and continuity"
+            ],
+            "refusal_reason": "FROZEN_SESSION_PARAMETERS_AND_TOPOLOGY_MISSING",
+            "reduces_envelope": false,
+            "promoted_to_bound": false
+          },
+          {
+            "candidate_id": "DSN_ONE_SIGMA_ZENITH_DELAY",
+            "provenance": "INDEPENDENT_OF_TARGET_RF",
+            "numerical_inputs": {
+              "zenith_delay_one_sigma_m": 0.01
+            },
+            "scope": "service-level point-delay statistic",
+            "refusal_reason": "NO_TEMPORAL_LAW_FOR_DELAY_RATE_OR_NON_AFFINE_FREQUENCY",
+            "reduces_envelope": false,
+            "promoted_to_bound": false
+          }
         ],
         "promoted_to_bound": false
       },
@@ -139,7 +272,7 @@
       "admitted_heldout_peak_to_peak_bound_hz": null,
       "admitted_heldout_rms_bound_hz": null,
       "combination_role": "ADDITIVE_PHYSICAL_TERM",
-      "reason": "The TRO product supplies independent C10/C60 NUPART corrections, but the documented one-sigma zenith-delay accuracy supplies neither the historical DSS-65 delay-rate covariance nor a frequency-error family."
+      "reason": "The TRO product supplies independent C10/C60 NUPART corrections. A bounded audit of FITSIG, seasonal TRO, DSS-25 MCS, generic WVR and the relocated DSS-55 AWVR found no same-path DSS-65 temporal uncertainty family applicable to the frozen SAGR3 grid."
     },
     {
       "name": "EARTH_IONOSPHERE",
@@ -228,15 +361,16 @@
     "best_case_upper_ceiling_if_every_unavailable_term_were_zero_hz": 0.024000516602613656,
     "best_case_ceiling_is_admission_requirement": false
   },
+  "outcome": "CASSINI_OPEN_TERM_BOUND_UNAVAILABLE",
+  "iq_access_authorized": false,
+  "detector_implementation_authorized": false,
+  "new_gate_created": false,
   "exact_remaining_blockers": [
     "RELATIVISTIC_PROPAGATION_UNCERTAINTY_FAMILY",
-    "TROPOSPHERE_TEMPORAL_ERROR_MODEL_FOR_DSS25_AND_DSS65",
+    "TROPOSPHERE_DSS65_SAME_PATH_TEMPORAL_FAMILY_UNAVAILABLE",
     "DSS65_DISPERSIVE_PATH_OBSERVABLE_OR_UNCERTAINTY_FAMILY",
     "DIFFERENTIAL_INTERPLANETARY_PLASMA_FAMILY",
     "DIFFERENTIAL_RECEIVER_CHAIN_CURVATURE_FAMILY"
   ],
-  "next_smallest_physical_step": "STOP_BEFORE_X_KA_OBSERVABLE_REVIEW_BECAUSE_THE_DISTRIBUTED_TROPOSPHERE_FREQUENCY_FAMILY_IS_STILL_UNRESOLVED",
-  "iq_access_authorized": false,
-  "detector_implementation_authorized": false,
-  "new_gate_created": false
+  "next_smallest_physical_step": "CLOSE_SAGR3_UNLESS_AN_ARCHIVED_CALIBRATION_PRODUCT_CAN_BE_BOUND_TO_THE_DSS65_SAGR3_LINE_OF_SIGHT_WITH_A_TEMPORAL_RESIDUAL_FAMILY"
 }

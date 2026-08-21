@@ -10,7 +10,6 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from hashlib import sha256
 import json
-from math import sqrt
 from pathlib import Path
 from typing import Final, Mapping, Sequence
 
@@ -18,17 +17,24 @@ import numpy as np
 
 from experiments.orbital_discriminability import cassini_dss26_one_way as one_way
 from experiments.orbital_discriminability import cassini_dss26_open_term_audit as prior
-from experiments.orbital_discriminability import cassini_dss14_header_evaluation as header_eval
-from experiments.orbital_discriminability import cassini_sagr3_distributed_geometry as geometry
+from experiments.orbital_discriminability import (
+    cassini_dss14_header_evaluation as header_eval,
+)
+from experiments.orbital_discriminability import (
+    cassini_sagr3_distributed_geometry as geometry,
+)
 
 
-AUDIT_VERSION: Final = "cassini-sagr3-pretransition-open-term-envelope-audit-v2"
+AUDIT_VERSION: Final = "cassini-sagr3-pretransition-open-term-envelope-audit-v3"
 RECEIPT_PATH: Final = Path(__file__).with_name(
     "CASSINI_SAGR3_TRANSITION_AUDIT_RECEIPT.json"
 )
 CONTROLLING_SEPARATION_HZ: Final = 0.07231370056321107
 DETECTOR_BINS_REQUIRED: Final = 3.0
 OUTCOME_BOUND_UNAVAILABLE: Final = "CASSINI_OPEN_TERM_BOUND_UNAVAILABLE"
+TROPOSPHERE_FAMILY_REFUSAL: Final = (
+    "TROPOSPHERE_DSS65_SAME_PATH_TEMPORAL_FAMILY_UNAVAILABLE"
+)
 OPEN_TERM_NAMES: Final = prior.OPEN_TERM_NAMES
 PROVENANCE_INDEPENDENT: Final = prior.PROVENANCE_INDEPENDENT
 PROVENANCE_UNKNOWN: Final = prior.PROVENANCE_UNKNOWN
@@ -55,6 +61,22 @@ SOURCES: Final = {
     "dsn_frequency_timing": prior.SOURCES["dsn_frequency_timing"],
     "dsn_media_interface": prior.SOURCES["dsn_media_interface"],
     "dsn_service_accuracy": "https://deepspace.jpl.nasa.gov/files/820-100-H.pdf",
+    "dsn_tro_specification": (
+        "https://pds-geosciences.wustl.edu/insight/urn-nasa-pds-insight_documents/"
+        "document_rise/trk-2-23-revc-l5_ion_tro.pdf"
+    ),
+    "dsn_tro_seasonal": (
+        "https://pds-geosciences.wustl.edu/radiosciencedocs/"
+        "urn-nasa-pds-jpl_dsn_mmm/tro/1972_001_2048_001_tro.csp"
+    ),
+    "cassini_mcs_part_ii": ("https://tmo.jpl.nasa.gov/progress_report/42-145/145J.pdf"),
+    "goldstone_mcs_statistics": (
+        "https://ipnpr.jpl.nasa.gov/progress_report/42-158/158A.pdf"
+    ),
+    "wvr_beam_model": ("https://tmo.jpl.nasa.gov/progress_report/42-145/145M.pdf"),
+    "awvr1_relocation_dss55": (
+        "https://ntrs.nasa.gov/api/citations/20060008091/downloads/20060008091.pdf"
+    ),
     "ion_product": (
         "https://atmos.nmsu.edu/pdsd/archive/data/co-s-rss-1-sagr3-v10/cors_0147/"
         "sagr3_ancillary/ion/s23sagf2006_244_2006_273.ion"
@@ -83,6 +105,30 @@ SOURCE_IDENTITIES: Final = {
     "calibration_inventory": {
         "bytes": 1_996,
         "sha256": "afc3866c51a62292600bfb93c30372c60702be4353fbc70ec76a474c3160f3b3",
+    },
+    "dsn_tro_specification": {
+        "bytes": 290_653,
+        "sha256": "828bd999dc3f16b0454877f03d7336cb2e9976ad67c870c77f34445158050793",
+    },
+    "dsn_tro_seasonal": {
+        "bytes": 5_889,
+        "sha256": "e2d5022bb04345ae82c792e126e37648bac2947b86d42fb99534bdc366b221ba",
+    },
+    "cassini_mcs_part_ii": {
+        "bytes": 690_251,
+        "sha256": "881f6e49f26f4ca85f32497fa5d64ef30619cc72956d6d2a493fcefc2b421bdd",
+    },
+    "goldstone_mcs_statistics": {
+        "bytes": 886_180,
+        "sha256": "9380902c4e10af550ec7eb7e962fb20bf09151c0c835e0bdac091dd75f41d82b",
+    },
+    "wvr_beam_model": {
+        "bytes": 180_649,
+        "sha256": "436419795195a7f442c815adb60df1f49547082b2b619b19d9d1bf7368a90209",
+    },
+    "awvr1_relocation_dss55": {
+        "bytes": 514_578,
+        "sha256": "6330529a21dd6cfb706e120bbacd3fad4c7852a888e009821507ac5124a5a44f",
     },
 }
 
@@ -201,11 +247,9 @@ def validate_transition_receipt(path: Path = RECEIPT_PATH) -> dict[str, object]:
         receipt["full_heldout_status"]
         == "BLOCKED_BY_UNMODELED_COORDINATE_TRANSITION_INSIDE_HELDOUT",
         receipt["transition_cause"] == "UNRESOLVED",
-        screen["manifest_sha256"]
-        == geometry.pretransition_screen_manifest_sha256(),
+        screen["manifest_sha256"] == geometry.pretransition_screen_manifest_sha256(),
         screen["records"] == geometry.PRETRANSITION_RECORDS,
-        screen["calibration_records"]
-        == geometry.PRETRANSITION_CALIBRATION_RECORDS,
+        screen["calibration_records"] == geometry.PRETRANSITION_CALIBRATION_RECORDS,
         screen["holdout_records"] == geometry.PRETRANSITION_HOLDOUT_RECORDS,
         screen["controlling_heldout_separation_hz_peak_to_peak"]
         == CONTROLLING_SEPARATION_HZ,
@@ -264,9 +308,10 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
             OPEN_TERM_NAMES[2],
             PROVENANCE_INDEPENDENT,
             None,
-            "The TRO product supplies independent C10/C60 NUPART corrections, but "
-            "the documented one-sigma zenith-delay accuracy supplies neither the "
-            "historical DSS-65 delay-rate covariance nor a frequency-error family.",
+            "The TRO product supplies independent C10/C60 NUPART corrections. A "
+            "bounded audit of FITSIG, seasonal TRO, DSS-25 MCS, generic WVR and "
+            "the relocated DSS-55 AWVR found no same-path DSS-65 temporal "
+            "uncertainty family applicable to the frozen SAGR3 grid.",
             partial_diagnostic=tro_partial_metrics,
             epistemic_class=EPISTEMIC_UNRESOLVED,
             uncertainty_family=tro_candidate_family,
@@ -308,16 +353,15 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
         ),
     ]
 
-    timing = receipt["pretransition_screen"][
-        "timing_envelope_two_stream_two_sided_hz"
-    ]
+    timing = receipt["pretransition_screen"]["timing_envelope_two_stream_two_sided_hz"]
     best_case = max(
         0.0,
         (
             CONTROLLING_SEPARATION_HZ
             - timing
             - proper_family["heldout_non_affine_peak_to_peak_bound_hz"]
-        ) / DETECTOR_BINS_REQUIRED,
+        )
+        / DETECTOR_BINS_REQUIRED,
     )
     unresolved = [
         term["name"]
@@ -389,9 +433,7 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
         "terms": terms,
         "timing_envelope_two_stream_two_sided_hz": timing,
         "conservative_combination": {
-            "admitted_modeled_term_names": [
-                term["name"] for term in admitted_modeled
-            ],
+            "admitted_modeled_term_names": [term["name"] for term in admitted_modeled],
             "admitted_modeled_peak_to_peak_bound_hz": admitted_modeled_bound,
             "unresolved_open_term_names": unresolved,
             "combined_open_term_envelope_state": "UNAVAILABLE",
@@ -411,14 +453,14 @@ def audit_open_terms(*, spice, kernel_paths: Mapping[str, Path]) -> dict[str, ob
         "new_gate_created": False,
         "exact_remaining_blockers": [
             "RELATIVISTIC_PROPAGATION_UNCERTAINTY_FAMILY",
-            "TROPOSPHERE_TEMPORAL_ERROR_MODEL_FOR_DSS25_AND_DSS65",
+            TROPOSPHERE_FAMILY_REFUSAL,
             "DSS65_DISPERSIVE_PATH_OBSERVABLE_OR_UNCERTAINTY_FAMILY",
             "DIFFERENTIAL_INTERPLANETARY_PLASMA_FAMILY",
             "DIFFERENTIAL_RECEIVER_CHAIN_CURVATURE_FAMILY",
         ],
         "next_smallest_physical_step": (
-            "STOP_BEFORE_X_KA_OBSERVABLE_REVIEW_BECAUSE_THE_DISTRIBUTED_"
-            "TROPOSPHERE_FREQUENCY_FAMILY_IS_STILL_UNRESOLVED"
+            "CLOSE_SAGR3_UNLESS_AN_ARCHIVED_CALIBRATION_PRODUCT_CAN_BE_BOUND_"
+            "TO_THE_DSS65_SAGR3_LINE_OF_SIGHT_WITH_A_TEMPORAL_RESIDUAL_FAMILY"
         ),
     }
     strict_json(result)
@@ -448,6 +490,7 @@ def audit_manifest_sha256() -> str:
                 IERS_OMITTED_TIDAL_FRACTIONAL_BOUND_PER_RECEIVER
             ),
         },
+        "troposphere_candidate_family": (_troposphere_candidate_uncertainty_family()),
         "source_identities": SOURCE_IDENTITIES,
         "forbidden": [
             "RSR header access",
@@ -580,8 +623,7 @@ def _compile_differential_geometry(
         last_utc = spice.et2utc(float(transmit_grid[-1]), "ISOC", 6) + "Z"
 
     result = {
-        name: np.asarray(values, dtype=np.float64)
-        for name, values in fields.items()
+        name: np.asarray(values, dtype=np.float64) for name, values in fields.items()
     }
     result["transmit_et"] = transmit_grid
     result["first_transmit_utc"] = first_utc
@@ -603,9 +645,7 @@ def _compile_differential_geometry(
         first_utc != expected["first_transmit_utc"]
         or last_utc != expected["last_transmit_utc"]
     ):
-        raise CassiniSagr3OpenTermAuditError(
-            "compiled common-transmit grid changed"
-        )
+        raise CassiniSagr3OpenTermAuditError("compiled common-transmit grid changed")
     return result
 
 
@@ -629,12 +669,9 @@ def _endpoint_gravitational_rate(compiled, side: str) -> np.ndarray:
     transmit_potential = (
         prior.GM_SUN / _row_norm(spacecraft - compiled["sun_transmit"])
         + prior.GM_EARTH / _row_norm(spacecraft - compiled["earth_transmit"])
-        + prior.GM_SATURN_SYSTEM
-        / _row_norm(spacecraft - compiled["saturn_transmit"])
+        + prior.GM_SATURN_SYSTEM / _row_norm(spacecraft - compiled["saturn_transmit"])
     )
-    return (receive_potential - transmit_potential) / (
-        one_way.SPEED_OF_LIGHT_M_S**2
-    )
+    return (receive_potential - transmit_potential) / (one_way.SPEED_OF_LIGHT_M_S**2)
 
 
 def _relativistic_delay_differential(compiled) -> np.ndarray:
@@ -664,9 +701,9 @@ def _shapiro_delay(compiled, side: str) -> np.ndarray:
             raise CassiniSagr3OpenTermAuditError(
                 "invalid differential gravitational-delay geometry"
             )
-        total += (
-            2.0 * gm / one_way.SPEED_OF_LIGHT_M_S**3
-        ) * np.log(numerator / denominator)
+        total += (2.0 * gm / one_way.SPEED_OF_LIGHT_M_S**3) * np.log(
+            numerator / denominator
+        )
     return total
 
 
@@ -686,17 +723,18 @@ def _ionosphere_differential(compiled) -> np.ndarray:
     )
 
 
-def _ionosphere_delay(
-    compiled, epochs: np.ndarray, model: IonModel
-) -> np.ndarray:
+def _ionosphere_delay(compiled, epochs: np.ndarray, model: IonModel) -> np.ndarray:
     start = compiled["calibration_et"][model.start_utc]
     end = compiled["calibration_et"][model.end_utc]
-    return _normalized_delay(
-        epochs,
-        start,
-        end,
-        model.coefficients_m_at_s_band,
-    ) * (prior.S_BAND_ION_REFERENCE_HZ / geometry.X_BAND_HZ) ** 2
+    return (
+        _normalized_delay(
+            epochs,
+            start,
+            end,
+            model.coefficients_m_at_s_band,
+        )
+        * (prior.S_BAND_ION_REFERENCE_HZ / geometry.X_BAND_HZ) ** 2
+    )
 
 
 def _troposphere_correction_only_differential(compiled) -> np.ndarray:
@@ -725,12 +763,8 @@ def _troposphere_partial_delay(
 ) -> np.ndarray:
     start = compiled["calibration_et"][correction.start_utc]
     end = compiled["calibration_et"][correction.end_utc]
-    wet = _normalized_delay(
-        epochs, start, end, correction.wet_coefficients_m
-    )
-    dry = _normalized_delay(
-        epochs, start, end, correction.dry_coefficients_m
-    )
+    wet = _normalized_delay(epochs, start, end, correction.wet_coefficients_m)
+    dry = _normalized_delay(epochs, start, end, correction.dry_coefficients_m)
     if np.any(elevation_rad <= 0.0):
         raise CassiniSagr3OpenTermAuditError(
             "pre-transition track is below the geometric horizon"
@@ -776,12 +810,8 @@ def _proper_time_uncertainty_family() -> dict[str, object]:
         "differential_raw_absolute_fractional_bound": differential_fractional,
         "differential_raw_absolute_bound_hz": raw_absolute_hz,
         "prefix_affine_maximum_absolute_gain": projection_gain,
-        "heldout_non_affine_maximum_absolute_bound_hz": (
-            heldout_maximum_absolute_hz
-        ),
-        "heldout_non_affine_peak_to_peak_bound_hz": (
-            2.0 * heldout_maximum_absolute_hz
-        ),
+        "heldout_non_affine_maximum_absolute_bound_hz": (heldout_maximum_absolute_hz),
+        "heldout_non_affine_peak_to_peak_bound_hz": (2.0 * heldout_maximum_absolute_hz),
         "projection_policy": (
             "exact infinity-norm propagation through the frozen prefix-only "
             "least-squares affine extrapolation"
@@ -795,19 +825,98 @@ def _proper_time_uncertainty_family() -> dict[str, object]:
 
 def _troposphere_candidate_uncertainty_family() -> dict[str, object]:
     return {
-        "kind": "INCOMPLETE_STATISTICAL_ZENITH_DELAY_DESCRIPTION",
-        "source": SOURCES["dsn_service_accuracy"],
+        "kind": "BOUNDED_OUTCOME_INDEPENDENT_CANDIDATE_FAMILY_AUDIT",
+        "audit_outcome": TROPOSPHERE_FAMILY_REFUSAL,
         "zenith_delay_one_sigma_m": DSN_TROPOSPHERE_ZENITH_DELAY_ONE_SIGMA_M,
         "frequency_family_state": "UNAVAILABLE",
         "reason": (
-            "a point-delay sigma does not determine delay-rate covariance or "
-            "one-second frequency curvature"
+            "none of the inspected products binds a temporal residual family to "
+            "both frozen receive paths; in particular DSS-65 has no documented "
+            "same-path SAGR3 witness with a numerical delay-rate uncertainty"
         ),
         "missing": [
-            "historical applicability to both DSS-25 and DSS-65",
-            "temporal covariance or Allan-deviation model for both paths",
-            "wet and dry elevation-mapping uncertainty",
-            "complete DSS-65 central troposphere model",
+            "DSS-65 same-line-of-sight calibration binding",
+            "historical DSS-65 temporal covariance or Allan-deviation family",
+            "mapping and beam-separation uncertainty on the frozen grid",
+        ],
+        "candidate_families": [
+            {
+                "candidate_id": "SAGR3_TRO_FITSIG",
+                "provenance": PROVENANCE_INDEPENDENT,
+                "numerical_inputs": {
+                    "DSS-25_C10_wet_fitsig_m": TRO_CORRECTIONS["DSS-25"].wet_fitsig_m,
+                    "DSS-25_C10_dry_fitsig_m": TRO_CORRECTIONS["DSS-25"].dry_fitsig_m,
+                    "DSS-65_C60_wet_fitsig_m": TRO_CORRECTIONS["DSS-65"].wet_fitsig_m,
+                    "DSS-65_C60_dry_fitsig_m": TRO_CORRECTIONS["DSS-65"].dry_fitsig_m,
+                },
+                "scope": "post-fit residual of each fitted zenith-delay polynomial",
+                "refusal_reason": (
+                    "POST_FIT_DELAY_RESIDUAL_WITHOUT_TEMPORAL_COVARIANCE_OR_"
+                    "SAMPLE_COUNT"
+                ),
+                "reduces_envelope": False,
+                "promoted_to_bound": False,
+            },
+            {
+                "candidate_id": "DSN_SEASONAL_TRO_MODEL",
+                "provenance": PROVENANCE_INDEPENDENT,
+                "scope": "first-order wet and dry zenith-delay central model",
+                "refusal_reason": "CENTRAL_MODEL_ONLY_WITHOUT_RESIDUAL_FAMILY",
+                "reduces_envelope": False,
+                "promoted_to_bound": False,
+            },
+            {
+                "candidate_id": "DSS25_GOLDSTONE_MCS_EMPIRICAL_ASD",
+                "provenance": PROVENANCE_INDEPENDENT,
+                "numerical_inputs": {
+                    "observed_fractional_ASD_upper_hz_per_hz": 1.1e-15,
+                    "timescale_lower_s": 1_000,
+                    "timescale_upper_s": 10_000,
+                },
+                "scope": "DSS-25 special MCS observations in 2001-2003",
+                "refusal_reason": "NO_DSS65_SAME_PATH_APPLICABILITY",
+                "reduces_envelope": False,
+                "promoted_to_bound": False,
+            },
+            {
+                "candidate_id": "DSS55_RELOCATED_AWVR1",
+                "provenance": PROVENANCE_INDEPENDENT,
+                "scope": "AWVR1 relocated beside DSS-55 in 2004",
+                "refusal_reason": (
+                    "NO_DOCUMENTED_SAGR3_DSS65_LINE_OF_SIGHT_BINDING_OR_RESIDUAL_ASD"
+                ),
+                "reduces_envelope": False,
+                "promoted_to_bound": False,
+            },
+            {
+                "candidate_id": "GENERIC_WVR_TURBULENCE_MODEL",
+                "provenance": PROVENANCE_INDEPENDENT,
+                "scope": "theoretical beam-separation and turbulence spectrum",
+                "required_session_inputs": [
+                    "historical Cn",
+                    "wind speed and direction",
+                    "receiver and WVR beam geometry",
+                    "WVR pointing and continuity",
+                ],
+                "refusal_reason": "FROZEN_SESSION_PARAMETERS_AND_TOPOLOGY_MISSING",
+                "reduces_envelope": False,
+                "promoted_to_bound": False,
+            },
+            {
+                "candidate_id": "DSN_ONE_SIGMA_ZENITH_DELAY",
+                "provenance": PROVENANCE_INDEPENDENT,
+                "numerical_inputs": {
+                    "zenith_delay_one_sigma_m": (
+                        DSN_TROPOSPHERE_ZENITH_DELAY_ONE_SIGMA_M
+                    ),
+                },
+                "scope": "service-level point-delay statistic",
+                "refusal_reason": (
+                    "NO_TEMPORAL_LAW_FOR_DELAY_RATE_OR_NON_AFFINE_FREQUENCY"
+                ),
+                "reduces_envelope": False,
+                "promoted_to_bound": False,
+            },
         ],
         "promoted_to_bound": False,
     }
@@ -900,9 +1009,7 @@ def _term(
         "uncertainty_family": uncertainty_family,
         "central_or_partial_model_reduces_envelope": False,
         "bound_state": bound_state,
-        "admitted_heldout_peak_to_peak_bound_hz": (
-            admitted_peak_to_peak_bound_hz
-        ),
+        "admitted_heldout_peak_to_peak_bound_hz": (admitted_peak_to_peak_bound_hz),
         "admitted_heldout_rms_bound_hz": None,
         "combination_role": role,
         "reason": reason,
