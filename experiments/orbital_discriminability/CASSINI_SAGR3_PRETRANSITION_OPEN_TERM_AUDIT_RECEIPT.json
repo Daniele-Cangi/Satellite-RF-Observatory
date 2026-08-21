@@ -1,0 +1,190 @@
+{
+  "audit_manifest_sha256": "32fa639ee971fe35b83a5e1e43db8e702bab0474642a3acd3ea3cb63cb9c58ed",
+  "audit_version": "cassini-sagr3-pretransition-open-term-envelope-audit-v1",
+  "authoritative_prior_outcome": "CASSINI_SAGR3_PRETRANSITION_GEOMETRY_SCREEN_POSITIVE_BUT_NOT_PHYSICALLY_ADMITTED",
+  "scope": "SAGR3_PRETRANSITION_METADATA_ONLY_NO_RSR_OR_IQ_ACCESS",
+  "outcome": "CASSINI_OPEN_TERM_BOUND_UNAVAILABLE",
+  "controlling_comparison": "DSS25_MINUS_DSS65_X_BAND_ORBITAL_VERSUS_SATURN_CENTER_AFTER_PREFIX_AFFINE_PROJECTION",
+  "controlling_heldout_peak_to_peak_hz": 0.07231370056321107,
+  "grid": {
+    "event_axis": "COMMON_CASSINI_TRANSMIT_ET_TDB",
+    "records": 10651,
+    "calibration_records": 3360,
+    "holdout_records": 7291,
+    "first_transmit_utc": "2006-09-08T10:36:28.092247Z",
+    "last_transmit_utc": "2006-09-08T13:33:58.092249Z",
+    "suffix_refit": "PROHIBITED"
+  },
+  "structural_cancellation": {
+    "topology_basis": "COHERENT_COMMON_SOURCE_FROZEN_IN_PARENT_HEADER_RECEIPT",
+    "common_DSS14_uplink": "CANCELS_FROM_DSS25_MINUS_DSS65_AT_COMMON_TRANSMIT_EPOCH",
+    "common_Cassini_transponder": "CANCELS_FROM_DSS25_MINUS_DSS65_AT_COMMON_TRANSMIT_EPOCH",
+    "spacecraft_USO": "NOT_APPLICABLE_WITHIN_THE_FROZEN_COHERENT_TOPOLOGY",
+    "remaining_terms": "RECEIVER_RATE_PATH_MEDIA_AND_BRANCH_HARDWARE_DIFFERENTIALS"
+  },
+  "source_identities": {
+    "dsn_media_interface": {
+      "bytes": 25915,
+      "sha256": "e2f8617eb454b0b057c3277806aaab339ff937bc3410495f2d0f0bac5b23ca22"
+    },
+    "ion_product": {
+      "bytes": 29160,
+      "sha256": "d643911892ee9a9d5b9f366e038d6705fd50769d9aa29c80f9192553c02c6aad"
+    },
+    "tro_product": {
+      "bytes": 133236,
+      "sha256": "5a3b116405157715e094075d99c4cb28c2c289490bfa93901a427faf52378dcb"
+    },
+    "calibration_inventory": {
+      "bytes": 1996,
+      "sha256": "afc3866c51a62292600bfb93c30372c60702be4353fbc70ec76a474c3160f3b3"
+    }
+  },
+  "kernel_sha256": {
+    "naif0012.tls": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+    "earth_720101_070426.bpc": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e",
+    "earthstns_itrf93_050714.bsp": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c",
+    "060901AP_SCPSE_06244_06255.bsp": "0b7cc35d94b956602593106ed8aa62ce5f33cb178b8544036a841c5e53fc81dd"
+  },
+  "outcome_conditioned_products_used": [],
+  "terms": [
+    {
+      "name": "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_model_heldout_non_affine": {
+        "peak_to_peak_hz": 0.1927967947508092,
+        "rms_hz": 0.1025986201605052,
+        "maximum_absolute_hz": 0.19862553726020776,
+        "calibration_prefix_rmse_hz": 0.0026599947674960625
+      },
+      "partial_model_heldout_non_affine": null,
+      "central_or_partial_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "admitted_heldout_rms_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "The common spacecraft/source contribution cancels structurally, but the IERS weak-field receiver-rate differential has no pass-specific hard truncation bound."
+    },
+    {
+      "name": "RELATIVISTIC_PROPAGATION_LIGHT_TIME",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_model_heldout_non_affine": {
+        "peak_to_peak_hz": 0.00009447273990621622,
+        "rms_hz": 0.00005251315177958207,
+        "maximum_absolute_hz": 0.00009783140090249289,
+        "calibration_prefix_rmse_hz": 0.0000015562038543491523
+      },
+      "partial_model_heldout_non_affine": null,
+      "central_or_partial_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "admitted_heldout_rms_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "The outcome-independent Sun/Earth/Saturn central path model omits unbounded moving-body and higher-order differential terms."
+    },
+    {
+      "name": "EARTH_TROPOSPHERE",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_model_heldout_non_affine": null,
+      "partial_model_heldout_non_affine": {
+        "peak_to_peak_hz": 0.007539928126392502,
+        "rms_hz": 0.0046749722984799555,
+        "maximum_absolute_hz": 0.008144018438930117,
+        "calibration_prefix_rmse_hz": 0.00038314492425158524
+      },
+      "central_or_partial_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "admitted_heldout_rms_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "The TRO product supplies independent C10/C60 NUPART corrections, but the public frozen inputs do not contain the complete DSCC60 seasonal baseline or a deterministic residual/elevation-mapping bound."
+    },
+    {
+      "name": "EARTH_IONOSPHERE",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_model_heldout_non_affine": {
+        "peak_to_peak_hz": 0.0003817801467492578,
+        "rms_hz": 0.00020164593643276913,
+        "maximum_absolute_hz": 0.00038846708974371857,
+        "calibration_prefix_rmse_hz": 0.0000022734867082084603
+      },
+      "partial_model_heldout_non_affine": null,
+      "central_or_partial_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "admitted_heldout_rms_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "Applicable independent C10 and C60 line-of-sight models cover the grid, but FITSIG and DSN one-sigma accuracy are not deterministic residual-frequency bounds."
+    },
+    {
+      "name": "INTERPLANETARY_PLASMA",
+      "provenance": "UNKNOWN",
+      "central_model_heldout_non_affine": null,
+      "partial_model_heldout_non_affine": null,
+      "central_or_partial_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "admitted_heldout_rms_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "No applicable outcome-independent finite bound on the differential interplanetary-plasma gradient across the two Earth receive paths was found."
+    },
+    {
+      "name": "STATION_HARDWARE_DELAY",
+      "provenance": "UNKNOWN",
+      "central_model_heldout_non_affine": null,
+      "partial_model_heldout_non_affine": null,
+      "central_or_partial_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "admitted_heldout_rms_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "No pass-specific deterministic bound for differential DSS-25/DSS-65 receiver-chain frequency curvature was found."
+    },
+    {
+      "name": "AVAILABLE_MEDIA_CALIBRATION",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_model_heldout_non_affine": null,
+      "partial_model_heldout_non_affine": {
+        "peak_to_peak_hz": 0.00792170827314176,
+        "rms_hz": 0.004874642847874255,
+        "maximum_absolute_hz": 0.008532485528673837,
+        "calibration_prefix_rmse_hz": 0.00038492422363534085
+      },
+      "central_or_partial_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "admitted_heldout_rms_bound_hz": null,
+      "combination_role": "NON_ADDITIVE_CONTROL_DO_NOT_DOUBLE_COUNT",
+      "reason": "ION coverage is complete, but TRO remains a correction-only partial diagnostic and neither product supplies a hard residual bound."
+    }
+  ],
+  "timing_envelope_two_stream_two_sided_hz": 0.000007482903185973555,
+  "conservative_combination": {
+    "admitted_open_term_names": [],
+    "admitted_open_term_peak_to_peak_hz": 0.0,
+    "unresolved_open_term_names": [
+      "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
+      "RELATIVISTIC_PROPAGATION_LIGHT_TIME",
+      "EARTH_TROPOSPHERE",
+      "EARTH_IONOSPHERE",
+      "INTERPLANETARY_PLASMA",
+      "STATION_HARDWARE_DELAY",
+      "AVAILABLE_MEDIA_CALIBRATION"
+    ],
+    "combined_open_term_envelope_state": "UNAVAILABLE",
+    "remaining_physical_margin_hz": null,
+    "maximum_admissible_detector_resolution_hz": null,
+    "detector_criterion": "signature > 3 * R_f + timing_envelope + open_term_envelope",
+    "best_case_upper_ceiling_if_every_unavailable_term_were_zero_hz": 0.024102072553341698,
+    "best_case_ceiling_is_admission_requirement": false
+  },
+  "exact_remaining_blockers": [
+    "DIFFERENTIAL_INTERPLANETARY_PLASMA_BOUND",
+    "DIFFERENTIAL_RECEIVER_CHAIN_CURVATURE_BOUND",
+    "COMPLETE_TROPOSPHERE_MODEL_AND_HARD_RESIDUAL_BOUND"
+  ],
+  "next_smallest_physical_step": "CHANGE_OBSERVABLE_REVIEW_USING_THE_ALREADY_PREDECLARED_SIMULTANEOUS_DSS25_X_KA_WITNESS; DO_NOT_ACCESS_IQ_OR_IMPLEMENT_IT_YET",
+  "iq_access_authorized": false,
+  "detector_implementation_authorized": false,
+  "new_gate_created": false
+}
