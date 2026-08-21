@@ -1,6 +1,8 @@
 """Synthetic-only tests for the frozen three-product SFDU header spike."""
 
 from dataclasses import fields, replace
+import json
+from pathlib import Path
 import struct
 
 import pytest
@@ -231,3 +233,21 @@ def test_manifest_and_receipt_cannot_represent_signal_or_samples() -> None:
         assert forbidden not in representation
     assert parser_manifest()["data_chdo_access"] == "PROHIBITED"
     assert len(parser_manifest_sha256()) == 64
+
+
+def test_frozen_real_receipt_keeps_topology_separate_from_physical_admission() -> None:
+    path = Path(__file__).parents[1] / "CASSINI_SAGR3_DISTRIBUTED_HEADER_RECEIPT.json"
+    receipt = json.loads(
+        path.read_text(encoding="utf-8"),
+        parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)),
+    )
+    assert receipt["outcome"] == "CASSINI_SAGR3_HEADER_TOPOLOGY_QUALIFIED"
+    assert receipt["forward_experiment_status"] == (
+        "BLOCKED_BY_UNMODELED_COORDINATE_TRANSITION_INSIDE_HELDOUT"
+    )
+    assert receipt["claim_scope"]["physical_margin_admitted"] is False
+    assert receipt["claim_scope"]["iq_access_authorized"] is False
+    assert receipt["access_audit"]["data_chdo_bytes_read"] == 0
+    assert {
+        product["transition"]["first_sample_utc"] for product in receipt["products"]
+    } == {"2006-09-08T14:57:32.000000Z"}
