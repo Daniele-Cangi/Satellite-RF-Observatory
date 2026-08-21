@@ -18,6 +18,7 @@ from experiments.orbital_discriminability.cassini_sagr3_distributed_headers impo
     parser_manifest,
     parser_manifest_sha256,
     qualify_topology,
+    locate_ddc_transition,
     strict_json,
 )
 
@@ -188,6 +189,32 @@ def test_frequency_transform_boundary_includes_ddc_lo_not_only_nco() -> None:
     assert summary["receiver_frequency_transform"][
         "maximum_absolute_adjacent_boundary_residual_hz"
     ] == pytest.approx(0.0, abs=1e-3)
+
+
+def test_transition_locator_uses_header_metadata_and_returns_exact_boundary() -> None:
+    role = "MEASUREMENT_X_DSS65"
+    spec = PRODUCTS[role]
+    transition = spec.records // 2
+
+    def header_at_index(_role, index):
+        assert _role == role
+        return parse_distributed_header(
+            _header(
+                station=65,
+                sequence=index % 65_536,
+                second=43_201.0 + index,
+                ddc_lo_mhz=327 if index < transition else 330,
+                nco_f1_hz=11_000.0 if index < transition else 3_011_000.0,
+            ),
+            role,
+        )
+
+    result = locate_ddc_transition(role, header_at_index)
+    assert result is not None
+    assert result["transition_record_index_zero_based"] == transition
+    assert result["before"]["ddc_lo_hz"] == 327_000_000
+    assert result["after"]["ddc_lo_hz"] == 330_000_000
+    assert result["access_boundary"]["data_chdo_bytes_read"] == 0
 
 
 def test_manifest_and_receipt_cannot_represent_signal_or_samples() -> None:

@@ -13,7 +13,7 @@ from hashlib import sha256
 import json
 from math import isfinite
 from pathlib import Path
-from typing import Final, Literal, Mapping, Sequence
+from typing import Callable, Final, Literal, Mapping, Sequence
 import urllib.request
 
 from experiments.orbital_discriminability.cassini_dss14_header_evaluation import (
@@ -475,6 +475,92 @@ def fetch_and_summarize_product(role: ProductRole) -> dict[str, object]:
                 "server returned an unauthorized extra byte range"
             )
     return accumulator.finish()
+
+
+def fetch_header_at_index(
+    role: ProductRole,
+    record_index: int,
+) -> DistributedHeaderReceipt:
+    """Fetch one exact 260-byte header for bounded transition localization."""
+
+    spec = PRODUCTS[role]
+    if not 0 <= record_index < spec.records:
+        raise CassiniDistributedHeaderError("record index is outside frozen product")
+    start = record_index * RSR_RECORD_BYTES
+    byte_range = ((start, start + RSR_HEADER_BYTES - 1),)
+    request = urllib.request.Request(
+        spec.data_url,
+        headers={
+            "Range": f"bytes={byte_range[0][0]}-{byte_range[0][1]}",
+            "User-Agent": USER_AGENT,
+        },
+    )
+    response = urllib.request.urlopen(request, timeout=60)
+    try:
+        parts = _read_exact_range_response(response, byte_range, spec.file_bytes)
+    finally:
+        response.close()
+    raw = bytearray(parts.pop(byte_range[0]))
+    try:
+        return parse_distributed_header(raw, role)
+    finally:
+        raw[:] = bytes(len(raw))
+
+
+def locate_ddc_transition(
+    role: ProductRole,
+    header_at_index: Callable[[ProductRole, int], DistributedHeaderReceipt] = (
+        fetch_header_at_index
+    ),
+) -> dict[str, object] | None:
+    """Locate the first DDC change after a full scan established one change."""
+
+    spec = PRODUCTS[role]
+    first = header_at_index(role, 0)
+    last = header_at_index(role, spec.records - 1)
+    if first.ddc_lo_hz == last.ddc_lo_hz:
+        return None
+    low = 1
+    high = spec.records - 1
+    while low < high:
+        middle = (low + high) // 2
+        if header_at_index(role, middle).ddc_lo_hz == first.ddc_lo_hz:
+            low = middle + 1
+        else:
+            high = middle
+    before = header_at_index(role, low - 1)
+    after = header_at_index(role, low)
+    before_nco = _polynomial(_finite_polynomial(before.frequency_polynomial), 1.0005)
+    after_nco = _polynomial(_finite_polynomial(after.frequency_polynomial), 0.0005)
+    before_transform = -before.rf_to_if_lo_hz - before.ddc_lo_hz + before_nco
+    after_transform = -after.rf_to_if_lo_hz - after.ddc_lo_hz + after_nco
+    result = {
+        "role": role,
+        "transition_record_index_zero_based": low,
+        "before": {
+            "first_sample_utc": before.first_sample_utc,
+            "record_sequence_number": before.record_sequence_number,
+            "ddc_lo_hz": before.ddc_lo_hz,
+            "nco_at_record_end_hz": before_nco,
+            "receiver_transform_at_record_end_hz": before_transform,
+        },
+        "after": {
+            "first_sample_utc": after.first_sample_utc,
+            "record_sequence_number": after.record_sequence_number,
+            "ddc_lo_hz": after.ddc_lo_hz,
+            "nco_at_record_start_hz": after_nco,
+            "receiver_transform_at_record_start_hz": after_transform,
+        },
+        "receiver_transform_boundary_residual_hz": after_transform - before_transform,
+        "access_boundary": {
+            "only_exact_260_byte_headers": True,
+            "data_chdo_bytes_requested": 0,
+            "data_chdo_bytes_read": 0,
+            "raw_headers_persisted": False,
+        },
+    }
+    strict_json(result)
+    return result
 
 
 def qualify_topology(
