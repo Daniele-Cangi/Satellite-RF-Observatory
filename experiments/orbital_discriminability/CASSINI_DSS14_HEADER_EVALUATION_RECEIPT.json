@@ -1,0 +1,146 @@
+{
+  "access_boundary": {
+    "additional_description_retry_header_bytes": 26520,
+    "complete_rsr_materialized": false,
+    "data_chdo_bytes_requested": 0,
+    "data_chdo_bytes_read": 0,
+    "header_ranges_per_successful_request": 100,
+    "raw_headers_persisted": false,
+    "successful_complete_grid_header_bytes": 3946800,
+    "successful_complete_grid_requests": 152,
+    "transport": "HTTP 206 multipart/byteranges"
+  },
+  "authority": {
+    "evaluation_manifest_sha256": "d956bbac0e080998e351b72044b37134b6c6e3fc23f36e61f97bc3d0d2d1c3ec",
+    "evaluation_source_sha256": "a88d81cb61c29715fbc23a06a35a7eec74c6e49f08819ec3a91e66dcdfcdd760",
+    "parser_manifest_sha256": "7ffeeb059e091d8e98ebd6cc2ec4f4449b66ffe2ed9baae397c1840b5a1df912",
+    "parser_source_sha256": "696e5db7c8555f68091a0dc339266b9a0e6b49443454b0a1945c2b937325209b",
+    "plan_sha256": "4dd7e60f25a7cb00f955346a7c49c42d11ef0990cb5c4eab9b687d9ac827d818",
+    "runtime": {
+      "numpy": "2.3.3",
+      "spiceypy": "7.0.0"
+    }
+  },
+  "candidates": [
+    {
+      "header": {
+        "ddc_lo_hz": 328000000,
+        "first_sample_utc": "2006-09-08T12:00:01.000000Z",
+        "frequency_override_active": false,
+        "frequency_polynomial_maximum_absolute_boundary_residual_hz": 1.0011717677116394e-08,
+        "last_first_sample_utc": "2006-09-08T15:00:00.000000Z",
+        "non_one_second_steps": 0,
+        "non_unit_sequence_steps": 0,
+        "ordered_whitelist_receipts_sha256": "54a49099ddd16c37ffcbc13234134ac99f72ea74d7e5f40372bb6f18d217d619",
+        "record_count": 10800,
+        "rf_to_if_lo_hz": 8100000000,
+        "rsr": 5,
+        "sample_rate_hz": 1000,
+        "sample_resolution_bits": 16,
+        "station": "DSS-14",
+        "subchannel": 1
+      },
+      "identity": {
+        "label_sha256": "185d43fe474484d1ef29957c603a63feaab9ac5426043d588fe33716e871ca58",
+        "lidvid": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200nnnx14rd::1.0",
+        "product_bytes": 46008000,
+        "product_name": "s23sags2006_251_1200nnnx14rd.dat",
+        "published_md5": "378f601ddbc057ebdc822cdb5fac4197",
+        "source_product_id": "CO-S-RSS-1-SAGR3-V1.0:S23SAGS2006251_1200NNNX14RD.3A1"
+      },
+      "prediction": {
+        "calibration_records": 2160,
+        "calibration_rmse_hz": 0.001115323406101883,
+        "heldout_maximum_absolute_hz": 0.18556934684935666,
+        "heldout_peak_to_peak_hz": 0.18576614507706193,
+        "heldout_records": 8640,
+        "heldout_rms_hz": 0.10345562742107922,
+        "improvement_over_dss26_ratio": 2.9065633266050503
+      },
+      "rank": 1,
+      "role": "HEADER_CANDIDATE_A",
+      "trajectory": {
+        "independence": "PREDICT_CREATED_2006_09_01_BEFORE_PASS",
+        "label_sha256": "dc3c2b4127f24fa056578c56f5e26089635cfdac38e68409c6fe68d0db48aa99",
+        "name": "060901AP_SCPSE_06244_06255.bsp",
+        "sha256": "0b7cc35d94b956602593106ed8aa62ce5f33cb178b8544036a841c5e53fc81dd"
+      }
+    },
+    {
+      "header": {
+        "ddc_lo_hz": 326000000,
+        "first_sample_utc": "2005-05-02T19:55:01.000000Z",
+        "frequency_override_active": false,
+        "frequency_polynomial_maximum_absolute_boundary_residual_hz": 5.392939783632755e-08,
+        "last_first_sample_utc": "2005-05-02T21:08:00.000000Z",
+        "non_one_second_steps": 0,
+        "non_unit_sequence_steps": 0,
+        "ordered_whitelist_receipts_sha256": "9fbf59a1534f1ab7bce6192428fb4b7323e404cdaed93b7b491db2956bf6dd6a",
+        "record_count": 4380,
+        "rf_to_if_lo_hz": 8100000000,
+        "rsr": 3,
+        "sample_rate_hz": 1000,
+        "sample_resolution_bits": 16,
+        "station": "DSS-14",
+        "subchannel": 1
+      },
+      "identity": {
+        "label_sha256": "b17cf1f4470630894988b9694284fcda7bad115d59018a29a40fe496ede3c6c9",
+        "lidvid": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s10sags2005_122_1955nnnx14rd::1.0",
+        "product_bytes": 18658800,
+        "product_name": "s10sags2005_122_1955nnnx14rd.dat",
+        "published_md5": "9b8b89c1e3a15ad742c828b51224b85f",
+        "source_product_id": "CO-S-RSS-1-SAGR1-V1.0:S10SAGS2005122_1955NNNX14RD.2A1"
+      },
+      "prediction": {
+        "calibration_records": 876,
+        "calibration_rmse_hz": 0.000530378108194702,
+        "heldout_maximum_absolute_hz": 0.18424557243030706,
+        "heldout_peak_to_peak_hz": 0.1823773695374571,
+        "heldout_records": 3504,
+        "heldout_rms_hz": 0.10447427860491933,
+        "improvement_over_dss26_ratio": 2.8535413365033246
+      },
+      "rank": 2,
+      "role": "HEADER_CANDIDATE_B",
+      "trajectory": {
+        "independence": "PREDICT_CREATED_2005_04_26_BEFORE_PASS",
+        "label_sha256": "561cde58c09488576fbdfc32643c16b6a851ef29bf3bbb8cc049579752b3e9a6",
+        "name": "050426AP_SCPSE_05116_05216.bsp",
+        "sha256": "065258e6982b10488604d97f02f9b5110d6b1e4760ff340211b50973ab8228f5"
+      }
+    }
+  ],
+  "claim_scope": {
+    "controlling_null": "CALIBRATION_PREFIX_AFFINE_RECORDED_BASEBAND",
+    "detector_access_authorized": false,
+    "free_time_phase": "PROHIBITED",
+    "iq_access_authorized": false,
+    "physical_margin_admitted": false,
+    "ranking_difference_hz": 0.0033887755396048436,
+    "seven_candidate_specific_open_terms_bounded": false,
+    "suffix_refit": "PROHIBITED"
+  },
+  "closed_prior_path": {
+    "controlling_peak_to_peak_hz": 0.06391264328448062,
+    "outcome": "CASSINI_OPEN_TERM_BOUND_UNAVAILABLE",
+    "product": "s11sags2005_157_1750nnnx26rd"
+  },
+  "description_retries": [
+    {
+      "decision_effect": "NONE",
+      "reason": "multipart response used chunked transfer without Content-Length",
+      "result": "CLIENT_BOUND_ENFORCED_WITHOUT_SCIENTIFIC_CHANGE"
+    },
+    {
+      "decision_effect": "NONE",
+      "reason": "PDS source suffix was incorrectly interpreted as RSR ID",
+      "result": "WHITELIST_BINDING_CORRECTED_FROM_AUTHORIZED_HEADER_FIELDS"
+    }
+  ],
+  "outcome": "CASSINI_DSS14_REAL_NCO_SIGNATURE_RANKED",
+  "payload_roles": {
+    "HEADER_CANDIDATE_A": "UNASSIGNED_AND_PROHIBITED",
+    "HEADER_CANDIDATE_B": "UNASSIGNED_AND_PROHIBITED"
+  }
+}
