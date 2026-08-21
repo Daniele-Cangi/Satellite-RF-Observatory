@@ -1,0 +1,149 @@
+{
+  "audit_version": "cassini-sagr3-composite-xka-offline-audit-v1",
+  "audit_manifest_sha256": "73b6818c459fc426fdf6bab467ca7cacd6b08ac7a0c104c133f8177361477940",
+  "scope": "FROZEN_AGGREGATE_METADATA_ONLY_NO_HEADER_REACCESS_NO_IQ",
+  "outcome": "CASSINI_COMPOSITE_OBSERVABLE_NOT_ADMITTED",
+  "sub_outcomes": [
+    "COMPOSITION_ALGEBRA_ADMITTED",
+    "DSS25_FIRST_ORDER_DISPERSIVE_CANCELLATION_STRUCTURALLY_VALID",
+    "PLASMA_MEASUREMENT_NOT_EVALUATED_WITHOUT_IQ",
+    "PHYSICAL_NEGATIVE_NOT_INTERPRETABLE"
+  ],
+  "parent_receipts": {
+    "CASSINI_SAGR3_DISTRIBUTED_HEADER_RECEIPT.json": {
+      "repository_text_sha256": "eba267949a4aa3cb26996ac9664dfd3c68cf1f4e43d5ed0611e2e66adfa8655f",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
+    },
+    "CASSINI_SAGR3_TRANSITION_AUDIT_RECEIPT.json": {
+      "repository_text_sha256": "5250f5efbfa9cb7ccc577fc9bd08fb586e40cd4cf91dc08e08917c7aaccfbabe",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
+    },
+    "CASSINI_SAGR3_PRETRANSITION_OPEN_TERM_AUDIT_RECEIPT.json": {
+      "repository_text_sha256": "8ee2f7ac55bb79586fc3d903bbc3c2777897834dae1d83bd20d548b3bc30a9e9",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
+    },
+    "CASSINI_SAGR3_DISTRIBUTED_GEOMETRY_RECEIPT.json": {
+      "repository_text_sha256": "aeb65b82599d5d73b9367fe8b6a9adaebd9d63b09f1d5d4d4c4c8ff0721f111c",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
+    }
+  },
+  "physical_question": "Can simultaneous DSS-25 X/Ka define a first-order dispersive-free DSS-25 coordinate for the frozen DSS25-minus-DSS65 orbital test?",
+  "maximum_authorized_claim": "THE_COMPOSITION_IS_ALGEBRAICALLY_VALID_FOR_EXACT_SIMULTANEOUS_SKY_FREQUENCY_COORDINATES; NO_PLASMA_OR_RF_MEASUREMENT_WAS_EVALUATED",
+  "observable": {
+    "fractional_model": "z_station_band = g_station + p_station/f_band^2 + h_station_band",
+    "dss25_common": "g25_hat = w25X*z25X + w25Ka*z25Ka",
+    "distributed_x_hz": "C = fX*(g25_hat - z65X)",
+    "weight_definition": {
+      "w25X": "-fX^2/(fKa^2-fX^2)",
+      "w25Ka": "fKa^2/(fKa^2-fX^2)",
+      "w65X": -1.0
+    },
+    "nominal_diagnostic_only": {
+      "x_hz": 8425000000.0,
+      "ka_hz": 32028000000.0,
+      "w25X": -0.07433988385143721,
+      "w25Ka": 1.0743398838514373
+    },
+    "invariants": {
+      "common_fraction_gain": "w25X + w25Ka = 1",
+      "dss25_first_order_dispersive_gain": "w25X/fX^2 + w25Ka/fKa^2 = 0",
+      "dss65_first_order_dispersive_gain": "-1/fX^2",
+      "dss25_orbital_geometry_gain": 1.0,
+      "dss65_orbital_geometry_gain": -1.0
+    }
+  },
+  "instantaneous_carrier_coordinate": {
+    "required": "EXACT_TIME_VARYING_X_AND_KA_SKY_FREQUENCY_ARRAYS_ON_THE_FROZEN_GRID",
+    "state": "NOT_MATERIALIZED_FROM_PARENT_AGGREGATE_RECEIPTS",
+    "nominal_weights_are_physical_admission": false,
+    "reason": "The aggregate header receipt retains finite-transform clauses and LO/DDC ranges, not the per-record carrier or polynomial grid."
+  },
+  "topology": {
+    "shared_upstream": [
+      "DSS-14 X-band uplink",
+      "Cassini coherent transponder",
+      "interplanetary path before Earth-near divergence"
+    ],
+    "independent_receive_roots": [
+      "DSS-25",
+      "DSS-65"
+    ],
+    "dss25_x_ka_are_distinct_channels_not_roots": true,
+    "all_three_streams_continuous_and_simultaneous": true
+  },
+  "projection": {
+    "fit": "ONE_COMPOSITE_CONSTANT_PLUS_LINEAR_FIT_ON_PREFIX_ONLY",
+    "calibration_records": 3360,
+    "holdout_records": 7291,
+    "per_band_affine": "PROHIBITED",
+    "suffix_refit": "PROHIBITED"
+  },
+  "frozen_nulls": {
+    "prefix_affine": {
+      "heldout_peak_to_peak_hz": 3266.45445769222,
+      "inheritance": "UNCHANGED_BY_LINEAR_COMPOSITION_IDENTITY"
+    },
+    "saturn_barycenter_geometry_destroying": {
+      "heldout_peak_to_peak_hz": 0.07231370056321107,
+      "heldout_rms_hz": 0.05736675863455984,
+      "heldout_max_abs_hz": 0.07874172640044241,
+      "inheritance": "UNCHANGED_BY_LINEAR_COMPOSITION_IDENTITY"
+    },
+    "null_specific_transform_or_refit": "PROHIBITED"
+  },
+  "physical_ledger": [
+    {
+      "term": "DSS25_FIRST_ORDER_COLD_PLASMA",
+      "state": "STRUCTURALLY_CANCELABLE_IF_EXACT_CARRIER_GRID_EXISTS",
+      "measurement_state": "NOT_EVALUATED_WITHOUT_IQ"
+    },
+    {
+      "term": "DSS65_FIRST_ORDER_COLD_PLASMA",
+      "state": "UNRESOLVED",
+      "reason": "DSS65 has X only in the frozen capability set"
+    },
+    {
+      "term": "DIFFERENTIAL_TROPOSPHERE",
+      "state": "UNRESOLVED",
+      "reason": "nondispersive X/Ka composition does not cancel station differential"
+    },
+    {
+      "term": "RECEIVER_PROPER_TIME_GRAVITY_DIFFERENTIAL",
+      "state": "UNRESOLVED",
+      "reason": "nondispersive station-rate differential survives"
+    },
+    {
+      "term": "RELATIVISTIC_PROPAGATION_DIFFERENTIAL",
+      "state": "UNRESOLVED",
+      "reason": "parent audit has a model value but no admitted uncertainty bound"
+    },
+    {
+      "term": "CROSS_BAND_AND_CROSS_STATION_RECEIVER_HARDWARE",
+      "state": "UNRESOLVED",
+      "coefficient": "w25X*h25X + w25Ka*h25Ka - h65X",
+      "reason": "composition introduces a weighted DSS25 cross-band hardware term"
+    }
+  ],
+  "controlling_geometry": {
+    "heldout_peak_to_peak_hz": 0.07231370056321107,
+    "timing_envelope_hz": 7.482903185973555e-06,
+    "can_increase_by_composition": false,
+    "source": "FROZEN_PARENT_GEOMETRY_IDENTITY_NOT_RF_RECOMPUTATION"
+  },
+  "exact_blockers": [
+    "EXACT_TIME_VARYING_X_KA_CARRIER_WEIGHT_GRID_NOT_RETAINED_IN_PARENT_RECEIPT",
+    "DSS65_PLASMA_UNRESOLVED",
+    "DIFFERENTIAL_TROPOSPHERE_UNRESOLVED",
+    "RECEIVER_PROPER_TIME_GRAVITY_DIFFERENTIAL_UNRESOLVED",
+    "RELATIVISTIC_PROPAGATION_DIFFERENTIAL_UNRESOLVED",
+    "CROSS_BAND_AND_CROSS_STATION_HARDWARE_UNRESOLVED"
+  ],
+  "access": {
+    "network": false,
+    "header_reaccess": false,
+    "iq_bytes_accessed": 0,
+    "sample_or_amplitude_fields_represented": false,
+    "detector_implemented": false
+  },
+  "new_gate_created": false
+}
