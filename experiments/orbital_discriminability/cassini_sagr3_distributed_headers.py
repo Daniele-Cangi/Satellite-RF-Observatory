@@ -291,6 +291,9 @@ class _HeaderAccumulator:
         self.non_unit_rsn_steps = 0
         self.non_one_second_steps = 0
         self.max_nco_boundary_hz = 0.0
+        self.max_receiver_transform_boundary_hz = 0.0
+        self.ddc_lo_change_count = 0
+        self.rf_to_if_lo_change_count = 0
         self.unique: dict[str, set[object]] = {
             name: set()
             for name in (
@@ -330,6 +333,24 @@ class _HeaderAccumulator:
             right = _finite_polynomial(receipt.frequency_polynomial)
             boundary = _polynomial(right, 0.0005) - _polynomial(left, 1.0005)
             self.max_nco_boundary_hz = max(self.max_nco_boundary_hz, abs(boundary))
+            left_transform = (
+                -self.previous.rf_to_if_lo_hz
+                - self.previous.ddc_lo_hz
+                + _polynomial(left, 1.0005)
+            )
+            right_transform = (
+                -receipt.rf_to_if_lo_hz
+                - receipt.ddc_lo_hz
+                + _polynomial(right, 0.0005)
+            )
+            self.max_receiver_transform_boundary_hz = max(
+                self.max_receiver_transform_boundary_hz,
+                abs(right_transform - left_transform),
+            )
+            self.ddc_lo_change_count += receipt.ddc_lo_hz != self.previous.ddc_lo_hz
+            self.rf_to_if_lo_change_count += (
+                receipt.rf_to_if_lo_hz != self.previous.rf_to_if_lo_hz
+            )
         if self.first is None:
             self.first = receipt
         self.previous = receipt
@@ -394,6 +415,15 @@ class _HeaderAccumulator:
             "frequency_polynomial_maximum_absolute_boundary_residual_hz": (
                 self.max_nco_boundary_hz
             ),
+            "receiver_frequency_transform": {
+                "equation": "recorded_baseband = sky - RF_TO_IF_LO - DDC_LO + NCO",
+                "ddc_lo_change_count": self.ddc_lo_change_count,
+                "rf_to_if_lo_change_count": self.rf_to_if_lo_change_count,
+                "maximum_absolute_adjacent_boundary_residual_hz": (
+                    self.max_receiver_transform_boundary_hz
+                ),
+                "finite_and_explicit_on_every_record": True,
+            },
             "phase_polynomial_coefficient_ranges_cycles": [
                 {"minimum": row[0], "maximum": row[1]} for row in self.phase_ranges
             ],
@@ -481,6 +511,12 @@ def qualify_topology(
         "dss25_x_ka_distinct_receiver_channels": dss25_distinct_channels,
         "dss25_dss65_x_independent_receive_roots": independent_x_roots,
         "distributed_x_common_start_and_overlap": x_common_start,
+        "all_receiver_frequency_transforms_explicit": all(
+            summary["receiver_frequency_transform"][
+                "finite_and_explicit_on_every_record"
+            ]
+            for summary in summaries.values()
+        ),
     }
     admitted = all(clauses.values())
     return {

@@ -22,7 +22,11 @@ from experiments.orbital_discriminability.cassini_sagr3_distributed_headers impo
 )
 
 
-def _header(*, station: int, rsr: int = 2, sequence: int = 0, second: float = 43_201.0):
+def _header(
+    *, station: int, rsr: int = 2, sequence: int = 0,
+    second: float = 43_201.0, ddc_lo_mhz: int = 327,
+    nco_f1_hz: float = 11_000.0,
+):
     value = bytearray(RSR_HEADER_BYTES)
     value[0:4] = b"NJPL"
     value[4:6] = b"2I"
@@ -40,14 +44,14 @@ def _header(*, station: int, rsr: int = 2, sequence: int = 0, second: float = 43
     value[56] = 0
     value[68] = 16
     struct.pack_into(">H", value, 70, 1)
-    struct.pack_into(">H", value, 72, 327)
+    struct.pack_into(">H", value, 72, ddc_lo_mhz)
     struct.pack_into(">H", value, 74, 8_100)
     struct.pack_into(">H", value, 76, 2006)
     struct.pack_into(">H", value, 78, 251)
     struct.pack_into(">d", value, 80, second)
     for offset, number in {
         88: 0.0, 96: 0.0, 104: 0.0, 112: 40.0, 120: 0.0,
-        176: 11_000.0, 184: -4.0, 192: 0.25,
+        176: nco_f1_hz, 184: -4.0, 192: 0.25,
         200: 80.0, 208: 0.0, 216: 11.0, 224: -2.0, 232: 0.25,
     }.items():
         struct.pack_into(">d", value, offset, number)
@@ -127,6 +131,9 @@ def _summary(*, station: int, rsr: int, channel: str, end: str) -> dict[str, obj
             "channel_id": [channel],
             "subchannel_id": [1],
         },
+        "receiver_frequency_transform": {
+            "finite_and_explicit_on_every_record": True,
+        },
     }
 
 
@@ -154,6 +161,33 @@ def test_topology_requires_distinct_dss25_channels_and_receive_roots() -> None:
     assert qualify_topology(invalid)["outcome"] == (
         "NO_ADMISSIBLE_DISTRIBUTED_HEADER_TOPOLOGY"
     )
+
+
+def test_frequency_transform_boundary_includes_ddc_lo_not_only_nco() -> None:
+    spec = replace(
+        PRODUCTS["MEASUREMENT_X_DSS25"],
+        records=2,
+        first_sample_utc="2006-09-08T12:00:01.000000Z",
+        last_first_sample_utc="2006-09-08T12:00:02.000000Z",
+    )
+    accumulator = _HeaderAccumulator(spec)
+    accumulator.add(parse_distributed_header(
+        _header(station=25, sequence=0, second=43_201.0),
+        "MEASUREMENT_X_DSS25",
+    ))
+    accumulator.add(parse_distributed_header(
+        _header(
+            station=25, sequence=1, second=43_202.0,
+            ddc_lo_mhz=330, nco_f1_hz=3_010_996.25,
+        ),
+        "MEASUREMENT_X_DSS25",
+    ))
+    summary = accumulator.finish()
+    assert summary["frequency_polynomial_maximum_absolute_boundary_residual_hz"] > 2e6
+    assert summary["receiver_frequency_transform"]["ddc_lo_change_count"] == 1
+    assert summary["receiver_frequency_transform"][
+        "maximum_absolute_adjacent_boundary_residual_hz"
+    ] == pytest.approx(0.0, abs=1e-3)
 
 
 def test_manifest_and_receipt_cannot_represent_signal_or_samples() -> None:

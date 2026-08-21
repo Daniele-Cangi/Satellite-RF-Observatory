@@ -41,8 +41,10 @@ Data CHDO authorization is zero bytes.
 3. Station, RSR, channel, subchannel, sample resolution/rate, LO, DDC LO,
    override state, frequency/phase polynomial states, filter and decimation are
    explicit and internally stable where identity requires stability.
-4. Frequency-polynomial coefficients are finite and their adjacent-record NCO
-   boundary residual is reported.
+4. Frequency-polynomial coefficients are finite. Both the raw adjacent-record
+   NCO boundary and the physically relevant combined
+   `-RF/IF LO - DDC LO + NCO` boundary are reported; DDC recentering is never
+   mistaken for a sky-frequency discontinuity.
 5. DSS-25 X and Ka are simultaneous distinct channels of the declared receiver
    path; they do not count as two geographic roots.
 6. DSS-25 X and DSS-65 X are simultaneous independent receive hardware roots.
@@ -63,4 +65,4 @@ Parser manifest SHA-256 before access:
 `2ef3b9fed0d104911b5a9059b263bca2a5e9117dd06650e2a6f4359e861d6b9e`.
 
 Parser source SHA-256 before access:
-`67995719c89065178c0a28ecc1cef514695a5cb621f08980c0e285982acbf096`.
+`887756acbfcca3338e6b088636a01d1cc53ff78b4afe655661876d3efafc569e`.
