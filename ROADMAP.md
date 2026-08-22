@@ -71,27 +71,63 @@ They are not on the active dependency chain, and repairing search-result
 partitioning is not a prerequisite for a physical observation. No successor
 inventory/search gate is planned.
 
-## Next physical checkpoint — satellite/pass selection: REVIEW REQUIRED
+## Forward physical attempts — CONCLUDED WITHOUT ORBITAL SCORE
 
-Select one candidate satellite/pass/carrier and compare only explicitly
-scoped, predeclared capability sets. Apply the hardened G0/G1 geometry,
-visibility and direct clock-envelope primitives. The claim may be limited to
-the selected set; no global receiver inventory is required.
+The bounded Berlin–Utrecht OpenWebRX path, RSP-03, MAVEN RSR and the tested
+Cassini paths produced useful physical exclusions but no independent held-out
+orbital comparison. Their receipts are historical results, not prerequisites
+for another receiver search chain.
 
-Before any implementation, record:
+The subsequent GOLD00USA–NLIB00USA G11/G21 GNSS vertical had a positive
+`1420.626 Hz` premeasurement margin after the frozen pairwise physical
+envelope. Its single authorized run stopped `MEASUREMENT_INVALID` at
+`TRUNCATED_REQUIRED_OBSERVATION_RECORD`; calibration and held-out hypotheses
+remained `NOT_EVALUATED`. The receipt cannot attribute the short record to
+field absence or an unsupported representation. The primary is closed with
+zero retry.
+
+## Next physical checkpoint — independent GNSS vertical: REVIEW REQUIRED
+
+The preferred route keeps the high-margin dual-station GNSS mechanism but does
+not repair or reuse the closed primary:
+
+```text
+new orbit-first geometry screen
+  -> bounded independent station set
+  -> separate development/qualification product
+  -> exact field-topology and parser qualification
+  -> distinct unopened primary
+  -> immutable prospective plan
+  -> one measurement and held-out comparison
+```
+
+Before any implementation or observation, record:
 
 ```text
 Physical question:
+Can a new broadcast orbit predict a dual-station held-out GNSS coordinate
+better than prefix-affine and wrong-orbit alternatives?
+
 New information produced:
+Whether one real measurement-valid coordinate reaches an orbital-versus-null
+score, rather than another geometry or parser result.
+
 Why existing experiment cannot answer it:
+The GOLD/NLIB primary terminated before feature extraction and cannot be
+reopened, repaired or reclassified.
+
 Minimum experiment:
+One geometry-selected pair, one independent qualification product, one
+distinct primary, frozen nuisances/nulls and one zero-retry outcome.
+
 Stop condition:
+If no independent qualification product proves the required field topology,
+or no candidate retains positive G1 margin, terminate without synthesizing an
+experiment and abandon this GNSS route.
 ```
 
-Only after that review may one prospective plan freeze the station set,
-calibration/confirmation windows, orbital ensemble, nuisance terms, nulls,
-witnesses, missing-data budget and outcome rules. This is a phase description,
-not a newly approved gate or authorization to acquire RF.
+This is a phase review, not a new gate and not authority to access another
+observation product.
 
 ## Anti-drift stop
 
