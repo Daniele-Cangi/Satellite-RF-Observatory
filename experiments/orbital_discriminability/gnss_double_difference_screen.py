@@ -32,8 +32,9 @@ NAVIGATION_URL: Final = (
     "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/215/"
     "BRDM00DLR_S_20262150000_01D_MN.rnx.gz"
 )
-WINDOW_START_UTC: Final = "2026-08-03T00:00:00Z"
-WINDOW_STOP_UTC: Final = "2026-08-04T00:00:00Z"
+WINDOW_START_UTC: Final = "2026-08-02T23:59:42Z"
+WINDOW_STOP_UTC: Final = "2026-08-03T23:59:42Z"
+OBSERVATION_TIME_SYSTEM: Final = "GPS"
 GRID_STEP_S: Final = 30.0
 MINIMUM_ELEVATION_DEG: Final = 15.0
 MINIMUM_WINDOW_S: Final = 2_400.0
@@ -201,6 +202,8 @@ def screen_navigation(path: Path) -> dict[str, object]:
                         "reference": reference,
                         "start_utc": format_utc(epochs[start]),
                         "stop_utc": format_utc(epochs[stop - 1]),
+                        "start_observation_epoch_gps": format_gps(epochs[start]),
+                        "stop_observation_epoch_gps": format_gps(epochs[stop - 1]),
                         "records": stop - start,
                         "calibration_records": split,
                         "holdout_records": stop - start - split,
@@ -567,6 +570,11 @@ def format_utc(value: datetime) -> str:
     return value.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
+def format_gps(value: datetime) -> str:
+    gps = value.astimezone(timezone.utc) + timedelta(seconds=GPS_UTC_OFFSET_S)
+    return f"{gps.isoformat(timespec='seconds').replace('+00:00', '')} GPS"
+
+
 def screen_manifest() -> dict[str, object]:
     return {
         "screen_version": SCREEN_VERSION,
@@ -575,6 +583,8 @@ def screen_manifest() -> dict[str, object]:
         "parameters": {
             "window_start_utc": WINDOW_START_UTC,
             "window_stop_utc": WINDOW_STOP_UTC,
+            "observation_time_system": OBSERVATION_TIME_SYSTEM,
+            "gps_minus_utc_s": GPS_UTC_OFFSET_S,
             "grid_step_s": GRID_STEP_S,
             "minimum_elevation_deg": MINIMUM_ELEVATION_DEG,
             "minimum_window_s": MINIMUM_WINDOW_S,

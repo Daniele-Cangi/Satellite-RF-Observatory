@@ -790,9 +790,15 @@ HTTP metadata has been read; their payloads remain unopened. The screen is
 recorded in `GNSS_DOUBLE_DIFFERENCE_GEOMETRY_SCREEN_REPORT.md` and its strict
 receipt.
 
-The next minimum block is header-only observation admission and a differential
-physical-envelope calculation for the existing three windows. It must select
-one window by remaining physical margin, freeze all carrier combinations,
-timing conventions and null transforms, and stop if no negative result would
-be interpretable. It must not open carrier values, add a catalog, create a new
-gate family or treat product-name cadence as measured continuity.
+Header-only observation admission and the differential physical-envelope
+calculation are now complete. The real headers corrected an 18-second GPS/UTC
+labelling error before plan freeze, admitted the common L1C/L2W same-path
+family and selected G11/G21 with 1,420.626 Hz of conservative pairwise physical
+margin. The exact plan is frozen in
+`GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN.md`.
+
+The next action requires separate measurement authority. It may decode one
+deterministic pass over the two exact-hash artifacts, evaluate calibration
+admission and then score the single held-out suffix against the frozen affine
+and G12 alternatives. It may not change station, target, reference, signals,
+time axes, envelope, nulls or outcomes, and must stop after one terminal result.

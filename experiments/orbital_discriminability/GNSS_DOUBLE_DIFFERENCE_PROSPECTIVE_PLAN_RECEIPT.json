@@ -1,0 +1,184 @@
+{
+  "schema": "gnss-double-difference-prospective-plan-receipt-v1",
+  "recorded_at": "2026-08-22T14:24:37.896Z",
+  "branch": "experiment/gnss-double-difference-prospective",
+  "parent_commit": "709317c588654a785b8126ff9e9d4382f8b4fa72",
+  "plan_markdown": {
+    "name": "GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN.md",
+    "bytes": 8392,
+    "sha256": "e3eaa0d1974ce4b415182aaa47451174aaa9296b61e31c296f2cda1e8eda86f4"
+  },
+  "source_hashes": {
+    "gnss_double_difference_screen.py": "51253628aca3e53a5b467cd869a7d2ec523a41ae390e695bc68281d289af6082",
+    "gnss_observation_header.py": "8fcddcda50ebd0049dbc5fd3e063902bdeee8d29767645bc61d12f1a2c4a0797",
+    "gnss_double_difference_envelope.py": "4eb520a0b91c9ab75fab771dd917967c341d3993e9acb04dd0419f9dc82ab02a"
+  },
+  "manifest_hashes": {
+    "corrected_geometry_screen": "8a97c9fa6330ddc3fd54538bd22682edcc02697cb76ba7edb1a9c1def7963764",
+    "header_parser": "ef12c103478400cf3a14060f8124f2443f36135c8f24ad25bbba9329f87c441f",
+    "physical_envelope": "6428cd6b4de8bba5bfa11de79466a914472f38ce8df1fceae67bed973aa80218"
+  },
+  "historical_geometry_checkpoint": {
+    "commit": "709317c588654a785b8126ff9e9d4382f8b4fa72",
+    "manifest_sha256": "68d5f24eca97ab35e0ba5fd4fc82b4ab753150c880f8a1014ef8a5b388761a12",
+    "state": "SUPERSEDED_BY_GPS_TO_UTC_TIME_AXIS_CORRECTION",
+    "reason": "RINEX_HEADERS_DECLARE_GPS_TIME_AND_GPS_MINUS_UTC_WAS_18_SECONDS"
+  },
+  "artifact_authority": [
+    {
+      "station_id": "GOLD00USA",
+      "name": "GOLD00USA_R_20262150000_01D_30S_MO.crx.gz",
+      "bytes": 2197353,
+      "sha256": "815176b9eb57c9032e4007db6c4b639aeeb9225cc4b992b38d16b1b6f773e027",
+      "header_sha256": "b9ecab984789ca10733e1cd2f51cc4f2a54a152f8bdb7e0a98fed530e1416dad",
+      "header_lines": 215,
+      "compressed_bytes_consumed_to_header_boundary": 3086,
+      "post_header_decompressed_bytes_discarded": 0
+    },
+    {
+      "station_id": "NLIB00USA",
+      "name": "NLIB00USA_R_20262150000_01D_30S_MO.crx.gz",
+      "bytes": 2534492,
+      "sha256": "cdc57171392b0f855fc7a7458e8b2ba8bd68951085e5f01cdfbdb848a7481ac5",
+      "header_sha256": "3c244330482535bd51ba0c53b567070245df84ea51c3483224bc1d590aa56b0c",
+      "header_lines": 55,
+      "compressed_bytes_consumed_to_header_boundary": 1511,
+      "post_header_decompressed_bytes_discarded": 0
+    }
+  ],
+  "header_admission": {
+    "state": "PAIR_HEADER_ADMITTED",
+    "rinex_version": 3.04,
+    "crinex_version": "3.0",
+    "interval_s": 30.0,
+    "time_system": "GPS",
+    "first_epoch_gps": "2026-08-03T00:00:00.000000",
+    "last_epoch_gps": "2026-08-03T23:59:30.000000",
+    "receiver_clock_offset_applied": 0,
+    "receiver_clock_offset_provenance": "RINEX_3_04_TABLE_A2_STANDARD_DEFAULT_NO",
+    "chosen_signal_family": {
+      "l1_phase": "L1C",
+      "l2_phase": "L2W",
+      "same_path_observables": ["C1C", "C2W", "L1C", "L2W", "S1C", "S2W"]
+    },
+    "gold_signal_strength_unit": "UNKNOWN_NOT_DECLARED",
+    "nlib_signal_strength_unit": "DBHZ"
+  },
+  "corrected_geometry": {
+    "gps_minus_utc_s": 18.0,
+    "candidate_windows": 177,
+    "shortlist": [
+      {
+        "target": "G11",
+        "reference": "G21",
+        "joint_start_utc": "2026-08-03T10:01:12Z",
+        "joint_stop_utc": "2026-08-03T13:13:42Z",
+        "controlling_screen_separation_hz": 2160.786662551251
+      },
+      {
+        "target": "G19",
+        "reference": "G24",
+        "joint_start_utc": "2026-08-03T07:15:42Z",
+        "joint_stop_utc": "2026-08-03T10:08:42Z",
+        "controlling_screen_separation_hz": 2056.2350382408754
+      },
+      {
+        "target": "G18",
+        "reference": "G20",
+        "joint_start_utc": "2026-08-03T13:19:12Z",
+        "joint_stop_utc": "2026-08-03T16:19:42Z",
+        "controlling_screen_separation_hz": 2035.9578787451198
+      }
+    ]
+  },
+  "physical_envelope_ranking": [
+    {
+      "rank": 1,
+      "target": "G11",
+      "reference": "G21",
+      "controlling_separation_hz": 2146.7968089172564,
+      "one_model_envelope_hz": 363.08560578999004,
+      "pairwise_envelope_hz": 726.1712115799801,
+      "remaining_margin_hz": 1420.6255973372763
+    },
+    {
+      "rank": 2,
+      "target": "G19",
+      "reference": "G24",
+      "controlling_separation_hz": 2040.9091838881006,
+      "one_model_envelope_hz": 372.636586701858,
+      "pairwise_envelope_hz": 745.273173403716,
+      "remaining_margin_hz": 1295.6360104843848
+    },
+    {
+      "rank": 3,
+      "target": "G18",
+      "reference": "G20",
+      "controlling_separation_hz": 2020.412130819418,
+      "one_model_envelope_hz": 383.2435551044107,
+      "pairwise_envelope_hz": 766.4871102088214,
+      "remaining_margin_hz": 1253.9250206105967
+    }
+  ],
+  "selected_plan": {
+    "plan_id": "GOLD_NLIB_G11_G21_2026_215_DUAL_FREQUENCY_DD",
+    "target": "G11",
+    "reference": "G21",
+    "stations": ["GOLD00USA", "NLIB00USA"],
+    "raw_input_epoch_start_gps": "2026-08-03T10:01:30 GPS",
+    "raw_input_epoch_stop_gps": "2026-08-03T13:14:00 GPS",
+    "feature_epoch_start_gps": "2026-08-03T10:02:00 GPS",
+    "feature_epoch_stop_gps": "2026-08-03T13:13:30 GPS",
+    "calibration_epoch_start_gps": "2026-08-03T10:02:00 GPS",
+    "calibration_epoch_stop_gps": "2026-08-03T10:40:00 GPS",
+    "heldout_epoch_start_gps": "2026-08-03T10:40:30 GPS",
+    "heldout_epoch_stop_gps": "2026-08-03T13:13:30 GPS",
+    "feature_records": 384,
+    "calibration_records": 77,
+    "heldout_records": 307,
+    "coordinate": "L1_EQUIVALENT_TIME_DERIVATIVE_OF_L1C_L2W_IONOSPHERE_FREE_GOLD_NLIB_G11_G21_DOUBLE_DIFFERENCE",
+    "nulls": ["PREFIX_AFFINE", "G12_G21_WRONG_ORBIT"],
+    "pairwise_decision_guard_hz": 726.1712115799801,
+    "score": "HELDOUT_PEAK_TO_PEAK_AFTER_PREFIX_ONLY_AFFINE_RESIDUAL_FIT"
+  },
+  "measurement_clauses": {
+    "artifact_hashes": "SATISFIED",
+    "header_topology": "SATISFIED",
+    "matching_dual_frequency_family": "SATISFIED",
+    "epoch_continuity": "NOT_EVALUATED",
+    "eight_phase_streams_present": "NOT_EVALUATED",
+    "same_path_code_and_snr_present": "NOT_EVALUATED",
+    "lli_and_geometry_free_cycle_slip": "NOT_EVALUATED",
+    "calibration_detectability": "NOT_EVALUATED",
+    "heldout_model_comparison": "NOT_EVALUATED"
+  },
+  "allowed_terminal_outcomes": [
+    "MEASUREMENT_INVALID",
+    "NOT_DETECTABLE",
+    "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+    "PREFIX_AFFINE_NULL_PREFERRED",
+    "WRONG_ORBIT_G12_PREFERRED",
+    "AMBIGUOUS"
+  ],
+  "claims": {
+    "authorized_now": "HEADER_TOPOLOGY_AND_POSITIVE_PREMEASUREMENT_PHYSICAL_MARGIN",
+    "not_authorized": [
+      "NO_OBSERVATION_VALUE_HAS_BEEN_DECODED",
+      "NO_ORBITAL_MODEL_HAS_BEEN_PREFERRED",
+      "NO_SATELLITE_IDENTITY_HAS_BEEN_ESTABLISHED",
+      "NO_MEASUREMENT_RUN_IS_AUTHORIZED_BY_THIS_RECEIPT"
+    ]
+  },
+  "observation_access": {
+    "epoch_records_decoded": 0,
+    "observation_fields_decoded": 0,
+    "carrier_phase_values": 0,
+    "code_values": 0,
+    "snr_values": 0,
+    "lli_values": 0
+  },
+  "outcome": "READY_FOR_GNSS_MEASUREMENT_AUTHORITY",
+  "prospective_plan_frozen": true,
+  "measurement_authorized": false,
+  "new_gate_created": false
+}

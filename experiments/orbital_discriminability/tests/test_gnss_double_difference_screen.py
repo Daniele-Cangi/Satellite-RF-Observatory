@@ -113,17 +113,19 @@ def test_manifest_is_stable_and_has_no_observation_input() -> None:
     manifest = screen.screen_manifest()
 
     assert screen.screen_manifest_sha256() == (
-        "68d5f24eca97ab35e0ba5fd4fc82b4ab753150c880f8a1014ef8a5b388761a12"
+        "8a97c9fa6330ddc3fd54538bd22682edcc02697cb76ba7edb1a9c1def7963764"
     )
     assert "RINEX observation access" in manifest["forbidden"]
     assert "observation" not in manifest["parameters"]
 
 
-def test_receipt_is_geometry_only_and_observations_remain_unopened() -> None:
+def test_historical_receipt_remains_geometry_only_and_unopened() -> None:
     receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
 
     assert receipt["outcome"] == screen.OUTCOME_SHORTLIST
-    assert receipt["screen_manifest_sha256"] == screen.screen_manifest_sha256()
+    assert receipt["screen_manifest_sha256"] == (
+        "68d5f24eca97ab35e0ba5fd4fc82b4ab753150c880f8a1014ef8a5b388761a12"
+    )
     assert receipt["geometry_screen"]["candidate_windows"] == 176
     assert [row["target"] for row in receipt["geometry_screen"]["shortlist"]] == [
         "G11",

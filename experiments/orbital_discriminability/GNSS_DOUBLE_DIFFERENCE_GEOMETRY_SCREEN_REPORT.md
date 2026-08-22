@@ -1,5 +1,11 @@
 # GNSS double-difference prospective geometry screen
 
+> Time-axis amendment: this geometry-only checkpoint preceded real header
+> admission and labelled the delivery grid as UTC. The headers later proved
+> GPS time. Corrected windows, margins and the frozen experiment are recorded
+> in `GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN.md`; the historical numbers below
+> remain only to preserve the checkpoint audit trail.
+
 ## Outcome
 
 `GNSS_DOUBLE_DIFFERENCE_GEOMETRY_SHORTLISTED`
