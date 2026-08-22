@@ -1,0 +1,287 @@
+{
+  "compiler_version": "cassini-sroc-2005-dual-root-xka-compiler-v1",
+  "compiler_manifest_sha256": "b4c103d40e9a43d5704f4a63e1e59b78c6e3117886fec8ae92c87ece1c4f3823",
+  "canonical_compiler_source_sha256": "ea3f3ee640a579c85a70dc9c9388ada34d6f9f1ee1f08569e8d6c3ec3c021508",
+  "source_commit": "a7ddd39062e8ebe79e47eed607d53b4fe94c644a",
+  "scope": "FOUR_FROZEN_SROC_2005_HEADERS_NO_DATA_CHDO_NO_IQ",
+  "outcome": "CASSINI_DUAL_ROOT_PHYSICAL_ENVELOPE_UNAVAILABLE",
+  "maximum_authorized_claim": "EXACT_METADATA_COORDINATE_AND_DETECTABILITY_SCREEN_ONLY;NO_CARRIER_PLASMA_OR_ORBITAL_RF_MEASUREMENT",
+  "coordinate_artifacts": [
+    {
+      "role": "DSS25_X",
+      "records": 5280,
+      "ordered_whitelist_receipts_sha256": "b10bd92ed0cbc4a60184ed7cc1e2efa982fa79df587873b26b241d571ee837d6",
+      "derived_coordinate_artifact_sha256": "e2fe6cbc03432dbafe8726692aa503a116f78b7ef443ff07a66edb132ad3e1eb",
+      "raw_headers_persisted": false
+    },
+    {
+      "role": "DSS25_KA",
+      "records": 5280,
+      "ordered_whitelist_receipts_sha256": "0f980d0a0bcd2e929c3e9a40ecbe493bb70b17a213e069db9eefb563f8a76a92",
+      "derived_coordinate_artifact_sha256": "819ea1d55a1d687ab2f1830842c560603fd45901ffb6714e4183629d4ee51d3c",
+      "raw_headers_persisted": false
+    },
+    {
+      "role": "DSS55_X",
+      "records": 5280,
+      "ordered_whitelist_receipts_sha256": "7b4dd512135e37d788ea46c970c6c444f4570039a82765705b9cef6fb787a793",
+      "derived_coordinate_artifact_sha256": "d556d164637c862ab276f838da942753c26c7514fd98b386c51b2cda3e4aaa8b",
+      "raw_headers_persisted": false
+    },
+    {
+      "role": "DSS55_KA",
+      "records": 5280,
+      "ordered_whitelist_receipts_sha256": "b903c9fc637bac331866514c247a3204868f2ded27855e262f1764bb066dc844",
+      "derived_coordinate_artifact_sha256": "1bec7069d3eee69dca619f2209923f87febe45b785d1a9e3e04a2c7dc792ee8a",
+      "raw_headers_persisted": false
+    }
+  ],
+  "transform_ledger": [
+    "future model-blind baseband ridge per stream",
+    "add RF-to-IF plus DDC minus exact NCO to reconstruct sky frequency",
+    "map both roots to one common Cassini transmit-time coordinate",
+    "form fractional X/Ka coordinate independently at each root",
+    "cancel first-order p/f^2 at DSS25 and DSS55",
+    "subtract roots and scale by frozen X reference",
+    "fit one composite affine on first 20 percent only",
+    "score untouched suffix against both frozen nulls"
+  ],
+  "nco_semantics": "RECEIVER_STEERING_METADATA_NOT_RF_MEASUREMENT",
+  "geometry_and_nulls": {
+    "event_axis": "COMMON_CASSINI_TRANSMIT_ET_TDB",
+    "grid_step_s": 1.0,
+    "records": 5279,
+    "calibration_records": 1056,
+    "holdout_records": 4223,
+    "first_transmit_utc": "2005-06-08T17:54:57.678910Z",
+    "last_transmit_utc": "2005-06-08T19:22:55.678912Z",
+    "suffix_refit": "PROHIBITED",
+    "kernel_lineage": [
+      {
+        "name": "naif0012.tls",
+        "bytes": 5257,
+        "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+        "role": "UTC_TO_ET_TDB",
+        "independence": "TIME_SCALE_CONTROL"
+      },
+      {
+        "name": "earth_720101_070426.bpc",
+        "bytes": 8603648,
+        "sha256": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e",
+        "role": "HISTORICAL_EARTH_ORIENTATION",
+        "independence": "POST_PASS_EOP_INDEPENDENT_OF_TARGET_RF"
+      },
+      {
+        "name": "earthstns_itrf93_050714.bsp",
+        "bytes": 38912,
+        "sha256": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c",
+        "role": "DSN_STATION_STATES_DSS25_DSS55",
+        "independence": "STATION_MODEL_INDEPENDENT_OF_TARGET_RF"
+      },
+      {
+        "name": "050426AP_SCPSE_05116_05216.bsp",
+        "bytes": 3832832,
+        "sha256": "065258e6982b10488604d97f02f9b5110d6b1e4760ff340211b50973ab8228f5",
+        "role": "CASSINI_TRAJECTORY",
+        "independence": "PREDICT_CREATED_2005_04_26_BEFORE_PASS"
+      }
+    ],
+    "joint_visibility": true,
+    "elevation_deg": {
+      "DSS25": {
+        "minimum": 46.148384834982494,
+        "maximum": 63.555670834282566
+      },
+      "DSS55": {
+        "minimum": 15.830630683474048,
+        "maximum": 32.451680368284684
+      }
+    },
+    "carrier_coordinates_hz": {
+      "DSS25_X": {
+        "minimum": 8426636501.428985,
+        "maximum": 8426667574.00958,
+        "semantics": "RF_PLUS_DDC_MINUS_NCO_STEERING_NOT_MEASURED_RF"
+      },
+      "DSS25_KA": {
+        "minimum": 32021218713.460598,
+        "maximum": 32021336789.248554,
+        "semantics": "RF_PLUS_DDC_MINUS_NCO_STEERING_NOT_MEASURED_RF"
+      },
+      "DSS55_X": {
+        "minimum": 8426620734.465706,
+        "maximum": 8426653989.083331,
+        "semantics": "RF_PLUS_DDC_MINUS_NCO_STEERING_NOT_MEASURED_RF"
+      },
+      "DSS55_KA": {
+        "minimum": 32021158798.974907,
+        "maximum": 32021285166.523605,
+        "semantics": "RF_PLUS_DDC_MINUS_NCO_STEERING_NOT_MEASURED_RF"
+      }
+    },
+    "composition_weights": {
+      "DSS25_X": {
+        "minimum": -0.07440476186503232,
+        "maximum": -0.0744047618642167
+      },
+      "DSS25_KA": {
+        "minimum": 1.0744047618642167,
+        "maximum": 1.0744047618650323
+      },
+      "DSS55_X": {
+        "minimum": -0.07440476186508495,
+        "maximum": -0.07440476186424382
+      },
+      "DSS55_KA": {
+        "minimum": 1.0744047618642438,
+        "maximum": 1.074404761865085
+      },
+      "maximum_first_order_plasma_coefficient_abs": {
+        "DSS25": 3.76158192263132e-37,
+        "DSS55": 1.88079096131566e-37
+      },
+      "carrier_coordinate_uncertainty_basis_hz": 500.0
+    },
+    "orbital_observable": {
+      "minimum_hz": 13581.339025775518,
+      "maximum_hz": 15762.802420993261,
+      "peak_to_peak_hz": 2181.463395217743,
+      "rms_hz": 14869.379734291471
+    },
+    "nulls": {
+      "prefix_affine": {
+        "constant_hz": 15770.517487851808,
+        "slope_hz_s": -0.24387203104096264,
+        "heldout_peak_to_peak_hz": 894.288354116472,
+        "heldout_rms_hz": 429.8323094429751,
+        "heldout_maximum_absolute_hz": 902.0218822420884,
+        "calibration_prefix_rmse_hz": 3.4545787007635367
+      },
+      "saturn_barycenter_geometry_destroying": {
+        "constant_hz": -2.1907852615107983,
+        "slope_hz_s": 0.00010977967169768201,
+        "heldout_peak_to_peak_hz": 0.2995923735627999,
+        "heldout_rms_hz": 0.145497570139738,
+        "heldout_maximum_absolute_hz": 0.30231748920258017,
+        "calibration_prefix_rmse_hz": 0.0012207183286491844
+      },
+      "same_transform_and_projection": true
+    },
+    "controlling_heldout_peak_to_peak_hz": 0.2995923735627999,
+    "timing_envelope": {
+      "per_stream_bound_s": 1e-06,
+      "method": "DIRECT_TRAJECTORY_AT_T_MINUS_AND_PLUS_BOUND",
+      "four_stream_weighted_hz": 2.04165223073319e-05,
+      "shared_station_clock_correlation_assumed": false
+    },
+    "rf_or_plasma_observed": false
+  },
+  "seven_term_physical_ledger": [
+    {
+      "name": "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
+      "state": "MODELED_CENTRAL_UNCERTAINTY_UNRESOLVED",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_or_partial_heldout_non_affine": null,
+      "central_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "Receiver proper-time/gravity differential survives X/Ka; a central model is not its pass-specific uncertainty."
+    },
+    {
+      "name": "RELATIVISTIC_PROPAGATION_LIGHT_TIME",
+      "state": "MODELED_CENTRAL_UNCERTAINTY_UNRESOLVED",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_or_partial_heldout_non_affine": null,
+      "central_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "Moving-body and higher-order path remainders lack a frozen hard bound."
+    },
+    {
+      "name": "EARTH_TROPOSPHERE",
+      "state": "PARTIAL_MODEL_UNRESOLVED",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_or_partial_heldout_non_affine": null,
+      "central_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "C10/C60 TRO covers the window, but not with a complete slant model and deterministic residual-frequency bound."
+    },
+    {
+      "name": "EARTH_IONOSPHERE",
+      "state": "FIRST_ORDER_NOT_EVALUATED_WITHOUT_IQ_HIGHER_ORDER_UNRESOLVED",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_or_partial_heldout_non_affine": null,
+      "central_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "First-order 1/f^2 is structurally observable at both roots only after four RF ridges exist; FITSIG is not a hard bound."
+    },
+    {
+      "name": "INTERPLANETARY_PLASMA",
+      "state": "FIRST_ORDER_NOT_EVALUATED_WITHOUT_IQ_HIGHER_ORDER_UNRESOLVED",
+      "provenance": "UNKNOWN",
+      "central_or_partial_heldout_non_affine": null,
+      "central_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "The same future X/Ka coordinate can expose first-order interplanetary plasma; higher-order and scintillation curvature remain open."
+    },
+    {
+      "name": "STATION_HARDWARE_DELAY",
+      "state": "UNRESOLVED",
+      "provenance": "UNKNOWN",
+      "central_or_partial_heldout_non_affine": null,
+      "central_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "combination_role": "ADDITIVE_PHYSICAL_TERM",
+      "reason": "Weighted X/Ka hardware, cross-root reference curvature, FIR group delay and cable drift have no outcome-independent hard bound."
+    },
+    {
+      "name": "AVAILABLE_MEDIA_CALIBRATION",
+      "state": "PARTIAL_CALIBRATION_UNRESOLVED",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "central_or_partial_heldout_non_affine": null,
+      "central_model_reduces_envelope": false,
+      "bound_state": "UNAVAILABLE",
+      "admitted_heldout_peak_to_peak_bound_hz": null,
+      "combination_role": "NON_ADDITIVE_CONTROL_DO_NOT_DOUBLE_COUNT",
+      "reason": "Applicable ION/TRO products exist, but central corrections and FITSIG cannot reduce the envelope."
+    }
+  ],
+  "correlated_envelope": {
+    "representation": "NON_PROBABILISTIC_CAUSAL_STATE_ENVELOPE",
+    "combination": "MINKOWSKI_SUM_OF_BOUNDED_CORRELATED_FAMILIES",
+    "unresolved_terms": [
+      "PROPER_TIME_AND_GRAVITATIONAL_FREQUENCY",
+      "RELATIVISTIC_PROPAGATION_LIGHT_TIME",
+      "EARTH_TROPOSPHERE",
+      "EARTH_IONOSPHERE",
+      "INTERPLANETARY_PLASMA",
+      "STATION_HARDWARE_DELAY",
+      "AVAILABLE_MEDIA_CALIBRATION"
+    ],
+    "unresolved_is_zero": false,
+    "root_sum_square_used": false,
+    "remaining_physical_margin_hz": null,
+    "maximum_admissible_detector_resolution_hz": null,
+    "criterion": "signature > timing + physical envelope + 3*R_f"
+  },
+  "access": {
+    "sfdu_control_header_bytes": 5491200,
+    "data_chdo_bytes_requested": 0,
+    "data_chdo_bytes_read": 0,
+    "iq_bytes_accessed": 0,
+    "amplitude_or_signal_diagnostics_represented": false,
+    "raw_headers_persisted": false,
+    "detector_implemented": false
+  },
+  "iq_access_authorized": false,
+  "new_gate_created": false
+}
