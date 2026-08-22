@@ -15,6 +15,10 @@ PLAN = ROOT / "GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN.md"
 RECEIPT = ROOT / "GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN_RECEIPT.json"
 
 
+def canonical_lf_sha(path: Path) -> str:
+    return sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def test_ionosphere_free_coefficients_preserve_geometric_range() -> None:
     alpha, beta = envelope.ionosphere_free_coefficients()
 
@@ -61,7 +65,7 @@ def test_manifest_forbids_measurement_access_and_post_outcome_changes() -> None:
 
 def test_frozen_plan_receipt_binds_plan_and_keeps_measurements_sealed() -> None:
     receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
-    plan_hash = sha256(PLAN.read_bytes()).hexdigest()
+    plan_hash = canonical_lf_sha(PLAN)
 
     assert plan_hash == receipt["plan_markdown"]["sha256"]
     assert receipt["outcome"] == "READY_FOR_GNSS_MEASUREMENT_AUTHORITY"

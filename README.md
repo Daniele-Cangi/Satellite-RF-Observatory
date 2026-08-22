@@ -106,10 +106,19 @@ preferred an orbital model over frozen nulls. The GNSS result refuses one exact
 measurement path; it is not evidence against G11 or the double-difference
 mechanism.
 
-The next candidate is a new independent GNSS vertical. Geometry must again
-lead selection, and a different development product must demonstrate the exact
-decoder-native field topology before a separate artifact is assigned the
-primary role. The closed GOLD/NLIB primary cannot be repaired or rerun.
+The navigation-only review for a new independent GNSS vertical now selects
+KIRU00SWE–MAT100ITA, G20/G22. Its controlling orbital-versus-G14 separation is
+`6233.797940 Hz`; the unchanged pairwise physical envelope is `709.718875 Hz`,
+leaving `5524.079066 Hz`. The geometry result is recorded in
+[`GNSS_INDEPENDENT_FORWARD_REVIEW_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_FORWARD_REVIEW_REPORT.md).
+
+Separate DOY 214 KIRU/MAT1 products are described as future qualification
+artifacts, while distinct DOY 215 products remain the unopened primary. Only
+HTTP `HEAD` metadata has been accessed. No observation header, epoch or value
+has been opened, no prospective plan is frozen and no primary authority
+exists. The next admissible action is a separately authorized, structure-only
+qualification of DOY 214; failure there terminates the GNSS route rather than
+reopening GOLD/NLIB or constructing another parser gate.
 
 ## Preserved Gate F2.5 experimental history
 

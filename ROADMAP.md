@@ -86,7 +86,7 @@ remained `NOT_EVALUATED`. The receipt cannot attribute the short record to
 field absence or an unsupported representation. The primary is closed with
 zero retry.
 
-## Next physical checkpoint — independent GNSS vertical: REVIEW REQUIRED
+## Next physical checkpoint — independent GNSS vertical: NAVIGATION REVIEW COMPLETE
 
 The preferred route keeps the high-margin dual-station GNSS mechanism but does
 not repair or reuse the closed primary:
@@ -100,6 +100,19 @@ new orbit-first geometry screen
   -> immutable prospective plan
   -> one measurement and held-out comparison
 ```
+
+The navigation-only bounded review selected KIRU00SWE–MAT100ITA with target
+G20, reference G22 and wrong-orbit alternative G14. The controlling held-out
+separation is `6233.797940 Hz`; the unchanged symmetric physical envelope is
+`709.718875 Hz`, leaving `5524.079066 Hz`. A stronger-looking ONSA route was
+not admitted because its public antenna-calibration field is unknown under the
+existing PCV-envelope provenance.
+
+DOY 214 KIRU/MAT1 products are assigned only to future structural
+qualification. Distinct DOY 215 products are the still-unopened primary. HTTP
+`HEAD` proved only endpoint existence and content length; it did not prove any
+RINEX field, epoch, signal or continuity clause. See
+`GNSS_INDEPENDENT_FORWARD_REVIEW_REPORT.md`.
 
 Before any implementation or observation, record:
 
@@ -126,8 +139,9 @@ or no candidate retains positive G1 margin, terminate without synthesizing an
 experiment and abandon this GNSS route.
 ```
 
-This is a phase review, not a new gate and not authority to access another
-observation product.
+The phase review is complete without a new gate. The next action requires
+explicit authority limited to the two DOY 214 qualification products. The DOY
+215 primary remains sealed; no prospective plan is frozen yet.
 
 ## Anti-drift stop
 
