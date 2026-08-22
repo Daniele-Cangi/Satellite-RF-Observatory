@@ -1,0 +1,53 @@
+{
+  "schema": "gnss-double-difference-measurement-seal-v1",
+  "source_commit": "c00a368a51b0e81ffedc0ae50187f857e74ec22d",
+  "detector_source": "experiments/orbital_discriminability/gnss_double_difference_measurement.py",
+  "detector_source_sha256": "390637f3275b477d5091b1dc4e360a3eb2e1e4b392447542f29c657e87d9d901",
+  "detector_source_git_blob": "81b5ca4b478173efb3e5c7b7aa2cb672e91b57b4",
+  "plan_source_commit": "fc3a6059a2b440ef6a4e98989f944b225ebcf6d3",
+  "plan_file": "experiments/orbital_discriminability/GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN.md",
+  "plan_sha256": "e3eaa0d1974ce4b415182aaa47451174aaa9296b61e31c296f2cda1e8eda86f4",
+  "runtime_manifest_sha256": "6cf6fdfe4faf66a523f873545478a4e4eb049cf5be1224fef9f987638c5141d1",
+  "dependencies": {
+    "python": "3.13.5",
+    "hatanaka": "2.8.1",
+    "ncompress": "1.0.2",
+    "numpy": "2.3.3"
+  },
+  "frozen_transform": {
+    "signals": ["C1C", "L1C", "S1C", "C2W", "L2W", "S2W"],
+    "target": "G11",
+    "reference": "G21",
+    "wrong_orbit_null": "G12",
+    "raw_records": 386,
+    "feature_records": 384,
+    "calibration_records": 77,
+    "heldout_records": 307,
+    "epoch_step_s": 30.0,
+    "central_derivative_baseline_s": 60.0,
+    "gps_minus_utc_s": 18.0,
+    "geometry_free_second_difference_limit_m": 0.09514683639918244,
+    "geometry_free_limit_basis": "HALF_OF_SHORTEST_USED_CARRIER_WAVELENGTH",
+    "signal_strength_rule": "PRESENCE_AND_CONTINUITY_ONLY",
+    "one_model_admission_envelope_hz": 363.08560578999004,
+    "pairwise_decision_guard_hz": 726.1712115799801,
+    "score": "HELDOUT_PEAK_TO_PEAK_AFTER_CONSTANT_AND_SLOPE_FIT_ON_FIRST_77_FEATURES_ONLY"
+  },
+  "tests": {
+    "focused": "29 passed",
+    "full_orbital_suite": "258 passed, 1 pre-existing Maven detector-manifest hash failure",
+    "ruff": "passed"
+  },
+  "access_at_freeze": {
+    "observation_epoch_records_decoded": 0,
+    "observation_fields_decoded": 0,
+    "raw_observation_persisted": false
+  },
+  "post_freeze_policy": {
+    "measurement_runs": 1,
+    "retry": "NONE_AFTER_FIRST_TERMINAL_OUTCOME",
+    "alternate_station_target_reference_signal_or_window": false,
+    "raw_or_decompressed_observation_persistence": false
+  },
+  "state": "DETECTOR_SEALED_AWAITING_SINGLE_AUTHORIZED_MEASUREMENT_RUN"
+}

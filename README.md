@@ -80,8 +80,36 @@ into an admission procedure, but no current Internet capability has yet been
 queried or admitted.
 
 The G1.1–G1.3 inventory/search work is a concluded side investigation, not the
-critical path. The next physical choice is one satellite/pass and one bounded,
-predeclared capability set; no global receiver catalog is required.
+critical path. No global receiver catalog is required.
+
+## Current physical outcome
+
+Several bounded forward routes have now tested the path beyond G1 without
+producing an orbital score:
+
+- Berlin–Utrecht OpenWebRX was closed `MEASUREMENT_PATH_INSUFFICIENT` because
+  Berlin did not deliver the target profile and Utrecht exposed neither
+  server-side frame time nor sample sequence;
+- RSP-03 was closed by absolute sample-time provenance;
+- MAVEN DSS-45 produced a model-blind development carrier tracker, but only a
+  reconstructed date-covering spacecraft SPK is available;
+- Cassini produced positive distributed geometry, independent DSN receive
+  roots and an X/Ka control at DSS-25, but the tested paths were closed by
+  unresolved physical/hardware envelopes or a missing symmetric Ka root;
+- the GOLD00USA–NLIB00USA G11/G21 GNSS plan retained a `1420.626 Hz`
+  premeasurement physical margin, but its one authorized run stopped
+  `MEASUREMENT_INVALID` at `TRUNCATED_REQUIRED_OBSERVATION_RECORD` before any
+  calibration or held-out score.
+
+No real held-out vertical has therefore reached `MEASUREMENT_VALID` and then
+preferred an orbital model over frozen nulls. The GNSS result refuses one exact
+measurement path; it is not evidence against G11 or the double-difference
+mechanism.
+
+The next candidate is a new independent GNSS vertical. Geometry must again
+lead selection, and a different development product must demonstrate the exact
+decoder-native field topology before a separate artifact is assigned the
+primary role. The closed GOLD/NLIB primary cannot be repaired or rerun.
 
 ## Preserved Gate F2.5 experimental history
 

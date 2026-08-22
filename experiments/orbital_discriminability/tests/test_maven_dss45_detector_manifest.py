@@ -19,6 +19,10 @@ def _sha(path: Path) -> str:
     return sha256(path.read_bytes()).hexdigest()
 
 
+def _canonical_lf_sha(path: Path) -> str:
+    return sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def _assert_finite(value: object) -> None:
     if isinstance(value, dict):
         for child in value.values():
@@ -34,7 +38,7 @@ def test_manifest_binds_exact_detector_and_development_result() -> None:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     binding = manifest["freeze_binding"]
     assert manifest["outcome"] == "DETECTOR_FROZEN_FOR_RSR_DEVELOPMENT"
-    assert _sha(ROOT / "maven_rsr_carrier_tracker.py") == binding[
+    assert _canonical_lf_sha(ROOT / "maven_rsr_carrier_tracker.py") == binding[
         "detector_code_sha256"
     ]
     assert _sha(ROOT / "maven_dss45_detector_develop.py") == binding[

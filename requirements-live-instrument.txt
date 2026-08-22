@@ -7,4 +7,6 @@ sgp4==2.25
 skyfield==1.53
 Pillow==11.3.0
 websocket-client==1.8.0
+hatanaka==2.8.1
+ncompress==1.0.2
 pytest==8.4.2

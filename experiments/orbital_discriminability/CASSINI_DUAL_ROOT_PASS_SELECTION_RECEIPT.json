@@ -1,0 +1,534 @@
+{
+  "access": {
+    "amplitude_values": 0,
+    "rsr_header_bytes": 0,
+    "rsr_iq_bytes": 0
+  },
+  "approximation_policy": {
+    "combination": "CORRELATED_INTERVAL_ENVELOPE_UNLESS_INDEPENDENCE_IS_DOCUMENTED",
+    "prohibited": [
+      "UNRESOLVED_AS_ZERO",
+      "ROOT_SUM_SQUARE_WITHOUT_INDEPENDENCE",
+      "POST_OUTCOME_BOUND_SELECTION",
+      "UNJUSTIFIED_PROBABILITY_AMPLITUDES"
+    ],
+    "representation": "NON_PROBABILISTIC_CAUSAL_STATE_ENVELOPE",
+    "states": [
+      "OBSERVABLE",
+      "MODELED",
+      "BOUNDED",
+      "UNRESOLVED"
+    ]
+  },
+  "candidates": [
+    {
+      "candidate_id": "SROC_2005_159_DSS25_DSS55",
+      "complexes": [
+        "GOLDSTONE",
+        "MADRID"
+      ],
+      "geometry_screen_state": "EVALUATED",
+      "geometry_start_utc": "2005-06-08T19:17:00Z",
+      "geometry_stop_utc": "2005-06-08T20:44:59Z",
+      "label_sha256": [
+        "a785a4c803b4b66aaa5b585e98834e7141fdb9405c10eef8acab0165ecd371c4",
+        "74ad0b7c1911ac7567843dd576263fc3e7aa19cda2b484cb78610fc7a4d76d5e",
+        "8cbcea9512d103d2992738e98b5b5c72ce44f1888415436c0d5f39e555ec61c2",
+        "fd135f96ca3f3d1e0d21aef09c3e50f13a624b42291977cfffa5abce0cd09cfe"
+      ],
+      "media_evidence": [
+        "RSS_009RI_OCC004_PRIME 16:30-18:33 UTC",
+        "Deadtime X-to-Earth 18:33-19:17 UTC",
+        "frozen post-media window starts at 19:17 UTC"
+      ],
+      "media_scope": "DOCUMENTED_POST_OCCULTATION_CLEAR_WINDOW",
+      "overlap_seconds": 12598,
+      "overlap_start_utc": "2005-06-08T17:15:01Z",
+      "overlap_stop_utc": "2005-06-08T20:44:59Z",
+      "predict": {
+        "coverage_start_utc": "2005-04-26T11:04:46Z",
+        "coverage_stop_utc": "2005-08-04T00:00:00Z",
+        "label_sha256": "561cde58c09488576fbdfc32643c16b6a851ef29bf3bbb8cc049579752b3e9a6",
+        "name": "050426AP_SCPSE_05116_05216.bsp",
+        "product_creation_utc": "2005-04-26T11:10:12Z",
+        "product_version_type": "PREDICT"
+      },
+      "product_names": [
+        "s11sroe2005_159_1715nnnk25rd",
+        "s11sroe2005_159_1715nnnx25rd",
+        "s11sroe2005_159_1715nnnk55rd",
+        "s11sroe2005_159_1715nnnx55rd"
+      ],
+      "stations": [
+        "DSS-25",
+        "DSS-55"
+      ],
+      "topology_state": "CROSS_COMPLEX_DUAL_ROOT_X_KA_LABEL_QUALIFIED",
+      "uplink_path": "ONE_WAY_NNN"
+    },
+    {
+      "candidate_id": "SROC_2008_139_DSS25_DSS55",
+      "complexes": [
+        "GOLDSTONE",
+        "MADRID"
+      ],
+      "geometry_screen_state": "NOT_EVALUATED",
+      "geometry_start_utc": null,
+      "geometry_stop_utc": null,
+      "label_sha256": [
+        "98446387728ebd0014b01cb81d71924d29750315b8ae1b7fc9f03a00a5e46fab",
+        "a89252a27e8bf46b0907d6b61b9cc9fca502da1af415589683255d9d6ba6e6d1",
+        "ae48d2a35a1246e23151cc52a5f90aa4dc0f09f95386f5e2af2bf4471aea6019",
+        "f62d963b52f35bfbfcaaacde667052584fb53265326ddff77ca9e8b960a80740"
+      ],
+      "media_evidence": [
+        "bounded planning-table snapshot has no matching 2008-139 activity"
+      ],
+      "media_scope": "MEDIA_SCOPE_UNKNOWN",
+      "overlap_seconds": 3992,
+      "overlap_start_utc": "2008-05-18T00:00:00Z",
+      "overlap_stop_utc": "2008-05-18T01:06:32Z",
+      "predict": {
+        "coverage_start_utc": "2008-05-09T02:12:06Z",
+        "coverage_stop_utc": "2008-06-01T05:58:55Z",
+        "label_sha256": "1a5ec267756653c75a32eec8d8a849091b7d661de0e7004e54fa2fe250d6d7f6",
+        "name": "080514AP_SCPSE_08130_08153.bsp",
+        "product_creation_utc": "2008-05-14T12:20:17Z",
+        "product_version_type": "PREDICT"
+      },
+      "product_names": [
+        "s40saoe2008_139_0000nnnk25rd",
+        "s40saoe2008_139_0000nnnx25rd",
+        "s40saoe2008_139_0000nnnk55rd",
+        "s40saoe2008_139_0000nnnx55rd"
+      ],
+      "stations": [
+        "DSS-25",
+        "DSS-55"
+      ],
+      "topology_state": "CROSS_COMPLEX_DUAL_ROOT_X_KA_LABEL_QUALIFIED",
+      "uplink_path": "ONE_WAY_NNN"
+    },
+    {
+      "candidate_id": "SROC_2008_168_DSS25_DSS34",
+      "complexes": [
+        "GOLDSTONE",
+        "CANBERRA"
+      ],
+      "geometry_screen_state": "NOT_EVALUATED",
+      "geometry_start_utc": null,
+      "geometry_stop_utc": null,
+      "label_sha256": [
+        "1b9dc7a5a3e8faff502237d808f975dc01ca9948b29cada8116173d795461f77",
+        "baeb1f704b1d318b4c980a0dfdc9a410e4e77a927f530a231d2f8417f200fab0",
+        "de334fcc41ca6cb0280635e7c0df069f4260add44538c3e37073718abfc3d46c",
+        "a7cdd1d26aa976e06018d9ce4875c1cd8b912767542b6a13e90e4aa81dfc1e15"
+      ],
+      "media_evidence": [
+        "bounded planning-table snapshot has no matching 2008-168 activity"
+      ],
+      "media_scope": "MEDIA_SCOPE_UNKNOWN",
+      "overlap_seconds": 3299,
+      "overlap_start_utc": "2008-06-16T06:00:00Z",
+      "overlap_stop_utc": "2008-06-16T06:54:59Z",
+      "predict": {
+        "coverage_start_utc": "2008-06-09T15:24:48Z",
+        "coverage_stop_utc": "2008-08-04T05:58:55Z",
+        "label_sha256": "4441286f245be809dbfa84735b6b30f0ec2cf70634a5c59f4a1a8ea45548f7bb",
+        "name": "080609AP_SCPSE_08161_08217.bsp",
+        "product_creation_utc": "2008-06-09T15:38:06Z",
+        "product_version_type": "PREDICT"
+      },
+      "product_names": [
+        "s41saoe2008_168_0600nnnk25rd",
+        "s41saoe2008_168_0600nnnx25rd",
+        "s41saoe2008_168_0600nnnk34rd",
+        "s41saoe2008_168_0600nnnx34rd"
+      ],
+      "stations": [
+        "DSS-25",
+        "DSS-34"
+      ],
+      "topology_state": "CROSS_COMPLEX_DUAL_ROOT_X_KA_LABEL_QUALIFIED",
+      "uplink_path": "ONE_WAY_NNN"
+    },
+    {
+      "candidate_id": "SROC_2016_182_DSS25_DSS35",
+      "complexes": [
+        "GOLDSTONE",
+        "CANBERRA"
+      ],
+      "geometry_screen_state": "NOT_EVALUATED",
+      "geometry_start_utc": null,
+      "geometry_stop_utc": null,
+      "label_sha256": [
+        "f3ff65eeb4ccdb3053e1dc210fd74ac1f852b907ea2e1a4728b6784d1abbcd09",
+        "1d99403ae57f20fb02ccc252130925336e09c9c96ebc2c82335b3f723aa9fa83",
+        "873a2d70007a307ea1380bb4d169bc9d9afdcb732b5d12bfd26fc0e6a9a1a696",
+        "20f385645f43ba17977639d75de7c93b4279ea682c8eafad0ade343574945ed4"
+      ],
+      "media_evidence": [
+        "RSS_237SA_OCC002_PRIME 03:42-06:40 UTC",
+        "RSS_237RI_OCC002_PIE 06:40-09:14 UTC"
+      ],
+      "media_scope": "FULL_OVERLAP_OCCULTATION_MEDIA",
+      "overlap_seconds": 7200,
+      "overlap_start_utc": "2016-06-30T06:30:00Z",
+      "overlap_stop_utc": "2016-06-30T08:30:00Z",
+      "predict": {
+        "coverage_start_utc": "2016-06-19T23:58:55Z",
+        "coverage_stop_utc": "2016-07-29T23:58:55Z",
+        "label_sha256": "114a9848b5d1b2685332e66008974f1fe3fb1daf99b77a6e6d21c236fbfd8a90",
+        "name": "160620AP_SCPSE_16172_16212.bsp",
+        "product_creation_utc": "2016-06-20T12:21:55Z",
+        "product_version_type": "PREDICT"
+      },
+      "product_names": [
+        "s95saoe2016_182_0630x14k25rd",
+        "s95saoe2016_182_0630x14x25rd",
+        "s95saoe2016_182_0630x14k35rd",
+        "s95saoe2016_182_0630x14x35rd"
+      ],
+      "stations": [
+        "DSS-25",
+        "DSS-35"
+      ],
+      "topology_state": "CROSS_COMPLEX_DUAL_ROOT_X_KA_LABEL_QUALIFIED",
+      "uplink_path": "COHERENT_X_UPLINK_DSS14"
+    },
+    {
+      "candidate_id": "SROC_2017_110_DSS26_DSS35",
+      "complexes": [
+        "GOLDSTONE",
+        "CANBERRA"
+      ],
+      "geometry_screen_state": "NOT_EVALUATED",
+      "geometry_start_utc": null,
+      "geometry_stop_utc": null,
+      "label_sha256": [
+        "3087f6824ca72404fd684828db975919a3e6395867f3edbb38a7147820e0b4c0",
+        "357e209d2d5a95918ceb89925d3cb9de6ba34a36f44ef0a8c92436cccee08d62",
+        "d809db7f704c8de122575e73302ba1f96a2ac545a3f6ab2e441531cb6d5e1e68",
+        "65ebb99e27a434461a403fa5addddb36e189f990967dc498bd35685104c29adc"
+      ],
+      "media_evidence": [
+        "RSS_270SA_OCC001_PRIME 11:58-15:41 UTC",
+        "deadband 15:41-16:01 UTC"
+      ],
+      "media_scope": "OCCULTATION_THEN_DEADBAND",
+      "overlap_seconds": 12600,
+      "overlap_start_utc": "2017-04-20T12:30:00Z",
+      "overlap_stop_utc": "2017-04-20T16:00:00Z",
+      "predict": {
+        "coverage_start_utc": "2017-03-02T23:58:55Z",
+        "coverage_stop_utc": "2017-04-25T23:58:55Z",
+        "label_sha256": "4c3f3115aa4f1f53f134369d8ae0322904d2d940771c37fcbbc1f101a537f560",
+        "name": "170417AP_SCPSE_17062_17116.bsp",
+        "product_creation_utc": "2017-04-17T12:06:41Z",
+        "product_version_type": "PREDICT"
+      },
+      "product_names": [
+        "s99saoi2017_110_1230x14k26rd",
+        "s99saoi2017_110_1230x14x26rd",
+        "s99saoi2017_110_1230x14k35rd",
+        "s99saoi2017_110_1230x14x35rd"
+      ],
+      "stations": [
+        "DSS-26",
+        "DSS-35"
+      ],
+      "topology_state": "CROSS_COMPLEX_DUAL_ROOT_X_KA_LABEL_QUALIFIED",
+      "uplink_path": "COHERENT_X_UPLINK_DSS14"
+    }
+  ],
+  "claim": {
+    "authorized": [
+      "five exact sessions have label-level X/Ka coverage at two DSN complexes",
+      "one has a documented post-occultation sub-window",
+      "the selected trajectory is pre-pass PREDICT",
+      "the 2005 central geometry screen is positive"
+    ],
+    "not_authorized": [
+      "measurement validity",
+      "plasma-corrected RF observable",
+      "physical open-term closure",
+      "orbital model preference",
+      "satellite identity",
+      "IQ access"
+    ]
+  },
+  "experiment_frozen": false,
+  "geometry_screen": {
+    "candidate_id": "SROC_2005_159_DSS25_DSS55",
+    "controlling_heldout_peak_to_peak_hz": 0.2991723488431748,
+    "kernel_lineage": [
+      {
+        "bytes": 5257,
+        "independence": "TIME_SCALE_CONTROL",
+        "name": "naif0012.tls",
+        "role": "UTC_TO_ET_TDB",
+        "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b"
+      },
+      {
+        "bytes": 8603648,
+        "independence": "POST_PASS_EOP_INDEPENDENT_OF_TARGET_RF",
+        "name": "earth_720101_070426.bpc",
+        "role": "HISTORICAL_EARTH_ORIENTATION",
+        "sha256": "1fa3670679bcd3d1978bea7653a34e68d1518f832124412c766faf454d77205e"
+      },
+      {
+        "bytes": 38912,
+        "independence": "STATION_MODEL_INDEPENDENT_OF_TARGET_RF",
+        "name": "earthstns_itrf93_050714.bsp",
+        "role": "DSN_STATION_STATES_DSS25_DSS55",
+        "sha256": "371fb58d19dd757de7b31cac80b5e61d5eaa26dc3437a009eece1c47792cee5c"
+      },
+      {
+        "bytes": 3832832,
+        "independence": "PREDICT_CREATED_2005_04_26_BEFORE_PASS",
+        "name": "050426AP_SCPSE_05116_05216.bsp",
+        "role": "CASSINI_TRAJECTORY",
+        "sha256": "065258e6982b10488604d97f02f9b5110d6b1e4760ff340211b50973ab8228f5"
+      }
+    ],
+    "nulls": {
+      "prefix_affine": {
+        "maximum_absolute_hz": 900.8874193597203,
+        "peak_to_peak_hz": 893.0071308737461,
+        "prefix_rmse_hz": 3.480637940931005,
+        "rms_hz": 429.7432536766601
+      },
+      "saturn_barycenter_geometry_destroying": {
+        "maximum_absolute_hz": 0.3019504651855702,
+        "peak_to_peak_hz": 0.2991723488431748,
+        "prefix_rmse_hz": 0.0012299830238327472,
+        "rms_hz": 0.14547101132623516
+      },
+      "station_swap": "REMOVED_AS_SIGN_REDUNDANT"
+    },
+    "orbital_observable": {
+      "definition": "8425e6 * (factor_DSS25 - factor_DSS55)",
+      "raw_peak_to_peak_hz": 2179.4057577240183,
+      "raw_rms_hz": 14870.165907880739,
+      "receive_time_dss55_minus_dss25_s": {
+        "maximum": 0.01322948932647705,
+        "minimum": 0.003925323486328125
+      }
+    },
+    "screen_positive": true,
+    "screening_grid": {
+      "approximation_role": "SELECTION_ONLY_NOT_FINAL_SFDU_GRID",
+      "calibration_records": 212,
+      "event_axis": "COMMON_CASSINI_TRANSMIT_ET_TDB",
+      "first_transmit_utc": "2005-06-08T17:54:57.178445Z",
+      "holdout_records": 844,
+      "last_transmit_utc": "2005-06-08T19:22:52.178447Z",
+      "records": 1056,
+      "step_s": 5.0,
+      "suffix_refit": "PROHIBITED"
+    },
+    "timing_envelope": {
+      "final_header_bound_still_required": true,
+      "maximum_one_stream_absolute_hz": 9.353628982466944e-06,
+      "method": "DIRECT_FORWARD_TRAJECTORY_AT_T_MINUS_AND_PLUS_BOUND",
+      "per_stream_planning_bound_s": 1e-06,
+      "two_stream_two_sided_hz": 1.8707257964933888e-05
+    },
+    "visibility": {
+      "dss25_elevation_deg": {
+        "maximum": 63.544818549158066,
+        "minimum": 46.14668327911995
+      },
+      "dss55_elevation_deg": {
+        "maximum": 32.453275571335865,
+        "minimum": 15.84142530503263
+      },
+      "joint_visibility_required": true,
+      "joint_visible": true
+    }
+  },
+  "inventory_filter": {
+    "exact_start_cross_complex_dual_band_sessions": 16,
+    "parsed_product_rows": 1499,
+    "post_label_substitution": "PROHIBITED",
+    "predeclared_label_shortlist": 5,
+    "same_day_dual_band_candidates": 43
+  },
+  "next_blocker": "HEADER_ONLY_DSS25_DSS55_X_KA_QUALIFICATION_ON_2005_159_POST_MEDIA_WINDOW",
+  "outcome": "ONE_MEDIA_CLEAR_DUAL_ROOT_CANDIDATE_GEOMETRY_SCREEN_POSITIVE",
+  "physical_condition_ledger": [
+    {
+      "condition": "FIRST_ORDER_PLASMA_EACH_ROOT",
+      "numeric_substitution": null,
+      "scope": "simultaneous X/Ka; exact composite needs header carriers",
+      "state": "OBSERVABLE_IN_PRINCIPLE"
+    },
+    {
+      "condition": "HIGHER_ORDER_PLASMA",
+      "numeric_substitution": null,
+      "scope": "X/Ka does not cancel every dispersive term",
+      "state": "UNRESOLVED"
+    },
+    {
+      "condition": "OCCULTATION_MEDIA",
+      "numeric_substitution": null,
+      "scope": "must be absent or bounded on exact holdout",
+      "state": "CANDIDATE_SPECIFIC"
+    },
+    {
+      "condition": "EARTH_TROPOSPHERE_DIFFERENTIAL",
+      "numeric_substitution": null,
+      "scope": "station-local non-dispersive uncertainty",
+      "state": "UNRESOLVED"
+    },
+    {
+      "condition": "RECEIVER_PROPER_TIME_GRAVITY_DIFFERENTIAL",
+      "numeric_substitution": null,
+      "scope": "central value is not uncertainty",
+      "state": "MODELED_CENTRAL_UNCERTAINTY_UNRESOLVED"
+    },
+    {
+      "condition": "RELATIVISTIC_PROPAGATION_REMAINDER",
+      "numeric_substitution": null,
+      "scope": "requires predeclared uncertainty family",
+      "state": "UNRESOLVED"
+    },
+    {
+      "condition": "EOP_AND_STATION_COORDINATES",
+      "numeric_substitution": null,
+      "scope": "outcome-independent controls; propagate uncertainty",
+      "state": "MODELED"
+    },
+    {
+      "condition": "USO_RETARDED_TIME_COUPLING",
+      "numeric_substitution": null,
+      "scope": "different receive roots sample different transmit epochs",
+      "state": "UNRESOLVED"
+    },
+    {
+      "condition": "X_KA_DIFFERENTIAL_HARDWARE",
+      "numeric_substitution": null,
+      "scope": "two receive chains per root",
+      "state": "UNRESOLVED"
+    },
+    {
+      "condition": "ADC_TIME_BINDING",
+      "numeric_substitution": null,
+      "scope": "1 microsecond screen; exact SFDU proof required",
+      "state": "PLANNING_BOUND_ONLY"
+    },
+    {
+      "condition": "NCO_DDC_TRANSITIONS",
+      "numeric_substitution": null,
+      "scope": "transition in holdout invalidates transform",
+      "state": "UNKNOWN_UNTIL_HEADER_ONLY_AUDIT"
+    },
+    {
+      "condition": "SAMPLE_RATE_FILTER_DECIMATION",
+      "numeric_substitution": null,
+      "scope": "collection is not resolution",
+      "state": "UNKNOWN_UNTIL_HEADER_ONLY_AUDIT"
+    },
+    {
+      "condition": "RSN_GAPS_X_KA_ALIGNMENT",
+      "numeric_substitution": null,
+      "scope": "labels do not prove continuity",
+      "state": "UNKNOWN_UNTIL_HEADER_ONLY_AUDIT"
+    },
+    {
+      "condition": "DETECTOR_SNR_CLIPPING",
+      "numeric_substitution": null,
+      "scope": "no IQ or amplitude accessed",
+      "state": "UNKNOWN_UNTIL_MODEL_BLIND_DEVELOPMENT"
+    },
+    {
+      "condition": "PREDICT_SPK_ORBIT_ERROR",
+      "numeric_substitution": null,
+      "scope": "independent pre-pass orbit has no frozen covariance",
+      "state": "UNRESOLVED"
+    },
+    {
+      "condition": "NULL_DEGENERACY",
+      "numeric_substitution": null,
+      "scope": "affine and Saturn-center use same prefix/grid",
+      "state": "EVALUATED_BY_SAME_PROJECTION"
+    },
+    {
+      "condition": "COMMON_TRANSMIT_EPOCH_MAPPING",
+      "numeric_substitution": null,
+      "scope": "receive roots map to distinct receive times on one transmit-time coordinate",
+      "state": "MODELED_SELECTION_ONLY"
+    },
+    {
+      "condition": "STATION_PHASE_CENTER_CABLE_DELAY",
+      "numeric_substitution": null,
+      "scope": "root-specific non-dispersive delay and drift",
+      "state": "UNRESOLVED"
+    },
+    {
+      "condition": "FREQUENCY_REFERENCE_STABILITY",
+      "numeric_substitution": null,
+      "scope": "cycle slips and reference changes may imitate curvature",
+      "state": "UNKNOWN_UNTIL_HEADER_ONLY_AUDIT"
+    },
+    {
+      "condition": "POLARIZATION_CHANNEL_MAPPING",
+      "numeric_substitution": null,
+      "scope": "band labels do not prove identical polarization or channel lineage",
+      "state": "UNKNOWN_UNTIL_HEADER_ONLY_AUDIT"
+    },
+    {
+      "condition": "FINITE_INTEGRATION_SPECTRAL_SMEARING",
+      "numeric_substitution": null,
+      "scope": "header cadence and estimator window set the convolution kernel",
+      "state": "UNKNOWN_UNTIL_DETECTOR_FREEZE"
+    },
+    {
+      "condition": "SOLAR_SYSTEM_EPHEMERIS_AND_CONSTANTS",
+      "numeric_substitution": null,
+      "scope": "outcome-independent central model; uncertainty not yet propagated",
+      "state": "MODELED"
+    },
+    {
+      "condition": "NUMERICAL_LIGHT_TIME_CONVERGENCE",
+      "numeric_substitution": null,
+      "scope": "solver tolerance must stay below the physical envelope",
+      "state": "TESTABLE_SOFTWARE_BOUND"
+    },
+    {
+      "condition": "OPEN_TERM_CORRELATION",
+      "numeric_substitution": null,
+      "scope": "do not root-sum-square terms without documented independence",
+      "state": "UNRESOLVED"
+    }
+  ],
+  "scope": "THREE_HASHED_SROC_RSR_COLLECTIONS_FIVE_PREDECLARED_SESSIONS_METADATA_ONLY",
+  "selection_manifest_sha256": "9f0f409e2067820578ad8c586213ee8fee1288465c99065f2453c1742053ce69",
+  "selection_version": "cassini-sroc-dual-root-pass-selection-v1",
+  "source_snapshots": [
+    {
+      "bytes": 122992,
+      "role": "SROC_RSR01_COLLECTION_INVENTORY",
+      "sha256": "73d0a017c1db060a787ad96803f46cb85949806b371cf74ac95acc6ec14fd7d2",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sroc/data-rsr01/collection_sroc_rsr01.csv"
+    },
+    {
+      "bytes": 1230,
+      "role": "SROC_RSR02_COLLECTION_INVENTORY",
+      "sha256": "7f2e7d09e2e839b4c009172ccfff4c7c22b4368c96e69af7797ed9722ebd3e68",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sroc/data-rsr02/collection_sroc_rsr02.csv"
+    },
+    {
+      "bytes": 73636,
+      "role": "SROC_RSR16_COLLECTION_INVENTORY",
+      "sha256": "d5b84215078e9e784362ba64c2f1787985116d635d05c4276543ec5514db356a",
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sroc/data-rsr16/collection_sroc_rsr16.csv"
+    },
+    {
+      "bytes": 25835,
+      "role": "SROC_PLANNING_TABLE",
+      "sha256": "e0b22b90160f5c8d778d09fd397c246090fcad85bec9a7c7fdcac7a68c5f4eff",
+      "url": "https://atmos.nmsu.edu/data_and_services/atmospheres_data/Cassini/logs/8-Saturn_and_Saturn_Ring_Occultation_Planning.csv"
+    }
+  ]
+}
