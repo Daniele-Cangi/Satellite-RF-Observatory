@@ -112,13 +112,19 @@ KIRU00SWE–MAT100ITA, G20/G22. Its controlling orbital-versus-G14 separation is
 leaving `5524.079066 Hz`. The geometry result is recorded in
 [`GNSS_INDEPENDENT_FORWARD_REVIEW_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_FORWARD_REVIEW_REPORT.md).
 
-Separate DOY 214 KIRU/MAT1 products are described as future qualification
-artifacts, while distinct DOY 215 products remain the unopened primary. Only
-HTTP `HEAD` metadata has been accessed. No observation header, epoch or value
-has been opened, no prospective plan is frozen and no primary authority
-exists. The next admissible action is a separately authorized, structure-only
-qualification of DOY 214; failure there terminates the GNSS route rather than
-reopening GOLD/NLIB or constructing another parser gate.
+The separately authorized DOY 214 KIRU/MAT1 qualification is now complete as
+`GNSS_QUALIFICATION_ADMITTED`. Exact-hash, value-blind parsing found the common
+`L1C/L2W` phase family with same-path code/SNR fields and one uninterrupted
+493-record G20/G22 structural run, exceeding the 380 records required by the
+future coordinate. No numeric observation, LLI/SSI or SNR magnitude was
+decoded and no decompressed RINEX was persisted. See
+[`GNSS_INDEPENDENT_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_QUALIFICATION_REPORT.md).
+
+Distinct DOY 215 products remain the completely unopened primary. No
+prospective plan is frozen and no primary access authority exists. The next
+admissible action is an offline primary-plan freeze binding the already
+selected geometry, signal family, parser, nulls, value-level admission and
+zero-retry outcome semantics—not observation access.
 
 ## Preserved Gate F2.5 experimental history
 

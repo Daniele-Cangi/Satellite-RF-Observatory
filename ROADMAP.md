@@ -108,11 +108,19 @@ separation is `6233.797940 Hz`; the unchanged symmetric physical envelope is
 not admitted because its public antenna-calibration field is unknown under the
 existing PCV-envelope provenance.
 
-DOY 214 KIRU/MAT1 products are assigned only to future structural
-qualification. Distinct DOY 215 products are the still-unopened primary. HTTP
-`HEAD` proved only endpoint existence and content length; it did not prove any
-RINEX field, epoch, signal or continuity clause. See
-`GNSS_INDEPENDENT_FORWARD_REVIEW_REPORT.md`.
+The separately authorized DOY 214 KIRU/MAT1 structural qualification is
+complete as `GNSS_QUALIFICATION_ADMITTED`. It froze the common
+`C1C/L1C/S1C + C2W/L2W/S2W` family and demonstrated one 493-record continuous
+G20/G22 structural interval using an exact-hash, value-blind parser. The
+future coordinate needs 380 records. No numeric observation, LLI/SSI or SNR
+magnitude was decoded, and zero decompressed bytes were persisted. See
+`GNSS_INDEPENDENT_QUALIFICATION_REPORT.md`.
+
+Distinct DOY 215 products remain completely unopened. The next step is not a
+new gate or observation: freeze one offline prospective primary plan binding
+the selected geometry, qualified parser/family, value-level admission,
+prefix/suffix split, frozen nulls and zero-retry outcomes. Primary access still
+requires separate explicit authority.
 
 Before any implementation or observation, record:
 
@@ -139,9 +147,9 @@ or no candidate retains positive G1 margin, terminate without synthesizing an
 experiment and abandon this GNSS route.
 ```
 
-The phase review is complete without a new gate. The next action requires
-explicit authority limited to the two DOY 214 qualification products. The DOY
-215 primary remains sealed; no prospective plan is frozen yet.
+The navigation review and bounded structure-only qualification are complete
+without a new gate. The DOY 215 primary remains sealed; no prospective plan is
+frozen yet.
 
 ## Anti-drift stop
 
