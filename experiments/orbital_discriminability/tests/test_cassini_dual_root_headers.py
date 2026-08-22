@@ -1,6 +1,8 @@
 """Synthetic tests for the frozen four-product Cassini header path."""
 
 from dataclasses import fields, replace
+import json
+from pathlib import Path
 import struct
 
 import pytest
@@ -282,3 +284,45 @@ def test_manifest_and_receipt_cannot_represent_signal_or_samples() -> None:
 def test_strict_json_refuses_nonfinite_values() -> None:
     with pytest.raises(ValueError):
         strict_json({"value": float("nan")})
+
+
+def test_real_receipt_qualifies_controls_not_physical_margin() -> None:
+    path = (
+        Path(__file__).parents[1]
+        / "CASSINI_DUAL_ROOT_HEADER_RECEIPT.json"
+    )
+    receipt = json.loads(
+        path.read_text(encoding="utf-8"),
+        parse_constant=lambda value: (_ for _ in ()).throw(
+            ValueError(value)
+        ),
+    )
+
+    assert receipt["outcome"] == (
+        "CASSINI_DUAL_ROOT_HEADER_PATH_QUALIFIED"
+    )
+    assert receipt["authority"]["source_commit"] == (
+        "89c59334fa70a7dde9b8f2db49651f01d620d896"
+    )
+    assert len(receipt["products"]) == 4
+    assert {
+        product["identity"]["station_id"]
+        for product in receipt["products"]
+    } == {"DSS-25", "DSS-55"}
+    assert all(
+        product["event_time"]["non_one_second_steps"] == 0
+        and product["receiver_transform"]["ddc_lo_change_count"] == 0
+        and product["receiver_transform"]["rf_to_if_lo_change_count"] == 0
+        for product in receipt["products"]
+    )
+    assert all(
+        receipt["topology_qualification"]["clauses"].values()
+    )
+    assert receipt["topology_qualification"][
+        "physical_margin_admitted"
+    ] is False
+    assert receipt["topology_qualification"][
+        "iq_access_authorized"
+    ] is False
+    assert receipt["access_boundary"]["data_chdo_bytes_read"] == 0
+    assert receipt["access_boundary"]["raw_headers_persisted"] is False

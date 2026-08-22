@@ -1,0 +1,440 @@
+{
+  "qualification_version": "cassini-sroc-2005-header-qualification-v1",
+  "authority": {
+    "source_commit": "89c59334fa70a7dde9b8f2db49651f01d620d896",
+    "frozen_selection_commit": "8c18f82f8c26d09f1545eb98838617aa55b1e6e2",
+    "frozen_selection_manifest_sha256": "9f0f409e2067820578ad8c586213ee8fee1288465c99065f2453c1742053ce69",
+    "parser_manifest_sha256": "c7d1922cfaf69906399c6a0e3f8a6bb5a9078296fbba002bc152764e39481f52",
+    "canonical_parser_source_sha256": "151b275bed8a5583163c31207c7e0b0220cdd524e07c48683d47866e588b225d"
+  },
+  "outcome": "CASSINI_DUAL_ROOT_HEADER_PATH_QUALIFIED",
+  "frozen_window": {
+    "first_sample_utc": "2005-06-08T19:17:00.000000Z",
+    "last_first_sample_utc": "2005-06-08T20:44:59.000000Z",
+    "records_per_stream": 5280
+  },
+  "products": [
+    {
+      "role": "DSS25_X",
+      "lidvid": "urn:nasa:pds:cassini.rss.raw.sroc:data.rsr01:s11sroe2005_159_1715nnnx25rd::1.0",
+      "label_sha256": "74ad0b7c1911ac7567843dd576263fc3e7aa19cda2b484cb78610fc7a4d76d5e",
+      "published_data_md5": "74e093f68b55aa95481793840fc497ac",
+      "ordered_whitelist_receipts_sha256": "b10bd92ed0cbc4a60184ed7cc1e2efa982fa79df587873b26b241d571ee837d6",
+      "event_time": {
+        "first_sample_utc": "2005-06-08T19:17:00.000000Z",
+        "last_first_sample_utc": "2005-06-08T20:44:59.000000Z",
+        "non_one_second_steps": 0
+      },
+      "record_sequence": {
+        "first": 7320,
+        "last": 12599,
+        "non_unit_steps_modulo_65536": 0
+      },
+      "identity": {
+        "signal_processing_center_id": 10,
+        "station_id": "DSS-25",
+        "rsr_id": 1,
+        "channel_id": "A",
+        "subchannel_id": 1,
+        "downlink_band": "X"
+      },
+      "sample_mode": {
+        "sample_rate_hz": 1000,
+        "sample_resolution_bits": 16,
+        "input_rate_hz": 16000000,
+        "decimation": 16000,
+        "output_bandwidth_hz": 1000,
+        "filter_coefficients": "NOT_ENCODED_IN_SFDU"
+      },
+      "receiver_transform": {
+        "rf_to_if_lo_hz": 8100000000,
+        "ddc_lo_hz": 327000000,
+        "frequency_override_active": false,
+        "ddc_lo_change_count": 0,
+        "rf_to_if_lo_change_count": 0,
+        "frequency_override_state_change_count": 0,
+        "maximum_absolute_nco_boundary_residual_hz": 1.3544922694563866e-7,
+        "maximum_absolute_transform_boundary_residual_hz": 9.5367431640625e-7
+      },
+      "frequency_polynomial_ranges_hz": [
+        {
+          "minimum": 332425.2836999893,
+          "maximum": 363502.04786014557
+        },
+        {
+          "minimum": -6.946854591369629,
+          "maximum": -4.945538520812988
+        },
+        {
+          "minimum": 0.000148773193359375,
+          "maximum": 0.0002307891845703125
+        }
+      ],
+      "phase_polynomial_ranges_cycles": [
+        {
+          "minimum": 0.00003528542583808303,
+          "maximum": 0.9996631942340173
+        },
+        {
+          "minimum": 332425.2836999893,
+          "maximum": 363502.04786014557
+        },
+        {
+          "minimum": -3.4734272956848145,
+          "maximum": -2.472769260406494
+        },
+        {
+          "minimum": 0.000049591064453125,
+          "maximum": 0.00007692972819010417
+        }
+      ],
+      "predicts_zero_fields": [
+        "time_shift",
+        "frequency_override",
+        "frequency_rate",
+        "frequency_offset",
+        "subchannel_frequency_offset"
+      ],
+      "accumulated_phase_cycles": {
+        "minimum": 4199059572,
+        "maximum": 6031318635
+      }
+    },
+    {
+      "role": "DSS25_KA",
+      "lidvid": "urn:nasa:pds:cassini.rss.raw.sroc:data.rsr01:s11sroe2005_159_1715nnnk25rd::1.0",
+      "label_sha256": "a785a4c803b4b66aaa5b585e98834e7141fdb9405c10eef8acab0165ecd371c4",
+      "published_data_md5": "ba42b0cb354a93b8c7b6b805bb34aa0c",
+      "ordered_whitelist_receipts_sha256": "0f980d0a0bcd2e929c3e9a40ecbe493bb70b17a213e069db9eefb563f8a76a92",
+      "event_time": {
+        "first_sample_utc": "2005-06-08T19:17:00.000000Z",
+        "last_first_sample_utc": "2005-06-08T20:44:59.000000Z",
+        "non_one_second_steps": 0
+      },
+      "record_sequence": {
+        "first": 7319,
+        "last": 12598,
+        "non_unit_steps_modulo_65536": 0
+      },
+      "identity": {
+        "signal_processing_center_id": 10,
+        "station_id": "DSS-25",
+        "rsr_id": 2,
+        "channel_id": "B",
+        "subchannel_id": 1,
+        "downlink_band": "KA"
+      },
+      "sample_mode": {
+        "sample_rate_hz": 1000,
+        "sample_resolution_bits": 16,
+        "input_rate_hz": 16000000,
+        "decimation": 16000,
+        "output_bandwidth_hz": 1000,
+        "filter_coefficients": "NOT_ENCODED_IN_SFDU"
+      },
+      "receiver_transform": {
+        "rf_to_if_lo_hz": 31700000000,
+        "ddc_lo_hz": 321000000,
+        "frequency_override_active": false,
+        "ddc_lo_change_count": 0,
+        "rf_to_if_lo_change_count": 0,
+        "frequency_override_state_change_count": 0,
+        "maximum_absolute_nco_boundary_residual_hz": 2.0980951376259327e-7,
+        "maximum_absolute_transform_boundary_residual_hz": 0.000003814697265625
+      },
+      "frequency_polynomial_ranges_hz": [
+        {
+          "minimum": -336791.93408584595,
+          "maximum": -218700.24868392944
+        },
+        {
+          "minimum": -26.397846221923828,
+          "maximum": -18.793014526367188
+        },
+        {
+          "minimum": 0.00057220458984375,
+          "maximum": 0.00087738037109375
+        }
+      ],
+      "phase_polynomial_ranges_cycles": [
+        {
+          "minimum": -0.9998652136418968,
+          "maximum": -0.00022697399253956974
+        },
+        {
+          "minimum": -336791.93408584595,
+          "maximum": -218700.24868392944
+        },
+        {
+          "minimum": -13.198923110961914,
+          "maximum": -9.396507263183594
+        },
+        {
+          "minimum": 0.00019073486328125,
+          "maximum": 0.0002924601236979167
+        }
+      ],
+      "predicts_zero_fields": [
+        "time_shift",
+        "frequency_override",
+        "frequency_rate",
+        "frequency_offset",
+        "subchannel_frequency_offset"
+      ],
+      "accumulated_phase_cycles": {
+        "minimum": -2134755202,
+        "maximum": -650897355
+      }
+    },
+    {
+      "role": "DSS55_X",
+      "lidvid": "urn:nasa:pds:cassini.rss.raw.sroc:data.rsr01:s11sroe2005_159_1715nnnx55rd::1.0",
+      "label_sha256": "fd135f96ca3f3d1e0d21aef09c3e50f13a624b42291977cfffa5abce0cd09cfe",
+      "published_data_md5": "8904afec54ba0cbe63f0471fc33f07dc",
+      "ordered_whitelist_receipts_sha256": "7b4dd512135e37d788ea46c970c6c444f4570039a82765705b9cef6fb787a793",
+      "event_time": {
+        "first_sample_utc": "2005-06-08T19:17:00.000000Z",
+        "last_first_sample_utc": "2005-06-08T20:44:59.000000Z",
+        "non_one_second_steps": 0
+      },
+      "record_sequence": {
+        "first": 7320,
+        "last": 12599,
+        "non_unit_steps_modulo_65536": 0
+      },
+      "identity": {
+        "signal_processing_center_id": 60,
+        "station_id": "DSS-55",
+        "rsr_id": 1,
+        "channel_id": "A",
+        "subchannel_id": 1,
+        "downlink_band": "X"
+      },
+      "sample_mode": {
+        "sample_rate_hz": 1000,
+        "sample_resolution_bits": 16,
+        "input_rate_hz": 16000000,
+        "decimation": 16000,
+        "output_bandwidth_hz": 1000,
+        "filter_coefficients": "NOT_ENCODED_IN_SFDU"
+      },
+      "receiver_transform": {
+        "rf_to_if_lo_hz": 8100000000,
+        "ddc_lo_hz": 326000000,
+        "frequency_override_active": false,
+        "ddc_lo_change_count": 0,
+        "rf_to_if_lo_change_count": 0,
+        "frequency_override_state_change_count": 0,
+        "maximum_absolute_nco_boundary_residual_hz": 4.959292709827423e-8,
+        "maximum_absolute_transform_boundary_residual_hz": 9.5367431640625e-7
+      },
+      "frequency_polynomial_ranges_hz": [
+        {
+          "minimum": -653989.8045530319,
+          "maximum": -620730.8607559204
+        },
+        {
+          "minimum": -7.146728515625,
+          "maximum": -5.562178611755371
+        },
+        {
+          "minimum": -0.000030517578125,
+          "maximum": 0.0001926422119140625
+        }
+      ],
+      "phase_polynomial_ranges_cycles": [
+        {
+          "minimum": -0.9996740040369332,
+          "maximum": -0.00021314830519258976
+        },
+        {
+          "minimum": -653989.8045530319,
+          "maximum": -620730.8607559204
+        },
+        {
+          "minimum": -3.5733642578125,
+          "maximum": -2.7810893058776855
+        },
+        {
+          "minimum": -0.000010172526041666666,
+          "maximum": 0.00006421407063802083
+        }
+      ],
+      "predicts_zero_fields": [
+        "time_shift",
+        "frequency_override",
+        "frequency_rate",
+        "frequency_offset",
+        "subchannel_frequency_offset"
+      ],
+      "accumulated_phase_cycles": {
+        "minimum": -9513324382,
+        "maximum": -6145028337
+      }
+    },
+    {
+      "role": "DSS55_KA",
+      "lidvid": "urn:nasa:pds:cassini.rss.raw.sroc:data.rsr01:s11sroe2005_159_1715nnnk55rd::1.0",
+      "label_sha256": "8cbcea9512d103d2992738e98b5b5c72ce44f1888415436c0d5f39e555ec61c2",
+      "published_data_md5": "44831c3d9d149ee56fbda762fe0ff1d9",
+      "ordered_whitelist_receipts_sha256": "b903c9fc637bac331866514c247a3204868f2ded27855e262f1764bb066dc844",
+      "event_time": {
+        "first_sample_utc": "2005-06-08T19:17:00.000000Z",
+        "last_first_sample_utc": "2005-06-08T20:44:59.000000Z",
+        "non_one_second_steps": 0
+      },
+      "record_sequence": {
+        "first": 7320,
+        "last": 12599,
+        "non_unit_steps_modulo_65536": 0
+      },
+      "identity": {
+        "signal_processing_center_id": 60,
+        "station_id": "DSS-55",
+        "rsr_id": 2,
+        "channel_id": "B",
+        "subchannel_id": 1,
+        "downlink_band": "KA"
+      },
+      "sample_mode": {
+        "sample_rate_hz": 1000,
+        "sample_resolution_bits": 16,
+        "input_rate_hz": 16000000,
+        "decimation": 16000,
+        "output_bandwidth_hz": 1000,
+        "filter_coefficients": "NOT_ENCODED_IN_SFDU"
+      },
+      "receiver_transform": {
+        "rf_to_if_lo_hz": 31700000000,
+        "ddc_lo_hz": 321000000,
+        "frequency_override_active": false,
+        "ddc_lo_change_count": 0,
+        "rf_to_if_lo_change_count": 0,
+        "frequency_override_state_change_count": 0,
+        "maximum_absolute_nco_boundary_residual_hz": 4.0046870708465576e-8,
+        "maximum_absolute_transform_boundary_residual_hz": 0.000003814697265625
+      },
+      "frequency_polynomial_ranges_hz": [
+        {
+          "minimum": -285169.2642440796,
+          "maximum": -158785.27602767944
+        },
+        {
+          "minimum": -27.157703399658203,
+          "maximum": -21.136241912841797
+        },
+        {
+          "minimum": 0.00042724609375,
+          "maximum": 0.00072479248046875
+        }
+      ],
+      "phase_polynomial_ranges_cycles": [
+        {
+          "minimum": -0.9998512273014057,
+          "maximum": -0.0003248852153774351
+        },
+        {
+          "minimum": -285169.2642440796,
+          "maximum": -158785.27602767944
+        },
+        {
+          "minimum": -13.578851699829102,
+          "maximum": -10.568120956420898
+        },
+        {
+          "minimum": 0.00014241536458333334,
+          "maximum": 0.00024159749348958334
+        }
+      ],
+      "predicts_zero_fields": [
+        "time_shift",
+        "frequency_override",
+        "frequency_rate",
+        "frequency_offset",
+        "subchannel_frequency_offset"
+      ],
+      "accumulated_phase_cycles": {
+        "minimum": -1180470650,
+        "maximum": 5296585
+      }
+    }
+  ],
+  "topology_qualification": {
+    "clauses": {
+      "all_streams_complete_and_continuous": true,
+      "four_stream_common_header_grid": true,
+      "independent_receive_roots": true,
+      "dss25_x_ka_distinct_channels": true,
+      "dss55_x_ka_distinct_channels": true,
+      "all_receiver_transforms_finite": true,
+      "no_discrete_lo_ddc_or_override_transition": true
+    },
+    "topology": {
+      "shared_upstream": [
+        "Cassini USO and one-way downlink generation",
+        "interplanetary path before Earth-near divergence"
+      ],
+      "independent_receive_roots": [
+        "DSS-25",
+        "DSS-55"
+      ],
+      "same_path_dispersive_witnesses": {
+        "DSS-25": [
+          "X channel A",
+          "Ka channel B"
+        ],
+        "DSS-55": [
+          "X channel A",
+          "Ka channel B"
+        ]
+      },
+      "witnesses_count_as_additional_receive_roots": false
+    },
+    "physical_margin_admitted": false,
+    "forward_experiment_frozen": false,
+    "iq_access_authorized": false
+  },
+  "causal_state_update": {
+    "observed_control": [
+      "four complete one-second header grids",
+      "two independent processing/station roots",
+      "X and Ka on distinct channels at both roots",
+      "finite LO/DDC/NCO transform on every record",
+      "no discrete control transition"
+    ],
+    "modeled": [
+      "16 MHz to 1 kHz decimation topology"
+    ],
+    "unresolved": [
+      "FIR coefficients",
+      "ADC-to-UTC numerical error bound for these products",
+      "differential troposphere",
+      "receiver proper-time/gravity uncertainty",
+      "higher-order plasma",
+      "X/Ka differential hardware",
+      "USO retarded-time coupling",
+      "PREDICT-SPK orbit error"
+    ]
+  },
+  "access_boundary": {
+    "sfdu_header_bytes_requested_and_read": 5491200,
+    "data_chdo_bytes_requested": 0,
+    "data_chdo_bytes_read": 0,
+    "raw_headers_persisted": false,
+    "iq_or_amplitude_fields_represented": false
+  },
+  "claim": {
+    "authorized": [
+      "the frozen four-stream control path is continuous and causally admissible",
+      "first-order plasma is observable in principle at both independent roots"
+    ],
+    "not_authorized": [
+      "physical-envelope closure",
+      "plasma-corrected RF measurement",
+      "orbital model preference",
+      "detector development",
+      "IQ access"
+    ]
+  },
+  "next_physical_step": "COMPILE_EXACT_X_KA_COMPOSITE_AND_BOUND_PHYSICAL_ENVELOPE"
+}
