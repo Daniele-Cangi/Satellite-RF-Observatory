@@ -775,3 +775,24 @@ experiment needs them.
 
 The project advances by closing one causal ambiguity at a time, not by adding
 features around an unverified inference.
+
+## Current satellite-first forward route: GNSS quotient observable
+
+The Cassini 2005 dual-root route is closed because unresolved absolute-
+frequency terms can absorb its controlling held-out separation. The next
+physical route is not another receiver search and not a continuation of the
+F2.5 gate sequence.
+
+A bounded broadcast-only screen now identifies three GOLD00USA/NLIB00USA GPS
+target/reference windows for a prospective dual-frequency carrier-phase
+double-difference test. Two exact daily observation products exist, but only
+HTTP metadata has been read; their payloads remain unopened. The screen is
+recorded in `GNSS_DOUBLE_DIFFERENCE_GEOMETRY_SCREEN_REPORT.md` and its strict
+receipt.
+
+The next minimum block is header-only observation admission and a differential
+physical-envelope calculation for the existing three windows. It must select
+one window by remaining physical margin, freeze all carrier combinations,
+timing conventions and null transforms, and stop if no negative result would
+be interpretable. It must not open carrier values, add a catalog, create a new
+gate family or treat product-name cadence as measured continuity.
