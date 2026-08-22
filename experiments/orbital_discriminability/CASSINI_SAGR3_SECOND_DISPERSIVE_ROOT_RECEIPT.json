@@ -1,0 +1,94 @@
+{
+  "audit_version": "cassini-sagr3-second-dispersive-root-audit-v1",
+  "audit_manifest_sha256": "c2027288c84d0c8d62f37ee708cc19a1aeb18585f83665bfd0e0c17840ff2b50",
+  "scope": "SAGR3_BUNDLE_TWO_RAW_RSR_COLLECTION_INVENTORIES_METADATA_ONLY",
+  "outcome": "NO_SECOND_DISPERSIVE_ROOT_AVAILABLE",
+  "physical_question": "Does the frozen SAGR3 pass contain simultaneous DSS-65 Ka reception needed to cancel first-order plasma at the second receive root?",
+  "information_value": "Determines whether a symmetric DSS25_X_Ka minus DSS65_X_Ka orbital observable can exist in this archived pass.",
+  "source_snapshots": {
+    "bundle_index": {
+      "url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/",
+      "bytes": 3734,
+      "sha256": "4b9a7aa186b9b52d9b9760160e917bb69e95b75be9acc4596fb825052a8e1394",
+      "raw_rsr_collections": [
+        "data-rsr01/",
+        "data-rsr02/"
+      ]
+    },
+    "collections": {
+      "data-rsr01": {
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr01/collection_sagr_rsr01.csv",
+        "bytes": 48708,
+        "sha256": "0051d9079e72a8e4d803534b543caa5b1402fb8c287802114dac96f2894ee16d"
+      },
+      "data-rsr02": {
+        "url": "https://atmos.nmsu.edu/PDS/data/PDS4/cassini-rss-raw-sagr/data-rsr02/collection_sagr_rsr02.csv",
+        "bytes": 164,
+        "sha256": "636235dc28eb27d35b959c547fe232d6ef7956d6d00a73b6b69215418af13971"
+      }
+    },
+    "retrieved_utc_date": "2026-08-22",
+    "full_inventory_content_persisted": false,
+    "matching_inventory_rows_persisted": true
+  },
+  "bounded_inventory": {
+    "data-rsr01_day_lidvids": [
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200nnnx14rd::1.0",
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14k25rd::1.0",
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14x25rd::1.0",
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14x65rd::1.0",
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1502x14x14rd::1.0",
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1646x14s14rd::1.0",
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1955x14s43rd::1.0",
+      "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1955x14x43rd::1.0"
+    ],
+    "data-rsr02_day_lidvids": [],
+    "outcome": "NO_SECOND_DISPERSIVE_ROOT_AVAILABLE",
+    "dss65_ka_candidates": [],
+    "rsr01_day_product_count": 8,
+    "rsr02_day_product_count": 0
+  },
+  "frozen_topology": {
+    "DSS25_X": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14x25rd::1.0",
+    "DSS25_KA": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14k25rd::1.0",
+    "DSS65_X": "urn:nasa:pds:cassini.rss.raw.sagr:data.rsr01:s23sags2006_251_1200x14x65rd::1.0",
+    "DSS65_KA": null,
+    "pretransition_receive_window": "2006-09-08T12:00:01Z/2006-09-08T14:57:31Z"
+  },
+  "exact_carrier_grid": {
+    "state": "NOT_EVALUATED_TOPOLOGY_ABSENT",
+    "reason": "Without a DSS-65 Ka branch no symmetric composite can be formed, so header reaccess cannot restore the missing root."
+  },
+  "authorized_claims": [
+    "NO_DSS65_KA_PRODUCT_IN_THE_TWO_HASHED_SAGR3_RAW_RSR_COLLECTION_SNAPSHOTS",
+    "NO_SYMMETRIC_DUAL_BAND_COMPOSITE_IN_THIS_BOUNDED_PASS"
+  ],
+  "unauthorized_claims": [
+    "NO_DSS65_KA_RECORDING_EXISTS_ANYWHERE",
+    "PLASMA_WAS_MEASURED_OR_ABSENT",
+    "ORBITAL_MODEL_PREFERENCE",
+    "RF_OR_CARRIER_PRESENCE"
+  ],
+  "parent_receipts": {
+    "CASSINI_SAGR3_DISTRIBUTED_HEADER_RECEIPT.json": {
+      "repository_text_sha256": "eba267949a4aa3cb26996ac9664dfd3c68cf1f4e43d5ed0611e2e66adfa8655f",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
+    },
+    "CASSINI_SAGR3_COMPOSITE_XKA_RECEIPT.json": {
+      "repository_text_sha256": "577eacf5b9c93a8f8a76c6719c0efd908a7f79d3dd0525d6bdadebfaec32994c",
+      "line_ending_policy": "CRLF_NORMALIZED_TO_LF_BEFORE_HASH"
+    }
+  },
+  "access": {
+    "network_metadata_tool_calls": 11,
+    "source_snapshots_bound_by_hash": 3,
+    "rsr_label_requests": 0,
+    "rsr_header_bytes_accessed": 0,
+    "rsr_payload_or_iq_bytes_accessed": 0,
+    "sample_or_amplitude_fields_represented": false,
+    "detector_implemented": false
+  },
+  "stop_condition": "NO_SECOND_DISPERSIVE_ROOT_AVAILABLE",
+  "next_action": "CLOSE_SAGR3_SYMMETRIC_COMPOSITE_PATH_WITHOUT_IQ; DO_NOT_MATERIALIZE_EXACT_CARRIER_GRID",
+  "new_gate_created": false
+}
