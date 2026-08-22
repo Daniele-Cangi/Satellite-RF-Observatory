@@ -8,3 +8,6 @@ experiments/live_instrument/protocol_sources/gate_f2_5_17/rx_sound_cmd.h -text
 experiments/orbital_discriminability/maven_dss45_detector_develop.py -text
 experiments/orbital_discriminability/MAVEN_DSS45_CARRIER_DETECTOR_MANIFEST.json -text
 experiments/orbital_discriminability/MAVEN_DSS45_DETECTOR_DEVELOPMENT_RESULT.json -text
+
+# This frozen Cassini parent receipt was sealed from its exact CRLF byte stream.
+experiments/orbital_discriminability/CASSINI_DUAL_ROOT_XKA_COMPILER_RECEIPT.json -text whitespace=cr-at-eol
