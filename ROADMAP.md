@@ -116,11 +116,15 @@ future coordinate needs 380 records. No numeric observation, LLI/SSI or SNR
 magnitude was decoded, and zero decompressed bytes were persisted. See
 `GNSS_INDEPENDENT_QUALIFICATION_REPORT.md`.
 
-Distinct DOY 215 products remain completely unopened. The next step is not a
-new gate or observation: freeze one offline prospective primary plan binding
-the selected geometry, qualified parser/family, value-level admission,
-prefix/suffix split, frozen nulls and zero-retry outcomes. Primary access still
-requires separate explicit authority.
+Distinct DOY 215 products remain completely unopened. One offline prospective
+primary plan is now frozen: KIRU–MAT1, G20/G22, G14 and prefix-affine nulls,
+76 calibration plus 302 held-out feature records, the qualified `L1C/L2W`
+family, fixed admission rules and zero retry after decompression. See
+`GNSS_INDEPENDENT_PRIMARY_PROSPECTIVE_PLAN.md` and its receipt.
+
+The next step is not a new gate or observation. Implement and seal the exact
+deterministic evaluator against those frozen hashes using synthetic tests only.
+Primary access still requires separate explicit authority after that seal.
 
 Before any implementation or observation, record:
 
@@ -147,9 +151,9 @@ or no candidate retains positive G1 margin, terminate without synthesizing an
 experiment and abandon this GNSS route.
 ```
 
-The navigation review and bounded structure-only qualification are complete
-without a new gate. The DOY 215 primary remains sealed; no prospective plan is
-frozen yet.
+The navigation review, bounded structure-only qualification and prospective
+plan freeze are complete without a new gate. The DOY 215 primary remains
+sealed and the evaluator has not yet been materialized.
 
 ## Anti-drift stop
 

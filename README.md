@@ -120,11 +120,16 @@ future coordinate. No numeric observation, LLI/SSI or SNR magnitude was
 decoded and no decompressed RINEX was persisted. See
 [`GNSS_INDEPENDENT_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_QUALIFICATION_REPORT.md).
 
-Distinct DOY 215 products remain the completely unopened primary. No
-prospective plan is frozen and no primary access authority exists. The next
-admissible action is an offline primary-plan freeze binding the already
-selected geometry, signal family, parser, nulls, value-level admission and
-zero-retry outcome semantics—not observation access.
+Distinct DOY 215 products remain the completely unopened primary. The
+prospective design is now frozen in
+[`GNSS_INDEPENDENT_PRIMARY_PROSPECTIVE_PLAN.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PRIMARY_PROSPECTIVE_PLAN.md):
+KIRU–MAT1, G20/G22, G14 and prefix-affine nulls, 76 calibration features, 302
+held-out features, the qualified `L1C/L2W` family, fixed value-level admission
+and a `709.718875 Hz` pairwise guard. The plan itself authorizes no access.
+
+The next admissible action remains offline: materialize and seal the exact
+deterministic primary evaluator against the plan and qualification hashes.
+Only after that separate authority may open the DOY 215 products.
 
 ## Preserved Gate F2.5 experimental history
 

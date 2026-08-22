@@ -1,0 +1,172 @@
+{
+  "allowed_physical_terminal_outcomes": [
+    "MEASUREMENT_INVALID",
+    "NOT_DETECTABLE",
+    "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+    "PREFIX_AFFINE_NULL_PREFERRED",
+    "WRONG_ORBIT_G14_PREFERRED",
+    "AMBIGUOUS"
+  ],
+  "branch": "experiment/gnss-independent-forward",
+  "claims": {
+    "authorized_now": "FROZEN_PROSPECTIVE_DESIGN_WITH_POSITIVE_PREMEASUREMENT_PHYSICAL_MARGIN",
+    "not_authorized": [
+      "PRIMARY_ACCESS",
+      "MEASUREMENT_VALIDITY",
+      "ORBITAL_MODEL_PREFERENCE",
+      "SATELLITE_IDENTITY",
+      "ORBIT_RECONSTRUCTION"
+    ]
+  },
+  "detectability": {
+    "calibration_rule": "NOMINAL_PREFIX_RESIDUAL_PEAK_TO_PEAK_NOT_GREATER_THAN_ONE_MODEL_ENVELOPE",
+    "g14_controlling_separation_hz": 6233.797940337912,
+    "one_model_envelope_hz": 354.8594372656104,
+    "pairwise_decision_guard_hz": 709.7188745312208,
+    "prefix_affine_separation_hz": 6290.892122536,
+    "remaining_physical_margin_hz": 5524.079065806692,
+    "strict_preference_rule": "SCORE_WINNER_PLUS_GUARD_LESS_THAN_EVERY_OTHER_SCORE"
+  },
+  "failure_semantics": {
+    "ARTIFACT_MATERIALIZATION_FAILED": "PREMEASUREMENT_NO_PHYSICAL_CLAIM",
+    "MEASUREMENT_INVALID": "PHYSICAL_MEASUREMENT_ADMISSION_FAILED_DOWNSTREAM_NOT_EVALUATED",
+    "NOT_DETECTABLE": "MEASUREMENT_AVAILABLE_BUT_FROZEN_DETECTABILITY_CLAUSE_FAILED_HELDOUT_NOT_EVALUATED",
+    "PRIMARY_EVALUATION_ERROR": "DESCRIPTION_OR_SOFTWARE_FAILURE_NO_EPISTEMIC_REJECTION"
+  },
+  "future_evaluator_seal": {
+    "manifest_sha256": null,
+    "required_before_primary_access": true,
+    "source_sha256": null,
+    "state": "NOT_YET_MATERIALIZED"
+  },
+  "lineage": {
+    "hardened_envelope_source_sha256": "da8f2bb9f1779c1e6e4bdad0466428bf9034b4dd90bea1d8cc36abfb14c17bc8",
+    "hardened_screen_source_sha256": "1018c0cb2cdeff17d17e78e0f2c082b73e2ac7baccc138f55b64d0ba2d8324a0",
+    "navigation_review_receipt_sha256": "87a869afa1fa6a66e0cc4144c2ca7f261364e33867fe5ced9b9ee9620257df78",
+    "qualification_manifest_sha256": "bcd504f9e3a0e2b70bf62ee566fdcdc6154e43a7063d6bbe8921ad2ba292210c",
+    "qualification_parser_source_sha256": "ada26cf0ac30ea556af480cf3590b5ff7b61b0e26bb762e766a87de95114be18",
+    "qualification_receipt_sha256": "5e2d319ba633dce788bfa0a8b8961fa228a4b6ffd0ed47787b92c59520b37f0d",
+    "review_source_sha256": "3ed5e1ff02545f14a0271825ff3381fca4331edb2a344008ffef47a2b72abb02"
+  },
+  "measurement_clauses": {
+    "calibration_detectability": "NOT_EVALUATED",
+    "exact_epoch_continuity": "NOT_EVALUATED",
+    "finite_numeric_values": "NOT_EVALUATED",
+    "geometry_free_phase_continuity": "NOT_EVALUATED",
+    "heldout_model_comparison": "NOT_EVALUATED",
+    "navigation_and_geometry": "SATISFIED_OFFLINE",
+    "primary_complete_file_hashes": "NOT_EVALUATED",
+    "primary_header_semantics": "NOT_EVALUATED",
+    "qualification_topology": "SATISFIED_ON_DISTINCT_DOY_214",
+    "required_phase_code_snr_fields": "NOT_EVALUATED",
+    "zero_lli": "NOT_EVALUATED"
+  },
+  "navigation": {
+    "bytes": 8503101,
+    "compressed_bytes": 1406096,
+    "compressed_sha256": "261225401bdeaae1c5ea102c76b5b663fa999c6945821b10b6b4967731fe0f78",
+    "name": "BRDM00DLR_S_20262150000_01D_MN.rnx",
+    "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+    "sha256": "a8be80bbc5ad857381b8b4d662a08c9fb56a015b78c928d084f32799077aeb24"
+  },
+  "new_gate_created": false,
+  "observation_access": {
+    "numeric_observation_values_decoded": 0,
+    "primary_artifact_bytes_opened": 0,
+    "primary_epoch_records_decoded": 0,
+    "primary_headers_opened": 0
+  },
+  "outcome": "READY_FOR_GNSS_PRIMARY_EVALUATOR_FREEZE",
+  "parent_commit": "4956081ab204b7bc003fe2a5b81a09944586c0b3",
+  "plan_markdown": {
+    "bytes": 10595,
+    "hash_normalization": "CANONICAL_LF",
+    "name": "GNSS_INDEPENDENT_PRIMARY_PROSPECTIVE_PLAN.md",
+    "sha256": "763fa4c5c2b5ea77faaedc75c753c360fd848294ab789a8868d1e91458b2c000"
+  },
+  "primary_access_authorized": false,
+  "primary_products": [
+    {
+      "header_opened": false,
+      "name": "KIRU00SWE_R_20262150000_01D_30S_MO.crx.gz",
+      "payload_opened": false,
+      "preaccess_head_content_length_bytes": 5113772,
+      "sha256": null,
+      "station_id": "KIRU00SWE",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/215/KIRU00SWE_R_20262150000_01D_30S_MO.crx.gz"
+    },
+    {
+      "header_opened": false,
+      "name": "MAT100ITA_R_20262150000_01D_30S_MO.crx.gz",
+      "payload_opened": false,
+      "preaccess_head_content_length_bytes": 4255324,
+      "sha256": null,
+      "station_id": "MAT100ITA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/215/MAT100ITA_R_20262150000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "prospective_plan_frozen": true,
+  "recorded_at": "2026-08-22T21:34:12.735Z",
+  "retry_policy": {
+    "after_first_decompression_byte": "ZERO_RETRY",
+    "alternate_product": false,
+    "alternate_signal_family": false,
+    "alternate_window": false,
+    "before_complete_hash": "BOUNDED_RANGE_RESUME_FOR_TRANSPORT_ONLY",
+    "threshold_change": false
+  },
+  "schema": "gnss-independent-primary-prospective-plan-receipt-v1",
+  "selected_plan": {
+    "calibration_epoch_start_gps": "2026-08-03T16:03:00 GPS",
+    "calibration_epoch_stop_gps": "2026-08-03T16:40:30 GPS",
+    "calibration_records": 76,
+    "coordinate": "L1_EQUIVALENT_CENTRAL_TIME_DERIVATIVE_OF_L1C_L2W_IONOSPHERE_FREE_KIRU_MAT1_G20_G22_DOUBLE_DIFFERENCE",
+    "derivative_baseline_s": 60.0,
+    "feature_epoch_start_gps": "2026-08-03T16:03:00 GPS",
+    "feature_epoch_stop_gps": "2026-08-03T19:11:30 GPS",
+    "feature_records": 378,
+    "geometry_free_second_difference_limit_m": 0.09514683639918244,
+    "gps_minus_utc_s": 18.0,
+    "heldout_epoch_start_gps": "2026-08-03T16:41:00 GPS",
+    "heldout_epoch_stop_gps": "2026-08-03T19:11:30 GPS",
+    "heldout_records": 302,
+    "ionosphere_free_coefficients": [
+      2.54572778016316,
+      -1.5457277801631601
+    ],
+    "measurement_roots": [
+      "KIRU00SWE_RECEIVER_ANTENNA_CLOCK",
+      "MAT100ITA_RECEIVER_ANTENNA_CLOCK"
+    ],
+    "nulls": [
+      "PREFIX_AFFINE",
+      "G14_G22_WRONG_ORBIT"
+    ],
+    "plan_id": "KIRU_MAT1_G20_G22_2026_215_DUAL_FREQUENCY_DD",
+    "raw_input_epoch_start_gps": "2026-08-03T16:02:30 GPS",
+    "raw_input_epoch_stop_gps": "2026-08-03T19:12:00 GPS",
+    "raw_records": 380,
+    "reference": "G22",
+    "score": "HELDOUT_PEAK_TO_PEAK_AFTER_PREFIX_ONLY_CONSTANT_AND_SLOPE_RESIDUAL_FIT",
+    "signal_family": {
+      "l1": [
+        "C1C",
+        "L1C",
+        "S1C"
+      ],
+      "l2": [
+        "C2W",
+        "L2W",
+        "S2W"
+      ],
+      "selection_frozen_before_primary_access": true
+    },
+    "stations": [
+      "KIRU00SWE",
+      "MAT100ITA"
+    ],
+    "step_s": 30.0,
+    "target": "G20",
+    "wrong_orbit": "G14"
+  }
+}
