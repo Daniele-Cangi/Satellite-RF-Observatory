@@ -39,6 +39,8 @@ PyYAML>=6.0                # Configuration files
 loguru>=0.7.0              # Logging (optional)
 Pillow>=10.0.0             # In-memory SatNOGS waterfall inspection
 websocket-client>=1.8.0    # Short public KiwiSDR IQ probes
+hatanaka==2.8.1            # Frozen CRINEX decoder for the GNSS prospective vertical
+ncompress==1.0.2           # Explicit transitive codec dependency used by hatanaka
 
 # ----------------------------------------------------------------------------
 # SDR Hardware Interface
