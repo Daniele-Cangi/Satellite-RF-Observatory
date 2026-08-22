@@ -17,7 +17,7 @@ def _stream(role="DSS25_X"):
     records = tuple(
         compiler.ControlRecord(
             (start + timedelta(seconds=index))
-            .isoformat()
+            .isoformat(timespec="microseconds")
             .replace("+00:00", "Z"),
             index,
             8_100_000_000.0,

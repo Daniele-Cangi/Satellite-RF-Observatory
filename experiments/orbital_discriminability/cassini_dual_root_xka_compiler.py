@@ -11,7 +11,7 @@ from hashlib import sha256
 import json
 from math import ceil, floor, sqrt
 from pathlib import Path
-from typing import Final, Mapping, Sequence
+from typing import Final
 import urllib.request
 
 import numpy as np
@@ -23,9 +23,6 @@ from experiments.orbital_discriminability import cassini_dss26_one_way as one_wa
 from experiments.orbital_discriminability import cassini_dual_root_headers as headers
 from experiments.orbital_discriminability import (
     cassini_sagr3_distributed_geometry as forward,
-)
-from experiments.orbital_discriminability import (
-    cassini_sagr3_pretransition_open_term_audit as prior_audit,
 )
 
 
