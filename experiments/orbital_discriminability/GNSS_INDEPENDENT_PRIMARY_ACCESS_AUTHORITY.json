@@ -1,0 +1,39 @@
+{
+  "authorization_context": "USER_MESSAGE_PROCEDI_AFTER_EXPLICIT_REPORT_OF_THE_PRIMARY_AUTHORITY_BLOCKER",
+  "authorized_at_utc": "2026-08-23T00:38:41.040Z",
+  "evaluator_seal_sha256": "b2e09192345db050d61ae843ba01095f50b1deef5f2d9603c9365634519d8807",
+  "evaluator_source_sha256": "a4070a975ab402d0640d4818bdf6001a0d0380034d3715af8ed227558e4bff8b",
+  "plan_sha256": "763fa4c5c2b5ea77faaedc75c753c360fd848294ab789a8868d1e91458b2c000",
+  "products": [
+    "KIRU00SWE_R_20262150000_01D_30S_MO.crx.gz",
+    "MAT100ITA_R_20262150000_01D_30S_MO.crx.gz"
+  ],
+  "prospective_markdown_sha256": "763fa4c5c2b5ea77faaedc75c753c360fd848294ab789a8868d1e91458b2c000",
+  "retry_policy": {
+    "after_first_decompression_byte": "ZERO_RETRY",
+    "before_complete_hash": "BOUNDED_RANGE_RESUME_FOR_TRANSPORT_ONLY",
+    "change_artifact": false,
+    "change_signal": false,
+    "change_threshold": false,
+    "change_window": false
+  },
+  "schema": "gnss-independent-primary-access-authority-v1",
+  "scope": {
+    "allowed": [
+      "COMPLETE_FILE_MATERIALIZATION_OF_THE_TWO_EXACT_PRODUCTS",
+      "FULL_FILE_BYTE_COUNT_AND_SHA256_BEFORE_DECOMPRESSION",
+      "ONE_FROZEN_EVALUATOR_RUN",
+      "ONE_TERMINAL_RECEIPT"
+    ],
+    "forbidden": [
+      "ALTERNATE_PRODUCT_OR_MIRROR_AFTER_DECOMPRESSION",
+      "ALTERNATE_STATION_SATELLITE_SIGNAL_OR_WINDOW",
+      "POST_ACCESS_PARAMETER_OR_THRESHOLD_CHANGE",
+      "PERSISTENCE_OF_DECOMPRESSED_OR_DERIVED_MEASUREMENT_DATA",
+      "SATELLITE_IDENTITY_OR_ORBIT_RECONSTRUCTION_CLAIM"
+    ]
+  },
+  "single_run": true,
+  "source_commit": "770d255eae80a1929eb12102b166dc915fe43908",
+  "state": "PRIMARY_ACCESS_AUTHORIZED"
+}
