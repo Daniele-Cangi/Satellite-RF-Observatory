@@ -175,6 +175,14 @@ or instrumental assessment. DOY 214 numeric values and every future
 observation product remain unopened. A wider date set or changed duration is
 a new design choice requiring review, not a retry.
 
+The explicitly approved bounded expansion then evaluated DOY 219–232 with the
+same 380 records, nulls, elevation and clock shifts. No day admits a full
+target/reference/wrong-orbit mask: the best triple decreases from 379 to 376
+records even as two-satellite continuity increases to 471. The outcome is
+`NO_NATIVE_DOPPLER_GEOMETRY_SHORTLIST_IN_EXPANDED_SET`. This closes automatic
+date expansion. The next decision must reconsider the physical experiment
+shape or change observer geometry before any numeric observation access.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

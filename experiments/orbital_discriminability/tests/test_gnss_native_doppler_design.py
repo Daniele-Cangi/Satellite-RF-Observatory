@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timedelta, timezone
 from math import isclose
 from pathlib import Path
 
@@ -13,6 +14,9 @@ from experiments.orbital_discriminability import gnss_native_doppler_design as d
 
 ROOT = Path(__file__).parents[1]
 RECEIPT = ROOT / "GNSS_NATIVE_DOPPLER_FORWARD_DESIGN_RECEIPT.json"
+EXPANSION_RECEIPT = (
+    ROOT / "GNSS_NATIVE_DOPPLER_EXPANDED_NAVIGATION_RECEIPT.json"
+)
 
 
 def load_receipt() -> dict[str, object]:
@@ -33,6 +37,52 @@ def test_roles_and_navigation_days_are_bounded() -> None:
     ]
     with pytest.raises(design.DopplerDesignError, match="DAY_OUTSIDE"):
         design.expected_navigation_name(215)
+
+
+def test_expansion_is_a_distinct_predeclared_two_week_navigation_set() -> None:
+    assert design.EXPANSION_CANDIDATE_DOYS == tuple(range(219, 233))
+    assert design.expected_navigation_name(
+        219, design.EXPANSION_CANDIDATE_DOYS
+    ) == "BRDM00DLR_S_20262190000_01D_MN.rnx"
+    with pytest.raises(design.DopplerDesignError, match="DAY_OUTSIDE"):
+        design.expected_navigation_name(218, design.EXPANSION_CANDIDATE_DOYS)
+    manifest = design.expansion_manifest()
+    assert manifest["frozen_from"]["initial_design_receipt_sha256"] == (
+        design.INITIAL_DESIGN_RECEIPT_SHA256
+    )
+    assert manifest["parameters"]["window_records"] == 380
+    assert manifest["observation_access_forbidden"] is True
+
+
+def test_doy_calendar_mapping_is_explicit() -> None:
+    assert design.calendar_date_for_doy(219).isoformat() == "2026-08-07"
+    assert design.calendar_date_for_doy(232).isoformat() == "2026-08-20"
+    with pytest.raises(design.DopplerDesignError):
+        design.calendar_date_for_doy(366)
+
+
+def test_stale_navigation_epoch_becomes_a_visibility_gap(monkeypatch) -> None:
+    epochs = (
+        datetime(2026, 8, 7, tzinfo=timezone.utc),
+        datetime(2026, 8, 7, tzinfo=timezone.utc) + timedelta(hours=8),
+    )
+
+    def select(_records, epoch):
+        if epoch == epochs[1]:
+            raise design.screen.GnssDoubleDifferenceError("stale")
+        return object()
+
+    monkeypatch.setattr(design.screen, "select_ephemeris", select)
+    monkeypatch.setattr(
+        design.screen,
+        "broadcast_ecef",
+        lambda _record, _epoch: np.asarray([1.0, 2.0, 3.0]),
+    )
+
+    positions = design.broadcast_positions_with_gaps((object(),), epochs)
+
+    assert np.all(np.isfinite(positions[0]))
+    assert np.all(np.isnan(positions[1]))
 
 
 def test_native_dual_frequency_combination_recovers_geometry_and_cancels_iono() -> None:
@@ -110,3 +160,39 @@ def test_navigation_refusal_grants_no_measurement_authority() -> None:
     assert receipt["next_exact_blocker"] == (
         "PREDECLARED_NAVIGATION_SET_HAS_NO_380_EPOCH_THREE_SATELLITE_ROBUST_WINDOW"
     )
+
+
+def test_expanded_navigation_result_is_strict_and_bound_to_initial_refusal() -> None:
+    receipt = json.loads(EXPANSION_RECEIPT.read_text(encoding="ascii"))
+    assert receipt["expansion_manifest_sha256"] == (
+        design.expansion_manifest_sha256()
+    )
+    assert design.file_sha256(RECEIPT) == design.INITIAL_DESIGN_RECEIPT_SHA256
+    assert receipt["outcome"] == (
+        "NO_NATIVE_DOPPLER_GEOMETRY_SHORTLIST_IN_EXPANDED_SET"
+    )
+    assert receipt["candidate_doys"] == list(range(219, 233))
+    assert receipt["shortlist"] == []
+    assert design.strict_json(receipt)
+
+
+def test_expanded_navigation_continuity_regression() -> None:
+    receipt = json.loads(EXPANSION_RECEIPT.read_text(encoding="ascii"))
+    diagnostics = receipt["day_admission_diagnostics"]
+    assert [row["maximum_two_satellite_continuity_records"] for row in diagnostics] == [
+        468, 468, 468, 469, 469, 469, 470, 470, 469, 470, 470, 470, 471, 471
+    ]
+    assert [row["maximum_three_satellite_continuity_records"] for row in diagnostics] == [
+        379, 379, 378, 378, 378, 378, 378, 378, 378, 377, 377, 377, 377, 376
+    ]
+    assert {row["three_satellite_sets_meeting_window"] for row in diagnostics} == {0}
+    assert {tuple(row["controlling_three_satellite_set"]) for row in diagnostics} == {
+        ("G14", "G20", "G22")
+    }
+
+
+def test_expanded_refusal_does_not_authorize_numeric_development() -> None:
+    receipt = json.loads(EXPANSION_RECEIPT.read_text(encoding="ascii"))
+    assert set(receipt["measurement_access"].values()) == {0}
+    assert set(receipt["authority"].values()) == {False}
+    assert receipt["instrumental_assessment_reached"] is False

@@ -152,6 +152,14 @@ epoch short of the frozen wrong-orbit comparison. The outcome is therefore
 or numeric Doppler value was opened. See
 [`GNSS_NATIVE_DOPPLER_FORWARD_DESIGN.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_FORWARD_DESIGN.md).
 
+The separately predeclared DOY 219–232 expansion retained every physical
+parameter. It also produced no 380-epoch three-satellite window: pair
+continuity grows from 468 to 471 records, while the best G14/G20/G22 triple
+declines from 379 to 376. The result is
+`NO_NATIVE_DOPPLER_GEOMETRY_SHORTLIST_IN_EXPANDED_SET`, with zero observation
+access. See
+[`GNSS_NATIVE_DOPPLER_EXPANDED_NAVIGATION_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_EXPANDED_NAVIGATION_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

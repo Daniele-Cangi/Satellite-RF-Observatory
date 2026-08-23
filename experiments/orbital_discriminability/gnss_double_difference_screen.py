@@ -340,6 +340,7 @@ def parse_gps_record(lines: Sequence[str]) -> GpsEphemeris:
     toc = datetime(year, month, day, hour, minute, tzinfo=timezone.utc) + timedelta(seconds=second)
     first = fixed_fields(lines[0], 23)
     rows = [fixed_fields(line, 4) for line in lines[1:]]
+    fit_interval = None if len(rows[6]) < 2 or rows[6][1] == 0.0 else rows[6][1]
     return GpsEphemeris(
         lines[0][:3], toc, first[0], first[1], first[2],
         rows[0][0], rows[0][1], rows[0][2], rows[0][3],
@@ -347,7 +348,7 @@ def parse_gps_record(lines: Sequence[str]) -> GpsEphemeris:
         rows[2][0], rows[2][1], rows[2][2], rows[2][3],
         rows[3][0], rows[3][1], rows[3][2], rows[3][3],
         rows[4][0], int(round(rows[4][2])), rows[5][0], int(round(rows[5][1])),
-        rows[5][2], rows[6][0], None if rows[6][1] == 0.0 else rows[6][1],
+        rows[5][2], rows[6][0], fit_interval,
     )
 
 

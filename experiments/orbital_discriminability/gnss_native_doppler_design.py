@@ -24,14 +24,11 @@ from experiments.orbital_discriminability import gnss_independent_forward_review
 
 
 DESIGN_VERSION: Final = "gnss-kiru-mat1-native-doppler-design-v1"
+EXPANSION_VERSION: Final = "gnss-kiru-mat1-native-doppler-expansion-v1"
 DEVELOPMENT_DOY: Final = 214
 CLOSED_PRIMARY_DOY: Final = 215
 CANDIDATE_DOYS: Final = (216, 217, 218)
-CANDIDATE_DATES: Final = {
-    216: date(2026, 8, 4),
-    217: date(2026, 8, 5),
-    218: date(2026, 8, 6),
-}
+EXPANSION_CANDIDATE_DOYS: Final = tuple(range(219, 233))
 STATION_IDS: Final = ("KIRU00SWE", "MAT100ITA")
 OBSERVABLES: Final = ("C1C", "D1C", "S1C", "C2W", "D2W", "S2W")
 STEP_S: Final = 30.0
@@ -52,6 +49,9 @@ QUALIFICATION_RECEIPT_SHA256: Final = (
 )
 CLOSED_PRIMARY_OUTCOME_SHA256: Final = (
     "5e4e54c1cae1f431eacc8101bb995de18c548e4ea7dcb46a71313517e90ea02b"
+)
+INITIAL_DESIGN_RECEIPT_SHA256: Final = (
+    "561ef4c5954d1652702d954315071088ed2d66c021b10e7dd4bdda15fba51afb"
 )
 
 
@@ -84,10 +84,19 @@ class DayModel:
     elevation: dict[tuple[str, str, float], np.ndarray]
 
 
-def expected_navigation_name(doy: int) -> str:
-    if doy not in CANDIDATE_DOYS:
+def expected_navigation_name(
+    doy: int,
+    allowed_doys: Sequence[int] = CANDIDATE_DOYS,
+) -> str:
+    if doy not in allowed_doys:
         raise DopplerDesignError("DAY_OUTSIDE_PREDECLARED_SET")
     return f"BRDM00DLR_S_2026{doy:03d}0000_01D_MN.rnx"
+
+
+def calendar_date_for_doy(doy: int) -> date:
+    if not 1 <= doy <= 365:
+        raise DopplerDesignError("INVALID_2026_DAY_OF_YEAR")
+    return date(2026, 1, 1) + timedelta(days=doy - 1)
 
 
 def gps_epoch_grid(day: date) -> tuple[datetime, ...]:
@@ -232,14 +241,58 @@ def design_manifest_sha256() -> str:
     return sha256(strict_json(design_manifest()).encode("ascii")).hexdigest()
 
 
-def validate_navigation_inputs(paths: Sequence[Path]) -> dict[int, Path]:
-    if len(paths) != len(CANDIDATE_DOYS):
-        raise DopplerDesignError("EXACTLY_THREE_NAVIGATION_PRODUCTS_REQUIRED")
+def expansion_manifest() -> dict[str, object]:
+    original = design_manifest()
+    return {
+        "expansion_version": EXPANSION_VERSION,
+        "scope": "BROADCAST_NAVIGATION_ONLY_OBSERVATION_VALUES_UNOPENED",
+        "physical_question": (
+            "DOES_A_BOUNDED_TWO_WEEK_NAVIGATION_SET_CONTAIN_THREE_FROZEN_"
+            "KIRU_MAT1_NATIVE_DOPPLER_WINDOWS_WITH_FULL_WRONG_ORBIT_SUPPORT"
+        ),
+        "frozen_from": {
+            "initial_design_version": DESIGN_VERSION,
+            "initial_design_manifest_sha256": design_manifest_sha256(),
+            "initial_design_receipt_sha256": INITIAL_DESIGN_RECEIPT_SHA256,
+            "initial_outcome": (
+                "NO_NATIVE_DOPPLER_GEOMETRY_WITH_FROZEN_NULL_SUPPORT"
+            ),
+        },
+        "candidate_doys": list(EXPANSION_CANDIDATE_DOYS),
+        "capability_set": original["capability_set"],
+        "measurement_coordinate": original["measurement_coordinate"],
+        "parameters": original["parameters"],
+        "lineage": original["lineage"],
+        "post_result_changes_forbidden": [
+            "window length",
+            "calibration or heldout records",
+            "minimum elevation",
+            "clock shifts",
+            "null family",
+            "capability set",
+            "measurement coordinate",
+        ],
+        "observation_access_forbidden": True,
+    }
+
+
+def expansion_manifest_sha256() -> str:
+    return sha256(strict_json(expansion_manifest()).encode("ascii")).hexdigest()
+
+
+def validate_navigation_inputs(
+    paths: Sequence[Path],
+    candidate_doys: Sequence[int] = CANDIDATE_DOYS,
+) -> dict[int, Path]:
+    if len(paths) != len(candidate_doys):
+        raise DopplerDesignError("EXACT_PREDECLARED_NAVIGATION_SET_REQUIRED")
     by_day: dict[int, Path] = {}
     for raw_path in paths:
         path = Path(raw_path)
         matching = [
-            doy for doy in CANDIDATE_DOYS if path.name == expected_navigation_name(doy)
+            doy
+            for doy in candidate_doys
+            if path.name == expected_navigation_name(doy, candidate_doys)
         ]
         if len(matching) != 1:
             raise DopplerDesignError("NAVIGATION_PRODUCT_OUTSIDE_PREDECLARED_SET")
@@ -249,19 +302,37 @@ def validate_navigation_inputs(paths: Sequence[Path]) -> dict[int, Path]:
         if not path.is_file():
             raise DopplerDesignError("NAVIGATION_PRODUCT_MISSING")
         by_day[doy] = path
-    if set(by_day) != set(CANDIDATE_DOYS):
+    if set(by_day) != set(candidate_doys):
         raise DopplerDesignError("INCOMPLETE_NAVIGATION_DAY_SET")
     return by_day
 
 
-def compile_day_model(doy: int, path: Path) -> DayModel:
-    if path.name != expected_navigation_name(doy):
+def broadcast_positions_with_gaps(
+    records: Sequence[screen.GpsEphemeris],
+    epochs: Sequence[datetime],
+) -> np.ndarray:
+    positions = np.full((len(epochs), 3), np.nan, dtype=np.float64)
+    for index, epoch in enumerate(epochs):
+        try:
+            ephemeris = screen.select_ephemeris(records, epoch)
+        except screen.GnssDoubleDifferenceError:
+            continue
+        positions[index] = screen.broadcast_ecef(ephemeris, epoch)
+    return positions
+
+
+def compile_day_model(
+    doy: int,
+    path: Path,
+    allowed_doys: Sequence[int] = CANDIDATE_DOYS,
+) -> DayModel:
+    if path.name != expected_navigation_name(doy, allowed_doys):
         raise DopplerDesignError("NAVIGATION_IDENTITY_MISMATCH")
     records = screen.parse_gps_navigation(path)
     satellites = tuple(sorted(records))
     if len(satellites) < 4:
         raise DopplerDesignError("TOO_FEW_HEALTHY_GPS_SATELLITES")
-    gps_epochs = gps_epoch_grid(CANDIDATE_DATES[doy])
+    gps_epochs = gps_epoch_grid(calendar_date_for_doy(doy))
     utc_epochs = tuple(
         epoch - timedelta(seconds=GPS_MINUS_UTC_S) for epoch in gps_epochs
     )
@@ -276,15 +347,7 @@ def compile_day_model(doy: int, path: Path) -> DayModel:
             shifted = tuple(
                 epoch + timedelta(seconds=shift_s) for epoch in utc_epochs
             )
-            positions = np.asarray(
-                [
-                    screen.broadcast_ecef(
-                        screen.select_ephemeris(records[satellite], epoch), epoch
-                    )
-                    for epoch in shifted
-                ],
-                dtype=np.float64,
-            )
+            positions = broadcast_positions_with_gaps(records[satellite], shifted)
             for station_id in STATION_IDS:
                 station = review.STATIONS[station_id]
                 fractional[(station_id, satellite, shift_s)] = screen.fractional_doppler(
@@ -650,13 +713,118 @@ def design_forward(paths: Sequence[Path]) -> dict[str, object]:
     return result
 
 
+def design_expansion(paths: Sequence[Path]) -> dict[str, object]:
+    by_day = validate_navigation_inputs(paths, EXPANSION_CANDIDATE_DOYS)
+    models = {
+        doy: compile_day_model(
+            doy,
+            by_day[doy],
+            EXPANSION_CANDIDATE_DOYS,
+        )
+        for doy in EXPANSION_CANDIDATE_DOYS
+    }
+    day_winners = {
+        doy: select_day_candidate(models[doy]) for doy in EXPANSION_CANDIDATE_DOYS
+    }
+    diagnostics = [
+        day_continuity_diagnostic(models[doy]) for doy in EXPANSION_CANDIDATE_DOYS
+    ]
+    positive = [
+        candidate
+        for candidate in day_winners.values()
+        if candidate is not None
+        and float(candidate["remaining_after_direct_clock_envelope_hz"]) > 0.0
+    ]
+    positive.sort(
+        key=lambda row: (
+            -float(row["remaining_after_direct_clock_envelope_hz"]),
+            int(row["doy"]),
+        )
+    )
+    shortlist = positive[:3]
+    roles = ("primary_candidate", "reserve_1", "reserve_2")
+    for rank, (role, item) in enumerate(zip(roles, shortlist), start=1):
+        item["prospective_role"] = role
+        item["geometry_rank"] = rank
+    summaries = []
+    for doy in EXPANSION_CANDIDATE_DOYS:
+        candidate = day_winners[doy]
+        if candidate is None:
+            summaries.append({"doy": doy, "candidate_found": False})
+            continue
+        summaries.append(
+            {
+                "doy": doy,
+                "candidate_found": True,
+                "target": candidate["target"],
+                "reference": candidate["reference"],
+                "wrong_orbit": candidate["wrong_orbit_null"]["satellite"],
+                "start_observation_epoch_gps": candidate[
+                    "start_observation_epoch_gps"
+                ],
+                "remaining_after_direct_clock_envelope_hz": candidate[
+                    "remaining_after_direct_clock_envelope_hz"
+                ],
+            }
+        )
+    admitted = len(shortlist) == 3
+    result = {
+        "expansion_version": EXPANSION_VERSION,
+        "expansion_manifest_sha256": expansion_manifest_sha256(),
+        "scope": "BROADCAST_NAVIGATION_ONLY_OBSERVATION_VALUES_UNOPENED",
+        "candidate_doys": list(EXPANSION_CANDIDATE_DOYS),
+        "navigation_sources": [
+            models[doy].navigation_source for doy in EXPANSION_CANDIDATE_DOYS
+        ],
+        "capability_set": list(STATION_IDS),
+        "observable": expansion_manifest()["measurement_coordinate"],
+        "day_admission_diagnostics": diagnostics,
+        "day_candidate_summaries": summaries,
+        "shortlist": shortlist,
+        "measurement_envelope_status": "OPEN_UNTIL_DOY214_NUMERIC_DEVELOPMENT",
+        "instrumental_assessment_reached": False,
+        "measurement_access": {
+            "observation_products_opened": 0,
+            "observation_bytes_accessed": 0,
+            "observation_epochs_decoded": 0,
+            "doppler_values_decoded": 0,
+            "carrier_phase_values_decoded": 0,
+        },
+        "authority": {
+            "development_numeric_access_authorized": False,
+            "future_primary_access_authorized": False,
+            "closed_doy215_reopened": False,
+            "prospective_plan_frozen": False,
+        },
+        "next_exact_blocker": (
+            "SEPARATE_AUTHORITY_FOR_DOY214_NATIVE_DOPPLER_NUMERIC_DEVELOPMENT"
+            if admitted
+            else "EXPANDED_NAVIGATION_SET_HAS_FEWER_THAN_THREE_ADMISSIBLE_WINDOWS"
+        ),
+        "outcome": (
+            "NATIVE_DOPPLER_GEOMETRY_SHORTLIST_READY"
+            if admitted
+            else "NO_NATIVE_DOPPLER_GEOMETRY_SHORTLIST_IN_EXPANDED_SET"
+        ),
+        "new_gate_created": False,
+    }
+    strict_json(result)
+    return result
+
+
 def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("navigation", nargs=3, type=Path)
+    parser.add_argument("--expanded", action="store_true")
+    parser.add_argument("navigation", nargs="+", type=Path)
     args = parser.parse_args()
-    print(strict_json(design_forward(args.navigation)))
+    result = (
+        design_expansion(args.navigation)
+        if args.expanded
+        else design_forward(args.navigation)
+    )
+    print(strict_json(result))
 
 
 if __name__ == "__main__":

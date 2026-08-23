@@ -59,6 +59,24 @@ def test_real_broadcast_position_regression() -> None:
     )
 
 
+def test_optional_blank_fit_interval_is_parsed_as_unknown() -> None:
+    lines = [
+        "G05 2026 08 07 01 59 28-2.357596531510e-04-3.410605131648e-13 0.000000000000e+00",
+        "     1.000000000000e+02-9.437500000000e+01 3.772657146313e-09-2.081615159284e-01",
+        "    -4.781410098076e-06 5.578188458458e-03 6.921589374542e-06 5.153786031723e+03",
+        "     4.391680000000e+05-1.247972249985e-07 1.307623888949e+00 7.636845111847e-08",
+        "     9.813409281715e-01 2.564687500000e+02 1.493821906238e+00-7.907115077367e-09",
+        "     2.821546100149e-11 1.000000000000e+00 2.430000000000e+03 0.000000000000e+00",
+        "     2.000000000000e+00 1.000000000000e+00-1.024454832077e-08 1.000000000000e+02",
+        "     4.362660000000e+05                                                         ",
+    ]
+
+    record = screen.parse_gps_record(lines)
+
+    assert record.satellite == "G05"
+    assert record.transmission_sow == 436_266.0
+    assert record.fit_interval_h is None
+
 def test_double_difference_removes_common_receiver_and_satellite_terms() -> None:
     geometry = {
         "left_target": np.asarray([1.0, 1.2, 1.4]),
