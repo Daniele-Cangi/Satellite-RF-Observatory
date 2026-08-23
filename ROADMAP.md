@@ -149,6 +149,20 @@ outcome-independent orbit/clock uncertainty across multiple causal terms or
 select a genuinely stronger geometry. It must not reduce intervals because
 this candidate failed.
 
+A bounded documentation and navigation-grid audit has now tested the orbit/
+clock branch explicitly. GPS URRE provides useful 95% and 6-sigma design
+sensitivities, but no rate-error integrity NTE or published temporal covariance.
+Substituting those values still leaves -13.407 Hz and -30.431 Hz margins. The
+06:00 and 08:00 ephemeris cutovers affect four feature epochs by only
+millihertz; removing them diagnostically leaves the 403.375 Hz separation
+unchanged.
+
+The result is `GNSS_ORBIT_CLOCK_STRUCTURE_INSUFFICIENT`. Do not create another
+orbit-bound repair: even perfect orbit/clock knowledge cannot admit the closed
+candidate under the remaining envelope. The next comparison must change the
+causal topology—observer geometry, quotient coordinate or same-path witness—
+and rank by remaining physical margin from the start.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
@@ -852,4 +866,7 @@ The candidate-specific physical envelope has returned a non-positive margin:
 or observation access. The smallest remaining model-first question is whether
 the dominant metre-scale orbit/clock/path intervals can be replaced by
 predeclared smooth physical uncertainty families using only outcome-independent
-information. Until that is demonstrated, no GNSS primary should be selected.
+information. Orbit/clock alone has now been shown insufficient even under a
+zero-error sensitivity. The next work must compare causally different
+observables or observer geometries; until then, no GNSS primary should be
+selected.

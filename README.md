@@ -139,6 +139,14 @@ zero broadcast-orbit contribution alone would not make the margin positive.
 This is `GNSS_ORBIT_PAIR_PHYSICAL_ENVELOPE_DOMINATES`, not a negative orbital
 measurement. No qualification or observation access is authorized.
 
+A bounded structure audit then checked the strongest plausible objection. The
+official GPS `0.006 m/s` URRE statistic and `0.02 m/s` 6-sigma design value
+would reduce the pairwise total to 416.782 Hz and 433.806 Hz respectively, but
+both remain above G22. The two in-window ephemeris cutovers contribute only
+millihertz and do not control the separation. The result is
+`GNSS_ORBIT_CLOCK_STRUCTURE_INSUFFICIENT`: further orbit-only refinement is not
+the next path.
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
