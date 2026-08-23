@@ -1,0 +1,112 @@
+from __future__ import annotations
+
+import json
+from math import isclose
+from pathlib import Path
+
+import numpy as np
+import pytest
+
+from experiments.orbital_discriminability import gnss_double_difference_envelope as envelope
+from experiments.orbital_discriminability import gnss_native_doppler_design as design
+
+
+ROOT = Path(__file__).parents[1]
+RECEIPT = ROOT / "GNSS_NATIVE_DOPPLER_FORWARD_DESIGN_RECEIPT.json"
+
+
+def load_receipt() -> dict[str, object]:
+    return json.loads(
+        RECEIPT.read_text(encoding="ascii"),
+        parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)),
+    )
+
+
+def test_roles_and_navigation_days_are_bounded() -> None:
+    assert design.DEVELOPMENT_DOY == 214
+    assert design.CLOSED_PRIMARY_DOY == 215
+    assert design.CANDIDATE_DOYS == (216, 217, 218)
+    assert [design.expected_navigation_name(day) for day in design.CANDIDATE_DOYS] == [
+        "BRDM00DLR_S_20262160000_01D_MN.rnx",
+        "BRDM00DLR_S_20262170000_01D_MN.rnx",
+        "BRDM00DLR_S_20262180000_01D_MN.rnx",
+    ]
+    with pytest.raises(design.DopplerDesignError, match="DAY_OUTSIDE"):
+        design.expected_navigation_name(215)
+
+
+def test_native_dual_frequency_combination_recovers_geometry_and_cancels_iono() -> None:
+    fractional = np.asarray([-2.5e-6, 0.0, 1.75e-6])
+    ionosphere = np.asarray([1.2e9, -7.5e8, 3.25e8])
+    d1 = envelope.GPS_L1_HZ * fractional + ionosphere / envelope.GPS_L1_HZ
+    d2 = envelope.GPS_L2_HZ * fractional + ionosphere / envelope.GPS_L2_HZ
+    combined = design.ionosphere_free_doppler_l1_equivalent(d1, d2)
+    assert np.allclose(combined, envelope.GPS_L1_HZ * fractional, atol=1e-10)
+
+
+def test_prefix_affine_projection_removes_only_frozen_prefix_fit() -> None:
+    elapsed = np.arange(design.WINDOW_RECORDS) * design.STEP_S
+    affine = 12.0 - 0.003 * elapsed
+    residual, coefficients = design.prefix_affine_projection(affine)
+    assert np.max(np.abs(residual)) < 1e-10
+    assert isclose(coefficients[0], 12.0, rel_tol=0.0, abs_tol=1e-12)
+    assert isclose(coefficients[1], -0.003, rel_tol=0.0, abs_tol=1e-15)
+
+
+def test_heldout_curvature_survives_prefix_affine_null() -> None:
+    elapsed = np.arange(design.WINDOW_RECORDS, dtype=np.float64) * design.STEP_S
+    curved = 4.0 + 0.02 * elapsed + 2e-6 * elapsed**2
+    separation = design.heldout_non_affine_peak_to_peak(
+        curved, np.zeros(design.WINDOW_RECORDS)
+    )
+    assert separation > 100.0
+
+
+def test_window_search_never_returns_a_short_window_and_includes_tail() -> None:
+    assert design.window_starts(10, 10 + design.WINDOW_RECORDS - 1) == ()
+    starts = design.window_starts(10, 10 + design.WINDOW_RECORDS + 41)
+    assert starts[0] == 10
+    assert starts[-1] == 51
+    assert all(start + design.WINDOW_RECORDS <= 431 for start in starts)
+
+
+def test_manifest_is_strict_and_grants_no_observation_authority() -> None:
+    manifest = design.design_manifest()
+    assert manifest["scope"].endswith("OBSERVATION_VALUES_UNOPENED")
+    assert manifest["roles"]["closed_invalid_primary_doy"] == 215
+    assert design.strict_json(manifest)
+    with pytest.raises(ValueError):
+        design.strict_json({"bad": float("nan")})
+
+
+def test_native_doppler_rejects_nonfinite_or_mismatched_arrays() -> None:
+    with pytest.raises(design.DopplerDesignError):
+        design.ionosphere_free_doppler_l1_equivalent([1.0], [1.0, 2.0])
+    with pytest.raises(design.DopplerDesignError):
+        design.ionosphere_free_doppler_l1_equivalent([np.inf], [1.0])
+
+
+def test_real_navigation_refusal_is_strict_and_numerically_regressed() -> None:
+    receipt = load_receipt()
+    assert receipt["design_manifest_sha256"] == design.design_manifest_sha256()
+    assert receipt["outcome"] == (
+        "NO_NATIVE_DOPPLER_GEOMETRY_WITH_FROZEN_NULL_SUPPORT"
+    )
+    assert receipt["shortlist"] == []
+    assert receipt["instrumental_assessment_reached"] is False
+    assert design.strict_json(receipt)
+    for day in receipt["day_admission_diagnostics"]:
+        assert day["maximum_two_satellite_continuity_records"] == 467
+        assert day["two_satellite_sets_meeting_window"] == 14
+        assert day["maximum_three_satellite_continuity_records"] == 379
+        assert day["three_satellite_sets_meeting_window"] == 0
+        assert day["controlling_three_satellite_set"] == ["G14", "G20", "G22"]
+
+
+def test_navigation_refusal_grants_no_measurement_authority() -> None:
+    receipt = load_receipt()
+    assert set(receipt["measurement_access"].values()) == {0}
+    assert set(receipt["authority"].values()) == {False}
+    assert receipt["next_exact_blocker"] == (
+        "PREDECLARED_NAVIGATION_SET_HAS_NO_380_EPOCH_THREE_SATELLITE_ROBUST_WINDOW"
+    )

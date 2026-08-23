@@ -141,6 +141,17 @@ This is not evidence against G20 or either frozen null. No raw or derived
 measurement was persisted and the quarantine was destroyed. See
 [GNSS_INDEPENDENT_PRIMARY_OUTCOME.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PRIMARY_OUTCOME.md).
 
+A bounded navigation-only attempt then asked whether the already-qualified
+native `D1C/D2W` fields could support a fresh prospective coordinate without
+carrier-phase integration. It retained KIRU/MAT1, the 380-epoch window and the
+prefix-affine plus wrong-orbit nulls, and inspected only broadcast navigation
+for DOY 216–218. Each day has fourteen target/reference pairs long enough, but
+the longest robust three-satellite interval is 379 epochs (G14/G20/G22), one
+epoch short of the frozen wrong-orbit comparison. The outcome is therefore
+`NO_NATIVE_DOPPLER_GEOMETRY_WITH_FROZEN_NULL_SUPPORT`; no observation product
+or numeric Doppler value was opened. See
+[`GNSS_NATIVE_DOPPLER_FORWARD_DESIGN.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_FORWARD_DESIGN.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

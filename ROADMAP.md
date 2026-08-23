@@ -164,6 +164,17 @@ evaluator seal and one primary outcome are complete without a new gate. No raw
 or derived measurement was persisted and the quarantine was destroyed. This
 exact KIRU–MAT1 primary is closed.
 
+The next bounded navigation-only design tested whether the qualified native
+`D1C/D2W` observables could avoid the failed phase-integration path. It did not
+change the 380-epoch window after looking at the result. Across the
+predeclared DOY 216–218 navigation set, fourteen target/reference pairs per
+day meet the length, while the best robust target/reference/wrong-orbit triple
+G14/G20/G22 reaches only 379 epochs. The result is
+`NO_NATIVE_DOPPLER_GEOMETRY_WITH_FROZEN_NULL_SUPPORT`, before timing-envelope
+or instrumental assessment. DOY 214 numeric values and every future
+observation product remain unopened. A wider date set or changed duration is
+a new design choice requiring review, not a retry.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
