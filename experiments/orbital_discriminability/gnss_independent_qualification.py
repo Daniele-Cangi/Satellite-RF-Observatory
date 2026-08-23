@@ -16,10 +16,10 @@ import json
 from pathlib import Path
 import re
 from typing import Final, Iterable, Sequence
+from urllib.request import urlopen
 
 import hatanaka
 import numpy as np
-import requests
 
 from experiments.orbital_discriminability import gnss_observation_header as headers
 from experiments.orbital_discriminability import gnss_structural_qualification as structural
@@ -479,9 +479,8 @@ def run_once(output_directory: Path) -> dict[str, object]:
     scans: list[StationScan] = []
     try:
         for authority in PRODUCTS:
-            response = requests.get(authority.url, timeout=120)
-            response.raise_for_status()
-            compressed = bytearray(response.content)
+            with urlopen(authority.url, timeout=120) as response:
+                compressed = bytearray(response.read())
             compressed_buffers.append(compressed)
             decoded = decode_exact_in_memory(compressed, authority)
             decoded_buffers.append(decoded)
