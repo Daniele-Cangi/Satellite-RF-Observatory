@@ -220,6 +220,16 @@ immutable, the primary may not be rescored, and any reserve requires a new
 outcome-independent causal link between a health indicator and Doppler error.
 See `GNSS_NATIVE_DOPPLER_PRIMARY_POSTMORTEM.md`.
 
+The bounded public-document and frozen-receipt audit then found no
+outcome-independent numerical transfer from RINEX LLI, SSI/SNR, PolaRx5TR
+tracking descriptions or Leica phase/PVT performance to the single-observation
+native `D1C/D2W` error used by this experiment. The exact result is
+`GNSS_DOPPLER_HEALTH_WITNESS_BOUND_UNAVAILABLE`: measurement availability is
+still satisfied, held-out Doppler accuracy is unresolved, and the unopened
+reserve is `BLOCKED_BY_DOPPLER_HEALTH_PROVENANCE`. No replacement threshold,
+gate or observation is authorized. See
+`GNSS_NATIVE_DOPPLER_HEALTH_WITNESS_AUDIT.md`.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

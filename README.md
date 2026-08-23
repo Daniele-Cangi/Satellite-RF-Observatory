@@ -201,6 +201,16 @@ error.  The outcome remains frozen, no orbital/null score exists and DOY 219
 must not be rescored.  See
 [`GNSS_NATIVE_DOPPLER_PRIMARY_POSTMORTEM.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_PRIMARY_POSTMORTEM.md).
 
+A bounded outcome-independent health-witness audit now closes the immediate
+reserve path as `GNSS_DOPPLER_HEALTH_WITNESS_BOUND_UNAVAILABLE`. RINEX LLI is
+phase-only, SSI/S observables encode signal strength rather than a native
+Doppler-error ceiling, and neither exact receiver's public documentation
+provides a transferable per-observation `D1C/D2W` bound for the retained
+configuration. Measurement availability and prefix compatibility therefore
+remain satisfied while held-out Doppler accuracy is unresolved. No reserve
+was opened and no threshold was synthesized. See
+[`GNSS_NATIVE_DOPPLER_HEALTH_WITNESS_AUDIT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_HEALTH_WITNESS_AUDIT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
