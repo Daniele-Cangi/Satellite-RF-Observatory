@@ -14,6 +14,7 @@ from experiments.orbital_discriminability import gnss_native_doppler_primary as 
 
 ROOT = Path(__file__).parents[1]
 SEAL = ROOT / "GNSS_NATIVE_DOPPLER_PRIMARY_EVALUATOR_SEAL.json"
+AUTHORITY = ROOT / "GNSS_NATIVE_DOPPLER_PRIMARY_AUTHORITY.json"
 
 
 def header_line(data: str, label: str) -> str:
@@ -200,6 +201,14 @@ def test_repository_seal_binds_committed_source_and_opens_zero_observation_bytes
         "total_bytes_opened": 0,
     }
     assert seal_sha == primary.file_sha256(SEAL)
+
+
+def test_repository_authority_is_one_use_and_bound_to_seal() -> None:
+    seal, seal_sha = primary.verify_seal(SEAL, Path(primary.__file__))
+    authority, authority_sha = primary.verify_authority(AUTHORITY, seal, seal_sha)
+    assert authority["single_run"] is True
+    assert authority["products"] == [item["name"] for item in primary.PRIMARY_PRODUCTS]
+    assert authority_sha == primary.file_sha256(AUTHORITY)
 
 
 def test_seal_and_authority_bind_plan_source_and_single_run(tmp_path: Path) -> None:
