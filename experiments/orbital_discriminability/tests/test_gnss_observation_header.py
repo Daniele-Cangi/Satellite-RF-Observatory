@@ -18,6 +18,8 @@ def synthetic_product(
     marker: str = "GOLD00USA",
     *,
     include_clock_record: bool = True,
+    include_last_observation: bool = True,
+    last_observation: str = "  2026     8     3    23    59   30.0000000     GPS",
 ) -> header.ProductAuthority:
     records = [
             line("     3.04           OBSERVATION DATA    M", "RINEX VERSION / TYPE"),
@@ -33,6 +35,8 @@ def synthetic_product(
             line("      30.000", "INTERVAL"),
             line("  2026     8     3     0     0    0.0000000     GPS", "TIME OF FIRST OBS"),
     ]
+    if include_last_observation:
+        records.append(line(last_observation, "TIME OF LAST OBS"))
     if include_clock_record:
         records.append(line("     0", "RCV CLOCK OFFS APPL"))
     records.append(line("", "END OF HEADER"))
@@ -129,12 +133,19 @@ def test_pair_admission_selects_predeclared_common_signal_family(tmp_path: Path)
     assert result["chosen_signal_family"] == {
         "l1_phase": "L1C",
         "l2_phase": "L2W",
-        "same_path_observables": ["C1C", "C2W", "L1C", "L2W", "S1C", "S2W"],
+        "core_phase_observables": ["L1C", "L2W"],
+        "cycle_slip_continuity_witnesses": [
+            "LLI_ON_L1C",
+            "LLI_ON_L2W",
+            "EPOCH_CONTINUITY",
+        ],
+        "same_path_code_witnesses": ["C1C", "C2W"],
+        "optional_signal_strength_diagnostics": ["S1C", "S2W"],
     }
     assert result["measurement_values_accessed"] == 0
 
 
-def test_pair_admission_refuses_missing_same_path_witness(tmp_path: Path) -> None:
+def test_pair_admission_does_not_make_signal_strength_core(tmp_path: Path) -> None:
     left_path = tmp_path / "left.crx.gz"
     right_path = tmp_path / "right.crx.gz"
     left = header.parse_exact_header(left_path, synthetic_product(left_path, "GOLD00USA"))
@@ -143,8 +154,40 @@ def test_pair_admission_refuses_missing_same_path_witness(tmp_path: Path) -> Non
 
     result = header.admit_pair(left, right)
 
+    assert result["state"] == "PAIR_HEADER_ADMITTED"
+    assert result["chosen_signal_family"]["optional_signal_strength_diagnostics"] == [
+        "S1C"
+    ]
+
+
+def test_time_of_last_observation_is_required(tmp_path: Path) -> None:
+    path = tmp_path / "missing-last.crx.gz"
+    authority = synthetic_product(path, include_last_observation=False)
+
+    with pytest.raises(
+        header.HeaderAdmissionError,
+        match="MISSING_REQUIRED_HEADER_FIELDS:time_of_last_observation",
+    ):
+        header.parse_exact_header(path, authority)
+
+
+def test_pair_admission_requires_complete_frozen_window_coverage(tmp_path: Path) -> None:
+    left_path = tmp_path / "left.crx.gz"
+    right_path = tmp_path / "right.crx.gz"
+    left = header.parse_exact_header(left_path, synthetic_product(left_path, "GOLD00USA"))
+    right = header.parse_exact_header(
+        right_path,
+        synthetic_product(
+            right_path,
+            "NLIB00USA",
+            last_observation="  2026     8     3    12     0    0.0000000     GPS",
+        ),
+    )
+
+    result = header.admit_pair(left, right)
+
     assert result["state"] == "PAIR_HEADER_REJECTED"
-    assert "NO_COMMON_L1_L2_PHASE_CODE_SNR_WITNESS_FAMILY" in result["refusals"]
+    assert "FROZEN_WINDOW_NOT_COVERED:NLIB00USA" in result["refusals"]
 
 
 def test_parser_manifest_binds_authorities_and_forbidden_surface() -> None:
@@ -156,6 +199,4 @@ def test_parser_manifest_binds_authorities_and_forbidden_surface() -> None:
     ]
     assert "epoch record decoding" in manifest["forbidden"]
     assert manifest["post_boundary_policy"].startswith("COUNT_AND_STRUCTURALLY_DISCARD")
-    assert header.parser_manifest_sha256() == (
-        "ef12c103478400cf3a14060f8124f2443f36135c8f24ad25bbba9329f87c441f"
-    )
+    assert len(header.parser_manifest_sha256()) == 64

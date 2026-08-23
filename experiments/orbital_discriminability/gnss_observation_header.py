@@ -20,6 +20,12 @@ import zlib
 
 PARSER_VERSION: Final = "rinex-crinex-header-whitelist-v1"
 EXPECTED_INTERVAL_S: Final = 30.0
+FROZEN_WINDOW_START_GPS: Final = datetime(
+    2026, 8, 3, 10, 1, 30, tzinfo=timezone.utc
+)
+FROZEN_WINDOW_STOP_GPS: Final = datetime(
+    2026, 8, 3, 13, 14, 0, tzinfo=timezone.utc
+)
 MAX_HEADER_LINES: Final = 512
 MAX_COMPRESSED_BYTES_FOR_HEADER: Final = 262_144
 GPS_PHASE_PREFERENCES: Final = (
@@ -281,6 +287,7 @@ def parse_header_lines(lines: Iterable[bytes]) -> dict[str, object]:
         "approx_position_xyz_m",
         "interval_s",
         "time_of_first_observation",
+        "time_of_last_observation",
         "receiver_clock_offset_applied",
     }
     missing = sorted(required - parsed.keys())
@@ -316,10 +323,15 @@ def admit_pair(left: dict[str, object], right: dict[str, object]) -> dict[str, o
         if header["interval_s"] != EXPECTED_INTERVAL_S:
             refusals.append(f"INTERVAL_NOT_30S:{station}")
         first = parse_utc(header["time_of_first_observation"]["utc_like_epoch"])
-        if first > datetime(2026, 8, 3, tzinfo=timezone.utc):
-            refusals.append(f"DAY_START_NOT_COVERED:{station}")
+        last = parse_utc(header["time_of_last_observation"]["utc_like_epoch"])
+        if first > last:
+            refusals.append(f"OBSERVATION_TIME_ORDER_INVALID:{station}")
+        if first > FROZEN_WINDOW_START_GPS or last < FROZEN_WINDOW_STOP_GPS:
+            refusals.append(f"FROZEN_WINDOW_NOT_COVERED:{station}")
         if header["time_of_first_observation"]["time_system"] != "GPS":
             refusals.append(f"TIME_SYSTEM_NOT_GPS:{station}")
+        if header["time_of_last_observation"]["time_system"] != "GPS":
+            refusals.append(f"LAST_OBS_TIME_SYSTEM_NOT_GPS:{station}")
         if header["receiver_clock_offset_applied"] not in (0, 1):
             refusals.append(f"CLOCK_OFFSET_SEMANTICS_UNKNOWN:{station}")
 
@@ -330,14 +342,27 @@ def admit_pair(left: dict[str, object], right: dict[str, object]) -> dict[str, o
     for l1_phase, l2_phase in GPS_PHASE_PREFERENCES:
         required = signal_family(l1_phase) | signal_family(l2_phase)
         if required <= common:
+            signal_strength = sorted(
+                item for item in (f"S{l1_phase[1:]}", f"S{l2_phase[1:]}")
+                if item in common
+            )
             chosen = {
                 "l1_phase": l1_phase,
                 "l2_phase": l2_phase,
-                "same_path_observables": sorted(required),
+                "core_phase_observables": [l1_phase, l2_phase],
+                "cycle_slip_continuity_witnesses": [
+                    f"LLI_ON_{l1_phase}",
+                    f"LLI_ON_{l2_phase}",
+                    "EPOCH_CONTINUITY",
+                ],
+                "same_path_code_witnesses": sorted(
+                    item for item in required if item.startswith("C")
+                ),
+                "optional_signal_strength_diagnostics": signal_strength,
             }
             break
     if chosen is None:
-        refusals.append("NO_COMMON_L1_L2_PHASE_CODE_SNR_WITNESS_FAMILY")
+        refusals.append("NO_COMMON_L1_L2_PHASE_AND_CODE_FAMILY")
     state = "PAIR_HEADER_ADMITTED" if not refusals else "PAIR_HEADER_REJECTED"
     result = {
         "state": state,
@@ -352,7 +377,7 @@ def admit_pair(left: dict[str, object], right: dict[str, object]) -> dict[str, o
 
 def signal_family(phase_code: str) -> set[str]:
     suffix = phase_code[1:]
-    return {f"C{suffix}", phase_code, f"S{suffix}"}
+    return {f"C{suffix}", phase_code}
 
 
 def split_twenty(data: str) -> dict[str, str]:
@@ -408,6 +433,8 @@ def parser_manifest() -> dict[str, object]:
         "authorities": [asdict(authority) for authority in AUTHORITIES],
         "allowed_header_labels": sorted(ALLOWED_HEADER_LABELS),
         "expected_interval_s": EXPECTED_INTERVAL_S,
+        "frozen_window_start_gps": FROZEN_WINDOW_START_GPS.isoformat(),
+        "frozen_window_stop_gps": FROZEN_WINDOW_STOP_GPS.isoformat(),
         "gps_phase_preferences": GPS_PHASE_PREFERENCES,
         "maximum_header_lines": MAX_HEADER_LINES,
         "maximum_compressed_bytes_for_header": MAX_COMPRESSED_BYTES_FOR_HEADER,
