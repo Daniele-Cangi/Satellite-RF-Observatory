@@ -117,6 +117,25 @@ Any later GNSS experiment must first justify a different satellite/station
 geometry or duration from an orbit-first discriminability comparison. It may
 not arise as another retry of this qualification chain.
 
+## Orbit-pair result — one new geometry retained
+
+A bounded broadcast-only comparison has now evaluated every healthy GPS pair
+over the unchanged GOLD/NLIB stations, 386-epoch duration and DOY 216--220
+date set. Every candidate required 60 preceding epochs plus the full raw
+window with all four links at or above 15 degrees. The held-out suffix retained
+the same prefix-only affine null and jointly visible wrong-target orbit family.
+
+Twenty pair/date candidates were rankable. The top three were independent-date
+instances of G14/G17, all controlled by G22 rather than the affine null. Exactly
+one geometry is retained: DOY 220, raw GPS window 05:07:00--08:19:30, guarded
+minimum 23.620 degrees and controlling separation 403.375 Hz peak-to-peak.
+
+This is not yet an experiment freeze. No observation product, header or value
+was accessed. The next causal question is whether the candidate-specific
+pairwise physical envelope leaves a positive margin. If it does not, the
+geometry closes before any new qualification artifact is sought. Exact results
+are in `GNSS_ORBIT_PAIR_SCREEN_RECEIPT.json` and its report.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
@@ -807,22 +826,16 @@ frequency terms can absorb its controlling held-out separation. The next
 physical route is not another receiver search and not a continuation of the
 F2.5 gate sequence.
 
-A bounded broadcast-only screen now identifies three GOLD00USA/NLIB00USA GPS
-target/reference windows for a prospective dual-frequency carrier-phase
-double-difference test. Two exact daily observation products exist, but only
-HTTP metadata has been read; their payloads remain unopened. The screen is
-recorded in `GNSS_DOUBLE_DIFFERENCE_GEOMETRY_SCREEN_REPORT.md` and its strict
-receipt.
+The historical G11/G21 primary and independent qualification are closed. Their
+physical mechanism survives, but neither artifact may be reused or rescored.
 
-Header-only observation admission and the differential physical-envelope
-calculation are now complete. The real headers corrected an 18-second GPS/UTC
-labelling error before plan freeze, admitted the common L1C/L2W same-path
-family and selected G11/G21 with 1,420.626 Hz of conservative pairwise physical
-margin. The exact plan is frozen in
-`GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN.md`.
+The current route is the newly selected G14/G17 geometry on DOY 220. It was
+chosen from five exact-hash broadcast-navigation days without discovering or
+opening any observation product. G22 is the frozen closest wrong-target orbit;
+the controlling held-out separation is 403.375 Hz.
 
-The next action requires separate measurement authority. It may decode one
-deterministic pass over the two exact-hash artifacts, evaluate calibration
-admission and then score the single held-out suffix against the frozen affine
-and G12 alternatives. It may not change station, target, reference, signals,
-time axes, envelope, nulls or outcomes, and must stop after one terminal result.
+The next action is still orbit/model-only: compile the candidate-specific
+pairwise physical envelope through the same 384-feature coordinate and 77/307
+prefix/held-out split. Stop if the margin is non-positive. Only a positive
+margin can authorize later structural qualification of one independent
+artifact; it does not itself authorize observation access.

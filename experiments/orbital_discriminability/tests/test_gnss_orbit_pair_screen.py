@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
 
 from experiments.orbital_discriminability import gnss_orbit_pair_screen as pair
+
+
+ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / "GNSS_ORBIT_PAIR_SCREEN_RECEIPT.json"
 
 
 def test_authority_and_manifest_are_frozen_without_observation_surface() -> None:
@@ -83,3 +88,30 @@ def test_manifest_hash_and_json_are_deterministic_and_strict() -> None:
     assert json.loads(pair.strict_json(pair.manifest())) == pair.manifest()
     with pytest.raises(ValueError):
         pair.strict_json({"bad": float("nan")})
+
+
+def test_frozen_receipt_selects_only_one_geometry_without_observation_access() -> None:
+    receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["outcome"] == pair.OUTCOME_SELECTED
+    assert receipt["screen_source_commit"] == (
+        "4ea9fbcd78063d6c7a535b5c6e3917ceb5ef586f"
+    )
+    assert receipt["rankable_candidate_count"] == 20
+    assert receipt["selection_limit"] == 1
+    assert receipt["selected_geometry"]["target"] == "G14"
+    assert receipt["selected_geometry"]["reference"] == "G17"
+    assert receipt["selected_geometry"]["doy"] == 220
+    assert receipt["selected_geometry"]["wrong_orbit_null"][
+        "controlling_alternative"
+    ] == "G22"
+    assert receipt["observation_access"] == {
+        "products_discovered": 0,
+        "products_selected": 0,
+        "headers_opened": 0,
+        "payload_bytes": 0,
+        "values_accessed": 0,
+    }
+    assert receipt["physical_envelope_compiled"] is False
+    assert receipt["prospective_plan_frozen"] is False
+    assert receipt["measurement_authorized"] is False

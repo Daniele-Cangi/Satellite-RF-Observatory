@@ -124,6 +124,15 @@ qualification artifact is opened. The smallest demonstrated field family
 remains `L1C + L2W` phase with their LLI and epoch continuity, plus same-path
 `C1C + C2W`; `S1C/S2W` remain optional diagnostics.
 
+That orbit-first comparison is now complete for the unchanged GOLD/NLIB
+stations, 386-epoch duration and DOY 216--220 set. Twenty pair/date cases
+survived the 30-minute, four-link 15-degree guard and a meaningful wrong-orbit
+null. Exactly one geometry is retained: G14/G17 on DOY 220, 05:07:00--08:19:30
+GPS. Its controlling held-out separation is `403.375 Hz` against G22 and its
+complete guarded minimum elevation is `23.620 degrees`. No observation product
+was discovered or opened. The next step is the candidate-specific physical
+envelope; it is not observation access.
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
