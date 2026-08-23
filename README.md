@@ -190,6 +190,17 @@ and
 then
 [`GNSS_NATIVE_DOPPLER_MODEL_BOUND_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_MODEL_BOUND_REPORT.md).
 
+The subsequently sealed DOY 219 primary materialized exactly one KIRU/MAT1
+pair and terminated `NOT_DETECTABLE` before held-out scoring.  Artifact,
+continuity, prefix-model and dispersive clauses passed; the sole refusal was
+the frozen rule requiring every held-out SNR minimum to remain above its
+76-sample prefix minimum.  An offline postmortem shows that this unequal-window
+extremum rule has only a `76/380 = 0.20` pass rate per exchangeable unchanged
+stream and therefore cannot establish receiver continuity or bounded Doppler
+error.  The outcome remains frozen, no orbital/null score exists and DOY 219
+must not be rescored.  See
+[`GNSS_NATIVE_DOPPLER_PRIMARY_POSTMORTEM.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_PRIMARY_POSTMORTEM.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

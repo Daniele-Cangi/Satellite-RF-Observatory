@@ -207,6 +207,19 @@ candidate-specific limit and leaving more than 4.0 kHz after the full pairwise
 guard. The next step is an exact DOY 219 prospective evaluator and separate
 observation authority; neither is frozen by this model-only result.
 
+That evaluator and authority were frozen before access and the single DOY 219
+run is now closed `NOT_DETECTABLE`. Both measurement roots delivered complete
+380-epoch D/C/S grids; the `0.560609 Hz` prefix residual and both dispersive
+witness intervals passed. No held-out orbital/null score was computed because
+four of eight SNR streams violated the frozen same-link minimum rule. The
+offline postmortem attributes the block to that contract predicate, not to an
+observed receiver failure or orbital-model failure: comparing a 304-sample
+held-out minimum against a 76-sample prefix minimum passes with probability
+`76/380 = 0.20` per exchangeable unchanged stream. The raw outcome remains
+immutable, the primary may not be rescored, and any reserve requires a new
+outcome-independent causal link between a health indicator and Doppler error.
+See `GNSS_NATIVE_DOPPLER_PRIMARY_POSTMORTEM.md`.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
