@@ -86,7 +86,7 @@ remained `NOT_EVALUATED`. The receipt cannot attribute the short record to
 field absence or an unsupported representation. The primary is closed with
 zero retry.
 
-## Next physical checkpoint — independent GNSS vertical: NAVIGATION REVIEW COMPLETE
+## Independent GNSS vertical: CONCLUDED MEASUREMENT_INVALID
 
 The preferred route keeps the high-margin dual-station GNSS mechanism but does
 not repair or reuse the closed primary:
@@ -116,7 +116,7 @@ future coordinate needs 380 records. No numeric observation, LLI/SSI or SNR
 magnitude was decoded, and zero decompressed bytes were persisted. See
 `GNSS_INDEPENDENT_QUALIFICATION_REPORT.md`.
 
-Distinct DOY 215 products remain completely unopened. One offline prospective
+Distinct DOY 215 products were kept completely unopened while one prospective
 primary plan is now frozen: KIRU–MAT1, G20/G22, G14 and prefix-affine nulls,
 76 calibration plus 302 held-out feature records, the qualified `L1C/L2W`
 family, fixed admission rules and zero retry after decompression. See
@@ -128,11 +128,11 @@ Synthetic tests freeze the RINEX grammar, measurement clauses, transform,
 prefix-only detectability order, null scoring, receipt boundaries and RAM
 erasure. See GNSS_INDEPENDENT_PRIMARY_EVALUATOR_REPORT.md.
 
-Primary access still requires separate explicit authority bound to that seal.
-After authority, the only remaining physical step is complete-file
-materialization and one zero-retry evaluation of the two exact DOY 215
-products. No alternate product, signal, window, nuisance or threshold is
-admissible.
+The separately authorized single run is now closed MEASUREMENT_INVALID at the
+frozen GEOMETRY_FREE_PHASE_DISCONTINUITY clause. Both products parsed, but the
+first station-level continuity check refused the measurement before feature
+construction, calibration or held-out scoring. Zero retry is binding. The
+result cannot prefer or reject G20, H_AFFINE or G14.
 
 Before any implementation or observation, record:
 
@@ -159,9 +159,10 @@ or no candidate retains positive G1 margin, terminate without synthesizing an
 experiment and abandon this GNSS route.
 ```
 
-The navigation review, bounded structure-only qualification, prospective plan
-and evaluator seal are complete without a new gate. The DOY 215 primary
-remains sealed; zero primary bytes and zero primary headers have been opened.
+The navigation review, bounded structure-only qualification, prospective plan,
+evaluator seal and one primary outcome are complete without a new gate. No raw
+or derived measurement was persisted and the quarantine was destroyed. This
+exact KIRU–MAT1 primary is closed.
 
 ## Anti-drift stop
 

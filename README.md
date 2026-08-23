@@ -120,7 +120,7 @@ future coordinate. No numeric observation, LLI/SSI or SNR magnitude was
 decoded and no decompressed RINEX was persisted. See
 [`GNSS_INDEPENDENT_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_QUALIFICATION_REPORT.md).
 
-Distinct DOY 215 products remain the completely unopened primary. The
+Distinct DOY 215 products were the completely unopened primary when the
 prospective design is now frozen in
 [`GNSS_INDEPENDENT_PRIMARY_PROSPECTIVE_PLAN.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PRIMARY_PROSPECTIVE_PLAN.md):
 KIRU–MAT1, G20/G22, G14 and prefix-affine nulls, 76 calibration features, 302
@@ -133,10 +133,13 @@ synthetic tests freeze parsing, measurement admission, prefix detectability,
 the three held-out hypotheses, failure separation and zero persistence. See
 [GNSS_INDEPENDENT_PRIMARY_EVALUATOR_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PRIMARY_EVALUATOR_REPORT.md).
 
-Both DOY 215 products remain completely unopened. The next admissible action
-requires a separate authority bound to the evaluator seal and exact products;
-only then may complete-file materialization and the single zero-retry primary
-evaluation occur.
+The separately authorized single primary run is now closed
+MEASUREMENT_INVALID at GEOMETRY_FREE_PHASE_DISCONTINUITY. Both exact products
+parsed, but the first station-level geometry-free continuity check refused the
+measurement before feature construction, calibration or held-out scoring.
+This is not evidence against G20 or either frozen null. No raw or derived
+measurement was persisted and the quarantine was destroyed. See
+[GNSS_INDEPENDENT_PRIMARY_OUTCOME.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PRIMARY_OUTCOME.md).
 
 ## Preserved Gate F2.5 experimental history
 
