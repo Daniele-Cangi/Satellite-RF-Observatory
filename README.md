@@ -147,6 +147,20 @@ millihertz and do not control the separation. The result is
 `GNSS_ORBIT_CLOCK_STRUCTURE_INSUFFICIENT`: further orbit-only refinement is not
 the next path.
 
+A bounded SHOCK review has now compared five causally distinct routes. Merely
+adding a third GNSS station does not shrink station-local worst-case intervals,
+and another raw-separation screen risks repeating the same abstraction
+failure. The recommended next mechanism is instead a continuous,
+multi-frequency carrier-phase double difference with predeclared LLI,
+geometry-free phase and same-path code witnesses. It preserves integrated
+orbital structure while avoiding premature finite-difference amplification.
+
+This is not a new candidate or authorization. G14/G17 remains closed and may
+serve only as a historical development fixture. The next bounded work is an
+offline mechanism spike; only after it survives may a new orbit/station/signal
+set be declared and ranked by complete remaining physical margin. See
+[`POST_G14_G17_SHOCK_REVIEW.md`](experiments/orbital_discriminability/POST_G14_G17_SHOCK_REVIEW.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

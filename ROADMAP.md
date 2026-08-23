@@ -163,6 +163,23 @@ candidate under the remaining envelope. The next comparison must change the
 causal topology—observer geometry, quotient coordinate or same-path witness—
 and rank by remaining physical margin from the start.
 
+That SHOCK comparison is now complete without observation access. Five routes
+were compared by the interpretability of a negative result. A third station
+alone adds local nuisance families, while a new screen using the same
+frequency-rate coordinate changes no causal cut. SatNOGS raster validation is
+valuable for a limited positive model-conditioned result, and Delta-DOR is a
+stronger but substantially more archive-dependent later route.
+
+The recommended minimum work is an offline continuous-phase quotient spike.
+It must keep a multi-frequency geometry-preserving combination, prefix-only
+ambiguity/rate nuisance, frozen affine and wrong-orbit nulls, and separate
+LLI/geometry-free/code witness clauses. G14/G17 is development-only for this
+mechanism and cannot become a primary. If the coordinate survives synthetic
+mismatch and a complete physical envelope, a newly predeclared bounded set
+may then be ranked by remaining physical margin before any observation product
+is discovered. Details are in `POST_G14_G17_SHOCK_REVIEW.md`; no new gate has
+been created.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
