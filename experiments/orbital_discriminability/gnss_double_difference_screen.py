@@ -347,7 +347,9 @@ def parse_gps_record(lines: Sequence[str]) -> GpsEphemeris:
         rows[2][0], rows[2][1], rows[2][2], rows[2][3],
         rows[3][0], rows[3][1], rows[3][2], rows[3][3],
         rows[4][0], int(round(rows[4][2])), rows[5][0], int(round(rows[5][1])),
-        rows[5][2], rows[6][0], None if rows[6][1] == 0.0 else rows[6][1],
+        rows[5][2],
+        rows[6][0],
+        None if len(rows[6]) < 2 or rows[6][1] == 0.0 else rows[6][1],
     )
 
 

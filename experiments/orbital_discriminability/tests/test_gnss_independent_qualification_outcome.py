@@ -25,8 +25,8 @@ def test_frozen_real_qualification_failure_is_complete_and_value_free() -> None:
     assert outcome["artifact_persistence"] == {"compressed_rinex": 0, "decoded_rinex": 0, "observation_values": 0}
     assert outcome["plan"]["sha256"] == qualification.PLAN_SHA256
     assert outcome["coverage"]["rows"] == 9_264 == len(rows)
-    assert outcome["coverage"]["sha256"] == qualification.file_sha256(COVERAGE)
-    assert outcome["summary"]["sha256"] == qualification.file_sha256(SUMMARY)
+    assert outcome["coverage"]["sha256"] == qualification.canonical_text_sha256(COVERAGE)
+    assert outcome["summary"]["sha256"] == qualification.canonical_text_sha256(SUMMARY)
     assert all("value" not in row and "phase" not in row for row in rows)
     identities = {(row["station"], row["gps_epoch"], row["satellite"], row["observable"]) for row in rows}
     assert len(identities) == len(rows)

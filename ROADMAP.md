@@ -90,49 +90,32 @@ semantics classify it as `TRAILING_FIELD_OMITTED`, not evidence of file
 truncation. The original terminal remains unchanged and the primary remains
 closed with zero retry.
 
-## Next physical checkpoint — independent GNSS vertical: REVIEW REQUIRED
+## Geometry-guard result — GOLD/NLIB G11/G21 route closed
 
-The preferred route keeps the high-margin dual-station GNSS mechanism but does
-not repair or reuse the closed primary:
+The DOY 214 independent qualification did not repeat the historical parser
+failure. Its complete structural scan found NLIB-G21 absent for the first 27
+frozen epochs and nonzero LLI at reacquisition. The maximal joint segment was
+358 epochs, so the exact 386-epoch qualification failed without interpolation,
+gap bridging or alternate segment selection.
 
-```text
-new orbit-first geometry screen
-  -> bounded independent station set
-  -> separate development/qualification product
-  -> exact field-topology and parser qualification for L1C/L2W phase,
-     their LLI/epoch continuity and same-path C1C/C2W
-  -> distinct unopened primary
-  -> immutable prospective plan
-  -> one measurement and held-out comparison
-```
+A broadcast-navigation-only audit then screened the predeclared DOY 216--220
+set. The physical question was whether another date could supply all 386
+epochs after both receiver roots had already seen G11 and G21 above the
+15-degree guard for 30 minutes. DOY 217 and 218 contained only 385 guarded
+epochs. DOY 216, 219 and 220 contained 386, but their preceding 30-minute
+minimum elevations were only 3.405, 3.380 and 3.435 degrees. At 20 degrees the
+longest windows were 327--328 epochs.
 
-Before any implementation or observation, record:
+The modeled prefix-affine separation remained about 2.145 kHz, so geometry was
+still discriminative; the missing quantity was acquisition-margined
+observability for the frozen duration. No observation product or primary was
+selected. The route is closed rather than shortened after its measurement-path
+failure. Exact inputs and results are in
+`GNSS_GEOMETRY_GUARD_AUDIT_RECEIPT.json`.
 
-```text
-Physical question:
-Can a new broadcast orbit predict a dual-station held-out GNSS coordinate
-better than prefix-affine and wrong-orbit alternatives?
-
-New information produced:
-Whether one real measurement-valid coordinate reaches an orbital-versus-null
-score, rather than another geometry or parser result.
-
-Why existing experiment cannot answer it:
-The GOLD/NLIB primary terminated before feature extraction and cannot be
-reopened, repaired or reclassified.
-
-Minimum experiment:
-One geometry-selected pair, one independent qualification product, one
-distinct primary, frozen nuisances/nulls and one zero-retry outcome.
-
-Stop condition:
-If no independent qualification product proves the required field topology,
-or no candidate retains positive G1 margin, terminate without synthesizing an
-experiment and abandon this GNSS route.
-```
-
-This is a phase review, not a new gate and not authority to access another
-observation product.
+Any later GNSS experiment must first justify a different satellite/station
+geometry or duration from an orbit-first discriminability comparison. It may
+not arise as another retry of this qualification chain.
 
 ## Anti-drift stop
 
