@@ -10,6 +10,7 @@ from experiments.orbital_discriminability import gnss_orbit_pair_envelope as env
 
 ROOT = Path(__file__).resolve().parents[1]
 SCREEN_RECEIPT = ROOT / envelope.SCREEN_RECEIPT_NAME
+ENVELOPE_RECEIPT = ROOT / "GNSS_ORBIT_PAIR_PHYSICAL_ENVELOPE_RECEIPT.json"
 
 
 def test_manifest_freezes_one_geometry_and_has_no_observation_surface() -> None:
@@ -81,3 +82,29 @@ def test_strict_json_refuses_nonfinite_value() -> None:
     assert json.loads(envelope.strict_json(envelope.manifest())) == envelope.manifest()
     with pytest.raises(ValueError):
         envelope.strict_json({"bad": float("nan")})
+
+
+def test_frozen_envelope_receipt_closes_before_observation_access() -> None:
+    receipt = json.loads(ENVELOPE_RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["compiler_source_commit"] == (
+        "bb92583cf04e94c8ebda0558a1d5845ab20fbb04"
+    )
+    assert receipt["outcome"] == envelope.OUTCOME_BLOCKED
+    assert receipt["null_scores"]["controlling_null"] == "WRONG_ORBIT_G22"
+    assert receipt["null_scores"]["controlling_heldout_separation_hz"] == (
+        pytest.approx(403.37545402996614)
+    )
+    assert receipt["one_model_physical_envelope_hz"] == pytest.approx(
+        366.877020793687
+    )
+    assert receipt["pairwise_comparison_envelope_hz"] == pytest.approx(
+        733.754041587374
+    )
+    assert receipt["remaining_physical_margin_hz"] == pytest.approx(
+        -330.37858755740785
+    )
+    assert receipt["negative_result_interpretable_if_measurement_admitted"] is False
+    assert all(value == 0 for value in receipt["observation_access"].values())
+    assert receipt["prospective_plan_frozen"] is False
+    assert receipt["measurement_authorized"] is False

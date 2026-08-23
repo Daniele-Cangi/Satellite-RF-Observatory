@@ -130,8 +130,14 @@ survived the 30-minute, four-link 15-degree guard and a meaningful wrong-orbit
 null. Exactly one geometry is retained: G14/G17 on DOY 220, 05:07:00--08:19:30
 GPS. Its controlling held-out separation is `403.375 Hz` against G22 and its
 complete guarded minimum elevation is `23.620 degrees`. No observation product
-was discovered or opened. The next step is the candidate-specific physical
-envelope; it is not observation access.
+was discovered or opened.
+
+The candidate-specific envelope is now complete and closes this geometry
+before plan freeze. The one-model bound is `366.877 Hz`; the frozen pairwise
+comparison bound is `733.754 Hz`, leaving `-330.379 Hz` against G22. Even a
+zero broadcast-orbit contribution alone would not make the margin positive.
+This is `GNSS_ORBIT_PAIR_PHYSICAL_ENVELOPE_DOMINATES`, not a negative orbital
+measurement. No qualification or observation access is authorized.
 
 ## Preserved Gate F2.5 experimental history
 

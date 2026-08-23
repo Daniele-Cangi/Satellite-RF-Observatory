@@ -136,6 +136,19 @@ pairwise physical envelope leaves a positive margin. If it does not, the
 geometry closes before any new qualification artifact is sought. Exact results
 are in `GNSS_ORBIT_PAIR_SCREEN_RECEIPT.json` and its report.
 
+That envelope has now been compiled without observation discovery. G22 remains
+the controlling null at 403.375 Hz. The one-model conservative bound is
+366.877 Hz and the pairwise bound is 733.754 Hz, leaving a -330.379 Hz margin.
+The outcome is `GNSS_ORBIT_PAIR_PHYSICAL_ENVELOPE_DOMINATES`; G14/G17 DOY 220
+is closed before plan freeze, and lower-ranked dates are not automatic retries.
+
+The physical lesson is that no single nuisance removal admits the candidate.
+Even zeroing the complete broadcast-orbit contribution leaves the aggregate
+6.111 Hz above G22. A future step must either justify structured,
+outcome-independent orbit/clock uncertainty across multiple causal terms or
+select a genuinely stronger geometry. It must not reduce intervals because
+this candidate failed.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
@@ -834,8 +847,9 @@ chosen from five exact-hash broadcast-navigation days without discovering or
 opening any observation product. G22 is the frozen closest wrong-target orbit;
 the controlling held-out separation is 403.375 Hz.
 
-The next action is still orbit/model-only: compile the candidate-specific
-pairwise physical envelope through the same 384-feature coordinate and 77/307
-prefix/held-out split. Stop if the margin is non-positive. Only a positive
-margin can authorize later structural qualification of one independent
-artifact; it does not itself authorize observation access.
+The candidate-specific physical envelope has returned a non-positive margin:
+-330.379 Hz. The geometry is therefore closed without structural qualification
+or observation access. The smallest remaining model-first question is whether
+the dominant metre-scale orbit/clock/path intervals can be replaced by
+predeclared smooth physical uncertainty families using only outcome-independent
+information. Until that is demonstrated, no GNSS primary should be selected.
