@@ -109,12 +109,20 @@ preferred an orbital model over frozen nulls. The GNSS result refuses one exact
 measurement path; it is not evidence against G11 or the double-difference
 mechanism.
 
-The next candidate is a new independent GNSS vertical. Geometry must again
-lead selection, and a different development product must demonstrate the exact
-decoder-native field topology before a separate artifact is assigned the
-primary role. The smallest family is `L1C + L2W` phase with their LLI and epoch
-continuity, plus same-path `C1C + C2W`; `S1C/S2W` are optional diagnostics.
-The closed GOLD/NLIB primary cannot be repaired or rerun.
+One independent GOLD/NLIB qualification product on DOY 214 was then scanned
+structurally without persisting observation values. It failed because NLIB-G21
+was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
+longest joint segment contained 358 epochs. A subsequent broadcast-only screen
+of DOY 216--220 found no 386-epoch G11/G21 window with the frozen 15-degree
+guard and a 30-minute pre-acquisition guard. No new observation artifact or
+primary was selected. The unchanged GOLD/NLIB-G11/G21 386-epoch route is now
+closed rather than shortened after failure.
+
+Any next GNSS proposal must return to orbit-first comparison and justify a
+different geometry or duration from physical discriminability before another
+qualification artifact is opened. The smallest demonstrated field family
+remains `L1C + L2W` phase with their LLI and epoch continuity, plus same-path
+`C1C + C2W`; `S1C/S2W` remain optional diagnostics.
 
 ## Preserved Gate F2.5 experimental history
 
