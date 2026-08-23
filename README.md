@@ -160,6 +160,15 @@ declines from 379 to 376. The result is
 access. See
 [`GNSS_NATIVE_DOPPLER_EXPANDED_NAVIGATION_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_EXPANDED_NAVIGATION_REPORT.md).
 
+The claim-ladder review then separated orbitality from specific orbit identity.
+Keeping all geometry, timing and 380-epoch parameters unchanged, an
+affine-only non-orbital comparison selects G15/G22 on DOY 219–221. The primary
+geometry has `6752.925150 Hz` held-out non-affine structure, a `9.388576 Hz`
+direct clock envelope and `6743.536574 Hz` remaining before the still-open
+instrumental envelope. This authorizes only the future claim
+`ORBITAL_MODEL_PREDICTIVELY_PREFERRED`, never specific identity. See
+[`GNSS_NATIVE_DOPPLER_ORBITALITY_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_ORBITALITY_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

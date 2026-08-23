@@ -183,6 +183,15 @@ records even as two-satellite continuity increases to 471. The outcome is
 date expansion. The next decision must reconsider the physical experiment
 shape or change observer geometry before any numeric observation access.
 
+The change-of-abstraction review now separates the first orbitality claim from
+specific orbit identity. With the same KIRU/MAT1 geometry and 380 records, the
+prefix-affine-only comparison admits G15/G22 on DOY 219–221. The primary
+navigation curve retains `6743.536574 Hz` after the direct clock envelope, but
+the native-Doppler measurement envelope is still unknown. The claim ceiling is
+`ORBITAL_MODEL_PREDICTIVELY_PREFERRED`; no wrong-orbit or identity conclusion
+is available. The next step requires separate authority for numeric DOY 214
+development only, before any primary or reserve observation access.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

@@ -25,6 +25,7 @@ from experiments.orbital_discriminability import gnss_independent_forward_review
 
 DESIGN_VERSION: Final = "gnss-kiru-mat1-native-doppler-design-v1"
 EXPANSION_VERSION: Final = "gnss-kiru-mat1-native-doppler-expansion-v1"
+ORBITALITY_VERSION: Final = "gnss-kiru-mat1-native-doppler-orbitality-v1"
 DEVELOPMENT_DOY: Final = 214
 CLOSED_PRIMARY_DOY: Final = 215
 CANDIDATE_DOYS: Final = (216, 217, 218)
@@ -53,6 +54,9 @@ CLOSED_PRIMARY_OUTCOME_SHA256: Final = (
 INITIAL_DESIGN_RECEIPT_SHA256: Final = (
     "561ef4c5954d1652702d954315071088ed2d66c021b10e7dd4bdda15fba51afb"
 )
+EXPANSION_RECEIPT_SHA256: Final = (
+    "a0c0b1d34b251315c1daf0e043d6bfec1e2c51dc9096c78c8da35352ff2f7292"
+)
 
 
 class DopplerDesignError(ValueError):
@@ -70,6 +74,17 @@ class Candidate:
     separation_from_affine_hz: float
     separation_from_wrong_orbit_hz: float
     controlling_separation_hz: float
+    minimum_direct_shift_elevation_deg: float
+
+
+@dataclass(frozen=True, slots=True)
+class AffineCandidate:
+    doy: int
+    target: str
+    reference: str
+    start: int
+    stop: int
+    separation_from_affine_hz: float
     minimum_direct_shift_elevation_deg: float
 
 
@@ -278,6 +293,47 @@ def expansion_manifest() -> dict[str, object]:
 
 def expansion_manifest_sha256() -> str:
     return sha256(strict_json(expansion_manifest()).encode("ascii")).hexdigest()
+
+
+def orbitality_manifest() -> dict[str, object]:
+    expanded = expansion_manifest()
+    coordinate = dict(expanded["measurement_coordinate"])
+    coordinate["nulls"] = ["PREFIX_AFFINE"]
+    return {
+        "orbitality_version": ORBITALITY_VERSION,
+        "scope": "BROADCAST_NAVIGATION_ONLY_OBSERVATION_VALUES_UNOPENED",
+        "physical_question": (
+            "CAN_ONE_KIRU_MAT1_NATIVE_DOPPLER_WINDOW_DISCRIMINATE_A_"
+            "FROZEN_ORBITAL_CURVE_FROM_A_PREFIX_CALIBRATED_AFFINE_NULL"
+        ),
+        "claim_ceiling": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+        "specific_orbit_claim_authorized": False,
+        "wrong_orbit_null_present": False,
+        "reason_for_narrower_claim": (
+            "ORBITALITY_AND_SPECIFIC_ORBIT_IDENTITY_ARE_DISTINCT_CLAIM_LADDER_STEPS"
+        ),
+        "frozen_from": {
+            "expansion_version": EXPANSION_VERSION,
+            "expansion_manifest_sha256": expansion_manifest_sha256(),
+            "expansion_receipt_sha256": EXPANSION_RECEIPT_SHA256,
+            "expansion_outcome": (
+                "NO_NATIVE_DOPPLER_GEOMETRY_SHORTLIST_IN_EXPANDED_SET"
+            ),
+        },
+        "candidate_doys": list(EXPANSION_CANDIDATE_DOYS),
+        "capability_set": expanded["capability_set"],
+        "measurement_coordinate": coordinate,
+        "parameters": expanded["parameters"],
+        "selection_rule": (
+            "ONE_BEST_POSITIVE_DIRECT_CLOCK_MARGIN_WINDOW_PER_DAY_THEN_TOP_THREE"
+        ),
+        "post_result_changes_forbidden": expanded["post_result_changes_forbidden"],
+        "observation_access_forbidden": True,
+    }
+
+
+def orbitality_manifest_sha256() -> str:
+    return sha256(strict_json(orbitality_manifest()).encode("ascii")).hexdigest()
 
 
 def validate_navigation_inputs(
@@ -598,6 +654,120 @@ def select_day_candidate(model: DayModel) -> dict[str, object] | None:
     return audited[0] if audited else None
 
 
+def raw_affine_day_candidates(model: DayModel) -> list[AffineCandidate]:
+    visibility = {
+        satellite: robust_visibility(model, satellite)
+        for satellite in model.satellites
+    }
+    zero = np.zeros(WINDOW_RECORDS, dtype=np.float64)
+    candidates: list[AffineCandidate] = []
+    for target_index, target in enumerate(model.satellites):
+        for reference in model.satellites[target_index + 1 :]:
+            common = visibility[target] & visibility[reference]
+            curve = network_curve(model, target, reference)
+            for segment_start, segment_stop in contiguous_segments(common):
+                for start in window_starts(segment_start, segment_stop):
+                    stop = start + WINDOW_RECORDS
+                    feature = slice(start, stop)
+                    separation = heldout_non_affine_peak_to_peak(
+                        curve[feature], zero
+                    )
+                    candidates.append(
+                        AffineCandidate(
+                            doy=model.doy,
+                            target=target,
+                            reference=reference,
+                            start=start,
+                            stop=stop,
+                            separation_from_affine_hz=separation,
+                            minimum_direct_shift_elevation_deg=minimum_shifted_elevation(
+                                model,
+                                (target, reference),
+                                feature,
+                            ),
+                        )
+                    )
+    candidates.sort(
+        key=lambda row: (
+            -row.separation_from_affine_hz,
+            row.start,
+            row.target,
+            row.reference,
+        )
+    )
+    return candidates
+
+
+def audit_affine_candidate(
+    model: DayModel,
+    candidate: AffineCandidate,
+) -> dict[str, object]:
+    feature = slice(candidate.start, candidate.stop)
+    timing, offsets = direct_clock_envelope_hz(
+        model,
+        candidate.target,
+        candidate.reference,
+        feature,
+    )
+    remaining = candidate.separation_from_affine_hz - timing
+    gps_start = model.gps_epochs[candidate.start]
+    gps_stop = model.gps_epochs[candidate.stop - 1]
+    utc_start = model.utc_epochs[candidate.start]
+    utc_stop = model.utc_epochs[candidate.stop - 1]
+    return {
+        "doy": candidate.doy,
+        "target": candidate.target,
+        "reference": candidate.reference,
+        "start_observation_epoch_gps": (
+            f"{gps_start.isoformat(timespec='seconds').replace('+00:00', '')} GPS"
+        ),
+        "stop_observation_epoch_gps": (
+            f"{gps_stop.isoformat(timespec='seconds').replace('+00:00', '')} GPS"
+        ),
+        "start_model_epoch_utc": screen.format_utc(utc_start),
+        "stop_model_epoch_utc": screen.format_utc(utc_stop),
+        "records": WINDOW_RECORDS,
+        "duration_s": (WINDOW_RECORDS - 1) * STEP_S,
+        "calibration_records": CALIBRATION_RECORDS,
+        "heldout_records": HELDOUT_RECORDS,
+        "minimum_elevation_across_stations_and_clock_shifts_deg": (
+            candidate.minimum_direct_shift_elevation_deg
+        ),
+        "prefix_affine_null": {
+            "heldout_non_affine_peak_to_peak_hz": (
+                candidate.separation_from_affine_hz
+            )
+        },
+        "direct_clock_envelope": {
+            "heldout_peak_to_peak_hz": timing,
+            "controlling_station_offsets_s": list(offsets),
+            "basis": "DIRECT_SHIFTED_TRAJECTORIES_NOT_LOCAL_SLOPE",
+        },
+        "remaining_after_direct_clock_envelope_hz": float(remaining),
+        "instrumental_envelope_assessed": False,
+        "negative_result_interpretable": False,
+        "reason_negative_not_yet_interpretable": (
+            "NATIVE_DOPPLER_MEASUREMENT_ENVELOPE_NOT_YET_DEVELOPED"
+        ),
+    }
+
+
+def select_affine_day_candidate(model: DayModel) -> dict[str, object] | None:
+    audited = [
+        audit_affine_candidate(model, candidate)
+        for candidate in raw_affine_day_candidates(model)
+    ]
+    audited.sort(
+        key=lambda row: (
+            -float(row["remaining_after_direct_clock_envelope_hz"]),
+            str(row["start_observation_epoch_gps"]),
+            str(row["target"]),
+            str(row["reference"]),
+        )
+    )
+    return audited[0] if audited else None
+
+
 def day_continuity_diagnostic(model: DayModel) -> dict[str, object]:
     visibility = {
         satellite: robust_visibility(model, satellite)
@@ -812,18 +982,160 @@ def design_expansion(paths: Sequence[Path]) -> dict[str, object]:
     return result
 
 
+def day_pair_diagnostic(model: DayModel) -> dict[str, object]:
+    visibility = {
+        satellite: robust_visibility(model, satellite)
+        for satellite in model.satellites
+    }
+    rows = []
+    for target, reference in combinations(model.satellites, 2):
+        common = visibility[target] & visibility[reference]
+        longest = max(
+            (stop - start for start, stop in contiguous_segments(common)),
+            default=0,
+        )
+        rows.append((longest, target, reference))
+    rows.sort(key=lambda item: (-item[0], item[1], item[2]))
+    longest, target, reference = rows[0]
+    return {
+        "doy": model.doy,
+        "required_window_records": WINDOW_RECORDS,
+        "maximum_two_satellite_continuity_records": longest,
+        "controlling_two_satellite_set": [target, reference],
+        "two_satellite_sets_meeting_window": sum(
+            records >= WINDOW_RECORDS for records, _, _ in rows
+        ),
+        "state": (
+            "GEOMETRY_ADMISSIBLE_FOR_AFFINE_ONLY_ORBITALITY"
+            if longest >= WINDOW_RECORDS
+            else "NO_TWO_SATELLITE_ROBUST_WINDOW_FOR_FROZEN_LENGTH"
+        ),
+    }
+
+
+def design_orbitality(paths: Sequence[Path]) -> dict[str, object]:
+    by_day = validate_navigation_inputs(paths, EXPANSION_CANDIDATE_DOYS)
+    models = {
+        doy: compile_day_model(
+            doy,
+            by_day[doy],
+            EXPANSION_CANDIDATE_DOYS,
+        )
+        for doy in EXPANSION_CANDIDATE_DOYS
+    }
+    day_winners = {
+        doy: select_affine_day_candidate(models[doy])
+        for doy in EXPANSION_CANDIDATE_DOYS
+    }
+    positive = [
+        candidate
+        for candidate in day_winners.values()
+        if candidate is not None
+        and float(candidate["remaining_after_direct_clock_envelope_hz"]) > 0.0
+    ]
+    positive.sort(
+        key=lambda row: (
+            -float(row["remaining_after_direct_clock_envelope_hz"]),
+            int(row["doy"]),
+        )
+    )
+    shortlist = positive[:3]
+    roles = ("primary_candidate", "reserve_1", "reserve_2")
+    for rank, (role, item) in enumerate(zip(roles, shortlist), start=1):
+        item["prospective_role"] = role
+        item["geometry_rank"] = rank
+    summaries = []
+    for doy in EXPANSION_CANDIDATE_DOYS:
+        candidate = day_winners[doy]
+        if candidate is None:
+            summaries.append({"doy": doy, "candidate_found": False})
+            continue
+        summaries.append(
+            {
+                "doy": doy,
+                "candidate_found": True,
+                "target": candidate["target"],
+                "reference": candidate["reference"],
+                "start_observation_epoch_gps": candidate[
+                    "start_observation_epoch_gps"
+                ],
+                "affine_separation_hz": candidate["prefix_affine_null"][
+                    "heldout_non_affine_peak_to_peak_hz"
+                ],
+                "direct_clock_envelope_hz": candidate["direct_clock_envelope"][
+                    "heldout_peak_to_peak_hz"
+                ],
+                "remaining_after_direct_clock_envelope_hz": candidate[
+                    "remaining_after_direct_clock_envelope_hz"
+                ],
+            }
+        )
+    admitted = len(shortlist) == 3
+    result = {
+        "orbitality_version": ORBITALITY_VERSION,
+        "orbitality_manifest_sha256": orbitality_manifest_sha256(),
+        "scope": "BROADCAST_NAVIGATION_ONLY_OBSERVATION_VALUES_UNOPENED",
+        "physical_question": orbitality_manifest()["physical_question"],
+        "claim_ceiling": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+        "specific_orbit_claim_authorized": False,
+        "wrong_orbit_null_present": False,
+        "candidate_doys": list(EXPANSION_CANDIDATE_DOYS),
+        "navigation_sources": [
+            models[doy].navigation_source for doy in EXPANSION_CANDIDATE_DOYS
+        ],
+        "capability_set": list(STATION_IDS),
+        "observable": orbitality_manifest()["measurement_coordinate"],
+        "day_admission_diagnostics": [
+            day_pair_diagnostic(models[doy]) for doy in EXPANSION_CANDIDATE_DOYS
+        ],
+        "day_candidate_summaries": summaries,
+        "shortlist": shortlist,
+        "measurement_envelope_status": "OPEN_UNTIL_DOY214_NUMERIC_DEVELOPMENT",
+        "instrumental_assessment_reached": False,
+        "measurement_access": {
+            "observation_products_opened": 0,
+            "observation_bytes_accessed": 0,
+            "observation_epochs_decoded": 0,
+            "doppler_values_decoded": 0,
+            "carrier_phase_values_decoded": 0,
+        },
+        "authority": {
+            "development_numeric_access_authorized": False,
+            "future_primary_access_authorized": False,
+            "closed_doy215_reopened": False,
+            "prospective_plan_frozen": False,
+        },
+        "next_exact_blocker": (
+            "SEPARATE_AUTHORITY_FOR_DOY214_NATIVE_DOPPLER_NUMERIC_DEVELOPMENT"
+            if admitted
+            else "AFFINE_ONLY_ORBITALITY_SET_HAS_FEWER_THAN_THREE_POSITIVE_WINDOWS"
+        ),
+        "outcome": (
+            "NATIVE_DOPPLER_ORBITALITY_GEOMETRY_SHORTLIST_READY"
+            if admitted
+            else "NO_NATIVE_DOPPLER_ORBITALITY_GEOMETRY_SHORTLIST"
+        ),
+        "new_gate_created": False,
+    }
+    strict_json(result)
+    return result
+
+
 def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--expanded", action="store_true")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--expanded", action="store_true")
+    mode.add_argument("--orbitality", action="store_true")
     parser.add_argument("navigation", nargs="+", type=Path)
     args = parser.parse_args()
-    result = (
-        design_expansion(args.navigation)
-        if args.expanded
-        else design_forward(args.navigation)
-    )
+    if args.orbitality:
+        result = design_orbitality(args.navigation)
+    elif args.expanded:
+        result = design_expansion(args.navigation)
+    else:
+        result = design_forward(args.navigation)
     print(strict_json(result))
 
 

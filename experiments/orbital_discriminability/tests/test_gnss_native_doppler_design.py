@@ -17,6 +17,7 @@ RECEIPT = ROOT / "GNSS_NATIVE_DOPPLER_FORWARD_DESIGN_RECEIPT.json"
 EXPANSION_RECEIPT = (
     ROOT / "GNSS_NATIVE_DOPPLER_EXPANDED_NAVIGATION_RECEIPT.json"
 )
+ORBITALITY_RECEIPT = ROOT / "GNSS_NATIVE_DOPPLER_ORBITALITY_RECEIPT.json"
 
 
 def load_receipt() -> dict[str, object]:
@@ -196,3 +197,113 @@ def test_expanded_refusal_does_not_authorize_numeric_development() -> None:
     assert set(receipt["measurement_access"].values()) == {0}
     assert set(receipt["authority"].values()) == {False}
     assert receipt["instrumental_assessment_reached"] is False
+
+
+def test_orbitality_manifest_narrows_claim_instead_of_weakening_window() -> None:
+    manifest = design.orbitality_manifest()
+    assert manifest["claim_ceiling"] == "ORBITAL_MODEL_PREDICTIVELY_PREFERRED"
+    assert manifest["specific_orbit_claim_authorized"] is False
+    assert manifest["wrong_orbit_null_present"] is False
+    assert manifest["measurement_coordinate"]["nulls"] == ["PREFIX_AFFINE"]
+    assert manifest["parameters"]["window_records"] == 380
+    assert manifest["frozen_from"]["expansion_receipt_sha256"] == (
+        design.file_sha256(EXPANSION_RECEIPT)
+    )
+
+
+def test_affine_candidate_audit_subtracts_direct_clock_envelope(monkeypatch) -> None:
+    epochs = design.gps_epoch_grid(design.calendar_date_for_doy(219))
+    model = design.DayModel(
+        doy=219,
+        navigation_source={},
+        gps_epochs=epochs,
+        utc_epochs=tuple(
+            epoch - timedelta(seconds=design.GPS_MINUS_UTC_S) for epoch in epochs
+        ),
+        satellites=("G01", "G02"),
+        fractional={},
+        elevation={},
+    )
+    candidate = design.AffineCandidate(
+        doy=219,
+        target="G01",
+        reference="G02",
+        start=10,
+        stop=10 + design.WINDOW_RECORDS,
+        separation_from_affine_hz=12.5,
+        minimum_direct_shift_elevation_deg=16.0,
+    )
+    monkeypatch.setattr(
+        design,
+        "direct_clock_envelope_hz",
+        lambda *_args: (2.25, (-15.0, 15.0)),
+    )
+
+    audited = design.audit_affine_candidate(model, candidate)
+
+    assert audited["remaining_after_direct_clock_envelope_hz"] == 10.25
+    assert audited["direct_clock_envelope"]["controlling_station_offsets_s"] == [
+        -15.0,
+        15.0,
+    ]
+    assert audited["instrumental_envelope_assessed"] is False
+
+
+def test_real_orbitality_shortlist_is_strict_and_claim_limited() -> None:
+    receipt = json.loads(ORBITALITY_RECEIPT.read_text(encoding="ascii"))
+    assert receipt["orbitality_manifest_sha256"] == (
+        design.orbitality_manifest_sha256()
+    )
+    assert design.file_sha256(EXPANSION_RECEIPT) == (
+        design.EXPANSION_RECEIPT_SHA256
+    )
+    assert receipt["outcome"] == (
+        "NATIVE_DOPPLER_ORBITALITY_GEOMETRY_SHORTLIST_READY"
+    )
+    assert receipt["claim_ceiling"] == "ORBITAL_MODEL_PREDICTIVELY_PREFERRED"
+    assert receipt["specific_orbit_claim_authorized"] is False
+    assert receipt["wrong_orbit_null_present"] is False
+    assert receipt["observable"]["nulls"] == ["PREFIX_AFFINE"]
+    assert design.strict_json(receipt)
+
+
+def test_real_orbitality_geometry_is_numerically_regressed() -> None:
+    receipt = json.loads(ORBITALITY_RECEIPT.read_text(encoding="ascii"))
+    shortlist = receipt["shortlist"]
+    assert [(row["doy"], row["target"], row["reference"]) for row in shortlist] == [
+        (219, "G15", "G22"),
+        (220, "G15", "G22"),
+        (221, "G15", "G22"),
+    ]
+    assert isclose(
+        shortlist[0]["prefix_affine_null"]["heldout_non_affine_peak_to_peak_hz"],
+        6752.925149916402,
+        rel_tol=0.0,
+        abs_tol=1e-9,
+    )
+    assert isclose(
+        shortlist[0]["direct_clock_envelope"]["heldout_peak_to_peak_hz"],
+        9.388575556670272,
+        rel_tol=0.0,
+        abs_tol=1e-9,
+    )
+    assert isclose(
+        shortlist[0]["remaining_after_direct_clock_envelope_hz"],
+        6743.536574359732,
+        rel_tol=0.0,
+        abs_tol=1e-9,
+    )
+    assert shortlist[0]["start_observation_epoch_gps"] == (
+        "2026-08-07T16:20:00 GPS"
+    )
+
+
+def test_orbitality_shortlist_grants_no_measurement_authority() -> None:
+    receipt = json.loads(ORBITALITY_RECEIPT.read_text(encoding="ascii"))
+    assert set(receipt["measurement_access"].values()) == {0}
+    assert set(receipt["authority"].values()) == {False}
+    assert receipt["instrumental_assessment_reached"] is False
+    assert receipt["next_exact_blocker"] == (
+        "SEPARATE_AUTHORITY_FOR_DOY214_NATIVE_DOPPLER_NUMERIC_DEVELOPMENT"
+    )
+    assert all(row["negative_result_interpretable"] is False for row in receipt["shortlist"])
