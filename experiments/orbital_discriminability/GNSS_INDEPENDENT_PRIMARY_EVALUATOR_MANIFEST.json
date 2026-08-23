@@ -1,0 +1,89 @@
+{
+  "access_state": {
+    "authority_receipt_materialized": false,
+    "primary_artifact_bytes_opened": 0,
+    "primary_headers_opened": 0,
+    "primary_observation_values_decoded": 0,
+    "primary_products": [
+      "KIRU00SWE_R_20262150000_01D_30S_MO.crx.gz",
+      "MAT100ITA_R_20262150000_01D_30S_MO.crx.gz"
+    ]
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "ncompress": "1.0.2",
+    "numpy": "2.3.3"
+  },
+  "evaluator_source_sha256": "a4070a975ab402d0640d4818bdf6001a0d0380034d3715af8ed227558e4bff8b",
+  "evaluator_source": {
+    "name": "gnss_independent_primary_evaluator.py",
+    "sha256": "a4070a975ab402d0640d4818bdf6001a0d0380034d3715af8ed227558e4bff8b"
+  },
+  "frozen_parameters": {
+    "calibration_records": 76,
+    "derivative_baseline_s": 60.0,
+    "feature_records": 378,
+    "geometry_free_second_difference_limit_m": 0.09514683639918244,
+    "gps_minus_utc_s": 18.0,
+    "heldout_records": 302,
+    "hypotheses": [
+      "H_G20",
+      "H_AFFINE",
+      "H_G14"
+    ],
+    "one_model_admission_envelope_hz": 354.8594372656104,
+    "pairwise_decision_guard_hz": 709.7188745312208,
+    "raw_records": 380,
+    "raw_start_gps": "2026-08-03T16:02:30 GPS",
+    "raw_stop_gps": "2026-08-03T19:12:00 GPS",
+    "signal_fields": [
+      "C1C",
+      "L1C",
+      "S1C",
+      "C2W",
+      "L2W",
+      "S2W"
+    ],
+    "stations": [
+      "KIRU00SWE",
+      "MAT100ITA"
+    ],
+    "step_s": 30.0,
+    "target_reference_wrong_orbit": [
+      "G20",
+      "G22",
+      "G14"
+    ]
+  },
+  "lineage": {
+    "plan_receipt_sha256": "d9874543fd22d91d638846f94d6b7887962c565a089b0a88cbab74dfa5d10d65",
+    "prospective_markdown_sha256": "763fa4c5c2b5ea77faaedc75c753c360fd848294ab789a8868d1e91458b2c000",
+    "qualification_manifest_sha256": "bcd504f9e3a0e2b70bf62ee566fdcdc6154e43a7063d6bbe8921ad2ba292210c",
+    "qualification_receipt_sha256": "5e2d319ba633dce788bfa0a8b8961fa228a4b6ffd0ed47787b92c59520b37f0d",
+    "qualification_source_sha256": "ada26cf0ac30ea556af480cf3590b5ff7b61b0e26bb762e766a87de95114be18"
+  },
+  "outcomes": {
+    "nonphysical": [
+      "ARTIFACT_MATERIALIZATION_FAILED",
+      "PRIMARY_EVALUATION_ERROR"
+    ],
+    "physical": [
+      "MEASUREMENT_INVALID",
+      "NOT_DETECTABLE",
+      "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+      "PREFIX_AFFINE_NULL_PREFERRED",
+      "WRONG_ORBIT_G14_PREFERRED",
+      "AMBIGUOUS"
+    ]
+  },
+  "plan_sha256": "763fa4c5c2b5ea77faaedc75c753c360fd848294ab789a8868d1e91458b2c000",
+  "runtime_manifest_sha256": "6f88aef8e2ccfd05e70aba947f38c94ac4f722bc7978a6dd8a0578af06beaa8d",
+  "schema": "gnss-independent-primary-evaluator-seal-v1",
+  "source_commit": "770d255eae80a1929eb12102b166dc915fe43908",
+  "state": "EVALUATOR_FROZEN_PRIMARY_BLOCKED",
+  "zero_persistence": {
+    "decompressed_rinex": "RAM_BYTEARRAY_OVERWRITTEN_IN_FINALLY",
+    "measurement_and_hypothesis_arrays": "OVERWRITTEN_IN_FINALLY",
+    "receipt": "HASHES_COUNTS_AND_FINITE_SCALARS_ONLY"
+  }
+}

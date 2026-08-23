@@ -127,9 +127,16 @@ KIRU–MAT1, G20/G22, G14 and prefix-affine nulls, 76 calibration features, 302
 held-out features, the qualified `L1C/L2W` family, fixed value-level admission
 and a `709.718875 Hz` pairwise guard. The plan itself authorizes no access.
 
-The next admissible action remains offline: materialize and seal the exact
-deterministic primary evaluator against the plan and qualification hashes.
-Only after that separate authority may open the DOY 215 products.
+The exact deterministic primary evaluator is now implemented and sealed
+against the plan, qualification lineage, source commit and dependencies. Its
+synthetic tests freeze parsing, measurement admission, prefix detectability,
+the three held-out hypotheses, failure separation and zero persistence. See
+[GNSS_INDEPENDENT_PRIMARY_EVALUATOR_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PRIMARY_EVALUATOR_REPORT.md).
+
+Both DOY 215 products remain completely unopened. The next admissible action
+requires a separate authority bound to the evaluator seal and exact products;
+only then may complete-file materialization and the single zero-retry primary
+evaluation occur.
 
 ## Preserved Gate F2.5 experimental history
 

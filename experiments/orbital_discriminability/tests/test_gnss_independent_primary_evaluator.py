@@ -567,3 +567,20 @@ def test_decompressed_bytearray_is_overwritten(
         assert not any(captured["decoded"])
     finally:
         window.erase()
+
+
+def test_repository_manifest_seals_exact_committed_source() -> None:
+    manifest_path = Path(evaluator.__file__).with_name(
+        "GNSS_INDEPENDENT_PRIMARY_EVALUATOR_MANIFEST.json"
+    )
+    manifest, manifest_sha256 = evaluator.verify_seal(
+        manifest_path, Path(evaluator.__file__)
+    )
+    assert manifest_sha256 == (
+        "b2e09192345db050d61ae843ba01095f50b1deef5f2d9603c9365634519d8807"
+    )
+    assert manifest["source_commit"] == (
+        "770d255eae80a1929eb12102b166dc915fe43908"
+    )
+    assert manifest["state"] == "EVALUATOR_FROZEN_PRIMARY_BLOCKED"
+    assert manifest["access_state"]["primary_artifact_bytes_opened"] == 0

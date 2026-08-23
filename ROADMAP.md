@@ -122,9 +122,17 @@ primary plan is now frozen: KIRU–MAT1, G20/G22, G14 and prefix-affine nulls,
 family, fixed admission rules and zero retry after decompression. See
 `GNSS_INDEPENDENT_PRIMARY_PROSPECTIVE_PLAN.md` and its receipt.
 
-The next step is not a new gate or observation. Implement and seal the exact
-deterministic evaluator against those frozen hashes using synthetic tests only.
-Primary access still requires separate explicit authority after that seal.
+The exact deterministic evaluator is now implemented and sealed against the
+prospective plan, qualification hashes, source commit and dependency versions.
+Synthetic tests freeze the RINEX grammar, measurement clauses, transform,
+prefix-only detectability order, null scoring, receipt boundaries and RAM
+erasure. See GNSS_INDEPENDENT_PRIMARY_EVALUATOR_REPORT.md.
+
+Primary access still requires separate explicit authority bound to that seal.
+After authority, the only remaining physical step is complete-file
+materialization and one zero-retry evaluation of the two exact DOY 215
+products. No alternate product, signal, window, nuisance or threshold is
+admissible.
 
 Before any implementation or observation, record:
 
@@ -151,9 +159,9 @@ or no candidate retains positive G1 margin, terminate without synthesizing an
 experiment and abandon this GNSS route.
 ```
 
-The navigation review, bounded structure-only qualification and prospective
-plan freeze are complete without a new gate. The DOY 215 primary remains
-sealed and the evaluator has not yet been materialized.
+The navigation review, bounded structure-only qualification, prospective plan
+and evaluator seal are complete without a new gate. The DOY 215 primary
+remains sealed; zero primary bytes and zero primary headers have been opened.
 
 ## Anti-drift stop
 
