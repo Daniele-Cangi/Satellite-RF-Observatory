@@ -59,6 +59,27 @@ def test_real_broadcast_position_regression() -> None:
     )
 
 
+def test_optional_fit_interval_may_be_omitted() -> None:
+    def fields(values: tuple[float, ...]) -> str:
+        return "".join(f"{value:19.12E}" for value in values)
+
+    lines = [
+        f"{'G05 2026 08 07 01 59 28':<23}{fields((0.0, 0.0, 0.0))}",
+        "    " + fields((1.0, 1.0, 1.0, 1.0)),
+        "    " + fields((1.0, 0.01, 1.0, 5153.0)),
+        "    " + fields((1000.0, 1.0, 1.0, 1.0)),
+        "    " + fields((1.0, 1.0, 1.0, 1.0)),
+        "    " + fields((2430.0, 1.0, 0.0, 1.0)),
+        "    " + fields((1.0, 0.0, 1.0, 1.0)),
+        "    " + fields((436266.0,)),
+    ]
+
+    record = screen.parse_gps_record(lines)
+
+    assert record.fit_interval_h is None
+    assert record.transmission_sow == 436266.0
+
+
 def test_double_difference_removes_common_receiver_and_satellite_terms() -> None:
     geometry = {
         "left_target": np.asarray([1.0, 1.2, 1.4]),
