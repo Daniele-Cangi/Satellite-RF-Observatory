@@ -25,6 +25,7 @@ experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_PRIMARY_PLAN.md -text
 experiments/orbital_discriminability/gnss_native_doppler_primary.py -text
 experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_PRIMARY_EVALUATOR_SEAL.json -text
 experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_PRIMARY_AUTHORITY.json -text
+experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_PRIMARY_OUTCOME.jsonl -text
 
 # This frozen Cassini parent receipt was sealed from its exact CRLF byte stream.
 experiments/orbital_discriminability/CASSINI_DUAL_ROOT_XKA_COMPILER_RECEIPT.json -text whitespace=cr-at-eol

@@ -15,6 +15,8 @@ from experiments.orbital_discriminability import gnss_native_doppler_primary as 
 ROOT = Path(__file__).parents[1]
 SEAL = ROOT / "GNSS_NATIVE_DOPPLER_PRIMARY_EVALUATOR_SEAL.json"
 AUTHORITY = ROOT / "GNSS_NATIVE_DOPPLER_PRIMARY_AUTHORITY.json"
+OUTCOME = ROOT / "GNSS_NATIVE_DOPPLER_PRIMARY_OUTCOME.jsonl"
+OUTCOME_SHA256 = "e2c15a9939ac3fcef9fd28d0f46d5906bde629cb852197cf062876c15135d5c7"
 
 
 def header_line(data: str, label: str) -> str:
@@ -243,3 +245,22 @@ def test_nonphysical_error_never_changes_physical_decision() -> None:
     receipt = primary.nonphysical_error_receipt("DESCRIPTION_ERROR", "a" * 64, "b" * 64, True)
     assert receipt["outcome"] == "PRIMARY_EVALUATION_ERROR" and receipt["physical_decision"] == "NOT_EVALUATED"
     assert set(receipt["clauses"].values()) == {"NOT_EVALUATED"}
+
+
+def test_frozen_primary_outcome_is_scalar_not_detectable_and_unscored() -> None:
+    assert primary.file_sha256(OUTCOME) == OUTCOME_SHA256
+    raw = OUTCOME.read_bytes()
+    assert raw.count(b"\n") == 1
+    receipt = json.loads(raw.decode("ascii"), parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)))
+    assert receipt["outcome"] == "NOT_DETECTABLE"
+    assert receipt["scores"] == {}
+    assert receipt["preference_margins_hz"] == {}
+    assert receipt["clauses"]["measurement_admission"] == "SATISFIED"
+    assert receipt["clauses"]["heldout_model_comparison"] == "NOT_EVALUATED"
+    assert receipt["detectability"]["nominal_prefix_peak_to_peak_hz"] < receipt["detectability"]["nominal_prefix_limit_hz"]
+    assert receipt["detectability"]["prefix_dispersive_clause"] == "SATISFIED"
+    assert receipt["detectability"]["heldout_dispersive_clause"] == "SATISFIED"
+    assert receipt["detectability"]["same_link_snr_non_degradation_clause"] == "UNSATISFIED"
+    assert receipt["claims"]["authorized"] == "MEASUREMENT_PATH_OUTCOME_ONLY"
+    assert receipt["raw_or_derived_measurement_persisted"] is False
+    assert "measurement_series" not in receipt and "observed_coordinate" not in receipt
