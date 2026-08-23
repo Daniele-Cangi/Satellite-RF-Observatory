@@ -13,6 +13,7 @@ from experiments.orbital_discriminability import gnss_native_doppler_primary as 
 
 
 ROOT = Path(__file__).parents[1]
+SEAL = ROOT / "GNSS_NATIVE_DOPPLER_PRIMARY_EVALUATOR_SEAL.json"
 
 
 def header_line(data: str, label: str) -> str:
@@ -185,6 +186,20 @@ def test_manifest_json_and_claim_scope_are_strict() -> None:
         with pytest.raises(ValueError): primary.strict_json({"bad": value})
     for value in (np.bool_(True), np.float64(1.0)):
         with pytest.raises(TypeError): primary.strict_json({"bad": value})
+
+
+def test_repository_seal_binds_committed_source_and_opens_zero_observation_bytes() -> None:
+    seal, seal_sha = primary.verify_seal(SEAL, Path(primary.__file__))
+    assert seal["source_commit"] == "2d694fea4f42bd10238096c1c717b130474b36d1"
+    assert seal["primary_state"] == "PRIMARY_BLOCKED"
+    assert seal["access_authority_created"] is False
+    assert seal["observation_access"] == {
+        "headers_opened": 0,
+        "numeric_values_decoded": 0,
+        "products_opened": 0,
+        "total_bytes_opened": 0,
+    }
+    assert seal_sha == primary.file_sha256(SEAL)
 
 
 def test_seal_and_authority_bind_plan_source_and_single_run(tmp_path: Path) -> None:
