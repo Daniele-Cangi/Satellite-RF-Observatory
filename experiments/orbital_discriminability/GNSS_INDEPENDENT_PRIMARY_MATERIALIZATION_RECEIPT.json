@@ -1,0 +1,33 @@
+{
+  "artifacts": [
+    {
+      "bytes": 5113772,
+      "name": "KIRU00SWE_R_20262150000_01D_30S_MO.crx.gz",
+      "sha256": "e65de2fe6db79a9908a87ee7892f75558601c9bd28edd98fd61e22a21b4812f2",
+      "station_id": "KIRU00SWE"
+    },
+    {
+      "bytes": 4255324,
+      "name": "MAT100ITA_R_20262150000_01D_30S_MO.crx.gz",
+      "sha256": "48a973ae7ad1f365553c590337fc5ea838bc06a9db6d567417109f2dde0ad65f",
+      "station_id": "MAT100ITA"
+    }
+  ],
+  "authority_receipt_sha256": "e96908f0aaf5006830952d4e7884f5e999988c8ff7494af0a8a34823438404a4",
+  "completed_at_utc": "2026-08-23T00:41:50.988Z",
+  "hashes_completed_before_decompression": true,
+  "navigation": {
+    "bytes": 1406096,
+    "name": "BRDM00DLR_S_20262150000_01D_MN.rnx.gz",
+    "sha256": "261225401bdeaae1c5ea102c76b5b663fa999c6945821b10b6b4967731fe0f78"
+  },
+  "plan_sha256": "763fa4c5c2b5ea77faaedc75c753c360fd848294ab789a8868d1e91458b2c000",
+  "primary_decompression_bytes_before_receipt": 0,
+  "quarantine_policy": {
+    "compressed_products_persisted_in_repository": false,
+    "location": "EPHEMERAL_SYSTEM_TEMP_OUTSIDE_REPOSITORY",
+    "raw_or_decompressed_products_persisted_in_repository": false
+  },
+  "schema": "gnss-independent-primary-materialization-v1",
+  "state": "PRIMARY_ARTIFACTS_MATERIALIZED"
+}
