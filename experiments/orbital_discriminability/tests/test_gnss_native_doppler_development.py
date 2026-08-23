@@ -1,12 +1,21 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from hashlib import sha256
 import inspect
+import json
+from pathlib import Path
 
 import numpy as np
 import pytest
 
 from experiments.orbital_discriminability import gnss_native_doppler_development as development
+
+
+ROOT = Path(__file__).parents[1]
+RECEIPT = ROOT / "GNSS_NATIVE_DOPPLER_DEVELOPMENT_RECEIPT.json"
+TRANSFORM = ROOT / "GNSS_NATIVE_DOPPLER_DEVELOPMENT_TRANSFORM_MANIFEST.json"
+AUTHORITY = ROOT / "GNSS_NATIVE_DOPPLER_DEVELOPMENT_AUTHORITY.json"
 
 
 def header_line(data: str, label: str) -> str:
@@ -135,3 +144,37 @@ def test_strict_json_refuses_nonfinite_and_numpy_scalars() -> None:
         development.strict_json({"bad": float("nan")})
     with pytest.raises(TypeError):
         development.strict_json({"bad": np.float64(1.0)})
+
+
+def load_strict(path: Path) -> dict[str, object]:
+    return json.loads(
+        path.read_text(encoding="ascii"),
+        parse_constant=lambda value: (_ for _ in ()).throw(ValueError(value)),
+    )
+
+
+def test_frozen_real_outcome_binds_artifacts_transform_and_zero_future_access() -> None:
+    receipt = load_strict(RECEIPT)
+    transform = load_strict(TRANSFORM)
+    assert receipt["outcome"] == "NATIVE_DOPPLER_DEVELOPMENT_ENVELOPE_FROZEN"
+    assert receipt["lineage"]["authority_sha256"] == development.file_sha256(AUTHORITY)
+    assert receipt["lineage"]["transform_manifest_sha256"] == development.file_sha256(TRANSFORM)
+    assert transform["extractor_code_sha256"] == development.file_sha256(Path(development.__file__))
+    assert receipt["measurement_access"]["future_observation_products_opened"] == 0
+    assert receipt["measurement_access"]["phase_scalars_decoded"] == 0
+    assert receipt["quarantine"]["new_observation_artifacts_persisted"] == 0
+    assert transform["future_transfer_conditions"]["unresolved_as_zero"] is False
+    assert transform["future_transfer_conditions"]["snr_magnitude_threshold"].startswith("UNRESOLVED")
+
+
+def test_frozen_real_development_envelope_is_numerically_regressed() -> None:
+    receipt = load_strict(RECEIPT)
+    result = receipt["characterization"]
+    assert result["windows_evaluated"] == 114
+    assert result["development_residual_peak_to_peak_hz"] == pytest.approx(1.44001577563781, abs=1e-12)
+    assert result["provisional_future_measurement_envelope_hz"] == pytest.approx(1.7027139799721753, abs=1e-12)
+    assert result["provisional_pairwise_guard_hz"] == pytest.approx(3.4054279599443507, abs=1e-12)
+    payload = RECEIPT.read_bytes()
+    assert sha256(payload).hexdigest() == (
+        "698c1ee3e4eeca460fc0e3b81c5373e49ee7b2d7970e45823f902b2e53d73711"
+    )

@@ -9,5 +9,13 @@ experiments/orbital_discriminability/maven_dss45_detector_develop.py -text
 experiments/orbital_discriminability/MAVEN_DSS45_CARRIER_DETECTOR_MANIFEST.json -text
 experiments/orbital_discriminability/MAVEN_DSS45_DETECTOR_DEVELOPMENT_RESULT.json -text
 
+# The native-Doppler development plan, authority, code and result are joined
+# by byte-exact SHA-256 values across Windows and CI checkouts.
+experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_DEVELOPMENT_PLAN.md -text
+experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_DEVELOPMENT_AUTHORITY.json -text
+experiments/orbital_discriminability/gnss_native_doppler_development.py -text
+experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_DEVELOPMENT_TRANSFORM_MANIFEST.json -text
+experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_DEVELOPMENT_RECEIPT.json -text
+
 # This frozen Cassini parent receipt was sealed from its exact CRLF byte stream.
 experiments/orbital_discriminability/CASSINI_DUAL_ROOT_XKA_COMPILER_RECEIPT.json -text whitespace=cr-at-eol
