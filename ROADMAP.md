@@ -83,8 +83,12 @@ The subsequent GOLD00USA–NLIB00USA G11/G21 GNSS vertical had a positive
 envelope. Its single authorized run stopped `MEASUREMENT_INVALID` at
 `TRUNCATED_REQUIRED_OBSERVATION_RECORD`; calibration and held-out hypotheses
 remained `NOT_EVALUATED`. The receipt cannot attribute the short record to
-field absence or an unsupported representation. The primary is closed with
-zero retry.
+field absence or an unsupported representation. A bounded value-blind forensic
+repair has now located the exact boundary at NLIB G21, `10:06:00 GPS`: `C2W`
+was declared at index 5 after only three serialized fields. RINEX variable-line
+semantics classify it as `TRAILING_FIELD_OMITTED`, not evidence of file
+truncation. The original terminal remains unchanged and the primary remains
+closed with zero retry.
 
 ## Next physical checkpoint — independent GNSS vertical: REVIEW REQUIRED
 
@@ -95,7 +99,8 @@ not repair or reuse the closed primary:
 new orbit-first geometry screen
   -> bounded independent station set
   -> separate development/qualification product
-  -> exact field-topology and parser qualification
+  -> exact field-topology and parser qualification for L1C/L2W phase,
+     their LLI/epoch continuity and same-path C1C/C2W
   -> distinct unopened primary
   -> immutable prospective plan
   -> one measurement and held-out comparison

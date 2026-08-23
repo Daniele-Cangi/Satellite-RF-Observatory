@@ -99,7 +99,10 @@ producing an orbital score:
 - the GOLD00USA–NLIB00USA G11/G21 GNSS plan retained a `1420.626 Hz`
   premeasurement physical margin, but its one authorized run stopped
   `MEASUREMENT_INVALID` at `TRUNCATED_REQUIRED_OBSERVATION_RECORD` before any
-  calibration or held-out score.
+  calibration or held-out score. A later value-blind forensic repair explained
+  the boundary as NLIB G21 `C2W` at `10:06:00 GPS`: header index 5 followed
+  only three serialized fields, a RINEX `TRAILING_FIELD_OMITTED` state. The
+  historical outcome and closure are unchanged.
 
 No real held-out vertical has therefore reached `MEASUREMENT_VALID` and then
 preferred an orbital model over frozen nulls. The GNSS result refuses one exact
@@ -109,7 +112,9 @@ mechanism.
 The next candidate is a new independent GNSS vertical. Geometry must again
 lead selection, and a different development product must demonstrate the exact
 decoder-native field topology before a separate artifact is assigned the
-primary role. The closed GOLD/NLIB primary cannot be repaired or rerun.
+primary role. The smallest family is `L1C + L2W` phase with their LLI and epoch
+continuity, plus same-path `C1C + C2W`; `S1C/S2W` are optional diagnostics.
+The closed GOLD/NLIB primary cannot be repaired or rerun.
 
 ## Preserved Gate F2.5 experimental history
 

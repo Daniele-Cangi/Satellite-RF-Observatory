@@ -1,0 +1,80 @@
+{
+  "schema": "gnss-structural-failure-topology-receipt-v1",
+  "parent": {
+    "outcome": "MEASUREMENT_INVALID",
+    "reason": "TRUNCATED_REQUIRED_OBSERVATION_RECORD",
+    "outcome_sha256": "4060e8e3046696f6433ce5226e3d7f524d430cbbd49261fd1041554ab76b5172"
+  },
+  "artifact_authorization": {
+    "roles": [
+      "FORENSIC_DEVELOPMENT_ONLY",
+      "NEVER_PRIMARY_AGAIN",
+      "NEVER_SCORED_AGAIN"
+    ],
+    "artifacts": [
+      {
+        "station": "GOLD00USA",
+        "name": "GOLD00USA_R_20262150000_01D_30S_MO.crx.gz",
+        "bytes": 2197353,
+        "sha256": "815176b9eb57c9032e4007db6c4b639aeeb9225cc4b992b38d16b1b6f773e027"
+      },
+      {
+        "station": "NLIB00USA",
+        "name": "NLIB00USA_R_20262150000_01D_30S_MO.crx.gz",
+        "bytes": 2534492,
+        "sha256": "cdc57171392b0f855fc7a7458e8b2ba8bd68951085e5f01cdfbdb848a7481ac5"
+      }
+    ]
+  },
+  "parser": {
+    "version": "rinex-3-value-blind-structural-qualification-v1",
+    "manifest_sha256": "0d8a861eac4fe7aa939d9c7f6d0ddf33d87181eb4484027c49c69e23bb418757",
+    "specification": "https://files.igs.org/pub/data/format/rinex304.pdf",
+    "observation_scalar_conversion": "FORBIDDEN",
+    "orbital_scoring": "FORBIDDEN"
+  },
+  "access": {
+    "compressed_artifacts_materialized": "RAM_ONLY",
+    "hash_verified_before_decompression": true,
+    "decompressed_rinex": "RAM_ONLY_OVERWRITTEN_AFTER_SCAN",
+    "observation_values_retained": 0,
+    "observation_values_persisted": 0,
+    "orbital_scores_produced": 0
+  },
+  "station_results": [
+    {
+      "station": "GOLD00USA",
+      "state": "STRUCTURE_QUALIFIED_FOR_HISTORICAL_REQUIRED_LINKS",
+      "required_link_records_examined": 772,
+      "diagnostics": []
+    },
+    {
+      "station": "NLIB00USA",
+      "state": "STRUCTURE_REFUSED_AT_HISTORICAL_TERMINAL_BOUNDARY",
+      "required_link_records_examined_before_stop": 11,
+      "diagnostics": [
+        {
+          "station": "NLIB00USA",
+          "gps_epoch": "2026-08-03T10:06:00.000000Z",
+          "satellite": "G21",
+          "required_observable": "C2W",
+          "header_declared_index": 5,
+          "reconstructed_field_count": 3,
+          "source_line_class": "RINEX_3_OBSERVATION_DATA_RECORD",
+          "continuation_class": "SINGLE_LINE_VARIABLE_LENGTH_RECORD",
+          "typed_structural_state": "TRAILING_FIELD_OMITTED"
+        }
+      ]
+    }
+  ],
+  "attribution": {
+    "historical_reason_preserved": "TRUNCATED_REQUIRED_OBSERVATION_RECORD",
+    "exact_topology": "NLIB_G21_C2W_DECLARED_INDEX_5_AFTER_3_RECONSTRUCTED_FIELDS",
+    "rinex_semantic_class": "EMPTY_TRAILING_FIELDS_MAY_BE_OMITTED",
+    "file_corruption_established": false,
+    "continuation_required": false,
+    "physical_observable_available": false,
+    "downstream_clauses": "NOT_EVALUATED"
+  },
+  "outcome": "GNSS_FAILURE_TOPOLOGY_EXPLAINED"
+}
