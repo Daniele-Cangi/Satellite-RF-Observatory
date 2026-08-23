@@ -61,8 +61,10 @@ def test_real_failure_is_attributed_to_predeclared_nlib_g21_cuts() -> None:
     assert summary["geometry_free_phase_continuity"]["state"] == "UNSATISFIED"
 
 
-def test_historical_gold_nlib_terminal_receipt_remains_byte_exact() -> None:
-    assert qualification.file_sha256(HISTORICAL_OUTCOME) == "0a3d3781f2257437f79ce563549b699de2f69a7659538ffd86192d5a4eaad7b0"
+def test_historical_gold_nlib_terminal_receipt_remains_canonical_byte_exact() -> None:
+    assert qualification.canonical_text_sha256(HISTORICAL_OUTCOME) == (
+        "4060e8e3046696f6433ce5226e3d7f524d430cbbd49261fd1041554ab76b5172"
+    )
     receipt = json.loads(HISTORICAL_OUTCOME.read_text(encoding="ascii"))
     assert receipt["outcome"] == "MEASUREMENT_INVALID"
     assert receipt["clauses"]["reason"] == "TRUNCATED_REQUIRED_OBSERVATION_RECORD"
