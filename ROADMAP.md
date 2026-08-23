@@ -198,10 +198,14 @@ envelope after all 114 frozen windows and analytic quantization. An offline
 transfer audit then froze relative same-path health clauses without inventing
 an absolute SNR threshold. Under deliberately pessimistic path-to-Doppler
 projection, DOY 219--221 each retain room for approximately `64.93--64.95 m`
-of per-link broadcast-orbit path error. Because the parent receipt did not
-retain an outcome-independent G15/G22 value for that term, the primary remains
-unfrozen and unopened. The next step is bounded navigation/model provenance,
-not observation access and not a new gate.
+of per-link broadcast-orbit path error. The bounded navigation-only follow-up
+now resolves that term without opening an observation. Exact G15/G22 records
+across all frozen grids are healthy, within their declared 4 h fit interval and
+no older than 7,186 s. The legacy integrity-scaled LNAV URA interval is `10.608
+m/link` for DOY 219 and `15.028 m/link` for DOY 220/221, below every
+candidate-specific limit and leaving more than 4.0 kHz after the full pairwise
+guard. The next step is an exact DOY 219 prospective evaluator and separate
+observation authority; neither is frozen by this model-only result.
 
 ## Anti-drift stop
 

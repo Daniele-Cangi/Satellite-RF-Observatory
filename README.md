@@ -177,11 +177,18 @@ conservative development-path envelope including RINEX quantization is
 persisted. The subsequent offline transfer audit retained the same-path
 witness rules and found that the three geometries can tolerate roughly
 `64.93--64.95 m` of independently bounded broadcast-orbit path error per link.
-That actual G15/G22 bound is absent from the frozen receipts, so the primary is
-still blocked rather than treating the illustrative 4 m case as fact. See
+The subsequent navigation-only model-bound audit selected the exact healthy
+G15/G22 records on all three frozen grids. Using 4.42 times the published upper
+edge of each LNAV URA category gives `10.608 m/link` on DOY 219 and `15.028
+m/link` on DOY 220/221. All are below the approximately `64.93--64.95 m`
+limits, leaving `4416.688 Hz`, `4056.552 Hz` and `4055.503 Hz` respectively.
+This is a declared modeled interval, not a mathematical worst-case, and no
+observation was opened. See
 [`GNSS_NATIVE_DOPPLER_DEVELOPMENT_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_DEVELOPMENT_REPORT.md)
 and
-[`GNSS_NATIVE_DOPPLER_TRANSFER_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_TRANSFER_REPORT.md).
+[`GNSS_NATIVE_DOPPLER_TRANSFER_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_TRANSFER_REPORT.md),
+then
+[`GNSS_NATIVE_DOPPLER_MODEL_BOUND_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_MODEL_BOUND_REPORT.md).
 
 ## Preserved Gate F2.5 experimental history
 
