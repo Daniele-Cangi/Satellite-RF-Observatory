@@ -57,6 +57,16 @@ def test_subthreshold_epoch_is_not_bridged() -> None:
     assert minimum == pytest.approx(30.0)
 
 
+def test_missing_broadcast_epoch_is_a_gap_not_a_whole_day_error() -> None:
+    values = np.full(pair.GUARDED_BLOCK_EPOCHS * 2, 30.0)
+    values[pair.GUARDED_BLOCK_EPOCHS - 1] = np.nan
+
+    start, minimum = pair.select_guarded_block(values)
+
+    assert start == pair.GUARDED_BLOCK_EPOCHS
+    assert minimum == pytest.approx(30.0)
+
+
 def test_prefix_affine_uses_exact_frozen_partition() -> None:
     elapsed = np.arange(pair.FEATURE_EPOCHS, dtype=np.float64) * 30.0
     curve = 3.0 + 0.01 * elapsed + 3e-7 * elapsed**2

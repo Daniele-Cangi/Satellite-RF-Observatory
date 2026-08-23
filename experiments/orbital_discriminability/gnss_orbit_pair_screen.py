@@ -178,8 +178,9 @@ def select_guarded_block(
     four_link_minimum_deg: Sequence[float],
 ) -> tuple[int, float] | None:
     values = np.asarray(four_link_minimum_deg, dtype=np.float64)
-    if values.ndim != 1 or not np.all(np.isfinite(values)):
+    if values.ndim != 1:
         raise OrbitPairScreenError("invalid joint-elevation series")
+    values = np.where(np.isfinite(values), values, -np.inf)
     best: tuple[float, int] | None = None
     for segment_start, segment_stop in base.contiguous_true_segments(
         values >= base.MINIMUM_ELEVATION_DEG
@@ -266,15 +267,22 @@ def screen_day(path: Path, authority: NavigationAuthority) -> dict[str, object]:
     station_ecef = {
         station.station_id: base.station_to_ecef(station) for station in base.STATIONS
     }
-    positions = {
-        satellite: np.asarray(
-            [
-                base.broadcast_ecef(base.select_ephemeris(records[satellite], epoch), epoch)
-                for epoch in epochs
-            ]
-        )
-        for satellite in satellites
-    }
+    positions = {}
+    unavailable_epochs = {}
+    for satellite in satellites:
+        rows = []
+        unavailable = 0
+        for epoch in epochs:
+            try:
+                row = base.broadcast_ecef(
+                    base.select_ephemeris(records[satellite], epoch), epoch
+                )
+            except base.GnssDoubleDifferenceError:
+                row = np.full(3, np.nan, dtype=np.float64)
+                unavailable += 1
+            rows.append(row)
+        positions[satellite] = np.asarray(rows)
+        unavailable_epochs[satellite] = unavailable
     fractional = {
         (station.station_id, satellite): base.fractional_doppler(
             positions[satellite], station_ecef[station.station_id], base.GRID_STEP_S
@@ -294,6 +302,12 @@ def screen_day(path: Path, authority: NavigationAuthority) -> dict[str, object]:
     rejected_guard = 0
     rejected_null = 0
     for target, reference in combinations(satellites, 2):
+        four_link_finite = (
+            np.isfinite(fractional[(left, target)])
+            & np.isfinite(fractional[(right, target)])
+            & np.isfinite(fractional[(left, reference)])
+            & np.isfinite(fractional[(right, reference)])
+        )
         four_link_minimum = np.minimum.reduce(
             (
                 elevation[(left, target)],
@@ -302,6 +316,7 @@ def screen_day(path: Path, authority: NavigationAuthority) -> dict[str, object]:
                 elevation[(right, reference)],
             )
         )
+        four_link_minimum = np.where(four_link_finite, four_link_minimum, -np.inf)
         selected = select_guarded_block(four_link_minimum)
         if selected is None:
             rejected_guard += 1
@@ -359,6 +374,7 @@ def screen_day(path: Path, authority: NavigationAuthority) -> dict[str, object]:
     return {
         "doy": authority.doy,
         "healthy_satellites": list(satellites),
+        "broadcast_unavailable_epochs_by_satellite": unavailable_epochs,
         "unordered_pairs_evaluated": len(satellites) * (len(satellites) - 1) // 2,
         "rejected_no_guarded_block": rejected_guard,
         "rejected_no_jointly_visible_wrong_orbit": rejected_null,
