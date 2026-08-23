@@ -169,6 +169,20 @@ instrumental envelope. This authorizes only the future claim
 `ORBITAL_MODEL_PREDICTIVELY_PREFERRED`, never specific identity. See
 [`GNSS_NATIVE_DOPPLER_ORBITALITY_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_ORBITALITY_REPORT.md).
 
+Development-only numeric access to the exact DOY 214 KIRU/MAT1 products then
+froze a model-blind `D1C/D2W` transform. Across all 114 possible windows, the
+maximum held-out observed-minus-broadcast residual was `1.440016 Hz`; the
+conservative development-path envelope including RINEX quantization is
+`1.702714 Hz`. No future observation was opened and no measurement series was
+persisted. The subsequent offline transfer audit retained the same-path
+witness rules and found that the three geometries can tolerate roughly
+`64.93--64.95 m` of independently bounded broadcast-orbit path error per link.
+That actual G15/G22 bound is absent from the frozen receipts, so the primary is
+still blocked rather than treating the illustrative 4 m case as fact. See
+[`GNSS_NATIVE_DOPPLER_DEVELOPMENT_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_DEVELOPMENT_REPORT.md)
+and
+[`GNSS_NATIVE_DOPPLER_TRANSFER_REPORT.md`](experiments/orbital_discriminability/GNSS_NATIVE_DOPPLER_TRANSFER_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

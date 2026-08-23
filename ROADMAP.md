@@ -192,6 +192,17 @@ the native-Doppler measurement envelope is still unknown. The claim ceiling is
 is available. The next step requires separate authority for numeric DOY 214
 development only, before any primary or reserve observation access.
 
+That development authority produced one bounded DOY 214 outcome. The complete
+493-epoch G20/G22 path yielded a `1.702714 Hz` conservative development
+envelope after all 114 frozen windows and analytic quantization. An offline
+transfer audit then froze relative same-path health clauses without inventing
+an absolute SNR threshold. Under deliberately pessimistic path-to-Doppler
+projection, DOY 219--221 each retain room for approximately `64.93--64.95 m`
+of per-link broadcast-orbit path error. Because the parent receipt did not
+retain an outcome-independent G15/G22 value for that term, the primary remains
+unfrozen and unopened. The next step is bounded navigation/model provenance,
+not observation access and not a new gate.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
