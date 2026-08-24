@@ -12,6 +12,7 @@ from experiments.orbital_discriminability import (
 
 ROOT = Path(__file__).resolve().parents[1]
 STRUCTURAL_OUTCOME = ROOT / sensitivity.STRUCTURAL_OUTCOME_NAME
+RECEIPT = ROOT / "GNSS_PHASE_DURATION_SENSITIVITY_RECEIPT.json"
 
 
 def synthetic_rows(
@@ -109,3 +110,37 @@ def test_strict_json_rejects_nonfinite_numbers() -> None:
     )
     with pytest.raises(ValueError):
         sensitivity.strict_json({"bad": float("nan")})
+
+
+def test_frozen_receipt_records_shorter_physical_availability_only() -> None:
+    raw = RECEIPT.read_bytes()
+    receipt = json.loads(raw)
+
+    assert b"NaN" not in raw and b"Infinity" not in raw
+    assert receipt["outcome"] == sensitivity.OUTCOME_AVAILABLE
+    assert receipt["source_commit"] == (
+        "6da19a8404db1313e10c0bfc3209737d78013cd7"
+    )
+    assert receipt["source_sha256"] == sensitivity.source_sha256()
+    assert receipt["shortest_available_heldout_epochs"] == 60
+    assert receipt["shortest_available_heldout_budget_s"] == 1800.0
+    assert all(
+        row["positive_margin_date_count"] == 4
+        for row in receipt["duration_summaries"]
+    )
+    shortest = receipt["diagnostic_date_ranking"]
+    assert [row["doy"] for row in shortest] == [220, 219, 218, 217]
+    assert shortest[0]["guarded_block_minimum_elevation_deg"] == pytest.approx(
+        39.46672351862724
+    )
+    assert min(row["remaining_physical_margin_m"] for row in shortest) == (
+        pytest.approx(6473.198142081582)
+    )
+    original = receipt["duration_summaries"][-1]
+    assert original["heldout_epochs"] == 307
+    assert original["maximum_guard_deg"] == pytest.approx(15.616482659433581)
+    assert all(value == 0 for value in receipt["observation_access"].values())
+    assert all(value is None for value in receipt["candidate_roles"].values())
+    assert receipt["roles_assigned"] is False
+    assert receipt["prospective_plan_frozen"] is False
+    assert receipt["structural_closure"]["numerical_inputs_imported"] == []

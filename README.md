@@ -198,6 +198,16 @@ the predeclared coverage/boundary rule. No phase scalar was parsed and the DOY
 220 primary remains sealed. See
 [`GNSS_PHASE_STRUCTURE_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_STRUCTURE_REPORT.md).
 
+The subsequent offline change-of-abstraction calculation did not reopen that
+artifact. Using only exact-hash broadcast navigation on four other unopened
+dates, it found `PHASE_SHORTER_WINDOW_PHYSICALLY_AVAILABLE`: all four dates
+retain positive complete phase margin with a 60-epoch (30-minute) held-out
+suffix and a 139-epoch raw interval. The worst remaining margin is
+6,473.198 m, while the maximum four-link elevation guard rises from 15.616 deg
+at the old duration to 39.467 deg. No RINEX product was discovered or opened,
+and no new roles were assigned. See
+[`GNSS_PHASE_DURATION_SENSITIVITY_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_DURATION_SENSITIVITY_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

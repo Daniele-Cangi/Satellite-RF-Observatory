@@ -224,8 +224,21 @@ frozen 386-epoch window; the longest joint segment was 282 epochs and the
 same-path code clause also failed. Geometry-free health, measurement admission
 and orbital scoring remain `NOT_EVALUATED`; DOY 220 remains sealed. Do not
 shift the window or substitute a qualification artifact after this result.
-The next decision must be a change-of-abstraction review of geometric
-visibility versus actual continuous-phase capability, not an automatic retry.
+
+That change-of-abstraction review is now complete without reusing DOY 216 gap
+locations. The result is `PHASE_SHORTER_WINDOW_PHYSICALLY_AVAILABLE`. On the
+predeclared duration grid, all four unopened DOY 217--220 geometries retain a
+positive complete margin at the shortest 60-epoch held-out suffix. The
+observation-sized raw interval is 139 epochs (69 minutes elapsed); its worst
+margin is 6,473.198 m and its best four-link guard is 39.467 degrees, versus
+15.616 degrees at the old 307-epoch suffix. This is model-only physical
+availability, not a repaired qualification or a frozen primary.
+
+The next decision may assign two distinct unopened dates to qualification and
+primary under this smaller topology. Before any observation access it must
+freeze those roles, exact 139-epoch windows and witness rules. If independent
+qualification does not prove complete L1C/L2W/LLI structure plus the required
+health and same-path witnesses, stop; do not adapt the primary window.
 
 ## Anti-drift stop
 
