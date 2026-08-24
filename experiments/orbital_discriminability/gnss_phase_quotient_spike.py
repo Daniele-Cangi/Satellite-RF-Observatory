@@ -140,8 +140,9 @@ def quantization_term(projection_gain: float) -> dict[str, object]:
 def timing_term(
     curve,
     feature: slice,
+    target: str = TARGET,
 ) -> dict[str, object]:
-    nominal = curve(TARGET, 0.0, 0.0)[feature]
+    nominal = curve(target, 0.0, 0.0)[feature]
     maximum = 0.0
     controlling = None
     for left_offset in (-old.MAX_STATION_EPOCH_ERROR_S, old.MAX_STATION_EPOCH_ERROR_S):
@@ -149,7 +150,7 @@ def timing_term(
             -old.MAX_STATION_EPOCH_ERROR_S,
             old.MAX_STATION_EPOCH_ERROR_S,
         ):
-            shifted = curve(TARGET, left_offset, right_offset)[feature]
+            shifted = curve(target, left_offset, right_offset)[feature]
             bound = phase_prefix_metrics(shifted - nominal)[
                 "heldout_peak_to_peak_m"
             ]
@@ -173,6 +174,8 @@ def timing_term(
 def troposphere_term(
     elevation: Mapping[tuple[str, str], np.ndarray],
     feature: slice,
+    target: str = TARGET,
+    reference: str = REFERENCE,
 ) -> dict[str, object]:
     left, right = (station.station_id for station in base.STATIONS)
 
@@ -182,8 +185,8 @@ def troposphere_term(
             np.sin(radians), sin(np.radians(base.MINIMUM_ELEVATION_DEG))
         )
 
-    left_shape = mapping(left, TARGET) - mapping(left, REFERENCE)
-    right_shape = mapping(right, TARGET) - mapping(right, REFERENCE)
+    left_shape = mapping(left, target) - mapping(left, reference)
+    right_shape = mapping(right, target) - mapping(right, reference)
     maximum = 0.0
     controlling = None
     for left_ztd in (0.0, old.MAX_ZENITH_TROPOSPHERE_M):
