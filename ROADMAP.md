@@ -217,6 +217,16 @@ review may authorize at most bounded materialization, hashing, header
 admission and a full value-blind scan of the two DOY 216 locators. It may not
 touch DOY 220 or produce an orbital score.
 
+That single structural run is now closed as
+`GNSS_PHASE_STRUCTURE_REJECTED`. Both exact DOY 216 artifacts and headers were
+available, but actual NLIB G22/G30 carrier-phase continuity did not cover the
+frozen 386-epoch window; the longest joint segment was 282 epochs and the
+same-path code clause also failed. Geometry-free health, measurement admission
+and orbital scoring remain `NOT_EVALUATED`; DOY 220 remains sealed. Do not
+shift the window or substitute a qualification artifact after this result.
+The next decision must be a change-of-abstraction review of geometric
+visibility versus actual continuous-phase capability, not an automatic retry.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

@@ -1,0 +1,56 @@
+{
+  "artifacts": [
+    {
+      "attempts": 1,
+      "complete_file_bytes": 2197783,
+      "complete_file_sha256": "286babf58a11d8a87c8b72a07f7fd1de03c8cd0fa844afa8d571a25ddf2eeb21",
+      "hash_before_decompression": true,
+      "product": "GOLD00USA_R_20262160000_01D_30S_MO.crx.gz",
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/216/GOLD00USA_R_20262160000_01D_30S_MO.crx.gz"
+    },
+    {
+      "attempts": 1,
+      "complete_file_bytes": 2551870,
+      "complete_file_sha256": "a0ae412ed32b31e31aa879cebab43a8c1c9329cc106eac5a44631a88bdf347c8",
+      "hash_before_decompression": true,
+      "product": "NLIB00USA_R_20262160000_01D_30S_MO.crx.gz",
+      "station": "NLIB00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/216/NLIB00USA_R_20262160000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "clause_states": {
+    "geometry_free_phase_health": "NOT_EVALUATED",
+    "header_and_field_topology": "UNSATISFIED",
+    "lli_and_epoch_continuity": "UNSATISFIED",
+    "measurement_admission": "NOT_EVALUATED",
+    "orbital_score": "NOT_EVALUATED",
+    "same_path_code_witness": "UNSATISFIED"
+  },
+  "contract_manifest_sha256": "76c42055467c9b63e05911dc21611b6e26b0d9206f808b0c74b2f9c1696bcc86",
+  "coverage": {
+    "name": "GNSS_PHASE_STRUCTURE_COVERAGE.jsonl",
+    "rows": 9264,
+    "sha256": "193a1999b290341145883d425ec2114ebfd6895910a10ce6053ca5174354fb4b"
+  },
+  "manifest_sha256": "dd4ee054988541696ae8c7f14b82640262ab4531750e0e64ce03ba342e1d071c",
+  "outcome": "GNSS_PHASE_STRUCTURE_REJECTED",
+  "persistence": {
+    "compressed_artifact_bytes": 0,
+    "decoded_observation_bytes": 0,
+    "observation_values": 0,
+    "structural_receipts_only": true
+  },
+  "primary_doy220_access": {
+    "headers": 0,
+    "payload_bytes": 0,
+    "values": 0
+  },
+  "schema": "gnss-phase-structure-outcome-v1",
+  "source_commit": "a5033c9ce84c483fea9ebd43c75918a3dec9cf32",
+  "source_sha256": "71516003f8b455648b4c807e855dd54ccbfb03bb3c9fde6c48a4fdbff79b6a8b",
+  "summary": {
+    "name": "GNSS_PHASE_STRUCTURE_SUMMARY.json",
+    "sha256": "4e233e41c17bbddf6c8b57b492bae1cde23a9f5a1c362e18746e4ba0d3f3c874"
+  }
+}

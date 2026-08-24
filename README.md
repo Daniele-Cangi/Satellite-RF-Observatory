@@ -190,6 +190,14 @@ geometry-free physical phase health. A structural pass can authorize only a
 later health review, never measurement admission or an orbital score. See
 [`GNSS_PHASE_STRUCTURAL_CONTRACT.md`](experiments/orbital_discriminability/GNSS_PHASE_STRUCTURAL_CONTRACT.md).
 
+The authorized DOY 216 value-blind qualification has now returned
+`GNSS_PHASE_STRUCTURE_REJECTED`. GOLD preserved the complete G22/G30 phase and
+code topology, but NLIB did not: the longest four-link joint segment contains
+282 rather than the frozen 386 epochs, and three NLIB code-witness links fail
+the predeclared coverage/boundary rule. No phase scalar was parsed and the DOY
+220 primary remains sealed. See
+[`GNSS_PHASE_STRUCTURE_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_STRUCTURE_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
