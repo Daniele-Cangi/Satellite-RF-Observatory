@@ -208,6 +208,15 @@ independent artifact. The recommended unexecuted roles are DOY 216 for
 qualification and DOY 220 for the later primary. No observation product has
 yet been discovered or opened.
 
+The value-blind boundary for those roles is now frozen in
+`GNSS_PHASE_STRUCTURAL_CONTRACT.md`. DOY 216 uses the exact 04:47:00--07:59:30
+GPS raw window; DOY 220 remains sealed at 04:30:30--07:43:00 GPS. Structural
+presence, LLI and epoch-grid continuity are separable from geometry-free phase
+health, which requires phase scalars and remains `NOT_EVALUATED`. The next
+review may authorize at most bounded materialization, hashing, header
+admission and a full value-blind scan of the two DOY 216 locators. It may not
+touch DOY 220 or produce an orbital score.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

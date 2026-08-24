@@ -181,6 +181,15 @@ the remaining margin is 804,968.101 m. This is
 discovery or access. See
 [`GNSS_PHASE_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_GEOMETRY_SCREEN_REPORT.md).
 
+The following structural-only contract is now frozen before any observation
+product discovery. It predeclares G22/G30 DOY 216 as the independent
+qualification geometry and keeps the DOY 220 primary candidate sealed. The
+contract can test RINEX field topology, LLI and exact epoch continuity without
+retaining values, but explicitly refuses to equate those facts with
+geometry-free physical phase health. A structural pass can authorize only a
+later health review, never measurement admission or an orbital score. See
+[`GNSS_PHASE_STRUCTURAL_CONTRACT.md`](experiments/orbital_discriminability/GNSS_PHASE_STRUCTURAL_CONTRACT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
