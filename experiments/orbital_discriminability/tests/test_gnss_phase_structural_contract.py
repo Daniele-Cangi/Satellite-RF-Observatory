@@ -100,6 +100,17 @@ def test_only_doy216_structure_can_be_authorized_next() -> None:
     assert boundary["orbital_score"] == "FORBIDDEN"
 
 
+def test_materialization_failure_cannot_become_structural_rejection() -> None:
+    frozen = contract.contract()
+
+    assert "GNSS_PHASE_ARTIFACT_MATERIALIZATION_FAILED" in frozen["outcomes"]
+    meaning = frozen["outcome_semantics"][
+        "GNSS_PHASE_ARTIFACT_MATERIALIZATION_FAILED"
+    ]
+    assert "NOT_EVALUATED" in meaning
+    assert "REJECTED" not in meaning
+
+
 def test_strict_contract_is_finite_and_documented() -> None:
     encoded = contract.strict_json(contract.contract())
     report = REPORT.read_text(encoding="utf-8")

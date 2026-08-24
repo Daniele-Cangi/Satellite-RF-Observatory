@@ -56,6 +56,7 @@ ALLOWED_OUTCOMES: Final = (
     "GNSS_PHASE_STRUCTURE_READY_FOR_HEALTH_REVIEW",
     "GNSS_PHASE_STRUCTURE_REJECTED",
     "GNSS_PHASE_STRUCTURE_DESCRIPTION_ERROR",
+    "GNSS_PHASE_ARTIFACT_MATERIALIZATION_FAILED",
 )
 
 
@@ -203,6 +204,7 @@ def contract() -> dict[str, object]:
                     "MISSING_BLANK_OR_OMITTED_CORE_PHASE",
                     "NONZERO_OR_INVALID_LLI",
                     "MISSING_OR_OFF_GRID_EPOCH",
+                    "EPOCH_FLAG_NOT_ZERO_INCLUDING_POWER_FAILURE",
                     "UNSUPPORTED_CONTINUATION",
                     "INVALID_RECORD",
                 ],
@@ -247,6 +249,10 @@ def contract() -> dict[str, object]:
             "GNSS_PHASE_STRUCTURE_DESCRIPTION_ERROR": (
                 "RECEIPT_OR_SOFTWARE_DESCRIPTION_FAILED_PHYSICAL_AND_"
                 "STRUCTURAL_DECISIONS_REMAIN_NOT_EVALUATED"
+            ),
+            "GNSS_PHASE_ARTIFACT_MATERIALIZATION_FAILED": (
+                "ONE_OR_BOTH_EXACT_LOCATORS_COULD_NOT_BE_COMPLETELY_"
+                "MATERIALIZED_STRUCTURE_AND_PHYSICAL_CLAUSES_REMAIN_NOT_EVALUATED"
             ),
         },
         "next_authority_boundary": {

@@ -7,7 +7,7 @@ RINEX observation product. It freezes the value-blind boundary that must be
 reviewed before the independent DOY 216 qualification pair can be touched.
 The machine-readable contract is implemented by
 `gnss_phase_structural_contract.py`; its canonical manifest SHA-256 is
-`d2b3beecc1846b9fe52eb16a857ae0f0745c9a2bcbcc1c13c6abc5f5ef68e3dc`.
+`76c42055467c9b63e05911dc21611b6e26b0d9206f808b0c74b2f9c1696bcc86`.
 
 ## Frozen roles and geometry
 
@@ -37,7 +37,8 @@ materialization, and no number has been invented here.
   links.
 - LLI on both phase fields and the exact 30-second epoch grid are structural
   continuity witnesses. Missing core, nonzero/invalid LLI, an off-grid epoch,
-  unsupported continuation or invalid record breaks the segment.
+  any nonzero epoch flag (including the RINEX power-failure flag), unsupported
+  continuation or invalid record breaks the segment.
 - No interpolation or gap bridging is permitted. The only structurally
   admissible joint segment is the entire predeclared 386-epoch window.
 - `C1C` and `C2W` are same-path code witnesses. They need not be present at
@@ -83,10 +84,14 @@ the qualification artifact.
 GNSS_PHASE_STRUCTURE_READY_FOR_HEALTH_REVIEW
 GNSS_PHASE_STRUCTURE_REJECTED
 GNSS_PHASE_STRUCTURE_DESCRIPTION_ERROR
+GNSS_PHASE_ARTIFACT_MATERIALIZATION_FAILED
 ```
 
 The description-error outcome leaves every physical and structural decision
 `NOT_EVALUATED`; it is not a rejection.
+Likewise, inability to materialize either complete artifact is
+`GNSS_PHASE_ARTIFACT_MATERIALIZATION_FAILED`: structure and physical clauses
+remain `NOT_EVALUATED`.
 
 ## Exact next authority, not yet granted
 
