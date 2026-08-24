@@ -171,6 +171,16 @@ phase-coordinate geometry set, screened by full remaining margin before any
 observation-product discovery. See
 [`GNSS_PHASE_QUOTIENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_QUOTIENT_SPIKE_REPORT.md).
 
+The bounded phase-coordinate screen is now complete. After excluding G14 and
+G17 from candidate roles and the closed G11/G21 pair, all five remaining
+pair/date windows are G22/G30 and have positive physical margin. The distinct-
+pair rule retains DOY 220, 04:30:30--07:43:00 GPS: G14 is the controlling
+wrong-orbit null at 824,736.025 m, the pairwise envelope is 19,767.924 m and
+the remaining margin is 804,968.101 m. This is
+`GNSS_PHASE_GEOMETRY_SELECTED`, still with zero observation-product
+discovery or access. See
+[`GNSS_PHASE_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_GEOMETRY_SCREEN_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

@@ -194,6 +194,20 @@ margin. It must exclude G14/G17, keep code/LLI/geometry-free witnesses separate
 from the score, and stop before product discovery if no geometry is positive.
 No receiver catalog, new gate or change to G0/G1 is required.
 
+That bounded screen has now selected G22/G30 on DOY 220, raw window
+04:30:30--07:43:00 GPS. G14 remains the controlling physical wrong-orbit null
+at 824,736.025 m despite being excluded from candidate roles. The conservative
+pairwise envelope is 19,767.924 m, leaving 804,968.101 m. All five admitted
+dates of the single surviving distinct pair were positive; no alternate pair
+was manufactured merely to fill a three-row shortlist.
+
+The result is `GNSS_PHASE_GEOMETRY_SELECTED`, not measurement admission. The
+next blocker is structural-only qualification of L1C/L2W, LLI,
+geometry-free-phase continuity and predeclared C1C/C2W witness cadence on one
+independent artifact. The recommended unexecuted roles are DOY 216 for
+qualification and DOY 220 for the later primary. No observation product has
+yet been discovered or opened.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

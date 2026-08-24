@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -10,6 +11,7 @@ from experiments.orbital_discriminability import gnss_phase_geometry_screen as s
 
 ROOT = Path(__file__).resolve().parents[1]
 PHASE_RECEIPT = ROOT / screen.PHASE_SPIKE_RECEIPT_NAME
+SCREEN_RECEIPT = ROOT / "GNSS_PHASE_GEOMETRY_SCREEN_RECEIPT.json"
 
 
 def _candidate(
@@ -118,3 +120,35 @@ def test_manifest_and_future_receipts_are_strict_json() -> None:
     assert json.loads(encoded) == screen.manifest()
     with pytest.raises(ValueError):
         screen.strict_json({"bad": float("nan")})
+
+
+def test_frozen_screen_selects_one_new_geometry_without_observation_access() -> None:
+    canonical = SCREEN_RECEIPT.read_bytes().replace(b"\r\n", b"\n")
+    receipt = json.loads(canonical)
+
+    assert sha256(canonical).hexdigest() == (
+        "228359ad8e65dfe0191562ca601c6f47dad44ab36bab07736c63e8f9188f293c"
+    )
+    assert receipt["manifest_sha256"] == (
+        "c174204a82a14b8c0490a96c79f0da0ef233c817408e16ef5d3281c2a850f7e2"
+    )
+    assert receipt["outcome"] == screen.OUTCOME_SELECTED
+    assert receipt["compiled_candidate_count"] == 5
+    assert receipt["positive_margin_candidate_count"] == 5
+    assert len(receipt["shortlist"]) == 1
+    selected = receipt["selected_geometry"]
+    assert (selected["target"], selected["reference"]) == ("G22", "G30")
+    assert selected["doy"] == 220
+    assert selected["wrong_orbit_null"]["controlling_alternative"] == "G14"
+    assert selected["controlling_heldout_separation_m"] == pytest.approx(
+        824_736.0253644681
+    )
+    assert selected["pairwise_comparison_envelope_m"] == pytest.approx(
+        19_767.924052498845
+    )
+    assert selected["remaining_physical_margin_m"] == pytest.approx(
+        804_968.1013119692
+    )
+    assert set(receipt["observation_access"].values()) == {0}
+    assert receipt["prospective_plan_frozen"] is False
+    assert receipt["measurement_authorized"] is False
