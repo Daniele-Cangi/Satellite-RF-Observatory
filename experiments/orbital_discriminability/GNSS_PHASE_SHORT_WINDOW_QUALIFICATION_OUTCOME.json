@@ -1,0 +1,72 @@
+{
+  "artifacts": [
+    {
+      "attempts": 1,
+      "complete_file_bytes": 2170051,
+      "complete_file_sha256": "ef2c80b96c5bbe7fbb83fb90abaa6203a9ff8d557a9aa3a39db5930188487573",
+      "hash_before_any_decode": true,
+      "product": "GOLD00USA_R_20262170000_01D_30S_MO.crx.gz",
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/217/GOLD00USA_R_20262170000_01D_30S_MO.crx.gz"
+    },
+    {
+      "attempts": 1,
+      "complete_file_bytes": 2500618,
+      "complete_file_sha256": "582199ddeccd57fdde76f30aed9bb4e9489f4248563f3b7f217714fdd4dde473",
+      "hash_before_any_decode": true,
+      "product": "NLIB00USA_R_20262170000_01D_30S_MO.crx.gz",
+      "station": "NLIB00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/217/NLIB00USA_R_20262170000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "clause_states": {
+    "artifact_materialization_and_hash": "SATISFIED",
+    "core_phase_and_lli": "SATISFIED",
+    "geometry_free_phase_health": "SATISFIED",
+    "header_configuration_and_window": "SATISFIED",
+    "primary_orbital_comparison": "NOT_EVALUATED",
+    "same_path_code_witness": "SATISFIED"
+  },
+  "coverage": {
+    "name": "GNSS_PHASE_SHORT_WINDOW_QUALIFICATION_COVERAGE.jsonl",
+    "rows": 3336,
+    "sha256": "a1bcf2b0117caaa08694631bcacc6f3a4ea044f7319f7e1b90b79784ce8e3a5e"
+  },
+  "duration_receipt_sha256": "a81be2ddfb8d9455915118c74281f93dbf4919da3c140d58e18ebc4ccb4cee49",
+  "manifest_sha256": "c4fda251a845377c3e892d59a5f5a29743cc64f09f0ca882750da98fca726ca2",
+  "next_authority": "PRIMARY_SEAL_REVIEW_ONLY",
+  "observation_access": {
+    "code_or_snr_scalars_parsed": 0,
+    "compressed_bytes_in_ram": 4670669,
+    "decoded_rinex_bytes_in_ram": 33654336,
+    "phase_scalars_parsed_in_ram": 1112,
+    "phase_scalars_persisted": 0,
+    "qualification_headers": 2,
+    "qualification_products": 2
+  },
+  "orbital_prediction_access": 0,
+  "orbital_scores_produced": 0,
+  "outcome": "GNSS_SHORT_WINDOW_QUALIFICATION_PASSED",
+  "persistence": {
+    "compressed_rinex_bytes": 0,
+    "decoded_rinex_bytes": 0,
+    "observation_values": 0,
+    "structural_and_aggregate_health_receipts_only": true
+  },
+  "primary_doy220_access": {
+    "headers": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "proof_plan_manifest_sha256": "0068385ef4aaf1014f0211efaa47da52da8c5fb18cf51377f4812434fd2b5f3c",
+  "qualification_version": "g22-g30-phase-short-window-doy217-v1",
+  "schema": "gnss-phase-short-window-qualification-outcome-v1",
+  "source_commit": "d22695e513734c41ebb909b45c3846b37069940a",
+  "source_sha256": "f7ccffa52b1a2497ac6f4a073b00d7966f2ee4e4bec38ff2164629b138a727e8",
+  "substitute_date_authorized": false,
+  "summary": {
+    "name": "GNSS_PHASE_SHORT_WINDOW_QUALIFICATION_SUMMARY.json",
+    "sha256": "64a453b2117ad4a156024f9297d5e6457da530d5b2fe6001d232988776bf748b"
+  }
+}

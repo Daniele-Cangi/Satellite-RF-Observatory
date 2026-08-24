@@ -248,6 +248,19 @@ outcome; DOY 220 remains forbidden until a separate review. If complete
 L1C/L2W/LLI structure, geometry-free health or required C1C/C2W witnesses do
 not pass, close this role pair rather than move the window.
 
+That single qualification is now complete with
+`GNSS_SHORT_WINDOW_QUALIFICATION_PASSED`. Both product hashes were captured
+before decoding. The fixed 139-epoch interval is complete on all four phase
+links, every relevant structural field is present, all C1C/C2W witnesses have
+100% coverage, and the maximum geometry-free second difference is
+0.019274 m against the 0.095147 m limit. The qualification used no orbit or
+null model and persisted no observation values; DOY 220 remains sealed.
+
+The next bounded work is an offline primary decoder/scorer seal that reuses
+the already frozen coordinate, prefix, nulls and physical decision guard. It
+must be committed before primary access. Do not reopen qualification, learn a
+threshold from it, add a reserve or touch DOY 220 during that seal.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

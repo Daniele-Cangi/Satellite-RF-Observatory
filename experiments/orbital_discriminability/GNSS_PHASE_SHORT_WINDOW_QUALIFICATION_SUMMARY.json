@@ -1,0 +1,338 @@
+{
+  "code_or_snr_scalars_parsed": 0,
+  "coverage_rows": 3336,
+  "full_joint_window": true,
+  "geometry_free_phase_health": {
+    "links": [
+      {
+        "admitted": true,
+        "evaluated_second_differences": 137,
+        "maximum_absolute_second_difference_m": 0.019273575395345688,
+        "satellite": "G22",
+        "station": "GOLD00USA",
+        "violation_count": 0
+      },
+      {
+        "admitted": true,
+        "evaluated_second_differences": 137,
+        "maximum_absolute_second_difference_m": 0.0104883573949337,
+        "satellite": "G30",
+        "station": "GOLD00USA",
+        "violation_count": 0
+      },
+      {
+        "admitted": true,
+        "evaluated_second_differences": 137,
+        "maximum_absolute_second_difference_m": 0.012220028787851334,
+        "satellite": "G22",
+        "station": "NLIB00USA",
+        "violation_count": 0
+      },
+      {
+        "admitted": true,
+        "evaluated_second_differences": 137,
+        "maximum_absolute_second_difference_m": 0.010022133588790894,
+        "satellite": "G30",
+        "station": "NLIB00USA",
+        "violation_count": 0
+      }
+    ],
+    "orbital_prediction_used": false,
+    "phase_values_persisted": 0,
+    "state": "SATISFIED",
+    "threshold_m": 0.09514683639918244
+  },
+  "headers": [
+    {
+      "antenna_type": "AOAD/M_T NONE",
+      "full_frozen_window_covered": true,
+      "gps_observables": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "L1W",
+        "S1W",
+        "C2X",
+        "L2X",
+        "S2X",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C5X",
+        "L5X",
+        "S5X",
+        "C1X",
+        "L1X",
+        "S1X"
+      ],
+      "interval_s": 30.0,
+      "marker_name": "GOLD",
+      "receiver_clock_offset_applied": 0,
+      "receiver_type": "JAVAD TRE_G3TH DELTA",
+      "receiver_version": "4.2.03",
+      "station": "GOLD00USA",
+      "time_of_first_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-05T00:00:00.000000Z"
+      },
+      "time_of_last_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-05T23:59:30.000000Z"
+      }
+    },
+    {
+      "antenna_type": "JAVRINGANT_DM SCIS",
+      "full_frozen_window_covered": true,
+      "gps_observables": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "S1W",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C2L",
+        "L2L",
+        "S2L",
+        "C5Q",
+        "L5Q",
+        "S5Q",
+        "C1L",
+        "L1L",
+        "S1L"
+      ],
+      "interval_s": 30.0,
+      "marker_name": "NLIB",
+      "receiver_clock_offset_applied": 0,
+      "receiver_type": "SEPT POLARX5TR",
+      "receiver_version": "5.7.0",
+      "station": "NLIB00USA",
+      "time_of_first_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-05T00:00:00.000000Z"
+      },
+      "time_of_last_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-05T23:59:30.000000Z"
+      }
+    }
+  ],
+  "joint_core_segments": [
+    {
+      "duration_s": 4140,
+      "epoch_count": 139,
+      "start_gps": "2026-08-05T05:54:00.000000Z",
+      "stop_gps": "2026-08-05T07:03:00.000000Z"
+    }
+  ],
+  "optional_diagnostic_policy": "DESCRIPTIVE_ONLY_NEVER_FATAL",
+  "orbital_model_used": false,
+  "orbital_scores_produced": 0,
+  "outcome": "GNSS_SHORT_WINDOW_QUALIFICATION_PASSED",
+  "per_link_core_segments": [
+    {
+      "full_window": true,
+      "maximal_segments": [
+        {
+          "duration_s": 4140,
+          "epoch_count": 139,
+          "start_gps": "2026-08-05T05:54:00.000000Z",
+          "stop_gps": "2026-08-05T07:03:00.000000Z"
+        }
+      ],
+      "satellite": "G22",
+      "station": "GOLD00USA"
+    },
+    {
+      "full_window": true,
+      "maximal_segments": [
+        {
+          "duration_s": 4140,
+          "epoch_count": 139,
+          "start_gps": "2026-08-05T05:54:00.000000Z",
+          "stop_gps": "2026-08-05T07:03:00.000000Z"
+        }
+      ],
+      "satellite": "G30",
+      "station": "GOLD00USA"
+    },
+    {
+      "full_window": true,
+      "maximal_segments": [
+        {
+          "duration_s": 4140,
+          "epoch_count": 139,
+          "start_gps": "2026-08-05T05:54:00.000000Z",
+          "stop_gps": "2026-08-05T07:03:00.000000Z"
+        }
+      ],
+      "satellite": "G22",
+      "station": "NLIB00USA"
+    },
+    {
+      "full_window": true,
+      "maximal_segments": [
+        {
+          "duration_s": 4140,
+          "epoch_count": 139,
+          "start_gps": "2026-08-05T05:54:00.000000Z",
+          "stop_gps": "2026-08-05T07:03:00.000000Z"
+        }
+      ],
+      "satellite": "G30",
+      "station": "NLIB00USA"
+    }
+  ],
+  "phase_scalars_parsed_in_ram": 1112,
+  "phase_scalars_persisted": 0,
+  "qualification_version": "g22-g30-phase-short-window-doy217-v1",
+  "same_path_code_witness": {
+    "links": [
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C1C",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G22",
+        "station": "GOLD00USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C2W",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G22",
+        "station": "GOLD00USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C1C",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G30",
+        "station": "GOLD00USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C2W",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G30",
+        "station": "GOLD00USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C1C",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G22",
+        "station": "NLIB00USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C2W",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G22",
+        "station": "NLIB00USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C1C",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G30",
+        "station": "NLIB00USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C2W",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          1,
+          77,
+          78,
+          137
+        ],
+        "satellite": "G30",
+        "station": "NLIB00USA",
+        "total_epochs": 139
+      }
+    ],
+    "state": "SATISFIED"
+  },
+  "schema": "gnss-phase-short-window-qualification-summary-v1",
+  "structural_counts": {
+    "PRESENT": 3336
+  },
+  "window": {
+    "raw_epochs": 139,
+    "start_gps": "2026-08-05T05:54:00.000000Z",
+    "step_s": 30,
+    "stop_gps": "2026-08-05T07:03:00.000000Z"
+  }
+}

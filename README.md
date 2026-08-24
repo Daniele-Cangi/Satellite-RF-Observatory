@@ -217,6 +217,15 @@ qualification failure authorizes no substitute date, and primary access still
 requires a separate review. See
 [`GNSS_PHASE_SHORT_WINDOW_PLAN.md`](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_PLAN.md).
 
+The sole DOY 217 qualification has now passed. Both exact station artifacts
+were fully hashed before in-memory decode; all 3,336 relevant fields are
+present across the 139-epoch window, C1C/C2W coverage is 100%, and all four
+geometry-free phase links remain below the frozen continuity limit. The worst
+aggregate second difference is 0.019274 m against a 0.095147 m limit. No
+orbital model or score was available to this run, no observation value was
+persisted and DOY 220 remains unopened. See
+[`GNSS_PHASE_SHORT_WINDOW_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_QUALIFICATION_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
