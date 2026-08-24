@@ -234,11 +234,19 @@ margin is 6,473.198 m and its best four-link guard is 39.467 degrees, versus
 15.616 degrees at the old 307-epoch suffix. This is model-only physical
 availability, not a repaired qualification or a frozen primary.
 
-The next decision may assign two distinct unopened dates to qualification and
-primary under this smaller topology. Before any observation access it must
-freeze those roles, exact 139-epoch windows and witness rules. If independent
-qualification does not prove complete L1C/L2W/LLI structure plus the required
-health and same-path witnesses, stop; do not adapt the primary window.
+The roles and proof boundary are now frozen. DOY 217,
+05:54:00--07:03:00 GPS is the only qualification date; DOY 220,
+05:42:00--06:51:00 GPS remains the sealed primary. The exact 139-epoch
+coordinate, 77/60 prefix/holdout partition, geometry-free health limit,
+same-path witnesses, prefix-affine null, G01/G14/G17 alternatives and
+2,384.234 m decision guard are fixed before product discovery. No reserve is
+assigned and qualification failure authorizes no substitution.
+
+The maximum next action is bounded discovery and model-blind qualification of
+the two DOY 217 station products only. It must stop with the qualification
+outcome; DOY 220 remains forbidden until a separate review. If complete
+L1C/L2W/LLI structure, geometry-free health or required C1C/C2W witnesses do
+not pass, close this role pair rather than move the window.
 
 ## Anti-drift stop
 

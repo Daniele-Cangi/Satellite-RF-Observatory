@@ -208,6 +208,15 @@ at the old duration to 39.467 deg. No RINEX product was discovered or opened,
 and no new roles were assigned. See
 [`GNSS_PHASE_DURATION_SENSITIVITY_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_DURATION_SENSITIVITY_REPORT.md).
 
+The distinct roles are now frozen before product discovery. DOY 217,
+05:54:00--07:03:00 GPS is the sole qualification date; DOY 220,
+05:42:00--06:51:00 GPS is the sealed held-out primary. The 139-epoch plan
+keeps the ionosphere-free continuous-phase coordinate, 77/60 prefix/holdout
+split, the prefix-affine null and G01/G14/G17 alternative orbits. A
+qualification failure authorizes no substitute date, and primary access still
+requires a separate review. See
+[`GNSS_PHASE_SHORT_WINDOW_PLAN.md`](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_PLAN.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
