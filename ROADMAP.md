@@ -180,6 +180,20 @@ may then be ranked by remaining physical margin before any observation product
 is discovered. Details are in `POST_G14_G17_SHOCK_REVIEW.md`; no new gate has
 been created.
 
+The offline spike has now returned
+`PHASE_QUOTIENT_MECHANISM_DISCRIMINATIVE`. On the historical G14/G17 fixture,
+the continuous phase coordinate retains 742,458.297 m against G22 after the
+same prefix-only nuisance, while the conservative pairwise envelope is
+23,037.025 m. The 719,421.272 m remainder is mechanism evidence only: G14/G17
+stays closed, no product was discovered and no plan or measurement authority
+exists.
+
+The next work may declare one new bounded orbit/station/signal/date set and
+rank it directly in the phase coordinate by complete remaining physical
+margin. It must exclude G14/G17, keep code/LLI/geometry-free witnesses separate
+from the score, and stop before product discovery if no geometry is positive.
+No receiver catalog, new gate or change to G0/G1 is required.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

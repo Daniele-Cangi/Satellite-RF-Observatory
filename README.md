@@ -161,6 +161,16 @@ offline mechanism spike; only after it survives may a new orbit/station/signal
 set be declared and ranked by complete remaining physical margin. See
 [`POST_G14_G17_SHOCK_REVIEW.md`](experiments/orbital_discriminability/POST_G14_G17_SHOCK_REVIEW.md).
 
+That spike is now complete. On the closed fixture, G22 remains controlling at
+742,458.297 m peak-to-peak while the unchanged conservative pairwise physical
+envelope is 23,037.025 m, leaving a 719,421.272 m mechanism margin. The result
+is `PHASE_QUOTIENT_MECHANISM_DISCRIMINATIVE`. It demonstrates that preserving
+continuous phase avoids the former finite-difference loss; it does not reopen
+G14/G17 or authorize observations. The next step is a newly predeclared
+phase-coordinate geometry set, screened by full remaining margin before any
+observation-product discovery. See
+[`GNSS_PHASE_QUOTIENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_QUOTIENT_SPIKE_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
