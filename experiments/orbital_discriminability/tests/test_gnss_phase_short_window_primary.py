@@ -1,0 +1,352 @@
+from __future__ import annotations
+
+from hashlib import sha256
+import json
+from pathlib import Path
+
+import numpy as np
+import pytest
+
+from experiments.orbital_discriminability import (
+    gnss_phase_short_window_primary as primary,
+)
+from experiments.orbital_discriminability import (
+    gnss_phase_short_window_plan as frozen,
+)
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def header_line(data: str, label: str) -> str:
+    return f"{data:<60}{label:<20}\n"
+
+
+def field(value: float | None, lli: int = 0) -> str:
+    if value is None:
+        return " " * 16
+    return f"{value:14.3f}{' ' if lli == 0 else lli} "
+
+
+def fixture(
+    locator: primary.ProductLocator,
+    *,
+    blank: tuple[int, str, str] | None = None,
+    nonzero_lli: tuple[int, str, str] | None = None,
+) -> bytearray:
+    observables = ("C1C", "L1C", "S1C", "C2W", "L2W", "S2W")
+    config = primary.EXPECTED_CONFIGURATION[locator.station]
+    lines = [
+        header_line(
+            "     3.04           OBSERVATION DATA    G",
+            "RINEX VERSION / TYPE",
+        ),
+        header_line(locator.station[:4], "MARKER NAME"),
+        header_line(
+            f"SERIAL              {config['receiver_type']:<20}"
+            f"{config['receiver_version']:<20}",
+            "REC # / TYPE / VERS",
+        ),
+        header_line(
+            f"ANTENNA             {config['antenna_type']:<20}",
+            "ANT # / TYPE",
+        ),
+        header_line(
+            " -2350000.0 -4650000.0 3670000.0",
+            "APPROX POSITION XYZ",
+        ),
+        header_line(
+            f"G  {len(observables):3d} "
+            + "".join(f"{item:>3} " for item in observables),
+            "SYS / # / OBS TYPES",
+        ),
+        header_line("      30.000", "INTERVAL"),
+        header_line(
+            "  2026     8     8     0     0    0.0000000     GPS",
+            "TIME OF FIRST OBS",
+        ),
+        header_line(
+            "  2026     8     8    23    59   30.0000000     GPS",
+            "TIME OF LAST OBS",
+        ),
+        header_line("", "END OF HEADER"),
+    ]
+    station_bias = 200.0 if locator.station == "NLIB00USA" else 0.0
+    for epoch_index, epoch in enumerate(primary.expected_raw_gps_epochs()):
+        lines.append(
+            f"> {epoch.year:4d} {epoch.month:02d} {epoch.day:02d} "
+            f"{epoch.hour:02d} {epoch.minute:02d} "
+            f"{epoch.second:10.7f}  0  2\n"
+        )
+        for sat_index, satellite in enumerate(primary.SATELLITES):
+            values: dict[str, tuple[float | None, int]] = {
+                "C1C": (22_000_000.0 + epoch_index + sat_index, 0),
+                "L1C": (
+                    115_000_000.0
+                    + station_bias
+                    + epoch_index * 0.020
+                    + sat_index,
+                    0,
+                ),
+                "S1C": (45.0, 0),
+                "C2W": (22_000_010.0 + epoch_index + sat_index, 0),
+                "L2W": (
+                    89_000_000.0
+                    + station_bias
+                    + epoch_index * 0.015
+                    + sat_index,
+                    0,
+                ),
+                "S2W": (43.0, 0),
+            }
+            if blank and blank[:2] == (epoch_index, satellite):
+                values[blank[2]] = (None, 0)
+            if nonzero_lli and nonzero_lli[:2] == (
+                epoch_index,
+                satellite,
+            ):
+                value, _ = values[nonzero_lli[2]]
+                values[nonzero_lli[2]] = (value, 1)
+            lines.append(
+                satellite
+                + "".join(field(*values[item]) for item in observables)
+                + "\n"
+            )
+    return bytearray("".join(lines).encode("ascii"))
+
+
+def synthetic_curves() -> dict[str, np.ndarray]:
+    prefix = np.zeros(frozen.CALIBRATION_EPOCHS, dtype=np.float64)
+
+    def tail(scale: float) -> np.ndarray:
+        return np.concatenate(
+            (
+                prefix,
+                np.linspace(
+                    0.0,
+                    scale,
+                    frozen.HELDOUT_EPOCHS,
+                    dtype=np.float64,
+                ),
+            )
+        )
+
+    return {
+        "ORBITAL_G22": tail(10_000.0),
+        "PREFIX_AFFINE": tail(0.0),
+        "WRONG_ORBIT_G01": tail(-10_000.0),
+        "WRONG_ORBIT_G14": tail(20_000.0),
+        "WRONG_ORBIT_G17": tail(-20_000.0),
+    }
+
+
+@pytest.mark.parametrize(
+    ("hypothesis", "outcome"),
+    (
+        ("ORBITAL_G22", "ORBITAL_MODEL_PREDICTIVELY_PREFERRED"),
+        ("PREFIX_AFFINE", "PREFIX_AFFINE_NULL_PREFERRED"),
+        ("WRONG_ORBIT_G01", "WRONG_ORBIT_G01_PREFERRED"),
+    ),
+)
+def test_frozen_hypothesis_can_win_without_suffix_refit(
+    hypothesis: str, outcome: str
+) -> None:
+    curves = synthetic_curves()
+    elapsed = np.arange(frozen.FEATURE_EPOCHS) * frozen.STEP_S
+    observed = curves[hypothesis] + 12.5 + 0.002 * elapsed
+    result = primary.score_coordinate(observed, curves)
+
+    assert result["outcome"] == outcome
+    assert result["calibration_admission"]["state"] == "SATISFIED"
+    assert (
+        result["heldout_comparison"]["preference_margin_m"]
+        > frozen.PRIMARY_PAIRWISE_DECISION_GUARD_M
+    )
+
+
+def test_ambiguous_when_two_models_are_inside_pairwise_guard() -> None:
+    curves = synthetic_curves()
+    observed = 0.5 * curves["ORBITAL_G22"]
+    result = primary.score_coordinate(observed, curves)
+
+    assert result["outcome"] == "AMBIGUOUS"
+    assert result["heldout_comparison"]["preference_margin_m"] == pytest.approx(
+        0.0
+    )
+
+
+def test_calibration_failure_blocks_heldout_comparison() -> None:
+    curves = synthetic_curves()
+    observed = curves["ORBITAL_G22"].copy()
+    observed[: frozen.CALIBRATION_EPOCHS] += (
+        np.arange(frozen.CALIBRATION_EPOCHS) % 2
+    ) * 2_000.0
+    result = primary.score_coordinate(observed, curves)
+
+    assert result["outcome"] == "NOT_DETECTABLE"
+    assert result["calibration_admission"]["state"] == "UNSATISFIED"
+    assert result["heldout_comparison"] == "NOT_EVALUATED"
+
+
+def test_linear_suffix_is_not_refit() -> None:
+    curves = synthetic_curves()
+    observed = curves["ORBITAL_G22"].copy()
+    observed[frozen.CALIBRATION_EPOCHS :] += np.linspace(
+        0.0, 5_000.0, frozen.HELDOUT_EPOCHS
+    )
+    result = primary.score_coordinate(observed, curves)
+    orbital = next(
+        row
+        for row in result["heldout_comparison"]["scores"]
+        if row["hypothesis"] == "ORBITAL_G22"
+    )
+
+    assert orbital["heldout_peak_to_peak_m"] == pytest.approx(5_000.0)
+
+
+def test_primary_parser_and_health_use_only_frozen_window() -> None:
+    scans = [
+        primary.scan_decoded(fixture(locator), locator)
+        for locator in primary.PRODUCTS
+    ]
+    try:
+        coordinate, admission = primary.measurement_coordinate(scans)
+        coordinate.fill(0.0)
+    finally:
+        for scan in scans:
+            scan.erase()
+
+    assert admission["core_phase_and_lli"] == "SATISFIED"
+    assert admission["same_path_code_witness"]["state"] == "SATISFIED"
+    assert admission["geometry_free_phase_health"]["state"] == "SATISFIED"
+    assert admission["feature_epochs"] == 137
+    assert all(np.count_nonzero(scan.phase_cycles) == 0 for scan in scans)
+
+
+def test_nonzero_lli_is_measurement_invalid() -> None:
+    payload = fixture(
+        primary.PRODUCTS[0],
+        nonzero_lli=(77, "G22", "L1C"),
+    )
+    with pytest.raises(
+        primary.PrimaryMeasurementInvalid,
+        match="NONZERO_OR_INVALID_LLI",
+    ):
+        primary.scan_decoded(payload, primary.PRODUCTS[0])
+
+
+def test_unexpected_header_error_is_descriptive_not_measurement(
+    monkeypatch,
+) -> None:
+    payload = fixture(primary.PRODUCTS[0])
+    monkeypatch.setattr(
+        primary.headers,
+        "parse_header_lines",
+        lambda _lines: (_ for _ in ()).throw(RuntimeError("software")),
+    )
+    with pytest.raises(
+        primary.PrimaryDescriptionError,
+        match="HEADER_DESCRIPTION_ERROR",
+    ):
+        primary.scan_decoded(payload, primary.PRODUCTS[0])
+
+
+def test_code_witness_boundary_is_not_a_phase_value() -> None:
+    scans = [
+        primary.scan_decoded(
+            fixture(
+                locator,
+                blank=(
+                    (77, "G22", "C1C")
+                    if locator.station == "GOLD00USA"
+                    else None
+                ),
+            ),
+            locator,
+        )
+        for locator in primary.PRODUCTS
+    ]
+    try:
+        with pytest.raises(
+            primary.PrimaryMeasurementInvalid,
+            match="SAME_PATH_CODE_WITNESS_FAILED",
+        ):
+            primary.measurement_coordinate(scans)
+    finally:
+        for scan in scans:
+            scan.erase()
+
+
+def test_manifest_keeps_primary_sealed_and_retry_zero() -> None:
+    manifest = primary.manifest()
+    encoded = primary.strict_json(manifest)
+
+    assert all("2026220" in row["name"] for row in manifest["products"])
+    assert "2026217" not in encoded
+    assert manifest["transport"]["attempts_per_locator"] == 1
+    assert manifest["transport"]["retry_after_freeze"] is False
+    assert not any(manifest["access_boundary"].values())
+    assert manifest["scoring"]["free_time_phase"] is False
+    assert manifest["scoring"]["suffix_refit"] is False
+
+
+def test_qualification_closure_is_exact_and_primary_unopened() -> None:
+    outcome = primary.validate_qualification_closure(ROOT)
+
+    assert outcome["outcome"] == "GNSS_SHORT_WINDOW_QUALIFICATION_PASSED"
+    assert all(value == 0 for value in outcome["primary_doy220_access"].values())
+
+
+def test_materialization_hashes_once_before_decode(monkeypatch) -> None:
+    payload = b"complete-primary-compressed-fixture"
+    calls = 0
+
+    class Response:
+        def __init__(self):
+            self.blocks = [payload, b""]
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_):
+            return False
+
+        def read(self, _size):
+            return self.blocks.pop(0)
+
+    def open_once(*_args, **_kwargs):
+        nonlocal calls
+        calls += 1
+        return Response()
+
+    monkeypatch.setattr(primary, "urlopen", open_once)
+    materialized, receipt = primary.materialize(primary.PRODUCTS[0])
+    try:
+        assert bytes(materialized) == payload
+        assert receipt["attempts"] == 1
+        assert receipt["complete_file_sha256"] == sha256(payload).hexdigest()
+        assert receipt["hash_before_any_decode"] is True
+        assert calls == 1
+    finally:
+        materialized[:] = b"\x00" * len(materialized)
+
+
+def test_strict_json_and_invalid_prediction_values() -> None:
+    with pytest.raises(ValueError):
+        primary.strict_json({"bad": float("nan")})
+    curves = synthetic_curves()
+    curves["ORBITAL_G22"][4] = np.inf
+    with pytest.raises(
+        primary.PrimaryDescriptionError,
+        match="FROZEN_HYPOTHESIS_CURVES_INVALID",
+    ):
+        primary.score_coordinate(np.zeros(137), curves)
+    assert json.loads(primary.strict_json(primary.manifest())) == (
+        primary.manifest()
+    )
+
+
+def test_cli_has_no_implicit_live_default() -> None:
+    assert primary.AUTHORITY_TOKEN not in primary.manifest()["access_boundary"]
+    assert primary.MAX_TRANSPORT_ATTEMPTS == 1
+    assert not (ROOT / primary.OUTCOME_NAME).exists()
