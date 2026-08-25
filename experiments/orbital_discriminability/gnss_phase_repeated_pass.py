@@ -8,12 +8,14 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict
 from datetime import datetime, timedelta
+import gzip
 from hashlib import sha256
 import importlib.metadata
 import json
 from pathlib import Path
 import platform
 import subprocess
+import sys
 from typing import Final, Mapping
 
 import numpy as np
@@ -40,6 +42,10 @@ HYPOTHESES: Final = {
 }
 PREFIX_AFFINE_REGRESSION_M: Final = 11569.974689858733
 NUMERICAL_TOLERANCE_M: Final = 1.0e-6
+NAVIGATION_GZIP_BYTES: Final = 1391036
+NAVIGATION_GZIP_SHA256: Final = (
+    "12246e0e614f0a16c9bd7329ddd637fb541d478160d944131023aa9faeffcc3d"
+)
 
 
 class RepeatedPassDescriptionError(ValueError):
@@ -109,6 +115,50 @@ def validate_navigation(path: Path) -> pair.NavigationAuthority:
     return authority
 
 
+def parse_navigation_bytes(payload: bytes) -> dict[str, tuple[base.GpsEphemeris, ...]]:
+    if len(payload) != navigation_authority().bytes:
+        raise RepeatedPassDescriptionError("REPLICATION_NAVIGATION_SIZE_CHANGED")
+    if sha256(payload).hexdigest() != navigation_authority().sha256:
+        raise RepeatedPassDescriptionError("REPLICATION_NAVIGATION_SHA256_CHANGED")
+    lines = payload.decode("ascii").splitlines()
+    try:
+        start = (
+            next(index for index, line in enumerate(lines) if "END OF HEADER" in line)
+            + 1
+        )
+    except StopIteration as exc:
+        raise RepeatedPassDescriptionError("NAVIGATION_HEADER_INCOMPLETE") from exc
+    records: dict[str, list[base.GpsEphemeris]] = {}
+    for index in range(start, len(lines)):
+        if not lines[index].startswith("G"):
+            continue
+        if index + 7 >= len(lines):
+            raise RepeatedPassDescriptionError("NAVIGATION_RECORD_TRUNCATED")
+        record = base.parse_gps_record(lines[index : index + 8])
+        if record.sv_health == 0 and 0.0 <= record.eccentricity < 1.0:
+            records.setdefault(record.satellite, []).append(record)
+    if not records:
+        raise RepeatedPassDescriptionError("NAVIGATION_HAS_NO_HEALTHY_GPS_RECORD")
+    return {
+        satellite: tuple(sorted(values, key=lambda value: value.toc_gps))
+        for satellite, values in records.items()
+    }
+
+
+def parse_navigation_gzip(payload: bytes) -> dict[str, tuple[base.GpsEphemeris, ...]]:
+    if len(payload) != NAVIGATION_GZIP_BYTES:
+        raise RepeatedPassDescriptionError("REPLICATION_NAVIGATION_GZIP_SIZE_CHANGED")
+    if sha256(payload).hexdigest() != NAVIGATION_GZIP_SHA256:
+        raise RepeatedPassDescriptionError("REPLICATION_NAVIGATION_GZIP_SHA256_CHANGED")
+    try:
+        raw = gzip.decompress(payload)
+    except (EOFError, OSError) as exc:
+        raise RepeatedPassDescriptionError(
+            "REPLICATION_NAVIGATION_GZIP_INVALID"
+        ) from exc
+    return parse_navigation_bytes(raw)
+
+
 def _range_curve(
     positions: Mapping[str, np.ndarray],
     station_ecef: Mapping[str, np.ndarray],
@@ -149,6 +199,14 @@ def compiler_manifest() -> dict[str, object]:
             "network_capability": False,
             "decoder_present": False,
         },
+        "navigation_input": {
+            "accepted": [
+                "EXACT_HASH_UNCOMPRESSED_PATH",
+                "EXACT_HASH_GZIP_STDIN_IN_RAM",
+            ],
+            "network_capability": False,
+            "gzip_persistence_required": False,
+        },
         "forbidden": [
             "DOY220_REOPEN_OR_RESCORE",
             "DOY219_OR_DOY218_PRODUCT_DISCOVERY",
@@ -168,6 +226,18 @@ def build_predictions(navigation_path: Path) -> dict[str, object]:
     """Compile model coordinates without accepting observation input."""
     authority = validate_navigation(navigation_path)
     records = base.parse_gps_navigation(Path(navigation_path))
+    return _build_predictions(records, authority)
+
+
+def build_predictions_from_gzip(payload: bytes) -> dict[str, object]:
+    """Compile from an exact-hash compressed NAV payload held only in RAM."""
+    return _build_predictions(parse_navigation_gzip(payload), navigation_authority())
+
+
+def _build_predictions(
+    records: Mapping[str, tuple[base.GpsEphemeris, ...]],
+    authority: pair.NavigationAuthority,
+) -> dict[str, object]:
     gps_epochs = expected_raw_gps_epochs()
     utc_epochs = tuple(
         epoch - timedelta(seconds=base.GPS_UTC_OFFSET_S) for epoch in gps_epochs
@@ -343,12 +413,24 @@ def build_seal(predictions_path: Path) -> dict[str, object]:
     return result
 
 
-def write_artifacts(navigation_path: Path, output_dir: Path) -> tuple[Path, Path]:
+def write_artifacts(
+    output_dir: Path,
+    *,
+    navigation_path: Path | None = None,
+    navigation_gzip: bytes | None = None,
+) -> tuple[Path, Path]:
+    if (navigation_path is None) == (navigation_gzip is None):
+        raise RepeatedPassDescriptionError("EXACTLY_ONE_NAVIGATION_INPUT_REQUIRED")
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
     predictions_path = output / PREDICTIONS_NAME
+    predictions = (
+        build_predictions(navigation_path)
+        if navigation_path is not None
+        else build_predictions_from_gzip(navigation_gzip or b"")
+    )
     predictions_path.write_text(
-        strict_json(build_predictions(navigation_path), pretty=True) + "\n",
+        strict_json(predictions, pretty=True) + "\n",
         encoding="utf-8",
     )
     seal_path = output / SEAL_NAME
@@ -361,11 +443,18 @@ def write_artifacts(navigation_path: Path, output_dir: Path) -> tuple[Path, Path
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--navigation", type=Path, required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--navigation", type=Path)
+    source.add_argument("--navigation-gzip-stdin", action="store_true")
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     frozen.verify_sources(Path(__file__).resolve().parent)
-    predictions_path, seal_path = write_artifacts(args.navigation, args.output_dir)
+    payload = sys.stdin.buffer.read() if args.navigation_gzip_stdin else None
+    predictions_path, seal_path = write_artifacts(
+        args.output_dir,
+        navigation_path=args.navigation,
+        navigation_gzip=payload,
+    )
     print(
         strict_json(
             {

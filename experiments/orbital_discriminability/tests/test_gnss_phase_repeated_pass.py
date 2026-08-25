@@ -77,9 +77,19 @@ def test_compiler_has_no_observation_or_network_capability() -> None:
 
     assert manifest["navigation"]["doy"] == 219
     assert not any(manifest["observation_boundary"].values())
+    assert manifest["navigation_input"]["network_capability"] is False
+    assert manifest["navigation_input"]["gzip_persistence_required"] is False
     assert "DOY219_OR_DOY218_PRODUCT_DISCOVERY" in manifest["forbidden"]
     assert compiler.expected_raw_gps_epochs()[0] == frozen.REPLICATION_RAW_START
     assert len(compiler.expected_raw_gps_epochs()) == frozen.RAW_EPOCHS
+
+
+def test_in_memory_navigation_requires_complete_exact_hash_payload() -> None:
+    with pytest.raises(
+        compiler.RepeatedPassDescriptionError,
+        match="REPLICATION_NAVIGATION_GZIP_SIZE_CHANGED",
+    ):
+        compiler.parse_navigation_gzip(b"partial")
 
 
 def test_json_is_strict_and_manifest_is_stable() -> None:
