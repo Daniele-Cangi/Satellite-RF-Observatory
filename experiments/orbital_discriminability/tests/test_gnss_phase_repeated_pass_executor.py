@@ -253,3 +253,84 @@ def test_strict_json_rejects_nonfinite_values() -> None:
     assert json.loads(executor.strict_json(executor.executor_manifest())) == (
         executor.executor_manifest()
     )
+
+
+def test_executor_seal_is_exact_and_observation_blind() -> None:
+    seal_path = ROOT / executor.EXECUTOR_SEAL_NAME
+    expected = "490f60155dde4972df411d08717462e28b123883e3ef4aea15d708c982208ed6"
+
+    assert executor.canonical_sha256(seal_path) == expected
+    seal, curves = executor.validate_executor_seal(ROOT, seal_path, expected)
+    try:
+        assert seal["source_commit"] == ("d080bbb6b4db5d7328863e02d1df0baff6331658")
+        assert seal["source_sha256"] == executor.source_sha256()
+        assert seal["manifest_sha256"] == executor.manifest_sha256()
+        assert seal["authority"]["live_execution_authorized_by_seal"] is False
+        assert not any(seal["access_at_seal"].values())
+        assert all(value.shape == (137,) for value in curves.values())
+    finally:
+        for curve in curves.values():
+            curve.fill(0.0)
+
+
+def test_injected_one_shot_uses_two_hashes_one_outcome_and_no_values(
+    monkeypatch, tmp_path: Path
+) -> None:
+    materialized: list[bytearray] = []
+    decoded: list[bytearray] = []
+
+    def fake_materialize(locator: primary.ProductLocator):
+        payload = fixture(locator)
+        materialized.append(payload)
+        return payload, {
+            "station": locator.station,
+            "product": locator.name,
+            "url": locator.url,
+            "attempts": 1,
+            "complete_file_bytes": len(payload),
+            "complete_file_sha256": executor.sha256(payload).hexdigest(),
+            "hash_before_any_decode": True,
+        }
+
+    def fake_decode(payload: bytearray, _station: str) -> bytearray:
+        result = bytearray(payload)
+        decoded.append(result)
+        return result
+
+    prediction_value = json.loads(
+        (ROOT / executor.prediction.PREDICTIONS_NAME).read_text(encoding="utf-8")
+    )
+    orbital = np.asarray(prediction_value["curves_m"]["ORBITAL_G22"], dtype=np.float64)
+
+    def matching_coordinate(_scans):
+        elapsed = np.arange(orbital.size, dtype=np.float64) * frozen.STEP_S
+        return orbital + 12.5 + 0.002 * elapsed, {"synthetic": "SATISFIED"}
+
+    monkeypatch.setattr(primary, "materialize", fake_materialize)
+    monkeypatch.setattr(primary, "decode_in_memory", fake_decode)
+    monkeypatch.setattr(executor, "measurement_coordinate", matching_coordinate)
+
+    seal_sha = "490f60155dde4972df411d08717462e28b123883e3ef4aea15d708c982208ed6"
+    outcome = executor.run_once(
+        tmp_path,
+        executor.AUTHORITY_TOKEN,
+        seal_sha,
+        ROOT / executor.EXECUTOR_SEAL_NAME,
+    )
+
+    assert outcome["outcome"] == "ORBITAL_MODEL_REPEATED_PASS_PREFERRED"
+    assert len(outcome["artifacts"]) == 2
+    assert all(row["hash_before_any_decode"] for row in outcome["artifacts"])
+    assert outcome["persistence"]["observation_values"] == 0
+    encoded = (tmp_path / executor.OUTCOME_NAME).read_text(encoding="utf-8")
+    assert '"phase_cycles"' not in encoded
+    assert '"curves_m"' not in encoded
+    assert all(not np.any(payload) for payload in materialized + decoded)
+
+    with pytest.raises(PermissionError, match="REPLICATION_OUTCOME_ALREADY_EXISTS"):
+        executor.run_once(
+            tmp_path,
+            executor.AUTHORITY_TOKEN,
+            seal_sha,
+            ROOT / executor.EXECUTOR_SEAL_NAME,
+        )
