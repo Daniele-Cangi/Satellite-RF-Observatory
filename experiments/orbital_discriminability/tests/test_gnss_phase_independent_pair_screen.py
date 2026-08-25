@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -18,6 +19,8 @@ EXPECTED_CANDIDATES = (
     "AMC400USA",
     "MDO100USA",
 )
+ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / screen.RECEIPT_NAME
 
 
 def test_candidate_set_is_exact_unique_and_disjoint_from_consumed_roots() -> None:
@@ -139,3 +142,54 @@ def test_invalid_navigation_and_nonfinite_json_are_rejected() -> None:
 
 def test_manifest_round_trip_is_strict_json() -> None:
     assert json.loads(screen.strict_json(screen.manifest())) == screen.manifest()
+
+
+def test_frozen_receipt_retains_complete_ranking_and_zero_observation_access() -> None:
+    receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
+
+    assert screen.canonical_sha256(RECEIPT) == (
+        "24ea926f667749500cd380ebf3c2bd68d730e7faaa84572b0b0bc31bfaba679c"
+    )
+    assert receipt["source_commit"] == (
+        "5df12420b33c27b76748a7861ead69a9efffec70"
+    )
+    assert receipt["source_sha256"] == (
+        "21fef40bca1ce99caae4731cc4b6d13c0cd52fdb80ba7b1f2f2cbe31775be466"
+    )
+    assert receipt["source_sha256"] == screen.source_sha256()
+    assert receipt["manifest_sha256"] == screen.manifest_sha256()
+    assert receipt["outcome"] == screen.OUTCOME_SHORTLISTED
+    assert receipt["evaluated_pair_count"] == 15
+    assert receipt["admitted_pair_count"] == 15
+    assert len(receipt["evaluated_pairs"]) == 15
+    assert len({tuple(row["station_pair"]) for row in receipt["evaluated_pairs"]}) == 15
+    assert all(row["admissible_geometry"] for row in receipt["evaluated_pairs"])
+    assert min(
+        row["remaining_physical_margin_m"]
+        for row in receipt["evaluated_pairs"]
+    ) == pytest.approx(1463.264350987229)
+    assert [row["station_pair"] for row in receipt["shortlist"]] == [
+        ["DRAO00CAN", "WES200USA"],
+        ["DRAO00CAN", "ALGO00CAN"],
+        ["ALGO00CAN", "MDO100USA"],
+    ]
+
+    selected = receipt["selected_pair"]
+    assert selected["controlling_null"] == "WRONG_ORBIT_G01"
+    assert selected["controlling_heldout_separation_m"] == pytest.approx(
+        96588.52993917838
+    )
+    assert selected["pairwise_comparison_envelope_m"] == pytest.approx(
+        3939.458446549114
+    )
+    assert selected["remaining_physical_margin_m"] == pytest.approx(
+        92649.07149262926
+    )
+    assert selected["actual_four_link_minimum_elevation_deg"] == pytest.approx(
+        25.222053806335634
+    )
+    assert selected["minimum_model_elevation_deg"] == pytest.approx(
+        19.404701524098893
+    )
+    assert not any(receipt["observation_access"].values())
+    assert receipt["prospective_plan_frozen"] is False

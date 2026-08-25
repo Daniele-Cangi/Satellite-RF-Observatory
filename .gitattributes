@@ -14,3 +14,6 @@ experiments/orbital_discriminability/CASSINI_DUAL_ROOT_XKA_COMPILER_RECEIPT.json
 
 # The terminal GNSS replication receipt is hashed from its exact LF byte stream.
 experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_OUTCOME.json -text
+
+# The independent-pair geometry receipt is also byte-addressed evidence.
+experiments/orbital_discriminability/GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_RECEIPT.json -text
