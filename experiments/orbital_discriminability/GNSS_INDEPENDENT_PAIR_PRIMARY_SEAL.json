@@ -1,0 +1,90 @@
+{
+  "access_at_seal": {
+    "descriptive_head_requests": 2,
+    "observation_headers_opened": 0,
+    "observation_payload_bytes": 0,
+    "observation_values": 0
+  },
+  "authority": {
+    "primary_access_authorized_by_seal": false,
+    "separate_review_required": true
+  },
+  "compiler_manifest_sha256": "ace14f2c6809a11dccc843398a3d4e9a96be67dae0b779a68146cef2739db17c",
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "plan_manifest_sha256": "4bae4d9aa655579263de00e84b6d374a8263b8196122ef024bd39ccfdd804756",
+  "predictions": {
+    "canonical_sha256": "f88b7a9185203fea00a4587335b2018172c5a894409bb5cb13d481d3e9996c0c",
+    "curve_set_sha256": "cdccb4fcef936c9256b11893b4f9af9b9c5c95400d70cfb4649e576ffe9a5ce1",
+    "name": "GNSS_INDEPENDENT_PAIR_PRIMARY_PREDICTIONS.json"
+  },
+  "primary": {
+    "access": "SEALED_UNAUTHORIZED",
+    "candidate_station_roots": [
+      "ALGO00CAN_40104M002",
+      "MDO100USA_40442M012"
+    ],
+    "doy": 219,
+    "feature_start_gps": "2026-08-07T05:46:30 GPS",
+    "feature_stop_gps": "2026-08-07T06:54:30 GPS",
+    "heldout_start_gps": "2026-08-07T06:25:00 GPS",
+    "product_identity_state": "FROZEN_LOCATOR_AND_DESCRIPTIVE_HEAD_FULL_HASH_UNKNOWN_UNTIL_SINGLE_FUTURE_MATERIALIZATION",
+    "products": [
+      {
+        "head_content_length": 4320264,
+        "head_etag": "\"41ec08-658934a2a4a08\"",
+        "head_last_modified": "Sun, 09 Aug 2026 01:38:07 GMT",
+        "head_requests": 1,
+        "head_status": 200,
+        "header_bytes_accessed": 0,
+        "name": "ALGO00CAN_R_20262190000_01D_30S_MO.crx.gz",
+        "observation_values_accessed": 0,
+        "payload_bytes_accessed": 0,
+        "station": "ALGO00CAN",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/219/ALGO00CAN_R_20262190000_01D_30S_MO.crx.gz"
+      },
+      {
+        "head_content_length": 3559665,
+        "head_etag": "\"3650f1-658855380e7c4\"",
+        "head_last_modified": "Sat, 08 Aug 2026 08:58:35 GMT",
+        "head_requests": 1,
+        "head_status": 200,
+        "header_bytes_accessed": 0,
+        "name": "MDO100USA_R_20262190000_01D_30S_MO.crx.gz",
+        "observation_values_accessed": 0,
+        "payload_bytes_accessed": 0,
+        "station": "MDO100USA",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/219/MDO100USA_R_20262190000_01D_30S_MO.crx.gz"
+      }
+    ],
+    "raw_start_gps": "2026-08-07T05:46:00 GPS",
+    "raw_stop_gps": "2026-08-07T06:55:00 GPS",
+    "role": "DISTINCT_ROOT_HELDOUT_PRIMARY",
+    "stations": [
+      "ALGO00CAN",
+      "MDO100USA"
+    ]
+  },
+  "schema": "gnss-independent-pair-primary-seal-v1",
+  "source_authorities": {
+    "geometry_screen": {
+      "canonical_sha256": "24ea926f667749500cd380ebf3c2bd68d730e7faaa84572b0b0bc31bfaba679c",
+      "name": "GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_RECEIPT.json",
+      "selected_row_sha256": "b3d7e99f188fcb2488a78d3035e90ab56b714a197bc86148e67079a7e8f4b90f",
+      "source_commit": "5df12420b33c27b76748a7861ead69a9efffec70"
+    },
+    "model_blind_qualification": {
+      "canonical_sha256": "cf26a411a0b77b79e951a21516c06333d26e7cc879f1dff09ce2e6eaa2fe3090",
+      "manifest_sha256": "7aee72bac1660518769240eca4fd627067877fba0cda0a56519e514bd51d7e24",
+      "name": "GNSS_INDEPENDENT_PAIR_QUALIFICATION_OUTCOME.json",
+      "outcome": "GNSS_INDEPENDENT_PAIR_QUALIFICATION_PASSED",
+      "source_commit": "6410ab195b2b6b535bcb57c357fce5300e8fffae"
+    }
+  },
+  "source_commit": "24dd303dcb5395bf158f4e8fed025e4b54ff4609",
+  "source_sha256": "922a974a8670812a949b61d2bd4573d93ba5ba003733948e23edd4ae367bef12",
+  "state": "PRIMARY_PLAN_AND_PREDICTION_FROZEN",
+  "stop": "STOP_BEFORE_PRIMARY_HEADER_OR_PAYLOAD_ACCESS_FOR_REVIEW"
+}
