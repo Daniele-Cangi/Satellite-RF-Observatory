@@ -263,12 +263,20 @@ qualification receipts. The exact numerical regressions reproduce the
 11,401.473 m prefix-affine and controlling 8,857.432 m G01 separations.
 No primary locator was discovered or opened while sealing.
 
-The only next causal action is a separately authorized, single DOY 220
-execution. It has one attempt per frozen locator, hashes both complete
-artifacts before decode, persists no observation values and produces one
-measurement/detectability/held-out outcome. The seal itself is not authority;
-until explicit review, DOY 220 remains at zero headers, payload bytes and
-values.
+That single DOY 220 execution is complete with
+ORBITAL_MODEL_PREDICTIVELY_PREFERRED. Both station products passed exact
+hash-before-decode, full-window phase/LLI admission, same-path code witnesses
+and geometry-free health. The orbital calibration residual was 0.367 m
+peak-to-peak. Its held-out residual was 2.313 m, while runner-up G01 retained
+8,858.964 m; the observed 8,856.652 m preference margin exceeds the frozen
+2,384.234 m guard.
+
+The result establishes a real prospective held-out orbital-model preference
+for this exact station/date/signal/hypothesis set. It does not establish
+catalog-wide satellite identity, repeated-pass consistency or a general
+receiver claim. The primary is consumed: no retry, reserve or rescore is
+authorized. The next work must ask a new physical question rather than extend
+this measurement chain administratively.
 
 ## Anti-drift stop
 

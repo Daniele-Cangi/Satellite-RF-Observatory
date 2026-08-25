@@ -236,6 +236,17 @@ persistence. The primary is still completely unopened and the seal grants no
 live authority. See
 [GNSS_PHASE_SHORT_WINDOW_PRIMARY_SEAL_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_PRIMARY_SEAL_REPORT.md).
 
+The single DOY 220 execution has now returned
+ORBITAL_MODEL_PREDICTIVELY_PREFERRED. Both complete products were hashed
+before in-memory decoding, the four phase links and all code witnesses passed,
+and the orbital calibration residual was 0.367 m peak-to-peak. On the
+untouched 60-epoch suffix, the orbital residual was 2.313 m versus
+8,858.964 m for runner-up G01, leaving an 8,856.652 m preference margin
+against the frozen 2,384.234 m guard. No observation value was persisted and
+there is no retry. The authorized claim is a held-out orbital-model preference
+for this fixed experiment, not satellite identity. See
+[GNSS_PHASE_SHORT_WINDOW_PRIMARY_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_PRIMARY_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

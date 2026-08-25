@@ -346,10 +346,15 @@ def test_strict_json_and_invalid_prediction_values() -> None:
     )
 
 
-def test_cli_has_no_implicit_live_default() -> None:
+def test_cli_requires_explicit_live_authority() -> None:
     assert primary.AUTHORITY_TOKEN not in primary.manifest()["access_boundary"]
     assert primary.MAX_TRANSPORT_ATTEMPTS == 1
-    assert not (ROOT / primary.OUTCOME_NAME).exists()
+    assert (
+        primary.manifest()["access_boundary"][
+            "live_execution_authorized_by_manifest"
+        ]
+        is False
+    )
 
 
 def test_frozen_prediction_artifact_reproduces_geometry() -> None:
@@ -423,3 +428,116 @@ def test_frozen_seal_binds_code_plan_qualification_and_predictions() -> None:
     finally:
         for curve in curves.values():
             curve.fill(0.0)
+
+
+def test_single_frozen_primary_outcome_is_strict_and_value_free() -> None:
+    path = ROOT / primary.OUTCOME_NAME
+    raw = path.read_bytes()
+    assert len(raw) == 9_799
+    assert sha256(raw).hexdigest() == (
+        "66adf39fa1b10cbf43bdb712ebf4d1f3d8f598203caaa8fa2a41601fea511f9d"
+    )
+    assert b"NaN" not in raw and b"Infinity" not in raw
+    assert all(
+        token not in raw
+        for token in (
+            b'"phase_cycles"',
+            b'"observed_m"',
+            b'"curves_m"',
+            b'"value"',
+        )
+    )
+    receipt = json.loads(raw)
+
+    assert receipt["outcome"] == "ORBITAL_MODEL_PREDICTIVELY_PREFERRED"
+    assert receipt["seal_sha256"] == (
+        "58802ab8f4dfcc0a2050bcf6c37b4d3b751b97d02a8efc28127340f0b45df62b"
+    )
+    assert receipt["source_commit"] == (
+        "548b7a28f3bc36904142ed2ceef259b121657429"
+    )
+    assert receipt["proof_plan_manifest_sha256"] == (
+        "0068385ef4aaf1014f0211efaa47da52da8c5fb18cf51377f4812434fd2b5f3c"
+    )
+    assert [
+        (
+            row["station"],
+            row["attempts"],
+            row["complete_file_bytes"],
+            row["complete_file_sha256"],
+        )
+        for row in receipt["artifacts"]
+    ] == [
+        (
+            "GOLD00USA",
+            1,
+            2_182_238,
+            "b1763eb485311c0fd3a073f7b9b0beda3c9af8f8f9f7be4c868a56fdeb5b7e3d",
+        ),
+        (
+            "NLIB00USA",
+            1,
+            2_523_817,
+            "48d80ce59776fa6b10024a8cf5456153f1c1fd9906d1a4acfc84053799d40b3f",
+        ),
+    ]
+    assert all(
+        row["hash_before_any_decode"] is True
+        for row in receipt["artifacts"]
+    )
+    assert receipt["measurement_admission"][
+        "core_phase_and_lli"
+    ] == "SATISFIED"
+    assert receipt["measurement_admission"][
+        "same_path_code_witness"
+    ]["state"] == "SATISFIED"
+    assert all(
+        row["coverage_fraction"] == 1.0
+        for row in receipt["measurement_admission"][
+            "same_path_code_witness"
+        ]["links"]
+    )
+    health = receipt["measurement_admission"][
+        "geometry_free_phase_health"
+    ]
+    assert health["state"] == "SATISFIED"
+    assert max(
+        row["maximum_absolute_second_difference_m"]
+        for row in health["links"]
+    ) == pytest.approx(0.008667878806591034)
+
+    score = receipt["score"]
+    assert score["calibration_admission"][
+        "calibration_peak_to_peak_m"
+    ] == pytest.approx(0.3672753512726934)
+    assert score["calibration_admission"]["state"] == "SATISFIED"
+    comparison = score["heldout_comparison"]
+    assert comparison["best_hypothesis"] == "ORBITAL_G22"
+    assert comparison["runner_up_hypothesis"] == "WRONG_ORBIT_G01"
+    assert comparison["preference_margin_m"] == pytest.approx(
+        8856.65168424408
+    )
+    scores = {
+        row["hypothesis"]: row for row in comparison["scores"]
+    }
+    assert scores["ORBITAL_G22"][
+        "heldout_peak_to_peak_m"
+    ] == pytest.approx(2.312586041483124)
+    assert scores["WRONG_ORBIT_G01"][
+        "heldout_peak_to_peak_m"
+    ] == pytest.approx(8858.964270285564)
+    assert (
+        comparison["preference_margin_m"]
+        > comparison["preference_guard_m"]
+    )
+    assert receipt["retry"] == {
+        "post_freeze_attempts_per_locator": 1,
+        "substitution": False,
+    }
+    assert receipt["persistence"]["observation_values"] == 0
+    assert receipt["observation_access"][
+        "phase_code_or_snr_values_persisted"
+    ] == 0
+    assert receipt["claim_scope"] == (
+        "HELDOUT_ORBITAL_MODEL_PREFERENCE_BELOW_SATELLITE_IDENTITY"
+    )
