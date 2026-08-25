@@ -1,0 +1,70 @@
+{
+  "access_at_seal": {
+    "headers": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "authority": {
+    "replication_access_authorized_by_seal": false,
+    "separate_review_required": true
+  },
+  "compiler_manifest_sha256": "4913f96fe37a07d3028327e114f8efbdbe6035480cbe177a291c711a11d9b3db",
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "plan_manifest_sha256": "a9c7b00feb9b2fa277e5cd8d71ec22d6726cc4068bf932ef67560b07d68250ed",
+  "predictions": {
+    "canonical_sha256": "d408696d5c9d6e446216fdd7bad240a300e4d0d6d27af470756ff7d1413896b0",
+    "curve_set_sha256": "189ded42848dea792b0473726f2d24401452fa45d7a0843eac9e66c734b16fea",
+    "name": "GNSS_PHASE_REPEATED_PASS_PREDICTIONS.json"
+  },
+  "primary_outcome_canonical_sha256": "66adf39fa1b10cbf43bdb712ebf4d1f3d8f598203caaa8fa2a41601fea511f9d",
+  "replication": {
+    "access": "SEALED_UNDISCOVERED_UNAUTHORIZED",
+    "doy": 219,
+    "feature_start_gps": "2026-08-07T05:46:30 GPS",
+    "feature_stop_gps": "2026-08-07T06:54:30 GPS",
+    "heldout_start_gps": "2026-08-07T06:25:00 GPS",
+    "predeclared_product_locators": [
+      "GOLD00USA_R_20262190000_01D_30S_MO.crx.gz",
+      "NLIB00USA_R_20262190000_01D_30S_MO.crx.gz"
+    ],
+    "product_identity_state": "LOCATOR_ONLY_NOT_DISCOVERED_OR_MATERIALIZED",
+    "raw_start_gps": "2026-08-07T05:46:00 GPS",
+    "raw_stop_gps": "2026-08-07T06:55:00 GPS",
+    "reference": "G30",
+    "role": "DISTINCT_PASS_HELD_OUT_REPLICATION",
+    "stations": [
+      "GOLD00USA",
+      "NLIB00USA"
+    ],
+    "target": "G22"
+  },
+  "schema": "gnss-phase-repeated-pass-seal-v1",
+  "sealed_reserve": {
+    "access": "SEALED_UNDISCOVERED_UNAUTHORIZED_NOT_A_RETRY",
+    "doy": 218,
+    "feature_start_gps": "2026-08-06T05:50:30 GPS",
+    "feature_stop_gps": "2026-08-06T06:58:30 GPS",
+    "heldout_start_gps": "2026-08-06T06:29:00 GPS",
+    "predeclared_product_locators": [
+      "GOLD00USA_R_20262180000_01D_30S_MO.crx.gz",
+      "NLIB00USA_R_20262180000_01D_30S_MO.crx.gz"
+    ],
+    "product_identity_state": "LOCATOR_ONLY_NOT_DISCOVERED_OR_MATERIALIZED",
+    "raw_start_gps": "2026-08-06T05:50:00 GPS",
+    "raw_stop_gps": "2026-08-06T06:59:00 GPS",
+    "reference": "G30",
+    "role": "SEALED_REPLICATION_RESERVE",
+    "stations": [
+      "GOLD00USA",
+      "NLIB00USA"
+    ],
+    "target": "G22"
+  },
+  "source_commit": "bed2258e57d31910bacec3f3c17fe9917098042a",
+  "source_sha256": "8c40a868e97e668bf56e2f7184fb8ec42572c15cf2b9672402cbcde7235d8349",
+  "state": "REPLICATION_PLAN_AND_PREDICTION_FROZEN"
+}
