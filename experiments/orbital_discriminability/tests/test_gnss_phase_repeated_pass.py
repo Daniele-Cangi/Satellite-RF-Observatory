@@ -100,3 +100,40 @@ def test_json_is_strict_and_manifest_is_stable() -> None:
     assert json.loads(frozen.strict_json(frozen.plan())) == frozen.plan()
     assert len(frozen.manifest_sha256()) == 64
     assert len(compiler.compiler_manifest_sha256()) == 64
+
+
+def test_frozen_prediction_and_seal_bind_exact_offline_geometry() -> None:
+    prediction_path = ROOT / compiler.PREDICTIONS_NAME
+    seal_path = ROOT / compiler.SEAL_NAME
+
+    assert compiler.canonical_sha256(prediction_path) == (
+        "d408696d5c9d6e446216fdd7bad240a300e4d0d6d27af470756ff7d1413896b0"
+    )
+    assert compiler.canonical_sha256(seal_path) == (
+        "8d4466be2037420fb251f7ed70de8d463d9489264948245606a1a65b5d79987d"
+    )
+    prediction = json.loads(prediction_path.read_text(encoding="utf-8"))
+    curves = compiler.validate_predictions(prediction)
+    assert prediction["compiler_source_commit"] == (
+        "bed2258e57d31910bacec3f3c17fe9917098042a"
+    )
+    assert prediction["compiler_source_sha256"] == compiler.source_sha256()
+    assert prediction["plan_manifest_sha256"] == frozen.manifest_sha256()
+    assert prediction["curve_set_sha256"] == (
+        "189ded42848dea792b0473726f2d24401452fa45d7a0843eac9e66c734b16fea"
+    )
+    assert all(curve.shape == (137,) for curve in curves.values())
+    assert prediction["numerical_regression"] == {
+        "prefix_affine_heldout_peak_to_peak_m": 11569.974689858733,
+        "wrong_orbit_heldout_peak_to_peak_m": frozen.ALTERNATIVE_ORBITS,
+    }
+    assert not any(prediction["observation_access"].values())
+
+    seal = json.loads(seal_path.read_text(encoding="utf-8"))
+    assert seal["state"] == "REPLICATION_PLAN_AND_PREDICTION_FROZEN"
+    assert seal["predictions"]["canonical_sha256"] == (
+        "d408696d5c9d6e446216fdd7bad240a300e4d0d6d27af470756ff7d1413896b0"
+    )
+    assert seal["authority"]["replication_access_authorized_by_seal"] is False
+    assert seal["sealed_reserve"]["doy"] == 218
+    assert not any(seal["access_at_seal"].values())

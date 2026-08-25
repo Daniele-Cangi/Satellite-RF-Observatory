@@ -278,6 +278,16 @@ receiver claim. The primary is consumed: no retry, reserve or rescore is
 authorized. The next work must ask a new physical question rather than extend
 this measurement chain administratively.
 
+That next physical question is now frozen, without observation access: does
+the preference repeat on a distinct pass? The pre-outcome guard-first ranking
+selects unopened DOY 219 after excluding consumed DOY 220 and qualification
+DOY 217; DOY 218 remains a sealed non-retry reserve. Exact-hash broadcast NAV
+reproduces a controlling 8,986.714 m G01 separation against a 2,377.703 m
+pairwise guard, leaving 6,609.011 m of model-only physical margin. Source
+commit bed2258 and seal SHA-256 8d4466be...987d bind the unchanged coordinate,
+nulls, thresholds and prefix/held-out split. Neither DOY 219 nor DOY 218 has
+been discovered or opened. See GNSS_PHASE_REPEATED_PASS_SEAL_REPORT.md.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

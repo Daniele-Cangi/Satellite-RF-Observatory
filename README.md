@@ -247,6 +247,16 @@ there is no retry. The authorized claim is a held-out orbital-model preference
 for this fixed experiment, not satellite identity. See
 [GNSS_PHASE_SHORT_WINDOW_PRIMARY_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_PRIMARY_REPORT.md).
 
+The next experiment is now frozen offline and asks a genuinely new question:
+whether that preference repeats on a distinct pass. The outcome-blind
+guard-first ranking selects DOY 219; DOY 218 remains sealed and cannot act as
+a retry. Exact-hash broadcast NAV predicts a controlling 8,986.714 m G01
+separation against the unchanged conservative 2,377.703 m guard. The
+prediction and seal bind the same coordinate, nulls, measurement clauses and
+prefix-only nuisance with zero DOY 219/218 product discovery or value access.
+See
+[GNSS_PHASE_REPEATED_PASS_SEAL_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_SEAL_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
