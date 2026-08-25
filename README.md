@@ -257,6 +257,13 @@ prefix-only nuisance with zero DOY 219/218 product discovery or value access.
 See
 [GNSS_PHASE_REPEATED_PASS_SEAL_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_SEAL_REPORT.md).
 
+The corresponding one-shot DOY 219 executor is also frozen offline. It does
+not modify the consumed primary and reuses only an exact-hash model-blind
+measurement kernel. The executor seal binds the DOY 219 grid, prediction,
+thresholds, two predeclared locators, zero persistence and no-fallback rule;
+it grants no live authority. See
+[GNSS_PHASE_REPEATED_PASS_EXECUTOR_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_EXECUTOR_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

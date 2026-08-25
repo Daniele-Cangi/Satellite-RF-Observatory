@@ -288,6 +288,15 @@ commit bed2258 and seal SHA-256 8d4466be...987d bind the unchanged coordinate,
 nulls, thresholds and prefix/held-out split. Neither DOY 219 nor DOY 218 has
 been discovered or opened. See GNSS_PHASE_REPEATED_PASS_SEAL_REPORT.md.
 
+The experiment-specific DOY 219 executor is now frozen offline as well. It
+leaves the consumed DOY 220 source untouched and reuses only its exact-hash
+model-blind materialization, decode, coordinate and prefix-fit operations.
+Source commit d080bbb and executor seal SHA-256
+490f6015...8ed6 bind the DOY 219 grid, thresholds, two locators, prediction and
+zero-retry outcome semantics. The seal grants no live authority; both DOY 219
+and DOY 218 remain unopened. See
+GNSS_PHASE_REPEATED_PASS_EXECUTOR_REPORT.md.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin

@@ -1,0 +1,44 @@
+{
+  "access_at_seal": {
+    "headers": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "authority": {
+    "expected_executor_seal_sha256_must_be_supplied": true,
+    "live_execution_authorized_by_seal": false
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "ncompress": "1.0.2",
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "manifest_sha256": "287a5470adbcd11bc98560562a58790a38e744cdbb140f82b6e659b923029113",
+  "model_blind_kernel_sha256": "bbacf8653a74198941a6380640d43b5e7ffc7d46767039e84604db0de61793fc",
+  "plan_manifest_sha256": "a9c7b00feb9b2fa277e5cd8d71ec22d6726cc4068bf932ef67560b07d68250ed",
+  "prediction_seal_sha256": "8d4466be2037420fb251f7ed70de8d463d9489264948245606a1a65b5d79987d",
+  "prediction_sha256": "d408696d5c9d6e446216fdd7bad240a300e4d0d6d27af470756ff7d1413896b0",
+  "primary_outcome_canonical_sha256": "66adf39fa1b10cbf43bdb712ebf4d1f3d8f598203caaa8fa2a41601fea511f9d",
+  "products": [
+    {
+      "bytes": null,
+      "name": "GOLD00USA_R_20262190000_01D_30S_MO.crx.gz",
+      "sha256": null,
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/219/GOLD00USA_R_20262190000_01D_30S_MO.crx.gz"
+    },
+    {
+      "bytes": null,
+      "name": "NLIB00USA_R_20262190000_01D_30S_MO.crx.gz",
+      "sha256": null,
+      "station": "NLIB00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/219/NLIB00USA_R_20262190000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "schema": "gnss-phase-repeated-pass-executor-seal-v1",
+  "source_commit": "d080bbb6b4db5d7328863e02d1df0baff6331658",
+  "source_sha256": "a03e3daf685851afa067dccb6974f72ba64f468b3823f2607c90e81f75a403fb",
+  "state": "REPLICATION_EXECUTOR_FROZEN_OBSERVATION_UNOPENED"
+}
