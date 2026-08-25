@@ -264,6 +264,16 @@ thresholds, two predeclared locators, zero persistence and no-fallback rule;
 it grants no live authority. See
 [GNSS_PHASE_REPEATED_PASS_EXECUTOR_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_EXECUTOR_REPORT.md).
 
+The authorized one-shot DOY 219 execution is now terminal with
+`ORBITAL_MODEL_REPEATED_PASS_PREFERRED`. The orbital model left only
+2.269 m peak-to-peak on the held-out suffix; the closest frozen null left
+8,988.225 m, producing an 8,985.956 m preference above the 2,377.703 m guard.
+This establishes repeated-pass consistency only for the exact GOLD/NLIB
+G22/G30 DOY 220 and DOY 219 experiments. Both observation artifacts were
+hashed before in-memory decode, no values were persisted, no retry occurred
+and DOY 218 remains sealed. See
+[GNSS_PHASE_REPEATED_PASS_OUTCOME_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_OUTCOME_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
