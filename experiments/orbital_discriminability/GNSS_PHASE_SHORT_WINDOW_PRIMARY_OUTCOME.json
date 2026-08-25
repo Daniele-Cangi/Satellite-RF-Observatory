@@ -1,0 +1,312 @@
+{
+  "artifacts": [
+    {
+      "attempts": 1,
+      "complete_file_bytes": 2182238,
+      "complete_file_sha256": "b1763eb485311c0fd3a073f7b9b0beda3c9af8f8f9f7be4c868a56fdeb5b7e3d",
+      "hash_before_any_decode": true,
+      "product": "GOLD00USA_R_20262200000_01D_30S_MO.crx.gz",
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/220/GOLD00USA_R_20262200000_01D_30S_MO.crx.gz"
+    },
+    {
+      "attempts": 1,
+      "complete_file_bytes": 2523817,
+      "complete_file_sha256": "48d80ce59776fa6b10024a8cf5456153f1c1fd9906d1a4acfc84053799d40b3f",
+      "hash_before_any_decode": true,
+      "product": "NLIB00USA_R_20262200000_01D_30S_MO.crx.gz",
+      "station": "NLIB00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/220/NLIB00USA_R_20262200000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "claim_scope": "HELDOUT_ORBITAL_MODEL_PREFERENCE_BELOW_SATELLITE_IDENTITY",
+  "measurement_admission": {
+    "core_phase_and_lli": "SATISFIED",
+    "feature_epochs": 137,
+    "geometry_free_phase_health": {
+      "limit_m": 0.09514683639918244,
+      "links": [
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.006479497998952866,
+          "satellite": "G22",
+          "station": "GOLD00USA",
+          "violations": 0
+        },
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.007443655282258987,
+          "satellite": "G30",
+          "station": "GOLD00USA",
+          "violations": 0
+        },
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.008667878806591034,
+          "satellite": "G22",
+          "station": "NLIB00USA",
+          "violations": 0
+        },
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.007748126983642578,
+          "satellite": "G30",
+          "station": "NLIB00USA",
+          "violations": 0
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "headers": [
+      {
+        "antenna_type": "AOAD/M_T NONE",
+        "full_frozen_window_covered": true,
+        "gps_observables": [
+          "C1C",
+          "L1C",
+          "S1C",
+          "C1W",
+          "L1W",
+          "S1W",
+          "C2X",
+          "L2X",
+          "S2X",
+          "C2W",
+          "L2W",
+          "S2W",
+          "C5X",
+          "L5X",
+          "S5X",
+          "C1X",
+          "L1X",
+          "S1X"
+        ],
+        "interval_s": 30.0,
+        "marker_name": "GOLD",
+        "receiver_type": "JAVAD TRE_G3TH DELTA",
+        "receiver_version": "4.2.03",
+        "station": "GOLD00USA",
+        "time_of_first_observation": {
+          "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+          "time_system": "GPS",
+          "utc_like_epoch": "2026-08-08T00:00:00.000000Z"
+        },
+        "time_of_last_observation": {
+          "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+          "time_system": "GPS",
+          "utc_like_epoch": "2026-08-08T23:59:30.000000Z"
+        }
+      },
+      {
+        "antenna_type": "JAVRINGANT_DM SCIS",
+        "full_frozen_window_covered": true,
+        "gps_observables": [
+          "C1C",
+          "L1C",
+          "S1C",
+          "C1W",
+          "S1W",
+          "C2W",
+          "L2W",
+          "S2W",
+          "C2L",
+          "L2L",
+          "S2L",
+          "C5Q",
+          "L5Q",
+          "S5Q",
+          "C1L",
+          "L1L",
+          "S1L"
+        ],
+        "interval_s": 30.0,
+        "marker_name": "NLIB",
+        "receiver_type": "SEPT POLARX5TR",
+        "receiver_version": "5.7.0",
+        "station": "NLIB00USA",
+        "time_of_first_observation": {
+          "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+          "time_system": "GPS",
+          "utc_like_epoch": "2026-08-08T00:00:00.000000Z"
+        },
+        "time_of_last_observation": {
+          "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+          "time_system": "GPS",
+          "utc_like_epoch": "2026-08-08T23:59:30.000000Z"
+        }
+      }
+    ],
+    "raw_epochs": 139,
+    "same_path_code_witness": {
+      "links": [
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C1C",
+          "required_indices_present": true,
+          "satellite": "G22",
+          "state": "SATISFIED",
+          "station": "GOLD00USA"
+        },
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C2W",
+          "required_indices_present": true,
+          "satellite": "G22",
+          "state": "SATISFIED",
+          "station": "GOLD00USA"
+        },
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C1C",
+          "required_indices_present": true,
+          "satellite": "G30",
+          "state": "SATISFIED",
+          "station": "GOLD00USA"
+        },
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C2W",
+          "required_indices_present": true,
+          "satellite": "G30",
+          "state": "SATISFIED",
+          "station": "GOLD00USA"
+        },
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C1C",
+          "required_indices_present": true,
+          "satellite": "G22",
+          "state": "SATISFIED",
+          "station": "NLIB00USA"
+        },
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C2W",
+          "required_indices_present": true,
+          "satellite": "G22",
+          "state": "SATISFIED",
+          "station": "NLIB00USA"
+        },
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C1C",
+          "required_indices_present": true,
+          "satellite": "G30",
+          "state": "SATISFIED",
+          "station": "NLIB00USA"
+        },
+        {
+          "coverage_fraction": 1.0,
+          "observable": "C2W",
+          "required_indices_present": true,
+          "satellite": "G30",
+          "state": "SATISFIED",
+          "station": "NLIB00USA"
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "structural_counts": {
+      "GOLD00USA": {
+        "BLANK": 0,
+        "PRESENT": 1112,
+        "TRAILING_FIELD_OMITTED": 0
+      },
+      "NLIB00USA": {
+        "BLANK": 0,
+        "PRESENT": 1112,
+        "TRAILING_FIELD_OMITTED": 0
+      }
+    }
+  },
+  "observation_access": {
+    "compressed_bytes_in_ram": 4706055,
+    "decoded_bytes_in_ram": 33930561,
+    "headers": 2,
+    "phase_code_or_snr_values_persisted": 0,
+    "phase_scalars_parsed_in_ram": 1112,
+    "products": 2
+  },
+  "outcome": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+  "persistence": {
+    "aggregate_admission_and_score_receipt_only": true,
+    "compressed_rinex": 0,
+    "decoded_rinex": 0,
+    "observation_values": 0
+  },
+  "primary_version": "g22-g30-phase-short-window-doy220-primary-v1",
+  "proof_plan_manifest_sha256": "0068385ef4aaf1014f0211efaa47da52da8c5fb18cf51377f4812434fd2b5f3c",
+  "retry": {
+    "post_freeze_attempts_per_locator": 1,
+    "substitution": false
+  },
+  "schema": "gnss-phase-short-window-primary-outcome-v1",
+  "score": {
+    "calibration_admission": {
+      "calibration_peak_to_peak_m": 0.3672753512726934,
+      "calibration_rms_m": 0.10987978148081154,
+      "constant_m": 1.9166609618280614,
+      "limit_m": 1192.1168692918313,
+      "rate_m_s": -0.0004702651264656509,
+      "state": "SATISFIED"
+    },
+    "heldout_comparison": {
+      "best_hypothesis": "ORBITAL_G22",
+      "preference_guard_m": 2384.2337385836627,
+      "preference_margin_m": 8856.65168424408,
+      "runner_up_hypothesis": "WRONG_ORBIT_G01",
+      "scores": [
+        {
+          "calibration_peak_to_peak_m": 0.3672753512726934,
+          "calibration_rms_m": 0.10987978148081154,
+          "constant_m": 1.9166609618280614,
+          "heldout_peak_to_peak_m": 2.312586041483124,
+          "heldout_rms_m": 1.4243605324783064,
+          "hypothesis": "ORBITAL_G22",
+          "rate_m_s": -0.0004702651264656509
+        },
+        {
+          "calibration_peak_to_peak_m": 10457.766849593725,
+          "calibration_rms_m": 2868.550454431946,
+          "constant_m": -2624030.0262157344,
+          "heldout_peak_to_peak_m": 8858.964270285564,
+          "heldout_rms_m": 11771.678796045378,
+          "hypothesis": "WRONG_ORBIT_G01",
+          "rate_m_s": 267.79950969574
+        },
+        {
+          "calibration_peak_to_peak_m": 13505.199712503236,
+          "calibration_rms_m": 3710.064974676191,
+          "constant_m": -812566.2481747501,
+          "heldout_peak_to_peak_m": 11403.005396895693,
+          "heldout_rms_m": 15202.191418217757,
+          "hypothesis": "PREFIX_AFFINE",
+          "rate_m_s": 298.0425276116916
+        },
+        {
+          "calibration_peak_to_peak_m": 11392.6156480934,
+          "calibration_rms_m": 3474.462007419195,
+          "constant_m": -752197.9004224235,
+          "heldout_peak_to_peak_m": 60005.60415351775,
+          "heldout_rms_m": 38497.420931025896,
+          "hypothesis": "WRONG_ORBIT_G14",
+          "rate_m_s": 14.334856925279592
+        },
+        {
+          "calibration_peak_to_peak_m": 19681.188634029124,
+          "calibration_rms_m": 5868.220581600895,
+          "constant_m": 40023.905342131075,
+          "heldout_peak_to_peak_m": 122004.29257640793,
+          "heldout_rms_m": 75104.40053848096,
+          "hypothesis": "WRONG_ORBIT_G17",
+          "rate_m_s": 89.10285547968246
+        }
+      ],
+      "state": "EVALUATED"
+    },
+    "outcome": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED"
+  },
+  "seal_sha256": "58802ab8f4dfcc0a2050bcf6c37b4d3b751b97d02a8efc28127340f0b45df62b",
+  "source_commit": "548b7a28f3bc36904142ed2ceef259b121657429",
+  "source_sha256": "bbacf8653a74198941a6380640d43b5e7ffc7d46767039e84604db0de61793fc"
+}

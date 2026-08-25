@@ -1,0 +1,215 @@
+{
+  "affine_projection_peak_to_peak_gain": 28.924759451075236,
+  "compiler_version": "gnss-continuous-phase-quotient-spike-v1",
+  "coordinate": {
+    "prefix_nuisance": [
+      "CONSTANT_AMBIGUITY",
+      "CONSTANT_RANGE_RATE"
+    ],
+    "station_satellite_order": "(GOLD_TARGET-GOLD_REFERENCE)-(NLIB_TARGET-NLIB_REFERENCE)",
+    "suffix_refit": false,
+    "time_derivative": "NONE",
+    "units": "IONOSPHERE_FREE_CARRIER_DERIVED_RANGE_METERS",
+    "weight_invariants": {
+      "first_order_dispersive_sum": 0.0,
+      "sum": 1.0
+    },
+    "weights": {
+      "L1C": 2.54572778016316,
+      "L2W": -1.5457277801631601
+    }
+  },
+  "fixture_role": "HISTORICAL_DEVELOPMENT_ONLY_NEVER_PRIMARY",
+  "geometry": {
+    "doy": 220,
+    "feature_start_gps": "2026-08-08T05:07:30 GPS",
+    "feature_stop_gps": "2026-08-08T08:19:00 GPS",
+    "reference": "G17",
+    "target": "G14",
+    "wrong_target": "G22"
+  },
+  "interpretation": "CONTINUOUS_PHASE_COORDINATE_RETAINS_POSITIVE_HISTORICAL_MECHANISM_MARGIN_NEW_CANDIDATE_SELECTION_STILL_REQUIRED",
+  "legacy_frequency_regression": {
+    "absolute_error_hz": 7.958078640513122e-13,
+    "controlling_heldout_separation_hz": 403.37545402996534,
+    "derivation": "NEGATIVE_L1_OVER_C_TIMES_CENTRAL_RANGE_DERIVATIVE",
+    "frozen_expected_hz": 403.37545402996614,
+    "g22_heldout_peak_to_peak_hz": 403.37545402996534,
+    "prefix_affine_heldout_peak_to_peak_hz": 556.6455860315574
+  },
+  "manifest_sha256": "c7a2ce41b2c40e31d3ac41a15ae314baef7c7f7aeb50174b2f6956b89bfc53f0",
+  "measurement_authorized": false,
+  "navigation": {
+    "bytes": 8285778,
+    "name": "BRDM00DLR_S_20262200000_01D_MN.rnx",
+    "sha256": "8ac8cd5327b84295436875b57cd88f6d7a45fa666acc5094be13fe56990d0df3"
+  },
+  "negative_result_interpretable_if_future_measurement_admitted": true,
+  "new_candidate_selected": false,
+  "new_gate_created": false,
+  "null_scores": {
+    "controlling_heldout_separation_m": 742458.2974898004,
+    "controlling_null": "FROZEN_WRONG_ORBIT_G22",
+    "prefix_affine": {
+      "calibration_prefix_rmse_m": 6081.36517312346,
+      "constant_m": 448586.0256255092,
+      "heldout_peak_to_peak_m": 2295676.5247644475,
+      "heldout_rms_m": 1111681.71437109,
+      "rate_m_s": 157.8855356156537
+    },
+    "wrong_orbit_g22": {
+      "calibration_prefix_rmse_m": 3363.8905809092407,
+      "constant_m": 702063.6922485183,
+      "heldout_peak_to_peak_m": 742458.2974898004,
+      "heldout_rms_m": 387434.13846398547,
+      "rate_m_s": 22.232833024651338
+    }
+  },
+  "observation_access": {
+    "headers_opened": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "products_selected": 0,
+    "values_accessed": 0
+  },
+  "one_model_physical_envelope_m": 11518.512515700328,
+  "outcome": "PHASE_QUOTIENT_MECHANISM_DISCRIMINATIVE",
+  "pairwise_comparison_envelope_m": 23037.025031400655,
+  "partition": {
+    "calibration_epochs": 77,
+    "feature_epochs": 384,
+    "heldout_epochs": 307,
+    "raw_epochs": 386
+  },
+  "physical_terms": [
+    {
+      "basis": "DIRECT_RANGE_TRAJECTORY_AT_T_PLUS_OR_MINUS_DELTA_T",
+      "controlling_station_offsets_s": [
+        15.0,
+        -15.0
+      ],
+      "heldout_peak_to_peak_bound_m": 10532.866951642754,
+      "pairwise_contribution_m": 21065.73390328551,
+      "parameter_interval_s": [
+        -15.0,
+        15.0
+      ],
+      "provenance": "STRUCTURAL_HALF_CADENCE_BOUND",
+      "state": "MODELED_DIRECT_TRAJECTORY_ENVELOPE",
+      "term": "STATION_EVENT_TIME"
+    },
+    {
+      "affine_projection_peak_to_peak_gain": 28.924759451075236,
+      "basis": "TWO_TIMES_THE_2_M_MAXIMUM_SV_ACCURACY_IN_FROZEN_NAVIGATION",
+      "basis_phase_coordinate": "FOUR_LINK_SIGNED_SUM_WITH_PER_LINK_INTERVAL_THEN_PREFIX_AFFINE_PROJECTION",
+      "four_link_coordinate_amplitude_bound_m": 16.0,
+      "heldout_peak_to_peak_bound_m": 462.79615121720377,
+      "pairwise_contribution_m": 925.5923024344075,
+      "per_link_path_bound_m": 4.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "BROADCAST_ORBIT_SV_ACCURACY"
+    },
+    {
+      "affine_projection_peak_to_peak_gain": 28.924759451075236,
+      "basis": "CONSERVATIVE_BOUND_WITH_IGS_ROBOT_CALIBRATED_RECEIVER_ANTENNAS",
+      "basis_phase_coordinate": "FOUR_LINK_SIGNED_SUM_WITH_PER_LINK_INTERVAL_THEN_PREFIX_AFFINE_PROJECTION",
+      "four_link_coordinate_amplitude_bound_m": 4.0,
+      "heldout_peak_to_peak_bound_m": 115.69903780430094,
+      "pairwise_contribution_m": 231.39807560860189,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "ANTENNA_PCV_AND_PHASE_WINDUP"
+    },
+    {
+      "affine_projection_peak_to_peak_gain": 28.924759451075236,
+      "basis": "FIXED_REJECTION_LIMIT_NOT_A_POSTERIOR_ERROR_ESTIMATE",
+      "basis_phase_coordinate": "FOUR_LINK_SIGNED_SUM_WITH_PER_LINK_INTERVAL_THEN_PREFIX_AFFINE_PROJECTION",
+      "four_link_coordinate_amplitude_bound_m": 4.0,
+      "heldout_peak_to_peak_bound_m": 115.69903780430094,
+      "pairwise_contribution_m": 231.39807560860189,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "LEARNABLE_ON_CALIBRATION_PREFIX_ONLY",
+      "state": "CALIBRATION_ADMISSION_LIMIT",
+      "term": "MULTIPATH_AND_SIGNAL_SPECIFIC_HARDWARE"
+    },
+    {
+      "affine_projection_peak_to_peak_gain": 28.924759451075236,
+      "basis": "CONSERVATIVE_REMAINDER_AFTER_SAME_SATELLITE_STATION_DIFFERENCE",
+      "basis_phase_coordinate": "FOUR_LINK_SIGNED_SUM_WITH_PER_LINK_INTERVAL_THEN_PREFIX_AFFINE_PROJECTION",
+      "four_link_coordinate_amplitude_bound_m": 4.0,
+      "heldout_peak_to_peak_bound_m": 115.69903780430094,
+      "pairwise_contribution_m": 231.39807560860189,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "SATELLITE_CLOCK_RETARDED_TIME_REMAINDER"
+    },
+    {
+      "affine_projection_peak_to_peak_gain": 28.924759451075236,
+      "basis": "CONSERVATIVE_COMBINED_UNMODELED_PATH_INTERVAL",
+      "basis_phase_coordinate": "FOUR_LINK_SIGNED_SUM_WITH_PER_LINK_INTERVAL_THEN_PREFIX_AFFINE_PROJECTION",
+      "four_link_coordinate_amplitude_bound_m": 4.0,
+      "heldout_peak_to_peak_bound_m": 115.69903780430094,
+      "pairwise_contribution_m": 231.39807560860189,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "STATION_DISPLACEMENT_EOP_AND_RELATIVITY"
+    },
+    {
+      "affine_projection_peak_to_peak_gain": 28.924759451075236,
+      "basis": "CONSERVATIVE_IERS_CHAPTER_9_HIGHER_ORDER_PATH_INTERVAL",
+      "basis_phase_coordinate": "FOUR_LINK_SIGNED_SUM_WITH_PER_LINK_INTERVAL_THEN_PREFIX_AFFINE_PROJECTION",
+      "four_link_coordinate_amplitude_bound_m": 2.0,
+      "heldout_peak_to_peak_bound_m": 57.84951890215047,
+      "pairwise_contribution_m": 115.69903780430094,
+      "per_link_path_bound_m": 0.5,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "HIGHER_ORDER_IONOSPHERE"
+    },
+    {
+      "basis": "CONSERVATIVE_ONE_OVER_SINE_MAPPING_IN_PHASE_RANGE_UNITS",
+      "controlling_station_zenith_delays_m": [
+        0.0,
+        3.5
+      ],
+      "heldout_peak_to_peak_bound_m": 2.153881156224279,
+      "pairwise_contribution_m": 4.307762312448558,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "DIFFERENTIAL_TROPOSPHERE",
+      "zenith_delay_interval_m": [
+        0.0,
+        3.5
+      ]
+    },
+    {
+      "affine_projection_peak_to_peak_gain": 28.924759451075236,
+      "basis": "HALF_RINEX_F14_3_CYCLE_QUANTIZATION_AFTER_IONOSPHERE_FREE_COMBINATION",
+      "basis_phase_coordinate": "FOUR_LINK_SIGNED_SUM_WITH_PER_LINK_INTERVAL_THEN_PREFIX_AFFINE_PROJECTION",
+      "four_link_coordinate_amplitude_bound_m": 0.0017238368006440115,
+      "heldout_peak_to_peak_bound_m": 0.049861564791539165,
+      "pairwise_contribution_m": 0.09972312958307833,
+      "per_link_path_bound_m": 0.00043095920016100286,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "KNOWN_FORMAT_BOUND",
+      "term": "RINEX_CARRIER_PHASE_QUANTIZATION"
+    }
+  ],
+  "prospective_plan_frozen": false,
+  "remaining_physical_margin_m": 719421.2724583998,
+  "schema": "gnss-continuous-phase-quotient-spike-receipt-v1",
+  "screen_receipt_sha256": "bc6b172cd750a8071c5841dd187752c66c2b855e6abf2e77d8e54d2b4488a609",
+  "synthetic_model_mismatch": {
+    "acceleration_m_s2": 5e-05,
+    "family": "CONSTANT_UNMODELED_LINE_OF_SIGHT_ACCELERATION",
+    "generated_from_nominal_orbit": false,
+    "heldout_peak_to_peak_m": 2643.84,
+    "heldout_rms_m": 1265.458145401301,
+    "same_prefix_only_affine_projection": true,
+    "survives_affine_null": true
+  }
+}

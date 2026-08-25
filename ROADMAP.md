@@ -117,6 +117,167 @@ Any later GNSS experiment must first justify a different satellite/station
 geometry or duration from an orbit-first discriminability comparison. It may
 not arise as another retry of this qualification chain.
 
+## Orbit-pair result — one new geometry retained
+
+A bounded broadcast-only comparison has now evaluated every healthy GPS pair
+over the unchanged GOLD/NLIB stations, 386-epoch duration and DOY 216--220
+date set. Every candidate required 60 preceding epochs plus the full raw
+window with all four links at or above 15 degrees. The held-out suffix retained
+the same prefix-only affine null and jointly visible wrong-target orbit family.
+
+Twenty pair/date candidates were rankable. The top three were independent-date
+instances of G14/G17, all controlled by G22 rather than the affine null. Exactly
+one geometry is retained: DOY 220, raw GPS window 05:07:00--08:19:30, guarded
+minimum 23.620 degrees and controlling separation 403.375 Hz peak-to-peak.
+
+This is not yet an experiment freeze. No observation product, header or value
+was accessed. The next causal question is whether the candidate-specific
+pairwise physical envelope leaves a positive margin. If it does not, the
+geometry closes before any new qualification artifact is sought. Exact results
+are in `GNSS_ORBIT_PAIR_SCREEN_RECEIPT.json` and its report.
+
+That envelope has now been compiled without observation discovery. G22 remains
+the controlling null at 403.375 Hz. The one-model conservative bound is
+366.877 Hz and the pairwise bound is 733.754 Hz, leaving a -330.379 Hz margin.
+The outcome is `GNSS_ORBIT_PAIR_PHYSICAL_ENVELOPE_DOMINATES`; G14/G17 DOY 220
+is closed before plan freeze, and lower-ranked dates are not automatic retries.
+
+The physical lesson is that no single nuisance removal admits the candidate.
+Even zeroing the complete broadcast-orbit contribution leaves the aggregate
+6.111 Hz above G22. A future step must either justify structured,
+outcome-independent orbit/clock uncertainty across multiple causal terms or
+select a genuinely stronger geometry. It must not reduce intervals because
+this candidate failed.
+
+A bounded documentation and navigation-grid audit has now tested the orbit/
+clock branch explicitly. GPS URRE provides useful 95% and 6-sigma design
+sensitivities, but no rate-error integrity NTE or published temporal covariance.
+Substituting those values still leaves -13.407 Hz and -30.431 Hz margins. The
+06:00 and 08:00 ephemeris cutovers affect four feature epochs by only
+millihertz; removing them diagnostically leaves the 403.375 Hz separation
+unchanged.
+
+The result is `GNSS_ORBIT_CLOCK_STRUCTURE_INSUFFICIENT`. Do not create another
+orbit-bound repair: even perfect orbit/clock knowledge cannot admit the closed
+candidate under the remaining envelope. The next comparison must change the
+causal topology—observer geometry, quotient coordinate or same-path witness—
+and rank by remaining physical margin from the start.
+
+That SHOCK comparison is now complete without observation access. Five routes
+were compared by the interpretability of a negative result. A third station
+alone adds local nuisance families, while a new screen using the same
+frequency-rate coordinate changes no causal cut. SatNOGS raster validation is
+valuable for a limited positive model-conditioned result, and Delta-DOR is a
+stronger but substantially more archive-dependent later route.
+
+The recommended minimum work is an offline continuous-phase quotient spike.
+It must keep a multi-frequency geometry-preserving combination, prefix-only
+ambiguity/rate nuisance, frozen affine and wrong-orbit nulls, and separate
+LLI/geometry-free/code witness clauses. G14/G17 is development-only for this
+mechanism and cannot become a primary. If the coordinate survives synthetic
+mismatch and a complete physical envelope, a newly predeclared bounded set
+may then be ranked by remaining physical margin before any observation product
+is discovered. Details are in `POST_G14_G17_SHOCK_REVIEW.md`; no new gate has
+been created.
+
+The offline spike has now returned
+`PHASE_QUOTIENT_MECHANISM_DISCRIMINATIVE`. On the historical G14/G17 fixture,
+the continuous phase coordinate retains 742,458.297 m against G22 after the
+same prefix-only nuisance, while the conservative pairwise envelope is
+23,037.025 m. The 719,421.272 m remainder is mechanism evidence only: G14/G17
+stays closed, no product was discovered and no plan or measurement authority
+exists.
+
+The next work may declare one new bounded orbit/station/signal/date set and
+rank it directly in the phase coordinate by complete remaining physical
+margin. It must exclude G14/G17, keep code/LLI/geometry-free witnesses separate
+from the score, and stop before product discovery if no geometry is positive.
+No receiver catalog, new gate or change to G0/G1 is required.
+
+That bounded screen has now selected G22/G30 on DOY 220, raw window
+04:30:30--07:43:00 GPS. G14 remains the controlling physical wrong-orbit null
+at 824,736.025 m despite being excluded from candidate roles. The conservative
+pairwise envelope is 19,767.924 m, leaving 804,968.101 m. All five admitted
+dates of the single surviving distinct pair were positive; no alternate pair
+was manufactured merely to fill a three-row shortlist.
+
+The result is `GNSS_PHASE_GEOMETRY_SELECTED`, not measurement admission. The
+next blocker is structural-only qualification of L1C/L2W, LLI,
+geometry-free-phase continuity and predeclared C1C/C2W witness cadence on one
+independent artifact. The recommended unexecuted roles are DOY 216 for
+qualification and DOY 220 for the later primary. No observation product has
+yet been discovered or opened.
+
+The value-blind boundary for those roles is now frozen in
+`GNSS_PHASE_STRUCTURAL_CONTRACT.md`. DOY 216 uses the exact 04:47:00--07:59:30
+GPS raw window; DOY 220 remains sealed at 04:30:30--07:43:00 GPS. Structural
+presence, LLI and epoch-grid continuity are separable from geometry-free phase
+health, which requires phase scalars and remains `NOT_EVALUATED`. The next
+review may authorize at most bounded materialization, hashing, header
+admission and a full value-blind scan of the two DOY 216 locators. It may not
+touch DOY 220 or produce an orbital score.
+
+That single structural run is now closed as
+`GNSS_PHASE_STRUCTURE_REJECTED`. Both exact DOY 216 artifacts and headers were
+available, but actual NLIB G22/G30 carrier-phase continuity did not cover the
+frozen 386-epoch window; the longest joint segment was 282 epochs and the
+same-path code clause also failed. Geometry-free health, measurement admission
+and orbital scoring remain `NOT_EVALUATED`; DOY 220 remains sealed. Do not
+shift the window or substitute a qualification artifact after this result.
+
+That change-of-abstraction review is now complete without reusing DOY 216 gap
+locations. The result is `PHASE_SHORTER_WINDOW_PHYSICALLY_AVAILABLE`. On the
+predeclared duration grid, all four unopened DOY 217--220 geometries retain a
+positive complete margin at the shortest 60-epoch held-out suffix. The
+observation-sized raw interval is 139 epochs (69 minutes elapsed); its worst
+margin is 6,473.198 m and its best four-link guard is 39.467 degrees, versus
+15.616 degrees at the old 307-epoch suffix. This is model-only physical
+availability, not a repaired qualification or a frozen primary.
+
+The roles and proof boundary are now frozen. DOY 217,
+05:54:00--07:03:00 GPS is the only qualification date; DOY 220,
+05:42:00--06:51:00 GPS remains the sealed primary. The exact 139-epoch
+coordinate, 77/60 prefix/holdout partition, geometry-free health limit,
+same-path witnesses, prefix-affine null, G01/G14/G17 alternatives and
+2,384.234 m decision guard are fixed before product discovery. No reserve is
+assigned and qualification failure authorizes no substitution.
+
+The maximum next action is bounded discovery and model-blind qualification of
+the two DOY 217 station products only. It must stop with the qualification
+outcome; DOY 220 remains forbidden until a separate review. If complete
+L1C/L2W/LLI structure, geometry-free health or required C1C/C2W witnesses do
+not pass, close this role pair rather than move the window.
+
+That single qualification is now complete with
+`GNSS_SHORT_WINDOW_QUALIFICATION_PASSED`. Both product hashes were captured
+before decoding. The fixed 139-epoch interval is complete on all four phase
+links, every relevant structural field is present, all C1C/C2W witnesses have
+100% coverage, and the maximum geometry-free second difference is
+0.019274 m against the 0.095147 m limit. The qualification used no orbit or
+null model and persisted no observation values; DOY 220 remains sealed.
+
+That offline primary decoder/scorer seal is now complete. Source commit
+548b7a2 and seal SHA-256 58802ab8...df62b bind the exact DOY 220
+broadcast-model curves, runtime dependencies, proof plan and passed
+qualification receipts. The exact numerical regressions reproduce the
+11,401.473 m prefix-affine and controlling 8,857.432 m G01 separations.
+No primary locator was discovered or opened while sealing.
+
+That single DOY 220 execution is complete with
+ORBITAL_MODEL_PREDICTIVELY_PREFERRED. Both station products passed exact
+hash-before-decode, full-window phase/LLI admission, same-path code witnesses
+and geometry-free health. The orbital calibration residual was 0.367 m
+peak-to-peak. Its held-out residual was 2.313 m, while runner-up G01 retained
+8,858.964 m; the observed 8,856.652 m preference margin exceeds the frozen
+2,384.234 m guard.
+
+The result establishes a real prospective held-out orbital-model preference
+for this exact station/date/signal/hypothesis set. It does not establish
+catalog-wide satellite identity, repeated-pass consistency or a general
+receiver claim. The primary is consumed: no retry, reserve or rescore is
+authorized. The next work must ask a new physical question rather than extend
+this measurement chain administratively.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
@@ -807,22 +968,20 @@ frequency terms can absorb its controlling held-out separation. The next
 physical route is not another receiver search and not a continuation of the
 F2.5 gate sequence.
 
-A bounded broadcast-only screen now identifies three GOLD00USA/NLIB00USA GPS
-target/reference windows for a prospective dual-frequency carrier-phase
-double-difference test. Two exact daily observation products exist, but only
-HTTP metadata has been read; their payloads remain unopened. The screen is
-recorded in `GNSS_DOUBLE_DIFFERENCE_GEOMETRY_SCREEN_REPORT.md` and its strict
-receipt.
+The historical G11/G21 primary and independent qualification are closed. Their
+physical mechanism survives, but neither artifact may be reused or rescored.
 
-Header-only observation admission and the differential physical-envelope
-calculation are now complete. The real headers corrected an 18-second GPS/UTC
-labelling error before plan freeze, admitted the common L1C/L2W same-path
-family and selected G11/G21 with 1,420.626 Hz of conservative pairwise physical
-margin. The exact plan is frozen in
-`GNSS_DOUBLE_DIFFERENCE_PROSPECTIVE_PLAN.md`.
+The current route is the newly selected G14/G17 geometry on DOY 220. It was
+chosen from five exact-hash broadcast-navigation days without discovering or
+opening any observation product. G22 is the frozen closest wrong-target orbit;
+the controlling held-out separation is 403.375 Hz.
 
-The next action requires separate measurement authority. It may decode one
-deterministic pass over the two exact-hash artifacts, evaluate calibration
-admission and then score the single held-out suffix against the frozen affine
-and G12 alternatives. It may not change station, target, reference, signals,
-time axes, envelope, nulls or outcomes, and must stop after one terminal result.
+The candidate-specific physical envelope has returned a non-positive margin:
+-330.379 Hz. The geometry is therefore closed without structural qualification
+or observation access. The smallest remaining model-first question is whether
+the dominant metre-scale orbit/clock/path intervals can be replaced by
+predeclared smooth physical uncertainty families using only outcome-independent
+information. Orbit/clock alone has now been shown insufficient even under a
+zero-error sensitivity. The next work must compare causally different
+observables or observer geometries; until then, no GNSS primary should be
+selected.

@@ -1,0 +1,49 @@
+{
+  "access_at_seal": {
+    "headers": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "authority": {
+    "expected_seal_sha256_must_be_supplied_separately": true,
+    "live_execution_authorized_by_seal": false,
+    "token": "AUTHORIZE_DOY220_SHORT_WINDOW_PRIMARY_ONCE"
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "ncompress": "1.0.2",
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "manifest_sha256": "1f92dcfa4b581f467f75c8281eaf8e0a1f89f1d777094f94a6f17c5c2295922c",
+  "predictions": {
+    "curve_set_sha256": "816e259786a70f47b1b6d8063e79a3a14bda3a0b630d3c161982e46c6957ddb6",
+    "name": "GNSS_PHASE_SHORT_WINDOW_PRIMARY_PREDICTIONS.json",
+    "sha256": "1500fa3d6ddc5b3e1681631fca10df2f24a80bdfa5933f725e006cd07d7a81b3"
+  },
+  "primary_products": [
+    {
+      "bytes": null,
+      "name": "GOLD00USA_R_20262200000_01D_30S_MO.crx.gz",
+      "sha256": null,
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/220/GOLD00USA_R_20262200000_01D_30S_MO.crx.gz"
+    },
+    {
+      "bytes": null,
+      "name": "NLIB00USA_R_20262200000_01D_30S_MO.crx.gz",
+      "sha256": null,
+      "station": "NLIB00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/220/NLIB00USA_R_20262200000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "proof_plan_manifest_sha256": "0068385ef4aaf1014f0211efaa47da52da8c5fb18cf51377f4812434fd2b5f3c",
+  "qualification_coverage_sha256": "a1bcf2b0117caaa08694631bcacc6f3a4ea044f7319f7e1b90b79784ce8e3a5e",
+  "qualification_outcome_sha256": "c592ae34c665322d1bc209d6d868d1ab5aedae10934d3a79a524231dab765322",
+  "qualification_summary_sha256": "64a453b2117ad4a156024f9297d5e6457da530d5b2fe6001d232988776bf748b",
+  "schema": "gnss-phase-short-window-primary-seal-v1",
+  "source_commit": "548b7a28f3bc36904142ed2ceef259b121657429",
+  "source_sha256": "bbacf8653a74198941a6380640d43b5e7ffc7d46767039e84604db0de61793fc",
+  "state": "PRIMARY_SCORER_FROZEN_PRIMARY_UNOPENED"
+}
