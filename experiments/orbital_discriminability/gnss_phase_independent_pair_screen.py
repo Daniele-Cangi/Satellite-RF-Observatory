@@ -615,6 +615,7 @@ def compile_screen(
         "admitted_pair_count": sum(
             1 for row in rows if bool(row["admissible_geometry"])
         ),
+        "evaluated_pairs": rows,
         "shortlist": shortlist,
         "selected_pair": shortlist[0] if shortlist else None,
         "outcome": OUTCOME_SHORTLISTED if shortlist else OUTCOME_NONE,
