@@ -286,6 +286,16 @@ value was accessed and no prospective plan is frozen. The next maximum step
 is one bounded value-blind capability qualification of DRAO/WES. See
 [GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_REPORT.md).
 
+The subsequent metadata-only admission found that WES exposes a RINEX v2
+primary feed, so its products cannot provide the frozen explicit `L1C/L2W`
+identity without a post-hoc signal mapping. DRAO/WES is therefore rejected
+before payload access. From the already frozen shortlist, ALGO00CAN +
+MDO100USA is selected for one model-blind DOY217 qualification: it retains
+`47828.042 m` of complete margin and supplies distinct DOMES, hardware
+serials, agencies and primary data centers. The qualification plan contains
+only two DOY217 locators; no DOY219 product has been named or opened. See
+[GNSS_INDEPENDENT_PAIR_QUALIFICATION_PLAN.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_QUALIFICATION_PLAN.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

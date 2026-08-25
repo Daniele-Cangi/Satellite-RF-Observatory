@@ -332,6 +332,19 @@ L1C/L2W/LLI plus C1C/C2W witness family on one distinct artifact. Only after
 that review may a DRAO/WES DOY 219 prospective primary be selected and frozen.
 See GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_REPORT.md.
 
+Metadata-only admission then rejected DRAO/WES before payload access. WES's
+official primary feed is RINEX v2 and cannot prove the explicit L1C/L2W signal
+identity required by the frozen coordinate. A post-hoc RINEX2 mapping is not
+an admissible repair.
+
+The next bounded role is ALGO00CAN/MDO100USA, already third in the frozen
+shortlist. Its 47,828.042 m complete margin remains strongly positive, while
+site logs establish distinct DOMES, receiver and antenna serials,
+organisations and primary data centers. One DOY217 qualification window is now
+frozen model-blind. No observation body has been accessed and no DOY219
+product locator exists in the plan. See
+GNSS_INDEPENDENT_PAIR_QUALIFICATION_PLAN.md.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
@@ -1023,14 +1036,13 @@ repeated-pass consistency for that exact pair; shared station systematics are
 still open.
 
 The current route therefore preserves the same orbital coordinate and changes
-the observer roots. A six-site, observation-blind geometry screen selects
-DRAO00CAN + WES200USA with 92,649.071 m of complete remaining physical margin
-on DOY 219. The screen has no RINEX observation input and freezes no primary.
+the observer roots. DRAO/WES had the strongest geometry but failed metadata
+admission because WES provides RINEX v2 rather than explicit L1C/L2W signal
+identity. No payload was opened.
 
-The immediate blocker is measurement-root admission, not more geometry: exact
-historical receiver/clock lineage, full 139-epoch event-time coverage,
-L1C/L2W phase and LLI continuity, geometry-free health and predeclared
-C1C/C2W same-path witnesses must first pass on one distinct qualification
-artifact. Failure ends this candidate without relaxing duration, fields,
-nulls or thresholds. Observation discovery and primary selection remain
-outside the current stop condition.
+ALGO00CAN + MDO100USA is now the sole frozen qualification role. The pair has
+47,828.042 m of complete remaining margin and physically distinct hardware,
+antenna, organisation and ingest roots. The immediate blocker is one
+model-blind DOY217 capability outcome over the complete 139-epoch window.
+Primary product discovery remains forbidden; qualification failure permits no
+fallback pair, date, duration, field or threshold change.
