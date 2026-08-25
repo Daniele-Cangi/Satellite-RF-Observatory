@@ -11,3 +11,6 @@ experiments/orbital_discriminability/MAVEN_DSS45_DETECTOR_DEVELOPMENT_RESULT.jso
 
 # This frozen Cassini parent receipt was sealed from its exact CRLF byte stream.
 experiments/orbital_discriminability/CASSINI_DUAL_ROOT_XKA_COMPILER_RECEIPT.json -text whitespace=cr-at-eol
+
+# The terminal GNSS replication receipt is hashed from its exact LF byte stream.
+experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_OUTCOME.json -text
