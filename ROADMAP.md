@@ -297,6 +297,16 @@ zero-retry outcome semantics. The seal grants no live authority; both DOY 219
 and DOY 218 remain unopened. See
 GNSS_PHASE_REPEATED_PASS_EXECUTOR_REPORT.md.
 
+The single authorized DOY 219 execution has now closed positively as
+ORBITAL_MODEL_REPEATED_PASS_PREFERRED. All measurement clauses passed. The
+orbital held-out residual was 2.269 m peak-to-peak versus 8,988.225 m for the
+closest null, leaving an 8,985.956 m preference against the frozen
+2,377.703 m guard. This supports repeated-pass consistency for the exact two
+GOLD/NLIB G22/G30 passes, not general identity or independence from shared
+station-pair systematics. No observation values were persisted, no retry or
+fallback occurred and DOY 218 remains sealed. The replication is consumed;
+see GNSS_PHASE_REPEATED_PASS_OUTCOME_REPORT.md.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
