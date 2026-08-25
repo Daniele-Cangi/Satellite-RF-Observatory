@@ -307,6 +307,31 @@ station-pair systematics. No observation values were persisted, no retry or
 fallback occurred and DOY 218 remains sealed. The replication is consumed;
 see GNSS_PHASE_REPEATED_PASS_OUTCOME_REPORT.md.
 
+## Independent pair challenge — geometry shortlisted, measurement unopened
+
+Repeated-pass consistency leaves the GOLD/NLIB hardware, geography and
+pair-specific systematics shared. Because the phase observable is a four-link
+two-station coordinate, adding only one station cannot isolate that causal
+cut. The minimum next geometry needs two new sites.
+
+A bounded observation-blind screen fixed six official IGS candidates before
+ranking and evaluated all 15 pairs on the unchanged DOY 219 G22/G30 grid,
+prefix-affine null, G01/G14/G17 alternatives and complete pairwise physical
+envelope. All 15 pairs retain positive margins. The deterministic shortlist
+is DRAO00CAN/WES200USA, DRAO00CAN/ALGO00CAN and ALGO00CAN/MDO100USA.
+
+DRAO/WES ranks first with a 96,588.530 m controlling G01 separation and a
+3,939.458 m pairwise envelope, leaving 92,649.071 m. Every modeled satellite
+remains jointly visible at both sites; the minimum is 19.405 degrees. No
+observation product was discovered or opened.
+
+This does not yet prove independent hardware roots. The next maximum work is
+a separate value-blind capability qualification establishing the exact
+historical receiver/clock lineage, full event-time coverage and the frozen
+L1C/L2W/LLI plus C1C/C2W witness family on one distinct artifact. Only after
+that review may a DRAO/WES DOY 219 prospective primary be selected and frozen.
+See GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_REPORT.md.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
@@ -990,27 +1015,22 @@ experiment needs them.
 The project advances by closing one causal ambiguity at a time, not by adding
 features around an unverified inference.
 
-## Current satellite-first forward route: GNSS quotient observable
+## Current satellite-first forward route: independent GNSS station pair
 
-The Cassini 2005 dual-root route is closed because unresolved absolute-
-frequency terms can absorb its controlling held-out separation. The next
-physical route is not another receiver search and not a continuation of the
-F2.5 gate sequence.
+The continuous-phase G22/G30 mechanism has passed one held-out GOLD/NLIB
+primary and one distinct-pass replication. The authorized claim remains
+repeated-pass consistency for that exact pair; shared station systematics are
+still open.
 
-The historical G11/G21 primary and independent qualification are closed. Their
-physical mechanism survives, but neither artifact may be reused or rescored.
+The current route therefore preserves the same orbital coordinate and changes
+the observer roots. A six-site, observation-blind geometry screen selects
+DRAO00CAN + WES200USA with 92,649.071 m of complete remaining physical margin
+on DOY 219. The screen has no RINEX observation input and freezes no primary.
 
-The current route is the newly selected G14/G17 geometry on DOY 220. It was
-chosen from five exact-hash broadcast-navigation days without discovering or
-opening any observation product. G22 is the frozen closest wrong-target orbit;
-the controlling held-out separation is 403.375 Hz.
-
-The candidate-specific physical envelope has returned a non-positive margin:
--330.379 Hz. The geometry is therefore closed without structural qualification
-or observation access. The smallest remaining model-first question is whether
-the dominant metre-scale orbit/clock/path intervals can be replaced by
-predeclared smooth physical uncertainty families using only outcome-independent
-information. Orbit/clock alone has now been shown insufficient even under a
-zero-error sensitivity. The next work must compare causally different
-observables or observer geometries; until then, no GNSS primary should be
-selected.
+The immediate blocker is measurement-root admission, not more geometry: exact
+historical receiver/clock lineage, full 139-epoch event-time coverage,
+L1C/L2W phase and LLI continuity, geometry-free health and predeclared
+C1C/C2W same-path witnesses must first pass on one distinct qualification
+artifact. Failure ends this candidate without relaxing duration, fields,
+nulls or thresholds. Observation discovery and primary selection remain
+outside the current stop condition.

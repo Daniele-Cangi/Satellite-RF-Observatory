@@ -274,6 +274,18 @@ hashed before in-memory decode, no values were persisted, no retry occurred
 and DOY 218 remains sealed. See
 [GNSS_PHASE_REPEATED_PASS_OUTCOME_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_OUTCOME_REPORT.md).
 
+The next physical challenge is now geometry-screened without observation
+discovery: can the same G22/G30 coordinate survive on two sites wholly
+disjoint from GOLD/NLIB? Six predeclared official IGS sites produced 15
+four-link candidates on the frozen DOY 219 grid; all retain positive complete
+margin. DRAO00CAN + WES200USA ranks first against G01 with a
+`96588.530 m` separation, `3939.458 m` pairwise envelope and
+`92649.071 m` remaining margin. These are candidate site roots, not yet
+qualified historical hardware roots. No RINEX observation locator, header or
+value was accessed and no prospective plan is frozen. The next maximum step
+is one bounded value-blind capability qualification of DRAO/WES. See
+[GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
