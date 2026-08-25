@@ -350,3 +350,76 @@ def test_cli_has_no_implicit_live_default() -> None:
     assert primary.AUTHORITY_TOKEN not in primary.manifest()["access_boundary"]
     assert primary.MAX_TRANSPORT_ATTEMPTS == 1
     assert not (ROOT / primary.OUTCOME_NAME).exists()
+
+
+def test_frozen_prediction_artifact_reproduces_geometry() -> None:
+    path = ROOT / primary.PREDICTIONS_NAME
+    assert primary.canonical_sha256(path) == (
+        "1500fa3d6ddc5b3e1681631fca10df2f24a80bdfa5933f725e006cd07d7a81b3"
+    )
+    value = json.loads(path.read_text(encoding="utf-8"))
+    curves = primary.validate_predictions(value)
+    try:
+        assert value["compiler_source_commit"] == (
+            "548b7a28f3bc36904142ed2ceef259b121657429"
+        )
+        assert value["compiler_source_sha256"] == primary.source_sha256()
+        assert value["curve_set_sha256"] == (
+            "816e259786a70f47b1b6d8063e79a3a14bda3a0b630d3c161982e46c6957ddb6"
+        )
+        regression = value["numerical_regression"]
+        assert regression[
+            "prefix_affine_heldout_peak_to_peak_m"
+        ] == pytest.approx(11401.473007275607, abs=1.0e-6)
+        assert regression[
+            "wrong_orbit_heldout_peak_to_peak_m"
+        ] == pytest.approx(
+            {
+                "G01": 8857.431880665245,
+                "G14": 60003.29156747623,
+                "G17": 122006.60516244936,
+            },
+            abs=1.0e-6,
+        )
+        assert value["observation_access"] == {
+            "products_discovered": 0,
+            "headers": 0,
+            "payload_bytes": 0,
+            "values": 0,
+        }
+    finally:
+        for curve in curves.values():
+            curve.fill(0.0)
+
+
+def test_frozen_seal_binds_code_plan_qualification_and_predictions() -> None:
+    seal_path = ROOT / primary.SEAL_NAME
+    predictions_path = ROOT / primary.PREDICTIONS_NAME
+    seal_sha256 = (
+        "58802ab8f4dfcc0a2050bcf6c37b4d3b751b97d02a8efc28127340f0b45df62b"
+    )
+    seal, curves = primary.validate_seal(
+        seal_path, predictions_path, seal_sha256
+    )
+    try:
+        assert seal["source_commit"] == (
+            "548b7a28f3bc36904142ed2ceef259b121657429"
+        )
+        assert seal["source_sha256"] == (
+            "bbacf8653a74198941a6380640d43b5e7ffc7d46767039e84604db0de61793fc"
+        )
+        assert seal["proof_plan_manifest_sha256"] == (
+            "0068385ef4aaf1014f0211efaa47da52da8c5fb18cf51377f4812434fd2b5f3c"
+        )
+        assert seal["qualification_outcome_sha256"] == (
+            primary.QUALIFICATION_OUTCOME_SHA256
+        )
+        assert all(
+            product["bytes"] is None and product["sha256"] is None
+            for product in seal["primary_products"]
+        )
+        assert all(value == 0 for value in seal["access_at_seal"].values())
+        assert seal["authority"]["live_execution_authorized_by_seal"] is False
+    finally:
+        for curve in curves.values():
+            curve.fill(0.0)

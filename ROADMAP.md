@@ -256,10 +256,19 @@ links, every relevant structural field is present, all C1C/C2W witnesses have
 0.019274 m against the 0.095147 m limit. The qualification used no orbit or
 null model and persisted no observation values; DOY 220 remains sealed.
 
-The next bounded work is an offline primary decoder/scorer seal that reuses
-the already frozen coordinate, prefix, nulls and physical decision guard. It
-must be committed before primary access. Do not reopen qualification, learn a
-threshold from it, add a reserve or touch DOY 220 during that seal.
+That offline primary decoder/scorer seal is now complete. Source commit
+548b7a2 and seal SHA-256 58802ab8...df62b bind the exact DOY 220
+broadcast-model curves, runtime dependencies, proof plan and passed
+qualification receipts. The exact numerical regressions reproduce the
+11,401.473 m prefix-affine and controlling 8,857.432 m G01 separations.
+No primary locator was discovered or opened while sealing.
+
+The only next causal action is a separately authorized, single DOY 220
+execution. It has one attempt per frozen locator, hashes both complete
+artifacts before decode, persists no observation values and produces one
+measurement/detectability/held-out outcome. The seal itself is not authority;
+until explicit review, DOY 220 remains at zero headers, payload bytes and
+values.
 
 ## Anti-drift stop
 

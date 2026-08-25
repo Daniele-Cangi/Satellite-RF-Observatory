@@ -226,6 +226,16 @@ orbital model or score was available to this run, no observation value was
 persisted and DOY 220 remains unopened. See
 [`GNSS_PHASE_SHORT_WINDOW_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_QUALIFICATION_REPORT.md).
 
+The primary decoder/scorer is now frozen offline at source commit 548b7a2.
+Exact-hash broadcast navigation produced the immutable DOY 220 orbital,
+prefix-affine and G01/G14/G17 model coordinates, reproducing the controlling
+8,857.432 m separation. The seal binds code, dependencies, plan,
+qualification receipts and prediction artifact; it permits one transport
+attempt per predeclared product, no suffix refit and no observation-value
+persistence. The primary is still completely unopened and the seal grants no
+live authority. See
+[GNSS_PHASE_SHORT_WINDOW_PRIMARY_SEAL_REPORT.md](experiments/orbital_discriminability/GNSS_PHASE_SHORT_WINDOW_PRIMARY_SEAL_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
