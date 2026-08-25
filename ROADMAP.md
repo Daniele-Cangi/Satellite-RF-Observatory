@@ -345,6 +345,14 @@ frozen model-blind. No observation body has been accessed and no DOY219
 product locator exists in the plan. See
 GNSS_INDEPENDENT_PAIR_QUALIFICATION_PLAN.md.
 
+The separately authorised execution returned
+`GNSS_INDEPENDENT_PAIR_QUALIFICATION_PASSED`. Both exact artifacts were hashed
+before decode and then erased from RAM. Every one of the 3,336 structural rows
+is present; all four phase links span the complete 139-epoch window, C1C/C2W
+coverage is 100 percent, and the largest geometry-free second difference is
+0.022172391 m against the frozen 0.095146836 m limit. This is capability
+admission only: no orbit, null or DOY219 product was available to the executor.
+
 ## Anti-drift stop
 
 Stop the roadmap if no candidate pass produces a positive detectability margin
@@ -1040,9 +1048,10 @@ the observer roots. DRAO/WES had the strongest geometry but failed metadata
 admission because WES provides RINEX v2 rather than explicit L1C/L2W signal
 identity. No payload was opened.
 
-ALGO00CAN + MDO100USA is now the sole frozen qualification role. The pair has
-47,828.042 m of complete remaining margin and physically distinct hardware,
-antenna, organisation and ingest roots. The immediate blocker is one
-model-blind DOY217 capability outcome over the complete 139-epoch window.
-Primary product discovery remains forbidden; qualification failure permits no
-fallback pair, date, duration, field or threshold change.
+ALGO00CAN + MDO100USA has now passed its sole model-blind DOY217 qualification.
+The pair retains 47,828.042 m of complete modeled margin and has demonstrated
+the required 139-epoch L1C/L2W/LLI path plus C1C/C2W witnesses on physically
+distinct hardware, antenna, organisation and ingest roots. The immediate
+blocker is no longer capability qualification; it is metadata-only selection
+and freezing of one distinct DOY219 primary. No primary locator has yet been
+named or accessed, and this result authorizes no orbital claim.

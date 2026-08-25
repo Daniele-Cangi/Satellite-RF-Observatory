@@ -296,6 +296,14 @@ serials, agencies and primary data centers. The qualification plan contains
 only two DOY217 locators; no DOY219 product has been named or opened. See
 [GNSS_INDEPENDENT_PAIR_QUALIFICATION_PLAN.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_QUALIFICATION_PLAN.md).
 
+That one qualification execution is now complete with
+`GNSS_INDEPENDENT_PAIR_QUALIFICATION_PASSED`. Both products were hash-complete
+before decode; the complete 139-epoch joint window, L1C/L2W plus LLI,
+C1C/C2W witnesses and geometry-free health all passed. Compressed and decoded
+RINEX persisted zero bytes, and no orbit or DOY219 product entered the
+executor. This authorizes only a separate primary-selection review. See
+[GNSS_INDEPENDENT_PAIR_QUALIFICATION_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_QUALIFICATION_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
