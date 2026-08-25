@@ -304,6 +304,14 @@ RINEX persisted zero bytes, and no orbit or DOY219 product entered the
 executor. This authorizes only a separate primary-selection review. See
 [GNSS_INDEPENDENT_PAIR_QUALIFICATION_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_QUALIFICATION_REPORT.md).
 
+That review has now frozen one distinct DOY219 ALGO/MDO primary and all five
+model curves. Only two descriptive HEAD requests were made; no observation
+header, payload byte or value was accessed. The controlling wrong-orbit G14
+separation remains `51370.299 m` against a `3542.257 m` pairwise physical
+guard, leaving `47828.042 m`. The seal binds the exact broadcast NAV,
+compiler, partition, nuisance and nulls but grants no primary authority. See
+[GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

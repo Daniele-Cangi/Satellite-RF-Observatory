@@ -1051,7 +1051,14 @@ identity. No payload was opened.
 ALGO00CAN + MDO100USA has now passed its sole model-blind DOY217 qualification.
 The pair retains 47,828.042 m of complete modeled margin and has demonstrated
 the required 139-epoch L1C/L2W/LLI path plus C1C/C2W witnesses on physically
-distinct hardware, antenna, organisation and ingest roots. The immediate
-blocker is no longer capability qualification; it is metadata-only selection
-and freezing of one distinct DOY219 primary. No primary locator has yet been
-named or accessed, and this result authorizes no orbital claim.
+distinct hardware, antenna, organisation and ingest roots.
+
+The distinct DOY219 primary is now selected and prediction-frozen without
+opening either observation. Two exact ALGO/MDO locators returned descriptive
+HEAD metadata, while artifact hashes remain intentionally unknown until a
+future single materialization before any header decode. The exact-hash
+broadcast NAV compilation reproduces the G14-controlling 51,370.299 m
+separation, 3,542.257 m pairwise guard and 47,828.042 m remaining margin. The
+seal grants no observation authority. The immediate blocker is review of this
+one-shot proof boundary, not further selection or infrastructure. See
+[`GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md).
