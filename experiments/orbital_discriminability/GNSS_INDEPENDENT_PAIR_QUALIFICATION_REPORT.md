@@ -93,6 +93,15 @@ The JSON Lines receipt contains only the predeclared structural keys. It has
 phase, code or signal-strength value. The aggregate summary reports 1,112
 phase scalars parsed transiently and zero persisted.
 
+Post-execution review identified one alternate failure-path weakness in the
+consumed executor: source-commit lookup occurred while constructing the final
+outcome rather than being cached before transport. It succeeded in the actual
+run and the complete receipt exists, so it did not affect this result. The
+source file is deliberately left byte-identical to its executed SHA-256;
+changing it now would falsify that provenance. This one-shot authority is
+consumed and the executor must never run again. Any distinct future executor
+must resolve all source metadata before observation access.
+
 ## Authorized and unauthorized claims
 
 Authorized:

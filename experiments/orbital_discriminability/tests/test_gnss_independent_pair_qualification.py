@@ -290,7 +290,10 @@ def test_run_hashes_both_products_before_first_decode(monkeypatch, tmp_path) -> 
     assert materialized == ["ALGO00CAN", "MDO100USA"]
     assert decoded == ["ALGO00CAN", "MDO100USA"]
     assert outcome["outcome"] == "GNSS_INDEPENDENT_PAIR_QUALIFICATION_PASSED"
-    assert all(outcome["future_primary_doy219_access"].values()) is False
+    assert all(
+        value == 0
+        for value in outcome["future_primary_doy219_access"].values()
+    )
     coverage = (tmp_path / qualification.COVERAGE_NAME).read_bytes()
     assert b'"value"' not in coverage and b"115000000" not in coverage
 
