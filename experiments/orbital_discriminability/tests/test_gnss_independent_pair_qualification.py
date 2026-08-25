@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from hashlib import sha256
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -9,6 +10,9 @@ import pytest
 from experiments.orbital_discriminability import (
     gnss_independent_pair_qualification as qualification,
 )
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def header_line(data: str, label: str) -> str:
@@ -341,4 +345,80 @@ def test_strict_json_rejects_nonfinite_and_numpy_scalars() -> None:
             qualification.strict_json({"bad": value})
     assert json.loads(qualification.strict_json(qualification.manifest())) == (
         qualification.manifest()
+    )
+
+
+def test_frozen_real_outcome_qualifies_without_primary_or_orbit_access() -> None:
+    outcome = json.loads(
+        (ROOT / qualification.OUTCOME_NAME).read_text(encoding="utf-8")
+    )
+    summary = json.loads(
+        (ROOT / qualification.SUMMARY_NAME).read_text(encoding="utf-8")
+    )
+
+    assert outcome["outcome"] == "GNSS_INDEPENDENT_PAIR_QUALIFICATION_PASSED"
+    assert outcome["source_commit"] == (
+        "6410ab195b2b6b535bcb57c357fce5300e8fffae"
+    )
+    assert outcome["source_sha256"] == qualification.source_sha256()
+    assert outcome["manifest_sha256"] == qualification.manifest_sha256()
+    assert [
+        (row["complete_file_bytes"], row["complete_file_sha256"])
+        for row in outcome["artifacts"]
+    ] == [
+        (
+            4_305_409,
+            "339b4de652b3b9f1cbdf60804834fe97ff5dbf374e042e4871f5b761c5cfd821",
+        ),
+        (
+            3_560_934,
+            "fe7df3b7186519c108a192b2549f2b42f20fac353f6f38238db27b51164e0552",
+        ),
+    ]
+    assert summary["structural_counts"] == {"PRESENT": 3336}
+    assert summary["full_joint_window"] is True
+    assert summary["same_path_code_witness"]["state"] == "SATISFIED"
+    assert all(
+        row["coverage_fraction"] == 1.0
+        for row in summary["same_path_code_witness"]["links"]
+    )
+    assert summary["geometry_free_phase_health"]["state"] == "SATISFIED"
+    assert max(
+        row["maximum_absolute_second_difference_m"]
+        for row in summary["geometry_free_phase_health"]["links"]
+    ) == pytest.approx(0.022172391414642334)
+    assert all(
+        value == 0 for value in outcome["future_primary_doy219_access"].values()
+    )
+    assert outcome["orbital_prediction_access"] == 0
+    assert outcome["orbital_scores_produced"] == 0
+    assert outcome["persistence"]["observation_values"] == 0
+    assert outcome["next_authority"] == "PRIMARY_SELECTION_REVIEW_ONLY"
+
+
+def test_frozen_coverage_is_strict_structural_jsonl_only() -> None:
+    path = ROOT / qualification.COVERAGE_NAME
+    raw = path.read_bytes()
+    rows = [json.loads(line) for line in raw.splitlines()]
+    allowed = {
+        "station",
+        "gps_epoch",
+        "satellite",
+        "observable",
+        "physical_role",
+        "state",
+        "header_declared_index",
+        "reconstructed_field_count",
+        "source_line_class",
+        "continuation_state",
+        "lli_state",
+        "epoch_flag",
+    }
+
+    assert len(rows) == 3336
+    assert all(set(row) == allowed for row in rows)
+    assert b'"value"' not in raw
+    assert b"NaN" not in raw and b"Infinity" not in raw
+    assert sha256(raw).hexdigest() == (
+        "544e1b6d584c3bb2e666d1cb5190743c60a9f2758bebd6fa4d656e714ad08b19"
     )

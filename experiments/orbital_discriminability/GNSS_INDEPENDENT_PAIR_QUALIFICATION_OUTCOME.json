@@ -1,0 +1,88 @@
+{
+  "artifacts": [
+    {
+      "attempts": 1,
+      "complete_file_bytes": 4305409,
+      "complete_file_sha256": "339b4de652b3b9f1cbdf60804834fe97ff5dbf374e042e4871f5b761c5cfd821",
+      "hash_before_any_decode": true,
+      "head_metadata_was_descriptive_not_identity": true,
+      "preaccess_head_content_length": 4305409,
+      "product": "ALGO00CAN_R_20262170000_01D_30S_MO.crx.gz",
+      "response_content_length": "4305409",
+      "response_etag": "\"41b201-6586b10a8ad64\"",
+      "response_last_modified": "Fri, 07 Aug 2026 01:38:44 GMT",
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/217/ALGO00CAN_R_20262170000_01D_30S_MO.crx.gz"
+    },
+    {
+      "attempts": 1,
+      "complete_file_bytes": 3560934,
+      "complete_file_sha256": "fe7df3b7186519c108a192b2549f2b42f20fac353f6f38238db27b51164e0552",
+      "hash_before_any_decode": true,
+      "head_metadata_was_descriptive_not_identity": true,
+      "preaccess_head_content_length": 3560934,
+      "product": "MDO100USA_R_20262170000_01D_30S_MO.crx.gz",
+      "response_content_length": "3560934",
+      "response_etag": "\"3655e6-65856e80dc6c3\"",
+      "response_last_modified": "Thu, 06 Aug 2026 01:35:43 GMT",
+      "station": "MDO100USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/217/MDO100USA_R_20262170000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "clause_states": {
+    "artifact_materialization_and_hash": "SATISFIED",
+    "core_phase_and_lli": "SATISFIED",
+    "geometry_free_phase_health": "SATISFIED",
+    "header_configuration_and_window": "SATISFIED",
+    "primary_orbital_comparison": "NOT_EVALUATED",
+    "same_path_code_witness": "SATISFIED"
+  },
+  "coverage": {
+    "name": "GNSS_INDEPENDENT_PAIR_QUALIFICATION_COVERAGE.jsonl",
+    "rows": 3336,
+    "sha256": "544e1b6d584c3bb2e666d1cb5190743c60a9f2758bebd6fa4d656e714ad08b19"
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "fallback_pair_or_date_selected": false,
+  "future_primary_doy219_access": {
+    "headers": 0,
+    "locators": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "manifest_sha256": "7aee72bac1660518769240eca4fd627067877fba0cda0a56519e514bd51d7e24",
+  "next_authority": "PRIMARY_SELECTION_REVIEW_ONLY",
+  "observation_access": {
+    "code_or_snr_scalars_parsed": 0,
+    "compressed_bytes_in_ram": 7866343,
+    "decoded_rinex_bytes_in_ram": 56035389,
+    "phase_scalars_parsed_in_ram": 1112,
+    "phase_scalars_persisted": 0,
+    "qualification_headers": 2,
+    "qualification_products": 2
+  },
+  "orbital_prediction_access": 0,
+  "orbital_scores_produced": 0,
+  "outcome": "GNSS_INDEPENDENT_PAIR_QUALIFICATION_PASSED",
+  "persistence": {
+    "compressed_rinex_bytes": 0,
+    "decoded_rinex_bytes": 0,
+    "observation_values": 0,
+    "structural_and_aggregate_health_receipts_only": true
+  },
+  "proof_plan_manifest_sha256": "9f6d2ec41717666910b82e03341dbfc9ba6dd8285d481a93f0699e912206c3e4",
+  "proof_plan_source_sha256": "7f5a0959b3280014ac8811efb614331135c26cbcfece61ea6685fca9f79147b0",
+  "qualification_version": "algo-mdo-g22-g30-doy217-qualification-v1",
+  "schema": "gnss-independent-pair-qualification-outcome-v1",
+  "source_commit": "6410ab195b2b6b535bcb57c357fce5300e8fffae",
+  "source_sha256": "9f2f81daf251caa6dfc9bc07225f8d5a300597969417da2a4566cab53b1aa155",
+  "summary": {
+    "name": "GNSS_INDEPENDENT_PAIR_QUALIFICATION_SUMMARY.json",
+    "sha256": "68f14d331509f4bed96176314cab4428d80292d28da5a88430f4068948384493"
+  }
+}
