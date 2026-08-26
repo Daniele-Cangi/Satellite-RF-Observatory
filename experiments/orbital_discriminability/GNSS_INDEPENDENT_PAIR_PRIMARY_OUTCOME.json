@@ -1,0 +1,10 @@
+{
+  "artifacts": [],
+  "execution_state": "PRIMARY_ARTIFACT_MATERIALIZATION_FAILED",
+  "executor_version": "g22-g30-algo-mdo-doy219-primary-executor-v1",
+  "heldout_comparison": "NOT_EVALUATED",
+  "observation_values_persisted": 0,
+  "physical_outcome": null,
+  "reason": "ARTIFACT_MATERIALIZATION_FAILED:ALGO00CAN:URLError:<urlopen error [WinError 10060] Impossibile stabilire la connessione. Risposta non corretta della parte connessa dopo l'intervallo di tempo oppure mancata risposta dall'host collegato>",
+  "schema": "gnss-independent-pair-primary-outcome-v1"
+}
