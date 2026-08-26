@@ -63,21 +63,21 @@ NAVIGATION_CANDIDATES: Final = (
         221,
         "2026-08-09",
         "BRDM00DLR_S_20262210000_01D_MN.rnx.gz",
-        "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/221/"
+        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/brdc/"
         "BRDM00DLR_S_20262210000_01D_MN.rnx.gz",
     ),
     NavigationCandidate(
         222,
         "2026-08-10",
         "BRDM00DLR_S_20262220000_01D_MN.rnx.gz",
-        "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/222/"
+        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/brdc/"
         "BRDM00DLR_S_20262220000_01D_MN.rnx.gz",
     ),
     NavigationCandidate(
         223,
         "2026-08-11",
         "BRDM00DLR_S_20262230000_01D_MN.rnx.gz",
-        "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/223/"
+        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/brdc/"
         "BRDM00DLR_S_20262230000_01D_MN.rnx.gz",
     ),
 )
