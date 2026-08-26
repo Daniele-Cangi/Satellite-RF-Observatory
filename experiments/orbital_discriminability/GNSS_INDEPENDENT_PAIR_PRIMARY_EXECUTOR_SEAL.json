@@ -1,0 +1,47 @@
+{
+  "access_at_seal": {
+    "descriptive_head_requests": 2,
+    "observation_headers_opened": 0,
+    "observation_payload_bytes": 0,
+    "observation_values": 0
+  },
+  "authority": {
+    "expected_executor_seal_sha256_must_be_supplied": true,
+    "live_execution_authorized_by_seal": false
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "ncompress": "1.0.2",
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "manifest_sha256": "3a70af31fa8a241087167794dc94a8acaaf661e4315c472e00650c5f94997823",
+  "plan_document_sha256": "b6646759bfd6b36027557fc8c58398d0a0268cb677472ca7ed152cc543cf7355",
+  "plan_manifest_sha256": "4bae4d9aa655579263de00e84b6d374a8263b8196122ef024bd39ccfdd804756",
+  "prediction_seal_sha256": "f8585632bc5f5ea6f3f94441fae35d58b53ab181bcbeeda32c3daf8747e07793",
+  "prediction_sha256": "f88b7a9185203fea00a4587335b2018172c5a894409bb5cb13d481d3e9996c0c",
+  "products": [
+    {
+      "complete_file_bytes": null,
+      "complete_file_sha256": null,
+      "name": "ALGO00CAN_R_20262190000_01D_30S_MO.crx.gz",
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/219/ALGO00CAN_R_20262190000_01D_30S_MO.crx.gz"
+    },
+    {
+      "complete_file_bytes": null,
+      "complete_file_sha256": null,
+      "name": "MDO100USA_R_20262190000_01D_30S_MO.crx.gz",
+      "station": "MDO100USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/219/MDO100USA_R_20262190000_01D_30S_MO.crx.gz"
+    }
+  ],
+  "qualification_outcome_sha256": "cf26a411a0b77b79e951a21516c06333d26e7cc879f1dff09ce2e6eaa2fe3090",
+  "qualification_summary_sha256": "68f14d331509f4bed96176314cab4428d80292d28da5a88430f4068948384493",
+  "qualified_header_transform_sha256": "7f106a5486ddd05cad12e034b4b7a14c87fc97ad77e77f73f660755c344d09bf",
+  "schema": "gnss-independent-pair-primary-executor-seal-v1",
+  "source_commit": "6ad6e1762e8ae7d3414f30777dd17c56190e8f7d",
+  "source_sha256": "1954a080d358191c9b19e36895ce0bf3edb9889d983a7e4ca3eca2c85625e5eb",
+  "state": "PRIMARY_EXECUTOR_FROZEN_OBSERVATION_UNOPENED",
+  "stop": "SEPARATE_REVIEW_BEFORE_ANY_PRIMARY_GET_OR_HEADER_ACCESS"
+}
