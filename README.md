@@ -312,6 +312,14 @@ guard, leaving `47828.042 m`. The seal binds the exact broadcast NAV,
 compiler, partition, nuisance and nulls but grants no primary authority. See
 [GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md).
 
+The corresponding one-shot executor is now source-frozen and seal-bound. It
+reuses the exact model-blind qualification parser and phase kernel, requires
+both a separate authority token and the exact executor-seal hash, allows one
+materialization attempt per frozen locator, and persists only an aggregate
+strict-JSON receipt. Its seal records zero observation access and grants no
+live authority. See
+[GNSS_INDEPENDENT_PAIR_PRIMARY_EXECUTOR_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_EXECUTOR_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
