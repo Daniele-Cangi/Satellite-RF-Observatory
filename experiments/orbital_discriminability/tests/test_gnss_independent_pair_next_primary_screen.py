@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 
 import numpy as np
 import pytest
@@ -112,6 +113,40 @@ def test_navigation_set_and_nonfinite_json_are_rejected() -> None:
         screen.strict_json({"bad": float("nan")})
     with pytest.raises(ValueError):
         screen.strict_json({"bad": float("inf")})
+
+
+def _d(value: float) -> str:
+    return f"{value:19.12E}".replace("E", "D")
+
+
+def test_rinex2_parser_fixture_preserves_broadcast_fields() -> None:
+    first = (
+        f"{22:2d} {26:2d} {8:2d} {9:2d} {0:2d} {0:2d}{0.0:5.1f}"
+        + _d(1.0e-4)
+        + _d(2.0e-12)
+        + _d(0.0)
+    )
+    rows = (
+        (1.0, 20.0, 3.0e-9, 0.5),
+        (1.0e-6, 0.01, 2.0e-6, 5153.7),
+        (86400.0, 3.0e-7, 1.5, 4.0e-7),
+        (0.9, 200.0, 0.7, -8.0e-9),
+        (1.0e-10, 0.0, 2430.0, 0.0),
+        (2.0, 0.0, -2.0e-9, 10.0),
+        (86410.0, 4.0, 0.0, 0.0),
+    )
+    lines = [first, *("   " + "".join(_d(value) for value in row) for row in rows)]
+
+    record = screen.parse_rinex2_gps_record(lines)
+
+    assert record.satellite == "G22"
+    assert record.toc_gps == datetime(2026, 8, 9, tzinfo=timezone.utc)
+    assert record.af0_s == pytest.approx(1.0e-4)
+    assert record.eccentricity == pytest.approx(0.01)
+    assert record.sqrt_a_m_sqrt == pytest.approx(5153.7)
+    assert record.gps_week == 2430
+    assert record.sv_health == 0
+    assert record.fit_interval_h == pytest.approx(4.0)
 
 
 def test_manifest_round_trip_is_strict_json() -> None:

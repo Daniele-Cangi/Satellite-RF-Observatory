@@ -56,29 +56,34 @@ class NavigationCandidate:
     gps_date: str
     name: str
     url: str
+    rinex_version: str
+    provider: str
 
 
 NAVIGATION_CANDIDATES: Final = (
     NavigationCandidate(
         221,
         "2026-08-09",
-        "BRDM00DLR_S_20262210000_01D_MN.rnx.gz",
-        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/brdc/"
-        "BRDM00DLR_S_20262210000_01D_MN.rnx.gz",
+        "brdc2210.26n.gz",
+        "https://geodesy.noaa.gov/corsdata/rinex/2026/221/brdc2210.26n.gz",
+        "2.11",
+        "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
     ),
     NavigationCandidate(
         222,
         "2026-08-10",
-        "BRDM00DLR_S_20262220000_01D_MN.rnx.gz",
-        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/brdc/"
-        "BRDM00DLR_S_20262220000_01D_MN.rnx.gz",
+        "brdc2220.26n.gz",
+        "https://geodesy.noaa.gov/corsdata/rinex/2026/222/brdc2220.26n.gz",
+        "2.11",
+        "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
     ),
     NavigationCandidate(
         223,
         "2026-08-11",
-        "BRDM00DLR_S_20262230000_01D_MN.rnx.gz",
-        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/brdc/"
-        "BRDM00DLR_S_20262230000_01D_MN.rnx.gz",
+        "brdc2230.26n.gz",
+        "https://geodesy.noaa.gov/corsdata/rinex/2026/223/brdc2230.26n.gz",
+        "2.11",
+        "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
     ),
 )
 
@@ -315,15 +320,17 @@ def parse_navigation_gzip(
             f"NAVIGATION_HEADER_INCOMPLETE_DOY_{candidate.doy}"
         ) from exc
 
+    if candidate.rinex_version != "2.11":
+        raise NextPrimaryScreenError("NAVIGATION_RINEX_VERSION_CHANGED")
     parsed: dict[str, list[geometry.GpsEphemeris]] = {}
     for index in range(start, len(lines)):
-        if not lines[index].startswith("G"):
+        if not lines[index][:2].strip().isdigit():
             continue
         if index + 7 >= len(lines):
             raise NextPrimaryScreenError(
                 f"NAVIGATION_RECORD_TRUNCATED_DOY_{candidate.doy}"
             )
-        record = geometry.parse_gps_record(lines[index : index + 8])
+        record = parse_rinex2_gps_record(lines[index : index + 8])
         if record.sv_health == 0 and 0.0 <= record.eccentricity < 1.0:
             parsed.setdefault(record.satellite, []).append(record)
     records = {
@@ -347,6 +354,62 @@ def parse_navigation_gzip(
     payload = b""
     raw = b""
     return records, authority
+
+
+def parse_rinex2_gps_record(
+    lines: Sequence[str],
+) -> geometry.GpsEphemeris:
+    """Parse the fixed RINEX 2.11 GPS navigation record used by NOAA."""
+
+    if len(lines) != 8 or not lines[0][:2].strip().isdigit():
+        raise NextPrimaryScreenError("NOT_ONE_RINEX2_GPS_RECORD")
+    prn = int(lines[0][:2])
+    epoch_fields = lines[0][2:22].split()
+    if len(epoch_fields) != 6:
+        raise NextPrimaryScreenError("INVALID_RINEX2_GPS_TOC")
+    short_year, month, day, hour, minute = (
+        int(value) for value in epoch_fields[:5]
+    )
+    year = 1900 + short_year if short_year >= 80 else 2000 + short_year
+    second = float(epoch_fields[5])
+    toc = datetime(year, month, day, hour, minute, tzinfo=timezone.utc)
+    toc += timedelta(seconds=second)
+    first = geometry.fixed_fields(lines[0], 22)
+    rows = [geometry.fixed_fields(line, 3) for line in lines[1:]]
+    if len(first) < 3 or any(len(row) < 4 for row in rows[:6]):
+        raise NextPrimaryScreenError("INCOMPLETE_RINEX2_GPS_RECORD")
+    if len(rows[6]) < 1:
+        raise NextPrimaryScreenError("INCOMPLETE_RINEX2_GPS_TRANSMISSION_TIME")
+    return geometry.GpsEphemeris(
+        f"G{prn:02d}",
+        toc,
+        first[0],
+        first[1],
+        first[2],
+        rows[0][0],
+        rows[0][1],
+        rows[0][2],
+        rows[0][3],
+        rows[1][0],
+        rows[1][1],
+        rows[1][2],
+        rows[1][3],
+        rows[2][0],
+        rows[2][1],
+        rows[2][2],
+        rows[2][3],
+        rows[3][0],
+        rows[3][1],
+        rows[3][2],
+        rows[3][3],
+        rows[4][0],
+        int(round(rows[4][2])),
+        rows[5][0],
+        int(round(rows[5][1])),
+        rows[5][2],
+        rows[6][0],
+        None if len(rows[6]) < 2 or rows[6][1] == 0.0 else rows[6][1],
+    )
 
 
 def gps_day_grid(candidate: NavigationCandidate) -> tuple[datetime, ...]:
