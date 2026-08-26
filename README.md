@@ -320,6 +320,13 @@ strict-JSON receipt. Its seal records zero observation access and grants no
 live authority. See
 [GNSS_INDEPENDENT_PAIR_PRIMARY_EXECUTOR_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_EXECUTOR_REPORT.md).
 
+The one authorized primary execution stopped before measurement admission with
+`PRIMARY_ARTIFACT_MATERIALIZATION_FAILED`: the first ALGO materialization
+timed out, no complete artifact was admitted, MDO was not attempted, and the
+held-out comparison remains `NOT_EVALUATED`. The frozen zero-retry rule closes
+this exact execution without an orbital claim. See
+[GNSS_INDEPENDENT_PAIR_PRIMARY_OUTCOME_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_OUTCOME_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

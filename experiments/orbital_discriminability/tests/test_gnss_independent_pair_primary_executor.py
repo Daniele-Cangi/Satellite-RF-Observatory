@@ -21,6 +21,10 @@ EXECUTOR_SEAL = ROOT / executor.EXECUTOR_SEAL_NAME
 EXECUTOR_SEAL_SHA256 = (
     "8ba4a2ad060e7c607d5110087d17947f62954a6afc25b8ca8a596680d82fb387"
 )
+PRIMARY_OUTCOME = ROOT / executor.OUTCOME_NAME
+PRIMARY_OUTCOME_SHA256 = (
+    "c510db1488c8cbb19b16d5b34150fec2334efddb4a2cfaa3e94a03cba0963ab3"
+)
 
 
 def header_line(data: str, label: str) -> str:
@@ -214,6 +218,21 @@ def test_executor_seal_binds_post_commit_source_and_zero_observation_access() ->
     )
     for curve in curves.values():
         curve.fill(0.0)
+
+
+def test_primary_transport_failure_is_frozen_without_physical_outcome() -> None:
+    assert executor.canonical_sha256(PRIMARY_OUTCOME) == PRIMARY_OUTCOME_SHA256
+    outcome = json.loads(
+        PRIMARY_OUTCOME.read_text(encoding="utf-8"),
+        parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+    )
+
+    assert outcome["execution_state"] == "PRIMARY_ARTIFACT_MATERIALIZATION_FAILED"
+    assert outcome["physical_outcome"] is None
+    assert outcome["heldout_comparison"] == "NOT_EVALUATED"
+    assert outcome["artifacts"] == []
+    assert outcome["observation_values_persisted"] == 0
+    assert "ALGO00CAN" in outcome["reason"]
 
 
 def test_parser_and_coordinate_use_algo_mdo_doy219_only() -> None:
