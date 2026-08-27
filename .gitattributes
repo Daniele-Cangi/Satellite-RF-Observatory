@@ -17,3 +17,6 @@ experiments/orbital_discriminability/GNSS_PHASE_REPEATED_PASS_OUTCOME.json -text
 
 # The independent-pair geometry receipt is also byte-addressed evidence.
 experiments/orbital_discriminability/GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_RECEIPT.json -text
+
+# The one-shot DOY223 outcome is frozen from its exact CRLF byte stream.
+experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_OUTCOME.json -text whitespace=cr-at-eol
