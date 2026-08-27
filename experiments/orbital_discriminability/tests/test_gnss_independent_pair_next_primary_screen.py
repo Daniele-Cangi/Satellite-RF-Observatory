@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -9,6 +10,10 @@ import pytest
 from experiments.orbital_discriminability import (
     gnss_independent_pair_next_primary_screen as screen,
 )
+
+
+ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / screen.RECEIPT_NAME
 
 
 def test_scope_is_exact_new_dates_and_fixed_physical_hypothesis() -> None:
@@ -151,3 +156,43 @@ def test_rinex2_parser_fixture_preserves_broadcast_fields() -> None:
 
 def test_manifest_round_trip_is_strict_json() -> None:
     assert json.loads(screen.strict_json(screen.manifest())) == screen.manifest()
+
+
+def test_frozen_screen_receipt_selects_doy223_without_observation_access() -> None:
+    receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
+
+    assert screen.canonical_sha256(RECEIPT) == (
+        "2e5af124d25475900eb8b8f88535bb5ac70da10f6f2f3a796fe6f66699b330b3"
+    )
+    assert receipt["source_commit"] == (
+        "7a5d88633fdb086590eaf29c1fad2e6b4d3ead59"
+    )
+    assert receipt["source_sha256"] == (
+        "e252a6ba4f573df3b286656db9116c3adb6d6ab63a0b355a812bd4134a54ac9a"
+    )
+    assert receipt["source_sha256"] == screen.source_sha256()
+    assert receipt["manifest_sha256"] == screen.manifest_sha256()
+    assert receipt["outcome"] == screen.OUTCOME_SELECTED
+    assert [row["doy"] for row in receipt["ranking"]] == [223, 222, 221]
+    assert all(day["candidate_window_count"] == 165 for day in receipt["day_results"])
+    assert all(day["day_admitted"] for day in receipt["day_results"])
+
+    selected = receipt["selected"]
+    assert selected["raw_start_gps"] == "2026-08-11T05:24:00 GPS"
+    assert selected["raw_stop_gps"] == "2026-08-11T06:33:00 GPS"
+    assert selected["heldout_start_gps"] == "2026-08-11T06:03:00 GPS"
+    assert selected["controlling_null"] == "WRONG_ORBIT_G14"
+    assert selected["controlling_heldout_separation_m"] == pytest.approx(
+        54990.701676848694
+    )
+    assert selected["pairwise_comparison_envelope_m"] == pytest.approx(
+        3142.1641485601226
+    )
+    assert selected["remaining_physical_margin_m"] == pytest.approx(
+        51848.53752828857
+    )
+    assert selected["minimum_model_elevation_deg"] == pytest.approx(
+        22.66366007669533
+    )
+    assert not any(receipt["observation_access"].values())
+    assert receipt["prospective_plan_frozen"] is False

@@ -327,6 +327,14 @@ held-out comparison remains `NOT_EVALUATED`. The frozen zero-retry rule closes
 this exact execution without an orbital claim. See
 [GNSS_INDEPENDENT_PAIR_PRIMARY_OUTCOME_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_OUTCOME_REPORT.md).
 
+The subsequent observation-blind screen fixes ALGO/MDO, G22/G30, the existing
+nulls and partition, and compares only three new broadcast-navigation dates.
+All are geometrically admissible; DOY223 ranks first with a 54,990.702 m
+wrong-orbit G14 separation and 51,848.538 m remaining physical margin. No new
+observation locator, header, payload byte or value was accessed, and no plan is
+yet frozen. See
+[GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate
