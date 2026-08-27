@@ -343,6 +343,13 @@ is zero and measurement/scoring remain single-shot. No observation request was
 made and the contract grants no execution authority. See
 [GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md).
 
+The corresponding exact-hash DOY223 prediction set is also frozen. The NOAA
+broadcast NAV compiler reproduces the G14-controlling 54,990.702 m held-out
+separation, the 3,142.164 m pairwise guard and the 51,848.538 m remaining
+margin on the exact 137-epoch feature grid. All observation access counters
+remain zero, and the seal grants no authority to request ALGO or MDO. See
+[GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

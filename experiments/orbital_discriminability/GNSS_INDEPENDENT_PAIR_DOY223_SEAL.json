@@ -1,0 +1,107 @@
+{
+  "access_at_seal": {
+    "descriptive_head_requests": 0,
+    "observation_headers_opened": 0,
+    "observation_locator_requests": 0,
+    "observation_payload_bytes": 0,
+    "observation_values": 0
+  },
+  "authority": {
+    "primary_access_authorized_by_seal": false,
+    "separate_review_required": true
+  },
+  "compiler_manifest_sha256": "e15ace782755708541b21fa61dc31c25989880c965ce16e8932a4539d417591c",
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "plan_manifest_sha256": "2e7598068db8dd5c4fe27ee881340bb7096b8e878fda0a050048a11a70767055",
+  "predictions": {
+    "canonical_sha256": "c45df3e1ca2a18bf52bd7f33e31fceaf6c15a9e83d83d1078c3f092c81cbf15b",
+    "curve_set_sha256": "6ded9e22e1a32ce2fd4c24f9834a04fcd818f719d1f84465bef8f04c1b82323f",
+    "name": "GNSS_INDEPENDENT_PAIR_DOY223_PREDICTIONS.json"
+  },
+  "primary": {
+    "access": "SEALED_UNAUTHORIZED",
+    "candidate_station_roots": [
+      "ALGO00CAN_40104M002",
+      "MDO100USA_40442M012"
+    ],
+    "doy": 223,
+    "feature_start_gps": "2026-08-11T05:24:30 GPS",
+    "feature_stop_gps": "2026-08-11T06:32:30 GPS",
+    "heldout_start_gps": "2026-08-11T06:03:00 GPS",
+    "product_identity_state": "FROZEN_LOGICAL_PRODUCT_AND_MIRROR_SET_COMPLETE_HASH_UNKNOWN_UNTIL_MATERIALIZATION",
+    "products": [
+      {
+        "complete_bytes": null,
+        "complete_sha256": null,
+        "header_bytes_accessed": 0,
+        "logical_identity_frozen": true,
+        "mirror_order_frozen": true,
+        "mirrors": [
+          "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/223/ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz",
+          "https://cddis.nasa.gov/archive/gnss/data/daily/2026/223/26d/ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz"
+        ],
+        "name": "ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz",
+        "observation_values_accessed": 0,
+        "station": "ALGO00CAN"
+      },
+      {
+        "complete_bytes": null,
+        "complete_sha256": null,
+        "header_bytes_accessed": 0,
+        "logical_identity_frozen": true,
+        "mirror_order_frozen": true,
+        "mirrors": [
+          "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/223/MDO100USA_R_20262230000_01D_30S_MO.crx.gz",
+          "https://cddis.nasa.gov/archive/gnss/data/daily/2026/223/26d/MDO100USA_R_20262230000_01D_30S_MO.crx.gz"
+        ],
+        "name": "MDO100USA_R_20262230000_01D_30S_MO.crx.gz",
+        "observation_values_accessed": 0,
+        "station": "MDO100USA"
+      }
+    ],
+    "raw_start_gps": "2026-08-11T05:24:00 GPS",
+    "raw_stop_gps": "2026-08-11T06:33:00 GPS",
+    "role": "DISTINCT_PASS_HELDOUT_PRIMARY",
+    "stations": [
+      "ALGO00CAN",
+      "MDO100USA"
+    ]
+  },
+  "schema": "gnss-independent-pair-doy223-seal-v1",
+  "source_authorities": {
+    "broadcast_navigation": {
+      "compressed_bytes": 71403,
+      "compressed_sha256": "deaea8679fc2fd816d0d127ae11a7c83f3956cdf51b969e99bddb0f381437478",
+      "doy": 223,
+      "gps_date": "2026-08-11",
+      "name": "brdc2230.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 298710,
+      "uncompressed_name": "brdc2230.26n",
+      "uncompressed_sha256": "340bf5e84504420d6770476c8f3c9cda78722fcc283cd34385f47b77ba6f4d2e",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/223/brdc2230.26n.gz"
+    },
+    "geometry_screen": {
+      "canonical_sha256": "2e5af124d25475900eb8b8f88535bb5ac70da10f6f2f3a796fe6f66699b330b3",
+      "name": "GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_RECEIPT.json",
+      "selected_row_sha256": "15b9d49ff9a35740f6fb72207bbec58ec2671d6d7ece890caaf26c10b12b0ac4",
+      "source_commit": "7a5d88633fdb086590eaf29c1fad2e6b4d3ead59"
+    },
+    "model_blind_qualification": {
+      "canonical_sha256": "cf26a411a0b77b79e951a21516c06333d26e7cc879f1dff09ce2e6eaa2fe3090",
+      "manifest_sha256": "7aee72bac1660518769240eca4fd627067877fba0cda0a56519e514bd51d7e24",
+      "name": "GNSS_INDEPENDENT_PAIR_QUALIFICATION_OUTCOME.json",
+      "outcome": "GNSS_INDEPENDENT_PAIR_QUALIFICATION_PASSED",
+      "source_commit": "6410ab195b2b6b535bcb57c357fce5300e8fffae"
+    }
+  },
+  "source_commit": "6647fe3aa6e37f514dc399449a9f88354a3b8464",
+  "source_sha256": "0c05d4f5a0464e11fc6d79827adfb33a0f673c8d0be788800205077bafe3ef1e",
+  "state": "PRIMARY_PLAN_AND_PREDICTION_FROZEN",
+  "stop": "STOP_BEFORE_ANY_PRIMARY_OBSERVATION_REQUEST_FOR_REVIEW"
+}

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
+from pathlib import Path
 
 import pytest
 
@@ -10,6 +12,11 @@ from experiments.orbital_discriminability import (
 from experiments.orbital_discriminability import (
     gnss_independent_pair_doy223_primary_plan as plan,
 )
+
+
+ROOT = Path(__file__).resolve().parents[1]
+PREDICTIONS = ROOT / predictions.PREDICTIONS_NAME
+SEAL = ROOT / predictions.SEAL_NAME
 
 
 def test_compiler_is_exact_navigation_only_and_observation_blind() -> None:
@@ -88,3 +95,75 @@ def test_manifest_is_bound_to_primary_plan_and_no_access_authority() -> None:
         "observation_payload_bytes": 0,
         "observation_values": 0,
     }
+
+
+def test_frozen_prediction_reproduces_doy223_screen_regressions() -> None:
+    value = json.loads(PREDICTIONS.read_text(encoding="utf-8"))
+    curves = predictions.validate_predictions(value)
+
+    assert value["compiler_source_commit"] == (
+        "6647fe3aa6e37f514dc399449a9f88354a3b8464"
+    )
+    assert value["compiler_source_sha256"] == (
+        "0c05d4f5a0464e11fc6d79827adfb33a0f673c8d0be788800205077bafe3ef1e"
+    )
+    assert value["compiler_manifest_sha256"] == (
+        "e15ace782755708541b21fa61dc31c25989880c965ce16e8932a4539d417591c"
+    )
+    assert value["curve_set_sha256"] == (
+        "6ded9e22e1a32ce2fd4c24f9834a04fcd818f719d1f84465bef8f04c1b82323f"
+    )
+    assert set(curves) == set(predictions.HYPOTHESES)
+    assert all(curve.shape == (137,) for curve in curves.values())
+    assert value["minimum_model_elevation_deg"] == pytest.approx(
+        22.66366007669533
+    )
+    regression = value["numerical_regression"]
+    assert regression["controlling_null"] == "WRONG_ORBIT_G14"
+    assert regression["controlling_heldout_separation_m"] == pytest.approx(
+        54_990.701676848694
+    )
+    assert regression["pairwise_decision_guard_m"] == pytest.approx(
+        3_142.1641485601226
+    )
+    assert regression["remaining_physical_margin_m"] == pytest.approx(
+        51_848.53752828857
+    )
+    assert predictions.canonical_sha256(PREDICTIONS) == (
+        "c45df3e1ca2a18bf52bd7f33e31fceaf6c15a9e83d83d1078c3f092c81cbf15b"
+    )
+
+
+def test_prediction_curve_tampering_is_refused() -> None:
+    value = json.loads(PREDICTIONS.read_text(encoding="utf-8"))
+    tampered = deepcopy(value)
+    tampered["curves_m"]["ORBITAL_G22"][0] += 1.0
+
+    with pytest.raises(
+        predictions.Doy223PredictionError,
+        match="PREDICTION_CURVE_HASH_CHANGED",
+    ):
+        predictions.validate_predictions(tampered)
+
+
+def test_seal_grants_no_primary_access_authority() -> None:
+    seal = json.loads(SEAL.read_text(encoding="utf-8"))
+
+    assert predictions.canonical_sha256(SEAL) == (
+        "4e94711d88a9c85c232585db83a3b7192713ba0b4900606076e8c386373c57fa"
+    )
+    assert seal["state"] == "PRIMARY_PLAN_AND_PREDICTION_FROZEN"
+    assert seal["authority"] == {
+        "primary_access_authorized_by_seal": False,
+        "separate_review_required": True,
+    }
+    assert seal["access_at_seal"] == {
+        "observation_locator_requests": 0,
+        "descriptive_head_requests": 0,
+        "observation_headers_opened": 0,
+        "observation_payload_bytes": 0,
+        "observation_values": 0,
+    }
+    assert seal["stop"] == (
+        "STOP_BEFORE_ANY_PRIMARY_OBSERVATION_REQUEST_FOR_REVIEW"
+    )

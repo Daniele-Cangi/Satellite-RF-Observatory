@@ -1087,3 +1087,12 @@ or any decode begins there is no retry, substitution or second window. At
 freeze, all observation access counters remain zero. The next maximum work is
 an exact-hash offline prediction seal, not an observation request. See
 [`GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md).
+
+That offline prediction seal is now complete. It binds source commit,
+dependencies, plan manifest, the exact NOAA DOY223 broadcast NAV hashes and the
+five immutable 137-epoch curves. The compiled regression retains the
+54,990.702 m G14-controlling separation and 51,848.538 m physical margin, with
+all observation access counters still zero. The next maximum step is review of
+the already defined bounded primary materialization; the seal itself does not
+authorize it. See
+[`GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md).
