@@ -1062,3 +1062,19 @@ separation, 3,542.257 m pairwise guard and 47,828.042 m remaining margin. The
 seal grants no observation authority. The immediate blocker is review of this
 one-shot proof boundary, not further selection or infrastructure. See
 [`GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_PRIMARY_PLAN.md).
+
+That one authorized DOY219 execution is now closed as
+`PRIMARY_ARTIFACT_MATERIALIZATION_FAILED`. ALGO timed out before a complete
+artifact existed, MDO was not attempted, and no header, observation value or
+orbital score entered the result. DOY219 cannot be retried, reopened or
+substituted.
+
+A new bounded orbit-only screen has therefore selected DOY223 without opening
+any observation product. Over the fixed DOY221--223 candidate set, all three
+dates retained positive ALGO/MDO G22/G30 geometry; DOY223 ranks first at
+2026-08-11 05:24:00--06:33:00 GPS. The controlling wrong-orbit G14 separation
+is 54,990.702 m peak-to-peak against a 3,142.164 m pairwise envelope, leaving
+51,848.538 m. This is geometry selection only, not a prospective plan or
+measurement. The next maximum work is to freeze one DOY223 primary contract
+before discovering or materializing its two observation artifacts. See
+[`GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md).
