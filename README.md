@@ -335,6 +335,14 @@ observation locator, header, payload byte or value was accessed, and no plan is
 yet frozen. See
 [GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md).
 
+The DOY223 ALGO/MDO primary contract is now frozen offline. It preserves the
+selected window, coordinate, physical envelope and nulls while correcting the
+DOY219 transport mistake: bounded retry/resume is allowed only before a
+complete artifact hash and before decoding; after both hashes, network retry
+is zero and measurement/scoring remain single-shot. No observation request was
+made and the contract grants no execution authority. See
+[GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

@@ -113,6 +113,12 @@ def test_plan_is_strict_json_and_stops_before_observation_request() -> None:
     assert frozen["stop"] == "STOP_BEFORE_ANY_OBSERVATION_REQUEST_FOR_REVIEW"
     assert frozen["new_gate"] is False
     assert frozen["generic_framework"] is False
+    assert plan.canonical_sha256(Path(plan.__file__)) == (
+        "49f50ac7ab28b0e204e87633a8f623899990ee08b152e1a60287e77f96d99549"
+    )
+    assert plan.manifest_sha256() == (
+        "2e7598068db8dd5c4fe27ee881340bb7096b8e878fda0a050048a11a70767055"
+    )
     assert json.loads(plan.strict_json(frozen)) == frozen
     with pytest.raises(ValueError):
         plan.strict_json({"bad": float("nan")})
