@@ -23,6 +23,10 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXECUTOR_SEAL = ROOT / executor.EXECUTOR_SEAL_NAME
+EXECUTOR_SEAL_SHA256 = (
+    "130378385487a337e82aa215c083c5b97099162c5361bdf6f9651ce4f84f45b5"
+)
 
 
 def header_line(data: str, label: str) -> str:
@@ -216,6 +220,38 @@ def test_frozen_inputs_bind_exact_curves_and_qualified_transforms() -> None:
     finally:
         for curve in curves.values():
             curve.fill(0.0)
+
+
+def test_executor_seal_binds_post_commit_source_and_zero_access() -> None:
+    assert executor.canonical_sha256(EXECUTOR_SEAL) == EXECUTOR_SEAL_SHA256
+    seal = json.loads(EXECUTOR_SEAL.read_text(encoding="utf-8"))
+
+    assert seal["state"] == "PRIMARY_EXECUTOR_FROZEN_OBSERVATION_UNOPENED"
+    assert seal["source_commit"] == (
+        "af293090436468b43737677bd0b0a12dfb84ee0a"
+    )
+    assert seal["source_sha256"] == (
+        "4b7d032c414419c11844a974f97aa9239293557ffc704fa22c03f4525336bc08"
+    )
+    assert seal["manifest_sha256"] == (
+        "6748fb3acd8eb65cd868d205420a00841006861f14e904a6bcbeb5318cf3bb87"
+    )
+    assert seal["qualified_header_transform_sha256"] == (
+        "7f106a5486ddd05cad12e034b4b7a14c87fc97ad77e77f73f660755c344d09bf"
+    )
+    assert seal["authority"]["live_execution_authorized_by_seal"] is False
+    assert not any(seal["access_at_seal"].values())
+    _, curves, _ = executor.validate_executor_seal(
+        ROOT,
+        EXECUTOR_SEAL,
+        EXECUTOR_SEAL_SHA256,
+    )
+    for curve in curves.values():
+        curve.fill(0.0)
+
+
+def test_executor_freeze_did_not_create_a_primary_outcome() -> None:
+    assert not (ROOT / executor.OUTCOME_NAME).exists()
 
 
 def test_same_mirror_resume_requires_and_uses_stable_validator() -> None:
@@ -465,6 +501,51 @@ def test_both_complete_hashes_precede_decode_and_buffers_are_erased(
     assert all(not any(payload) for payload in compressed + decoded)
     assert all(np.count_nonzero(scan.phase_cycles) == 0 for scan in scans)
     assert all(np.count_nonzero(value) == 0 for value in coordinates)
+
+
+def test_decode_failure_has_zero_transport_retry(monkeypatch) -> None:
+    curves = synthetic_curves(frozen.SCREEN_PAIRWISE_GUARD_M + 1.0)
+    expected_headers = {
+        product.station: synthetic_expected(product)
+        for product in executor.PRODUCTS
+    }
+    calls: list[str] = []
+
+    def validate(*_args):
+        return {
+            "source_commit": "frozen",
+            "source_sha256": "a" * 64,
+        }, curves, expected_headers
+
+    def materialize(product: executor.ProductPlan):
+        calls.append(product.station)
+        payload = bytearray(product.station.encode("ascii"))
+        return payload, {
+            "station": product.station,
+            "attempts_total": 1,
+            "complete_file_bytes": len(payload),
+            "complete_file_sha256": sha256(payload).hexdigest(),
+        }
+
+    def decode(_payload: bytearray, station: str):
+        raise primary.PrimaryMeasurementInvalid(f"DECODE_FAILED:{station}")
+
+    monkeypatch.setattr(executor, "validate_executor_seal", validate)
+    monkeypatch.setattr(primary, "decode_in_memory", decode)
+
+    with TemporaryDirectory(dir=ROOT) as directory:
+        output = Path(directory)
+        outcome = executor.run_once(
+            output,
+            executor.AUTHORITY_TOKEN,
+            "f" * 64,
+            output / "seal.json",
+            materializer=materialize,
+        )
+
+    assert outcome["outcome"] == "MEASUREMENT_INVALID"
+    assert outcome["heldout_comparison"] == "NOT_EVALUATED"
+    assert calls == ["ALGO00CAN", "MDO100USA"]
 
 
 def test_strict_json_rejects_nonfinite_values() -> None:

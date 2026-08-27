@@ -350,6 +350,12 @@ margin on the exact 137-epoch feature grid. All observation access counters
 remain zero, and the seal grants no authority to request ALGO or MDO. See
 [GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md).
 
+The one-off DOY223 executor is now frozen as well, still with zero observation
+access. It requires both complete product hashes before decoding, permits only
+bounded pre-hash transport retry/resume, and has no post-decode retry or
+scientific fallback. Its seal grants no live authority. See
+[GNSS_INDEPENDENT_PAIR_DOY223_EXECUTOR_REPORT.md](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_EXECUTOR_REPORT.md).
+
 ## Preserved Gate F2.5 experimental history
 
 Gate F2.5 removed server waterfall (`W/F`) and `ext_api` from the causal gate

@@ -1096,3 +1096,11 @@ all observation access counters still zero. The next maximum step is review of
 the already defined bounded primary materialization; the seal itself does not
 authorize it. See
 [`GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PREDICTION_REPORT.md).
+
+The corresponding disposable executor is now source- and manifest-sealed. It
+implements only the two frozen products, bounded retry/resume before complete
+hashes, both hashes before decode, the qualified L1C/L2W plus witness path and
+the frozen held-out scorer. No observation request or outcome exists, and the
+executor seal grants no live authority. The next maximum step is therefore one
+explicit execution review, not more implementation or selection. See
+[`GNSS_INDEPENDENT_PAIR_DOY223_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_EXECUTOR_REPORT.md).
