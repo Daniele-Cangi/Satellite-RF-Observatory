@@ -75,17 +75,31 @@ trajectories rather than a local slope approximation.
 The 128-case synthetic sweep contains both detectable and undetectable regions:
 81 cases are `ORBITAL_MODEL_PREDICTIVELY_PREFERRED` and 47 are
 `ORBITAL_SIGNATURE_BELOW_DETECTABILITY`. This is a mechanism result, not a
-claim about a live signal or a satellite identity. G1 now turns that envelope
-into an admission procedure, but no current Internet capability has yet been
-queried or admitted.
+claim about a live signal or a satellite identity. G1 turns that envelope into
+an admission procedure; later GNSS experiments have now advanced beyond this
+offline baseline, as summarized below.
 
 The G1.1–G1.3 inventory/search work is a concluded side investigation, not the
 critical path. No global receiver catalog is required.
 
 ## Current physical outcome
 
-Several bounded forward routes have now tested the path beyond G1 without
-producing an orbital score:
+The project has reached real held-out orbital evidence. The frozen
+GOLD00USA/NLIB00USA G22/G30 DOY 220 primary was measurement-valid and
+preferred the orbital prediction: its held-out residual was `2.313 m`
+peak-to-peak, against `8,858.964 m` for the closest frozen alternative. A
+distinct DOY 219 pass repeated the result with `2.269 m` orbital residual
+against `8,988.225 m` for the closest null.
+
+The authorized claim is therefore
+`REPEATED_PASS_CONSISTENCY_FOR_TWO_GOLD_NLIB_G22_G30_PASSES`. It is not
+catalog-wide identity, unconstrained orbit reconstruction or confirmation on
+observer roots independent of GOLD/NLIB. The next scientific question is
+whether the prediction transfers to new hardware/geography without relying on
+systematics shared by that station pair.
+
+Several other bounded routes remain useful closed exclusions rather than
+orbital scores:
 
 - Berlin–Utrecht OpenWebRX was closed `MEASUREMENT_PATH_INSUFFICIENT` because
   Berlin did not deliver the target profile and Utrecht exposed neither
@@ -109,10 +123,13 @@ producing an orbital score:
   streams were fully hashed before decode; no measurement clause or held-out
   hypothesis was evaluated, and zero observation values were persisted.
 
-No real held-out vertical has therefore reached `MEASUREMENT_VALID` and then
-preferred an orbital model over frozen nulls. The GNSS result refuses one exact
-measurement path; it is not evidence against G11 or the double-difference
-mechanism.
+The ALGO/MDO outcomes close two exact primary paths, not the independent-root
+physical hypothesis. Repairing their transport or decoder in place would add
+no orbital information and is not the next research step. A bounded
+post-DOY223 review instead recommends testing whether the already demonstrated
+continuous-phase mechanism can make a frozen prediction for one held-out
+observer, before selecting any new artifact. See
+[`POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md`](experiments/orbital_discriminability/POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md).
 
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21

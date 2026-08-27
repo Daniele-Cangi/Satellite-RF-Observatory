@@ -1114,3 +1114,13 @@ encoding cause, so none is inferred. No observation value or RF artifact was
 persisted, and the primary cannot be retried, repaired in place or moved to a
 second window. See
 [`GNSS_INDEPENDENT_PAIR_DOY223_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_OUTCOME_REPORT.md).
+
+The post-outcome change-of-abstraction review does not continue that transport
+chain. It compares a wholly disjoint pair, a held-out observer, a one-new-root
+cross baseline, SatNOGS and fixed public SDR roots. The recommended minimum
+next work is an offline observer-transfer spike: freeze a candidate family on
+development observers A/B, then test whether a one-anchor continuous-phase
+coordinate at unseen observer C can retain positive orbital-versus-null margin
+without a free rate or suffix fit. No station, date, locator or artifact is yet
+selected. See
+[`POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md`](experiments/orbital_discriminability/POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md).
