@@ -1,0 +1,307 @@
+{
+  "compiler_version": "gnss-observer-transfer-spike-v1",
+  "coordinate": {
+    "anchor_role": "REMOVE_ONE_CONSTANT_INTEGER_AMBIGUITY_ONLY",
+    "fixed_anchor_index": 0,
+    "free_rate": false,
+    "station_satellite_order": "C_TARGET_MINUS_C_REFERENCE",
+    "suffix_fit": false,
+    "time_derivative": "NONE",
+    "units": "IONOSPHERE_FREE_CARRIER_DERIVED_RANGE_METERS",
+    "weights": {
+      "L1C": 2.54572778016316,
+      "L2W": -1.5457277801631601
+    }
+  },
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5",
+    "skyfield": "1.53"
+  },
+  "fixture_role": "SYNTHETIC_MECHANISM_ONLY_NEVER_CAPABILITY_NEVER_PRIMARY",
+  "future_capability_selected": false,
+  "interpretation": "ONE_ANCHOR_OBSERVER_TRANSFER_RETAINS_POSITIVE_SYNTHETIC_MARGIN_FUTURE_CANDIDATE_AND_CAPABILITY_STILL_REQUIRED",
+  "manifest_sha256": "62b029855f2a52d258223e70d77d2ae7da55306f5fea559d67a65d8115f423da",
+  "maximum_future_one_model_measurement_envelope_m": 708.1708334473566,
+  "measurement_authorized": false,
+  "negative_result_interpretable_if_future_capability_admitted": true,
+  "new_gate_created": false,
+  "null_scores": {
+    "FROZEN_AFFINE_NULL": {
+      "heldout_maximum_absolute_m": 1365.0439794717822,
+      "heldout_peak_to_peak_m": 1703.2250464932295,
+      "heldout_rms_m": 937.6180366490206
+    },
+    "WRONG_ORBIT_1": {
+      "heldout_maximum_absolute_m": 22625.984882086515,
+      "heldout_peak_to_peak_m": 9638.43901771307,
+      "heldout_rms_m": 18080.67903893972
+    },
+    "WRONG_ORBIT_2": {
+      "heldout_maximum_absolute_m": 36091.23876099661,
+      "heldout_peak_to_peak_m": 15321.806755706668,
+      "heldout_rms_m": 28870.065629689005
+    },
+    "affine_rate_source": "TARGET_PREDICTION_ONLY_BEFORE_OBSERVATION",
+    "controlling_heldout_separation_m": 1703.2250464932295,
+    "controlling_null": "FROZEN_AFFINE_NULL",
+    "frozen_affine_rate_m_s": -117.92956942605967
+  },
+  "observation_access": {
+    "headers_opened": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "products_selected": 0,
+    "real_stations_selected": 0,
+    "values_accessed": 0
+  },
+  "one_model_physical_envelope_m": 143.44168979925814,
+  "outcome": "OBSERVER_TRANSFER_MECHANISM_DISCRIMINATIVE",
+  "pairwise_comparison_envelope_m": 286.8833795985163,
+  "partition": {
+    "cadence_s": 30.0,
+    "confirmation_epochs": 60,
+    "epochs": 139,
+    "witness_prefix_epochs": 79,
+    "witness_prefix_may_apply_predeclared_admission_rules": true,
+    "witness_prefix_may_fit_or_select_orbit": false
+  },
+  "physical_terms": [
+    {
+      "basis": "COMMON_C_TIMESTAMP_SHIFT_APPLIED_DIRECTLY_TO_BOTH_TRAJECTORIES",
+      "controlling_offset_s": 15.0,
+      "heldout_peak_to_peak_bound_m": 109.2687568962574,
+      "pairwise_contribution_m": 218.5375137925148,
+      "parameter_interval_s": [
+        -15.0,
+        15.0
+      ],
+      "provenance": "STRUCTURAL_HALF_CADENCE_BOUND",
+      "state": "MODELED_DIRECT_TRAJECTORY_ENVELOPE",
+      "term": "STATION_C_EVENT_TIME"
+    },
+    {
+      "anchor_peak_to_peak_gain": 2.0,
+      "basis": "TWO_TIMES_THE_2_M_MAXIMUM_SV_ACCURACY_IN_FROZEN_NAVIGATION",
+      "basis_phase_coordinate": "TWO_LINK_TARGET_MINUS_REFERENCE_INTERVAL_WITH_FIXED_ANCHOR_CONSTANT_DROPPING_OUT_OF_PEAK_TO_PEAK",
+      "heldout_peak_to_peak_bound_m": 16.0,
+      "pairwise_contribution_m": 32.0,
+      "per_link_path_bound_m": 4.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "BROADCAST_ORBIT_SV_ACCURACY",
+      "two_link_coordinate_amplitude_bound_m": 8.0
+    },
+    {
+      "anchor_peak_to_peak_gain": 2.0,
+      "basis": "CONSERVATIVE_BOUND_WITH_IGS_ROBOT_CALIBRATED_RECEIVER_ANTENNAS",
+      "basis_phase_coordinate": "TWO_LINK_TARGET_MINUS_REFERENCE_INTERVAL_WITH_FIXED_ANCHOR_CONSTANT_DROPPING_OUT_OF_PEAK_TO_PEAK",
+      "heldout_peak_to_peak_bound_m": 4.0,
+      "pairwise_contribution_m": 8.0,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "ANTENNA_PCV_AND_PHASE_WINDUP",
+      "two_link_coordinate_amplitude_bound_m": 2.0
+    },
+    {
+      "anchor_peak_to_peak_gain": 2.0,
+      "basis": "FIXED_REJECTION_LIMIT_NOT_A_POSTERIOR_ERROR_ESTIMATE",
+      "basis_phase_coordinate": "TWO_LINK_TARGET_MINUS_REFERENCE_INTERVAL_WITH_FIXED_ANCHOR_CONSTANT_DROPPING_OUT_OF_PEAK_TO_PEAK",
+      "heldout_peak_to_peak_bound_m": 4.0,
+      "pairwise_contribution_m": 8.0,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "LEARNABLE_ON_C_WITNESS_PREFIX_ONLY_NOT_TRANSFERRED_FROM_AB",
+      "state": "REQUIRES_PREDECLARED_C_PREFIX_ADMISSION",
+      "term": "MULTIPATH_AND_SIGNAL_SPECIFIC_HARDWARE",
+      "two_link_coordinate_amplitude_bound_m": 2.0
+    },
+    {
+      "anchor_peak_to_peak_gain": 2.0,
+      "basis": "CONSERVATIVE_REMAINDER_AFTER_SAME_SATELLITE_STATION_DIFFERENCE",
+      "basis_phase_coordinate": "TWO_LINK_TARGET_MINUS_REFERENCE_INTERVAL_WITH_FIXED_ANCHOR_CONSTANT_DROPPING_OUT_OF_PEAK_TO_PEAK",
+      "heldout_peak_to_peak_bound_m": 4.0,
+      "pairwise_contribution_m": 8.0,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "SATELLITE_CLOCK_RETARDED_TIME_REMAINDER",
+      "two_link_coordinate_amplitude_bound_m": 2.0
+    },
+    {
+      "anchor_peak_to_peak_gain": 2.0,
+      "basis": "CONSERVATIVE_COMBINED_UNMODELED_PATH_INTERVAL",
+      "basis_phase_coordinate": "TWO_LINK_TARGET_MINUS_REFERENCE_INTERVAL_WITH_FIXED_ANCHOR_CONSTANT_DROPPING_OUT_OF_PEAK_TO_PEAK",
+      "heldout_peak_to_peak_bound_m": 4.0,
+      "pairwise_contribution_m": 8.0,
+      "per_link_path_bound_m": 1.0,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "STATION_DISPLACEMENT_EOP_AND_RELATIVITY",
+      "two_link_coordinate_amplitude_bound_m": 2.0
+    },
+    {
+      "anchor_peak_to_peak_gain": 2.0,
+      "basis": "CONSERVATIVE_IERS_CHAPTER_9_HIGHER_ORDER_PATH_INTERVAL",
+      "basis_phase_coordinate": "TWO_LINK_TARGET_MINUS_REFERENCE_INTERVAL_WITH_FIXED_ANCHOR_CONSTANT_DROPPING_OUT_OF_PEAK_TO_PEAK",
+      "heldout_peak_to_peak_bound_m": 2.0,
+      "pairwise_contribution_m": 4.0,
+      "per_link_path_bound_m": 0.5,
+      "provenance": "INDEPENDENT_OF_TARGET_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "HIGHER_ORDER_IONOSPHERE",
+      "two_link_coordinate_amplitude_bound_m": 1.0
+    },
+    {
+      "basis": "CONSERVATIVE_ONE_OVER_SINE_TARGET_MINUS_REFERENCE_MAPPING",
+      "heldout_peak_to_peak_bound_m": 0.17120906620009535,
+      "pairwise_contribution_m": 0.3424181324001907,
+      "provenance": "INDEPENDENT_OF_FUTURE_C_OBSERVATION",
+      "state": "MODELED_INTERVAL",
+      "term": "STATION_C_DIFFERENTIAL_TROPOSPHERE",
+      "zenith_delay_interval_m": [
+        0.0,
+        3.5
+      ]
+    },
+    {
+      "anchor_peak_to_peak_gain": 2.0,
+      "basis": "HALF_RINEX_F14_3_CYCLE_QUANTIZATION_AFTER_IF_COMBINATION",
+      "basis_phase_coordinate": "TWO_LINK_TARGET_MINUS_REFERENCE_INTERVAL_WITH_FIXED_ANCHOR_CONSTANT_DROPPING_OUT_OF_PEAK_TO_PEAK",
+      "heldout_peak_to_peak_bound_m": 0.0017238368006440115,
+      "pairwise_contribution_m": 0.003447673601288023,
+      "per_link_path_bound_m": 0.00043095920016100286,
+      "provenance": "INDEPENDENT_OF_FUTURE_C_OBSERVATION",
+      "state": "KNOWN_FORMAT_BOUND",
+      "term": "RINEX_CARRIER_PHASE_QUANTIZATION",
+      "two_link_coordinate_amplitude_bound_m": 0.0008619184003220057
+    }
+  ],
+  "prior_evidence": {
+    "GNSS_PHASE_REPEATED_PASS_OUTCOME.json": {
+      "canonical_sha256": "629865857ccc3b17c54db14aefee60fe26eaf9b0c5ded7525c07bcdba30399da",
+      "claim_scope": "REPEATED_PASS_CONSISTENCY_FOR_TWO_GOLD_NLIB_G22_G30_PASSES",
+      "outcome": "ORBITAL_MODEL_REPEATED_PASS_PREFERRED",
+      "role": "AGGREGATE_CLOSED_EVIDENCE_NO_VALUES_REOPENED"
+    },
+    "GNSS_PHASE_SHORT_WINDOW_PRIMARY_OUTCOME.json": {
+      "canonical_sha256": "66adf39fa1b10cbf43bdb712ebf4d1f3d8f598203caaa8fa2a41601fea511f9d",
+      "claim_scope": "HELDOUT_ORBITAL_MODEL_PREFERENCE_BELOW_SATELLITE_IDENTITY",
+      "outcome": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+      "role": "AGGREGATE_CLOSED_EVIDENCE_NO_VALUES_REOPENED"
+    }
+  },
+  "prospective_plan_frozen": false,
+  "receiver_clock_cancellation": {
+    "common_clock_curve_contains_constant_rate_and_non_affine_terms": true,
+    "maximum_absolute_numerical_error_m": 0.0,
+    "signal_specific_hardware_cancels": false
+  },
+  "remaining_physical_margin_m": 1416.3416668947132,
+  "schema": "gnss-observer-transfer-spike-receipt-v1",
+  "source_commit": "2c1464f586d0db1e12e39c0be72e4b75505d6d2e",
+  "source_sha256": "c07ec3c904f9874fcb2dca73b334753f7efd4029d850be9ae9796a4a57591dca",
+  "synthetic_geometry": {
+    "minimum_all_model_elevation_deg": 62.823247468827304,
+    "minimum_required_elevation_deg": 15.0,
+    "model_elements": {
+      "REFERENCE_ORBIT": {
+        "ARG_OF_PERICENTER": 0.0,
+        "BSTAR": 0.0,
+        "CLASSIFICATION_TYPE": "U",
+        "ECCENTRICITY": 0.01,
+        "ELEMENT_SET_NO": 1,
+        "EPHEMERIS_TYPE": 0,
+        "EPOCH": "2026-01-01T00:00:00.000000",
+        "INCLINATION": 55.0,
+        "MEAN_ANOMALY": 8.0,
+        "MEAN_MOTION": 2.0056,
+        "MEAN_MOTION_DDOT": 0.0,
+        "MEAN_MOTION_DOT": 0.0,
+        "NORAD_CAT_ID": 90002,
+        "OBJECT_ID": "2099-002A",
+        "OBJECT_NAME": "SYNTHETIC_REFERENCE",
+        "RA_OF_ASC_NODE": 20.0,
+        "REV_AT_EPOCH": 1
+      },
+      "TARGET_ORBIT": {
+        "ARG_OF_PERICENTER": 0.0,
+        "BSTAR": 0.0,
+        "CLASSIFICATION_TYPE": "U",
+        "ECCENTRICITY": 0.01,
+        "ELEMENT_SET_NO": 1,
+        "EPHEMERIS_TYPE": 0,
+        "EPOCH": "2026-01-01T00:00:00.000000",
+        "INCLINATION": 55.0,
+        "MEAN_ANOMALY": 0.0,
+        "MEAN_MOTION": 2.0056,
+        "MEAN_MOTION_DDOT": 0.0,
+        "MEAN_MOTION_DOT": 0.0,
+        "NORAD_CAT_ID": 90001,
+        "OBJECT_ID": "2099-001A",
+        "OBJECT_NAME": "SYNTHETIC_TARGET",
+        "RA_OF_ASC_NODE": 20.0,
+        "REV_AT_EPOCH": 1
+      },
+      "WRONG_ORBIT_1": {
+        "ARG_OF_PERICENTER": 0.0,
+        "BSTAR": 0.0,
+        "CLASSIFICATION_TYPE": "U",
+        "ECCENTRICITY": 0.01,
+        "ELEMENT_SET_NO": 1,
+        "EPHEMERIS_TYPE": 0,
+        "EPOCH": "2026-01-01T00:00:00.000000",
+        "INCLINATION": 55.0,
+        "MEAN_ANOMALY": 0.35,
+        "MEAN_MOTION": 2.0054,
+        "MEAN_MOTION_DDOT": 0.0,
+        "MEAN_MOTION_DOT": 0.0,
+        "NORAD_CAT_ID": 90003,
+        "OBJECT_ID": "2099-003A",
+        "OBJECT_NAME": "SYNTHETIC_WRONG_1",
+        "RA_OF_ASC_NODE": 20.1,
+        "REV_AT_EPOCH": 1
+      },
+      "WRONG_ORBIT_2": {
+        "ARG_OF_PERICENTER": 0.0,
+        "BSTAR": 0.0,
+        "CLASSIFICATION_TYPE": "U",
+        "ECCENTRICITY": 0.01,
+        "ELEMENT_SET_NO": 1,
+        "EPHEMERIS_TYPE": 0,
+        "EPOCH": "2026-01-01T00:00:00.000000",
+        "INCLINATION": 55.0,
+        "MEAN_ANOMALY": -0.55,
+        "MEAN_MOTION": 2.006,
+        "MEAN_MOTION_DDOT": 0.0,
+        "MEAN_MOTION_DOT": 0.0,
+        "NORAD_CAT_ID": 90004,
+        "OBJECT_ID": "2099-004A",
+        "OBJECT_NAME": "SYNTHETIC_WRONG_2",
+        "RA_OF_ASC_NODE": 19.8,
+        "REV_AT_EPOCH": 1
+      }
+    },
+    "observer_coordinates_are_candidate_selection": false,
+    "observer_id": "SYNTHETIC_C_NO_CAPABILITY_ROLE",
+    "start_utc": "2026-01-01T03:25:00+00:00",
+    "stop_utc": "2026-01-01T04:34:00+00:00"
+  },
+  "synthetic_model_mismatch": {
+    "best_model": "WRONG_ORBIT_1",
+    "generated_from_nominal_target": false,
+    "same_fixed_anchor_and_zero_observation_fit": true,
+    "target_not_automatically_preferred": true,
+    "target_residual": {
+      "heldout_maximum_absolute_m": 22625.984882086515,
+      "heldout_peak_to_peak_m": 9638.43901771307,
+      "heldout_rms_m": 18080.67903893972
+    },
+    "truth_family": "WRONG_ORBIT_1",
+    "truth_residual": {
+      "heldout_maximum_absolute_m": 0.0,
+      "heldout_peak_to_peak_m": 0.0,
+      "heldout_rms_m": 0.0
+    }
+  }
+}

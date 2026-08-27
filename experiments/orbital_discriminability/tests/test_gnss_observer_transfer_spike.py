@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +15,8 @@ from experiments.orbital_discriminability import (
 ROOT = Path(__file__).resolve().parents[1]
 PRIMARY = ROOT / spike.PRIMARY_OUTCOME_NAME
 REPEATED = ROOT / spike.REPEATED_OUTCOME_NAME
+RECEIPT = ROOT / spike.RECEIPT_NAME
+RECEIPT_SHA256 = "e60e130e051626ebbae02aa655ade26071fd1dddd7f79a4f7ff131d476d3f4c5"
 
 
 @pytest.fixture(scope="module")
@@ -153,3 +156,28 @@ def test_receipt_contains_no_real_capability_or_observation_surface(compiled) ->
     assert json.loads(spike.strict_json(compiled)) == compiled
     with pytest.raises(ValueError):
         spike.strict_json({"bad": float("nan")})
+
+
+def test_frozen_receipt_binds_source_manifest_and_result() -> None:
+    payload = RECEIPT.read_bytes()
+    frozen = json.loads(payload)
+
+    assert len(payload) == 12010
+    assert sha256(payload).hexdigest() == RECEIPT_SHA256
+    assert frozen["source_commit"] == (
+        "2c1464f586d0db1e12e39c0be72e4b75505d6d2e"
+    )
+    assert frozen["source_sha256"] == spike.source_sha256()
+    assert frozen["manifest_sha256"] == spike.manifest_sha256()
+    assert frozen["outcome"] == spike.OUTCOME_DISCRIMINATIVE
+    assert frozen["null_scores"]["controlling_null"] == "FROZEN_AFFINE_NULL"
+    assert frozen["null_scores"]["controlling_heldout_separation_m"] == pytest.approx(
+        1703.2250464932295
+    )
+    assert frozen["pairwise_comparison_envelope_m"] == pytest.approx(
+        286.8833795985163
+    )
+    assert frozen["remaining_physical_margin_m"] == pytest.approx(
+        1416.3416668947132
+    )
+    assert set(frozen["observation_access"].values()) == {0}
