@@ -416,6 +416,7 @@ def compile_station_day(
     candidate: navigation.NavigationCandidate,
     records: Mapping[str, tuple[geometry.GpsEphemeris, ...]],
     observer_authority: station_scope.CandidateStation,
+    position_cache: dict[tuple[str, float], np.ndarray] | None = None,
 ) -> dict[str, object]:
     epochs = navigation.gps_day_grid(candidate)
     observer = _station(observer_authority)
@@ -425,7 +426,10 @@ def compile_station_day(
         0.0,
         inherited.MAX_STATION_EPOCH_ERROR_S,
     )
-    cache: dict[tuple[str, float], np.ndarray] = {}
+    owns_cache = position_cache is None
+    cache: dict[tuple[str, float], np.ndarray] = (
+        {} if position_cache is None else position_cache
+    )
 
     def positions(satellite: str, offset_s: float = 0.0) -> np.ndarray:
         key = satellite, float(offset_s)
@@ -607,8 +611,9 @@ def compile_station_day(
         if best is None or _case_sort_key(row) < _case_sort_key(best):
             best = row
 
-    for values in cache.values():
-        values.fill(0.0)
+    if owns_cache:
+        for values in cache.values():
+            values.fill(0.0)
     return {
         "station_id": observer_authority.station_id,
         "doy": candidate.doy,
@@ -657,13 +662,19 @@ def compile_screen(
     parents = validate_parent_receipts(root)
     records_by_doy, navigation_authority = _parse_navigation_payloads(payloads)
     cases = []
-    for observer in CANDIDATES:
-        for candidate in NAVIGATION_CANDIDATES:
+    for candidate in NAVIGATION_CANDIDATES:
+        day_cache: dict[tuple[str, float], np.ndarray] = {}
+        for observer in CANDIDATES:
             cases.append(
                 compile_station_day(
-                    candidate, records_by_doy[candidate.doy], observer
+                    candidate,
+                    records_by_doy[candidate.doy],
+                    observer,
+                    day_cache,
                 )
             )
+        for values in day_cache.values():
+            values.fill(0.0)
     best_windows = [
         case["best_window"]
         for case in cases
