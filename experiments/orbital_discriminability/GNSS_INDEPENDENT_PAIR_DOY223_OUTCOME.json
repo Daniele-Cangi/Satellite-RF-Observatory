@@ -1,0 +1,44 @@
+{
+  "artifacts": [
+    {
+      "attempt_on_selected_mirror": 1,
+      "attempts_total": 3,
+      "complete_file_bytes": 11064,
+      "complete_file_sha256": "28566afe3361bdcd2cacb5da83f2cfb5bba25d3ff2234256313df16d337326d1",
+      "cross_mirror_partial_append": false,
+      "hash_before_any_decode": true,
+      "mirror": "https://cddis.nasa.gov/archive/gnss/data/daily/2026/223/26d/ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz",
+      "mirror_index": 1,
+      "product": "ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz",
+      "resume_used": false,
+      "stable_validator": {
+        "kind": "ETAG",
+        "value": "W/\"969beb706e4a6ffe6a957d6cb4ef509f\""
+      },
+      "station": "ALGO00CAN"
+    },
+    {
+      "attempt_on_selected_mirror": 1,
+      "attempts_total": 3,
+      "complete_file_bytes": 11064,
+      "complete_file_sha256": "dd6508377b50bb142297a52b52151ba602d6e17d2a8458aa8875861384be9235",
+      "cross_mirror_partial_append": false,
+      "hash_before_any_decode": true,
+      "mirror": "https://cddis.nasa.gov/archive/gnss/data/daily/2026/223/26d/MDO100USA_R_20262230000_01D_30S_MO.crx.gz",
+      "mirror_index": 1,
+      "product": "MDO100USA_R_20262230000_01D_30S_MO.crx.gz",
+      "resume_used": false,
+      "stable_validator": {
+        "kind": "ETAG",
+        "value": "W/\"d33bf064b15ae423b21c89415a76dd73\""
+      },
+      "station": "MDO100USA"
+    }
+  ],
+  "executor_version": "g22-g30-algo-mdo-doy223-primary-executor-v1",
+  "heldout_comparison": "NOT_EVALUATED",
+  "observation_values_persisted": 0,
+  "outcome": "MEASUREMENT_INVALID",
+  "reason": "HATANAKA_DECODE_FAILED:ALGO00CAN",
+  "schema": "gnss-independent-pair-doy223-outcome-v1"
+}

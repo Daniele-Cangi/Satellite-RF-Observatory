@@ -103,6 +103,11 @@ producing an orbital score:
   the boundary as NLIB G21 `C2W` at `10:06:00 GPS`: header index 5 followed
   only three serialized fields, a RINEX `TRAILING_FIELD_OMITTED` state. The
   historical outcome and closure are unchanged.
+- the distinct-root ALGO00CAN–MDO100USA G22/G30 DOY223 primary retained a
+  `51,848.538 m` modeled physical margin, but its single authorized run stopped
+  `MEASUREMENT_INVALID` at `HATANAKA_DECODE_FAILED:ALGO00CAN`. Both frozen byte
+  streams were fully hashed before decode; no measurement clause or held-out
+  hypothesis was evaluated, and zero observation values were persisted.
 
 No real held-out vertical has therefore reached `MEASUREMENT_VALID` and then
 preferred an orbital model over frozen nulls. The GNSS result refuses one exact

@@ -250,8 +250,26 @@ def test_executor_seal_binds_post_commit_source_and_zero_access() -> None:
         curve.fill(0.0)
 
 
-def test_executor_freeze_did_not_create_a_primary_outcome() -> None:
-    assert not (ROOT / executor.OUTCOME_NAME).exists()
+def test_separately_authorized_primary_outcome_is_frozen_and_value_free() -> None:
+    raw = (ROOT / executor.OUTCOME_NAME).read_bytes()
+    outcome = json.loads(
+        raw,
+        parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+    )
+
+    assert len(raw) == 1_668
+    assert sha256(raw).hexdigest() == (
+        "2f8e7f0f4261e32c159d312995f69899f591696f0b0ea6141c40706ce6d9153b"
+    )
+    assert outcome["outcome"] == "MEASUREMENT_INVALID"
+    assert outcome["reason"] == "HATANAKA_DECODE_FAILED:ALGO00CAN"
+    assert outcome["heldout_comparison"] == "NOT_EVALUATED"
+    assert outcome["observation_values_persisted"] == 0
+    assert len(outcome["artifacts"]) == 2
+    assert all(
+        artifact["hash_before_any_decode"] is True
+        for artifact in outcome["artifacts"]
+    )
 
 
 def test_same_mirror_resume_requires_and_uses_stable_validator() -> None:

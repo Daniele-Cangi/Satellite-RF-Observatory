@@ -1104,3 +1104,13 @@ the frozen held-out scorer. No observation request or outcome exists, and the
 executor seal grants no live authority. The next maximum step is therefore one
 explicit execution review, not more implementation or selection. See
 [`GNSS_INDEPENDENT_PAIR_DOY223_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_EXECUTOR_REPORT.md).
+
+That one authorized DOY223 execution is now closed as `MEASUREMENT_INVALID` at
+`HATANAKA_DECODE_FAILED:ALGO00CAN`. Both frozen byte streams reached complete
+SHA-256 receipts before the first decode; ALGO then failed the frozen Hatanaka
+decoder, MDO was not decoded, and admission and held-out scoring remained
+`NOT_EVALUATED`. The receipt does not identify the underlying response-body or
+encoding cause, so none is inferred. No observation value or RF artifact was
+persisted, and the primary cannot be retried, repaired in place or moved to a
+second window. See
+[`GNSS_INDEPENDENT_PAIR_DOY223_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_OUTCOME_REPORT.md).
