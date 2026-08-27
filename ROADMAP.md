@@ -1124,3 +1124,16 @@ coordinate at unseen observer C can retain positive orbital-versus-null margin
 without a free rate or suffix fit. No station, date, locator or artifact is yet
 selected. See
 [`POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md`](experiments/orbital_discriminability/POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md).
+
+The recommended offline spike is now frozen as
+`OBSERVER_TRANSFER_MECHANISM_DISCRIMINATIVE`. On its deterministic synthetic
+high-elevation geometry, the one-anchor observer-C coordinate retains
+1,703.225 m peak-to-peak separation from the prediction-frozen affine null,
+against a 286.883 m pairwise physical envelope. Common receiver clock cancels;
+signal-specific hardware remains a mandatory C-prefix admission bound. A
+wrong-orbit truth stress selects the wrong orbit, so the target is not favored
+by construction. This advances only the mechanism: no real observer, date,
+product or primary has been selected, and no measurement is authorized. The
+next maximum work after review is bounded orbit-only observer ranking before
+artifact discovery. See
+[`GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md).

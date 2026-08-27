@@ -20,3 +20,6 @@ experiments/orbital_discriminability/GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_RECEIPT.
 
 # The one-shot DOY223 outcome is frozen from its exact CRLF byte stream.
 experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_OUTCOME.json -text whitespace=cr-at-eol
+
+# The synthetic observer-transfer receipt is frozen from its exact LF byte stream.
+experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_SPIKE_RECEIPT.json -text

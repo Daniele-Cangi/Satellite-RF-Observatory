@@ -131,6 +131,17 @@ continuous-phase mechanism can make a frozen prediction for one held-out
 observer, before selecting any new artifact. See
 [`POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md`](experiments/orbital_discriminability/POST_DOY223_INDEPENDENT_OBSERVER_REVIEW.md).
 
+That offline observer-transfer spike is now complete. A one-anchor
+target-minus-reference coordinate at a synthetic unseen observer preserves
+`1,703.225 m` peak-to-peak separation from the closest frozen affine null.
+The full conservative pairwise envelope is `286.883 m`, leaving
+`1,416.342 m`. A wrong-orbit truth stress selects the wrong-orbit family rather
+than automatically preferring the target. The outcome is
+`OBSERVER_TRANSFER_MECHANISM_DISCRIMINATIVE`, but it is only a synthetic
+mechanism result: no observer, station, date, product or measurement is
+selected or authorized. See
+[`GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
