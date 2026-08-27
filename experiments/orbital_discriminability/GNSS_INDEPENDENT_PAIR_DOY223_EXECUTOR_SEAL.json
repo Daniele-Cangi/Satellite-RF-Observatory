@@ -1,0 +1,56 @@
+{
+  "access_at_seal": {
+    "descriptive_head_requests": 0,
+    "observation_headers_opened": 0,
+    "observation_locator_requests": 0,
+    "observation_payload_bytes": 0,
+    "observation_values": 0
+  },
+  "authority": {
+    "expected_executor_seal_sha256_must_be_supplied": true,
+    "live_execution_authorized_by_seal": false
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "ncompress": "1.0.2",
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "manifest_sha256": "6748fb3acd8eb65cd868d205420a00841006861f14e904a6bcbeb5318cf3bb87",
+  "plan_document_sha256": "8c6890ba6a9638739f9402d4c5ea3264d8f74aef82b8c83b58902ac5cd9e1291",
+  "plan_manifest_sha256": "2e7598068db8dd5c4fe27ee881340bb7096b8e878fda0a050048a11a70767055",
+  "prediction_seal_sha256": "4e94711d88a9c85c232585db83a3b7192713ba0b4900606076e8c386373c57fa",
+  "prediction_sha256": "c45df3e1ca2a18bf52bd7f33e31fceaf6c15a9e83d83d1078c3f092c81cbf15b",
+  "products": [
+    {
+      "complete_file_bytes": null,
+      "complete_file_sha256": null,
+      "mirror_order_frozen": true,
+      "mirrors": [
+        "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/223/ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz",
+        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/223/26d/ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz"
+      ],
+      "name": "ALGO00CAN_R_20262230000_01D_30S_MO.crx.gz",
+      "station": "ALGO00CAN"
+    },
+    {
+      "complete_file_bytes": null,
+      "complete_file_sha256": null,
+      "mirror_order_frozen": true,
+      "mirrors": [
+        "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/223/MDO100USA_R_20262230000_01D_30S_MO.crx.gz",
+        "https://cddis.nasa.gov/archive/gnss/data/daily/2026/223/26d/MDO100USA_R_20262230000_01D_30S_MO.crx.gz"
+      ],
+      "name": "MDO100USA_R_20262230000_01D_30S_MO.crx.gz",
+      "station": "MDO100USA"
+    }
+  ],
+  "qualification_outcome_sha256": "cf26a411a0b77b79e951a21516c06333d26e7cc879f1dff09ce2e6eaa2fe3090",
+  "qualification_summary_sha256": "68f14d331509f4bed96176314cab4428d80292d28da5a88430f4068948384493",
+  "qualified_header_transform_sha256": "7f106a5486ddd05cad12e034b4b7a14c87fc97ad77e77f73f660755c344d09bf",
+  "schema": "gnss-independent-pair-doy223-executor-seal-v1",
+  "source_commit": "af293090436468b43737677bd0b0a12dfb84ee0a",
+  "source_sha256": "4b7d032c414419c11844a974f97aa9239293557ffc704fa22c03f4525336bc08",
+  "state": "PRIMARY_EXECUTOR_FROZEN_OBSERVATION_UNOPENED",
+  "stop": "SEPARATE_REVIEW_BEFORE_ANY_PRIMARY_GET_OR_HEADER_ACCESS"
+}
