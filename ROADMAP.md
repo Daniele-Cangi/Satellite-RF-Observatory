@@ -1148,3 +1148,13 @@ L1C/L2W identity, so this geometry result does not reinstate it. The next
 maximum work is bounded PIE-only capability characterization before selecting
 any qualification artifact or primary. See
 [`GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md).
+
+The bounded PIE-only metadata check has confirmed exact CDDIS RINEX 3 compact
+products for DOY221 and DOY223 plus one continuous documented receiver,
+antenna and H-maser/10 MHz/PPS configuration across both dates. No observation
+body was requested and DOY223 remains unopened. Product naming cannot prove
+L1C/L2W, LLI, C1C/C2W, actual epoch coverage or continuity, so the state is
+`PIE_METADATA_PATH_AVAILABLE`, not capability admission. The next maximum
+action, after explicit review, is one DOY221-only structural qualification;
+DOY223 access remains forbidden. See
+[`PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md).

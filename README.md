@@ -153,6 +153,16 @@ the next maximum work is a PIE-only field/timing/configuration check before
 any qualification or primary artifact is selected. See
 [`GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md).
 
+A PIE-only metadata characterization has now confirmed that exact RINEX 3
+compact `01D/30S` products exist for the DOY221 qualification candidate and
+the still-unopened DOY223 primary candidate. The frozen station log places
+both dates under receiver serial `4100427`, firmware `5.7.0`, antenna serial
+`CR520022114` and the documented H-maser/10 MHz/PPS architecture. This is
+`PIE_METADATA_PATH_AVAILABLE`, not signal-field qualification: L1C/L2W, LLI,
+C1C/C2W, actual epoch coverage and continuity remain unknown until a separately
+authorized DOY221-only structural pass. See
+[`PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
