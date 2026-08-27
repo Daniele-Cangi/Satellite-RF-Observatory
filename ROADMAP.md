@@ -1078,3 +1078,12 @@ is 54,990.702 m peak-to-peak against a 3,142.164 m pairwise envelope, leaving
 measurement. The next maximum work is to freeze one DOY223 primary contract
 before discovering or materializing its two observation artifacts. See
 [`GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_NEXT_PRIMARY_SCREEN_REPORT.md).
+
+The corresponding DOY223 primary contract is now observation-blind and frozen.
+It binds the two logical ALGO/MDO products, a closed ordered mirror set, the
+139-epoch window, witnesses, physical envelope and nulls. Transport may retry
+or resume only during bounded pre-hash materialization; after complete hashes
+or any decode begins there is no retry, substitution or second window. At
+freeze, all observation access counters remain zero. The next maximum work is
+an exact-hash offline prediction seal, not an observation request. See
+[`GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md`](experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_PRIMARY_PLAN.md).
