@@ -23,3 +23,6 @@ experiments/orbital_discriminability/GNSS_INDEPENDENT_PAIR_DOY223_OUTCOME.json -
 
 # The synthetic observer-transfer receipt is frozen from its exact LF byte stream.
 experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_SPIKE_RECEIPT.json -text
+
+# The bounded real-geometry observer-transfer receipt is exact LF evidence.
+experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.json -text

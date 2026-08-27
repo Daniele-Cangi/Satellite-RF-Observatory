@@ -142,6 +142,17 @@ mechanism result: no observer, station, date, product or measurement is
 selected or authorized. See
 [`GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md).
 
+The corresponding bounded real-geometry screen is also complete, still with
+zero observation access. Across four unused observers and three frozen
+post-A/B NAV days, all 12 station/date cases retain positive margin. The
+distinct-observer shortlist is PIE100USA/DOY223, WES200USA/DOY223 and
+AMC400USA/DOY221. PIE controls with `190,232.341 m` separation from the affine
+null against a `2,907.821 m` pairwise envelope, leaving `187,324.520 m`.
+This is `OBSERVER_TRANSFER_GEOMETRY_SHORTLISTED`, not capability admission:
+the next maximum work is a PIE-only field/timing/configuration check before
+any qualification or primary artifact is selected. See
+[`GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

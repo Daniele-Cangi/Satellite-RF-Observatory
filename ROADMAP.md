@@ -1137,3 +1137,14 @@ product or primary has been selected, and no measurement is authorized. The
 next maximum work after review is bounded orbit-only observer ranking before
 artifact discovery. See
 [`GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_SPIKE_REPORT.md).
+
+The bounded real-geometry successor is now frozen without creating a new gate
+or opening observations. Four unused observers times three frozen post-A/B
+NAV days yield 12/12 positive cases. The distinct-observer shortlist is
+PIE100USA/DOY223, WES200USA/DOY223 and AMC400USA/DOY221; PIE leaves
+187,324.520 m after the complete 2,907.821 m pairwise envelope. WES remains
+historically capability-rejected because its RINEX v2 feed does not establish
+L1C/L2W identity, so this geometry result does not reinstate it. The next
+maximum work is bounded PIE-only capability characterization before selecting
+any qualification artifact or primary. See
+[`GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md`](experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_REPORT.md).

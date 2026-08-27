@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 import numpy as np
@@ -12,6 +13,8 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / screen.RECEIPT_NAME
+RECEIPT_SHA256 = "4982a32459d880a17abab9cf726ee6e8f6383e1d0b570abbf77fd07341d459d5"
 
 
 def test_scope_is_bounded_unused_observers_and_frozen_post_ab_days() -> None:
@@ -105,3 +108,45 @@ def test_navigation_payload_set_and_nonfinite_json_are_refused() -> None:
 
 def test_manifest_round_trip_is_strict_json() -> None:
     assert json.loads(screen.strict_json(screen.manifest())) == screen.manifest()
+
+
+def test_frozen_receipt_selects_three_distinct_observers_without_observation() -> None:
+    payload = RECEIPT.read_bytes()
+    frozen = json.loads(payload)
+
+    assert len(payload) == 164_520
+    assert sha256(payload).hexdigest() == RECEIPT_SHA256
+    assert frozen["source_commit"] == (
+        "48afe8e59bc97d2fc0afc5afc7015176018af89c"
+    )
+    assert frozen["source_sha256"] == screen.source_sha256()
+    assert frozen["manifest_sha256"] == screen.manifest_sha256()
+    assert frozen["outcome"] == screen.OUTCOME_SHORTLISTED
+    assert len(frozen["case_results"]) == 12
+    assert all(case["case_admitted"] for case in frozen["case_results"])
+    assert [row["station_id"] for row in frozen["shortlist"]] == [
+        "PIE100USA",
+        "WES200USA",
+        "AMC400USA",
+    ]
+    assert [row["doy"] for row in frozen["shortlist"]] == [223, 223, 221]
+    selected = frozen["selected"]
+    assert selected["raw_start_gps"] == "2026-08-11T05:42:00 GPS"
+    assert selected["raw_stop_gps"] == "2026-08-11T06:51:00 GPS"
+    assert selected["heldout_start_gps"] == "2026-08-11T06:21:30 GPS"
+    assert selected["controlling_null"] == "FROZEN_AFFINE_NULL"
+    assert selected["controlling_heldout_separation_m"] == pytest.approx(
+        190_232.34133512143
+    )
+    assert selected["pairwise_comparison_envelope_m"] == pytest.approx(
+        2_907.8208783974924
+    )
+    assert selected["remaining_physical_margin_m"] == pytest.approx(
+        187_324.52045672393
+    )
+    assert selected["minimum_time_shifted_model_elevation_deg"] == pytest.approx(
+        17.801627769079243
+    )
+    assert set(frozen["observation_access"].values()) == {0}
+    assert frozen["capability_selected"] is False
+    assert frozen["prospective_plan_frozen"] is False
