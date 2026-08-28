@@ -1,0 +1,37 @@
+{
+  "access_at_seal": {
+    "network_requests": 0,
+    "orbital_scores": 0,
+    "primary_headers": 0,
+    "primary_payload_bytes": 0,
+    "primary_values": 0
+  },
+  "authority": {
+    "live_execution_authorized_by_seal": false,
+    "separate_review_and_one_use_token_required": true
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3",
+    "python": "3.13.5",
+    "requests": "2.32.4"
+  },
+  "manifest_sha256": "68d0b9ccadfc6f97cbf522784c4c6957352d231739c27f69ef6c0ba1353fb4e3",
+  "plan_manifest_sha256": "5fef155739849280fced56a5967460df7be0b6e9ae1522aadbc61b6d667a6867",
+  "prediction_seal_sha256": "446b65682cf9bfe7eac5d4fe63a1c709dc0ebaf9f75a681214f925b0f111e4e9",
+  "prediction_sha256": "a86a360fcbf9e1aa05e112bae1e2d1158b729f6e2fe9b4418a89883c72aacbc9",
+  "product": {
+    "complete_hash_unknown_until_authorized_materialization": true,
+    "directory": "/gnss/data/daily/2026/223",
+    "fallback": false,
+    "logical_product": "PIE100USA_R_20262230000_01D_30S_MO.crx.gz",
+    "station": "PIE100USA",
+    "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION_ONLY"
+  },
+  "qualified_header_transform_sha256": "5988af21e1812ab17c63a2d547eb0babd5ca754c2a5bbeebb6e9ef263d4ec672",
+  "schema": "pie-observer-primary-executor-seal-v1",
+  "source_commit": "c9334e45025e837a11cc62eec084b1e0495a58e2",
+  "source_sha256": "aaa59603eec7dc3139bb4f935faa899e9a8158708c877d8356c459500cf9727a",
+  "state": "PIE_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED",
+  "stop": "STOP_BEFORE_PRIMARY_ACCESS_FOR_SEPARATE_REVIEW"
+}
