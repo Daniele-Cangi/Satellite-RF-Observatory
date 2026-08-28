@@ -1213,3 +1213,16 @@ margin is well above the fixed `7,899.821 m` guard. The result authorizes only
 or product bytes persist, and the consumed primary may not be retried or
 rescored. See
 [`PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md).
+
+The bounded next-replication review selects AMC400USA/DOY221 from the already
+frozen observer shortlist, without a new geometry search or observation
+access. It combines a new station and new pass with `159,899.492 m` remaining
+modeled margin and a `25.726 deg` minimum shifted elevation. Official metadata
+establishes a physical receiver, antenna, monument and H-maser root distinct
+from PIE, while the shared POLARX5TR family remains a declared limitation.
+GSSC directory descriptions contain one exact AMC file for DOY222
+qualification and one for the still-unopened DOY221 primary candidate. This is
+`AMC_REPLICATION_METADATA_PATH_AVAILABLE`, not qualification or a prospective
+plan. The next maximum work is one separately authorized, value-blind DOY222
+structural qualification. See
+[`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md).

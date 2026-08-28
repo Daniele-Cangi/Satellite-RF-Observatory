@@ -214,6 +214,18 @@ identity or a general receiver claim. The primary is consumed and cannot be
 retried or rescored. See
 [`PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md).
 
+The next independent-replication route is now bounded metadata-only, without
+opening another observation. AMC400USA/DOY221 changes both receiver root and
+pass while retaining `159,899.492 m` of modeled margin. The official site log
+establishes receiver serial `3013929`, firmware `5.6.0`, antenna serial
+`1364-10065` and an external USNO H-maser chain distinct from PIE; the shared
+POLARX5TR family remains an explicit common-mode limitation. Exact GSSC files
+exist for a DOY222 qualification candidate and the unopened DOY221 primary
+candidate. The state is `AMC_REPLICATION_METADATA_PATH_AVAILABLE`; the next
+maximum action requires separate authorization for DOY222 structural-only
+qualification. See
+[`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
