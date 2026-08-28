@@ -112,6 +112,12 @@ compressed and decoded observation artifacts existed only in RAM and were
 destroyed after the receipt was formed. Persisted compressed bytes, decoded
 bytes, observation values and orbital scores are all zero.
 
+After the one-shot result was frozen, the live-only `requests` import was made
+lazy so the offline CI job can collect the structural tests without installing
+the transport client. This changes no frozen parameter or receipt. Commit
+`a7d154e458a8d3cdd50b45421a318cb2e153ad09` and its source SHA-256 above remain
+the exact executor provenance for the consumed observation access.
+
 ## Authorized and unauthorized claims
 
 Authorized:

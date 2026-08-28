@@ -148,6 +148,17 @@ def test_gssc_download_url_preserves_bare_wingftp_flag() -> None:
     assert "download=" not in pie._gssc_download_url()
 
 
+def test_offline_manifest_does_not_load_live_transport(monkeypatch) -> None:
+    def forbidden_import(name: str):
+        raise AssertionError(f"offline manifest attempted import: {name}")
+
+    monkeypatch.setattr(pie, "import_module", forbidden_import)
+
+    assert pie.manifest()["qualification_product"]["name"] == (
+        "PIE100USA_R_20262210000_01D_30S_MO.crx.gz"
+    )
+
+
 def test_complete_structure_passes_without_measurement_or_score() -> None:
     scan = scanned()
     try:

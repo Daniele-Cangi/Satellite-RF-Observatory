@@ -15,16 +15,16 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 import gc
 from hashlib import md5, sha256
+from importlib import import_module, metadata
 import io
 import json
 from pathlib import Path
 import platform
 import subprocess
-from typing import Final, Iterable, Mapping, Sequence
+from typing import Any, Final, Iterable, Mapping, Sequence
 from xml.etree import ElementTree
 
 import hatanaka
-import requests
 
 from experiments.orbital_discriminability import gnss_observation_header as headers
 
@@ -762,7 +762,23 @@ def evaluate(scan: StationScan) -> dict[str, object]:
     return result
 
 
-def _bounded_response(response: requests.Response, maximum: int, label: str) -> bytes:
+def _requests_module() -> Any:
+    """Load the live-only transport dependency outside offline collection."""
+
+    try:
+        return import_module("requests")
+    except ModuleNotFoundError as exc:
+        raise DescriptionError("REQUESTS_DEPENDENCY_UNAVAILABLE") from exc
+
+
+def _dependency_version(name: str) -> str:
+    try:
+        return metadata.version(name)
+    except metadata.PackageNotFoundError:
+        return "UNAVAILABLE"
+
+
+def _bounded_response(response: Any, maximum: int, label: str) -> bytes:
     data = response.content
     if len(data) > maximum:
         raise MaterializationError(f"{label}_SIZE_LIMIT")
@@ -805,8 +821,8 @@ def _gssc_product_metadata(directory_xml: bytes) -> dict[str, object]:
     }
 
 
-def _new_gssc_session() -> requests.Session:
-    session = requests.Session()
+def _new_gssc_session() -> Any:
+    session = _requests_module().Session()
     response = session.post(
         GSSC_WEB_ROOT + "loginok.html",
         data={
@@ -826,7 +842,7 @@ def _new_gssc_session() -> requests.Session:
     return session
 
 
-def _navigate_gssc(session: requests.Session) -> dict[str, object]:
+def _navigate_gssc(session: Any) -> dict[str, object]:
     for index, component in enumerate(GSSC_DIRECTORY_COMPONENTS):
         requested = f"/{component}" if index == 0 else component
         response = session.post(
@@ -854,7 +870,7 @@ def _navigate_gssc(session: requests.Session) -> dict[str, object]:
 
 
 def _download_gssc(
-    session: requests.Session,
+    session: Any,
 ) -> tuple[bytearray, Mapping[str, object]]:
     response = session.get(
         _gssc_download_url(),
@@ -915,12 +931,7 @@ def materialize() -> tuple[bytearray, dict[str, object]]:
                 "response_content_length": response_headers.get("Content-Length"),
                 "response_content_type": response_headers.get("Content-Type"),
             }
-        except (
-            requests.RequestException,
-            TimeoutError,
-            OSError,
-            MaterializationError,
-        ) as exc:
+        except (TimeoutError, OSError, MaterializationError) as exc:
             payload[:] = b"\x00" * len(payload)
             failures.append(f"{type(exc).__name__}:{exc}")
     raise MaterializationError(
@@ -952,7 +963,7 @@ def _base_outcome(
         "dependencies": {
             "python": platform.python_version(),
             "hatanaka": getattr(hatanaka, "__version__", "UNKNOWN"),
-            "requests": requests.__version__,
+            "requests": _dependency_version("requests"),
         },
         "artifact": dict(artifact) if artifact is not None else None,
         "persistence": {
