@@ -1,0 +1,53 @@
+{
+  "authority": {
+    "executor_authorized_by_seal": false,
+    "primary_access_authorized_by_seal": false,
+    "separate_review_required": true
+  },
+  "compiler_manifest_sha256": "59bd0270787d61de1bcb73200f20ba93521fa9a1f366c567914899151c1dc5c0",
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "navigation": {
+    "compressed_bytes": 71403,
+    "compressed_sha256": "deaea8679fc2fd816d0d127ae11a7c83f3956cdf51b969e99bddb0f381437478",
+    "doy": 223,
+    "gps_date": "2026-08-11",
+    "name": "brdc2230.26n.gz",
+    "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+    "rinex_version": "2.11",
+    "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+    "uncompressed_bytes": 298710,
+    "uncompressed_name": "brdc2230.26n",
+    "uncompressed_sha256": "340bf5e84504420d6770476c8f3c9cda78722fcc283cd34385f47b77ba6f4d2e",
+    "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/223/brdc2230.26n.gz"
+  },
+  "orbital_scores_produced": 0,
+  "plan": {
+    "canonical_sha256": "7291cc19b0400b1b16367d6786090bc0f7ddd1473e83195a3b7abe4951b14a1b",
+    "manifest_sha256": "5fef155739849280fced56a5967460df7be0b6e9ae1522aadbc61b6d667a6867",
+    "name": "PIE_OBSERVER_PRIMARY_PLAN_RECEIPT.json",
+    "outcome": "PIE_OBSERVER_PRIMARY_PLAN_FROZEN",
+    "role": "FROZEN_PROSPECTIVE_PLAN_NO_OBSERVATION_REOPENED"
+  },
+  "predictions": {
+    "canonical_sha256": "a86a360fcbf9e1aa05e112bae1e2d1158b729f6e2fe9b4418a89883c72aacbc9",
+    "curve_set_sha256": "acdf11390aa6ce4d7506fc733d53f968ac0cdfb977b99ef43dfe388d77d39586",
+    "name": "PIE_OBSERVER_PRIMARY_PREDICTIONS.json",
+    "timing_curve_set_sha256": "048315df7a536a7e71fce6e0f0fbdd54e8a1ce60d1b2bc7d0cefdc8d9421dff8"
+  },
+  "primary": {
+    "access": "SEALED_UNAUTHORIZED",
+    "headers_opened": 0,
+    "logical_product": "PIE100USA_R_20262230000_01D_30S_MO.crx.gz",
+    "observation_values": 0,
+    "payload_bytes": 0,
+    "station": "PIE100USA"
+  },
+  "schema": "pie-observer-primary-prediction-seal-v1",
+  "source_commit": "db0ff58c092f48cb5cea09bffd494b7a639be848",
+  "source_sha256": "b1cecd12f2a72fad4526d824713f7f1a716f6e0b69bc8e40f4370a05ab5b382e",
+  "state": "PIE_OBSERVER_PRIMARY_PREDICTION_FROZEN",
+  "stop": "STOP_BEFORE_EXECUTOR_OR_PRIMARY_OBSERVATION_ACCESS_FOR_REVIEW"
+}

@@ -184,6 +184,15 @@ guard is 7,899.821 m against 190,232.341 m affine separation, leaving
 authority. The next maximum work is an offline exact-hash prediction seal. See
 [`PIE_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PLAN.md).
 
+That exact-hash prediction seal is now complete. The frozen NOAA DOY223 NAV
+reproduces the 190,232.341 m affine-controlling separation, the direct
+`t +/- 15 s` envelope is 1,418.146 m, and every modeled trajectory remains
+above 17.802 degrees. The unchanged pairwise guard leaves 182,332.520 m of
+margin. The outcome is `PIE_OBSERVER_PRIMARY_PREDICTION_FROZEN`: zero PIE
+headers, payload bytes, observation values or orbital scores were accessed.
+The seal grants neither executor nor primary authority. See
+[`PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

@@ -1181,3 +1181,14 @@ unopened and no executor exists. The next maximum work, after review, is an
 offline exact-hash prediction seal from the already frozen broadcast NAV
 authority. See
 [`PIE_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PLAN.md).
+
+The reviewed offline prediction seal is now frozen without primary access.
+Exact-hash NOAA DOY223 broadcast navigation binds all five nominal curves and
+the eight direct `t +/- 15 s` orbital envelope curves. The affine null remains
+controlling at 190,232.341 m, the direct timing envelope is 1,418.146 m, joint
+visibility remains complete and the revised physical margin remains
+182,332.520 m. This is `PIE_OBSERVER_PRIMARY_PREDICTION_FROZEN`, not a
+measurement or executor authority. The next maximum work is review of a
+minimal one-shot executor; until then the PIE DOY223 product remains unopened.
+See
+[`PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
