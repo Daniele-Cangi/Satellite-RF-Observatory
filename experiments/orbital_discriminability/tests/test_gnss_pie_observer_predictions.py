@@ -84,6 +84,24 @@ def test_frozen_prediction_reproduces_pie_geometry() -> None:
     value = json.loads(PREDICTIONS.read_text(encoding="utf-8"))
     curves = predictions.validate_predictions(value, ROOT)
 
+    assert value["compiler_source_commit"] == (
+        "db0ff58c092f48cb5cea09bffd494b7a639be848"
+    )
+    assert value["compiler_source_sha256"] == (
+        "b1cecd12f2a72fad4526d824713f7f1a716f6e0b69bc8e40f4370a05ab5b382e"
+    )
+    assert value["compiler_manifest_sha256"] == (
+        "59bd0270787d61de1bcb73200f20ba93521fa9a1f366c567914899151c1dc5c0"
+    )
+    assert value["curve_set_sha256"] == (
+        "acdf11390aa6ce4d7506fc733d53f968ac0cdfb977b99ef43dfe388d77d39586"
+    )
+    assert value["timing_curve_set_sha256"] == (
+        "048315df7a536a7e71fce6e0f0fbdd54e8a1ce60d1b2bc7d0cefdc8d9421dff8"
+    )
+    assert predictions.canonical_sha256(PREDICTIONS) == (
+        "a86a360fcbf9e1aa05e112bae1e2d1158b729f6e2fe9b4418a89883c72aacbc9"
+    )
     assert set(curves) == set(predictions.HYPOTHESES)
     assert all(curve.shape == (139,) for curve in curves.values())
     regression = value["numerical_regression"]
@@ -130,6 +148,9 @@ def test_direct_timing_curve_tampering_is_refused() -> None:
 def test_seal_grants_no_observation_or_executor_authority() -> None:
     seal = json.loads(SEAL.read_text(encoding="utf-8"))
 
+    assert predictions.canonical_sha256(SEAL) == (
+        "446b65682cf9bfe7eac5d4fe63a1c709dc0ebaf9f75a681214f925b0f111e4e9"
+    )
     assert seal["state"] == "PIE_OBSERVER_PRIMARY_PREDICTION_FROZEN"
     assert seal["authority"] == {
         "primary_access_authorized_by_seal": False,
