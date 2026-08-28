@@ -9,6 +9,15 @@ from experiments.orbital_discriminability import gnss_amc_observer_qualification
 
 
 SECRET_OBSERVATION_TOKEN = "987654321.123"
+ROOT = Path(amc.__file__).resolve().parent
+FROZEN_SOURCE_COMMIT = "d8281f2d183b274c5d8f94a7769051440ad95da0"
+FROZEN_SOURCE_SHA256 = (
+    "6bc2044f78e8afeb2f31a74d47b716ebbbde86350b78503ce135c8bf8f6d3fa6"
+)
+FROZEN_MANIFEST_SHA256 = (
+    "5f06900060478f72993a801db5a47ad6aef674b36b847e6aa10ed869abe7cc40"
+)
+FROZEN_SEAL_SHA256 = "ffd6b009a9e13d05c7b879b5cbb795376d2f9ba1ddeb0ac17bd66ffff3b523ad"
 
 
 def header_line(data: str, label: str) -> str:
@@ -306,6 +315,22 @@ def test_executor_seal_binds_source_manifest_parents_and_zero_access(
     assert seal["authority"]["live_execution_authorized_by_seal"] is False
     assert "/221/" not in encoded
     assert "2026221" not in encoded
+
+
+def test_committed_executor_seal_is_exact_and_still_unopened() -> None:
+    seal_path = ROOT / amc.EXECUTOR_SEAL_NAME
+
+    assert amc.source_sha256() == FROZEN_SOURCE_SHA256
+    assert amc.manifest_sha256() == FROZEN_MANIFEST_SHA256
+    assert amc.canonical_sha256(seal_path) == FROZEN_SEAL_SHA256
+
+    seal = amc.validate_executor_seal(ROOT, seal_path, FROZEN_SEAL_SHA256)
+
+    assert seal["source_commit"] == FROZEN_SOURCE_COMMIT
+    assert seal["source_sha256"] == FROZEN_SOURCE_SHA256
+    assert seal["manifest_sha256"] == FROZEN_MANIFEST_SHA256
+    assert not any(seal["access_at_seal"].values())
+    assert seal["stop"] == "SEPARATE_EXPLICIT_LIVE_QUALIFICATION_AUTHORITY_REQUIRED"
 
 
 def test_wrong_authority_stops_before_seal_and_network(tmp_path, monkeypatch) -> None:

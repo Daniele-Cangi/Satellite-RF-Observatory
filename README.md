@@ -221,10 +221,15 @@ establishes receiver serial `3013929`, firmware `5.6.0`, antenna serial
 `1364-10065` and an external USNO H-maser chain distinct from PIE; the shared
 POLARX5TR family remains an explicit common-mode limitation. Exact GSSC files
 exist for a DOY222 qualification candidate and the unopened DOY221 primary
-candidate. The state is `AMC_REPLICATION_METADATA_PATH_AVAILABLE`; the next
-maximum action requires separate authorization for DOY222 structural-only
-qualification. See
-[`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md).
+candidate. The value-blind DOY222 executor is now frozen offline as
+`AMC_OBSERVER_QUALIFICATION_EXECUTOR_FROZEN_UNOPENED`: its exact source,
+manifest, dependencies, parent receipts and zero-access state are sealed, and
+the one-shot marker must precede any network request. The seal grants no live
+authority; the next maximum action is review of exactly one DOY222 structural
+execution. See
+[`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md)
+and
+[`AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md).
 
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
