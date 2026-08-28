@@ -1223,6 +1223,16 @@ from PIE, while the shared POLARX5TR family remains a declared limitation.
 GSSC directory descriptions contain one exact AMC file for DOY222
 qualification and one for the still-unopened DOY221 primary candidate. This is
 `AMC_REPLICATION_METADATA_PATH_AVAILABLE`, not qualification or a prospective
-plan. The next maximum work is one separately authorized, value-blind DOY222
-structural qualification. See
-[`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md).
+plan.
+
+The corresponding value-blind DOY222 executor is now frozen offline as
+`AMC_OBSERVER_QUALIFICATION_EXECUTOR_FROZEN_UNOPENED`. Source commit
+`d8281f2`, source/manifest hashes, dependencies and both parent receipts are
+bound by seal SHA-256 `ffd6b009...523ad`. It writes a one-shot consumed marker
+before network, retries only transport interruption before the complete-file
+hash and cannot contain the DOY221 primary locator. All qualification and
+primary access counters remain zero. The next maximum work is separate review
+of exactly one DOY222 structural execution; it cannot score an orbit. See
+[`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md)
+and
+[`AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md).

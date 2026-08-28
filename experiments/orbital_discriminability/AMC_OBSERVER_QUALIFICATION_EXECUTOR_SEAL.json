@@ -1,0 +1,39 @@
+{
+  "access_at_seal": {
+    "network_requests": 0,
+    "primary_doy221_headers": 0,
+    "primary_doy221_locator_requests": 0,
+    "primary_doy221_payload_bytes": 0,
+    "primary_doy221_values": 0,
+    "qualification_headers": 0,
+    "qualification_payload_bytes": 0,
+    "qualification_values": 0
+  },
+  "authority": {
+    "expected_seal_sha256_must_be_supplied": true,
+    "live_execution_authorized_by_seal": false,
+    "one_shot_marker_before_network": true,
+    "retry_after_complete_hash": false,
+    "retry_scope": "TRANSPORT_INTERRUPTION_BEFORE_COMPLETE_HASH_ONLY"
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "python": "3.13.5",
+    "requests": "2.32.4"
+  },
+  "manifest_sha256": "5f06900060478f72993a801db5a47ad6aef674b36b847e6aa10ed869abe7cc40",
+  "parents": {
+    "AMC_OBSERVER_REPLICATION_METADATA_REPORT.md": "e0c8d9496448ead1ac5bfe07cd17a0f25623853c26c70b6f4a1edb32913929fa",
+    "GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.json": "4982a32459d880a17abab9cf726ee6e8f6383e1d0b570abbf77fd07341d459d5"
+  },
+  "qualification_product": {
+    "name": "AMC400USA_R_20262220000_01D_30S_MO.crx.gz",
+    "station": "AMC400USA",
+    "url": "https://cddis.nasa.gov/archive/gnss/data/daily/2026/222/26d/AMC400USA_R_20262220000_01D_30S_MO.crx.gz"
+  },
+  "schema": "amc-observer-qualification-executor-seal-v1",
+  "source_commit": "d8281f2d183b274c5d8f94a7769051440ad95da0",
+  "source_sha256": "6bc2044f78e8afeb2f31a74d47b716ebbbde86350b78503ce135c8bf8f6d3fa6",
+  "state": "AMC_OBSERVER_QUALIFICATION_EXECUTOR_FROZEN_UNOPENED",
+  "stop": "SEPARATE_EXPLICIT_LIVE_QUALIFICATION_AUTHORITY_REQUIRED"
+}
