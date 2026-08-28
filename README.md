@@ -264,6 +264,19 @@ outcome exists. The next maximum action is separate review of exactly one live
 execution; this seal alone cannot open the primary. See
 [`AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).
 
+The separately authorized one-shot AMC execution is now terminally complete as
+`AMC_HELD_OUT_ORBITAL_MODEL_PREFERRED`. All 139 epochs and every predeclared
+measurement witness passed. G22 leaves `1.409 m` p-p on the frozen held-out
+suffix, versus `162,245.831 m` for the affine runner-up; the
+`162,244.422 m` preference margin exceeds the unchanged `7,339.701 m` guard
+with zero fitted nuisance parameters. The direct receipt claim is limited to
+held-out-station confirmation for this exact window. Combined prospectively
+with PIE, it supports independent-observer-and-pass replication for this orbit
+signal family, while the shared POLARX5TR receiver family remains an explicit
+common-mode limitation. The consumed primary cannot be retried or rescored.
+See
+[`AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
