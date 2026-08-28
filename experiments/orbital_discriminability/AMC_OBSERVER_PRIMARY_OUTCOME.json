@@ -1,0 +1,188 @@
+{
+  "artifact": {
+    "attempts": 1,
+    "complete_file_bytes": 3415979,
+    "complete_file_md5": "aa4d25b59ec992f4046a13616b2d6c13",
+    "complete_file_sha256": "edbe8adfc6bc7ce72c9082f549840576a27a4a949f974a2c7bf1820f82ade425",
+    "gssc_directory_bytes": 3415979,
+    "gssc_directory_md5": "1",
+    "gssc_directory_modified": "2026-08-10 03:01:38",
+    "hash_before_decompression_header_or_record_decode": true,
+    "preexisting_cddis_description_used_as_identity": false,
+    "product": "AMC400USA_R_20262210000_01D_30S_MO.crx.gz",
+    "station": "AMC400USA",
+    "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION"
+  },
+  "claim_scope": "HELD_OUT_STATION_CONFIRMED_FOR_THIS_ORBIT_SIGNAL_WINDOW",
+  "executor_seal_sha256": "0b6ffe5af82b15404b7a546e8203df6415a68e0ba373c03500d31d4645f44893",
+  "executor_version": "amc-g22-g30-doy221-one-shot-executor-v1",
+  "measurement_admission": {
+    "core_phase_and_lli": "SATISFIED",
+    "event_time": {
+      "limit_s": 15.0,
+      "maximum_absolute_deviation_s": 0.0,
+      "state": "SATISFIED"
+    },
+    "geometry_free_phase_health": {
+      "limit_m": 0.09514683639918244,
+      "links": [
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.005680263042449951,
+          "satellite": "G22",
+          "violations": 0
+        },
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.0028385482728481293,
+          "satellite": "G30",
+          "violations": 0
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "header": {
+      "antenna": {
+        "serial": "1364-10065",
+        "type": "TPSCR.G5C       NONE",
+        "version_or_radome": ""
+      },
+      "full_frozen_window_covered": true,
+      "gps_observables": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "S1W",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C2L",
+        "L2L",
+        "S2L",
+        "C5Q",
+        "L5Q",
+        "S5Q",
+        "C1L",
+        "L1L",
+        "S1L"
+      ],
+      "interval_s": 30.0,
+      "marker_name": "AMC4",
+      "receiver": {
+        "serial": "3013929",
+        "type": "SEPT POLARX5TR",
+        "version_or_radome": "5.6.0"
+      },
+      "receiver_clock_offset_applied": 0,
+      "required_phase_shift_records": [
+        "G L1C",
+        "G L2W"
+      ],
+      "rinex_version": 3.04,
+      "station": "AMC400USA",
+      "time_of_first_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-09T00:00:00.000000Z"
+      },
+      "time_of_last_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-09T23:59:30.000000Z"
+      }
+    },
+    "raw_epochs": 139,
+    "same_path_code_phase_witness": {
+      "links": [
+        {
+          "full_window_peak_to_peak_m": 2.85609482601285,
+          "limit_m": 1250.0,
+          "satellite": "G22",
+          "state": "SATISFIED"
+        },
+        {
+          "full_window_peak_to_peak_m": 2.134501576423645,
+          "limit_m": 1250.0,
+          "satellite": "G30",
+          "state": "SATISFIED"
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "structural_counts": {
+      "BLANK": 0,
+      "PRESENT": 1112,
+      "TRAILING_FIELD_OMITTED": 0
+    }
+  },
+  "observation_access": {
+    "code_scalars_parsed_in_ram": 556,
+    "compressed_bytes_in_ram": 3415979,
+    "decoded_bytes_in_ram": 27599127,
+    "headers": 1,
+    "observation_values_persisted": 0,
+    "phase_scalars_parsed_in_ram": 556,
+    "products": 1
+  },
+  "outcome": "AMC_HELD_OUT_ORBITAL_MODEL_PREFERRED",
+  "persistence": {
+    "aggregate_admission_and_score_receipt_only": true,
+    "compressed_rinex": 0,
+    "decoded_rinex": 0,
+    "observation_values": 0
+  },
+  "plan_manifest_sha256": "0a3c1e3768566da6242d6aaffd6c751a23d6bf167c7f54d0498fe75f365609b0",
+  "prediction_sha256": "c9f7236f3cc221cb8485fe82f0a739e720ee3725f9dbf7c7fcc54c4167794155",
+  "retry": {
+    "new_window_endpoint_feature_threshold_or_null": false,
+    "retry_after_complete_hash": false,
+    "retry_after_decode": false,
+    "transport_attempts_before_hash": 1
+  },
+  "schema": "amc-observer-primary-outcome-v1",
+  "score": {
+    "heldout_comparison": {
+      "best_hypothesis": "ORBITAL_G22",
+      "nuisance_parameters_fit": 0,
+      "preference_guard_m": 7339.701234647398,
+      "preference_margin_m": 162244.42216239765,
+      "raw_indices_inclusive": [
+        79,
+        138
+      ],
+      "runner_up_hypothesis": "FROZEN_AFFINE_NULL",
+      "scores": [
+        {
+          "heldout_peak_to_peak_m": 1.409090131521225,
+          "heldout_rms_m": 6.45253754440446,
+          "hypothesis": "ORBITAL_G22"
+        },
+        {
+          "heldout_peak_to_peak_m": 162245.83125252917,
+          "heldout_rms_m": 52789.66236597826,
+          "hypothesis": "FROZEN_AFFINE_NULL"
+        },
+        {
+          "heldout_peak_to_peak_m": 162721.51776501536,
+          "heldout_rms_m": 53983.203917862134,
+          "hypothesis": "WRONG_ORBIT_G17"
+        },
+        {
+          "heldout_peak_to_peak_m": 220147.74668402597,
+          "heldout_rms_m": 351742.8600262788,
+          "hypothesis": "WRONG_ORBIT_G14"
+        },
+        {
+          "heldout_peak_to_peak_m": 498273.34280978516,
+          "heldout_rms_m": 534213.1630062002,
+          "hypothesis": "WRONG_ORBIT_G01"
+        }
+      ],
+      "state": "EVALUATED"
+    },
+    "outcome": "AMC_HELD_OUT_ORBITAL_MODEL_PREFERRED"
+  },
+  "source_commit": "b31a987987578a24fdc0594c44d00abf787f8510",
+  "source_sha256": "d87cde21fe8b0ff4e6265e4e460c1c24aaad6a2a590f85d0b8e830fa9975ef63"
+}

@@ -1,0 +1,10 @@
+{
+  "executor_seal_sha256": "0b6ffe5af82b15404b7a546e8203df6415a68e0ba373c03500d31d4645f44893",
+  "network_requests_before_marker": 0,
+  "primary_headers_before_marker": 0,
+  "primary_payload_bytes_before_marker": 0,
+  "primary_values_before_marker": 0,
+  "schema": "amc-observer-primary-authority-consumed-v1",
+  "source_commit": "b31a987987578a24fdc0594c44d00abf787f8510",
+  "state": "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}

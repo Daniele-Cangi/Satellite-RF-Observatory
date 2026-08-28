@@ -1269,3 +1269,15 @@ zero-fit held-out comparison. Source commit `b31a987` and executor seal
 next maximum work is a separate decision on exactly one execution, not further
 executor or infrastructure work. See
 [`AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).
+
+The reviewed one-shot execution is now consumed and terminal as
+`AMC_HELD_OUT_ORBITAL_MODEL_PREFERRED`. The exact 3,415,979-byte product was
+hashed before decode on the first transport attempt; all 139 epochs, event
+time, core phase/LLI, geometry-free continuity and same-path code witnesses
+passed. With no fitted nuisance parameters, G22 leaves `1.409 m` p-p on the
+held-out suffix against `162,245.831 m` for the affine runner-up. The resulting
+`162,244.422 m` preference margin passes the fixed `7,339.701 m` guard. This
+closes the planned observer/pass replication positively, without claiming
+satellite identity, orbit recovery or independence from the POLARX5TR receiver
+family shared with PIE. No retry or rescore is permitted. See
+[`AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md).
