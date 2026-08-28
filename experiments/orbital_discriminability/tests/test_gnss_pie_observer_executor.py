@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from hashlib import sha256
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Mapping
@@ -28,6 +29,14 @@ EXECUTOR_MANIFEST_SHA256 = (
 )
 EXECUTOR_SEAL_SHA256 = (
     "3b15c0c899756c48c80a6339cb6c6e20a0f493f379f8b439c445caf1bf033e2b"
+)
+AUTHORITY_MARKER = ROOT / executor.AUTHORITY_MARKER_NAME
+PRIMARY_OUTCOME = ROOT / executor.OUTCOME_NAME
+AUTHORITY_MARKER_SHA256 = (
+    "6f78077bbf374bc463890448ac0b152eb318a77e7f48f4cc03a3d73de977811f"
+)
+PRIMARY_OUTCOME_SHA256 = (
+    "13dc0f6f2dd0d7456bd615599336b4c70354f505821bb694757376f241a1ec9b"
 )
 
 
@@ -170,6 +179,59 @@ def test_frozen_executor_seal_binds_source_manifest_and_zero_access() -> None:
     finally:
         for curve in curves.values():
             curve.fill(0.0)
+
+
+def test_single_primary_outcome_is_terminal_admitted_and_value_free() -> None:
+    assert executor.canonical_sha256(AUTHORITY_MARKER) == AUTHORITY_MARKER_SHA256
+    assert executor.canonical_sha256(PRIMARY_OUTCOME) == PRIMARY_OUTCOME_SHA256
+
+    marker = json.loads(AUTHORITY_MARKER.read_text(encoding="utf-8"))
+    outcome = json.loads(PRIMARY_OUTCOME.read_text(encoding="utf-8"))
+    encoded = executor.strict_json(outcome)
+
+    assert marker["state"] == "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+    assert marker["executor_seal_sha256"] == EXECUTOR_SEAL_SHA256
+    assert marker["network_requests_before_marker"] == 0
+    assert marker["primary_values_before_marker"] == 0
+
+    assert outcome["outcome"] == "PIE_HELD_OUT_ORBITAL_MODEL_PREFERRED"
+    assert outcome["claim_scope"] == (
+        "HELD_OUT_STATION_CONFIRMED_FOR_THIS_ORBIT_SIGNAL_WINDOW"
+    )
+    assert outcome["executor_seal_sha256"] == EXECUTOR_SEAL_SHA256
+    assert outcome["artifact"]["attempts"] == 1
+    assert outcome["artifact"]["complete_file_bytes"] == 3_112_422
+    assert outcome["artifact"]["complete_file_sha256"] == (
+        "1b3d1190ab2c31591166cddcb42c160f777c05908cadbf83649d10d48a55254d"
+    )
+    assert outcome["artifact"][
+        "hash_before_decompression_header_or_record_decode"
+    ] is True
+
+    admission = outcome["measurement_admission"]
+    assert admission["raw_epochs"] == 139
+    assert admission["core_phase_and_lli"] == "SATISFIED"
+    assert admission["event_time"]["state"] == "SATISFIED"
+    assert admission["geometry_free_phase_health"]["state"] == "SATISFIED"
+    assert admission["same_path_code_phase_witness"]["state"] == "SATISFIED"
+
+    comparison = outcome["score"]["heldout_comparison"]
+    assert comparison["state"] == "EVALUATED"
+    assert comparison["best_hypothesis"] == "ORBITAL_G22"
+    assert comparison["runner_up_hypothesis"] == "FROZEN_AFFINE_NULL"
+    assert comparison["nuisance_parameters_fit"] == 0
+    assert comparison["raw_indices_inclusive"] == [79, 138]
+    assert comparison["preference_guard_m"] == 7_899.820878397492
+    assert comparison["preference_margin_m"] == 190_227.78297061834
+
+    assert outcome["persistence"]["compressed_rinex"] == 0
+    assert outcome["persistence"]["decoded_rinex"] == 0
+    assert outcome["persistence"]["observation_values"] == 0
+    assert outcome["retry"]["transport_attempts_before_hash"] == 1
+    assert outcome["retry"]["retry_after_complete_hash"] is False
+    assert outcome["retry"]["retry_after_decode"] is False
+    assert "phase_cycles" not in encoded
+    assert "code_m" not in encoded
 
 
 def test_frozen_inputs_bind_exact_prediction_and_qualified_transform() -> None:
