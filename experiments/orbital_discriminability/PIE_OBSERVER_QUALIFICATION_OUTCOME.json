@@ -1,0 +1,76 @@
+{
+  "artifact": {
+    "attempts": 1,
+    "authority_url": "https://cddis.nasa.gov/archive/gnss/data/daily/2026/221/26d/PIE100USA_R_20262210000_01D_30S_MO.crx.gz",
+    "complete_file_bytes": 3111600,
+    "complete_file_md5": "2ef135588a873b4204a9fa9a35272106",
+    "complete_file_sha256": "6a39f3ee411bd43d32befb856fc54ea8bd6d4db41a1669ca7823bc5e1931e0d3",
+    "descriptive_head_was_not_identity_authority": true,
+    "gssc_directory_md5": "1",
+    "gssc_directory_modified": "2026-08-10 03:01:38",
+    "hash_before_any_decompression_or_record_scan": true,
+    "preaccess_cddis_head_content_length": 3111600,
+    "product": "PIE100USA_R_20262210000_01D_30S_MO.crx.gz",
+    "response_content_length": "3111600",
+    "response_content_type": "application/x-gzip",
+    "station": "PIE100USA",
+    "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION",
+    "transport_directory": "/gnss/data/daily/2026/221"
+  },
+  "clause_states": {
+    "artifact_materialization_and_hash": "SATISFIED",
+    "core_phase_and_lli": "SATISFIED",
+    "header_configuration_and_window": "SATISFIED",
+    "measurement_admission": "NOT_EVALUATED",
+    "primary_orbital_comparison": "NOT_EVALUATED",
+    "same_path_code_witness": "SATISFIED"
+  },
+  "coverage": {
+    "name": "PIE_OBSERVER_QUALIFICATION_COVERAGE.jsonl",
+    "rows": 1668,
+    "sha256": "773e84d7f2c5d9698a7a90745386c60fdfbc015ea9ad9c4041c7e0380881961e"
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "python": "3.13.5",
+    "requests": "2.32.4"
+  },
+  "fallback_selected": false,
+  "manifest_sha256": "e1664c49e5bb3589152b7a821898382d24860ff19f26e1d41f825037bfd156f4",
+  "next_authority": "PROSPECTIVE_PLAN_REVIEW_ONLY",
+  "observation_access": {
+    "compressed_bytes_in_ram": 3111600,
+    "decoded_rinex_bytes_in_ram": 23915069,
+    "observation_values_parsed": 0,
+    "observation_values_persisted": 0,
+    "qualification_headers": 1,
+    "qualification_products": 1
+  },
+  "orbital_prediction_access": 0,
+  "orbital_scores_produced": 0,
+  "outcome": "PIE_OBSERVER_QUALIFICATION_PASSED",
+  "parents": {
+    "GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.json": "4982a32459d880a17abab9cf726ee6e8f6383e1d0b570abbf77fd07341d459d5",
+    "PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md": "a652abc162cbf127b953fadeeac0a98ce92021a723f0974443c34d9b83061943"
+  },
+  "persistence": {
+    "compressed_rinex_bytes": 0,
+    "decoded_rinex_bytes": 0,
+    "observation_values": 0,
+    "structural_receipts_only": true
+  },
+  "primary_doy223_access": {
+    "headers": 0,
+    "locator_requests": 0,
+    "payload_bytes": 0,
+    "values": 0
+  },
+  "qualification_version": "pie-g22-g30-doy221-structural-qualification-v1",
+  "schema": "pie-observer-structural-qualification-outcome-v1",
+  "source_commit": "a7d154e458a8d3cdd50b45421a318cb2e153ad09",
+  "source_sha256": "5cd0e7ba77c0f7f19b174ad6ffa94819cba366f4448293177b09ac9c51237548",
+  "summary": {
+    "name": "PIE_OBSERVER_QUALIFICATION_SUMMARY.json",
+    "sha256": "8813d699753af9729bf122c893641598bb837b57c9f7c090e5dd67073143a4ba"
+  }
+}
