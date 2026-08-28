@@ -825,9 +825,10 @@ def _new_gssc_session() -> object:
         },
     )
     with opener.open(login, timeout=HTTP_TIMEOUT_S) as response:
-        body = _bounded_read(response, 100_000, "GSSC_LOGIN_RESPONSE")
-    if b"login()" not in body:
-        raise MaterializationError("GSSC_ANONYMOUS_LOGIN_NOT_CONFIRMED")
+        _bounded_read(response, 100_000, "GSSC_LOGIN_RESPONSE")
+    # WingFTP may serve loginok.html itself or advance the response body.  The
+    # exact, outcome-independent session witness is the first successful
+    # chdir below, not a presentation-layer JavaScript token.
     return opener
 
 
