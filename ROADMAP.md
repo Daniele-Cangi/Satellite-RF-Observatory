@@ -1231,11 +1231,22 @@ SHA-256 hashed before decode on the first attempt. All 1,668 structural rows
 are present, G22/G30 span the complete 139-epoch core phase/LLI window, and all
 four C1C/C2W witness links have 100 percent coverage. Zero observation values
 and zero product bytes persisted; quantitative measurement admission and
-orbital scoring remain `NOT_EVALUATED`. DOY221 remains unopened. The next
-maximum work is offline freezing of its prospective plan and exact model/null
-predictions, not primary access. See
+orbital scoring remain `NOT_EVALUATED`.
+
+The prospective AMC/DOY221 contract is now frozen offline as
+`AMC_OBSERVER_PRIMARY_PLAN_FROZEN`; DOY221 remains unopened. It binds the exact
+139-epoch window, sample-zero anchor, fixed prefix/held-out split, zero fitted
+nuisance parameters and the affine/G01/G14/G17 alternatives. Replacing the
+unwitnessed 4 m hardware term with the predeclared full-window code-phase rule
+raises the pairwise guard to `7,339.701 m`, still leaving `154,907.492 m`
+against the controlling affine separation. The distinct physical instance and
+pass test observer transfer, while the common POLARX5TR family remains a claim
+limitation. The next maximum work is the offline exact-hash model/null
+prediction seal, not primary access or executor construction. See
 [`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md)
 and
 [`AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md).
 The consumed qualification is documented in
-[`AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md).
+[`AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md),
+and the frozen proof design is
+[`AMC_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PLAN.md).

@@ -225,14 +225,26 @@ candidate. The one authorized value-blind DOY222 execution is now consumed as
 `AMC_OBSERVER_QUALIFICATION_PASSED`. All 1,668 retained structural states are
 present, the G22/G30 core phase/LLI window spans all 139 epochs, and every
 C1C/C2W witness has 100 percent coverage. No observation scalar or product
-bytes persisted and no orbital score was produced. DOY221 remains unopened;
-the next maximum action is an offline prospective plan and exact prediction
-freeze, not primary access. See
+bytes persisted and no orbital score was produced.
+
+The AMC/DOY221 prospective contract is now frozen offline while the primary
+remains unopened. It fixes the 139-epoch grid, raw-index-zero anchor, 79-epoch
+witness prefix, 60-epoch held-out suffix, zero fitted nuisance parameters and
+the same affine/G01/G14/G17 alternatives used by the geometry screen. The
+predeclared code-phase witness replaces the old unwitnessed 4 m hardware term:
+the resulting pairwise guard is `7,339.701 m` against `162,247.193 m` affine
+separation, leaving `154,907.492 m`. The shared POLARX5TR family with PIE
+remains an explicit limit on hardware diversity. This is
+`AMC_OBSERVER_PRIMARY_PLAN_FROZEN`, not primary access or an orbital outcome.
+The next maximum action is the offline exact-hash DOY221 model/null prediction
+seal. See
 [`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md)
 and
 [`AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md).
 The terminal receipt is documented in
-[`AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md).
+[`AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md),
+and the proof design is
+[`AMC_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PLAN.md).
 
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
