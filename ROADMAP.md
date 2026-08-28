@@ -1225,14 +1225,17 @@ qualification and one for the still-unopened DOY221 primary candidate. This is
 `AMC_REPLICATION_METADATA_PATH_AVAILABLE`, not qualification or a prospective
 plan.
 
-The corresponding value-blind DOY222 executor is now frozen offline as
-`AMC_OBSERVER_QUALIFICATION_EXECUTOR_FROZEN_UNOPENED`. Source commit
-`d8281f2`, source/manifest hashes, dependencies and both parent receipts are
-bound by seal SHA-256 `ffd6b009...523ad`. It writes a one-shot consumed marker
-before network, retries only transport interruption before the complete-file
-hash and cannot contain the DOY221 primary locator. All qualification and
-primary access counters remain zero. The next maximum work is separate review
-of exactly one DOY222 structural execution; it cannot score an orbit. See
+The corresponding one-shot value-blind DOY222 execution is now consumed as
+`AMC_OBSERVER_QUALIFICATION_PASSED`. The exact 3,455,043-byte artifact was
+SHA-256 hashed before decode on the first attempt. All 1,668 structural rows
+are present, G22/G30 span the complete 139-epoch core phase/LLI window, and all
+four C1C/C2W witness links have 100 percent coverage. Zero observation values
+and zero product bytes persisted; quantitative measurement admission and
+orbital scoring remain `NOT_EVALUATED`. DOY221 remains unopened. The next
+maximum work is offline freezing of its prospective plan and exact model/null
+predictions, not primary access. See
 [`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md)
 and
 [`AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md).
+The consumed qualification is documented in
+[`AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md).

@@ -1,0 +1,79 @@
+{
+  "artifact": {
+    "attempts": 1,
+    "authority_url": "https://cddis.nasa.gov/archive/gnss/data/daily/2026/222/26d/AMC400USA_R_20262220000_01D_30S_MO.crx.gz",
+    "complete_file_bytes": 3455043,
+    "complete_file_md5": "9973b2e2db0fbbf52750ed55c9886e14",
+    "complete_file_sha256": "1b2257350a6cadb5713c5db9316b87bc1cd61dc49e71533189741e3b1a45cea8",
+    "descriptive_directory_was_not_identity_authority": true,
+    "gssc_directory_md5": "1",
+    "gssc_directory_md5_is_checksum": false,
+    "gssc_directory_modified": "2026-08-11 03:01:26",
+    "hash_before_any_decompression_or_record_scan": true,
+    "preaccess_declared_product_bytes": 3455043,
+    "preaccess_directory_response_sha256": "207aece33d1d72add0da59228104de955f8b241416f07e9ae55d93f3c41dd573",
+    "product": "AMC400USA_R_20262220000_01D_30S_MO.crx.gz",
+    "response_content_length": "3455043",
+    "response_content_type": "application/x-gzip",
+    "station": "AMC400USA",
+    "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION",
+    "transport_directory": "/gnss/data/daily/2026/222"
+  },
+  "clause_states": {
+    "artifact_materialization_and_hash": "SATISFIED",
+    "core_phase_and_lli": "SATISFIED",
+    "header_configuration_and_window": "SATISFIED",
+    "measurement_admission": "NOT_EVALUATED",
+    "primary_orbital_comparison": "NOT_EVALUATED",
+    "same_path_code_witness": "SATISFIED"
+  },
+  "coverage": {
+    "name": "AMC_OBSERVER_QUALIFICATION_COVERAGE.jsonl",
+    "rows": 1668,
+    "sha256": "bfaccd2ca742f329fe56d6df5e88774c73790040eca2bee5eb3c6ca907718077"
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "python": "3.13.5",
+    "requests": "2.32.4"
+  },
+  "executor_seal_sha256": "ffd6b009a9e13d05c7b879b5cbb795376d2f9ba1ddeb0ac17bd66ffff3b523ad",
+  "fallback_selected": false,
+  "manifest_sha256": "5f06900060478f72993a801db5a47ad6aef674b36b847e6aa10ed869abe7cc40",
+  "next_authority": "PROSPECTIVE_PLAN_REVIEW_ONLY",
+  "observation_access": {
+    "compressed_bytes_in_ram": 3455043,
+    "decoded_rinex_bytes_in_ram": 27855960,
+    "observation_values_parsed": 0,
+    "observation_values_persisted": 0,
+    "qualification_headers": 1,
+    "qualification_products": 1
+  },
+  "orbital_prediction_access": 0,
+  "orbital_scores_produced": 0,
+  "outcome": "AMC_OBSERVER_QUALIFICATION_PASSED",
+  "parents": {
+    "AMC_OBSERVER_REPLICATION_METADATA_REPORT.md": "e0c8d9496448ead1ac5bfe07cd17a0f25623853c26c70b6f4a1edb32913929fa",
+    "GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.json": "4982a32459d880a17abab9cf726ee6e8f6383e1d0b570abbf77fd07341d459d5"
+  },
+  "persistence": {
+    "compressed_rinex_bytes": 0,
+    "decoded_rinex_bytes": 0,
+    "observation_values": 0,
+    "structural_receipts_only": true
+  },
+  "primary_doy221_access": {
+    "headers": 0,
+    "locator_requests": 0,
+    "payload_bytes": 0,
+    "values": 0
+  },
+  "qualification_version": "amc-g22-g30-doy222-structural-qualification-v1",
+  "schema": "amc-observer-structural-qualification-outcome-v1",
+  "source_commit": "d8281f2d183b274c5d8f94a7769051440ad95da0",
+  "source_sha256": "6bc2044f78e8afeb2f31a74d47b716ebbbde86350b78503ce135c8bf8f6d3fa6",
+  "summary": {
+    "name": "AMC_OBSERVER_QUALIFICATION_SUMMARY.json",
+    "sha256": "3e1be4ca9ef741690af99d6206ff94719fbae32b97fe6792034ac87ac9efca69"
+  }
+}

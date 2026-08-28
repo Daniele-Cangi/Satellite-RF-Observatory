@@ -1,0 +1,11 @@
+{
+  "executor_seal_sha256": "ffd6b009a9e13d05c7b879b5cbb795376d2f9ba1ddeb0ac17bd66ffff3b523ad",
+  "network_requests_before_marker": 0,
+  "primary_doy221_access_before_marker": 0,
+  "qualification_headers_before_marker": 0,
+  "qualification_payload_bytes_before_marker": 0,
+  "qualification_values_before_marker": 0,
+  "schema": "amc-observer-qualification-authority-consumed-v1",
+  "source_commit": "d8281f2d183b274c5d8f94a7769051440ad95da0",
+  "state": "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}
