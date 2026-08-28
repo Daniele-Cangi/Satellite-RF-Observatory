@@ -1201,3 +1201,15 @@ measurement admission and no-fit held-out scoring. All primary access counters
 remain zero. The seal grants no live authority; the next maximum work is a
 separate decision on one exact execution. See
 [`PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).
+
+The one authorized PIE execution is now closed as
+`PIE_HELD_OUT_ORBITAL_MODEL_PREFERRED`. The exact product was completely
+SHA-256 hashed on the first transport attempt before decode; the complete
+139-epoch measurement contract and all witnesses passed. With no fitted
+nuisance parameters, G22 leaves `2.279 m` p-p on the frozen held-out suffix,
+versus `190,230.062 m` for the affine runner-up. The `190,227.783 m` preference
+margin is well above the fixed `7,899.821 m` guard. The result authorizes only
+`HELD_OUT_STATION_CONFIRMED_FOR_THIS_ORBIT_SIGNAL_WINDOW`. No observation value
+or product bytes persist, and the consumed primary may not be retried or
+rescored. See
+[`PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md).

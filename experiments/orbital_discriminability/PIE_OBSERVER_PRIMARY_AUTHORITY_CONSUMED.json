@@ -1,0 +1,10 @@
+{
+  "executor_seal_sha256": "3b15c0c899756c48c80a6339cb6c6e20a0f493f379f8b439c445caf1bf033e2b",
+  "network_requests_before_marker": 0,
+  "primary_headers_before_marker": 0,
+  "primary_payload_bytes_before_marker": 0,
+  "primary_values_before_marker": 0,
+  "schema": "pie-observer-primary-authority-consumed-v1",
+  "source_commit": "c9334e45025e837a11cc62eec084b1e0495a58e2",
+  "state": "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}

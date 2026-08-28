@@ -1,0 +1,188 @@
+{
+  "artifact": {
+    "attempts": 1,
+    "complete_file_bytes": 3112422,
+    "complete_file_md5": "81d437546a782bbdbc73dbd133aeeb91",
+    "complete_file_sha256": "1b3d1190ab2c31591166cddcb42c160f777c05908cadbf83649d10d48a55254d",
+    "gssc_directory_bytes": 3112422,
+    "gssc_directory_md5": "1",
+    "gssc_directory_modified": "2026-08-12 03:01:32",
+    "hash_before_decompression_header_or_record_decode": true,
+    "preexisting_cddis_description_used_as_identity": false,
+    "product": "PIE100USA_R_20262230000_01D_30S_MO.crx.gz",
+    "station": "PIE100USA",
+    "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION"
+  },
+  "claim_scope": "HELD_OUT_STATION_CONFIRMED_FOR_THIS_ORBIT_SIGNAL_WINDOW",
+  "executor_seal_sha256": "3b15c0c899756c48c80a6339cb6c6e20a0f493f379f8b439c445caf1bf033e2b",
+  "executor_version": "pie-g22-g30-doy223-one-shot-executor-v1",
+  "measurement_admission": {
+    "core_phase_and_lli": "SATISFIED",
+    "event_time": {
+      "limit_s": 15.0,
+      "maximum_absolute_deviation_s": 0.0,
+      "state": "SATISFIED"
+    },
+    "geometry_free_phase_health": {
+      "limit_m": 0.09514683639918244,
+      "links": [
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.00427526980638504,
+          "satellite": "G22",
+          "violations": 0
+        },
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.0034157708287239075,
+          "satellite": "G30",
+          "violations": 0
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "header": {
+      "antenna": {
+        "serial": "CR520022114",
+        "type": "ASH701945E_M    NONE",
+        "version_or_radome": ""
+      },
+      "full_frozen_window_covered": true,
+      "gps_observables": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "S1W",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C2L",
+        "L2L",
+        "S2L",
+        "C5Q",
+        "L5Q",
+        "S5Q",
+        "C1L",
+        "L1L",
+        "S1L"
+      ],
+      "interval_s": 30.0,
+      "marker_name": "PIE1",
+      "receiver": {
+        "serial": "4100427",
+        "type": "SEPT POLARX5TR",
+        "version_or_radome": "5.7.0"
+      },
+      "receiver_clock_offset_applied": 0,
+      "required_phase_shift_records": [
+        "G L1C",
+        "G L2W"
+      ],
+      "rinex_version": 3.04,
+      "station": "PIE100USA",
+      "time_of_first_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-11T00:00:00.000000Z"
+      },
+      "time_of_last_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-11T23:59:30.000000Z"
+      }
+    },
+    "raw_epochs": 139,
+    "same_path_code_phase_witness": {
+      "links": [
+        {
+          "full_window_peak_to_peak_m": 1.5385612696409225,
+          "limit_m": 1250.0,
+          "satellite": "G22",
+          "state": "SATISFIED"
+        },
+        {
+          "full_window_peak_to_peak_m": 1.735886350274086,
+          "limit_m": 1250.0,
+          "satellite": "G30",
+          "state": "SATISFIED"
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "structural_counts": {
+      "BLANK": 0,
+      "PRESENT": 1112,
+      "TRAILING_FIELD_OMITTED": 0
+    }
+  },
+  "observation_access": {
+    "code_scalars_parsed_in_ram": 556,
+    "compressed_bytes_in_ram": 3112422,
+    "decoded_bytes_in_ram": 23982652,
+    "headers": 1,
+    "observation_values_persisted": 0,
+    "phase_scalars_parsed_in_ram": 556,
+    "products": 1
+  },
+  "outcome": "PIE_HELD_OUT_ORBITAL_MODEL_PREFERRED",
+  "persistence": {
+    "aggregate_admission_and_score_receipt_only": true,
+    "compressed_rinex": 0,
+    "decoded_rinex": 0,
+    "observation_values": 0
+  },
+  "plan_manifest_sha256": "5fef155739849280fced56a5967460df7be0b6e9ae1522aadbc61b6d667a6867",
+  "prediction_sha256": "a86a360fcbf9e1aa05e112bae1e2d1158b729f6e2fe9b4418a89883c72aacbc9",
+  "retry": {
+    "new_window_endpoint_feature_threshold_or_null": false,
+    "retry_after_complete_hash": false,
+    "retry_after_decode": false,
+    "transport_attempts_before_hash": 1
+  },
+  "schema": "pie-observer-primary-outcome-v1",
+  "score": {
+    "heldout_comparison": {
+      "best_hypothesis": "ORBITAL_G22",
+      "nuisance_parameters_fit": 0,
+      "preference_guard_m": 7899.820878397492,
+      "preference_margin_m": 190227.78297061834,
+      "raw_indices_inclusive": [
+        79,
+        138
+      ],
+      "runner_up_hypothesis": "FROZEN_AFFINE_NULL",
+      "scores": [
+        {
+          "heldout_peak_to_peak_m": 2.2791822515428066,
+          "heldout_rms_m": 7.58668879686946,
+          "hypothesis": "ORBITAL_G22"
+        },
+        {
+          "heldout_peak_to_peak_m": 190230.06215286988,
+          "heldout_rms_m": 61610.89027798891,
+          "hypothesis": "FROZEN_AFFINE_NULL"
+        },
+        {
+          "heldout_peak_to_peak_m": 190419.8011118248,
+          "heldout_rms_m": 298431.85780840734,
+          "hypothesis": "WRONG_ORBIT_G14"
+        },
+        {
+          "heldout_peak_to_peak_m": 300099.4937609248,
+          "heldout_rms_m": 266350.829735152,
+          "hypothesis": "WRONG_ORBIT_G17"
+        },
+        {
+          "heldout_peak_to_peak_m": 580943.1617409065,
+          "heldout_rms_m": 677561.254909653,
+          "hypothesis": "WRONG_ORBIT_G01"
+        }
+      ],
+      "state": "EVALUATED"
+    },
+    "outcome": "PIE_HELD_OUT_ORBITAL_MODEL_PREFERRED"
+  },
+  "source_commit": "c9334e45025e837a11cc62eec084b1e0495a58e2",
+  "source_sha256": "aaa59603eec7dc3139bb4f935faa899e9a8158708c877d8356c459500cf9727a"
+}

@@ -203,6 +203,17 @@ grants no live authority. The next maximum action is separate review of
 exactly one execution, not further executor work. See
 [`PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).
 
+That single authorized execution is now terminally complete as
+`PIE_HELD_OUT_ORBITAL_MODEL_PREFERRED`. All 139 PIE epochs, phase/LLI health,
+event time and same-path code witnesses passed. The G22 held-out residual was
+`2.279 m` p-p, while the closest frozen affine alternative left
+`190,230.062 m`; the `190,227.783 m` preference margin exceeds the frozen
+`7,899.821 m` guard with zero fitted nuisance parameters. The authorized claim
+is `HELD_OUT_STATION_CONFIRMED_FOR_THIS_ORBIT_SIGNAL_WINDOW`, not satellite
+identity or a general receiver claim. The primary is consumed and cannot be
+retried or rescored. See
+[`PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_OUTCOME_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
