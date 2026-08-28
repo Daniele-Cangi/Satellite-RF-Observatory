@@ -1241,8 +1241,8 @@ unwitnessed 4 m hardware term with the predeclared full-window code-phase rule
 raises the pairwise guard to `7,339.701 m`, still leaving `154,907.492 m`
 against the controlling affine separation. The distinct physical instance and
 pass test observer transfer, while the common POLARX5TR family remains a claim
-limitation. The next maximum work is the offline exact-hash model/null
-prediction seal, not primary access or executor construction. See
+limitation. This is a frozen plan, not primary access or an orbital outcome.
+See
 [`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md)
 and
 [`AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md).
@@ -1250,3 +1250,14 @@ The consumed qualification is documented in
 [`AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md),
 and the frozen proof design is
 [`AMC_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PLAN.md).
+
+That exact-hash prediction seal is now complete as
+`AMC_OBSERVER_PRIMARY_PREDICTION_FROZEN`. The NOAA DOY221 broadcast NAV exactly
+reproduces `162,247.193 m` separation from the affine controller, the direct
+clock envelope is `1,138.625 m`, minimum shifted elevation is `25.726 deg`, and
+the frozen decision guard leaves `154,907.492 m`. The seal accessed zero AMC
+locator, header, payload or value data and produced zero orbital scores. It
+authorizes neither executor nor primary access. The next maximum work is
+review and freezing of one minimal one-shot executor without opening DOY221.
+See
+[`AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
