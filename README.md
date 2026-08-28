@@ -173,6 +173,17 @@ maximum action is review of one prospective PIE/DOY223 contract, not primary
 access. See
 [`PIE_OBSERVER_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_QUALIFICATION_REPORT.md).
 
+The PIE/DOY223 prospective contract is now frozen offline while the primary
+remains unopened. It fixes one sample-zero anchor, a 79-epoch witness prefix,
+a 60-epoch held-out suffix, zero fitted nuisance parameters, the affine and
+G01/G14/G17 nulls, and explicit measurement-validity outcomes. The earlier
+unwitnessed 4 m hardware term is replaced by a predeclared ionosphere-free
+code-phase witness capped at 1,250 m p-p per satellite. The resulting pairwise
+guard is 7,899.821 m against 190,232.341 m affine separation, leaving
+182,332.520 m. This is `PIE_OBSERVER_PRIMARY_PLAN_FROZEN`, not an observation
+authority. The next maximum work is an offline exact-hash prediction seal. See
+[`PIE_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PLAN.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

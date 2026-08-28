@@ -1169,3 +1169,15 @@ next maximum work is review and freezing of one prospective PIE/DOY223
 contract with an explicit measurement-admission rule. It is not authority to
 open the primary. See
 [`PIE_OBSERVER_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_QUALIFICATION_REPORT.md).
+
+The prospective PIE/DOY223 proof contract is now frozen with zero additional
+network or observation access. It preserves the exact 139-epoch geometry and
+replaces the inherited unwitnessed 4 m hardware assumption with a fixed
+full-window ionosphere-free code-phase witness of 1,250 m p-p per satellite.
+No constant, rate, time phase or suffix nuisance may be fitted. The revised
+pairwise guard is 7,899.821 m and the affine-controlling margin remains
+182,332.520 m. The state is `PIE_OBSERVER_PRIMARY_PLAN_FROZEN`; DOY223 is still
+unopened and no executor exists. The next maximum work, after review, is an
+offline exact-hash prediction seal from the already frozen broadcast NAV
+authority. See
+[`PIE_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PLAN.md).

@@ -191,3 +191,22 @@ def test_parent_tampering_is_refused_before_plan_compilation(monkeypatch) -> Non
 
     with pytest.raises(plan.PiePlanError, match="FROZEN_PARENT_CHANGED"):
         plan.plan(ROOT)
+
+
+def test_frozen_receipt_binds_pre_receipt_source_and_zero_access() -> None:
+    path = ROOT / plan.RECEIPT_NAME
+    value = plan._read_strict_json(path)
+
+    assert plan.canonical_sha256(path) == (
+        "00e1a30015027acd981bd879ec21601c8ff92b50646c07cac94fedf3eeca7353"
+    )
+    assert value["source_commit"] == "22ef02a0ed07e0877cf760172a2c1c89db34f682"
+    assert value["source_sha256"] == plan.source_sha256()
+    assert value["manifest_sha256"] == plan.manifest_sha256(ROOT)
+    assert value["primary_access"] == {
+        "headers": 0,
+        "payload_bytes": 0,
+        "observation_values": 0,
+    }
+    assert value["orbital_scores_produced"] == 0
+    assert value["next_authority"] == "OFFLINE_PREDICTION_SEAL_REVIEW_ONLY"
