@@ -19,6 +19,16 @@ from experiments.orbital_discriminability import (
 
 ROOT = Path(__file__).resolve().parents[1]
 EXECUTOR_SEAL = ROOT / executor.EXECUTOR_SEAL_NAME
+EXECUTOR_SOURCE_COMMIT = "c9334e45025e837a11cc62eec084b1e0495a58e2"
+EXECUTOR_SOURCE_SHA256 = (
+    "aaa59603eec7dc3139bb4f935faa899e9a8158708c877d8356c459500cf9727a"
+)
+EXECUTOR_MANIFEST_SHA256 = (
+    "68d0b9ccadfc6f97cbf522784c4c6957352d231739c27f69ef6c0ba1353fb4e3"
+)
+EXECUTOR_SEAL_SHA256 = (
+    "3b15c0c899756c48c80a6339cb6c6e20a0f493f379f8b439c445caf1bf033e2b"
+)
 
 
 def header_line(data: str, label: str) -> str:
@@ -139,6 +149,27 @@ def test_manifest_is_one_product_observation_blind_and_no_fit() -> None:
     assert manifest["live_execution_authorized"] is False
     assert not any(manifest["access_at_freeze"].values())
     assert executor.AUTHORITY_TOKEN not in encoded
+
+
+def test_frozen_executor_seal_binds_source_manifest_and_zero_access() -> None:
+    assert executor.canonical_sha256(EXECUTOR_SEAL) == EXECUTOR_SEAL_SHA256
+    assert executor.source_sha256() == EXECUTOR_SOURCE_SHA256
+    assert executor.manifest_sha256(ROOT) == EXECUTOR_MANIFEST_SHA256
+
+    seal, curves, transform = executor.validate_executor_seal(
+        ROOT, EXECUTOR_SEAL, EXECUTOR_SEAL_SHA256
+    )
+    try:
+        assert seal["state"] == "PIE_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED"
+        assert seal["source_commit"] == EXECUTOR_SOURCE_COMMIT
+        assert seal["source_sha256"] == EXECUTOR_SOURCE_SHA256
+        assert seal["manifest_sha256"] == EXECUTOR_MANIFEST_SHA256
+        assert not any(seal["access_at_seal"].values())
+        assert seal["authority"]["live_execution_authorized_by_seal"] is False
+        assert transform["receiver"]["serial"] == "4100427"
+    finally:
+        for curve in curves.values():
+            curve.fill(0.0)
 
 
 def test_frozen_inputs_bind_exact_prediction_and_qualified_transform() -> None:

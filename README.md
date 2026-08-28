@@ -193,6 +193,16 @@ headers, payload bytes, observation values or orbital scores were accessed.
 The seal grants neither executor nor primary authority. See
 [`PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
 
+The reviewed one-shot executor is now frozen offline as
+`PIE_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED`. It binds one PIE DOY223
+product, the exact plan and prediction seals, full-window measurement
+admission, the 1,250 m same-path witness, zero fitted nuisance parameters and
+the frozen held-out comparison. The executor seal SHA-256 is
+`3b15c0c8...33e2b`; all observation access counters remain zero and the seal
+grants no live authority. The next maximum action is separate review of
+exactly one execution, not further executor work. See
+[`PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

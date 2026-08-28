@@ -1192,3 +1192,12 @@ measurement or executor authority. The next maximum work is review of a
 minimal one-shot executor; until then the PIE DOY223 product remains unopened.
 See
 [`PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
+
+The minimal PIE executor is now frozen offline as
+`PIE_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED`. Source commit `c9334e4` and
+executor seal SHA-256 `3b15c0c8...33e2b` bind the sole DOY223 product, exact
+prediction and plan, qualified transform, one-shot transport boundary,
+measurement admission and no-fit held-out scoring. All primary access counters
+remain zero. The seal grants no live authority; the next maximum work is a
+separate decision on one exact execution. See
+[`PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).
