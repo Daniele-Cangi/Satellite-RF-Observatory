@@ -14,7 +14,8 @@ from collections import Counter
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 import gc
-from hashlib import sha256
+from hashlib import md5, sha256
+from http.cookiejar import CookieJar
 import io
 import json
 from pathlib import Path
@@ -22,7 +23,9 @@ import platform
 import subprocess
 from typing import Final, Iterable, Mapping, Sequence
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from urllib.parse import urlencode
+from urllib.request import HTTPCookieProcessor, Request, build_opener
+from xml.etree import ElementTree
 
 import hatanaka
 
@@ -65,6 +68,9 @@ MAX_COMPRESSED_BYTES: Final = 10_000_000
 EXPECTED_HEAD_CONTENT_LENGTH: Final = 3_111_600
 EXPECTED_HEAD_ETAG: Final = '"2f7ab0-658a6754cdfed"'
 EXPECTED_HEAD_LAST_MODIFIED: Final = "Mon, 10 Aug 2026 00:30:16 GMT"
+GSSC_WEB_ROOT: Final = "https://gssc.esa.int/webftp/"
+GSSC_DIRECTORY_COMPONENTS: Final = ("gnss", "data", "daily", "2026", "221")
+MAX_DIRECTORY_BYTES: Final = 5_000_000
 
 PRESENT: Final = "PRESENT"
 BLANK: Final = "BLANK"
@@ -209,6 +215,15 @@ def manifest() -> dict[str, object]:
             "last_modified": EXPECTED_HEAD_LAST_MODIFIED,
             "identity_authority": False,
         },
+        "transport_repair": {
+            "reason": "CDDIS_GET_REDIRECTED_TO_EARTHDATA_LOGIN_HTML",
+            "source": "GSSC_OFFICIAL_GLOBAL_DATA_CENTER",
+            "authentication": "DOCUMENTED_ANONYMOUS_WEB_SESSION",
+            "web_root": GSSC_WEB_ROOT,
+            "directory_components": list(GSSC_DIRECTORY_COMPONENTS),
+            "same_frozen_product_name": True,
+            "physical_contract_changed": False,
+        },
         "window": {
             "start_gps": _format_epoch(expected_epochs()[0]),
             "heldout_boundary_gps": _format_epoch(HELDOUT_BOUNDARY_GPS),
@@ -234,6 +249,7 @@ def manifest() -> dict[str, object]:
             "maximum_attempts_before_complete_hash": MAX_TRANSPORT_ATTEMPTS,
             "timeout_s": HTTP_TIMEOUT_S,
             "maximum_compressed_bytes": MAX_COMPRESSED_BYTES,
+            "maximum_directory_bytes": MAX_DIRECTORY_BYTES,
             "complete_file_hash_before_decompression": True,
             "retry_after_complete_hash": False,
         },
@@ -748,6 +764,126 @@ def evaluate(scan: StationScan) -> dict[str, object]:
     return result
 
 
+def _bounded_read(response: object, maximum: int, label: str) -> bytes:
+    data = response.read(maximum + 1)
+    if len(data) > maximum:
+        raise MaterializationError(f"{label}_SIZE_LIMIT")
+    return data
+
+
+def _gssc_product_metadata(directory_xml: bytes) -> dict[str, object]:
+    """Extract only exact-file metadata from one GSSC directory response."""
+
+    try:
+        root = ElementTree.fromstring(directory_xml)
+    except ElementTree.ParseError as exc:
+        raise MaterializationError("GSSC_DIRECTORY_XML_INVALID") from exc
+    nowdir = root.findtext("nowdir", default="")
+    expected_directory = "/" + "/".join(GSSC_DIRECTORY_COMPONENTS)
+    if nowdir != expected_directory:
+        raise MaterializationError(f"GSSC_DIRECTORY_CHANGED:{nowdir}")
+    matches = []
+    for row in root.findall("./dirdata/rowdata"):
+        if row.findtext("name", default="") == QUALIFICATION_PRODUCT.name:
+            matches.append(row)
+    if len(matches) != 1:
+        raise MaterializationError(f"GSSC_PRODUCT_MATCH_COUNT:{len(matches)}")
+    row = matches[0]
+    if row.findtext("dir", default="") != "0":
+        raise MaterializationError("GSSC_PRODUCT_IS_NOT_FILE")
+    try:
+        size = int(row.findtext("size", default="-1"))
+    except ValueError as exc:
+        raise MaterializationError("GSSC_PRODUCT_SIZE_INVALID") from exc
+    if size != EXPECTED_HEAD_CONTENT_LENGTH:
+        raise MaterializationError("GSSC_AND_CDDIS_SIZE_DISAGREE")
+    return {
+        "directory": nowdir,
+        "name": QUALIFICATION_PRODUCT.name,
+        "bytes": size,
+        "modified": row.findtext("date", default=""),
+        "md5": row.findtext("md5", default=""),
+        "permission": row.findtext("perm", default=""),
+    }
+
+
+def _new_gssc_session() -> object:
+    opener = build_opener(HTTPCookieProcessor(CookieJar()))
+    login = Request(
+        GSSC_WEB_ROOT + "loginok.html",
+        data=urlencode(
+            {
+                "username": "anonymous",
+                "password": "",
+                "username_val": "anonymous",
+                "password_val": "",
+            }
+        ).encode("ascii"),
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "User-Agent": "Satellite-RF-Observatory/qualification",
+        },
+    )
+    with opener.open(login, timeout=HTTP_TIMEOUT_S) as response:
+        body = _bounded_read(response, 100_000, "GSSC_LOGIN_RESPONSE")
+    if b"login()" not in body:
+        raise MaterializationError("GSSC_ANONYMOUS_LOGIN_NOT_CONFIRMED")
+    return opener
+
+
+def _navigate_gssc(opener: object) -> dict[str, object]:
+    for index, component in enumerate(GSSC_DIRECTORY_COMPONENTS):
+        requested = f"/{component}" if index == 0 else component
+        request = Request(
+            GSSC_WEB_ROOT + "chdir.html",
+            data=urlencode({"dir": requested}).encode("ascii"),
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded",
+                "User-Agent": "Satellite-RF-Observatory/qualification",
+            },
+        )
+        with opener.open(request, timeout=HTTP_TIMEOUT_S) as response:
+            result = _bounded_read(response, 10_000, "GSSC_CHDIR_RESPONSE")
+        if result.strip() != b"Operation successful!":
+            raise MaterializationError(
+                f"GSSC_CHDIR_FAILED:{component}:{result[:100]!r}"
+            )
+    listing = Request(
+        GSSC_WEB_ROOT + "dir.html",
+        headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
+    )
+    with opener.open(listing, timeout=HTTP_TIMEOUT_S) as response:
+        directory_xml = _bounded_read(
+            response, MAX_DIRECTORY_BYTES, "GSSC_DIRECTORY_RESPONSE"
+        )
+    return _gssc_product_metadata(directory_xml)
+
+
+def _download_gssc(opener: object) -> tuple[bytearray, Mapping[str, object]]:
+    url = (
+        GSSC_WEB_ROOT
+        + "?download&"
+        + urlencode({"filename": QUALIFICATION_PRODUCT.name})
+    )
+    request = Request(
+        url,
+        headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
+    )
+    payload = bytearray()
+    with opener.open(request, timeout=HTTP_TIMEOUT_S) as response:
+        response_headers = getattr(response, "headers", {})
+        while True:
+            block = response.read(1024 * 1024)
+            if not block:
+                break
+            payload.extend(block)
+            if len(payload) > MAX_COMPRESSED_BYTES:
+                raise MaterializationError("COMPRESSED_SIZE_LIMIT")
+    if payload[:2] != b"\x1f\x8b":
+        raise MaterializationError("GSSC_RESPONSE_NOT_GZIP")
+    return payload, response_headers
+
+
 def materialize() -> tuple[bytearray, dict[str, object]]:
     """Fetch the complete DOY221 product in RAM and hash before decode."""
 
@@ -755,36 +891,32 @@ def materialize() -> tuple[bytearray, dict[str, object]]:
     for attempt in range(1, MAX_TRANSPORT_ATTEMPTS + 1):
         payload = bytearray()
         try:
-            request = Request(
-                QUALIFICATION_PRODUCT.url,
-                headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
-            )
-            with urlopen(request, timeout=HTTP_TIMEOUT_S) as response:
-                response_headers = getattr(response, "headers", {})
-                while True:
-                    block = response.read(1024 * 1024)
-                    if not block:
-                        break
-                    payload.extend(block)
-                    if len(payload) > MAX_COMPRESSED_BYTES:
-                        raise MaterializationError("COMPRESSED_SIZE_LIMIT")
-            if not payload:
-                raise MaterializationError("EMPTY_ARTIFACT")
+            opener = _new_gssc_session()
+            directory = _navigate_gssc(opener)
+            payload, response_headers = _download_gssc(opener)
             if len(payload) != EXPECTED_HEAD_CONTENT_LENGTH:
-                raise MaterializationError("DESCRIPTIVE_CONTENT_LENGTH_CHANGED")
+                raise MaterializationError("COMPLETE_FILE_SIZE_CHANGED")
+            actual_md5 = md5(payload, usedforsecurity=False).hexdigest()
+            directory_md5 = str(directory["md5"]).lower()
+            if len(directory_md5) == 32 and directory_md5 != actual_md5:
+                raise MaterializationError("GSSC_DIRECTORY_MD5_MISMATCH")
             return payload, {
                 "station": QUALIFICATION_PRODUCT.station,
                 "product": QUALIFICATION_PRODUCT.name,
-                "url": QUALIFICATION_PRODUCT.url,
+                "authority_url": QUALIFICATION_PRODUCT.url,
+                "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION",
+                "transport_directory": directory["directory"],
                 "attempts": attempt,
                 "complete_file_bytes": len(payload),
                 "complete_file_sha256": sha256(payload).hexdigest(),
+                "complete_file_md5": actual_md5,
+                "gssc_directory_md5": directory["md5"],
+                "gssc_directory_modified": directory["modified"],
                 "hash_before_any_decompression_or_record_scan": True,
                 "descriptive_head_was_not_identity_authority": True,
-                "preaccess_head_content_length": EXPECTED_HEAD_CONTENT_LENGTH,
+                "preaccess_cddis_head_content_length": EXPECTED_HEAD_CONTENT_LENGTH,
                 "response_content_length": response_headers.get("Content-Length"),
-                "response_etag": response_headers.get("ETag"),
-                "response_last_modified": response_headers.get("Last-Modified"),
+                "response_content_type": response_headers.get("Content-Type"),
             }
         except (
             HTTPError,

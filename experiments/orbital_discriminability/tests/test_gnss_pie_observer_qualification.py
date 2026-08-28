@@ -97,6 +97,15 @@ def test_manifest_freezes_only_doy221_and_has_no_primary_locator() -> None:
     assert "2026223" not in encoded
     assert manifest["admission"]["code_required_raw_indices"] == [0, 78, 79, 138]
     assert manifest["parser_boundary"].endswith("NO_OBSERVATION_SCALAR_CONVERSION")
+    assert manifest["transport_repair"] == {
+        "reason": "CDDIS_GET_REDIRECTED_TO_EARTHDATA_LOGIN_HTML",
+        "source": "GSSC_OFFICIAL_GLOBAL_DATA_CENTER",
+        "authentication": "DOCUMENTED_ANONYMOUS_WEB_SESSION",
+        "web_root": "https://gssc.esa.int/webftp/",
+        "directory_components": ["gnss", "data", "daily", "2026", "221"],
+        "same_frozen_product_name": True,
+        "physical_contract_changed": False,
+    }
 
 
 def test_frozen_grid_and_heldout_boundary_are_exact() -> None:
@@ -106,6 +115,28 @@ def test_frozen_grid_and_heldout_boundary_are_exact() -> None:
     assert epochs[0] == pie.QUALIFICATION_RAW_START_GPS
     assert epochs[79] == pie.HELDOUT_BOUNDARY_GPS
     assert epochs[-1] == pie.QUALIFICATION_RAW_STOP_GPS
+
+
+def test_gssc_directory_parser_accepts_only_exact_product_and_size() -> None:
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<alldata><nowdir>/gnss/data/daily/2026/221</nowdir><dirdata>
+<rowdata><perm>-rw-r--r--</perm><dir>0</dir>
+<size>{pie.EXPECTED_HEAD_CONTENT_LENGTH}</size><date>2026-08-10</date>
+<name>{pie.QUALIFICATION_PRODUCT.name}</name>
+<md5>{'a' * 32}</md5></rowdata>
+</dirdata></alldata>""".encode(
+        "ascii"
+    )
+
+    result = pie._gssc_product_metadata(xml)
+
+    assert result["name"] == pie.QUALIFICATION_PRODUCT.name
+    assert result["bytes"] == pie.EXPECTED_HEAD_CONTENT_LENGTH
+    assert result["md5"] == "a" * 32
+
+    changed = xml.replace(str(pie.EXPECTED_HEAD_CONTENT_LENGTH).encode("ascii"), b"123")
+    with pytest.raises(pie.MaterializationError, match="GSSC_AND_CDDIS_SIZE_DISAGREE"):
+        pie._gssc_product_metadata(changed)
 
 
 def test_complete_structure_passes_without_measurement_or_score() -> None:
