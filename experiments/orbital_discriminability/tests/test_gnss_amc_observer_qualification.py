@@ -18,6 +18,12 @@ FROZEN_MANIFEST_SHA256 = (
     "5f06900060478f72993a801db5a47ad6aef674b36b847e6aa10ed869abe7cc40"
 )
 FROZEN_SEAL_SHA256 = "ffd6b009a9e13d05c7b879b5cbb795376d2f9ba1ddeb0ac17bd66ffff3b523ad"
+AUTHORITY_MARKER_SHA256 = (
+    "7379ed30f51d06f6a3b2cffdf2e5b22d4ce0425ae99383f8e3c589558caa4310"
+)
+OUTCOME_SHA256 = "8c543bbd5d00128c70feab66574df4b878983f036daab932ba7cb6714ee829c4"
+SUMMARY_SHA256 = "3e1be4ca9ef741690af99d6206ff94719fbae32b97fe6792034ac87ac9efca69"
+COVERAGE_SHA256 = "bfaccd2ca742f329fe56d6df5e88774c73790040eca2bee5eb3c6ca907718077"
 
 
 def header_line(data: str, label: str) -> str:
@@ -317,7 +323,7 @@ def test_executor_seal_binds_source_manifest_parents_and_zero_access(
     assert "2026221" not in encoded
 
 
-def test_committed_executor_seal_is_exact_and_still_unopened() -> None:
+def test_committed_executor_seal_is_exact_and_was_frozen_unopened() -> None:
     seal_path = ROOT / amc.EXECUTOR_SEAL_NAME
 
     assert amc.source_sha256() == FROZEN_SOURCE_SHA256
@@ -331,6 +337,61 @@ def test_committed_executor_seal_is_exact_and_still_unopened() -> None:
     assert seal["manifest_sha256"] == FROZEN_MANIFEST_SHA256
     assert not any(seal["access_at_seal"].values())
     assert seal["stop"] == "SEPARATE_EXPLICIT_LIVE_QUALIFICATION_AUTHORITY_REQUIRED"
+
+
+def test_single_committed_qualification_outcome_is_exact_and_value_blind() -> None:
+    marker_path = ROOT / amc.AUTHORITY_MARKER_NAME
+    outcome_path = ROOT / amc.OUTCOME_NAME
+    summary_path = ROOT / amc.SUMMARY_NAME
+    coverage_path = ROOT / amc.COVERAGE_NAME
+
+    assert amc.canonical_sha256(marker_path) == AUTHORITY_MARKER_SHA256
+    assert amc.canonical_sha256(outcome_path) == OUTCOME_SHA256
+    assert amc.canonical_sha256(summary_path) == SUMMARY_SHA256
+    assert amc.canonical_sha256(coverage_path) == COVERAGE_SHA256
+
+    marker = json.loads(marker_path.read_text(encoding="utf-8"))
+    outcome = json.loads(outcome_path.read_text(encoding="utf-8"))
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    coverage = coverage_path.read_bytes().replace(b"\r\n", b"\n")
+
+    assert marker["state"] == "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+    assert marker["executor_seal_sha256"] == FROZEN_SEAL_SHA256
+    assert marker["network_requests_before_marker"] == 0
+    assert marker["primary_doy221_access_before_marker"] == 0
+
+    assert outcome["outcome"] == "AMC_OBSERVER_QUALIFICATION_PASSED"
+    assert outcome["artifact"]["attempts"] == 1
+    assert outcome["artifact"]["complete_file_bytes"] == 3_455_043
+    assert outcome["artifact"]["complete_file_sha256"] == (
+        "1b2257350a6cadb5713c5db9316b87bc1cd61dc49e71533189741e3b1a45cea8"
+    )
+    assert outcome["artifact"]["hash_before_any_decompression_or_record_scan"] is True
+    assert outcome["clause_states"]["core_phase_and_lli"] == "SATISFIED"
+    assert outcome["clause_states"]["same_path_code_witness"] == "SATISFIED"
+    assert outcome["clause_states"]["measurement_admission"] == "NOT_EVALUATED"
+    assert outcome["clause_states"]["primary_orbital_comparison"] == "NOT_EVALUATED"
+    assert outcome["observation_access"]["observation_values_parsed"] == 0
+    assert outcome["observation_access"]["observation_values_persisted"] == 0
+    assert outcome["persistence"]["compressed_rinex_bytes"] == 0
+    assert outcome["persistence"]["decoded_rinex_bytes"] == 0
+    assert not any(outcome["primary_doy221_access"].values())
+    assert outcome["orbital_scores_produced"] == 0
+
+    assert summary["outcome"] == "AMC_OBSERVER_QUALIFICATION_PASSED"
+    assert summary["structural_counts"] == {"PRESENT": 1668}
+    assert summary["coverage_rows"] == 1668
+    assert summary["full_joint_window"] is True
+    assert summary["parser_issues"] == []
+    assert summary["same_path_code_witness"]["state"] == "SATISFIED"
+    assert summary["geometry_free_phase_health"] == (
+        "NOT_EVALUATED_BY_VALUE_BLIND_AUTHORITY"
+    )
+
+    assert coverage.count(b"\n") == 1668
+    assert b'"value"' not in coverage
+    assert b"NaN" not in coverage and b"Infinity" not in coverage
+    assert not (ROOT / amc.QUALIFICATION_PRODUCT.name).exists()
 
 
 def test_wrong_authority_stops_before_seal_and_network(tmp_path, monkeypatch) -> None:
