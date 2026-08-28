@@ -15,19 +15,16 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
 import gc
 from hashlib import md5, sha256
-from http.cookiejar import CookieJar
 import io
 import json
 from pathlib import Path
 import platform
 import subprocess
 from typing import Final, Iterable, Mapping, Sequence
-from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
-from urllib.request import HTTPCookieProcessor, Request, build_opener
 from xml.etree import ElementTree
 
 import hatanaka
+import requests
 
 from experiments.orbital_discriminability import gnss_observation_header as headers
 
@@ -219,6 +216,7 @@ def manifest() -> dict[str, object]:
             "reason": "CDDIS_GET_REDIRECTED_TO_EARTHDATA_LOGIN_HTML",
             "source": "GSSC_OFFICIAL_GLOBAL_DATA_CENTER",
             "authentication": "DOCUMENTED_ANONYMOUS_WEB_SESSION",
+            "client": "REQUESTS_SESSION_WITH_EXPLICIT_COOKIE_CONTINUITY",
             "web_root": GSSC_WEB_ROOT,
             "directory_components": list(GSSC_DIRECTORY_COMPONENTS),
             "same_frozen_product_name": True,
@@ -764,8 +762,8 @@ def evaluate(scan: StationScan) -> dict[str, object]:
     return result
 
 
-def _bounded_read(response: object, maximum: int, label: str) -> bytes:
-    data = response.read(maximum + 1)
+def _bounded_response(response: requests.Response, maximum: int, label: str) -> bytes:
+    data = response.content
     if len(data) > maximum:
         raise MaterializationError(f"{label}_SIZE_LIMIT")
     return data
@@ -807,82 +805,75 @@ def _gssc_product_metadata(directory_xml: bytes) -> dict[str, object]:
     }
 
 
-def _new_gssc_session() -> object:
-    opener = build_opener(HTTPCookieProcessor(CookieJar()))
-    login = Request(
+def _new_gssc_session() -> requests.Session:
+    session = requests.Session()
+    response = session.post(
         GSSC_WEB_ROOT + "loginok.html",
-        data=urlencode(
-            {
-                "username": "anonymous",
-                "password": "",
-                "username_val": "anonymous",
-                "password_val": "",
-            }
-        ).encode("ascii"),
-        headers={
-            "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent": "Satellite-RF-Observatory/qualification",
+        data={
+            "username": "anonymous",
+            "password": "",
+            "username_val": "anonymous",
+            "password_val": "",
         },
+        headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
+        timeout=HTTP_TIMEOUT_S,
     )
-    with opener.open(login, timeout=HTTP_TIMEOUT_S) as response:
-        _bounded_read(response, 100_000, "GSSC_LOGIN_RESPONSE")
+    response.raise_for_status()
+    _bounded_response(response, 100_000, "GSSC_LOGIN_RESPONSE")
     # WingFTP may serve loginok.html itself or advance the response body.  The
     # exact, outcome-independent session witness is the first successful
     # chdir below, not a presentation-layer JavaScript token.
-    return opener
+    return session
 
 
-def _navigate_gssc(opener: object) -> dict[str, object]:
+def _navigate_gssc(session: requests.Session) -> dict[str, object]:
     for index, component in enumerate(GSSC_DIRECTORY_COMPONENTS):
         requested = f"/{component}" if index == 0 else component
-        request = Request(
+        response = session.post(
             GSSC_WEB_ROOT + "chdir.html",
-            data=urlencode({"dir": requested}).encode("ascii"),
-            headers={
-                "Content-Type": "application/x-www-form-urlencoded",
-                "User-Agent": "Satellite-RF-Observatory/qualification",
-            },
+            data={"dir": requested},
+            headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
+            timeout=HTTP_TIMEOUT_S,
         )
-        with opener.open(request, timeout=HTTP_TIMEOUT_S) as response:
-            result = _bounded_read(response, 10_000, "GSSC_CHDIR_RESPONSE")
+        response.raise_for_status()
+        result = _bounded_response(response, 10_000, "GSSC_CHDIR_RESPONSE")
         if result.strip() != b"Operation successful!":
             raise MaterializationError(
                 f"GSSC_CHDIR_FAILED:{component}:{result[:100]!r}"
             )
-    listing = Request(
+    response = session.get(
         GSSC_WEB_ROOT + "dir.html",
         headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
+        timeout=HTTP_TIMEOUT_S,
     )
-    with opener.open(listing, timeout=HTTP_TIMEOUT_S) as response:
-        directory_xml = _bounded_read(
-            response, MAX_DIRECTORY_BYTES, "GSSC_DIRECTORY_RESPONSE"
-        )
+    response.raise_for_status()
+    directory_xml = _bounded_response(
+        response, MAX_DIRECTORY_BYTES, "GSSC_DIRECTORY_RESPONSE"
+    )
     return _gssc_product_metadata(directory_xml)
 
 
-def _download_gssc(opener: object) -> tuple[bytearray, Mapping[str, object]]:
-    url = (
-        GSSC_WEB_ROOT
-        + "?download&"
-        + urlencode({"filename": QUALIFICATION_PRODUCT.name})
-    )
-    request = Request(
-        url,
+def _download_gssc(
+    session: requests.Session,
+) -> tuple[bytearray, Mapping[str, object]]:
+    response = session.get(
+        GSSC_WEB_ROOT,
+        params={"download": "", "filename": QUALIFICATION_PRODUCT.name},
         headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
+        timeout=HTTP_TIMEOUT_S,
+        stream=True,
     )
+    response.raise_for_status()
     payload = bytearray()
-    with opener.open(request, timeout=HTTP_TIMEOUT_S) as response:
-        response_headers = getattr(response, "headers", {})
-        while True:
-            block = response.read(1024 * 1024)
-            if not block:
-                break
-            payload.extend(block)
-            if len(payload) > MAX_COMPRESSED_BYTES:
-                raise MaterializationError("COMPRESSED_SIZE_LIMIT")
+    for block in response.iter_content(chunk_size=1024 * 1024):
+        if not block:
+            continue
+        payload.extend(block)
+        if len(payload) > MAX_COMPRESSED_BYTES:
+            raise MaterializationError("COMPRESSED_SIZE_LIMIT")
     if payload[:2] != b"\x1f\x8b":
         raise MaterializationError("GSSC_RESPONSE_NOT_GZIP")
-    return payload, response_headers
+    return payload, response.headers
 
 
 def materialize() -> tuple[bytearray, dict[str, object]]:
@@ -892,9 +883,9 @@ def materialize() -> tuple[bytearray, dict[str, object]]:
     for attempt in range(1, MAX_TRANSPORT_ATTEMPTS + 1):
         payload = bytearray()
         try:
-            opener = _new_gssc_session()
-            directory = _navigate_gssc(opener)
-            payload, response_headers = _download_gssc(opener)
+            session = _new_gssc_session()
+            directory = _navigate_gssc(session)
+            payload, response_headers = _download_gssc(session)
             if len(payload) != EXPECTED_HEAD_CONTENT_LENGTH:
                 raise MaterializationError("COMPLETE_FILE_SIZE_CHANGED")
             actual_md5 = md5(payload, usedforsecurity=False).hexdigest()
@@ -920,8 +911,7 @@ def materialize() -> tuple[bytearray, dict[str, object]]:
                 "response_content_type": response_headers.get("Content-Type"),
             }
         except (
-            HTTPError,
-            URLError,
+            requests.RequestException,
             TimeoutError,
             OSError,
             MaterializationError,
@@ -957,6 +947,7 @@ def _base_outcome(
         "dependencies": {
             "python": platform.python_version(),
             "hatanaka": getattr(hatanaka, "__version__", "UNKNOWN"),
+            "requests": requests.__version__,
         },
         "artifact": dict(artifact) if artifact is not None else None,
         "persistence": {

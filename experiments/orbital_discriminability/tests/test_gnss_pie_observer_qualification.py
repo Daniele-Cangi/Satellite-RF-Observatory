@@ -101,6 +101,7 @@ def test_manifest_freezes_only_doy221_and_has_no_primary_locator() -> None:
         "reason": "CDDIS_GET_REDIRECTED_TO_EARTHDATA_LOGIN_HTML",
         "source": "GSSC_OFFICIAL_GLOBAL_DATA_CENTER",
         "authentication": "DOCUMENTED_ANONYMOUS_WEB_SESSION",
+        "client": "REQUESTS_SESSION_WITH_EXPLICIT_COOKIE_CONTINUITY",
         "web_root": "https://gssc.esa.int/webftp/",
         "directory_components": ["gnss", "data", "daily", "2026", "221"],
         "same_frozen_product_name": True,
