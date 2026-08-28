@@ -244,3 +244,24 @@ def test_cli_prints_only_public_minimal_summary(capsys) -> None:
     assert plan.STATION not in encoded
 
 
+def test_frozen_receipt_binds_source_manifest_plan_and_zero_access() -> None:
+    path = ROOT / plan.RECEIPT_NAME
+    value = plan._read_strict_json(path)
+
+    assert plan.canonical_sha256(path) == (
+        "615cce5046e218f583483175c8774357680d80450d5b97928685f728fb2fb89b"
+    )
+    assert value["source_commit"] == "fd9b6cef4ae342ea589faf65e348531e05e13137"
+    assert value["source_sha256"] == plan.source_sha256()
+    assert value["manifest_sha256"] == plan.manifest_sha256(ROOT)
+    assert value["plan_markdown"] == {
+        "name": plan.PLAN_NAME,
+        "canonical_sha256": plan.PLAN_SHA256,
+    }
+    assert value["primary_access"] == {
+        "headers": 0,
+        "payload_bytes": 0,
+        "observation_values": 0,
+    }
+    assert value["orbital_scores_produced"] == 0
+    assert value["next_authority"] == "OFFLINE_PREDICTION_SEAL_REVIEW_ONLY"
