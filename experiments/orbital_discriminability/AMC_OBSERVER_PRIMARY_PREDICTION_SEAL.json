@@ -1,0 +1,53 @@
+{
+  "authority": {
+    "executor_authorized_by_seal": false,
+    "primary_access_authorized_by_seal": false,
+    "separate_review_required": true
+  },
+  "compiler_manifest_sha256": "1d277ed619b69bbb6b113e924202c8c7a6901e0816fd8aeedfa4bc696ef92a4e",
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "navigation": {
+    "compressed_bytes": 71457,
+    "compressed_sha256": "ac512aaaa875a9807c152785427f0e40316710fad1d72d5d6c584389c997963e",
+    "doy": 221,
+    "gps_date": "2026-08-09",
+    "name": "brdc2210.26n.gz",
+    "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+    "rinex_version": "2.11",
+    "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+    "uncompressed_bytes": 294875,
+    "uncompressed_name": "brdc2210.26n",
+    "uncompressed_sha256": "762c18808dac8cc85b252ce6efe05a2ca87caefb8ebf286e9aabbb475470b771",
+    "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/221/brdc2210.26n.gz"
+  },
+  "orbital_scores_produced": 0,
+  "plan": {
+    "canonical_sha256": "615cce5046e218f583483175c8774357680d80450d5b97928685f728fb2fb89b",
+    "manifest_sha256": "0a3c1e3768566da6242d6aaffd6c751a23d6bf167c7f54d0498fe75f365609b0",
+    "name": "AMC_OBSERVER_PRIMARY_PLAN_RECEIPT.json",
+    "outcome": "AMC_OBSERVER_PRIMARY_PLAN_FROZEN",
+    "role": "FROZEN_PROSPECTIVE_PLAN_NO_OBSERVATION_REOPENED"
+  },
+  "predictions": {
+    "canonical_sha256": "c9f7236f3cc221cb8485fe82f0a739e720ee3725f9dbf7c7fcc54c4167794155",
+    "curve_set_sha256": "5ca0813f5951b4cf8242b69654170db4153e56bfc9c90b0b0fb76cc55d3f0154",
+    "name": "AMC_OBSERVER_PRIMARY_PREDICTIONS.json",
+    "timing_curve_set_sha256": "e61db141bc507b0a19fcd91cba1a2a4db60c5819c89b9bc8c3709f573c469550"
+  },
+  "primary": {
+    "access": "SEALED_UNAUTHORIZED",
+    "headers_opened": 0,
+    "logical_product": "AMC400USA_R_20262210000_01D_30S_MO.crx.gz",
+    "observation_values": 0,
+    "payload_bytes": 0,
+    "station": "AMC400USA"
+  },
+  "schema": "amc-observer-primary-prediction-seal-v1",
+  "source_commit": "d254526da7e0cd17ec2335992c61f8e6c628d1bb",
+  "source_sha256": "94a0206cfd9d76f495a76256a500d41ac1feb2d8f56a7adf9499d1e8a8164d8c",
+  "state": "AMC_OBSERVER_PRIMARY_PREDICTION_FROZEN",
+  "stop": "STOP_BEFORE_EXECUTOR_OR_PRIMARY_OBSERVATION_ACCESS_FOR_REVIEW"
+}

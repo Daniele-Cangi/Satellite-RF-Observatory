@@ -236,8 +236,7 @@ the resulting pairwise guard is `7,339.701 m` against `162,247.193 m` affine
 separation, leaving `154,907.492 m`. The shared POLARX5TR family with PIE
 remains an explicit limit on hardware diversity. This is
 `AMC_OBSERVER_PRIMARY_PLAN_FROZEN`, not primary access or an orbital outcome.
-The next maximum action is the offline exact-hash DOY221 model/null prediction
-seal. See
+See
 [`AMC_OBSERVER_REPLICATION_METADATA_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_REPLICATION_METADATA_REPORT.md)
 and
 [`AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_EXECUTOR_REPORT.md).
@@ -245,6 +244,16 @@ The terminal receipt is documented in
 [`AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_QUALIFICATION_OUTCOME_REPORT.md),
 and the proof design is
 [`AMC_OBSERVER_PRIMARY_PLAN.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PLAN.md).
+
+The exact-hash DOY221 prediction seal is now complete. NOAA broadcast NAV
+reproduces the `162,247.193 m` affine-controlling separation, the direct
+`t +/- 15 s` envelope is `1,138.625 m`, and every modeled trajectory remains
+above `25.726 deg`. The unchanged pairwise guard leaves `154,907.492 m` of
+physical margin. This is `AMC_OBSERVER_PRIMARY_PREDICTION_FROZEN`: zero AMC
+locator requests, headers, payload bytes, observation values or orbital scores
+were accessed. The next maximum action is review of one minimal executor seal;
+the prediction grants no primary authority. See
+[`AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
 
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
