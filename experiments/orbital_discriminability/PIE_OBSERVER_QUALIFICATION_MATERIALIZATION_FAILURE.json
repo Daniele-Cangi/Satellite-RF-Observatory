@@ -1,0 +1,39 @@
+{
+  "artifact": null,
+  "clause_states": {
+    "artifact_materialization_and_hash": "UNSATISFIED",
+    "measurement_qualification": "NOT_EVALUATED",
+    "primary_orbital_comparison": "NOT_EVALUATED"
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "python": "3.13.5"
+  },
+  "fallback_selected": false,
+  "manifest_sha256": "3df4cebc8c0d46102a78ac31c239514ca0e5d9a366c9d275857d11f0c75ae6ec",
+  "next_authority": "MATERIALIZATION_REPAIR_ONLY",
+  "orbital_prediction_access": 0,
+  "orbital_scores_produced": 0,
+  "outcome": "PIE_OBSERVER_ARTIFACT_MATERIALIZATION_FAILED",
+  "parents": {
+    "GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.json": "4982a32459d880a17abab9cf726ee6e8f6383e1d0b570abbf77fd07341d459d5",
+    "PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md": "a652abc162cbf127b953fadeeac0a98ce92021a723f0974443c34d9b83061943"
+  },
+  "persistence": {
+    "compressed_rinex_bytes": 0,
+    "decoded_rinex_bytes": 0,
+    "observation_values": 0,
+    "structural_receipts_only": true
+  },
+  "primary_doy223_access": {
+    "headers": 0,
+    "locator_requests": 0,
+    "payload_bytes": 0,
+    "values": 0
+  },
+  "qualification_version": "pie-g22-g30-doy221-structural-qualification-v1",
+  "reason": "PIE_ARTIFACT_MATERIALIZATION_FAILED:MaterializationError:DESCRIPTIVE_CONTENT_LENGTH_CHANGED|MaterializationError:DESCRIPTIVE_CONTENT_LENGTH_CHANGED",
+  "schema": "pie-observer-structural-qualification-outcome-v1",
+  "source_commit": "7becb2380cacb61c2cb8755f848a078774f92ae6",
+  "source_sha256": "3a94395a13d13abbf345a5a9a2e4fe56121b92b58b8323f87418166fe7f3e18f"
+}

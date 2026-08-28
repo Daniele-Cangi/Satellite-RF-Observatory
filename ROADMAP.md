@@ -1158,3 +1158,14 @@ L1C/L2W, LLI, C1C/C2W, actual epoch coverage or continuity, so the state is
 action, after explicit review, is one DOY221-only structural qualification;
 DOY223 access remains forbidden. See
 [`PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md).
+
+That one DOY221-only structural qualification is now complete as
+`PIE_OBSERVER_QUALIFICATION_PASSED`. The full artifact was hashed before
+decode; the complete 139-epoch G22/G30 window, L1C/L2W plus LLI structure and
+C1C/C2W same-path witnesses all passed. The qualifier parsed and persisted
+zero observation values, produced zero orbital scores and left DOY223 wholly
+unopened. Geometry-free numerical phase health remains `NOT_EVALUATED`, so the
+next maximum work is review and freezing of one prospective PIE/DOY223
+contract with an explicit measurement-admission rule. It is not authority to
+open the primary. See
+[`PIE_OBSERVER_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_QUALIFICATION_REPORT.md).

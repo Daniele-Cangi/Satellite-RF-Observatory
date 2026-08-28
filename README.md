@@ -163,6 +163,16 @@ C1C/C2W, actual epoch coverage and continuity remain unknown until a separately
 authorized DOY221-only structural pass. See
 [`PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_CAPABILITY_METADATA_REPORT.md).
 
+The separately authorized DOY221 value-blind structural qualification has now
+passed. The exact 3,111,600-byte product was SHA-256 hashed before decode; all
+1,668 retained structural states are `PRESENT`, G22/G30 each span the complete
+139-epoch window, and C1C/C2W witnesses have 100 percent coverage. No numerical
+observation value, orbital prediction or score entered the qualifier, and no
+observation bytes were persisted. DOY223 remains completely unopened. The next
+maximum action is review of one prospective PIE/DOY223 contract, not primary
+access. See
+[`PIE_OBSERVER_QUALIFICATION_REPORT.md`](experiments/orbital_discriminability/PIE_OBSERVER_QUALIFICATION_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

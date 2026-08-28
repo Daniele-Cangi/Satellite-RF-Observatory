@@ -1,0 +1,201 @@
+{
+  "coverage_rows": 1668,
+  "full_joint_window": true,
+  "geometry_free_phase_health": "NOT_EVALUATED_BY_VALUE_BLIND_AUTHORITY",
+  "header": {
+    "antenna": {
+      "serial": "CR520022114",
+      "type": "ASH701945E_M    NONE",
+      "version_or_radome": ""
+    },
+    "applied_bias_records": [],
+    "full_frozen_window_covered": true,
+    "gps_observables": [
+      "C1C",
+      "L1C",
+      "S1C",
+      "C1W",
+      "S1W",
+      "C2W",
+      "L2W",
+      "S2W",
+      "C2L",
+      "L2L",
+      "S2L",
+      "C5Q",
+      "L5Q",
+      "S5Q",
+      "C1L",
+      "L1L",
+      "S1L"
+    ],
+    "interval_s": 30.0,
+    "marker_name": "PIE1",
+    "phase_shift_records": [
+      "G L1C",
+      "G L2W",
+      "G L2L  0.00000",
+      "G L5Q  0.00000",
+      "G L1L  0.00000",
+      "E L1C  0.00000",
+      "E L6B",
+      "E L5Q  0.00000",
+      "E L7Q  0.00000",
+      "E L8Q  0.00000",
+      "R L1C",
+      "R L1P  0.00000",
+      "R L2P  0.00000",
+      "R L2C",
+      "R L3Q  0.00000",
+      "C L1P  0.00000",
+      "C L5P  0.00000",
+      "C L2I",
+      "C L6I"
+    ],
+    "receiver": {
+      "serial": "4100427",
+      "type": "SEPT POLARX5TR",
+      "version_or_radome": "5.7.0"
+    },
+    "receiver_clock_offset_applied": 0,
+    "receiver_clock_offset_provenance": "RINEX_3_04_TABLE_A2_STANDARD_DEFAULT_NO",
+    "rinex_version": 3.04,
+    "station": "PIE100USA",
+    "time_of_first_observation": {
+      "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+      "time_system": "GPS",
+      "utc_like_epoch": "2026-08-09T00:00:00.000000Z"
+    },
+    "time_of_last_observation": {
+      "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+      "time_system": "GPS",
+      "utc_like_epoch": "2026-08-09T23:59:30.000000Z"
+    }
+  },
+  "joint_core_segments": [
+    {
+      "duration_s": 4140,
+      "epoch_count": 139,
+      "start_gps": "2026-08-09T05:50:30 GPS",
+      "stop_gps": "2026-08-09T06:59:30 GPS"
+    }
+  ],
+  "measurement_admission": "NOT_EVALUATED",
+  "observation_artifact_bytes_persisted": 0,
+  "observation_values_parsed": 0,
+  "observation_values_persisted": 0,
+  "optional_diagnostic_policy": "DESCRIPTIVE_ONLY_NEVER_FATAL",
+  "orbital_score": "NOT_EVALUATED",
+  "outcome": "PIE_OBSERVER_QUALIFICATION_PASSED",
+  "parser_issues": [],
+  "per_link_core_segments": [
+    {
+      "full_window": true,
+      "maximal_segments": [
+        {
+          "duration_s": 4140,
+          "epoch_count": 139,
+          "start_gps": "2026-08-09T05:50:30 GPS",
+          "stop_gps": "2026-08-09T06:59:30 GPS"
+        }
+      ],
+      "satellite": "G22",
+      "station": "PIE100USA"
+    },
+    {
+      "full_window": true,
+      "maximal_segments": [
+        {
+          "duration_s": 4140,
+          "epoch_count": 139,
+          "start_gps": "2026-08-09T05:50:30 GPS",
+          "stop_gps": "2026-08-09T06:59:30 GPS"
+        }
+      ],
+      "satellite": "G30",
+      "station": "PIE100USA"
+    }
+  ],
+  "qualification_version": "pie-g22-g30-doy221-structural-qualification-v1",
+  "same_path_code_witness": {
+    "links": [
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C1C",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          0,
+          78,
+          79,
+          138
+        ],
+        "satellite": "G22",
+        "station": "PIE100USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C2W",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          0,
+          78,
+          79,
+          138
+        ],
+        "satellite": "G22",
+        "station": "PIE100USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C1C",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          0,
+          78,
+          79,
+          138
+        ],
+        "satellite": "G30",
+        "station": "PIE100USA",
+        "total_epochs": 139
+      },
+      {
+        "admitted": true,
+        "coverage_fraction": 1.0,
+        "observable": "C2W",
+        "present_epochs": 139,
+        "required_boundaries_present": true,
+        "required_raw_indices": [
+          0,
+          78,
+          79,
+          138
+        ],
+        "satellite": "G30",
+        "station": "PIE100USA",
+        "total_epochs": 139
+      }
+    ],
+    "minimum_coverage_fraction": 0.95,
+    "state": "SATISFIED"
+  },
+  "schema": "pie-observer-structural-qualification-summary-v1",
+  "structural_counts": {
+    "PRESENT": 1668
+  },
+  "window": {
+    "heldout_boundary_gps": "2026-08-09T06:30:00 GPS",
+    "raw_epochs": 139,
+    "start_gps": "2026-08-09T05:50:30 GPS",
+    "step_s": 30,
+    "stop_gps": "2026-08-09T06:59:30 GPS"
+  }
+}
