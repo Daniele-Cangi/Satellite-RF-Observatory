@@ -857,8 +857,7 @@ def _download_gssc(
     session: requests.Session,
 ) -> tuple[bytearray, Mapping[str, object]]:
     response = session.get(
-        GSSC_WEB_ROOT,
-        params={"download": "", "filename": QUALIFICATION_PRODUCT.name},
+        _gssc_download_url(),
         headers={"User-Agent": "Satellite-RF-Observatory/qualification"},
         timeout=HTTP_TIMEOUT_S,
         stream=True,
@@ -874,6 +873,12 @@ def _download_gssc(
     if payload[:2] != b"\x1f\x8b":
         raise MaterializationError("GSSC_RESPONSE_NOT_GZIP")
     return payload, response.headers
+
+
+def _gssc_download_url() -> str:
+    """Preserve WingFTP's bare ``download`` query flag exactly."""
+
+    return GSSC_WEB_ROOT + "?download&filename=" + QUALIFICATION_PRODUCT.name
 
 
 def materialize() -> tuple[bytearray, dict[str, object]]:

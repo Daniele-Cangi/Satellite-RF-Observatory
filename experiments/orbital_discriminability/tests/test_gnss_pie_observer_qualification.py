@@ -140,6 +140,14 @@ def test_gssc_directory_parser_accepts_only_exact_product_and_size() -> None:
         pie._gssc_product_metadata(changed)
 
 
+def test_gssc_download_url_preserves_bare_wingftp_flag() -> None:
+    assert pie._gssc_download_url() == (
+        "https://gssc.esa.int/webftp/?download&filename="
+        "PIE100USA_R_20262210000_01D_30S_MO.crx.gz"
+    )
+    assert "download=" not in pie._gssc_download_url()
+
+
 def test_complete_structure_passes_without_measurement_or_score() -> None:
     scan = scanned()
     try:
