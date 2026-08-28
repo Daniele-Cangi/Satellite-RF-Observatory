@@ -251,9 +251,18 @@ reproduces the `162,247.193 m` affine-controlling separation, the direct
 above `25.726 deg`. The unchanged pairwise guard leaves `154,907.492 m` of
 physical margin. This is `AMC_OBSERVER_PRIMARY_PREDICTION_FROZEN`: zero AMC
 locator requests, headers, payload bytes, observation values or orbital scores
-were accessed. The next maximum action is review of one minimal executor seal;
-the prediction grants no primary authority. See
+were accessed. The prediction grants no primary authority. See
 [`AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
+
+The minimal one-shot executor is now frozen offline as
+`AMC_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED`. It binds exactly one DOY221
+product, the plan and prediction hashes, AMC-qualified receiver transforms,
+the complete 139-epoch admission contract, zero fitted nuisance parameters and
+the frozen held-out comparison. Its seal SHA-256 is
+`0b6ffe5a...f44893`; all access counters remain zero and no authority marker or
+outcome exists. The next maximum action is separate review of exactly one live
+execution; this seal alone cannot open the primary. See
+[`AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).
 
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21

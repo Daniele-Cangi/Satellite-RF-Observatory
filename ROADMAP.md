@@ -1257,7 +1257,15 @@ reproduces `162,247.193 m` separation from the affine controller, the direct
 clock envelope is `1,138.625 m`, minimum shifted elevation is `25.726 deg`, and
 the frozen decision guard leaves `154,907.492 m`. The seal accessed zero AMC
 locator, header, payload or value data and produced zero orbital scores. It
-authorizes neither executor nor primary access. The next maximum work is
-review and freezing of one minimal one-shot executor without opening DOY221.
-See
+authorizes neither executor nor primary access. See
 [`AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_PREDICTION_REPORT.md).
+
+The minimal experiment-specific executor is now frozen as
+`AMC_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED`. It binds the sole DOY221
+logical product, the exact plan and prediction seals, the AMC-qualified header
+transform, full-window measurement admission, the same-path witness and the
+zero-fit held-out comparison. Source commit `b31a987` and executor seal
+`0b6ffe5a...f44893` retain zero primary access and grant no live authority. The
+next maximum work is a separate decision on exactly one execution, not further
+executor or infrastructure work. See
+[`AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_EXECUTOR_REPORT.md).

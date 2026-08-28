@@ -18,6 +18,17 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXECUTOR_SEAL = ROOT / executor.EXECUTOR_SEAL_NAME
+EXECUTOR_SOURCE_COMMIT = "b31a987987578a24fdc0594c44d00abf787f8510"
+EXECUTOR_SOURCE_SHA256 = (
+    "d87cde21fe8b0ff4e6265e4e460c1c24aaad6a2a590f85d0b8e830fa9975ef63"
+)
+EXECUTOR_MANIFEST_SHA256 = (
+    "d30cd0eb4f6fac2b3e73303f5dcd7764d6fb9ce4bcc8e475b13dad2c5ec9c344"
+)
+EXECUTOR_SEAL_SHA256 = (
+    "0b6ffe5af82b15404b7a546e8203df6415a68e0ba373c03500d31d4645f44893"
+)
 
 
 def header_line(data: str, label: str) -> str:
@@ -138,6 +149,30 @@ def test_manifest_is_one_product_observation_blind_and_no_fit() -> None:
     assert manifest["live_execution_authorized"] is False
     assert not any(manifest["access_at_freeze"].values())
     assert executor.AUTHORITY_TOKEN not in encoded
+
+
+def test_frozen_executor_seal_binds_source_manifest_and_zero_access() -> None:
+    assert executor.canonical_sha256(EXECUTOR_SEAL) == EXECUTOR_SEAL_SHA256
+    assert executor.source_sha256() == EXECUTOR_SOURCE_SHA256
+    assert executor.manifest_sha256(ROOT) == EXECUTOR_MANIFEST_SHA256
+    assert not (ROOT / executor.AUTHORITY_MARKER_NAME).exists()
+    assert not (ROOT / executor.OUTCOME_NAME).exists()
+
+    seal, curves, transform = executor.validate_executor_seal(
+        ROOT, EXECUTOR_SEAL, EXECUTOR_SEAL_SHA256
+    )
+    try:
+        assert seal["state"] == "AMC_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED"
+        assert seal["source_commit"] == EXECUTOR_SOURCE_COMMIT
+        assert seal["source_sha256"] == EXECUTOR_SOURCE_SHA256
+        assert seal["manifest_sha256"] == EXECUTOR_MANIFEST_SHA256
+        assert not any(seal["access_at_seal"].values())
+        assert seal["authority"]["live_execution_authorized_by_seal"] is False
+        assert transform["receiver"]["serial"] == "3013929"
+        assert transform["antenna"]["serial"] == "1364-10065"
+    finally:
+        for curve in curves.values():
+            curve.fill(0.0)
 
 
 def test_frozen_inputs_bind_exact_prediction_and_qualified_transform() -> None:

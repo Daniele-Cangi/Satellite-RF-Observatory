@@ -1,0 +1,37 @@
+{
+  "access_at_seal": {
+    "network_requests": 0,
+    "orbital_scores": 0,
+    "primary_headers": 0,
+    "primary_payload_bytes": 0,
+    "primary_values": 0
+  },
+  "authority": {
+    "live_execution_authorized_by_seal": false,
+    "separate_review_and_one_use_token_required": true
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3",
+    "python": "3.13.5",
+    "requests": "2.32.4"
+  },
+  "manifest_sha256": "d30cd0eb4f6fac2b3e73303f5dcd7764d6fb9ce4bcc8e475b13dad2c5ec9c344",
+  "plan_manifest_sha256": "0a3c1e3768566da6242d6aaffd6c751a23d6bf167c7f54d0498fe75f365609b0",
+  "prediction_seal_sha256": "83a52b2fbaa8f921532684cc87f292ffb976fb8972e595d21ffa0a645b4bb2f5",
+  "prediction_sha256": "c9f7236f3cc221cb8485fe82f0a739e720ee3725f9dbf7c7fcc54c4167794155",
+  "product": {
+    "complete_hash_unknown_until_authorized_materialization": true,
+    "directory": "/gnss/data/daily/2026/221",
+    "fallback": false,
+    "logical_product": "AMC400USA_R_20262210000_01D_30S_MO.crx.gz",
+    "station": "AMC400USA",
+    "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION_ONLY"
+  },
+  "qualified_header_transform_sha256": "b717042b94b2febc3e93294463cba37ecedc9837bbe7e16fd3368d028463fbdd",
+  "schema": "amc-observer-primary-executor-seal-v1",
+  "source_commit": "b31a987987578a24fdc0594c44d00abf787f8510",
+  "source_sha256": "d87cde21fe8b0ff4e6265e4e460c1c24aaad6a2a590f85d0b8e830fa9975ef63",
+  "state": "AMC_OBSERVER_PRIMARY_EXECUTOR_FROZEN_UNOPENED",
+  "stop": "STOP_BEFORE_PRIMARY_ACCESS_FOR_SEPARATE_REVIEW"
+}
