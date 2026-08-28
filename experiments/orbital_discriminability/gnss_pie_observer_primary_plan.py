@@ -541,9 +541,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--write-receipt", action="store_true")
     args = parser.parse_args(argv)
     value = receipt(args.output_directory)
+    output = None
     if args.write_receipt:
-        write_receipt(args.output_directory)
-    print(strict_json(value, pretty=True))
+        output = write_receipt(args.output_directory)
+    public_summary = {
+        "outcome": value["outcome"],
+        "manifest_sha256": value["manifest_sha256"],
+        "primary_access": value["primary_access"],
+        "orbital_scores_produced": value["orbital_scores_produced"],
+        "next_authority": value["next_authority"],
+        "receipt_written": output is not None,
+        "receipt_name": output.name if output is not None else None,
+    }
+    print(strict_json(public_summary, pretty=True))
     return 0
 
 
