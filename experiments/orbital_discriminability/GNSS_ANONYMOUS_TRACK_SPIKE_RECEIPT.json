@@ -1,0 +1,889 @@
+{
+  "anonymous_hypothesis_surface": {
+    "curve_hashes": {
+      "H_02216B4414E9D923": "262b65035b098b64a6cae570fa4fd4685d682908ee9d38c8d96c480f3bd3097f",
+      "H_0F7B423DEE4445EB": "0a8c06f0a84b27c121362f973a60551e2dcd3b67dd4f63660c65f493e9a40b7b",
+      "H_113EA69083E0450B": "03a5c8041bbb2b04a42de1b63338f95cba5f5a1f65317db24569dfb4771a498f",
+      "H_5A7421B20092455F": "97d69f13ce7ef1ec38b4a3527e4c6fac520ebbfbcceeffa2cd9f2f41f51e8a84",
+      "H_72E7F21DC8244653": "74ec0df62a078135fa3fdd4a307c170ec65038117643cd543da9af27c77ffb4e",
+      "H_81D7F83E42ED8B58": "628a85f0e28e280352b1371f0e2bf70066f4cacb89f5a223a5b41fccdbbfb54c",
+      "H_871C18BD04239F5B": "9628b358ba64484e963af08306ad6fbfe273b88290a4e7fa0d098672211ffb3d",
+      "H_970DD1C2274548B5": "4889861d5c64b48685255d91dc549803bacd8c01ed8933e748b04012b0a60723",
+      "H_B7DAF98094A64E7E": "f34b91047813ff8b58bb2574d7ac204035ecffe839c5b167f32028211a386604",
+      "H_C16CB6556AC2E050": "48b34cde09927a80f97a25cf8882da31f88fdb4d6d2ac60d72501d78c079d6a8",
+      "H_CC64DCF632B4FDE0": "023425ac94b66b561c55fc005e195dfd19c10e3a8941ab67f4619c83eb003360"
+    },
+    "mapping_available_to_scorer": false,
+    "normal_family": 6,
+    "opaque_hypotheses": 11,
+    "track_order_reversed_family": 5
+  },
+  "claim_scope": "SYNTHETIC_INTERFACE_MECHANISM_ONLY",
+  "closed_development_fixture": {
+    "consumed_primary_reopened_or_rescored": false,
+    "mapping_seal_sha256": "b719a2bf17e66fcafa3597c4018d6acd039bdac4e33ecb173795646ff47245db",
+    "observation_values_used": 0,
+    "prediction_bundle_sha256": "a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2"
+  },
+  "derived_detectability_boundary": {
+    "calibrated_probability_claimed": false,
+    "development_guard_m": 7339.701234647398,
+    "exact_fixture_preference_margin_m": 18763.716564788578,
+    "real_capability_interpretation": "TOTAL_PAIRWISE_NONAFFINE_ENVELOPE_MUST_REMAIN_BELOW_EXACT_FIXTURE_PREFERENCE_MARGIN",
+    "remaining_synthetic_margin_m": 11424.01533014118
+  },
+  "next_maximum_action": "BOUNDED_RAW_GNSS_CAPABILITY_CONSIDERATION_ONLY_AFTER_REVIEW",
+  "observation_access": {
+    "headers": 0,
+    "network_requests": 0,
+    "payload_bytes": 0,
+    "product_locators": 0,
+    "values": 0
+  },
+  "outcome": "ANONYMOUS_TRACK_SEALED_WITNESS_MECHANISM_DISCRIMINATIVE",
+  "real_capability_admission": "NOT_EVALUATED_OPEN_TERMS",
+  "real_capability_terms": [
+    {
+      "state": "OPEN_TERM",
+      "term": "sample_zero_event_time_and_sample_rate"
+    },
+    {
+      "state": "CANCELLED_OR_PREFIX_PROJECTED_IN_SYNTHETIC_TOPOLOGY",
+      "term": "common_oscillator_constant_and_rate"
+    },
+    {
+      "state": "OPEN_TERM",
+      "term": "differential_nonaffine_oscillator"
+    },
+    {
+      "state": "OPEN_TERM",
+      "term": "ionosphere_and_propagation"
+    },
+    {
+      "state": "MEASUREMENT_INVALID_BEFORE_SCORE",
+      "term": "cycle_slip_or_midwindow_ambiguity"
+    },
+    {
+      "state": "MEASUREMENT_INVALID_BEFORE_SCORE",
+      "term": "gap_or_nonfinite_track"
+    },
+    {
+      "state": "EXPLICIT_FROZEN_HYPOTHESIS_FAMILY",
+      "term": "track_order"
+    }
+  ],
+  "scenarios": [
+    {
+      "code_witness_sha256_before_scoring": "e38612cd7cc7645450571ba8487b536c72fd337f27ca9a724a76142354b26162",
+      "name": "correct_model",
+      "reveal_after_score_receipt_hash": {
+        "best_opaque_id": "H_72E7F21DC8244653",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_hardware_root": false,
+          "same_samples_as_orbital_tracks": true,
+          "schema": "gnss-synthetic-code-witness-v1",
+          "source": "SYNTHETIC_ORTHOGONAL_FEATURE",
+          "track_identity": [
+            {
+              "code_identity": "G22",
+              "track_id": "TRACK_A"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "TRACK_B"
+            }
+          ]
+        },
+        "model": "G22_RELATIVE_TO_G30",
+        "model_class": "ORBITAL_CANDIDATE",
+        "orientation": "TRACK_A_MINUS_TRACK_B",
+        "state": "ORBIT_CODE_CONCORDANT"
+      },
+      "role": "POSITIVE_CONTROL",
+      "score_receipt": {
+        "best_opaque_id": "H_72E7F21DC8244653",
+        "coordinate": "TRACK_A_MINUS_TRACK_B",
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "observed_coordinate_sha256": "91cf581e19f9a40619c0d64e765db71aea2076f182c9d3aecc8ec02115e2b6f4",
+        "opaque_hypotheses": 11,
+        "orbital_score_state": "OPAQUE_HYPOTHESIS_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 18763.152832551084,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_0F7B423DEE4445EB",
+        "same_loop_parameter_count": 2,
+        "schema": "gnss-anonymous-track-score-receipt-v1",
+        "scorer_version": "gnss-anonymous-track-spike-scorer-v1",
+        "scores": [
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 0.6675653598108795,
+            "heldout_rms_m": 0.23623158007807038,
+            "opaque_id": "H_72E7F21DC8244653",
+            "prefix_constant_m": 120.09024296712447,
+            "prefix_rate_m_s": -0.004069055618246747,
+            "prefix_rmse_m": 0.1907055949486703
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 18763.820397910895,
+            "heldout_rms_m": 23462.77631218742,
+            "opaque_id": "H_0F7B423DEE4445EB",
+            "prefix_constant_m": 13117.169499076554,
+            "prefix_rate_m_s": -540.7538429205916,
+            "prefix_rmse_m": 5258.107354470949
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 24309.19035022147,
+            "heldout_rms_m": 8266.546193100654,
+            "opaque_id": "H_C16CB6556AC2E050",
+            "prefix_constant_m": 11088.764477135846,
+            "prefix_rate_m_s": -947.156091437225,
+            "prefix_rmse_m": 4188.036787930436
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 25636.84877334023,
+            "heldout_rms_m": 18089.481934753567,
+            "opaque_id": "H_81D7F83E42ED8B58",
+            "prefix_constant_m": 19749.726695679594,
+            "prefix_rate_m_s": -940.1425876743294,
+            "prefix_rmse_m": 7589.09325944028
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 26484.650930509903,
+            "heldout_rms_m": 8498.427739692064,
+            "opaque_id": "H_970DD1C2274548B5",
+            "prefix_constant_m": -6956.43773521611,
+            "prefix_rate_m_s": 721.1118987553581,
+            "prefix_rmse_m": 2521.7271790736013
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 28127.15565238893,
+            "heldout_rms_m": 42936.84115007476,
+            "opaque_id": "H_02216B4414E9D923",
+            "prefix_constant_m": 33190.7767333691,
+            "prefix_rate_m_s": -1802.6195845965415,
+            "prefix_rmse_m": 13008.774051721895
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 37527.53696270008,
+            "heldout_rms_m": 46925.7041157807,
+            "opaque_id": "H_CC64DCF632B4FDE0",
+            "prefix_constant_m": 26114.248755185865,
+            "prefix_rate_m_s": -1081.503616785565,
+            "prefix_rmse_m": 10516.252498278824
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 49343.110870189674,
+            "heldout_rms_m": 32072.933959101323,
+            "opaque_id": "H_5A7421B20092455F",
+            "prefix_constant_m": 6484.612302473804,
+            "prefix_rate_m_s": -141.3650981668541,
+            "prefix_rmse_m": 2970.4578069495838
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 54723.59164071991,
+            "heldout_rms_m": 43774.87846969056,
+            "opaque_id": "H_113EA69083E0450B",
+            "prefix_constant_m": 15145.574521017872,
+            "prefix_rate_m_s": -134.35159440395861,
+            "prefix_rmse_m": 6348.382480283166
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 60955.81401947653,
+            "heldout_rms_m": 20581.890300729603,
+            "opaque_id": "H_871C18BD04239F5B",
+            "prefix_constant_m": 13410.385266679106,
+            "prefix_rate_m_s": -1436.6003802259722,
+            "prefix_rmse_m": 4748.690116260492
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 94419.22890971065,
+            "heldout_rms_m": 61933.87522339052,
+            "opaque_id": "H_B7DAF98094A64E7E",
+            "prefix_constant_m": 12823.953731475107,
+            "prefix_rate_m_s": 355.0926943847881,
+            "prefix_rmse_m": 5895.671246688127
+          }
+        ],
+        "track_ids": [
+          "TRACK_A",
+          "TRACK_B"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_pair_sha256": "d710edae5dd4fd9dba07f5c5110e11c3e1532d20b98d75f774021130083fae58"
+      },
+      "score_receipt_sha256_before_reveal": "8ce642efbe9f57d55cf9a8652dbc867f164ef3a25130171eed686ce5de8849ea"
+    },
+    {
+      "code_witness_sha256_before_scoring": "cac45234dd2b47b1abb26b83f1996f96b3b01defea081055fe314600faf507e6",
+      "name": "wrong_orbit_truth",
+      "reveal_after_score_receipt_hash": {
+        "best_opaque_id": "H_970DD1C2274548B5",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_hardware_root": false,
+          "same_samples_as_orbital_tracks": true,
+          "schema": "gnss-synthetic-code-witness-v1",
+          "source": "SYNTHETIC_ORTHOGONAL_FEATURE",
+          "track_identity": [
+            {
+              "code_identity": "G06",
+              "track_id": "TRACK_A"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "TRACK_B"
+            }
+          ]
+        },
+        "model": "G06_RELATIVE_TO_G30",
+        "model_class": "ORBITAL_CANDIDATE",
+        "orientation": "TRACK_A_MINUS_TRACK_B",
+        "state": "ORBIT_CODE_CONCORDANT"
+      },
+      "role": "ANTI_AUTO_CONFIRMATION_CONTROL",
+      "score_receipt": {
+        "best_opaque_id": "H_970DD1C2274548B5",
+        "coordinate": "TRACK_A_MINUS_TRACK_B",
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "observed_coordinate_sha256": "f7d9f89c7b7201923a1702087361b0d19fd91e8748a4040a173b9051edf337a3",
+        "opaque_hypotheses": 11,
+        "orbital_score_state": "OPAQUE_HYPOTHESIS_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 20942.529492276637,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_0F7B423DEE4445EB",
+        "same_loop_parameter_count": 2,
+        "schema": "gnss-anonymous-track-score-receipt-v1",
+        "scorer_version": "gnss-anonymous-track-spike-scorer-v1",
+        "scores": [
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 0.6675653598188376,
+            "heldout_rms_m": 0.23623158015149268,
+            "opaque_id": "H_970DD1C2274548B5",
+            "prefix_constant_m": 120.09024296712666,
+            "prefix_rate_m_s": -0.004069055618267171,
+            "prefix_rmse_m": 0.19070559496549322
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 20943.197057636455,
+            "heldout_rms_m": 20183.90707256867,
+            "opaque_id": "H_0F7B423DEE4445EB",
+            "prefix_constant_m": 20193.69747726037,
+            "prefix_rate_m_s": -1261.8698107315684,
+            "prefix_rmse_m": 7755.3441728060625
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 23470.923350751167,
+            "heldout_rms_m": 26380.42819527667,
+            "opaque_id": "H_5A7421B20092455F",
+            "prefix_constant_m": 13561.140280657448,
+            "prefix_rate_m_s": -862.4810659778306,
+            "prefix_rmse_m": 5424.8624576246
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 26484.163515520748,
+            "heldout_rms_m": 8498.5789251836,
+            "opaque_id": "H_72E7F21DC8244653",
+            "prefix_constant_m": 7196.618221150711,
+            "prefix_rate_m_s": -721.1200368665948,
+            "prefix_rmse_m": 2521.6472572986077
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 28127.15565238893,
+            "heldout_rms_m": 42936.841150074746,
+            "opaque_id": "H_CC64DCF632B4FDE0",
+            "prefix_constant_m": 33190.7767333691,
+            "prefix_rate_m_s": -1802.6195845965415,
+            "prefix_rmse_m": 13008.774051721903
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 30831.6429275712,
+            "heldout_rms_m": 38564.43276273976,
+            "opaque_id": "H_113EA69083E0450B",
+            "prefix_constant_m": 22222.102499201428,
+            "prefix_rate_m_s": -855.4675622149351,
+            "prefix_rmse_m": 8826.591490850258
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 41886.41812707856,
+            "heldout_rms_m": 40367.95841771532,
+            "opaque_id": "H_02216B4414E9D923",
+            "prefix_constant_m": 40267.30471155327,
+            "prefix_rate_m_s": -2523.7355524075183,
+            "prefix_rmse_m": 15510.726960176098
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 50205.521399173886,
+            "heldout_rms_m": 14530.545810934987,
+            "opaque_id": "H_C16CB6556AC2E050",
+            "prefix_constant_m": 18165.292455319315,
+            "prefix_rate_m_s": -1668.2720592482015,
+            "prefix_rmse_m": 6702.852786817382
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 50295.02903476823,
+            "heldout_rms_m": 19332.66465139259,
+            "opaque_id": "H_81D7F83E42ED8B58",
+            "prefix_constant_m": 26826.254673863994,
+            "prefix_rate_m_s": -1661.2585554853065,
+            "prefix_rmse_m": 10098.720907831585
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 68349.90195889235,
+            "heldout_rms_m": 55942.16604331096,
+            "opaque_id": "H_B7DAF98094A64E7E",
+            "prefix_constant_m": 19900.481709658692,
+            "prefix_rate_m_s": -366.02327342618844,
+            "prefix_rmse_m": 8333.453210441254
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 87427.97616383992,
+            "heldout_rms_m": 29045.99166489358,
+            "opaque_id": "H_871C18BD04239F5B",
+            "prefix_constant_m": 20486.913244861644,
+            "prefix_rate_m_s": -2157.716348036948,
+            "prefix_rmse_m": 7270.343556789606
+          }
+        ],
+        "track_ids": [
+          "TRACK_A",
+          "TRACK_B"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_pair_sha256": "2b7bc66ab5b260d27f261bf21fe4f687dc942d59addfb3e479b1997f12fefc4f"
+      },
+      "score_receipt_sha256_before_reveal": "16eacaa92f6c187dc693087fc7f9dda447c45f5c90400bbcacc6589fd270c71f"
+    },
+    {
+      "code_witness_sha256_before_scoring": "cac45234dd2b47b1abb26b83f1996f96b3b01defea081055fe314600faf507e6",
+      "name": "code_orbit_discordance",
+      "reveal_after_score_receipt_hash": {
+        "best_opaque_id": "H_72E7F21DC8244653",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_hardware_root": false,
+          "same_samples_as_orbital_tracks": true,
+          "schema": "gnss-synthetic-code-witness-v1",
+          "source": "SYNTHETIC_ORTHOGONAL_FEATURE",
+          "track_identity": [
+            {
+              "code_identity": "G06",
+              "track_id": "TRACK_A"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "TRACK_B"
+            }
+          ]
+        },
+        "model": "G22_RELATIVE_TO_G30",
+        "model_class": "ORBITAL_CANDIDATE",
+        "orientation": "TRACK_A_MINUS_TRACK_B",
+        "state": "ORBIT_CODE_DISCORDANT"
+      },
+      "role": "ORTHOGONAL_WITNESS_NEGATIVE_CONTROL",
+      "score_receipt": {
+        "best_opaque_id": "H_72E7F21DC8244653",
+        "coordinate": "TRACK_A_MINUS_TRACK_B",
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "observed_coordinate_sha256": "91cf581e19f9a40619c0d64e765db71aea2076f182c9d3aecc8ec02115e2b6f4",
+        "opaque_hypotheses": 11,
+        "orbital_score_state": "OPAQUE_HYPOTHESIS_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 18763.152832551084,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_0F7B423DEE4445EB",
+        "same_loop_parameter_count": 2,
+        "schema": "gnss-anonymous-track-score-receipt-v1",
+        "scorer_version": "gnss-anonymous-track-spike-scorer-v1",
+        "scores": [
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 0.6675653598108795,
+            "heldout_rms_m": 0.23623158007807038,
+            "opaque_id": "H_72E7F21DC8244653",
+            "prefix_constant_m": 120.09024296712447,
+            "prefix_rate_m_s": -0.004069055618246747,
+            "prefix_rmse_m": 0.1907055949486703
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 18763.820397910895,
+            "heldout_rms_m": 23462.77631218742,
+            "opaque_id": "H_0F7B423DEE4445EB",
+            "prefix_constant_m": 13117.169499076554,
+            "prefix_rate_m_s": -540.7538429205916,
+            "prefix_rmse_m": 5258.107354470949
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 24309.19035022147,
+            "heldout_rms_m": 8266.546193100654,
+            "opaque_id": "H_C16CB6556AC2E050",
+            "prefix_constant_m": 11088.764477135846,
+            "prefix_rate_m_s": -947.156091437225,
+            "prefix_rmse_m": 4188.036787930436
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 25636.84877334023,
+            "heldout_rms_m": 18089.481934753567,
+            "opaque_id": "H_81D7F83E42ED8B58",
+            "prefix_constant_m": 19749.726695679594,
+            "prefix_rate_m_s": -940.1425876743294,
+            "prefix_rmse_m": 7589.09325944028
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 26484.650930509903,
+            "heldout_rms_m": 8498.427739692064,
+            "opaque_id": "H_970DD1C2274548B5",
+            "prefix_constant_m": -6956.43773521611,
+            "prefix_rate_m_s": 721.1118987553581,
+            "prefix_rmse_m": 2521.7271790736013
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 28127.15565238893,
+            "heldout_rms_m": 42936.84115007476,
+            "opaque_id": "H_02216B4414E9D923",
+            "prefix_constant_m": 33190.7767333691,
+            "prefix_rate_m_s": -1802.6195845965415,
+            "prefix_rmse_m": 13008.774051721895
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 37527.53696270008,
+            "heldout_rms_m": 46925.7041157807,
+            "opaque_id": "H_CC64DCF632B4FDE0",
+            "prefix_constant_m": 26114.248755185865,
+            "prefix_rate_m_s": -1081.503616785565,
+            "prefix_rmse_m": 10516.252498278824
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 49343.110870189674,
+            "heldout_rms_m": 32072.933959101323,
+            "opaque_id": "H_5A7421B20092455F",
+            "prefix_constant_m": 6484.612302473804,
+            "prefix_rate_m_s": -141.3650981668541,
+            "prefix_rmse_m": 2970.4578069495838
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 54723.59164071991,
+            "heldout_rms_m": 43774.87846969056,
+            "opaque_id": "H_113EA69083E0450B",
+            "prefix_constant_m": 15145.574521017872,
+            "prefix_rate_m_s": -134.35159440395861,
+            "prefix_rmse_m": 6348.382480283166
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 60955.81401947653,
+            "heldout_rms_m": 20581.890300729603,
+            "opaque_id": "H_871C18BD04239F5B",
+            "prefix_constant_m": 13410.385266679106,
+            "prefix_rate_m_s": -1436.6003802259722,
+            "prefix_rmse_m": 4748.690116260492
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 94419.22890971065,
+            "heldout_rms_m": 61933.87522339052,
+            "opaque_id": "H_B7DAF98094A64E7E",
+            "prefix_constant_m": 12823.953731475107,
+            "prefix_rate_m_s": 355.0926943847881,
+            "prefix_rmse_m": 5895.671246688127
+          }
+        ],
+        "track_ids": [
+          "TRACK_A",
+          "TRACK_B"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_pair_sha256": "d710edae5dd4fd9dba07f5c5110e11c3e1532d20b98d75f774021130083fae58"
+      },
+      "score_receipt_sha256_before_reveal": "8ce642efbe9f57d55cf9a8652dbc867f164ef3a25130171eed686ce5de8849ea"
+    },
+    {
+      "code_witness_sha256_before_scoring": "d5defcc49c09fb7d79d9d8329eb1f2d4f814b56cca1df285c38c464c9f86cc68",
+      "name": "track_order_reversed",
+      "reveal_after_score_receipt_hash": {
+        "best_opaque_id": "H_CC64DCF632B4FDE0",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_hardware_root": false,
+          "same_samples_as_orbital_tracks": true,
+          "schema": "gnss-synthetic-code-witness-v1",
+          "source": "SYNTHETIC_ORTHOGONAL_FEATURE",
+          "track_identity": [
+            {
+              "code_identity": "G30",
+              "track_id": "TRACK_A"
+            },
+            {
+              "code_identity": "G22",
+              "track_id": "TRACK_B"
+            }
+          ]
+        },
+        "model": "G22_RELATIVE_TO_G30",
+        "model_class": "ORBITAL_CANDIDATE",
+        "orientation": "TRACK_B_MINUS_TRACK_A",
+        "state": "ORBIT_CODE_CONCORDANT"
+      },
+      "role": "PERMUTATION_CONTROL",
+      "score_receipt": {
+        "best_opaque_id": "H_CC64DCF632B4FDE0",
+        "coordinate": "TRACK_A_MINUS_TRACK_B",
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "observed_coordinate_sha256": "cc7f2209f57c44d10e99487e0289aded1b0549c7ccfa786a9483e41bdcfb61e2",
+        "opaque_hypotheses": 11,
+        "orbital_score_state": "OPAQUE_HYPOTHESIS_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 18762.945166307192,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_0F7B423DEE4445EB",
+        "same_loop_parameter_count": 2,
+        "schema": "gnss-anonymous-track-score-receipt-v1",
+        "scorer_version": "gnss-anonymous-track-spike-scorer-v1",
+        "scores": [
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 0.6675653598109506,
+            "heldout_rms_m": 0.23623158007829329,
+            "opaque_id": "H_CC64DCF632B4FDE0",
+            "prefix_constant_m": 120.09024296712481,
+            "prefix_rate_m_s": -0.004069055618246954,
+            "prefix_rmse_m": 0.19070559494872089
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 18763.612731667003,
+            "heldout_rms_m": 23463.079297099754,
+            "opaque_id": "H_0F7B423DEE4445EB",
+            "prefix_constant_m": -12876.989013142651,
+            "prefix_rate_m_s": 540.7457048093554,
+            "prefix_rmse_m": 5258.182943112242
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 24309.16026357189,
+            "heldout_rms_m": 8266.697869786036,
+            "opaque_id": "H_113EA69083E0450B",
+            "prefix_constant_m": -10848.583991201129,
+            "prefix_rate_m_s": 947.1479533259883,
+            "prefix_rmse_m": 4188.113975171484
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 25636.63757701777,
+            "heldout_rms_m": 18089.756664406705,
+            "opaque_id": "H_5A7421B20092455F",
+            "prefix_constant_m": -19509.546209744876,
+            "prefix_rate_m_s": 940.1344495630927,
+            "prefix_rmse_m": 7589.170305903293
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 26484.16351552005,
+            "heldout_rms_m": 8498.578925183341,
+            "opaque_id": "H_02216B4414E9D923",
+            "prefix_constant_m": 7196.618221150478,
+            "prefix_rate_m_s": -721.1200368665945,
+            "prefix_rmse_m": 2521.647257298591
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 28127.343303642236,
+            "heldout_rms_m": 42937.142358317746,
+            "opaque_id": "H_970DD1C2274548B5",
+            "prefix_constant_m": -32950.59624743578,
+            "prefix_rate_m_s": 1802.6114464853054,
+            "prefix_rmse_m": 13008.85064978376
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 37527.329296456184,
+            "heldout_rms_m": 46926.00710069328,
+            "opaque_id": "H_72E7F21DC8244653",
+            "prefix_constant_m": -25874.068269252544,
+            "prefix_rate_m_s": 1081.495478674329,
+            "prefix_rmse_m": 10516.328086920126
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 49342.32665883156,
+            "heldout_rms_m": 32073.222302845654,
+            "opaque_id": "H_81D7F83E42ED8B58",
+            "prefix_constant_m": -6244.431816539465,
+            "prefix_rate_m_s": 141.35696005561755,
+            "prefix_rmse_m": 2970.52856837555
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 54722.80742936151,
+            "heldout_rms_m": 43775.17461965232,
+            "opaque_id": "H_C16CB6556AC2E050",
+            "prefix_constant_m": -14905.39403508362,
+            "prefix_rate_m_s": 134.34345629272215,
+            "prefix_rmse_m": 6348.456773751247
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 60956.34251070628,
+            "heldout_rms_m": 20581.712078178076,
+            "opaque_id": "H_B7DAF98094A64E7E",
+            "prefix_constant_m": -13170.20478074369,
+            "prefix_rate_m_s": 1436.592242114735,
+            "prefix_rmse_m": 4748.769452536972
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 94418.44469835272,
+            "heldout_rms_m": 61934.16401406654,
+            "opaque_id": "H_871C18BD04239F5B",
+            "prefix_constant_m": -12583.773245540797,
+            "prefix_rate_m_s": -355.1008324960247,
+            "prefix_rmse_m": 5895.742173818027
+          }
+        ],
+        "track_ids": [
+          "TRACK_A",
+          "TRACK_B"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_pair_sha256": "718e6ffdd15ad4538cf4adfab00089b8abffdac8346041c9a6f6653c7df51053"
+      },
+      "score_receipt_sha256_before_reveal": "d40a3e4788aa576109666805887abe77439c404722868bddcd91938af5117643"
+    },
+    {
+      "code_witness_sha256_before_scoring": "e38612cd7cc7645450571ba8487b536c72fd337f27ca9a724a76142354b26162",
+      "name": "below_detectability_midpoint",
+      "reveal_after_score_receipt_hash": {
+        "best_opaque_id": "H_72E7F21DC8244653",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_hardware_root": false,
+          "same_samples_as_orbital_tracks": true,
+          "schema": "gnss-synthetic-code-witness-v1",
+          "source": "SYNTHETIC_ORTHOGONAL_FEATURE",
+          "track_identity": [
+            {
+              "code_identity": "G22",
+              "track_id": "TRACK_A"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "TRACK_B"
+            }
+          ]
+        },
+        "model": "G22_RELATIVE_TO_G30",
+        "model_class": "ORBITAL_CANDIDATE",
+        "orientation": "TRACK_A_MINUS_TRACK_B",
+        "state": "ORBIT_ASSIGNMENT_UNRESOLVED"
+      },
+      "role": "AMBIGUITY_CONTROL",
+      "score_receipt": {
+        "best_opaque_id": "H_72E7F21DC8244653",
+        "coordinate": "TRACK_A_MINUS_TRACK_B",
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "observed_coordinate_sha256": "8c77ab0e1adace3267e5cdf310afe743942346131f7e609092ac73c917d2b7da",
+        "opaque_hypotheses": 11,
+        "orbital_score_state": "AMBIGUOUS",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 0.2076662436593324,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_0F7B423DEE4445EB",
+        "same_loop_parameter_count": 2,
+        "schema": "gnss-anonymous-track-score-receipt-v1",
+        "scorer_version": "gnss-anonymous-track-spike-scorer-v1",
+        "scores": [
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 9381.754449272761,
+            "heldout_rms_m": 11731.615395828523,
+            "opaque_id": "H_72E7F21DC8244653",
+            "prefix_constant_m": -6378.44938508753,
+            "prefix_rate_m_s": 270.37081787686844,
+            "prefix_rmse_m": 2629.11037370008
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 9381.96211551642,
+            "heldout_rms_m": 11731.312410915782,
+            "opaque_id": "H_0F7B423DEE4445EB",
+            "prefix_constant_m": 6618.629871021898,
+            "prefix_rate_m_s": -270.37895598810496,
+            "prefix_rmse_m": 2629.034785058973
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 20335.44210496079,
+            "heldout_rms_m": 31430.14430522267,
+            "opaque_id": "H_02216B4414E9D923",
+            "prefix_constant_m": 26692.237105315086,
+            "prefix_rate_m_s": -1532.2446976640551,
+            "prefix_rmse_m": 10381.462333939746
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 22540.315917669795,
+            "heldout_rms_m": 10108.672917840995,
+            "opaque_id": "H_970DD1C2274548B5",
+            "prefix_constant_m": -13454.977363271406,
+            "prefix_rate_m_s": 991.4867856878452,
+            "prefix_rmse_m": 5132.330075437325
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 27800.348820633488,
+            "heldout_rms_m": 9471.704116629255,
+            "opaque_id": "H_81D7F83E42ED8B58",
+            "prefix_constant_m": 13251.18706762488,
+            "prefix_rate_m_s": -669.7677007418428,
+            "prefix_rmse_m": 4966.456945462231
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 28145.678680305602,
+            "heldout_rms_m": 35194.24021392546,
+            "opaque_id": "H_CC64DCF632B4FDE0",
+            "prefix_constant_m": 19615.70912713115,
+            "prefix_rate_m_s": -811.1287298530784,
+            "prefix_rmse_m": 7887.179926098021
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 29268.97127519292,
+            "heldout_rms_m": 10836.816039200336,
+            "opaque_id": "H_C16CB6556AC2E050",
+            "prefix_constant_m": 4590.224849080783,
+            "prefix_rate_m_s": -676.7812045047382,
+            "prefix_rmse_m": 1579.3660679923823
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 40851.15155838488,
+            "heldout_rms_m": 20986.49346015722,
+            "opaque_id": "H_5A7421B20092455F",
+            "prefix_constant_m": -13.927325580996694,
+            "prefix_rate_m_s": 129.00978876563266,
+            "prefix_rmse_m": 529.6445903023133
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 46231.63232891506,
+            "heldout_rms_m": 32270.463683450816,
+            "opaque_id": "H_113EA69083E0450B",
+            "prefix_constant_m": 8647.03489296307,
+            "prefix_rate_m_s": 136.02329252852815,
+            "prefix_rmse_m": 3724.9801309693016
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 68942.56676294003,
+            "heldout_rms_m": 29390.289015998733,
+            "opaque_id": "H_871C18BD04239F5B",
+            "prefix_constant_m": 6911.845638623228,
+            "prefix_rate_m_s": -1166.2254932934848,
+            "prefix_rmse_m": 2205.9962674767316
+          },
+          {
+            "fitted_parameter_count": 2,
+            "heldout_peak_to_peak_m": 85927.26959790522,
+            "heldout_rms_m": 50693.92130529399,
+            "opaque_id": "H_B7DAF98094A64E7E",
+            "prefix_constant_m": 6325.414103420568,
+            "prefix_rate_m_s": 625.4675813172748,
+            "prefix_rmse_m": 3312.2257829125665
+          }
+        ],
+        "track_ids": [
+          "TRACK_A",
+          "TRACK_B"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_pair_sha256": "b7eaccc8abfa71479efc86e062a89a4417998dd9d412b4ce2dadce5602f356ce"
+      },
+      "score_receipt_sha256_before_reveal": "3eee593a0368836c6871343cba887fbe5fe0f294224a9d0b630f86ca93de2709"
+    }
+  ],
+  "schema": "gnss-anonymous-track-spike-receipt-v1",
+  "source": {
+    "scorer_sha256": "8722ebbf17f0be58c1d61e0383f3d9457124d7c812f63b22bb65b0bc937dec24",
+    "spike_sha256": "60154631a35cdd40c778aba688aecad68683aa4d4268177a713eb7c19c5f4672"
+  },
+  "stop": "STOP_BEFORE_CAPABILITY_SEARCH_OR_OBSERVATION",
+  "version": "gnss-anonymous-track-sealed-code-witness-spike-v1"
+}
