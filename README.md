@@ -94,9 +94,12 @@ against `8,988.225 m` for the closest null.
 The authorized claim is therefore
 `REPEATED_PASS_CONSISTENCY_FOR_TWO_GOLD_NLIB_G22_G30_PASSES`. It is not
 catalog-wide identity, unconstrained orbit reconstruction or confirmation on
-observer roots independent of GOLD/NLIB. The next scientific question is
-whether the prediction transfers to new hardware/geography without relying on
-systematics shared by that station pair.
+observer roots independent of GOLD/NLIB. Later PIE and AMC held-out results
+transferred the same orbit-signal family across independent observers and
+passes, but retained the common POLARX5 receiver family as an explicit
+upstream limitation. The bounded attempt to cut that implementation family is
+now closed below; another traditional GNSS station search is not the current
+direction.
 
 Several other bounded routes remain useful closed exclusions rather than
 orbital scores:
@@ -288,6 +291,27 @@ not universal hardware independence. After that one outcome, traditional GNSS
 replication stops; bounded blind orbit assignment or independently timed RF
 must change the information type. See
 [`POST_AMC_NEXT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_AMC_NEXT_INFORMATION_REVIEW.md).
+
+That single bounded cross-family screen is now terminal as
+`NO_CROSS_FAMILY_GEOMETRY_SHORTLISTED`. WTZR and ZIMM had no complete joint
+visibility, TSKB reached only 113 of the immutable 139 epochs, WES retained a
+large positive geometry but remained refused by product-level RINEX 2 signal
+semantics, and HOB2 did not cut the POLARX5 family. No observation locator or
+value was opened. The result freezes `STOP_TRADITIONAL_GNSS_REPLICATION`; it
+does not justify a sixth station or a weakened window. See
+[`GNSS_CROSS_FAMILY_BOUNDED_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_CROSS_FAMILY_BOUNDED_SCREEN_REPORT.md).
+
+A subsequent five-family raw-RF metadata audit then tested the physically
+distinct route without downloading IQ. It ended
+`NO_TIME_AND_ORBIT_QUALIFIED_RAW_RF_VERTICAL`: DSLWP-B and the concrete Rosetta
+volume do not contain the required open-loop complex samples; SLIM declares an
+internal time source; Voyager/GBT and Artemis I expose serious disciplined
+receiver chains but no product-applicable finite ADC-to-UTC bound, and their
+remaining orbit/artifact uncertainty is not allowed to become zero. No
+held-out curve was computed after time refusal. Repeating dataset inventory is
+not the next experiment; the remaining minimum information-changing route is
+a separately reviewed bounded blind orbit assignment. See
+[`RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md).
 
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
