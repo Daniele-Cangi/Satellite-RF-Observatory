@@ -130,6 +130,20 @@ def test_invalid_observed_coordinate_is_refused() -> None:
         scorer.score(bad, bundle)
 
 
+def test_writable_float64_input_remains_owned_by_the_caller() -> None:
+    bundle = _bundle()
+    identifier = "H_72E7F21DC8244653"
+    observed = np.asarray(bundle["curves_m"][identifier], dtype=np.float64).copy()
+    observed += 31.0 - 0.004 * _elapsed()
+    before = observed.copy()
+
+    receipt = scorer.score(observed, bundle)
+
+    assert receipt["best_opaque_id"] == identifier
+    assert np.array_equal(observed, before)
+    assert observed.flags.owndata is True
+
+
 def test_score_receipt_hash_precedes_any_identity_reveal_and_persists_no_values() -> None:
     bundle = _bundle()
     observed = np.asarray(

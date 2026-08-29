@@ -127,7 +127,7 @@ def validate_bundle(value: Mapping[str, object]) -> dict[str, np.ndarray]:
 
 
 def _finite_observation(values: Sequence[float]) -> np.ndarray:
-    observed = np.asarray(values, dtype=np.float64)
+    observed = np.array(values, dtype=np.float64, copy=True)
     if observed.shape != (RAW_EPOCHS,):
         raise OpaqueOrbitScorerError("OBSERVED_COORDINATE_SHAPE_INVALID")
     if not np.all(np.isfinite(observed)):
