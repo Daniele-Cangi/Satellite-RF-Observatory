@@ -14,6 +14,8 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / screen.RECEIPT_NAME
+RECEIPT_SHA256 = "cddc9fcf0db1be7f55fde04f1bf51256c3a88edf2608871b3bc7e438bd167485"
 
 
 def test_manifest_freezes_physical_question_and_zero_observation_boundary() -> None:
@@ -142,3 +144,43 @@ def test_incomplete_navigation_payload_set_is_rejected_before_parsing() -> None:
     ):
         screen.compile_screen({}, ROOT)
 
+
+def test_committed_receipt_freezes_geometry_without_measurement_authority() -> None:
+    canonical = RECEIPT.read_bytes().replace(b"\r\n", b"\n")
+    assert len(canonical) == 46_895
+    assert screen.canonical_sha256(RECEIPT) == RECEIPT_SHA256
+    value = json.loads(canonical)
+    assert value["outcome"] == screen.OUTCOME_SHORTLISTED
+    assert value["source_commit"] == (
+        "0f08f0956fc24dcbe4eabb7fa08314b02a15b743"
+    )
+    assert value["selected"]["doy"] == 226
+    assert value["selected"]["raw_start_gps"] == "2026-08-14T06:14:30 GPS"
+    assert value["selected"]["heldout_start_gps"] == "2026-08-14T06:54:00 GPS"
+    assert value["selected"]["raw_stop_gps"] == "2026-08-14T07:23:30 GPS"
+    assert value["selected"]["candidate_family"] == [
+        "G22",
+        "G06",
+        "G14",
+        "G17",
+        "G19",
+    ]
+    assert value["selected"]["minimum_combined_remaining_margin_m"] == (
+        pytest.approx(11_424.01533014155)
+    )
+    assert value["selected"]["minimum_time_shifted_elevation_deg"] == (
+        pytest.approx(15.01043286179639)
+    )
+    assert value["observation_access"] == {
+        "consumed_outcomes_reopened": 0,
+        "headers": 0,
+        "payload_bytes": 0,
+        "product_locators": 0,
+        "products_discovered": 0,
+        "values": 0,
+    }
+    assert value["orbital_scores_from_measurements"] == 0
+    assert value["qualification_artifact_selected"] is False
+    assert value["primary_selected"] is False
+    assert value["prospective_plan_frozen"] is False
+    assert value["maximum_authorized_claim"] is None

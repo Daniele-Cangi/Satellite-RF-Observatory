@@ -1,0 +1,1322 @@
+{
+  "day_results": [
+    {
+      "best_margin_attempt_descriptive_only": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 87061.05230068951,
+          "heldout_rms_m": 66059.93921756164,
+          "prefix_constant_m": -115376.19544347469,
+          "prefix_rate_m_s": -507.34506226974105,
+          "prefix_rmse_m": 8637.962965721761,
+          "remaining_margin_m": 79721.35106604212,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G14",
+          "G19",
+          "G17",
+          "G01"
+        ],
+        "doy": 224,
+        "gps_date": "2026-08-12",
+        "heldout_start_gps": "2026-08-12T06:45:30 GPS",
+        "maximum_family_separation_m": 201988.1095227576,
+        "minimum_combined_remaining_margin_m": 44161.61614997344,
+        "minimum_remaining_margin_m": 44161.61614997344,
+        "minimum_time_shifted_elevation_deg": 15.00095013014678,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 51501.31738462084,
+            "heldout_rms_m": 32718.768855489692,
+            "prefix_constant_m": 251966.0569661297,
+            "prefix_rate_m_s": -126.89028232956247,
+            "prefix_rmse_m": 2833.9335253470304,
+            "remaining_margin_m": 44161.61614997344,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 101905.7003704696,
+            "heldout_rms_m": 65184.4161315577,
+            "prefix_constant_m": -1200787.6635389877,
+            "prefix_rate_m_s": 382.6482084904316,
+            "prefix_rmse_m": 5722.650209181485,
+            "remaining_margin_m": 94565.9991358222,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          },
+          {
+            "heldout_peak_to_peak_m": 108239.30828184041,
+            "heldout_rms_m": 77070.22946988542,
+            "prefix_constant_m": 514740.1728473755,
+            "prefix_rate_m_s": -97.24222648380882,
+            "prefix_rmse_m": 9059.985404210014,
+            "remaining_margin_m": 100899.60704719301,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 201988.1095227576,
+            "heldout_rms_m": 138152.0209320796,
+            "prefix_constant_m": -1805238.2414881224,
+            "prefix_rate_m_s": -291.5097339991031,
+            "prefix_rmse_m": 14756.96261800616,
+            "remaining_margin_m": 194648.4082881102,
+            "robust_double_guard_pass": true,
+            "satellite": "G01"
+          }
+        ],
+        "raw_start_gps": "2026-08-12T06:06:00 GPS",
+        "raw_stop_gps": "2026-08-12T07:15:00 GPS",
+        "robustly_admissible": true,
+        "start_index": 732,
+        "visible_alternative_count": 4
+      },
+      "doy": 224,
+      "gps_date": "2026-08-12",
+      "healthy_gps_satellite_count": 31,
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "nearest_four_evaluated_window_count": 312,
+      "robust_window_count": 173,
+      "selected_day_window": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 19351.461917995475,
+          "heldout_rms_m": 23933.472545816578,
+          "prefix_constant_m": -595224.9501449307,
+          "prefix_rate_m_s": -540.2754616843105,
+          "prefix_rmse_m": 5297.322253283489,
+          "remaining_margin_m": 12011.760683348077,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G06",
+          "G14",
+          "G17",
+          "G19"
+        ],
+        "doy": 224,
+        "gps_date": "2026-08-12",
+        "heldout_start_gps": "2026-08-12T07:02:00 GPS",
+        "maximum_family_separation_m": 94811.2122638087,
+        "minimum_combined_remaining_margin_m": 12011.760683348077,
+        "minimum_remaining_margin_m": 19080.97231638655,
+        "minimum_time_shifted_elevation_deg": 15.085286062141613,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 26420.67355103395,
+            "heldout_rms_m": 8461.824108696674,
+            "prefix_constant_m": -3270328.150032728,
+            "prefix_rate_m_s": 720.9206095264141,
+            "prefix_rmse_m": 2528.115731604297,
+            "remaining_margin_m": 19080.97231638655,
+            "robust_double_guard_pass": true,
+            "satellite": "G06"
+          },
+          {
+            "heldout_peak_to_peak_m": 49443.09273418039,
+            "heldout_rms_m": 32125.277253810244,
+            "prefix_constant_m": 135636.50283282454,
+            "prefix_rate_m_s": -140.66828278461,
+            "prefix_rmse_m": 2972.087991649666,
+            "remaining_margin_m": 42103.39149953299,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 55345.15917057835,
+            "heldout_rms_m": 44164.35833143247,
+            "prefix_constant_m": 443283.9314442567,
+            "prefix_rate_m_s": -133.77153069224613,
+            "prefix_rmse_m": 6381.318252660825,
+            "remaining_margin_m": 48005.45793593095,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 94811.2122638087,
+            "heldout_rms_m": 62176.75470691624,
+            "prefix_constant_m": -803309.7730423553,
+            "prefix_rate_m_s": 354.9938454557574,
+            "prefix_rmse_m": 5914.937834381302,
+            "remaining_margin_m": 87471.51102916131,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          }
+        ],
+        "raw_start_gps": "2026-08-12T06:22:30 GPS",
+        "raw_stop_gps": "2026-08-12T07:31:30 GPS",
+        "robustly_admissible": true,
+        "start_index": 765,
+        "visible_alternative_count": 4
+      },
+      "target_reference_complete_window_count": 385
+    },
+    {
+      "best_margin_attempt_descriptive_only": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 88681.75851847744,
+          "heldout_rms_m": 67044.22668151984,
+          "prefix_constant_m": -104000.51272646361,
+          "prefix_rate_m_s": -506.4217285445488,
+          "prefix_rmse_m": 8712.423305480637,
+          "remaining_margin_m": 81342.05728383004,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G14",
+          "G19",
+          "G17",
+          "G01"
+        ],
+        "doy": 225,
+        "gps_date": "2026-08-13",
+        "heldout_start_gps": "2026-08-13T06:41:00 GPS",
+        "maximum_family_separation_m": 203305.7766987593,
+        "minimum_combined_remaining_margin_m": 44139.66029876042,
+        "minimum_remaining_margin_m": 44139.66029876042,
+        "minimum_time_shifted_elevation_deg": 15.107502532927182,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 51479.36153340782,
+            "heldout_rms_m": 32689.49275787646,
+            "prefix_constant_m": 254527.73754095397,
+            "prefix_rate_m_s": -126.83730632545085,
+            "prefix_rmse_m": 2827.280384448025,
+            "remaining_margin_m": 44139.66029876042,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 101798.9763449463,
+            "heldout_rms_m": 65071.931677120745,
+            "prefix_constant_m": -1213706.6347466852,
+            "prefix_rate_m_s": 383.4931698858777,
+            "prefix_rmse_m": 5699.396666636832,
+            "remaining_margin_m": 94459.27511029891,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          },
+          {
+            "heldout_peak_to_peak_m": 109487.4703423935,
+            "heldout_rms_m": 77837.76313439934,
+            "prefix_constant_m": 515917.28396690916,
+            "prefix_rate_m_s": -96.28248828828026,
+            "prefix_rmse_m": 9119.372282544757,
+            "remaining_margin_m": 102147.7691077461,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 203305.7766987593,
+            "heldout_rms_m": 138936.45367690746,
+            "prefix_constant_m": -1801441.1586840188,
+            "prefix_rate_m_s": -290.2757121044496,
+            "prefix_rmse_m": 14809.814230589762,
+            "remaining_margin_m": 195966.0754641119,
+            "robust_double_guard_pass": true,
+            "satellite": "G01"
+          }
+        ],
+        "raw_start_gps": "2026-08-13T06:01:30 GPS",
+        "raw_stop_gps": "2026-08-13T07:10:30 GPS",
+        "robustly_admissible": true,
+        "start_index": 723,
+        "visible_alternative_count": 4
+      },
+      "doy": 225,
+      "gps_date": "2026-08-13",
+      "healthy_gps_satellite_count": 31,
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "nearest_four_evaluated_window_count": 312,
+      "robust_window_count": 172,
+      "selected_day_window": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 19061.020146700088,
+          "heldout_rms_m": 23700.907952263286,
+          "prefix_constant_m": -597939.9444463288,
+          "prefix_rate_m_s": -540.5030306219521,
+          "prefix_rmse_m": 5277.994355962978,
+          "remaining_margin_m": 11721.31891205269,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G06",
+          "G14",
+          "G17",
+          "G19"
+        ],
+        "doy": 225,
+        "gps_date": "2026-08-13",
+        "heldout_start_gps": "2026-08-13T06:58:00 GPS",
+        "maximum_family_separation_m": 94614.47613782668,
+        "minimum_combined_remaining_margin_m": 11721.31891205269,
+        "minimum_remaining_margin_m": 19117.116464965417,
+        "minimum_time_shifted_elevation_deg": 15.047676292950907,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 26456.817699612817,
+            "heldout_rms_m": 8482.150902056035,
+            "prefix_constant_m": -3269436.6300546983,
+            "prefix_rate_m_s": 721.0417809740815,
+            "prefix_rmse_m": 2524.813368717161,
+            "remaining_margin_m": 19117.116464965417,
+            "robust_double_guard_pass": true,
+            "satellite": "G06"
+          },
+          {
+            "heldout_peak_to_peak_m": 49391.04282056115,
+            "heldout_rms_m": 32098.151285476135,
+            "prefix_constant_m": 134509.01542943675,
+            "prefix_rate_m_s": -141.01994469816808,
+            "prefix_rmse_m": 2971.244799232466,
+            "remaining_margin_m": 42051.34158591375,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 55038.78480287857,
+            "heldout_rms_m": 43972.41683836474,
+            "prefix_constant_m": 442721.32749976416,
+            "prefix_rate_m_s": -134.0369299668512,
+            "prefix_rmse_m": 6365.059627235329,
+            "remaining_margin_m": 47699.083568231166,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 94614.47613782668,
+            "heldout_rms_m": 62054.71785989847,
+            "prefix_constant_m": -803787.7446386227,
+            "prefix_rate_m_s": 355.0656243038013,
+            "prefix_rmse_m": 5905.172935039515,
+            "remaining_margin_m": 87274.77490317929,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          }
+        ],
+        "raw_start_gps": "2026-08-13T06:18:30 GPS",
+        "raw_stop_gps": "2026-08-13T07:27:30 GPS",
+        "robustly_admissible": true,
+        "start_index": 757,
+        "visible_alternative_count": 4
+      },
+      "target_reference_complete_window_count": 385
+    },
+    {
+      "best_margin_attempt_descriptive_only": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 88330.07653939584,
+          "heldout_rms_m": 66831.17185126095,
+          "prefix_constant_m": -106310.81125583523,
+          "prefix_rate_m_s": -506.75711518258873,
+          "prefix_rmse_m": 8696.43764610859,
+          "remaining_margin_m": 80990.37530474845,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G14",
+          "G19",
+          "G17",
+          "G01"
+        ],
+        "doy": 226,
+        "gps_date": "2026-08-14",
+        "heldout_start_gps": "2026-08-14T06:37:00 GPS",
+        "maximum_family_separation_m": 202817.2754429346,
+        "minimum_combined_remaining_margin_m": 44124.63633396933,
+        "minimum_remaining_margin_m": 44124.63633396933,
+        "minimum_time_shifted_elevation_deg": 15.049457160166149,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 51464.33756861673,
+            "heldout_rms_m": 32684.78513548844,
+            "prefix_constant_m": 253798.308747494,
+            "prefix_rate_m_s": -127.17814162073088,
+            "prefix_rmse_m": 2828.0983519743295,
+            "remaining_margin_m": 44124.63633396933,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 101633.94088816724,
+            "heldout_rms_m": 64972.89009622954,
+            "prefix_constant_m": -1214052.1126899668,
+            "prefix_rate_m_s": 383.48412568963016,
+            "prefix_rmse_m": 5692.424850953105,
+            "remaining_margin_m": 94294.23965351985,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          },
+          {
+            "heldout_peak_to_peak_m": 109196.6533175559,
+            "heldout_rms_m": 77659.1307395721,
+            "prefix_constant_m": 515811.85294287524,
+            "prefix_rate_m_s": -96.66808983011552,
+            "prefix_rmse_m": 9105.53326029561,
+            "remaining_margin_m": 101856.95208290851,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 202817.2754429346,
+            "heldout_rms_m": 138647.26904227582,
+            "prefix_constant_m": -1803881.9386018054,
+            "prefix_rate_m_s": -291.1757184790695,
+            "prefix_rmse_m": 14790.726164252615,
+            "remaining_margin_m": 195477.5742082872,
+            "robust_double_guard_pass": true,
+            "satellite": "G01"
+          }
+        ],
+        "raw_start_gps": "2026-08-14T05:57:30 GPS",
+        "raw_stop_gps": "2026-08-14T07:06:30 GPS",
+        "robustly_admissible": true,
+        "start_index": 715,
+        "visible_alternative_count": 4
+      },
+      "doy": 226,
+      "gps_date": "2026-08-14",
+      "healthy_gps_satellite_count": 31,
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "nearest_four_evaluated_window_count": 312,
+      "robust_window_count": 173,
+      "selected_day_window": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 18763.71656478895,
+          "heldout_rms_m": 23462.92780394319,
+          "prefix_constant_m": -600650.7127011981,
+          "prefix_rate_m_s": -540.7497738649736,
+          "prefix_rmse_m": 5258.145145469125,
+          "remaining_margin_m": 11424.01533014155,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G06",
+          "G14",
+          "G17",
+          "G19"
+        ],
+        "doy": 226,
+        "gps_date": "2026-08-14",
+        "heldout_start_gps": "2026-08-14T06:54:00 GPS",
+        "maximum_family_separation_m": 94418.83680403186,
+        "minimum_combined_remaining_margin_m": 11424.01533014155,
+        "minimum_remaining_margin_m": 19144.705988368158,
+        "minimum_time_shifted_elevation_deg": 15.01043286179639,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 26484.407223015558,
+            "heldout_rms_m": 8498.503329490708,
+            "prefix_constant_m": -3268504.603634617,
+            "prefix_rate_m_s": 721.1159678109765,
+            "prefix_rmse_m": 2521.6872112915744,
+            "remaining_margin_m": 19144.705988368158,
+            "robust_double_guard_pass": true,
+            "satellite": "G06"
+          },
+          {
+            "heldout_peak_to_peak_m": 49342.71876451056,
+            "heldout_rms_m": 32073.07813042751,
+            "prefix_constant_m": 133432.15040101754,
+            "prefix_rate_m_s": -141.36102911123584,
+            "prefix_rmse_m": 2970.493181751624,
+            "remaining_margin_m": 42003.01752986316,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 54723.19953504077,
+            "heldout_rms_m": 43775.026544284505,
+            "prefix_constant_m": 442173.174630066,
+            "prefix_rate_m_s": -134.34752534834038,
+            "prefix_rmse_m": 6348.419624261501,
+            "remaining_margin_m": 47383.49830039337,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 94418.83680403186,
+            "heldout_rms_m": 61934.01961844644,
+            "prefix_constant_m": -804168.8844171152,
+            "prefix_rate_m_s": 355.09676344040645,
+            "prefix_rmse_m": 5895.706707275409,
+            "remaining_margin_m": 87079.13556938447,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          }
+        ],
+        "raw_start_gps": "2026-08-14T06:14:30 GPS",
+        "raw_stop_gps": "2026-08-14T07:23:30 GPS",
+        "robustly_admissible": true,
+        "start_index": 749,
+        "visible_alternative_count": 4
+      },
+      "target_reference_complete_window_count": 385
+    },
+    {
+      "best_margin_attempt_descriptive_only": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 89921.29517350392,
+          "heldout_rms_m": 67796.93832171962,
+          "prefix_constant_m": -94918.50076390547,
+          "prefix_rate_m_s": -505.89930687313284,
+          "prefix_rmse_m": 8769.252781099329,
+          "remaining_margin_m": 82581.59393885653,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G14",
+          "G19",
+          "G17",
+          "G01"
+        ],
+        "doy": 227,
+        "gps_date": "2026-08-15",
+        "heldout_start_gps": "2026-08-15T06:32:30 GPS",
+        "maximum_family_separation_m": 204133.73394783074,
+        "minimum_combined_remaining_margin_m": 44103.721646581245,
+        "minimum_remaining_margin_m": 44103.721646581245,
+        "minimum_time_shifted_elevation_deg": 15.15445624482937,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 51443.422881228646,
+            "heldout_rms_m": 32655.511137438414,
+            "prefix_constant_m": 256462.57130273918,
+            "prefix_rate_m_s": -127.10593810378361,
+            "prefix_rmse_m": 2821.26000465024,
+            "remaining_margin_m": 44103.721646581245,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 101532.35756486934,
+            "heldout_rms_m": 64864.61929510817,
+            "prefix_constant_m": -1226789.9489316798,
+            "prefix_rate_m_s": 384.25802749048256,
+            "prefix_rmse_m": 5669.807046697509,
+            "remaining_margin_m": 94192.65633022194,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          },
+          {
+            "heldout_peak_to_peak_m": 110439.53162123868,
+            "heldout_rms_m": 78423.76552998029,
+            "prefix_constant_m": 517137.2744728548,
+            "prefix_rate_m_s": -95.7826706603409,
+            "prefix_rmse_m": 9164.796581884082,
+            "remaining_margin_m": 103099.83038659129,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 204133.73394783074,
+            "heldout_rms_m": 139430.23978478645,
+            "prefix_constant_m": -1800132.3459742127,
+            "prefix_rate_m_s": -289.98927584488854,
+            "prefix_rmse_m": 14843.221606022113,
+            "remaining_margin_m": 196794.03271318335,
+            "robust_double_guard_pass": true,
+            "satellite": "G01"
+          }
+        ],
+        "raw_start_gps": "2026-08-15T05:53:00 GPS",
+        "raw_stop_gps": "2026-08-15T07:02:00 GPS",
+        "robustly_admissible": true,
+        "start_index": 706,
+        "visible_alternative_count": 4
+      },
+      "doy": 227,
+      "gps_date": "2026-08-15",
+      "healthy_gps_satellite_count": 31,
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "nearest_four_evaluated_window_count": 310,
+      "robust_window_count": 171,
+      "selected_day_window": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 169421.51822492224,
+          "heldout_rms_m": 115173.23275584541,
+          "prefix_constant_m": 486617.0647319739,
+          "prefix_rate_m_s": -435.0099418785942,
+          "prefix_rmse_m": 12053.316111610786,
+          "remaining_margin_m": 162081.81699027485,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G14",
+          "G19",
+          "G20",
+          "G17"
+        ],
+        "doy": 227,
+        "gps_date": "2026-08-15",
+        "heldout_start_gps": "2026-08-15T06:09:00 GPS",
+        "maximum_family_separation_m": 173771.7665702863,
+        "minimum_combined_remaining_margin_m": 39821.533719202846,
+        "minimum_remaining_margin_m": 39821.533719202846,
+        "minimum_time_shifted_elevation_deg": 15.136738647713745,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 47161.234953850246,
+            "heldout_rms_m": 29094.358918696915,
+            "prefix_constant_m": 402966.23838515393,
+            "prefix_rate_m_s": -109.75489638968685,
+            "prefix_rmse_m": 2291.311752585175,
+            "remaining_margin_m": 39821.533719202846,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 93016.76962952677,
+            "heldout_rms_m": 56957.75106592951,
+            "prefix_constant_m": -1832685.729488813,
+            "prefix_rate_m_s": 418.1766851780588,
+            "prefix_rmse_m": 4242.493802612489,
+            "remaining_margin_m": 85677.06839487937,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          },
+          {
+            "heldout_peak_to_peak_m": 135737.48008783208,
+            "heldout_rms_m": 98082.11555128368,
+            "prefix_constant_m": -1824159.9675715552,
+            "prefix_rate_m_s": -328.64759793072335,
+            "prefix_rmse_m": 11751.259520814616,
+            "remaining_margin_m": 128397.77885318469,
+            "robust_double_guard_pass": true,
+            "satellite": "G20"
+          },
+          {
+            "heldout_peak_to_peak_m": 173771.7665702863,
+            "heldout_rms_m": 116481.54212755589,
+            "prefix_constant_m": 519274.12335200043,
+            "prefix_rate_m_s": -24.40196317178938,
+            "prefix_rmse_m": 11837.723761901123,
+            "remaining_margin_m": 166432.0653356389,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          }
+        ],
+        "raw_start_gps": "2026-08-15T05:29:30 GPS",
+        "raw_stop_gps": "2026-08-15T06:38:30 GPS",
+        "robustly_admissible": true,
+        "start_index": 659,
+        "visible_alternative_count": 5
+      },
+      "target_reference_complete_window_count": 384
+    },
+    {
+      "best_margin_attempt_descriptive_only": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 89536.22681905096,
+          "heldout_rms_m": 67563.5949988091,
+          "prefix_constant_m": -97248.8592925308,
+          "prefix_rate_m_s": -506.34490049938864,
+          "prefix_rmse_m": 8751.68351407989,
+          "remaining_margin_m": 82196.52558440357,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G14",
+          "G19",
+          "G17",
+          "G01"
+        ],
+        "doy": 228,
+        "gps_date": "2026-08-16",
+        "heldout_start_gps": "2026-08-16T06:28:30 GPS",
+        "maximum_family_separation_m": 203639.42075521033,
+        "minimum_combined_remaining_margin_m": 44089.08751013976,
+        "minimum_remaining_margin_m": 44089.08751013976,
+        "minimum_time_shifted_elevation_deg": 15.094975158128273,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 51428.78874478716,
+            "heldout_rms_m": 32650.464231618735,
+            "prefix_constant_m": 255821.19862554368,
+            "prefix_rate_m_s": -127.43295970787139,
+            "prefix_rmse_m": 2821.8718313389845,
+            "remaining_margin_m": 44089.08751013976,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 101377.05026380671,
+            "heldout_rms_m": 64772.278135685265,
+            "prefix_constant_m": -1227107.8378515318,
+            "prefix_rate_m_s": 384.21001925639746,
+            "prefix_rmse_m": 5663.561067359374,
+            "remaining_margin_m": 94037.34902915932,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          },
+          {
+            "heldout_peak_to_peak_m": 110161.95305629593,
+            "heldout_rms_m": 78254.02486690828,
+            "prefix_constant_m": 517209.51706439804,
+            "prefix_rate_m_s": -96.21238479556298,
+            "prefix_rmse_m": 9151.88724320433,
+            "remaining_margin_m": 102822.25182164853,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 203639.42075521033,
+            "heldout_rms_m": 139136.84445354633,
+            "prefix_constant_m": -1802620.5584956002,
+            "prefix_rate_m_s": -290.9476612070779,
+            "prefix_rmse_m": 14823.58903468247,
+            "remaining_margin_m": 196299.71952056294,
+            "robust_double_guard_pass": true,
+            "satellite": "G01"
+          }
+        ],
+        "raw_start_gps": "2026-08-16T05:49:00 GPS",
+        "raw_stop_gps": "2026-08-16T06:58:00 GPS",
+        "robustly_admissible": true,
+        "start_index": 698,
+        "visible_alternative_count": 4
+      },
+      "doy": 228,
+      "gps_date": "2026-08-16",
+      "healthy_gps_satellite_count": 31,
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "nearest_four_evaluated_window_count": 310,
+      "robust_window_count": 171,
+      "selected_day_window": {
+        "affine_null": {
+          "heldout_peak_to_peak_m": 169148.71512927418,
+          "heldout_rms_m": 115015.19187083175,
+          "prefix_constant_m": 485091.0598440547,
+          "prefix_rate_m_s": -435.5479726565258,
+          "prefix_rmse_m": 12043.813986774647,
+          "remaining_margin_m": 161809.01389462678,
+          "robust_double_guard_pass": true
+        },
+        "candidate_family": [
+          "G22",
+          "G14",
+          "G19",
+          "G20",
+          "G17"
+        ],
+        "doy": 228,
+        "gps_date": "2026-08-16",
+        "heldout_start_gps": "2026-08-16T06:05:00 GPS",
+        "maximum_family_separation_m": 173573.23328675242,
+        "minimum_combined_remaining_margin_m": 39838.62443128478,
+        "minimum_remaining_margin_m": 39838.62443128478,
+        "minimum_time_shifted_elevation_deg": 15.104363419056424,
+        "nearest_four_alternatives": [
+          {
+            "heldout_peak_to_peak_m": 47178.32566593218,
+            "heldout_rms_m": 29108.13320749835,
+            "prefix_constant_m": 402769.630040344,
+            "prefix_rate_m_s": -110.07296754532403,
+            "prefix_rmse_m": 2293.2739992712586,
+            "remaining_margin_m": 39838.62443128478,
+            "robust_double_guard_pass": true,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 92926.89748857729,
+            "heldout_rms_m": 56908.718571953876,
+            "prefix_constant_m": -1832882.2706749556,
+            "prefix_rate_m_s": 418.10083971722,
+            "prefix_rmse_m": 4240.472351662393,
+            "remaining_margin_m": 85587.1962539299,
+            "robust_double_guard_pass": true,
+            "satellite": "G19"
+          },
+          {
+            "heldout_peak_to_peak_m": 135197.11199016403,
+            "heldout_rms_m": 97757.12994886727,
+            "prefix_constant_m": -1824577.9981586528,
+            "prefix_rate_m_s": -329.43571755897693,
+            "prefix_rmse_m": 11727.846643293145,
+            "remaining_margin_m": 127857.41075551664,
+            "robust_double_guard_pass": true,
+            "satellite": "G20"
+          },
+          {
+            "heldout_peak_to_peak_m": 173573.23328675242,
+            "heldout_rms_m": 116366.91328515526,
+            "prefix_constant_m": 520080.0507271901,
+            "prefix_rate_m_s": -24.898667860498854,
+            "prefix_rmse_m": 11831.122451299067,
+            "remaining_margin_m": 166233.53205210503,
+            "robust_double_guard_pass": true,
+            "satellite": "G17"
+          }
+        ],
+        "raw_start_gps": "2026-08-16T05:25:30 GPS",
+        "raw_stop_gps": "2026-08-16T06:34:30 GPS",
+        "robustly_admissible": true,
+        "start_index": 651,
+        "visible_alternative_count": 5
+      },
+      "target_reference_complete_window_count": 384
+    }
+  ],
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "manifest_sha256": "705ce9d38816dc0725013f97d85da5e057092958a6910953d0fda8e982ff27ef",
+  "maximum_authorized_claim": null,
+  "navigation": [
+    {
+      "compressed_bytes": 71290,
+      "compressed_sha256": "51b07e0b263cbe32e3b058992449a36aeb35d181a84de203ae56a63533787160",
+      "doy": 224,
+      "gps_date": "2026-08-12",
+      "name": "brdc2240.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 296253,
+      "uncompressed_name": "brdc2240.26n",
+      "uncompressed_sha256": "382a4269f03ffa4d5673ffc65aa8d16dad50808d4b0a95527697f485f58638f0",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/224/brdc2240.26n.gz"
+    },
+    {
+      "compressed_bytes": 71213,
+      "compressed_sha256": "4d041840ad9743c604a19c4ecefb5e1c812570aca17956acba6232ab9e5a122e",
+      "doy": 225,
+      "gps_date": "2026-08-13",
+      "name": "brdc2250.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 296234,
+      "uncompressed_name": "brdc2250.26n",
+      "uncompressed_sha256": "cfe3d00c59d0cc0341380b22fda78a39f22d2982cdb5d8542ea31b5bec4c314f",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/225/brdc2250.26n.gz"
+    },
+    {
+      "compressed_bytes": 71489,
+      "compressed_sha256": "d2b2006769aac07d40497c547edef37c1cf1a32780981dffab971c610ae5b0b9",
+      "doy": 226,
+      "gps_date": "2026-08-14",
+      "name": "brdc2260.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 297923,
+      "uncompressed_name": "brdc2260.26n",
+      "uncompressed_sha256": "4042f7a4138aa16acd8b2700d88ccca799f7b4c6e5ffa9f47b79ae371f05d665",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/226/brdc2260.26n.gz"
+    },
+    {
+      "compressed_bytes": 69478,
+      "compressed_sha256": "14db10ee1d94f8ae0745b188a10a8878857777175d75351becb637628eab2015",
+      "doy": 227,
+      "gps_date": "2026-08-15",
+      "name": "brdc2270.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 290097,
+      "uncompressed_name": "brdc2270.26n",
+      "uncompressed_sha256": "0bcacf5606b606044a9f4466d1ab4c3a8c4def8339b5979bbdbf424c9643a4cf",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/227/brdc2270.26n.gz"
+    },
+    {
+      "compressed_bytes": 70468,
+      "compressed_sha256": "5d3e15a6682d0f7cfbd442ea9dd7b241a2bb78ad8462546daca1944af7dc16bd",
+      "doy": 228,
+      "gps_date": "2026-08-16",
+      "name": "brdc2280.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 295515,
+      "uncompressed_name": "brdc2280.26n",
+      "uncompressed_sha256": "9a9aaa59272f3cd3ffe33488f0f94a0f306a8348d37630858384b435931c1981",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/228/brdc2280.26n.gz"
+    }
+  ],
+  "new_gate_created": false,
+  "next_maximum": "REVIEW_BEFORE_OPAQUE_HYPOTHESIS_PLAN_AND_ONE_NEW_PRIMARY_SELECTION",
+  "observation_access": {
+    "consumed_outcomes_reopened": 0,
+    "headers": 0,
+    "payload_bytes": 0,
+    "product_locators": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "orbital_scores_from_measurements": 0,
+  "outcome": "BLIND_ASSIGNMENT_GEOMETRY_SHORTLISTED",
+  "primary_selected": false,
+  "prospective_plan_frozen": false,
+  "qualification_artifact_selected": false,
+  "schema": "gnss-blind-orbit-assignment-screen-receipt-v1",
+  "scope": {
+    "canonical_sha256": "2b57ac1b19f41cba70585bae1bf09b0834349872d5a3db540ca5aac1d2cd3ebf",
+    "filename": "GNSS_BLIND_ORBIT_ASSIGNMENT_SCOPE.md",
+    "scope_commit": "00bb74da2ad2a494c2e6bf0b92d45a124c46680f"
+  },
+  "screen_version": "gnss-bounded-blind-orbit-assignment-screen-v1",
+  "selected": {
+    "affine_null": {
+      "heldout_peak_to_peak_m": 18763.71656478895,
+      "heldout_rms_m": 23462.92780394319,
+      "prefix_constant_m": -600650.7127011981,
+      "prefix_rate_m_s": -540.7497738649736,
+      "prefix_rmse_m": 5258.145145469125,
+      "remaining_margin_m": 11424.01533014155,
+      "robust_double_guard_pass": true
+    },
+    "candidate_family": [
+      "G22",
+      "G06",
+      "G14",
+      "G17",
+      "G19"
+    ],
+    "doy": 226,
+    "gps_date": "2026-08-14",
+    "heldout_start_gps": "2026-08-14T06:54:00 GPS",
+    "maximum_family_separation_m": 94418.83680403186,
+    "minimum_combined_remaining_margin_m": 11424.01533014155,
+    "minimum_remaining_margin_m": 19144.705988368158,
+    "minimum_time_shifted_elevation_deg": 15.01043286179639,
+    "nearest_four_alternatives": [
+      {
+        "heldout_peak_to_peak_m": 26484.407223015558,
+        "heldout_rms_m": 8498.503329490708,
+        "prefix_constant_m": -3268504.603634617,
+        "prefix_rate_m_s": 721.1159678109765,
+        "prefix_rmse_m": 2521.6872112915744,
+        "remaining_margin_m": 19144.705988368158,
+        "robust_double_guard_pass": true,
+        "satellite": "G06"
+      },
+      {
+        "heldout_peak_to_peak_m": 49342.71876451056,
+        "heldout_rms_m": 32073.07813042751,
+        "prefix_constant_m": 133432.15040101754,
+        "prefix_rate_m_s": -141.36102911123584,
+        "prefix_rmse_m": 2970.493181751624,
+        "remaining_margin_m": 42003.01752986316,
+        "robust_double_guard_pass": true,
+        "satellite": "G14"
+      },
+      {
+        "heldout_peak_to_peak_m": 54723.19953504077,
+        "heldout_rms_m": 43775.026544284505,
+        "prefix_constant_m": 442173.174630066,
+        "prefix_rate_m_s": -134.34752534834038,
+        "prefix_rmse_m": 6348.419624261501,
+        "remaining_margin_m": 47383.49830039337,
+        "robust_double_guard_pass": true,
+        "satellite": "G17"
+      },
+      {
+        "heldout_peak_to_peak_m": 94418.83680403186,
+        "heldout_rms_m": 61934.01961844644,
+        "prefix_constant_m": -804168.8844171152,
+        "prefix_rate_m_s": 355.09676344040645,
+        "prefix_rmse_m": 5895.706707275409,
+        "remaining_margin_m": 87079.13556938447,
+        "robust_double_guard_pass": true,
+        "satellite": "G19"
+      }
+    ],
+    "raw_start_gps": "2026-08-14T06:14:30 GPS",
+    "raw_stop_gps": "2026-08-14T07:23:30 GPS",
+    "robustly_admissible": true,
+    "start_index": 749,
+    "visible_alternative_count": 4
+  },
+  "shortlist": [
+    {
+      "affine_null": {
+        "heldout_peak_to_peak_m": 18763.71656478895,
+        "heldout_rms_m": 23462.92780394319,
+        "prefix_constant_m": -600650.7127011981,
+        "prefix_rate_m_s": -540.7497738649736,
+        "prefix_rmse_m": 5258.145145469125,
+        "remaining_margin_m": 11424.01533014155,
+        "robust_double_guard_pass": true
+      },
+      "candidate_family": [
+        "G22",
+        "G06",
+        "G14",
+        "G17",
+        "G19"
+      ],
+      "doy": 226,
+      "gps_date": "2026-08-14",
+      "heldout_start_gps": "2026-08-14T06:54:00 GPS",
+      "maximum_family_separation_m": 94418.83680403186,
+      "minimum_combined_remaining_margin_m": 11424.01533014155,
+      "minimum_remaining_margin_m": 19144.705988368158,
+      "minimum_time_shifted_elevation_deg": 15.01043286179639,
+      "nearest_four_alternatives": [
+        {
+          "heldout_peak_to_peak_m": 26484.407223015558,
+          "heldout_rms_m": 8498.503329490708,
+          "prefix_constant_m": -3268504.603634617,
+          "prefix_rate_m_s": 721.1159678109765,
+          "prefix_rmse_m": 2521.6872112915744,
+          "remaining_margin_m": 19144.705988368158,
+          "robust_double_guard_pass": true,
+          "satellite": "G06"
+        },
+        {
+          "heldout_peak_to_peak_m": 49342.71876451056,
+          "heldout_rms_m": 32073.07813042751,
+          "prefix_constant_m": 133432.15040101754,
+          "prefix_rate_m_s": -141.36102911123584,
+          "prefix_rmse_m": 2970.493181751624,
+          "remaining_margin_m": 42003.01752986316,
+          "robust_double_guard_pass": true,
+          "satellite": "G14"
+        },
+        {
+          "heldout_peak_to_peak_m": 54723.19953504077,
+          "heldout_rms_m": 43775.026544284505,
+          "prefix_constant_m": 442173.174630066,
+          "prefix_rate_m_s": -134.34752534834038,
+          "prefix_rmse_m": 6348.419624261501,
+          "remaining_margin_m": 47383.49830039337,
+          "robust_double_guard_pass": true,
+          "satellite": "G17"
+        },
+        {
+          "heldout_peak_to_peak_m": 94418.83680403186,
+          "heldout_rms_m": 61934.01961844644,
+          "prefix_constant_m": -804168.8844171152,
+          "prefix_rate_m_s": 355.09676344040645,
+          "prefix_rmse_m": 5895.706707275409,
+          "remaining_margin_m": 87079.13556938447,
+          "robust_double_guard_pass": true,
+          "satellite": "G19"
+        }
+      ],
+      "raw_start_gps": "2026-08-14T06:14:30 GPS",
+      "raw_stop_gps": "2026-08-14T07:23:30 GPS",
+      "robustly_admissible": true,
+      "start_index": 749,
+      "visible_alternative_count": 4
+    },
+    {
+      "affine_null": {
+        "heldout_peak_to_peak_m": 19061.020146700088,
+        "heldout_rms_m": 23700.907952263286,
+        "prefix_constant_m": -597939.9444463288,
+        "prefix_rate_m_s": -540.5030306219521,
+        "prefix_rmse_m": 5277.994355962978,
+        "remaining_margin_m": 11721.31891205269,
+        "robust_double_guard_pass": true
+      },
+      "candidate_family": [
+        "G22",
+        "G06",
+        "G14",
+        "G17",
+        "G19"
+      ],
+      "doy": 225,
+      "gps_date": "2026-08-13",
+      "heldout_start_gps": "2026-08-13T06:58:00 GPS",
+      "maximum_family_separation_m": 94614.47613782668,
+      "minimum_combined_remaining_margin_m": 11721.31891205269,
+      "minimum_remaining_margin_m": 19117.116464965417,
+      "minimum_time_shifted_elevation_deg": 15.047676292950907,
+      "nearest_four_alternatives": [
+        {
+          "heldout_peak_to_peak_m": 26456.817699612817,
+          "heldout_rms_m": 8482.150902056035,
+          "prefix_constant_m": -3269436.6300546983,
+          "prefix_rate_m_s": 721.0417809740815,
+          "prefix_rmse_m": 2524.813368717161,
+          "remaining_margin_m": 19117.116464965417,
+          "robust_double_guard_pass": true,
+          "satellite": "G06"
+        },
+        {
+          "heldout_peak_to_peak_m": 49391.04282056115,
+          "heldout_rms_m": 32098.151285476135,
+          "prefix_constant_m": 134509.01542943675,
+          "prefix_rate_m_s": -141.01994469816808,
+          "prefix_rmse_m": 2971.244799232466,
+          "remaining_margin_m": 42051.34158591375,
+          "robust_double_guard_pass": true,
+          "satellite": "G14"
+        },
+        {
+          "heldout_peak_to_peak_m": 55038.78480287857,
+          "heldout_rms_m": 43972.41683836474,
+          "prefix_constant_m": 442721.32749976416,
+          "prefix_rate_m_s": -134.0369299668512,
+          "prefix_rmse_m": 6365.059627235329,
+          "remaining_margin_m": 47699.083568231166,
+          "robust_double_guard_pass": true,
+          "satellite": "G17"
+        },
+        {
+          "heldout_peak_to_peak_m": 94614.47613782668,
+          "heldout_rms_m": 62054.71785989847,
+          "prefix_constant_m": -803787.7446386227,
+          "prefix_rate_m_s": 355.0656243038013,
+          "prefix_rmse_m": 5905.172935039515,
+          "remaining_margin_m": 87274.77490317929,
+          "robust_double_guard_pass": true,
+          "satellite": "G19"
+        }
+      ],
+      "raw_start_gps": "2026-08-13T06:18:30 GPS",
+      "raw_stop_gps": "2026-08-13T07:27:30 GPS",
+      "robustly_admissible": true,
+      "start_index": 757,
+      "visible_alternative_count": 4
+    },
+    {
+      "affine_null": {
+        "heldout_peak_to_peak_m": 19351.461917995475,
+        "heldout_rms_m": 23933.472545816578,
+        "prefix_constant_m": -595224.9501449307,
+        "prefix_rate_m_s": -540.2754616843105,
+        "prefix_rmse_m": 5297.322253283489,
+        "remaining_margin_m": 12011.760683348077,
+        "robust_double_guard_pass": true
+      },
+      "candidate_family": [
+        "G22",
+        "G06",
+        "G14",
+        "G17",
+        "G19"
+      ],
+      "doy": 224,
+      "gps_date": "2026-08-12",
+      "heldout_start_gps": "2026-08-12T07:02:00 GPS",
+      "maximum_family_separation_m": 94811.2122638087,
+      "minimum_combined_remaining_margin_m": 12011.760683348077,
+      "minimum_remaining_margin_m": 19080.97231638655,
+      "minimum_time_shifted_elevation_deg": 15.085286062141613,
+      "nearest_four_alternatives": [
+        {
+          "heldout_peak_to_peak_m": 26420.67355103395,
+          "heldout_rms_m": 8461.824108696674,
+          "prefix_constant_m": -3270328.150032728,
+          "prefix_rate_m_s": 720.9206095264141,
+          "prefix_rmse_m": 2528.115731604297,
+          "remaining_margin_m": 19080.97231638655,
+          "robust_double_guard_pass": true,
+          "satellite": "G06"
+        },
+        {
+          "heldout_peak_to_peak_m": 49443.09273418039,
+          "heldout_rms_m": 32125.277253810244,
+          "prefix_constant_m": 135636.50283282454,
+          "prefix_rate_m_s": -140.66828278461,
+          "prefix_rmse_m": 2972.087991649666,
+          "remaining_margin_m": 42103.39149953299,
+          "robust_double_guard_pass": true,
+          "satellite": "G14"
+        },
+        {
+          "heldout_peak_to_peak_m": 55345.15917057835,
+          "heldout_rms_m": 44164.35833143247,
+          "prefix_constant_m": 443283.9314442567,
+          "prefix_rate_m_s": -133.77153069224613,
+          "prefix_rmse_m": 6381.318252660825,
+          "remaining_margin_m": 48005.45793593095,
+          "robust_double_guard_pass": true,
+          "satellite": "G17"
+        },
+        {
+          "heldout_peak_to_peak_m": 94811.2122638087,
+          "heldout_rms_m": 62176.75470691624,
+          "prefix_constant_m": -803309.7730423553,
+          "prefix_rate_m_s": 354.9938454557574,
+          "prefix_rmse_m": 5914.937834381302,
+          "remaining_margin_m": 87471.51102916131,
+          "robust_double_guard_pass": true,
+          "satellite": "G19"
+        }
+      ],
+      "raw_start_gps": "2026-08-12T06:22:30 GPS",
+      "raw_stop_gps": "2026-08-12T07:31:30 GPS",
+      "robustly_admissible": true,
+      "start_index": 765,
+      "visible_alternative_count": 4
+    }
+  ],
+  "source_commit": "0f08f0956fc24dcbe4eabb7fa08314b02a15b743",
+  "source_sha256": "022760e60d5f72a9a1efe857e49ac1cb9b2578f49ce076b780370bc1adf5b132",
+  "stop": "NO_OBSERVATION_PRODUCT_DISCOVERY_OR_ACCESS"
+}

@@ -1316,7 +1316,20 @@ lineage. Unknown bounds remain unknown; detector work and held-out scoring are
 not authorized. See
 [`RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md).
 
-The next proposal, if reviewed, must change the physical inference question to
-bounded blind orbit assignment within a predeclared difficult orbit family.
-It must not continue GNSS station accumulation or raw-RF catalog search, and it
-must again state its new orbital information before any observation access.
+The next physical question was therefore changed to bounded blind orbit
+assignment. Its first observation-blind screen is now complete as
+`BLIND_ASSIGNMENT_GEOMETRY_SHORTLISTED`. Five exact NOAA broadcast-navigation
+days and the already characterized AMC geometry selected DOY226,
+06:14:30--07:23:30 GPS, with the family G22/G06/G14/G17/G19. The controlling
+prefix-frozen affine separation is 18,763.717 m peak-to-peak; after the
+unchanged 7,339.701 m guard, 11,424.015 m remains. No observation product,
+header or value was discovered or opened, and no prospective plan or primary
+is frozen. See
+[`GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md).
+
+The next maximum work, after review, is an opaque-hypothesis prospective-plan
+audit for this one geometry. It must seal the PRN mapping outside the scorer,
+preserve identical prefix-only nuisance authority for every hypothesis and
+select at most one logical primary with zero post-freeze replacement. If that
+requires another station search, observation inventory or generic blind
+framework, stop instead.
