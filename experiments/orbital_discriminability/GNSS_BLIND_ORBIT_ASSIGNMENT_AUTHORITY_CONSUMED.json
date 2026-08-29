@@ -1,0 +1,11 @@
+{
+  "executor_seal_sha256": "2d385f73a0e6a5a8038fe875262b10022f95c04b4e9116f3ab0ecc87b95cd1be",
+  "network_requests_before_marker": 0,
+  "primary_headers_before_marker": 0,
+  "primary_payload_bytes_before_marker": 0,
+  "primary_values_before_marker": 0,
+  "product_locators_queried_before_marker": 0,
+  "schema": "gnss-blind-orbit-primary-authority-consumed-v1",
+  "source_commit": "07f31033258fcee87071b128cad48f74b2d6f946",
+  "state": "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}
