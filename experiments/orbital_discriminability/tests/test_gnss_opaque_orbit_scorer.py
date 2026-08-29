@@ -18,7 +18,7 @@ from experiments.orbital_discriminability import (
 ROOT = Path(__file__).resolve().parents[1]
 BUNDLE_PATH = ROOT / scorer.BUNDLE_NAME
 SEAL_PATH = ROOT / seal.SEAL_NAME
-SEAL_SHA256 = "7c1e151726ea05cdaa2df11f7001df2590b10dcb329347fedfd25855526599b0"
+SEAL_SHA256 = "2403358fed46293a1c44a9a7576a52c4cac547507abec1da1be5db1c7ff711f4"
 
 
 def _bundle() -> dict[str, object]:
@@ -220,16 +220,16 @@ def test_frozen_seal_binds_source_bundle_and_zero_measurement_access() -> None:
     assert seal.canonical_sha256(SEAL_PATH) == SEAL_SHA256
     assert value["state"] == "BLIND_ORBIT_PREDICTION_AND_SCORER_SEALED"
     assert value["seal_source_commit"] == (
-        "d8c94f3fbb98721ede1f876292aeae6c33928fdf"
+        "28740c0af2964ba644f1c7e58307ab94057e5393"
     )
     assert value["seal_source_sha256"] == (
         "edd94b29bcad36edff57f0040c5dfe960159843e3553b1abd8bd24758433a48d"
     )
     assert value["scorer"]["canonical_sha256"] == (
-        "1acf382db4e8137f0de1842c851e77e11fe5d4e4b2e8bad2ce9948a7883d9eba"
+        "ef064788296caaf0d1d48e2b25621ae99fb935c1a964ac5b9ffc17138a266dda"
     )
     assert value["scorer_manifest_sha256"] == (
-        "b07018ebeff0e49713e5ed98fc018462a56c60bc37d2b26e529d02e18c4bad1a"
+        "f15c257561805f4a027a7c42c2664935517c6f5312483d0e30ccc5fdb3d90283"
     )
     assert value["primary_access"] == {
         "locators_queried": 0,

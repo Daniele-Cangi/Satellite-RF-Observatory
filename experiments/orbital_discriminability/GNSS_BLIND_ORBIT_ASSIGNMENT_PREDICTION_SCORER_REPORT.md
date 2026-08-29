@@ -33,14 +33,14 @@ the scorer source and runtime interface have no identity-dependent branch.
 | --- | ---: | --- |
 | opaque prediction bundle | 20,849 | `a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2` |
 | curve set | n/a | `0e5eb9207a15574cf66d25f5f1eccdedb4e9ec4129a32abf5d23a066fdd9b2df` |
-| prediction/scorer seal | 2,962 | `7c1e151726ea05cdaa2df11f7001df2590b10dcb329347fedfd25855526599b0` |
-| scorer source | n/a | `1acf382db4e8137f0de1842c851e77e11fe5d4e4b2e8bad2ce9948a7883d9eba` |
+| prediction/scorer seal | 2,962 | `2403358fed46293a1c44a9a7576a52c4cac547507abec1da1be5db1c7ff711f4` |
+| scorer source | n/a | `ef064788296caaf0d1d48e2b25621ae99fb935c1a964ac5b9ffc17138a266dda` |
 
 The prediction compiler is bound to commit
 `9b17c7b39fe672cc3bcce01be8816f8b2ff92c6c` and source SHA-256
 `3160bc4ab9c9fbbabca20457d7cfd4aa14d3d84f8a388ca850a6162504600544`.
 The scorer and seal compiler are bound to commit
-`d8c94f3fbb98721ede1f876292aeae6c33928fdf`.
+`28740c0af2964ba644f1c7e58307ab94057e5393`.
 
 ## Prediction materialization
 
@@ -76,7 +76,9 @@ may be used to interpret the winning identifier.
 Synthetic seam tests recover an exact opaque trajectory after an added
 constant and linear rate with a controlling `18763.716565 m` preference
 margin. A midpoint between the controlling pair returns `AMBIGUOUS` with zero
-margin. These are software-path tests, not measurements or orbital outcomes.
+margin. The scorer makes an owning working copy before its RAM cleanup, so the
+caller-owned coordinate remains unchanged. These are software-path tests, not
+measurements or orbital outcomes.
 
 ## Access boundary and next maximum
 
