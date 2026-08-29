@@ -486,6 +486,79 @@ def test_transport_budget_is_exactly_two_pre_hash_attempts(
     assert failure.value.receipt["retry_after_hash_or_decode"] is False
 
 
+def test_size_limit_erases_partial_primary_payload(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    buffers: list[bytearray] = []
+
+    class TrackingBytearray(bytearray):
+        def __init__(self, *args: object) -> None:
+            super().__init__(*args)
+            buffers.append(self)
+
+    class Response:
+        @staticmethod
+        def raise_for_status() -> None:
+            return None
+
+        @staticmethod
+        def iter_content(*, chunk_size: int):
+            assert chunk_size == 1024 * 1024
+            yield b"x" * (executor.MAX_COMPRESSED_BYTES + 1)
+
+    class Session:
+        @staticmethod
+        def get(*_args: object, **_kwargs: object) -> Response:
+            return Response()
+
+    monkeypatch.setattr(executor, "bytearray", TrackingBytearray, raising=False)
+    with pytest.raises(
+        executor.PrimaryDescriptionError, match="PRIMARY_COMPRESSED_SIZE_LIMIT"
+    ):
+        executor._download_gssc(
+            Session(),
+            {"bytes": executor.MAX_COMPRESSED_BYTES + 1, "md5": ""},
+        )
+
+    assert len(buffers) == 1
+    assert buffers[0]
+    assert not any(buffers[0])
+
+
+def test_decoder_distinguishes_invalid_data_from_software_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    calls: list[tuple[bytes, bool]] = []
+
+    def valid(content: bytes, *, strict: bool) -> bytes:
+        calls.append((content, strict))
+        return b"RINEX"
+
+    monkeypatch.setattr(executor.hatanaka, "decompress", valid)
+    assert executor.decompress_in_memory(bytearray(b"compressed")) == b"RINEX"
+    assert calls == [(b"compressed", True)]
+
+    def invalid(_content: bytes, *, strict: bool) -> bytes:
+        assert strict is True
+        raise executor.hatanaka.HatanakaException("invalid compressed RINEX")
+
+    monkeypatch.setattr(executor.hatanaka, "decompress", invalid)
+    with pytest.raises(
+        executor.PrimaryMeasurementInvalid, match="HATANAKA_DECOMPRESSION_FAILED"
+    ):
+        executor.decompress_in_memory(bytearray(b"invalid"))
+
+    def software_fault(_content: bytes, *, strict: bool) -> bytes:
+        assert strict is True
+        raise TypeError("decoder API mismatch")
+
+    monkeypatch.setattr(executor.hatanaka, "decompress", software_fault)
+    with pytest.raises(
+        executor.PrimaryDescriptionError, match="HATANAKA_DECODER_SOFTWARE_FAILURE"
+    ):
+        executor.decompress_in_memory(bytearray(b"valid-looking"))
+
+
 def test_json_boundaries_are_strict() -> None:
     for value in (float("nan"), float("inf"), float("-inf")):
         with pytest.raises(ValueError):

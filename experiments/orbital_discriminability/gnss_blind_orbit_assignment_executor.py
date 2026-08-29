@@ -586,6 +586,7 @@ def _download_gssc(session: Any, directory: Mapping[str, object]) -> bytearray:
             if block:
                 payload.extend(block)
             if len(payload) > MAX_COMPRESSED_BYTES:
+                payload[:] = b"\x00" * len(payload)
                 raise PrimaryDescriptionError("PRIMARY_COMPRESSED_SIZE_LIMIT")
     except (PrimaryDescriptionError, TransportInterruption):
         raise
@@ -655,9 +656,14 @@ def materialize_gssc() -> tuple[bytearray, dict[str, object]]:
 
 def decompress_in_memory(payload: bytearray) -> bytearray:
     try:
-        return bytearray(hatanaka.decompress(bytes(payload), strict=True))
-    except Exception as exc:
+        decoded = hatanaka.decompress(bytes(payload), strict=True)
+    except (hatanaka.HatanakaException, ValueError) as exc:
         raise PrimaryMeasurementInvalid("HATANAKA_DECOMPRESSION_FAILED") from exc
+    except Exception as exc:
+        raise PrimaryDescriptionError("HATANAKA_DECODER_SOFTWARE_FAILURE") from exc
+    if not isinstance(decoded, bytes):
+        raise PrimaryDescriptionError("HATANAKA_DECODER_OUTPUT_TYPE_CHANGED")
+    return bytearray(decoded)
 
 
 def validate_materialized_artifact(
