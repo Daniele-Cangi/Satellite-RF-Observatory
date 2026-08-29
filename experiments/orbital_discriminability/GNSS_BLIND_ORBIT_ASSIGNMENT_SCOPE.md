@@ -86,11 +86,14 @@ The affine nuisance has exactly two parameters for every orbital hypothesis,
 is calibrated only on the prefix and receives no suffix refit, free time
 phase, time warp, spline or candidate-dependent complexity.
 
-For each window, retain the four alternatives with the smallest strictly
-positive remaining margin. A window is robustly admissible only when all four
-remaining margins are at least one additional full decision guard; equivalently
-each held-out separation must be at least twice the guard. The same condition
-must hold against the prefix-frozen affine-only null.
+For each window, retain the four jointly visible alternatives with the smallest
+held-out separation, ordered by separation and then PRN. A nonpositive margin
+must remain in this nearest-four family and makes the window inadmissible; it
+cannot be discarded in favour of an easier fifth alternative. A window is
+robustly admissible only when all four remaining margins are at least one
+additional full decision guard; equivalently each held-out separation must be
+at least twice the guard. The same condition must hold against the prefix-
+frozen affine-only null.
 
 Rank admissible windows by:
 
@@ -135,4 +138,3 @@ Allowed outcomes are exactly:
 BLIND_ASSIGNMENT_GEOMETRY_SHORTLISTED
 NO_DIFFICULT_FAMILY_WITH_POSITIVE_MARGIN
 ```
-
