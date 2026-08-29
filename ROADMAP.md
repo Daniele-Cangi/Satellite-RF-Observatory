@@ -1294,3 +1294,29 @@ find documented family diversity, positive complete margin or a stable
 qualification/primary path must stop synthesis rather than expand inventory.
 See
 [`POST_AMC_NEXT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_AMC_NEXT_INFORMATION_REVIEW.md).
+
+## Terminal cross-family and raw-RF route decisions
+
+The one permitted traditional-GNSS cross-family screen is complete as
+`NO_CROSS_FAMILY_GEOMETRY_SHORTLISTED`. Its bounded set produced no root that
+simultaneously cut the POLARX5 family, retained explicit signal semantics and
+covered the unchanged 139-epoch G22/G30/null geometry. No qualification or
+primary was selected. The roadmap therefore retains
+`STOP_TRADITIONAL_GNSS_REPLICATION` and forbids another station-search
+successor. See
+[`GNSS_CROSS_FAMILY_BOUNDED_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_CROSS_FAMILY_BOUNDED_SCREEN_REPORT.md).
+
+The bounded independently timed raw-RF audit is also terminal for its exact
+five predeclared families. It accessed metadata only and stopped
+`NO_TIME_AND_ORBIT_QUALIFIED_RAW_RF_VERTICAL`: two families lack open-loop
+complex samples, SLIM declares internal time, and the otherwise promising
+Voyager/GBT and Artemis I products do not provide a product-applicable finite
+ADC-sample-zero UTC bound together with complete immutable orbit/artifact
+lineage. Unknown bounds remain unknown; detector work and held-out scoring are
+not authorized. See
+[`RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md).
+
+The next proposal, if reviewed, must change the physical inference question to
+bounded blind orbit assignment within a predeclared difficult orbit family.
+It must not continue GNSS station accumulation or raw-RF catalog search, and it
+must again state its new orbital information before any observation access.
