@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from experiments.orbital_discriminability import (
@@ -13,6 +15,9 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+BUNDLE = ROOT / predictions.BUNDLE_NAME
+BUNDLE_SHA256 = "a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2"
+CURVE_SET_SHA256 = "0e5eb9207a15574cf66d25f5f1eccdedb4e9ec4129a32abf5d23a066fdd9b2df"
 
 
 def test_compiler_binds_plan_screen_mapping_and_zero_primary_access() -> None:
@@ -112,3 +117,52 @@ def test_strict_json_rejects_nonfinite_values() -> None:
         predictions.strict_json({"bad": float("nan")})
     with pytest.raises(ValueError):
         predictions.strict_json({"bad": float("inf")})
+
+
+def test_frozen_bundle_is_exact_opaque_and_same_grid() -> None:
+    canonical = BUNDLE.read_bytes().replace(b"\r\n", b"\n")
+    value = json.loads(canonical)
+
+    assert len(canonical) == 20_849
+    assert predictions.canonical_sha256(BUNDLE) == BUNDLE_SHA256
+    assert set(value) == {"schema", "grid", "opaque_ids", "curves_m", "scoring"}
+    assert value["opaque_ids"] == sorted(value["curves_m"])
+    assert len(value["opaque_ids"]) == 6
+    assert len(set(value["opaque_ids"])) == 6
+    assert all(identifier.startswith("H_") for identifier in value["opaque_ids"])
+    assert all(len(curve) == 139 for curve in value["curves_m"].values())
+    assert all(
+        np.all(np.isfinite(np.asarray(curve, dtype=np.float64)))
+        for curve in value["curves_m"].values()
+    )
+    assert sum(not any(curve) for curve in value["curves_m"].values()) == 1
+    assert predictions.bundle_curve_set_sha256(value) == CURVE_SET_SHA256
+    assert sha256(predictions.strict_json(value["curves_m"]).encode("ascii")).hexdigest() == (
+        CURVE_SET_SHA256
+    )
+
+
+def test_frozen_bundle_discloses_no_identity_or_provenance_surface() -> None:
+    rendered = BUNDLE.read_text(encoding="ascii").lower()
+
+    for forbidden in (
+        "g22",
+        "g30",
+        "satellite",
+        "mapping",
+        "observer",
+        "product",
+        "affine",
+        "source_commit",
+        "navigation",
+    ):
+        assert forbidden not in rendered
+
+
+def test_frozen_compiler_source_and_manifest_are_exact() -> None:
+    assert predictions.source_sha256() == (
+        "3160bc4ab9c9fbbabca20457d7cfd4aa14d3d84f8a388ca850a6162504600544"
+    )
+    assert predictions.compiler_manifest_sha256(ROOT) == (
+        "e87298ef2af0cc7359f8458249468b10a08491788305c6932ce7f79c3a5023f7"
+    )
