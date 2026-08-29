@@ -1,0 +1,35 @@
+{
+  "access_at_seal": {
+    "measurement_scores": 0,
+    "network_requests": 0,
+    "primary_headers": 0,
+    "primary_payload_bytes": 0,
+    "primary_values": 0,
+    "product_locators_queried": 0
+  },
+  "authority": {
+    "live_execution_authorized_by_seal": false,
+    "separate_one_use_authority_required": true
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3",
+    "python": "3.13.5",
+    "requests": "2.32.4"
+  },
+  "frozen_inputs": {
+    "mapping_sha256": "b719a2bf17e66fcafa3597c4018d6acd039bdac4e33ecb173795646ff47245db",
+    "opaque_bundle_sha256": "a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2",
+    "opaque_hypotheses": 6,
+    "plan_receipt_sha256": "b35ccbee73762f7d9a8957f4d72c34ae684447a24fab055712708e064fbf3d9f",
+    "qualified_header_transform_sha256": "b717042b94b2febc3e93294463cba37ecedc9837bbe7e16fd3368d028463fbdd",
+    "scorer_seal_sha256": "2403358fed46293a1c44a9a7576a52c4cac547507abec1da1be5db1c7ff711f4",
+    "scorer_source_sha256": "ef064788296caaf0d1d48e2b25621ae99fb935c1a964ac5b9ffc17138a266dda"
+  },
+  "manifest_sha256": "d26bf3498d9e6c382e0ef9c57b5c5a6111d8540e089efee72dc6c5d8c539c4d9",
+  "schema": "gnss-blind-orbit-assignment-executor-seal-v1",
+  "source_commit": "6cb0288c9b8707a8957caf0c0a317b8a2d9c1e47",
+  "source_sha256": "a71d9ab2fc42a1e787f1be4a22e5838a7f40c0356116db76653be46faaf6c091",
+  "state": "BLIND_ORBIT_PRIMARY_EXECUTOR_FROZEN_UNOPENED",
+  "stop": "STOP_BEFORE_PRIMARY_ACCESS_FOR_REVIEW"
+}
