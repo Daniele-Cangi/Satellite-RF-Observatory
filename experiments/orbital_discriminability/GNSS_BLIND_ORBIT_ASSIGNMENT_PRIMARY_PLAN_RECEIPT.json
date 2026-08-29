@@ -1,0 +1,236 @@
+{
+  "access_boundary": {
+    "execution_authority": false,
+    "executor_present": false,
+    "measurement_scores": 0,
+    "network_requests": 0,
+    "prediction_bundle_present": false,
+    "primary_headers_opened": 0,
+    "primary_observation_values": 0,
+    "primary_payload_bytes": 0,
+    "product_locators_queried": 0,
+    "scorer_present": false
+  },
+  "admission": {
+    "doy222_qualification_scope": "PARSER_FIELD_FAMILY_AND_HISTORICAL_CONFIGURATION_ONLY_NOT_DOY226_EXISTENCE_COVERAGE_OR_HEALTH",
+    "event_time": {
+      "direct_trajectory_envelope": true,
+      "maximum_absolute_grid_deviation_s": 15.0,
+      "over_limit_outcome": "NOT_DETECTABLE"
+    },
+    "geometry_free_phase_health": {
+      "maximum_absolute_second_difference_m": 0.09514683639918244,
+      "violation_outcome": "MEASUREMENT_INVALID"
+    },
+    "required_structure": [
+      "EXACT_139_EPOCH_GPS_GRID_OR_DEVIATION_WITHIN_15_SECONDS",
+      "NORMAL_EPOCH_FLAG_ZERO_AT_ALL_REQUIRED_EPOCHS",
+      "L1C_L2W_C1C_C2W_PRESENT_ON_G22_AND_G30_AT_ALL_EPOCHS",
+      "LLI_BLANK_OR_ZERO_ON_BOTH_PHASE_FIELDS_AT_ALL_EPOCHS",
+      "HEADER_IDENTITY_INTERVAL_AND_TIME_OF_LAST_OBS_COVER_WINDOW",
+      "NO_UNSUPPORTED_SCALE_PHASE_SHIFT_OR_TIME_TRANSFORM",
+      "EVERY_TRANSFORM_INPUT_FINITE"
+    ],
+    "same_path_code_phase_witness": {
+      "finite_over_limit_outcome": "NOT_DETECTABLE",
+      "may_fit_or_select_model": false,
+      "missing_or_invalid_outcome": "MEASUREMENT_INVALID",
+      "per_satellite_peak_to_peak_limit_m": 1250.0
+    }
+  },
+  "claim_scope": {
+    "maximum_positive_claim": "BOUNDED_ORBIT_ASSIGNMENT_PREFERRED_WITHIN_FROZEN_CANDIDATE_SET",
+    "not_catalog_wide_uniqueness": true,
+    "not_free_orbit_recovery": true,
+    "not_targetless_identity": true,
+    "upstream_receiver_prn_correlation_remains": true
+  },
+  "detectability": {
+    "candidate_family": [
+      "G22",
+      "G06",
+      "G14",
+      "G17",
+      "G19"
+    ],
+    "complete_window_required": true,
+    "controlling_model": "PREFIX_AFFINE_ONLY",
+    "controlling_model_only_separation_m": 18763.71656478895,
+    "minimum_combined_remaining_margin_m": 11424.01533014155,
+    "minimum_direct_shifted_elevation_deg": 15.01043286179639,
+    "pairwise_guard_m": 7339.701234647398
+  },
+  "generic_framework_created": false,
+  "mapping_seal": {
+    "blindness_scope": "INTERFACE_NOT_ADVERSARIAL_REPOSITORY_SECRECY",
+    "canonical_sha256": "b719a2bf17e66fcafa3597c4018d6acd039bdac4e33ecb173795646ff47245db",
+    "filename": "GNSS_BLIND_ORBIT_ASSIGNMENT_MAPPING_SEAL.json",
+    "mapping_may_enter_scorer_process": false,
+    "mapping_reveal_condition": "ONLY_AFTER_OPAQUE_SCORE_RECEIPT_HASH_IS_PERSISTED",
+    "mapping_rows_exposed_in_plan_receipt": false,
+    "opaque_ids": [
+      "H_0F7B423DEE4445EB",
+      "H_113EA69083E0450B",
+      "H_5A7421B20092455F",
+      "H_72E7F21DC8244653",
+      "H_970DD1C2274548B5",
+      "H_B7DAF98094A64E7E"
+    ]
+  },
+  "measurement_packager": {
+    "anchor": "SUBTRACT_RAW_INDEX_ZERO_ONLY",
+    "ionosphere_free_weights": {
+      "L1C": 2.54572778016316,
+      "L2W": -1.5457277801631601
+    },
+    "may_receive_prn_labels": true,
+    "may_score": false,
+    "may_select_model": false,
+    "output_to_scorer": "ONE_FINITE_UNLABELLED_COORDINATE_ARRAY",
+    "per_satellite_phase_m": "ALPHA*LAMBDA_L1*L1C_PLUS_BETA*LAMBDA_L2*L2W",
+    "station_satellite_order": "AMC_G22_MINUS_AMC_G30"
+  },
+  "new_gate_created": false,
+  "new_information": "WHETHER_REAL_HELDOUT_AMC_PHASE_SUPPORTS_ORBITALITY_AND_G22_SPECIFICITY_INSIDE_A_DIFFICULT_PREDECLARED_CANDIDATE_SET",
+  "next_maximum": "OFFLINE_OPAQUE_PREDICTION_BUNDLE_AND_SCORER_SEAL_REVIEW_ONLY",
+  "observer": {
+    "antenna": "TPSCR.G5C NONE",
+    "antenna_serial": "1364-10065",
+    "height_m": 1911.3941,
+    "latitude_deg": 38.803125,
+    "longitude_deg": -104.524597,
+    "receiver": "SEPT_POLARX5TR",
+    "receiver_serial": "3013929",
+    "receiver_version": "5.6.0",
+    "role": "SAME_CHARACTERIZED_ROOT_NEW_ASSIGNMENT_QUESTION",
+    "station": "AMC400USA"
+  },
+  "outcome": "BLIND_ORBIT_ASSIGNMENT_PLAN_FROZEN",
+  "parents": {
+    "AMC_OBSERVER_QUALIFICATION_COVERAGE.jsonl": {
+      "canonical_sha256": "bfaccd2ca742f329fe56d6df5e88774c73790040eca2bee5eb3c6ca907718077",
+      "role": "STRUCTURAL_STATES_ONLY"
+    },
+    "AMC_OBSERVER_QUALIFICATION_OUTCOME.json": {
+      "canonical_sha256": "8c543bbd5d00128c70feab66574df4b878983f036daab932ba7cb6714ee829c4",
+      "outcome": "AMC_OBSERVER_QUALIFICATION_PASSED",
+      "role": "DISTINCT_VALUE_BLIND_TRANSFORM_QUALIFICATION_DOY222"
+    },
+    "AMC_OBSERVER_QUALIFICATION_SUMMARY.json": {
+      "canonical_sha256": "3e1be4ca9ef741690af99d6206ff94719fbae32b97fe6792034ac87ac9efca69",
+      "role": "STRUCTURAL_QUALIFICATION_SUMMARY_NOT_DOY226_HEALTH"
+    },
+    "AMC_OBSERVER_REPLICATION_METADATA_REPORT.md": {
+      "canonical_sha256": "e0c8d9496448ead1ac5bfe07cd17a0f25623853c26c70b6f4a1edb32913929fa",
+      "role": "HISTORICAL_AMC_CONFIGURATION_DESCRIPTION"
+    },
+    "GNSS_BLIND_ORBIT_ASSIGNMENT_MAPPING_SEAL.json": {
+      "canonical_sha256": "b719a2bf17e66fcafa3597c4018d6acd039bdac4e33ecb173795646ff47245db",
+      "opaque_identifier_count": 6,
+      "role": "PREACCESS_MAPPING_OUTSIDE_SCORER_INTERFACE"
+    },
+    "GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_PLAN.md": {
+      "canonical_sha256": "2cd8d31b81a1cb2d45fed03af28aa164bfbf54f86d440860dde11bda4683de62",
+      "role": "IMMUTABLE_PROSPECTIVE_MARKDOWN"
+    },
+    "GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_RECEIPT.json": {
+      "canonical_sha256": "cddc9fcf0db1be7f55fde04f1bf51256c3a88edf2608871b3bc7e438bd167485",
+      "outcome": "BLIND_ASSIGNMENT_GEOMETRY_SHORTLISTED",
+      "role": "FROZEN_ORBIT_ONLY_DIFFICULT_FAMILY_SELECTION"
+    }
+  },
+  "partition": {
+    "anchor_index": 0,
+    "cadence_s": 30.0,
+    "heldout_epochs": 60,
+    "heldout_raw_indices_inclusive": [
+      79,
+      138
+    ],
+    "heldout_start": "2026-08-14T06:54:00 GPS",
+    "prefix_epochs": 79,
+    "prefix_raw_indices_inclusive": [
+      0,
+      78
+    ],
+    "raw_epochs": 139,
+    "raw_start": "2026-08-14T06:14:30 GPS",
+    "raw_stop": "2026-08-14T07:23:30 GPS",
+    "time_system": "GPS",
+    "window_shortening_interpolation_gap_bridging": "FORBIDDEN"
+  },
+  "physical_question": "CAN_AN_IDENTITY_BLIND_SCORER_PREFER_THE_G22_RELATIVE_G30_TRAJECTORY_WITHIN_THE_FROZEN_FIVE_ORBIT_FAMILY_AND_AFFINE_NULL",
+  "plan_manifest_sha256": "f557d09596b1a11dad976aee61bc53d7271eeab1555ac45652404aa41e933e3c",
+  "plan_version": "gnss-bounded-blind-orbit-assignment-plan-v1",
+  "primary_artifact": {
+    "complete_sha256": "UNKNOWN_UNTIL_ONE_AUTHORIZED_MATERIALIZATION",
+    "directory_metadata_queried": false,
+    "fallback_product_date_station_window_or_archive": false,
+    "hash_before_header_or_record_decode": true,
+    "logical_product": "AMC400USA_R_20262260000_01D_30S_MO.crx.gz",
+    "predeclared_body_transport": {
+      "directory": "/gnss/data/daily/2026/226",
+      "filename": "AMC400USA_R_20262260000_01D_30S_MO.crx.gz",
+      "maximum_attempts_before_complete_hash": 2,
+      "retry_after_complete_hash_or_decode": false,
+      "retry_reasons": [
+        "TIMEOUT",
+        "TRANSPORT_INTERRUPTION"
+      ],
+      "source": "GSSC_OFFICIAL_GLOBAL_DATA_CENTER",
+      "web_root": "https://gssc.esa.int/webftp/"
+    },
+    "product_existence": "UNKNOWN_UNQUERIED"
+  },
+  "schema": "gnss-blind-orbit-assignment-primary-plan-v1",
+  "scorer_contract": {
+    "affine_null_model_array": "ZERO_ARRAY_IDENTICAL_INTERFACE",
+    "candidate_dependent_complexity": false,
+    "forbidden_inputs": [
+      "SATELLITE_NAMES",
+      "TARGET_ROLE",
+      "MAPPING_SEAL_PATH_OR_CONTENT",
+      "NAVIGATION_PARSER_OR_RECORDS",
+      "OBSERVATION_DECODER_OR_PRODUCT_METADATA",
+      "PRIMARY_OR_RESERVE_ROLE"
+    ],
+    "free_time_phase": false,
+    "heldout_refit": false,
+    "identical_loop_for_all_hypotheses": true,
+    "inputs": [
+      "FINITE_UNLABELLED_OBSERVED_COORDINATE_139",
+      "SIX_OPAQUE_MODEL_ARRAYS_139",
+      "PREFIX_AND_HELDOUT_INDICES",
+      "PAIRWISE_GUARD_M"
+    ],
+    "interpolation": false,
+    "metric_order": [
+      "PEAK_TO_PEAK_M",
+      "RMS_M",
+      "OPAQUE_ID"
+    ],
+    "opaque_receipt_hash_before_mapping_reveal": true,
+    "pairwise_guard_m": 7339.701234647398,
+    "per_hypothesis_parameter_count": 2,
+    "per_hypothesis_prefix_fit": [
+      "CONSTANT",
+      "LINEAR_RATE"
+    ],
+    "preference_rule": "RUNNER_UP_MINUS_BEST_HELDOUT_PEAK_TO_PEAK_STRICTLY_GREATER_THAN_PAIRWISE_GUARD",
+    "time_warp": false
+  },
+  "source_commit": "f5d6b2f4ae0521b98f64da5957c1c8f71a343cf7",
+  "source_sha256": "230370a1326f2bcbccde8b8bccab9d994c1b46566cafb6941d7272a3494daa56",
+  "stop": "DO_NOT_OPEN_PRIMARY_OR_BUILD_EXECUTOR",
+  "terminal_outcomes": [
+    "PRIMARY_ARTIFACT_MATERIALIZATION_FAILED",
+    "PRIMARY_DESCRIPTION_ERROR",
+    "BLINDING_INVALID",
+    "MEASUREMENT_INVALID",
+    "NOT_DETECTABLE",
+    "BOUNDED_TRUE_ORBIT_PREFERRED",
+    "BOUNDED_ALTERNATIVE_ORBIT_PREFERRED",
+    "FROZEN_AFFINE_NULL_PREFERRED",
+    "AMBIGUOUS"
+  ]
+}

@@ -1327,9 +1327,19 @@ header or value was discovered or opened, and no prospective plan or primary
 is frozen. See
 [`GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md).
 
-The next maximum work, after review, is an opaque-hypothesis prospective-plan
-audit for this one geometry. It must seal the PRN mapping outside the scorer,
-preserve identical prefix-only nuisance authority for every hypothesis and
-select at most one logical primary with zero post-freeze replacement. If that
-requires another station search, observation inventory or generic blind
-framework, stop instead.
+The opaque-hypothesis prospective-plan audit for this one geometry is now
+complete as `BLIND_ORBIT_ASSIGNMENT_PLAN_FROZEN`. It binds only
+`AMC400USA_R_20262260000_01D_30S_MO.crx.gz`, whose existence remains
+`UNKNOWN_UNQUERIED`; no fallback station, date, cadence, window or archive is
+allowed. Six preaccess opaque identifiers cover the five frozen orbital
+candidates and the affine null. The scorer must handle every hypothesis in
+one identical loop with exactly a prefix constant and rate, and it may not
+receive the PRN mapping, product metadata, navigation parser or observation
+decoder. The mapping is reviewable in the repository, so the claimed
+blindness is an enforced interface boundary, not cryptographic secrecy. No
+product locator, header, payload byte, value or score was accessed.
+
+After review, the next maximum work is one offline exact-hash prediction
+bundle and a scorer seal that cannot import the mapping. That step may not
+query the primary, build an executor, alter the nuisance family or broaden the
+candidate set. Observation access requires a separate explicit authorization.

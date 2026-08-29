@@ -325,6 +325,18 @@ future admission clause. This is geometry selection, not a primary freeze or
 measurement claim. See
 [`GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md).
 
+The corresponding prospective design is now frozen as
+`BLIND_ORBIT_ASSIGNMENT_PLAN_FROZEN`. It predeclares exactly one still
+unqueried logical AMC DOY226 product, the same 79-epoch prefix and 60-epoch
+holdout, five orbital candidates plus one affine null, and a six-identifier
+mapping outside the scorer interface. All six hypotheses receive exactly one
+prefix constant and one prefix rate; the mapping may be revealed only after
+the opaque score receipt has been hashed. This is interface blindness rather
+than adversarial repository secrecy, and the receiver's upstream PRN
+correlation remains outside the claim. The compiled receipt records zero
+network requests, zero primary bytes and no execution authority. See
+[`GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_PLAN.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_PLAN.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

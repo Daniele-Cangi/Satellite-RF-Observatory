@@ -1,0 +1,65 @@
+{
+  "binding": {
+    "candidate_family": [
+      "G22",
+      "G06",
+      "G14",
+      "G17",
+      "G19"
+    ],
+    "raw_start_gps": "2026-08-14T06:14:30 GPS",
+    "raw_stop_gps": "2026-08-14T07:23:30 GPS",
+    "screen_receipt_canonical_sha256": "cddc9fcf0db1be7f55fde04f1bf51256c3a88edf2608871b3bc7e438bd167485",
+    "screen_source_commit": "0f08f0956fc24dcbe4eabb7fa08314b02a15b743"
+  },
+  "blindness_semantics": {
+    "adversarial_repository_secrecy_claimed": false,
+    "mapping_may_enter_scorer_process": false,
+    "mapping_may_enter_scorer_receipt_before_scoring": false,
+    "mapping_reveal_condition": "ONLY_AFTER_OPAQUE_SCORE_RECEIPT_HASH_IS_PERSISTED",
+    "scorer_receives_only_opaque_identifiers": true,
+    "state": "INTERFACE_BLINDNESS_NOT_REPOSITORY_SECRECY"
+  },
+  "created_before_primary_access": true,
+  "mapping": [
+    {
+      "model": "G14_RELATIVE_TO_G30",
+      "model_class": "ORBITAL_CANDIDATE",
+      "opaque_id": "H_5A7421B20092455F"
+    },
+    {
+      "model": "PREFIX_AFFINE_ONLY",
+      "model_class": "NON_ORBITAL_NULL",
+      "opaque_id": "H_0F7B423DEE4445EB"
+    },
+    {
+      "model": "G22_RELATIVE_TO_G30",
+      "model_class": "ORBITAL_CANDIDATE",
+      "opaque_id": "H_72E7F21DC8244653"
+    },
+    {
+      "model": "G19_RELATIVE_TO_G30",
+      "model_class": "ORBITAL_CANDIDATE",
+      "opaque_id": "H_B7DAF98094A64E7E"
+    },
+    {
+      "model": "G06_RELATIVE_TO_G30",
+      "model_class": "ORBITAL_CANDIDATE",
+      "opaque_id": "H_970DD1C2274548B5"
+    },
+    {
+      "model": "G17_RELATIVE_TO_G30",
+      "model_class": "ORBITAL_CANDIDATE",
+      "opaque_id": "H_113EA69083E0450B"
+    }
+  ],
+  "observation_access": {
+    "headers": 0,
+    "payload_bytes": 0,
+    "product_locators_queried": 0,
+    "values": 0
+  },
+  "schema": "gnss-blind-orbit-assignment-mapping-seal-v1",
+  "seal_version": "gnss-blind-orbit-assignment-mapping-v1",
+  "source_base_commit": "bb999aa0fe194d51f51c66c9f2b5609213c9a634"
+}
