@@ -347,6 +347,19 @@ preferred opaque trajectory and an ambiguous controlling midpoint. No AMC
 DOY226 locator, header, payload byte or value was accessed. See
 [`GNSS_BLIND_ORBIT_ASSIGNMENT_PREDICTION_SCORER_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PREDICTION_SCORER_REPORT.md).
 
+The reviewed one-shot execution is now consumed as
+`BOUNDED_TRUE_ORBIT_PREFERRED`. The exact 3,456,560-byte AMC DOY226 artifact
+was hashed before decode; all 139 frozen epochs and physical witnesses passed,
+and no observation value persisted. Before identity reveal, the best opaque
+trajectory retained a `6.104475 m` held-out peak-to-peak residual versus
+`18,768.100639 m` for the runner-up, a `18,761.996164 m` preference margin
+against the unchanged `7,339.701235 m` guard. The persisted score-receipt hash
+preceded reveal of the best identifier as `G22_RELATIVE_TO_G30`. This supports
+only bounded orbit assignment within the frozen candidate set for this one
+observer/pass; it is not unconstrained orbit recovery or independent signal
+identity, and no retry or rescore is authorized. See
+[`GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

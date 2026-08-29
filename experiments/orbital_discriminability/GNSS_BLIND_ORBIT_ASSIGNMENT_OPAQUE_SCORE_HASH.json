@@ -1,0 +1,7 @@
+{
+  "mapping_revealed": false,
+  "schema": "gnss-opaque-orbit-score-hash-receipt-v1",
+  "score_receipt_filename": "GNSS_BLIND_ORBIT_ASSIGNMENT_OPAQUE_SCORE.json",
+  "score_receipt_sha256": "9614f9cfafaa817e492150d33aee9c262e08f90e9fe967b7ffc63cd9eda40f8a",
+  "state": "OPAQUE_SCORE_RECEIPT_HASH_PERSISTED_BEFORE_MAPPING_REVEAL"
+}

@@ -1,0 +1,165 @@
+{
+  "artifact": {
+    "attempts": 1,
+    "complete_file_bytes": 3456560,
+    "complete_file_md5": "68b45ded1cc3fc6e3fa1baea5ad05f8b",
+    "complete_file_sha256": "19f5969959cd9a33ed7e811ff9e92ea4d34c2e36a9d51c2f1ebebbbc1596ec4f",
+    "gssc_directory_bytes": 3456560,
+    "gssc_directory_md5": "1",
+    "gssc_directory_modified": "2026-08-15 03:01:19",
+    "hash_before_decompression_header_or_record_decode": true,
+    "product": "AMC400USA_R_20262260000_01D_30S_MO.crx.gz",
+    "station": "AMC400USA",
+    "transport": "GSSC_DOCUMENTED_ANONYMOUS_WEB_SESSION"
+  },
+  "claim_scope": "BOUNDED_ORBIT_ASSIGNMENT_PREFERRED_WITHIN_FROZEN_CANDIDATE_SET",
+  "executor_seal_sha256": "2d385f73a0e6a5a8038fe875262b10022f95c04b4e9116f3ab0ecc87b95cd1be",
+  "executor_version": "gnss-blind-orbit-amc-doy226-one-shot-v1",
+  "identity_reveal": {
+    "best_opaque_id": "H_72E7F21DC8244653",
+    "mapping_sha256": "b719a2bf17e66fcafa3597c4018d6acd039bdac4e33ecb173795646ff47245db",
+    "outcome": "BOUNDED_TRUE_ORBIT_PREFERRED",
+    "performed_after_opaque_score_receipt_hash": true,
+    "revealed_model": "G22_RELATIVE_TO_G30",
+    "revealed_model_class": "ORBITAL_CANDIDATE"
+  },
+  "measurement_admission": {
+    "core_phase_and_lli": "SATISFIED",
+    "event_time": {
+      "limit_s": 15.0,
+      "maximum_absolute_deviation_s": 0.0,
+      "state": "SATISFIED"
+    },
+    "geometry_free_phase_health": {
+      "limit_m": 0.09514683639918244,
+      "links": [
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.002166181802749634,
+          "satellite": "G22",
+          "violations": 0
+        },
+        {
+          "evaluated_second_differences": 137,
+          "maximum_absolute_second_difference_m": 0.004332344979047775,
+          "satellite": "G30",
+          "violations": 0
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "header": {
+      "antenna": {
+        "serial": "1364-10065",
+        "type": "TPSCR.G5C       NONE",
+        "version_or_radome": ""
+      },
+      "full_frozen_window_covered": true,
+      "gps_observables": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "S1W",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C2L",
+        "L2L",
+        "S2L",
+        "C5Q",
+        "L5Q",
+        "S5Q",
+        "C1L",
+        "L1L",
+        "S1L"
+      ],
+      "interval_s": 30.0,
+      "marker_name": "AMC4",
+      "receiver": {
+        "serial": "3013929",
+        "type": "SEPT POLARX5TR",
+        "version_or_radome": "5.6.0"
+      },
+      "receiver_clock_offset_applied": 0,
+      "required_phase_shift_records": [
+        "G L1C",
+        "G L2W"
+      ],
+      "rinex_version": 3.04,
+      "station": "AMC400USA",
+      "time_of_first_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-14T00:00:00.000000Z"
+      },
+      "time_of_last_observation": {
+        "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+        "time_system": "GPS",
+        "utc_like_epoch": "2026-08-14T23:59:30.000000Z"
+      }
+    },
+    "raw_epochs": 139,
+    "same_path_code_phase_witness": {
+      "links": [
+        {
+          "full_window_peak_to_peak_m": 4.116729903966188,
+          "limit_m": 1250.0,
+          "satellite": "G22",
+          "state": "SATISFIED"
+        },
+        {
+          "full_window_peak_to_peak_m": 4.983165107667446,
+          "limit_m": 1250.0,
+          "satellite": "G30",
+          "state": "SATISFIED"
+        }
+      ],
+      "state": "SATISFIED"
+    },
+    "structural_counts": {
+      "BLANK": 0,
+      "PRESENT": 1112,
+      "TRAILING_FIELD_OMITTED": 0
+    }
+  },
+  "observation_access": {
+    "code_scalars_parsed_in_ram": 556,
+    "compressed_bytes_in_ram": 3456560,
+    "decoded_bytes_in_ram": 27757500,
+    "headers": 1,
+    "observation_values_persisted": 0,
+    "phase_scalars_parsed_in_ram": 556,
+    "products": 1
+  },
+  "opaque_bundle_sha256": "a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2",
+  "opaque_score": {
+    "best_opaque_id": "H_72E7F21DC8244653",
+    "observed_coordinate_sha256": "5bef4b86796dea1f2beb732fdf015d4eeedfb71412b798a82c6d5e222d5d8944",
+    "observed_values_persisted": 0,
+    "opaque_outcome": "OPAQUE_HYPOTHESIS_PREFERRED",
+    "pairwise_guard_m": 7339.701234647398,
+    "preference_margin_m": 18761.996164020544,
+    "receipt_filename": "GNSS_BLIND_ORBIT_ASSIGNMENT_OPAQUE_SCORE.json",
+    "receipt_sha256": "9614f9cfafaa817e492150d33aee9c262e08f90e9fe967b7ffc63cd9eda40f8a",
+    "runner_up_opaque_id": "H_0F7B423DEE4445EB"
+  },
+  "outcome": "BOUNDED_TRUE_ORBIT_PREFERRED",
+  "persistence": {
+    "aggregate_receipts_only": true,
+    "compressed_rinex": 0,
+    "decoded_rinex": 0,
+    "observation_values": 0
+  },
+  "plan_receipt_sha256": "b35ccbee73762f7d9a8957f4d72c34ae684447a24fab055712708e064fbf3d9f",
+  "retry": {
+    "alternate_product_station_date_window_threshold_or_null": false,
+    "retry_after_complete_hash": false,
+    "retry_after_decode": false,
+    "transport_attempts_before_hash": 1
+  },
+  "schema": "gnss-blind-orbit-assignment-primary-outcome-v1",
+  "scorer_seal_sha256": "2403358fed46293a1c44a9a7576a52c4cac547507abec1da1be5db1c7ff711f4",
+  "source_commit": "07f31033258fcee87071b128cad48f74b2d6f946",
+  "source_sha256": "70a1c0cc1af1aeed1b58fd52a02cfafd310652dd01eb3c2e140cb61231d247c4"
+}

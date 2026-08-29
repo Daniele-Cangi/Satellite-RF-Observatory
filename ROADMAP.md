@@ -1350,9 +1350,20 @@ identity reveal. Synthetic tests cover a positive opaque preference and an
 exactly ambiguous controlling midpoint. Primary access and measurement scores
 remain zero.
 
-After review, the next maximum action is one explicitly authorized
-materialization of the already frozen AMC DOY226 product and one terminal
-opaque score. It requires structural and physical admission before packaging,
-zero alternative product or window, zero retry after complete hash or decode,
-and mapping reveal only after the opaque score receipt hash exists. No new
-geometry search, scorer change or executor framework is justified.
+The reviewed one-shot executor was then seal-bound without primary access and
+the separate authority was consumed exactly once. The exact 3,456,560-byte AMC
+DOY226 product was hashed before decoding; all 139 epochs and frozen physical
+witnesses passed. The opaque scorer preferred `H_72E7F21DC8244653` with a
+`6.104475 m` held-out peak-to-peak residual, while the runner-up retained
+`18,768.100639 m`. The `18,761.996164 m` preference margin exceeds the frozen
+`7,339.701235 m` guard. Only after the score receipt hash was persisted did the
+mapping reveal the best identifier as `G22_RELATIVE_TO_G30`.
+
+The terminal is `BOUNDED_TRUE_ORBIT_PREFERRED`, authorizing only
+`BOUNDED_ORBIT_ASSIGNMENT_PREFERRED_WITHIN_FROZEN_CANDIDATE_SET`. Compressed
+and decoded observations and observation values persisted zero bytes. The
+primary is consumed: no retry, rescore, alternate product or hypothesis change
+is permitted. No automatic gate follows. Any next work must first compare
+physically independent ways to test transfer of this blind preference, rather
+than resume traditional GNSS station inventory. See
+[`GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md).
