@@ -23,10 +23,10 @@ measurement scores: 0
 
 | Item | Binding |
 | --- | --- |
-| source commit | `6cb0288c9b8707a8957caf0c0a317b8a2d9c1e47` |
-| executor source SHA-256 | `a71d9ab2fc42a1e787f1be4a22e5838a7f40c0356116db76653be46faaf6c091` |
+| source commit | `07f31033258fcee87071b128cad48f74b2d6f946` |
+| executor source SHA-256 | `70a1c0cc1af1aeed1b58fd52a02cfafd310652dd01eb3c2e140cb61231d247c4` |
 | executor manifest SHA-256 | `d26bf3498d9e6c382e0ef9c57b5c5a6111d8540e089efee72dc6c5d8c539c4d9` |
-| executor seal SHA-256 | `a491710286d929b5e1a3db1b1a5e2c84f3cd3dd4c6ff0152785ffef6e76ea470` |
+| executor seal SHA-256 | `2d385f73a0e6a5a8038fe875262b10022f95c04b4e9116f3ab0ecc87b95cd1be` |
 | plan receipt SHA-256 | `b35ccbee73762f7d9a8957f4d72c34ae684447a24fab055712708e064fbf3d9f` |
 | opaque bundle SHA-256 | `a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2` |
 | prediction/scorer seal SHA-256 | `2403358fed46293a1c44a9a7576a52c4cac547507abec1da1be5db1c7ff711f4` |
@@ -64,6 +64,11 @@ calling the decoder, even when a materializer supplies a receipt. A mismatch
 is a descriptive failure and cannot become a physical rejection. Only timeout
 or interrupted transport can use the second pre-hash attempt; no retry or
 substitution exists after a complete hash or decode.
+
+The size-limit path explicitly erases any partial primary payload. Hatanaka
+content/format failures remain measurement-invalid, while an unexpected
+decoder API or software failure is descriptive and cannot reject the physical
+measurement.
 
 ## Frozen terminal semantics
 
