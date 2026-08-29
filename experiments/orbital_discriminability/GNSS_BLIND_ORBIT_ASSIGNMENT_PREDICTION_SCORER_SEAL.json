@@ -1,0 +1,90 @@
+{
+  "authority": {
+    "executor": false,
+    "measurement_score": false,
+    "observation_decode": false,
+    "primary_access": false,
+    "primary_materialization": false,
+    "separate_review_required": true
+  },
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "generic_framework_created": false,
+  "new_gate_created": false,
+  "next_maximum": "REVIEW_BEFORE_ONE_PRIMARY_MATERIALIZATION_AND_OPAQUE_SCORE",
+  "orbital_scores_from_measurement": 0,
+  "prediction_bundle": {
+    "canonical_bytes": 20849,
+    "canonical_sha256": "a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2",
+    "curve_set_sha256": "0e5eb9207a15574cf66d25f5f1eccdedb4e9ec4129a32abf5d23a066fdd9b2df",
+    "filename": "GNSS_BLIND_ORBIT_ASSIGNMENT_OPAQUE_PREDICTIONS.json",
+    "manifest_sha256": "0dbaa0339074529449a8aafdef39a500feea87d118dcaa0b1b0b86ae266a3186",
+    "named_hypotheses": 0,
+    "opaque_hypotheses": 6
+  },
+  "prediction_compiler": {
+    "manifest_sha256": "e87298ef2af0cc7359f8458249468b10a08491788305c6932ce7f79c3a5023f7",
+    "source_commit": "9b17c7b39fe672cc3bcce01be8816f8b2ff92c6c",
+    "source_sha256": "3160bc4ab9c9fbbabca20457d7cfd4aa14d3d84f8a388ca850a6162504600544"
+  },
+  "primary_access": {
+    "headers_opened": 0,
+    "locators_queried": 0,
+    "payload_bytes": 0,
+    "values": 0
+  },
+  "receipt_order": {
+    "identity_reveal_inside_scorer": false,
+    "score_receipt_contains_only_opaque_ids": true,
+    "score_receipt_hash_before_identity_reveal": true
+  },
+  "schema": "gnss-blind-orbit-scorer-manifest-v1",
+  "scorer": {
+    "canonical_sha256": "1acf382db4e8137f0de1842c851e77e11fe5d4e4b2e8bad2ce9948a7883d9eba",
+    "filename": "gnss_opaque_orbit_scorer.py",
+    "import_roots": [
+      "__future__",
+      "hashlib",
+      "json",
+      "math",
+      "numpy",
+      "pathlib",
+      "re",
+      "typing"
+    ],
+    "named_hypothesis_tokens": 0,
+    "network_client": false,
+    "observation_decoder": false,
+    "unexpected_import_roots": [],
+    "write_authority": false
+  },
+  "scorer_manifest_sha256": "b07018ebeff0e49713e5ed98fc018462a56c60bc37d2b26e529d02e18c4bad1a",
+  "scoring": {
+    "free_time_phase": false,
+    "heldout_epochs": 60,
+    "heldout_refit": false,
+    "metric_order": [
+      "PEAK_TO_PEAK_M",
+      "RMS_M",
+      "OPAQUE_ID"
+    ],
+    "pairwise_guard_m": 7339.701234647398,
+    "per_hypothesis_parameter_count": 2,
+    "per_hypothesis_parameters": [
+      "CONSTANT",
+      "LINEAR_RATE"
+    ],
+    "prefix_epochs": 79,
+    "raw_epochs": 139,
+    "same_loop_for_all_hypotheses": true,
+    "time_warp": false
+  },
+  "seal_source_commit": "d8c94f3fbb98721ede1f876292aeae6c33928fdf",
+  "seal_source_sha256": "edd94b29bcad36edff57f0040c5dfe960159843e3553b1abd8bd24758433a48d",
+  "seal_version": "gnss-blind-orbit-prediction-scorer-seal-v1",
+  "state": "BLIND_ORBIT_PREDICTION_AND_SCORER_SEALED",
+  "stop": "STOP_BEFORE_EXECUTOR_OR_PRIMARY_PRODUCT_ACCESS",
+  "synthetic_tests_only": true
+}

@@ -1339,7 +1339,20 @@ decoder. The mapping is reviewable in the repository, so the claimed
 blindness is an enforced interface boundary, not cryptographic secrecy. No
 product locator, header, payload byte, value or score was accessed.
 
-After review, the next maximum work is one offline exact-hash prediction
-bundle and a scorer seal that cannot import the mapping. That step may not
-query the primary, build an executor, alter the nuisance family or broaden the
-candidate set. Observation access requires a separate explicit authorization.
+The offline exact-hash prediction bundle and scorer seal are now complete as
+`BLIND_ORBIT_PREDICTION_AND_SCORER_SEALED`. The exact NOAA DOY226 navigation
+product reproduced the frozen orbital regressions, then its temporary copy was
+destroyed. The scorer-facing bundle exposes only six opaque arrays, grid and
+scoring constants. The scorer cannot import the mapping, any named orbit,
+navigation compiler or observation decoder; it applies one identical
+constant/rate prefix fit and hashes an opaque, value-free receipt before any
+identity reveal. Synthetic tests cover a positive opaque preference and an
+exactly ambiguous controlling midpoint. Primary access and measurement scores
+remain zero.
+
+After review, the next maximum action is one explicitly authorized
+materialization of the already frozen AMC DOY226 product and one terminal
+opaque score. It requires structural and physical admission before packaging,
+zero alternative product or window, zero retry after complete hash or decode,
+and mapping reveal only after the opaque score receipt hash exists. No new
+geometry search, scorer change or executor framework is justified.
