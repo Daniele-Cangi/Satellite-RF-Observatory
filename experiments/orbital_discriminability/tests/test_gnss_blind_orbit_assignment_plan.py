@@ -168,3 +168,16 @@ def test_committed_receipt_binds_compiler_and_keeps_execution_unavailable() -> N
     assert value["access_boundary"]["primary_payload_bytes"] == 0
     assert value["access_boundary"]["primary_observation_values"] == 0
     assert value["access_boundary"]["execution_authority"] is False
+
+
+def test_cli_summary_does_not_log_observer_or_product_identifiers() -> None:
+    value = plan.plan(ROOT)
+    summary = plan.cli_summary(value, receipt_written=False)
+    rendered = plan.strict_json(summary)
+
+    assert summary["outcome"] == "BLIND_ORBIT_ASSIGNMENT_PLAN_FROZEN"
+    assert summary["receipt_written"] is False
+    assert summary["access_boundary"] == value["access_boundary"]
+    assert value["observer"]["receiver_serial"] not in rendered
+    assert value["observer"]["antenna_serial"] not in rendered
+    assert value["primary_artifact"]["logical_product"] not in rendered

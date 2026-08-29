@@ -508,13 +508,29 @@ def write_receipt(root: Path) -> dict[str, object]:
     return receipt
 
 
+def cli_summary(value: Mapping[str, object], *, receipt_written: bool) -> dict[str, object]:
+    """Return only non-sensitive execution state for terminal output."""
+    manifest_hash = value.get("plan_manifest_sha256")
+    if not isinstance(manifest_hash, str):
+        manifest_hash = sha256(strict_json(value).encode("ascii")).hexdigest()
+    access = value.get("access_boundary")
+    if not isinstance(access, Mapping):
+        raise BlindOrbitPlanError("ACCESS_BOUNDARY_MISSING")
+    return {
+        "outcome": value.get("outcome"),
+        "plan_manifest_sha256": manifest_hash,
+        "receipt_written": receipt_written,
+        "access_boundary": dict(access),
+    }
+
+
 def main() -> None:
     root = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
     value = write_receipt(root) if args.write else plan(root)
-    print(strict_json(value))
+    print(strict_json(cli_summary(value, receipt_written=args.write)))
 
 
 if __name__ == "__main__":
