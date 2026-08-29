@@ -17,6 +17,17 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXECUTOR_SEAL = ROOT / executor.EXECUTOR_SEAL_NAME
+EXECUTOR_SOURCE_COMMIT = "6cb0288c9b8707a8957caf0c0a317b8a2d9c1e47"
+EXECUTOR_SOURCE_SHA256 = (
+    "a71d9ab2fc42a1e787f1be4a22e5838a7f40c0356116db76653be46faaf6c091"
+)
+EXECUTOR_MANIFEST_SHA256 = (
+    "d26bf3498d9e6c382e0ef9c57b5c5a6111d8540e089efee72dc6c5d8c539c4d9"
+)
+EXECUTOR_SEAL_SHA256 = (
+    "a491710286d929b5e1a3db1b1a5e2c84f3cd3dd4c6ff0152785ffef6e76ea470"
+)
 
 
 def header_line(data: str, label: str) -> str:
@@ -161,6 +172,23 @@ def test_manifest_binds_one_unqueried_product_and_zero_access() -> None:
     )
     assert manifest["live_execution_authorized"] is False
     assert executor.AUTHORITY_TOKEN not in encoded
+
+
+def test_executor_seal_binds_source_manifest_and_zero_access() -> None:
+    assert executor.canonical_sha256(EXECUTOR_SEAL) == EXECUTOR_SEAL_SHA256
+    assert executor.source_sha256() == EXECUTOR_SOURCE_SHA256
+    assert executor.manifest_sha256(ROOT) == EXECUTOR_MANIFEST_SHA256
+
+    seal, bundle, transform = executor.validate_executor_seal(
+        ROOT, EXECUTOR_SEAL, EXECUTOR_SEAL_SHA256
+    )
+    assert seal["source_commit"] == EXECUTOR_SOURCE_COMMIT
+    assert seal["source_sha256"] == EXECUTOR_SOURCE_SHA256
+    assert seal["manifest_sha256"] == EXECUTOR_MANIFEST_SHA256
+    assert not any(seal["access_at_seal"].values())
+    assert seal["authority"]["live_execution_authorized_by_seal"] is False
+    assert len(bundle["opaque_ids"]) == 6
+    assert transform["receiver"]["serial"] == "3013929"
 
 
 def test_frozen_validation_hashes_but_does_not_parse_mapping(
