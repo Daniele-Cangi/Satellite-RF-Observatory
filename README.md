@@ -337,6 +337,16 @@ correlation remains outside the claim. The compiled receipt records zero
 network requests, zero primary bytes and no execution authority. See
 [`GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_PLAN.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_PLAN.md).
 
+The exact orbit-only arrays and identity-blind scorer are now frozen as
+`BLIND_ORBIT_PREDICTION_AND_SCORER_SEALED`. The 20,849-byte scorer bundle
+contains six opaque 139-point arrays and no PRN, observer, product or mapping
+metadata. The scorer imports no project orbital module or observation decoder,
+fits the same prefix constant/rate for every identifier, and requires the
+unchanged `7339.701 m` margin. Synthetic seam tests demonstrate both a
+preferred opaque trajectory and an ambiguous controlling midpoint. No AMC
+DOY226 locator, header, payload byte or value was accessed. See
+[`GNSS_BLIND_ORBIT_ASSIGNMENT_PREDICTION_SCORER_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PREDICTION_SCORER_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
