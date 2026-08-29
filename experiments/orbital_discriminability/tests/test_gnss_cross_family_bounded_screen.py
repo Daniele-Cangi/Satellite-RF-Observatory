@@ -67,6 +67,36 @@ def test_navigation_scope_remains_the_three_exact_frozen_days() -> None:
     )
 
 
+def test_candidate_outcomes_separate_geometry_from_capability_refusal() -> None:
+    candidates = screen.CANDIDATES
+    cases = [
+        {
+            "station_id": "WES200USA",
+            "joint_visible_epoch_count": 200,
+            "case_admitted": True,
+        },
+        {
+            "station_id": "WTZR00DEU",
+            "joint_visible_epoch_count": 0,
+            "case_admitted": False,
+        },
+    ]
+
+    outcomes = {
+        row["station_id"]: row
+        for row in screen.candidate_outcomes(candidates, cases, set())
+    }
+    assert outcomes["WES200USA"]["state"] == (
+        "GEOMETRY_POSITIVE_BUT_CAPABILITY_REJECTION_PRESERVED"
+    )
+    assert outcomes["WTZR00DEU"]["state"] == (
+        "NO_COMPLETE_139_EPOCH_JOINT_VISIBILITY"
+    )
+    assert outcomes["HOB200AUS"]["state"] == (
+        "NOT_EVALUATED_RECEIVER_FAMILY_REJECTED"
+    )
+
+
 def test_strict_json_rejects_nonfinite_numbers() -> None:
     assert json.loads(screen.strict_json(screen.manifest(ROOT))) == screen.manifest(ROOT)
     with pytest.raises(ValueError):

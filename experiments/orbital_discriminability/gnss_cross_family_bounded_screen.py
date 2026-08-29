@@ -333,6 +333,49 @@ def _eligible(candidate: CandidateRoot) -> bool:
     )
 
 
+def candidate_outcomes(
+    candidates: tuple[CandidateRoot, ...],
+    cases: list[dict[str, object]],
+    shortlisted_ids: set[str],
+) -> list[dict[str, object]]:
+    """Attribute every frozen root without turning metadata into a score."""
+
+    result: list[dict[str, object]] = []
+    for candidate in candidates:
+        station_cases = [
+            case for case in cases if case["station_id"] == candidate.station_id
+        ]
+        maximum_joint_epochs = max(
+            (int(case["joint_visible_epoch_count"]) for case in station_cases),
+            default=0,
+        )
+        geometry_positive = any(bool(case["case_admitted"]) for case in station_cases)
+        if not candidate.geometry_evaluated:
+            state = "NOT_EVALUATED_RECEIVER_FAMILY_REJECTED"
+        elif candidate.station_id in shortlisted_ids:
+            state = "CROSS_FAMILY_GEOMETRY_SHORTLISTED"
+        elif candidate.admission_state.startswith("CAPABILITY_REJECTED"):
+            state = (
+                "GEOMETRY_POSITIVE_BUT_CAPABILITY_REJECTION_PRESERVED"
+                if geometry_positive
+                else "CAPABILITY_REJECTION_PRESERVED"
+            )
+        else:
+            state = "NO_COMPLETE_139_EPOCH_JOINT_VISIBILITY"
+        result.append(
+            {
+                "station_id": candidate.station_id,
+                "state": state,
+                "maximum_joint_visible_epoch_count": maximum_joint_epochs,
+                "required_contiguous_epoch_count": inherited.RAW_EPOCHS,
+                "geometry_positive": geometry_positive,
+                "admission_state": candidate.admission_state,
+                "exact_blocker": candidate.exact_blocker,
+            }
+        )
+    return result
+
+
 def compile_screen(payloads: Mapping[int, bytes], root: Path) -> dict[str, object]:
     validate_scope(root)
     records_by_doy, navigation_authority = inherited._parse_navigation_payloads(
@@ -369,6 +412,11 @@ def compile_screen(payloads: Mapping[int, bytes], root: Path) -> dict[str, objec
     shortlist = [
         row for row in geometry_ranking if row["station_id"] in eligible_ids
     ][:SHORTLIST_SIZE]
+    root_outcomes = candidate_outcomes(
+        CANDIDATES,
+        cases,
+        {str(row["station_id"]) for row in shortlist},
+    )
     result = {
         "schema": "gnss-cross-family-bounded-screen-receipt-v1",
         "screen_version": SCREEN_VERSION,
@@ -381,6 +429,7 @@ def compile_screen(payloads: Mapping[int, bytes], root: Path) -> dict[str, objec
         "case_results": cases,
         "geometry_ranking_including_prior_refusal": geometry_ranking,
         "cross_family_shortlist": shortlist,
+        "candidate_outcomes": root_outcomes,
         "recommended_qualification_root": (
             shortlist[0]["station_id"] if shortlist else None
         ),
@@ -399,7 +448,7 @@ def compile_screen(payloads: Mapping[int, bytes], root: Path) -> dict[str, objec
             "ONE_DISTINCT_QUALIFICATION_ARTIFACT_MUST_PROVE_RINEX3_L1C_L2W_"
             "LLI_C1C_C2W_FULL_WINDOW_AND_RECEIVER_CONFIGURATION_CONTINUITY"
             if shortlist
-            else "NO_GEOMETRY_POSITIVE_CROSS_FAMILY_ROOT"
+            else "NO_NON_REJECTED_CROSS_FAMILY_ROOT_HAS_COMPLETE_139_EPOCH_JOINT_VISIBILITY"
         ),
         "next_maximum": (
             "REVIEW_BEFORE_ONE_ROOT_ONE_QUALIFICATION_ARTIFACT_DISCOVERY"
