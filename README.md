@@ -277,6 +277,18 @@ common-mode limitation. The consumed primary cannot be retried or rescored.
 See
 [`AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md).
 
+The bounded post-AMC change-of-information review now selects exactly one
+final cross-receiver-family observer transfer as the minimum next physical
+experiment. It selects no station, date or product and opens no observation
+data. A non-POLARX5TR implementation must be declared from a set of at most
+five roots, ranked orbit-only before target-window access, qualified on a
+separate date and used for one later primary with no fallback. The maximum
+future claim is replication across the receiver families explicitly tested,
+not universal hardware independence. After that one outcome, traditional GNSS
+replication stops; bounded blind orbit assignment or independently timed RF
+must change the information type. See
+[`POST_AMC_NEXT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_AMC_NEXT_INFORMATION_REVIEW.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

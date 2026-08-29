@@ -83,6 +83,11 @@ The affine null is the runner-up. The orbital model's preference margin is
 `7,339.701235 m`. The margin therefore passes without changing a threshold,
 feature, null, transform or observation window.
 
+The affine-to-orbital peak-to-peak residual ratio is `115,142.266363`. This is
+a descriptive separation between residuals under the same frozen metric. It
+is not a likelihood ratio, Bayes factor, confidence level or absolute orbit-
+accuracy estimate.
+
 ## Interpretation and stop
 
 This is prospective evidence that the previously frozen orbital structure
@@ -90,6 +95,12 @@ transfers to another observer and another pass. The evidence is especially
 discriminating against an affine-in-time explanation: the measured orbital
 residual is about five orders of magnitude smaller in peak-to-peak scale than
 the closest frozen null.
+
+The passed admission clauses exclude gross observation-path failures such as
+missing fields, out-of-grid event time, declared loss of continuity and a
+large same-path inconsistency. They do not exclude every receiver-family,
+firmware, antenna, multipath or phase-wind-up systematic. The shared POLARX5TR
+family with PIE therefore remains outside the positive claim.
 
 The primary is consumed. No retry, rescore, alternate endpoint, replacement
 window or threshold change is authorized. Any next experiment must ask a new

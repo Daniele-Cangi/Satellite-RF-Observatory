@@ -1281,3 +1281,16 @@ closes the planned observer/pass replication positively, without claiming
 satellite identity, orbit recovery or independence from the POLARX5TR receiver
 family shared with PIE. No retry or rescore is permitted. See
 [`AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/AMC_OBSERVER_PRIMARY_OUTCOME_REPORT.md).
+
+The post-AMC review does not create a new gate or continue station accumulation.
+It ranks one bounded cross-receiver-family observer transfer ahead of blind
+orbit assignment and independently timed RF for the immediate next action.
+The route changes the POLARX5TR tracking implementation while retaining the
+successful G22/G30 physical coordinate and null discipline. At most five
+hardware-diverse roots may be declared before observation access; geometry is
+ranked orbit-only, qualification and primary dates are distinct, and one
+terminal primary ends the traditional GNSS replication ladder. Failure to
+find documented family diversity, positive complete margin or a stable
+qualification/primary path must stop synthesis rather than expand inventory.
+See
+[`POST_AMC_NEXT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_AMC_NEXT_INFORMATION_REVIEW.md).
