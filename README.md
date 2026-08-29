@@ -360,6 +360,16 @@ observer/pass; it is not unconstrained orbit recovery or independent signal
 identity, and no retry or rescore is authorized. See
 [`GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md).
 
+The post-outcome information review now identifies the remaining causal
+boundary: G22/G30 RINEX fields were selected before the scorer became blind.
+Another labelled-RINEX station would add little after the existing
+observer/pass evidence and the terminal cross-family screen. The recommended
+next work is therefore only an offline mechanism spike in which raw-GNSS
+tracks remain anonymous to the orbit scorer while code identity is sealed as
+a separate same-sample witness and revealed after the orbital receipt. This
+does not authorize data search or acquisition. See
+[`POST_BLIND_ORBIT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_BLIND_ORBIT_INFORMATION_REVIEW.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

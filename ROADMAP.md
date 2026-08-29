@@ -1367,3 +1367,16 @@ is permitted. No automatic gate follows. Any next work must first compare
 physically independent ways to test transfer of this blind preference, rather
 than resume traditional GNSS station inventory. See
 [`GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PRIMARY_OUTCOME_REPORT.md).
+
+That comparison is now complete offline. The blind scorer never received PRN
+identity, but the executor had already selected the G22/G30 RINEX channels;
+the experiment therefore supports bounded specific-orbit preference, not
+independent signal identity. Another RINEX observer preserves this causal
+topology and is not the next route. The recommended minimum is an offline
+anonymous-track mechanism spike: derive synthetic simultaneous tracks without
+AMC values, keep the code/PRN identity receipt outside the orbital scorer,
+freeze orbit and code receipts separately, and reveal their concordance only
+after both exist. No capability search or acquisition is authorized until
+this topology retains a non-empty discriminative region under timing,
+oscillator, propagation, ambiguity and track-permutation envelopes. See
+[`POST_BLIND_ORBIT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_BLIND_ORBIT_INFORMATION_REVIEW.md).
