@@ -13,6 +13,8 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / plan.RECEIPT_NAME
+RECEIPT_SHA256 = "b35ccbee73762f7d9a8957f4d72c34ae684447a24fab055712708e064fbf3d9f"
 
 
 def test_plan_binds_frozen_parents_and_never_opens_the_primary() -> None:
@@ -144,3 +146,25 @@ def test_plan_manifest_is_deterministic() -> None:
 
     assert len(first) == 64
     assert first == second
+
+
+def test_committed_receipt_binds_compiler_and_keeps_execution_unavailable() -> None:
+    canonical = RECEIPT.read_bytes().replace(b"\r\n", b"\n")
+    value = json.loads(canonical)
+
+    assert len(canonical) == 8_996
+    assert plan.canonical_sha256(RECEIPT) == RECEIPT_SHA256
+    assert value["source_commit"] == (
+        "f5d6b2f4ae0521b98f64da5957c1c8f71a343cf7"
+    )
+    assert value["source_sha256"] == (
+        "230370a1326f2bcbccde8b8bccab9d994c1b46566cafb6941d7272a3494daa56"
+    )
+    assert value["plan_manifest_sha256"] == (
+        "f557d09596b1a11dad976aee61bc53d7271eeab1555ac45652404aa41e933e3c"
+    )
+    assert value["mapping_seal"]["mapping_rows_exposed_in_plan_receipt"] is False
+    assert value["access_boundary"]["network_requests"] == 0
+    assert value["access_boundary"]["primary_payload_bytes"] == 0
+    assert value["access_boundary"]["primary_observation_values"] == 0
+    assert value["access_boundary"]["execution_authority"] is False
