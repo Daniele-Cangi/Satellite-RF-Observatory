@@ -342,7 +342,7 @@ The exact orbit-only arrays and identity-blind scorer are now frozen as
 contains six opaque 139-point arrays and no PRN, observer, product or mapping
 metadata. The scorer imports no project orbital module or observation decoder,
 fits the same prefix constant/rate for every identifier, and requires the
-unchanged `7339.701 m` margin. Synthetic seam tests demonstrate both a
+unchanged `7339.701 m` pairwise guard. Synthetic seam tests demonstrate both a
 preferred opaque trajectory and an ambiguous controlling midpoint. No AMC
 DOY226 locator, header, payload byte or value was accessed. See
 [`GNSS_BLIND_ORBIT_ASSIGNMENT_PREDICTION_SCORER_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_PREDICTION_SCORER_REPORT.md).
