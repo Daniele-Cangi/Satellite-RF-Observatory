@@ -313,6 +313,18 @@ not the next experiment; the remaining minimum information-changing route is
 a separately reviewed bounded blind orbit assignment. See
 [`RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/RAW_RF_TIME_ORBIT_METADATA_AUDIT_REPORT.md).
 
+That bounded orbit-only screen is now complete as
+`BLIND_ASSIGNMENT_GEOMETRY_SHORTLISTED`. Without discovering or opening any
+new observation product, it selected AMC DOY226, 06:14:30--07:23:30 GPS and a
+nearest-four family `G22 / G06 / G14 / G17 / G19`. Every candidate receives
+the same prefix-only constant/rate nuisance. The affine null is controlling at
+`18763.717 m` peak-to-peak against the unchanged `7339.701 m` guard, leaving a
+combined `11424.015 m` model-only margin. The minimum direct-time-shifted
+elevation is only `15.010433 deg`, so complete-window coverage remains a hard
+future admission clause. This is geometry selection, not a primary freeze or
+measurement claim. See
+[`GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_BLIND_ORBIT_ASSIGNMENT_SCREEN_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
