@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -11,6 +12,8 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / screen.RECEIPT_NAME
+RECEIPT_SHA256 = "59125fedbe1afbfa40255681f82d575a516589ca0f7d40186f601a23495e88f0"
 
 
 def test_candidate_set_is_exact_bounded_and_consumed_roots_do_not_reenter() -> None:
@@ -103,3 +106,35 @@ def test_strict_json_rejects_nonfinite_numbers() -> None:
         screen.strict_json({"bad": float("nan")})
     with pytest.raises(ValueError):
         screen.strict_json({"bad": float("inf")})
+
+
+def test_frozen_receipt_stops_before_observation_access() -> None:
+    payload = RECEIPT.read_bytes()
+    frozen = json.loads(payload)
+
+    assert len(payload) == 48_183
+    assert sha256(payload).hexdigest() == RECEIPT_SHA256
+    assert frozen["source_commit"] == (
+        "f67e0d7e9c74a97eb4cbc211871d60140087a40a"
+    )
+    assert frozen["source_sha256"] == screen.source_sha256()
+    assert frozen["manifest_sha256"] == screen.manifest_sha256(ROOT)
+    assert frozen["outcome"] == screen.OUTCOME_NONE
+    assert frozen["cross_family_shortlist"] == []
+    assert frozen["recommended_qualification_root"] is None
+    assert frozen["next_maximum"] == "STOP_TRADITIONAL_GNSS_REPLICATION"
+    assert set(frozen["observation_access"].values()) == {0}
+    assert frozen["qualification_artifact_selected"] is False
+    assert frozen["primary_selected"] is False
+    assert frozen["prospective_plan_frozen"] is False
+
+    outcomes = {row["station_id"]: row for row in frozen["candidate_outcomes"]}
+    assert outcomes["WES200USA"]["state"] == (
+        "GEOMETRY_POSITIVE_BUT_CAPABILITY_REJECTION_PRESERVED"
+    )
+    assert outcomes["WTZR00DEU"]["maximum_joint_visible_epoch_count"] == 0
+    assert outcomes["ZIMM00CHE"]["maximum_joint_visible_epoch_count"] == 0
+    assert outcomes["TSKB00JPN"]["maximum_joint_visible_epoch_count"] == 113
+    assert outcomes["HOB200AUS"]["state"] == (
+        "NOT_EVALUATED_RECEIVER_FAMILY_REJECTED"
+    )
