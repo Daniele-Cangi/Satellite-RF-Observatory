@@ -380,6 +380,19 @@ propagation terms remain `OPEN_TERM`, so no raw-GNSS capability is admitted
 and no observation is authorized. See
 [`GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md).
 
+The bounded real-capability consideration now stops
+`NO_FALSIFIABLE_RAW_TRACK_EXPERIMENT`. TEX-CUP has the correct long,
+dual-frequency temporal topology, but its official data root is empty in the
+current session and the formerly documented products return HTTP 404. LuGRE
+is a reachable immutable dual-band raw-IQ family, but its products are
+separated `0.3--2.0 s` snapshots; their finite ADC-to-GPST and sample-rate
+accuracy bounds are not established by the inspected metadata. No sample byte
+was accessed. The resulting SHOCK is an offline constellation-snapshot
+observable: test the simultaneous multi-satellite Doppler pattern under
+common-clock and permutation nulls before deciding whether any LuGRE IQ can be
+opened. See
+[`RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md`](experiments/orbital_discriminability/RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
