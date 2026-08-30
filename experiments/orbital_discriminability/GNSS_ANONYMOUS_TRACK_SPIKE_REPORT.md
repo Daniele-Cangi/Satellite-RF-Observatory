@@ -116,7 +116,7 @@ capability-admission questions, not quantities to infer from RINEX L1C/L2W.
 ## Immutable ledger
 
 - spike source SHA-256:
-  `60154631a35cdd40c778aba688aecad68683aa4d4268177a713eb7c19c5f4672`;
+  `7f4288f8c1283be62a06fab08de9fe57d58bcda94d17883d69a0ea30cd7e8d60`;
 - pure scorer source SHA-256:
   `8722ebbf17f0be58c1d61e0383f3d9457124d7c812f63b22bb65b0bc937dec24`;
 - frozen prediction bundle SHA-256:
@@ -124,7 +124,7 @@ capability-admission questions, not quantities to infer from RINEX L1C/L2W.
 - frozen mapping seal SHA-256:
   `b719a2bf17e66fcafa3597c4018d6acd039bdac4e33ecb173795646ff47245db`;
 - synthetic receipt SHA-256:
-  `490c8fbe992090c489169e42e645abd02de8973566f015016cfe61fc6c3b4f97`;
+  `a843d189f1bacfa361204035daa898ef3a257cc465b7d63ba28adf355117fa97`;
 - observation access: zero network requests, locators, headers, payload bytes
   and values.
 

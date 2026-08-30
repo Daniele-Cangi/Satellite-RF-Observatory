@@ -882,7 +882,7 @@
   "schema": "gnss-anonymous-track-spike-receipt-v1",
   "source": {
     "scorer_sha256": "8722ebbf17f0be58c1d61e0383f3d9457124d7c812f63b22bb65b0bc937dec24",
-    "spike_sha256": "60154631a35cdd40c778aba688aecad68683aa4d4268177a713eb7c19c5f4672"
+    "spike_sha256": "7f4288f8c1283be62a06fab08de9fe57d58bcda94d17883d69a0ea30cd7e8d60"
   },
   "stop": "STOP_BEFORE_CAPABILITY_SEARCH_OR_OBSERVATION",
   "version": "gnss-anonymous-track-sealed-code-witness-spike-v1"

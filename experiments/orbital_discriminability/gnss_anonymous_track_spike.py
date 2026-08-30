@@ -236,6 +236,10 @@ def build_receipt(root: Path) -> dict[str, object]:
         exact_a, exact_b, surface, pairwise_guard_m=0.0
     )
     maximum_guard = float(exact_score["preference_margin_m"])
+    if not maximum_guard > DEVELOPMENT_GUARD_M:
+        raise AnonymousTrackSpikeError(
+            "DEVELOPMENT_GUARD_NOT_BELOW_EXACT_FIXTURE_MARGIN"
+        )
     exact_a.fill(0.0)
     exact_b.fill(0.0)
 

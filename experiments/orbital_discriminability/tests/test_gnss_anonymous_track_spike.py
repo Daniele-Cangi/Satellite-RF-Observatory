@@ -167,6 +167,18 @@ def test_real_capability_terms_remain_open_and_never_become_zero() -> None:
     assert all(row["state"] != 0 for row in receipt["real_capability_terms"])
 
 
+def test_development_guard_cannot_exceed_exact_fixture_boundary(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(spike, "DEVELOPMENT_GUARD_M", 1.0e12)
+
+    with pytest.raises(
+        spike.AnonymousTrackSpikeError,
+        match="DEVELOPMENT_GUARD_NOT_BELOW_EXACT_FIXTURE_MARGIN",
+    ):
+        spike.build_receipt(ROOT)
+
+
 def test_receipt_is_deterministic_strict_and_observation_blind() -> None:
     first = _receipt()
     second = _receipt()
