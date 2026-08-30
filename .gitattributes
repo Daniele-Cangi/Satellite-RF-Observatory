@@ -26,3 +26,6 @@ experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_SPIKE_RECEIPT.json -
 
 # The bounded real-geometry observer-transfer receipt is exact LF evidence.
 experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.json -text
+
+# The LuGRE metadata audit receipt is frozen from its exact LF byte stream.
+experiments/orbital_discriminability/LUGRE_PROSPECTIVE_METADATA_AUDIT_RECEIPT.json -text

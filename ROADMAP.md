@@ -1442,3 +1442,18 @@ must terminate before measurement scoring. Do not open LuGRE IQ, NAV/EPH
 telemetry or post-processed identity results merely because geometry is
 positive. See
 [`LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md`](experiments/orbital_discriminability/LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md).
+
+That metadata-first audit is complete and stops
+`LUGRE_PROSPECTIVE_PLAN_BLOCKED_BY_ADC_TIME_PROVENANCE`. The six exact SDRX
+companions materially improve the instrument picture: OP73/OP74/OP76 have
+simultaneous L1/L5 capture timestamps, `8/24 MHz` rates, 4-bit complex IQ,
+zero translated frequency and no inversion. Same-file affine offset and scale
+remain projected by the frozen score. However, `rxTime`/`SC_Start` semantics do
+not provide a numerical ADC-to-true-GPST accuracy bound; the repeated one-
+millisecond SDRX/OPTABLE difference is resolution/convention evidence only, and
+the generic public `50 ns` receiver figure is not product-applicable. The
+DEFLATE IQS members also prevent header-only access without sample bytes, so
+the exact binary headers remain unopened. No role, detector or prospective plan
+is frozen. The route may continue only if outcome-independent timing provenance
+closes this clause; otherwise LuGRE closes without RF access. See
+[`LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md).

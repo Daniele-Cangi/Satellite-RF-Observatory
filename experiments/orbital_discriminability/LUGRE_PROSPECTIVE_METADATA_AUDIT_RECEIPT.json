@@ -1,0 +1,416 @@
+{
+  "access_boundary": {
+    "iq_sample_values": 0,
+    "iqs_compressed_payload_bytes": 0,
+    "iqs_local_zip_headers": false,
+    "iqs_uncompressed_bytes": 0,
+    "primary_opened": false,
+    "public_documentation": true,
+    "reserve_opened": false,
+    "sdrx_companions": 6,
+    "signal_derived_diagnostics": 0,
+    "telemetry_bytes": 0,
+    "zenodo_record_metadata": true,
+    "zip_central_directory": true
+  },
+  "archive": {
+    "bytes": 256135673,
+    "central_directory_bytes": 27306,
+    "central_directory_offset": 256108345,
+    "doi": "10.5281/zenodo.16411687",
+    "eocd_offset": 256135651,
+    "license": "CC-BY-4.0",
+    "object": "LuGRE.zip",
+    "published_md5": "cec32df1ca17cb95887762762c16629f",
+    "record": "https://zenodo.org/records/16411687",
+    "tail_range_bytes": 65536,
+    "tail_range_sha256": "fdb21440968c1198d6215b77328138811be4176dc5817bc1630e17b3469186a4",
+    "version": "v1",
+    "zip_entries": 224
+  },
+  "audit_version": "lugre-prospective-metadata-audit-v1",
+  "authorities": [
+    {
+      "archive_member": "LuGRE/Doc/NIL-TN-QAS-024_2.0 LuGRE Receiver Interface Control Document.pdf",
+      "bytes": 338641,
+      "issue": "2.0",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "RECEIVER_INTERFACE_CONTROL_DOCUMENT",
+      "sha256": "ee7adecd0ea6dff0d20d2ddc067738c579450ddefbd6f21ea7019bb66a368642",
+      "zip_crc32": "42a4fa64"
+    },
+    {
+      "archive_member": "LuGRE/Doc/PRODHDBK_ESC-LUGRE-HDBK-0075-Rev-.pdf",
+      "bytes": 618698,
+      "effective_date": "2025-11-13",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "PRODUCT_HANDBOOK",
+      "sha256": "4444f679e0cc40a810b56bd68832899cce3f12b9928802ab2f66871523cd7499",
+      "zip_crc32": "5cf97ff9"
+    },
+    {
+      "archive_member": "LuGRE/Ancillary/OPTABLE.csv",
+      "bytes": 3308,
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "OPERATION_TABLE",
+      "sha256": "55bbf073d58147436056b67b654a38eb306efa8c14e085e1ff3105841cacc4ed",
+      "zip_crc32": "9c3cbd52"
+    },
+    {
+      "archive_member": "LuGRE/README.md",
+      "bytes": 11128,
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "ARCHIVE_README",
+      "sha256": "cd5976f8bc5fcbf16f22bcec4ea1090fa9796f369b7b4e7793667b0026bb9238",
+      "zip_crc32": "aa4e4d9b"
+    },
+    {
+      "bytes": 7408,
+      "commit": "ae0bb3d0ce77cc6a924fe4e8fbd5d714f29b0494",
+      "git_blob_sha1": "20e06efeac8b4f28c3146d22e82b56dbbf9a9180",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "INDEPENDENT_PUBLIC_IQS_INTERPRETATION",
+      "sha256": "16af7bb52a3c78e0b7e61faf3f49f49e74f62d4312c4f8c0db6f05cb6f4fb02f",
+      "url": "https://github.com/daniestevez/lugre/blob/ae0bb3d0ce77cc6a924fe4e8fbd5d714f29b0494/qascom_to_sigmf.py"
+    }
+  ],
+  "candidate_split": [
+    {
+      "bands_share_sdrx_timestamp": true,
+      "candidate_role": "DEVELOPMENT_CANDIDATE_NOT_FROZEN",
+      "duration_s": 2.0,
+      "geometry_controlling_separation_hz": 5.033679711284175,
+      "maximum_symmetric_total_per_track_rms_envelope_hz": 2.5168398556420875,
+      "metadata": [
+        {
+          "band": "L1",
+          "center_frequency_hz": 1575420000.0,
+          "data_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L1_20250314_100945_2000MS_S_OP73_0.bin",
+            "compressed_bytes": 10323556,
+            "compression_method": 8,
+            "crc32": "5e96e62c",
+            "local_header_offset": 25894697,
+            "uncompressed_bytes": 16000394
+          },
+          "delay_bias_s": 0.0,
+          "duration_s": 2.0,
+          "footer_bytes": 3,
+          "header_bytes": 62,
+          "metadata_bytes": 2335,
+          "metadata_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L1_20250314_100945_2000MS_S_OP73_0.sdrx",
+            "compressed_bytes": 889,
+            "compression_method": 8,
+            "crc32": "0537c54d",
+            "local_header_offset": 36218386,
+            "uncompressed_bytes": 2335
+          },
+          "metadata_sha256": "d127395ee983c228de945395845211dbb4a4ae4b195b2e56c9c527b19fe87574",
+          "operation": "OP73",
+          "optable_timestamp_utc": "2025-03-14T10:09:45.210Z",
+          "packed_bits": 8,
+          "quantization_bits": 4,
+          "sample_rate_hz": 8000000.0,
+          "spectrum_inverted": false,
+          "timestamp_utc": "2025-03-14T10:09:45.209Z",
+          "translated_frequency_hz": 0.0
+        },
+        {
+          "band": "L5",
+          "center_frequency_hz": 1176450000.0,
+          "data_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L5_20250314_100945_2000MS_S_OP73_0.bin",
+            "compressed_bytes": 26141670,
+            "compression_method": 8,
+            "crc32": "86fed408",
+            "local_header_offset": 79770980,
+            "uncompressed_bytes": 48001089
+          },
+          "delay_bias_s": 0.0,
+          "duration_s": 2.0,
+          "footer_bytes": 3,
+          "header_bytes": 62,
+          "metadata_bytes": 2336,
+          "metadata_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L5_20250314_100945_2000MS_S_OP73_0.sdrx",
+            "compressed_bytes": 890,
+            "compression_method": 8,
+            "crc32": "e707e472",
+            "local_header_offset": 105912783,
+            "uncompressed_bytes": 2336
+          },
+          "metadata_sha256": "03b8d3ed3f6715e42ec12d748b6879828d8cfb5af66f93d2df3a89523f4fadf0",
+          "operation": "OP73",
+          "optable_timestamp_utc": "2025-03-14T10:09:45.210Z",
+          "packed_bits": 8,
+          "quantization_bits": 4,
+          "sample_rate_hz": 24000000.0,
+          "spectrum_inverted": false,
+          "timestamp_utc": "2025-03-14T10:09:45.209Z",
+          "translated_frequency_hz": 0.0
+        }
+      ],
+      "native_whole_window_fft_spacing_hz": 0.5,
+      "operation": "OP73",
+      "optable_timestamp_utc": "2025-03-14T10:09:45.210Z",
+      "sdrx_minus_optable_s": -0.001,
+      "sdrx_timestamp_utc": "2025-03-14T10:09:45.209Z"
+    },
+    {
+      "bands_share_sdrx_timestamp": true,
+      "candidate_role": "PRIMARY_CANDIDATE_NOT_FROZEN",
+      "duration_s": 2.0,
+      "geometry_controlling_separation_hz": 11.019310141609873,
+      "maximum_symmetric_total_per_track_rms_envelope_hz": 5.5096550708049365,
+      "metadata": [
+        {
+          "band": "L1",
+          "center_frequency_hz": 1575420000.0,
+          "data_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L1_20250315_130727_2000MS_S_OP76_0.bin",
+            "compressed_bytes": 10438639,
+            "compression_method": 8,
+            "crc32": "68424644",
+            "local_header_offset": 38792072,
+            "uncompressed_bytes": 16000394
+          },
+          "delay_bias_s": 0.0,
+          "duration_s": 2.0,
+          "footer_bytes": 3,
+          "header_bytes": 62,
+          "metadata_bytes": 2335,
+          "metadata_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L1_20250315_130727_2000MS_S_OP76_0.sdrx",
+            "compressed_bytes": 888,
+            "compression_method": 8,
+            "crc32": "4c75be02",
+            "local_header_offset": 49230844,
+            "uncompressed_bytes": 2335
+          },
+          "metadata_sha256": "07ab58b621d653317ef443935296a191af829374155936f3dd0b371e7f7d8bae",
+          "operation": "OP76",
+          "optable_timestamp_utc": "2025-03-15T13:07:27.164Z",
+          "packed_bits": 8,
+          "quantization_bits": 4,
+          "sample_rate_hz": 8000000.0,
+          "spectrum_inverted": false,
+          "timestamp_utc": "2025-03-15T13:07:27.163Z",
+          "translated_frequency_hz": 0.0
+        },
+        {
+          "band": "L5",
+          "center_frequency_hz": 1176450000.0,
+          "data_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L5_20250315_130727_2000MS_S_OP76_0.bin",
+            "compressed_bytes": 27290392,
+            "compression_method": 8,
+            "crc32": "99a735c9",
+            "local_header_offset": 112387432,
+            "uncompressed_bytes": 48001089
+          },
+          "delay_bias_s": 0.0,
+          "duration_s": 2.0,
+          "footer_bytes": 3,
+          "header_bytes": 62,
+          "metadata_bytes": 2336,
+          "metadata_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L5_20250315_130727_2000MS_S_OP76_0.sdrx",
+            "compressed_bytes": 891,
+            "compression_method": 8,
+            "crc32": "ff892bd8",
+            "local_header_offset": 139677957,
+            "uncompressed_bytes": 2336
+          },
+          "metadata_sha256": "ce3d1e7bf1ad80309f9b6bb8459f0e9f9921b789d84835d6416b6b3c70df4855",
+          "operation": "OP76",
+          "optable_timestamp_utc": "2025-03-15T13:07:27.164Z",
+          "packed_bits": 8,
+          "quantization_bits": 4,
+          "sample_rate_hz": 24000000.0,
+          "spectrum_inverted": false,
+          "timestamp_utc": "2025-03-15T13:07:27.163Z",
+          "translated_frequency_hz": 0.0
+        }
+      ],
+      "native_whole_window_fft_spacing_hz": 0.5,
+      "operation": "OP76",
+      "optable_timestamp_utc": "2025-03-15T13:07:27.164Z",
+      "sdrx_minus_optable_s": -0.001,
+      "sdrx_timestamp_utc": "2025-03-15T13:07:27.163Z"
+    },
+    {
+      "bands_share_sdrx_timestamp": true,
+      "candidate_role": "RESERVE_CANDIDATE_NOT_FROZEN",
+      "duration_s": 0.5,
+      "geometry_controlling_separation_hz": 6.328409344875698,
+      "maximum_symmetric_total_per_track_rms_envelope_hz": 3.164204672437849,
+      "metadata": [
+        {
+          "band": "L1",
+          "center_frequency_hz": 1575420000.0,
+          "data_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L1_20250314_124717_500MS_S_OP74_0.bin",
+            "compressed_bytes": 2571508,
+            "compression_method": 8,
+            "crc32": "8eba759f",
+            "local_header_offset": 36219409,
+            "uncompressed_bytes": 4000479
+          },
+          "delay_bias_s": 0.0,
+          "duration_s": 0.5,
+          "footer_bytes": 3,
+          "header_bytes": 62,
+          "metadata_bytes": 2334,
+          "metadata_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L1_20250314_124717_500MS_S_OP74_0.sdrx",
+            "compressed_bytes": 890,
+            "compression_method": 8,
+            "crc32": "cb5cbc4f",
+            "local_header_offset": 38791049,
+            "uncompressed_bytes": 2334
+          },
+          "metadata_sha256": "99a0d66765ea8ccb342fe601d4e6df0d6e87c9b58cff017d6c61ad74b2cc564f",
+          "operation": "OP74",
+          "optable_timestamp_utc": "2025-03-14T12:47:17.387Z",
+          "packed_bits": 8,
+          "quantization_bits": 4,
+          "sample_rate_hz": 8000000.0,
+          "spectrum_inverted": false,
+          "timestamp_utc": "2025-03-14T12:47:17.386Z",
+          "translated_frequency_hz": 0.0
+        },
+        {
+          "band": "L5",
+          "center_frequency_hz": 1176450000.0,
+          "data_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L5_20250314_124717_500MS_S_OP74_0.bin",
+            "compressed_bytes": 6472468,
+            "compression_method": 8,
+            "crc32": "764b5291",
+            "local_header_offset": 105913807,
+            "uncompressed_bytes": 12001345
+          },
+          "delay_bias_s": 0.0,
+          "duration_s": 0.5,
+          "footer_bytes": 3,
+          "header_bytes": 62,
+          "metadata_bytes": 2335,
+          "metadata_member": {
+            "archive_member": "LuGRE/L0/IQS/IQS_L5_20250314_124717_500MS_S_OP74_0.sdrx",
+            "compressed_bytes": 892,
+            "compression_method": 8,
+            "crc32": "cc392da4",
+            "local_header_offset": 112386407,
+            "uncompressed_bytes": 2335
+          },
+          "metadata_sha256": "a3f8edae4e52b77e842d666ee3f6c75495c33dee5b552defcc2dc7ca10e7aa9d",
+          "operation": "OP74",
+          "optable_timestamp_utc": "2025-03-14T12:47:17.387Z",
+          "packed_bits": 8,
+          "quantization_bits": 4,
+          "sample_rate_hz": 24000000.0,
+          "spectrum_inverted": false,
+          "timestamp_utc": "2025-03-14T12:47:17.386Z",
+          "translated_frequency_hz": 0.0
+        }
+      ],
+      "native_whole_window_fft_spacing_hz": 2.0,
+      "operation": "OP74",
+      "optable_timestamp_utc": "2025-03-14T12:47:17.387Z",
+      "sdrx_minus_optable_s": -0.001,
+      "sdrx_timestamp_utc": "2025-03-14T12:47:17.386Z"
+    }
+  ],
+  "clauses": [
+    {
+      "clause": "ARCHIVE_IDENTITY",
+      "state": "SUPPORTED_AT_ARCHIVE_LEVEL"
+    },
+    {
+      "clause": "L1_L5_SIMULTANEITY",
+      "state": "SUPPORTED_DESCRIPTIVELY"
+    },
+    {
+      "clause": "FREQUENCY_AXIS_TRANSFORM",
+      "state": "SUPPORTED_BY_SDRX_METADATA"
+    },
+    {
+      "clause": "IQS_HEADER_IDENTITY",
+      "state": "NOT_EVALUATED_SAMPLE_BOUNDARY"
+    },
+    {
+      "clause": "SAMPLE_CAPTURE_START_SEMANTICS",
+      "state": "SUPPORTED_DESCRIPTIVELY"
+    },
+    {
+      "clause": "FINITE_ADC_TO_TRUE_GPST_BOUND",
+      "state": "UNRESOLVED"
+    },
+    {
+      "clause": "MODEL_BLIND_DETECTOR_ERROR",
+      "state": "NOT_EVALUATED"
+    },
+    {
+      "clause": "FOUR_FROZEN_L1_CARRIERS_PRESENT",
+      "state": "NOT_EVALUATED_PRE_SCORE"
+    },
+    {
+      "clause": "PHYSICAL_CORRECTION_ENVELOPE",
+      "state": "NOT_EVALUATED_AFTER_BLOCKING_CLAUSE"
+    }
+  ],
+  "detectability": {
+    "controlling_primary_separation_hz": 11.019310141609873,
+    "detector": "NOT_IMPLEMENTED",
+    "differential_media": "OPEN_TERM_NOT_EVALUATED_AFTER_TIME_BLOCKER",
+    "four_frozen_signal_presence": "NOT_EVALUATED_PRE_SCORE",
+    "l5_dispersive_witness": "AVAILABLE_AS_SIMULTANEOUS_BAND_NOT_ADMITTED_FOR_ANY_SATELLITE",
+    "maximum_symmetric_total_per_track_rms_envelope_hz": 5.5096550708049365,
+    "native_spacing_is_detector_error_bound": false,
+    "native_spacing_within_geometry_envelope": true,
+    "non_affine_estimator_weighting_of_common_clock": "OPEN_TERM_FOR_FUTURE_DETECTOR_MANIFEST",
+    "primary_native_whole_window_fft_spacing_hz": 0.5,
+    "satellite_clock_residual": "OPEN_TERM_NOT_EVALUATED_AFTER_TIME_BLOCKER"
+  },
+  "frequency_transform": {
+    "common_frequency_offset": "PROJECTED_BY_FROZEN_GEOMETRY_SCORE",
+    "common_positive_frequency_scale": "PROJECTED_BY_FROZEN_GEOMETRY_SCORE",
+    "exact_iqs_header": "NOT_ACCESSED",
+    "header_only_range_authorized": false,
+    "iqs_header_access_state": "NOT_SEPARABLE_FROM_COMPRESSED_SAMPLE_PAYLOAD",
+    "l1": {
+      "center_frequency_hz": 1575420000.0,
+      "sample_rate_hz": 8000000.0
+    },
+    "l5": {
+      "center_frequency_hz": 1176450000.0,
+      "sample_rate_hz": 24000000.0
+    },
+    "same_l1_file_for_all_four_future_coordinates": true,
+    "sample_format": "COMPLEX_IQ_TWO_COMPLEMENT_4_BIT_PACKED_IN_8_BITS",
+    "spectrum_inverted": false,
+    "translated_frequency_hz": 0.0
+  },
+  "maximum_authorized_claim": "THE_PUBLIC_SDRX_PRODUCTS_DESCRIBE_A_REVERSIBLE_COMMON_L1_FREQUENCY_COORDINATE_BUT_DO_NOT_SUPPLY_A_FINITE_PRODUCT_APPLICABLE_ADC_TO_UTC_BOUND",
+  "minimum_next_physical_step": "OBTAIN_OUTCOME_INDEPENDENT_PRODUCT_APPLICABLE_ADC_TIME_PROVENANCE_OR_CLOSE_LUGRE_ROUTE",
+  "outcome": "LUGRE_PROSPECTIVE_PLAN_BLOCKED_BY_ADC_TIME_PROVENANCE",
+  "physical_question": "CAN_OP76_PRODUCE_AN_INTERPRETABLE_NEGATIVE_FOR_THE_FROZEN_FOUR_SIGNAL_ORBITAL_SHAPE_WITHOUT_DERIVING_ABSOLUTE_TIME_FROM_TARGET_RF",
+  "prospective_plan_frozen": false,
+  "roles_frozen": false,
+  "schema": "lugre-prospective-metadata-audit-receipt-v1",
+  "source_commit": "40dccba136e84a609a3abd3b98307b489a19565d",
+  "source_sha256": "9a7846d73ad1674201f08c5f9d572664090953dca61f56b3d232ddcc4edb38c1",
+  "time_semantics": {
+    "adc_to_true_gpst_error_bound_s": null,
+    "filename": "SAMPLE_CAPTURE_START_TO_ONE_SECOND",
+    "generic_qn400_bound_product_applicable": false,
+    "generic_qn400_timing_accuracy_s": 5e-08,
+    "iqs_icd_rx_time": "RECEIVER_TIME_MISSION_USED_GPST",
+    "product_handbook_sc_start": "ACTUAL_SAMPLE_CAPTURE_START_DERIVED_FROM_IQS_HEADER",
+    "repeated_sdrx_minus_optable_s": -0.001,
+    "resolution_is_accuracy": false,
+    "sdrx_and_optable_resolution_s": 0.001,
+    "state": "UNRESOLVED_FINITE_ABSOLUTE_TIME_BOUND"
+  }
+}

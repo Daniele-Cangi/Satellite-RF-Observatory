@@ -409,6 +409,20 @@ non-affine clock terms remain open. LuGRE headers, telemetry and IQ remain
 unopened (`0` bytes), and no prospective role is frozen. See
 [`LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md`](experiments/orbital_discriminability/LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md).
 
+The bounded metadata-first follow-up now stops
+`LUGRE_PROSPECTIVE_PLAN_BLOCKED_BY_ADC_TIME_PROVENANCE`. Six OP73/OP74/OP76
+SDRX companions prove simultaneous L1/L5 products, complex 4-bit IQ, exact
+nominal sample rates (`8/24 MHz`), baseband center coordinates and no spectrum
+inversion. OP76's two-second native Fourier spacing is `0.5 Hz`, plausibly
+inside the frozen `5.509655 Hz` symmetric envelope, but it is not a detector
+error bound. The IQS members are DEFLATE-compressed, so their embedded headers
+cannot be ranged without consuming sample payload; none was opened. More
+importantly, public documentation gives capture-start semantics but no finite,
+product-applicable ADC-to-true-GPST error. Millisecond representation and the
+generic QN400 `50 ns` figure were not promoted to accuracy. Candidate roles and
+the prospective plan remain unfrozen, with zero IQ and telemetry access. See
+[`LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
