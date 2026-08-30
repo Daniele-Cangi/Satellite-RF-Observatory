@@ -746,7 +746,8 @@ def _timing_sensitivity(
     identities, rows = _codebook(nominal_values)
     _, _, normalized = _center_and_normalize(rows)
     tree = cKDTree(normalized)
-    correct_index = identities.index(tuple(subset))
+    identity = tuple(sorted(subset))
+    correct_index = identities.index(identity)
     result = []
     for shift in TIMING_SHIFTS_S:
         shifted, _ = _values_for_mode(
@@ -757,7 +758,7 @@ def _timing_sensitivity(
             "NOMINAL",
             subset,
         )
-        if set(shifted) != set(subset):
+        if set(shifted) != set(identity):
             result.append(
                 {"shift_s": shift, "state": "EPHEMERIS_OR_VISIBILITY_UNAVAILABLE"}
             )
