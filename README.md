@@ -393,6 +393,22 @@ common-clock and permutation nulls before deciding whether any LuGRE IQ can be
 opened. See
 [`RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md`](experiments/orbital_discriminability/RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md).
 
+The observation-blind LuGRE snapshot sweep is now complete as
+`LUGRE_SNAPSHOT_GEOMETRY_DISCRIMINATIVE`. Historical broadcast GPS and
+independently archived Blue Ghost geometry identify OP76 as the strongest
+surface candidate: its four minimum-off-boresight GPS hypotheses retain an
+`11.019310 Hz` controlling separation from the same-complexity wrong-subset,
+Earth-center, static-observer and rank-affine alternatives after common offset
+and scale projection. The complete unfiltered GPS codebook remains a
+millihertz-level stress test and is not used to pretend that all geometrically
+unocculted transmitters are RF-plausible.
+
+This is not measurement admission. Exact IQS sample-zero binding, sample-rate
+accuracy, four-signal presence, estimator error, differential media and
+non-affine clock terms remain open. LuGRE headers, telemetry and IQ remain
+unopened (`0` bytes), and no prospective role is frozen. See
+[`LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md`](experiments/orbital_discriminability/LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

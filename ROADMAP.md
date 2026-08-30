@@ -1415,3 +1415,30 @@ simultaneous anonymous multi-satellite frequency pattern survives
 common-clock, timing, permutation, propagation and non-orbital nulls before
 any IQ access. A non-positive margin must close the route. See
 [`RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md`](experiments/orbital_discriminability/RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md).
+
+The bounded offline LuGRE calculation has now returned
+`LUGRE_SNAPSHOT_GEOMETRY_DISCRIMINATIVE`. It used six exact-hash NOAA
+broadcast-navigation days and archived CLPS observer geometry, with zero LuGRE
+payload access. Four simultaneous L1 coordinates are projected against the
+same common offset and positive scale for the orbital family and all nulls.
+The observation-blind family selector is the four unocculted healthy GPS
+satellites with minimum transmit off-boresight; it uses no gain, received
+power, code identity or signal result.
+
+OP76 ranks first with G31/G28/G26/G10, `17.465--34.527 deg` off-boresight and
+an `11.019310 Hz` controlling static-observer separation. The symmetric total
+per-track RMS envelope ceiling is `5.509655 Hz`. The full 30--31-satellite
+population remains a conservative codebook stress surface whose controlling
+separation is only `0.008811--0.060388 Hz`; it is not the physical target
+selector. Discrete OP76 timing stresses preserve the selected identity at
+`+/-10 s` but not `+/-60 s`, without converting that observation into an ADC
+timing bound.
+
+The next maximum work, only after review, is a metadata-first prospective
+freeze that tries to close exact IQS timing/receiver transforms and physical
+error envelopes for a possible OP73-development / OP76-primary / OP74-reserve
+split. Failure to establish all four frozen signals or a complete envelope
+must terminate before measurement scoring. Do not open LuGRE IQ, NAV/EPH
+telemetry or post-processed identity results merely because geometry is
+positive. See
+[`LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md`](experiments/orbital_discriminability/LUGRE_SNAPSHOT_DISCRIMINABILITY_REPORT.md).
