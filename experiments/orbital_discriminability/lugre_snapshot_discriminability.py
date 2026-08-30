@@ -478,6 +478,26 @@ def codebook_separation(values_hz: Mapping[str, float]) -> dict[str, object]:
     }
 
 
+def subset_separation(
+    values_hz: Mapping[str, float], true_subset: Sequence[str]
+) -> dict[str, object]:
+    identities, rows = _codebook(values_hz)
+    identity = tuple(sorted(true_subset))
+    if identity not in identities:
+        raise LuGreSnapshotError("TRUE_SUBSET_OUTSIDE_CODEBOOK")
+    index = identities.index(identity)
+    _, _, normalized = _center_and_normalize(rows)
+    _, nearest = cKDTree(normalized).query(normalized[index], k=2)
+    competitor = int(nearest[1])
+    residual = affine_residual_rmse_hz(rows[index], rows[competitor])
+    return {
+        "true_subset": list(identity),
+        "nearest_wrong_subset": list(identities[competitor]),
+        "affine_projected_rmse_hz": residual,
+        "maximum_total_per_track_rms_envelope_hz": residual / 2.0,
+    }
+
+
 def null_separation(
     true_values_hz: Mapping[str, float], null_values_hz: Mapping[str, float]
 ) -> dict[str, object]:
@@ -516,6 +536,43 @@ def null_separation(
     }
 
 
+def subset_null_separation(
+    true_values_hz: Mapping[str, float],
+    true_subset: Sequence[str],
+    null_values_hz: Mapping[str, float],
+) -> dict[str, object]:
+    identity = tuple(sorted(true_subset))
+    observed = np.asarray(
+        [sorted(float(true_values_hz[satellite]) for satellite in identity)],
+        dtype=np.float64,
+    )
+    null_identities, null_rows = _codebook(null_values_hz)
+    _, null_norms, null_normalized = _center_and_normalize(null_rows)
+    keep = null_norms > 1.0e-12
+    if not np.any(keep):
+        residual = float(np.std(observed[0]))
+        nearest_identity: tuple[str, ...] = ()
+    else:
+        kept_rows = null_rows[keep]
+        kept_identities = tuple(
+            candidate
+            for candidate, valid in zip(null_identities, keep, strict=True)
+            if valid
+        )
+        _, nearest = cKDTree(null_normalized[keep]).query(
+            _center_and_normalize(observed)[2][0], k=1
+        )
+        nearest_index = int(nearest)
+        nearest_identity = kept_identities[nearest_index]
+        residual = affine_residual_rmse_hz(observed[0], kept_rows[nearest_index])
+    return {
+        "true_subset": list(identity),
+        "nearest_null_subset": list(nearest_identity),
+        "affine_projected_rmse_hz": residual,
+        "maximum_total_per_track_rms_envelope_hz": residual / 2.0,
+    }
+
+
 def rank_affine_null(values_hz: Mapping[str, float]) -> dict[str, object]:
     identities, rows = _codebook(values_hz)
     rank = np.arange(SIGNALS_PER_SNAPSHOT, dtype=np.float64)
@@ -525,6 +582,21 @@ def rank_affine_null(values_hz: Mapping[str, float]) -> dict[str, object]:
         "controlling_true_subset": list(identities[index]),
         "affine_projected_rmse_hz": float(residuals[index]),
         "maximum_total_per_track_rms_envelope_hz": float(residuals[index] / 2.0),
+    }
+
+
+def subset_rank_affine_null(
+    values_hz: Mapping[str, float], true_subset: Sequence[str]
+) -> dict[str, object]:
+    identity = tuple(sorted(true_subset))
+    row = sorted(float(values_hz[satellite]) for satellite in identity)
+    residual = affine_residual_rmse_hz(
+        row, np.arange(SIGNALS_PER_SNAPSHOT, dtype=np.float64)
+    )
+    return {
+        "true_subset": list(identity),
+        "affine_projected_rmse_hz": residual,
+        "maximum_total_per_track_rms_envelope_hz": residual / 2.0,
     }
 
 
@@ -756,11 +828,36 @@ def compile_snapshot(
         if assignment_margin <= float(controlling_null["affine_projected_rmse_hz"])
         else controlling_null_name
     )
-    subset = assignment["controlling_assignment"]["true_subset"]  # type: ignore[index]
     boresight = {
         satellite: float(diagnostics[satellite]["off_boresight_deg"])
         for satellite in satellites
     }
+    selected_subset = tuple(
+        satellite
+        for satellite, _ in sorted(
+            boresight.items(), key=lambda item: (item[1], item[0])
+        )[:SIGNALS_PER_SNAPSHOT]
+    )
+    selected_assignment = subset_separation(nominal, selected_subset)
+    selected_nulls = {
+        "RANK_AFFINE": subset_rank_affine_null(nominal, selected_subset),
+        "EARTH_CENTER_OBSERVER": subset_null_separation(
+            nominal, selected_subset, earth_center
+        ),
+        "STATIC_OBSERVER": subset_null_separation(nominal, selected_subset, static),
+    }
+    selected_null_name, selected_null = min(
+        selected_nulls.items(),
+        key=lambda item: float(item[1]["affine_projected_rmse_hz"]),
+    )
+    selected_assignment_margin = float(selected_assignment["affine_projected_rmse_hz"])
+    selected_null_margin = float(selected_null["affine_projected_rmse_hz"])
+    selected_controlling = min(selected_assignment_margin, selected_null_margin)
+    selected_source = (
+        "NEAREST_WRONG_GPS_SUBSET"
+        if selected_assignment_margin <= selected_null_margin
+        else selected_null_name
+    )
     return {
         **asdict(snapshot),
         "state": "GEOMETRY_COMPILED",
@@ -774,14 +871,31 @@ def compile_snapshot(
         },
         "assignment_codebook": assignment,
         "nulls": nulls,
-        "controlling_separation": {
+        "complete_pool_stress_controlling_separation": {
             "source": controlling_source,
             "affine_projected_rmse_hz": controlling_separation,
             "maximum_total_per_track_rms_envelope_hz": controlling_separation / 2.0,
             "geometry_only_maximum_detector_bin_width_hz": controlling_separation,
         },
+        "geometry_selected_candidate_family": {
+            "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+            "selection_uses_rf_values": False,
+            "satellites": list(selected_subset),
+            "off_boresight_deg": {
+                satellite: boresight[satellite] for satellite in selected_subset
+            },
+            "transmit_gain_or_received_power_inferred": False,
+            "assignment": selected_assignment,
+            "nulls": selected_nulls,
+            "controlling_separation": {
+                "source": selected_source,
+                "affine_projected_rmse_hz": selected_controlling,
+                "maximum_total_per_track_rms_envelope_hz": selected_controlling / 2.0,
+                "geometry_only_maximum_detector_bin_width_hz": selected_controlling,
+            },
+        },
         "timing_sensitivity_for_controlling_true_subset": _timing_sensitivity(
-            spice, snapshot, records, nominal, subset
+            spice, snapshot, records, nominal, selected_subset
         ),
     }
 
@@ -808,6 +922,7 @@ def manifest() -> dict[str, object]:
             "broadcast_clock_rate": "INCLUDED_FROM_SAME_HISTORICAL_NAVIGATION",
         },
         "candidate_population": "ALL_HEALTHY_GPS_IN_DAILY_BROADCAST_FILE_WITH_UNOCCULTED_EARTH_LINE_OF_SIGHT",
+        "candidate_family_selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_WITHOUT_USING_GAIN_OR_RF_VALUES",
         "rf_detectability": "NOT_INFERRED_FROM_BORESIGHT_OR_GEOMETRY",
         "nulls": [
             "NEAREST_WRONG_GPS_SUBSET",
@@ -864,12 +979,21 @@ def compile_sweep(input_root: Path) -> dict[str, object]:
     positive = [
         row
         for row in compiled
-        if float(row["controlling_separation"]["affine_projected_rmse_hz"]) > 0.0  # type: ignore[index]
+        if float(
+            row["geometry_selected_candidate_family"]["controlling_separation"][  # type: ignore[index]
+                "affine_projected_rmse_hz"
+            ]
+        )
+        > 0.0
     ]
     ranked = sorted(
         positive,
         key=lambda row: (
-            -float(row["controlling_separation"]["affine_projected_rmse_hz"]),  # type: ignore[index]
+            -float(
+                row["geometry_selected_candidate_family"][  # type: ignore[index]
+                    "controlling_separation"
+                ]["affine_projected_rmse_hz"]
+            ),
             str(row["utc"]),
         ),
     )
@@ -891,10 +1015,7 @@ def compile_sweep(input_root: Path) -> dict[str, object]:
                 "rank": rank,
                 "operation": row["operation"],
                 "utc": row["utc"],
-                "controlling_separation": row["controlling_separation"],
-                "controlling_assignment": row["assignment_codebook"][
-                    "controlling_assignment"
-                ],  # type: ignore[index]
+                "candidate_family": row["geometry_selected_candidate_family"],
             }
             for rank, row in enumerate(ranked, 1)
         ],

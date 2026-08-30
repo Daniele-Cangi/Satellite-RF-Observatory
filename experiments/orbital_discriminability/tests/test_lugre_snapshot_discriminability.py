@@ -89,6 +89,11 @@ def test_four_signal_codebook_has_explicit_wrong_subset_margin() -> None:
         controlling["affine_projected_rmse_hz"] / 2.0
     )
 
+    selected = screen.subset_separation(values, ("G01", "G02", "G03", "G04"))
+    assert selected["true_subset"] == ["G01", "G02", "G03", "G04"]
+    assert selected["nearest_wrong_subset"] != selected["true_subset"]
+    assert selected["affine_projected_rmse_hz"] > 0.0
+
 
 def test_rank_affine_null_is_not_silently_removed_when_it_matches() -> None:
     result = screen.rank_affine_null(
@@ -108,6 +113,10 @@ def test_geometry_null_receives_same_affine_projection() -> None:
     assert result["maximum_total_per_track_rms_envelope_hz"] == pytest.approx(
         0.0, abs=1.0e-12
     )
+
+    selected = screen.subset_null_separation(true, ("G01", "G02", "G03", "G04"), null)
+    assert selected["true_subset"] == ["G01", "G02", "G03", "G04"]
+    assert selected["affine_projected_rmse_hz"] == pytest.approx(0.0, abs=1.0e-12)
 
 
 def test_occultation_and_boresight_geometry_are_explicit() -> None:
