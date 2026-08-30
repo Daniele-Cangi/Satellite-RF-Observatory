@@ -16,6 +16,11 @@ IQS access. The bounded public record describes the intended time coordinate
 and the receiver clock mechanism, but it does not publish a numerical,
 product-applicable error from IQS ADC sample zero to true GPST/UTC.
 
+The deterministic audit source is frozen at commit
+`657019d7b50cbc9fe4fa3ef3cd2b9e8b1fbc671c`. The resulting 7,115-byte strict
+JSON receipt has SHA-256
+`68b6467fc7b1984031d9e20986ca618d8f25b50a373954f08c49919eb711f39e`.
+
 ```text
 new IQS compressed payload bytes = 0
 new IQS uncompressed bytes = 0

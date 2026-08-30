@@ -1457,3 +1457,15 @@ the exact binary headers remain unopened. No role, detector or prospective plan
 is frozen. The route may continue only if outcome-independent timing provenance
 closes this clause; otherwise LuGRE closes without RF access. See
 [`LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md).
+
+The final bounded timing-provenance audit closes this branch as
+`LUGRE_ROUTE_CLOSED_BY_ABSOLUTE_TIME_PROVENANCE`. Public preflight mission
+architecture documents the receiver-time state machine, but no inspected
+outcome-independent source supplies all numerical edges from ADC sample zero
+through IQS tagging and receiver synchronization to true GPST/UTC. Timestamp
+resolution, generic QN400-S performance and VCTCXO Allan deviation remain
+distinct from that bound. OP73/OP76/OP74 are closed without IQ or telemetry
+access; the positive geometry is preserved. There is no automatic successor.
+Any future route must select a different orbit-first raw-IQ family whose
+sample-zero time accuracy is documented before plan freeze. See
+[`LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md`](experiments/orbital_discriminability/LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md).

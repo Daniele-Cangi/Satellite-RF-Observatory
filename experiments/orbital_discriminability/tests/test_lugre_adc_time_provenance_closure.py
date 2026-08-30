@@ -9,6 +9,8 @@ from experiments.orbital_discriminability import lugre_adc_time_provenance_closu
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / audit.RECEIPT_NAME
+RECEIPT_SHA256 = "68b6467fc7b1984031d9e20986ca618d8f25b50a373954f08c49919eb711f39e"
 
 
 def test_incomplete_causal_chain_has_no_finite_bound() -> None:
@@ -94,3 +96,19 @@ def test_receipt_is_strict_json_when_materialized(tmp_path: Path) -> None:
     value = json.loads(output.read_text(encoding="ascii"))
     assert value["outcome"] == audit.OUTCOME
     assert value["composed_adc_to_true_gpst_error_bound_s"] is None
+
+
+def test_committed_receipt_binds_frozen_source_and_zero_access() -> None:
+    canonical = RECEIPT.read_bytes().replace(b"\r\n", b"\n")
+    value = json.loads(canonical)
+
+    assert len(canonical) == 7_115
+    assert audit.canonical_sha256(RECEIPT) == RECEIPT_SHA256
+    assert value["source_commit"] == "657019d7b50cbc9fe4fa3ef3cd2b9e8b1fbc671c"
+    assert value["source_sha256"] == (
+        "44bf26190433bd0c5598e36e812a95b25ee5b714d61cc0a5db352eaa7a257d42"
+    )
+    assert value["outcome"] == audit.OUTCOME
+    assert value["composed_adc_to_true_gpst_error_bound_s"] is None
+    assert value["access_boundary"]["new_iq_sample_values"] == 0
+    assert value["access_boundary"]["new_telemetry_bytes"] == 0

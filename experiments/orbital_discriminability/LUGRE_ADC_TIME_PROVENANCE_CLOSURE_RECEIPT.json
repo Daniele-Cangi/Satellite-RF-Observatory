@@ -1,0 +1,154 @@
+{
+  "access_boundary": {
+    "all_three_candidate_products_opened": false,
+    "detector_implemented": false,
+    "new_iq_sample_values": 0,
+    "new_iqs_compressed_payload_bytes": 0,
+    "new_iqs_uncompressed_bytes": 0,
+    "new_signal_derived_diagnostics": 0,
+    "new_telemetry_bytes": 0,
+    "orbital_score_recomputed": false
+  },
+  "adc_time_causal_ledger": [
+    {
+      "edge": "ADC_SAMPLE_ZERO_TO_IQS_RXTIME_TAG",
+      "finite_error_bound_s": null,
+      "semantics": "SC_START_IS_DESCRIBED_AS_ACTUAL_IQS_CAPTURE_START",
+      "state": "UNRESOLVED_LATENCY_AND_LATCH_ERROR"
+    },
+    {
+      "edge": "IQS_RXTIME_TAG_TO_RECEIVER_REFERENCE_TIME",
+      "finite_error_bound_s": null,
+      "semantics": "IQS_RXTIME_IS_RECEIVER_TIME",
+      "state": "UNRESOLVED_TAGGING_ERROR"
+    },
+    {
+      "edge": "RECEIVER_REFERENCE_TIME_TO_GPST",
+      "finite_error_bound_s": null,
+      "semantics": "COMMAND_INITIALIZED_OR_GNSS_SYNCHRONIZED_THEN_VCTCXO_PROPAGATED",
+      "state": "UNRESOLVED_OPERATION_SPECIFIC_SYNC_STATE_AND_RESIDUAL"
+    },
+    {
+      "edge": "GPST_LABEL_TO_TRUE_GPST_UTC",
+      "finite_error_bound_s": null,
+      "semantics": "MISSION_TELEMETRY_TIME_SCALE_IS_GPST",
+      "state": "UNRESOLVED_END_TO_END_ABSOLUTE_ERROR"
+    }
+  ],
+  "audit_version": "lugre-adc-time-provenance-closure-v1",
+  "automatic_successor": false,
+  "bounded_search_scope": {
+    "archive_native_product_documents": true,
+    "global_nonexistence_claim": false,
+    "manufacturer_receiver_family_page": true,
+    "official_nasa_mission_and_clock_documents": true,
+    "operator_contact": false,
+    "private_documents": false,
+    "published_preflight_qualification_manuscript": true,
+    "target_rf_or_telemetry": false
+  },
+  "candidate_roles": {
+    "OP73": "CLOSED_UNOPENED_DEVELOPMENT_CANDIDATE",
+    "OP74": "CLOSED_UNOPENED_RESERVE_CANDIDATE",
+    "OP76": "CLOSED_UNOPENED_PRIMARY_CANDIDATE"
+  },
+  "composed_adc_to_true_gpst_error_bound_s": null,
+  "frozen_input": {
+    "canonical_sha256": "f44c6c92858b87adec65e86794403cdd70f834b6101567aa725526afb79a7730",
+    "controlling_primary_separation_hz": 11.019310141609873,
+    "maximum_symmetric_total_per_track_rms_envelope_hz": 5.5096550708049365,
+    "outcome": "LUGRE_PROSPECTIVE_PLAN_BLOCKED_BY_ADC_TIME_PROVENANCE",
+    "receipt": "LUGRE_PROSPECTIVE_METADATA_AUDIT_RECEIPT.json"
+  },
+  "geometry_result": "PRESERVED_NOT_WEAKENED",
+  "information_value": "DECIDES_WHETHER_THE_POSITIVE_OP76_GEOMETRY_CAN_SUPPORT_AN_INTERPRETABLE_PROSPECTIVE_NEGATIVE",
+  "maximum_authorized_claim": "THE_BOUNDED_PUBLIC_RECORD_ESTABLISHES_TIME_SEMANTICS_AND_CLOCK_MECHANISM_BUT_NOT_A_FINITE_PRODUCT_APPLICABLE_ADC_SAMPLE_ZERO_TO_TRUE_GPST_UTC_BOUND",
+  "minimum_next_physical_route": "SELECT_A_DIFFERENT_ORBIT_FIRST_RAW_IQ_FAMILY_WITH_PREEXISTING_NUMERICAL_SAMPLE_ZERO_TIME_PROVENANCE",
+  "outcome": "LUGRE_ROUTE_CLOSED_BY_ABSOLUTE_TIME_PROVENANCE",
+  "physical_question": "CAN_THE_PUBLIC_OUTCOME_INDEPENDENT_RECORD_NUMERICALLY_BIND_LUGRE_IQS_ADC_SAMPLE_ZERO_TO_TRUE_GPST_UTC",
+  "prospective_plan_frozen": false,
+  "public_evidence": [
+    {
+      "authority": "NASA_NTRS",
+      "bytes": 1638343,
+      "can_reduce_adc_time_envelope": false,
+      "citation_id": "20240012279",
+      "finding": "RECEIVER_TIME_IS_COMMAND_INITIALIZED_THEN_GNSS_SYNCHRONIZED_AND_VCTCXO_PROPAGATED_BUT_NO_NUMERICAL_ADC_BINDING_OR_OPERATION_STATE_IS_GIVEN",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "MISSION_TIME_ARCHITECTURE",
+      "sha256": "e06a742766d748f215f65e2c3b818aa803814edd30317d602dd5c835a26de913",
+      "title": "Science Objectives and Investigations for the Lunar GNSS Receiver Experiment (LuGRE)",
+      "url": "https://ntrs.nasa.gov/api/citations/20240012279/downloads/ION_GNSS_2024_ScienceInvestigations_Paper_v1.pdf"
+    },
+    {
+      "authority": "NASA_NTRS",
+      "bytes": 1906135,
+      "can_reduce_adc_time_envelope": false,
+      "citation_id": "20220010106",
+      "finding": "PREDICTED_TYPICAL_VCTCXO_ALLAN_DEVIATION_IS_FREQUENCY_STABILITY_NOT_ABSOLUTE_TIME_AND_THE_PAPER_DEFERS_FLIGHT_UNIT_MEASUREMENT",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "PREFLIGHT_CLOCK_MODEL",
+      "sha256": "660f4a5bd925381a9a4b2d2094a1375231c0b04290d9d0c020508d6714db3d13",
+      "title": "Navigation Performance Analysis and Trades for LuGRE",
+      "url": "https://ntrs.nasa.gov/api/citations/20220010106/downloads/AAS_2022_LuGRE_Analysis_STRIVES_v2.pdf"
+    },
+    {
+      "authority": "POLITECNICO_DI_TORINO_INSTITUTIONAL_REPOSITORY",
+      "bytes": 422417,
+      "can_reduce_adc_time_envelope": false,
+      "doi": "10.1109/WISEE58383.2023.10289430",
+      "finding": "PUBLISHED_MANUSCRIPT_DESCRIBES_FUNCTIONAL_AND_ENVIRONMENTAL_QUALIFICATION_BUT_PUBLISHES_NO_END_TO_END_ADC_TIME_RESULT",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "PREFLIGHT_QUALIFICATION_SCOPE",
+      "sha256": "285da7c1623bbe8237ff8479b311b1f15529a297487b7b4f2cc958ae32058c74",
+      "title": "The Space Qualification Process of the LuGRE GNSS Payload",
+      "url": "https://iris.polito.it/retrieve/handle/11583/2986317/42ba7e80-0d36-4356-b310-f9d7c7ab8db4/The_Space_Qualification_Process_of_the_LuGRE_GNSS_Payload_Pulliero.pdf"
+    },
+    {
+      "authority": "QASCOM",
+      "can_reduce_adc_time_envelope": false,
+      "captured_utf8_bytes": 186438,
+      "captured_utf8_sha256": "82144512af30fb0dc2146abe2d121f2990b02e8b62c1a115df5aec57695f1bde",
+      "finding": "GENERIC_QN400_S_TIMING_ACCURACY_50_NS_IS_NOT_BOUND_TO_LUGRE_FLIGHT_CONFIGURATION_IQS_CAPTURE_STATE_OR_ADC_SAMPLE_ZERO",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "retrieved_utc_date": "2026-08-30",
+      "role": "GENERIC_RECEIVER_FAMILY_PERFORMANCE",
+      "title": "GNSS Receivers",
+      "url": "https://www.qascom.com/products/gnss-receivers/"
+    }
+  ],
+  "rejected_substitutes": [
+    {
+      "candidate": "SDRX_AND_OPTABLE_MILLISECOND_FIELDS",
+      "reason": "REPRESENTATION_AND_CONVENTION_DO_NOT_BOUND_ACCURACY"
+    },
+    {
+      "candidate": "GENERIC_QN400_S_50_NS_TIMING_ACCURACY",
+      "reason": "NO_LUGRE_IQS_ADC_SAMPLE_ZERO_APPLICABILITY"
+    },
+    {
+      "candidate": "IDENTICAL_MODEL_OR_PREDICTED_VCTCXO_ALLAN_DEVIATION",
+      "reason": "FREQUENCY_STABILITY_DOES_NOT_ESTABLISH_INITIAL_TIME_OFFSET_OR_ADC_LATCH"
+    },
+    {
+      "candidate": "LANDER_TIME_COMMAND",
+      "reason": "NO_COMMAND_TO_RECEIVER_TO_ADC_NUMERICAL_LATENCY_OR_JITTER_BOUND"
+    },
+    {
+      "candidate": "POSTFLIGHT_PVT_CLOCK_BIAS_OR_STARTUP_TRANSIENT",
+      "reason": "OUTCOME_CONDITIONED_AND_NOT_AN_INDEPENDENT_IQS_ADC_BINDING"
+    },
+    {
+      "candidate": "TARGET_RF_FITTED_TIME_PHASE",
+      "reason": "FORBIDDEN_OUTCOME_CONDITIONING_WOULD_WEAKEN_THE_HELD_OUT_TEST"
+    }
+  ],
+  "roles_frozen": false,
+  "schema": "satellite-rf-observatory/lugre-adc-time-provenance-closure/v1",
+  "source_commit": "657019d7b50cbc9fe4fa3ef3cd2b9e8b1fbc671c",
+  "source_sha256": "44bf26190433bd0c5598e36e812a95b25ee5b714d61cc0a5db352eaa7a257d42",
+  "timing_clause": {
+    "reason": "NO_PRODUCT_APPLICABLE_NUMERICAL_BOUND_IN_BOUNDED_PUBLIC_RECORD",
+    "state": "UNRESOLVED"
+  }
+}
