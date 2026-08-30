@@ -1398,3 +1398,20 @@ next action is one bounded raw-GNSS capability consideration with valid
 `NO_CAPABILITY_AVAILABLE` and `NO_FALSIFIABLE_RAW_TRACK_EXPERIMENT` terminals,
 not a catalog or another RINEX station. See
 [`GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md).
+
+The single bounded raw-GNSS consideration is complete as
+`NO_FALSIFIABLE_RAW_TRACK_EXPERIMENT`. It did not create a catalog. TEX-CUP
+May 9/12 has the needed continuous L1/L2 raw-IF topology, but the official data
+surface currently exposes no products and exact former payload URLs return
+HTTP 404. LuGRE Zenodo `16411687` is reachable, immutable and exposes seven
+same-operation L1/L5 IQ snapshot pairs, but each is only `0.3--2.0 s` and the
+inspected documentation does not supply product-applicable finite ADC-time or
+sample-rate-accuracy bounds. Zero sample bytes were accessed.
+
+Do not respond by searching more receiver inventories or by adapting the
+139-epoch runtime to snippets. The next maximum work is an offline LuGRE
+constellation-snapshot discriminability calculation: determine whether a
+simultaneous anonymous multi-satellite frequency pattern survives
+common-clock, timing, permutation, propagation and non-orbital nulls before
+any IQ access. A non-positive margin must close the route. See
+[`RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md`](experiments/orbital_discriminability/RAW_GNSS_CAPABILITY_CONSIDERATION_REPORT.md).
