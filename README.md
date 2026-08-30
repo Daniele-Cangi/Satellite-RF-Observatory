@@ -435,6 +435,20 @@ custom LuGRE IQS sample zero. OP73, OP76 and OP74 are closed unopened; the
 experiment. See
 [`LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md`](experiments/orbital_discriminability/LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md).
 
+The subsequent change-of-abstraction review did not resume raw-IQ inventory.
+Instead, one bounded offline spike tested observer-specific visibility and
+Earth-occulted absence as a coarser distributed orbital coordinate. On the
+fixed G0 LEO fixture, Dublin–Rome geometry yields a robust 145 s / 240 s /
+155 s sequence of left-only, both-visible and right-only states. After a
+provisional 5 s per-root timing allowance, the controlling state remains
+135 s, 105 s above the frozen minimum dwell. A common transmitter schedule,
+co-located geometry and observer permutation cannot reproduce that witnessed
+ordering. A nearby plausible orbit differs by only 5 s against a 15 s
+comparison bound, so the result supports the visibility mechanism but not
+specific orbit identity. No receiver was selected and no RF value was opened.
+See
+[`DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

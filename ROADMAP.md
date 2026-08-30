@@ -1469,3 +1469,25 @@ access; the positive geometry is preserved. There is no automatic successor.
 Any future route must select a different orbit-first raw-IQ family whose
 sample-zero time accuracy is documented before plan freeze. See
 [`LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md`](experiments/orbital_discriminability/LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md).
+
+## Post-LuGRE change of observable
+
+The project does not automatically resume raw-IQ metadata search. A bounded
+offline spike has established
+`DISTRIBUTED_VISIBILITY_MECHANISM_DISCRIMINATIVE` on the existing G0 LEO
+fixture. Dublin–Rome geometry retains a three-state
+left-only → both-visible → right-only topology with a 105 s dwell margin after
+the provisional timing allowance. The coordinate needs no sub-hertz ridge,
+but its negative is usable only with a simultaneous transmitter-on root, a
+same-path witness at the occulted root, immutable station identity and a
+predeclared directional mask.
+
+The spike does not establish specific orbit identity: the plausible adjacent
+orbit changes relative event timing by at most 5 s against the 15 s comparison
+bound. It also asserts no receiver near either city. The next maximum work,
+only after review, is a metadata-only orbit/pass calculation for one current
+candidate with independently witnessable emission and one bounded pair of
+actual station coordinates. If the witnesses or timing cannot be qualified,
+the route stops `NO_FALSIFIABLE_VISIBILITY_EXPERIMENT_AVAILABLE` without RF
+access. See
+[`DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md).
