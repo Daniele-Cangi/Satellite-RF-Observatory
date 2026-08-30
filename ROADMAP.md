@@ -1380,3 +1380,21 @@ after both exist. No capability search or acquisition is authorized until
 this topology retains a non-empty discriminative region under timing,
 oscillator, propagation, ambiguity and track-permutation envelopes. See
 [`POST_BLIND_ORBIT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_BLIND_ORBIT_INFORMATION_REVIEW.md).
+
+The mechanism spike now returns
+`ANONYMOUS_TRACK_SEALED_WITNESS_MECHANISM_DISCRIMINATIVE`. Its pure scorer
+receives only two anonymous same-clock tracks, eleven opaque curves and one
+guard. A wrong-orbit truth selects G06, a deliberately contradictory code
+witness remains discordant, reversed track order selects the frozen reversed
+orientation, and the G22/affine midpoint remains ambiguous. The exact fixture
+margin is `18,763.716565 m`; after the historical development guard,
+`11,424.015330 m` remains.
+
+This is not capability admission. Sample-zero timing/rate, differential
+non-affine oscillator behavior and propagation remain `OPEN_TERM`; cycle slips
+and gaps are pre-score invalidity, while track permutation is an explicit
+hypothesis family. No observation access occurred. After review, the maximum
+next action is one bounded raw-GNSS capability consideration with valid
+`NO_CAPABILITY_AVAILABLE` and `NO_FALSIFIABLE_RAW_TRACK_EXPERIMENT` terminals,
+not a catalog or another RINEX station. See
+[`GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md).

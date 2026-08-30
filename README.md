@@ -370,6 +370,16 @@ a separate same-sample witness and revealed after the orbital receipt. This
 does not authorize data search or acquisition. See
 [`POST_BLIND_ORBIT_INFORMATION_REVIEW.md`](experiments/orbital_discriminability/POST_BLIND_ORBIT_INFORMATION_REVIEW.md).
 
+That synthetic spike is now complete as
+`ANONYMOUS_TRACK_SEALED_WITNESS_MECHANISM_DISCRIMINATIVE`. Eleven opaque
+hypotheses include all five track-order reversals. Correct, wrong-orbit,
+code/orbit-discordant, reversed-order and below-detectability controls behave
+as predeclared; the scorer never receives code identity. The exact synthetic
+boundary is `18,763.716565 m`, but real timing, non-affine oscillator and
+propagation terms remain `OPEN_TERM`, so no raw-GNSS capability is admitted
+and no observation is authorized. See
+[`GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ANONYMOUS_TRACK_SPIKE_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
