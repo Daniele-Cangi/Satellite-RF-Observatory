@@ -11,6 +11,8 @@ from experiments.orbital_discriminability import lugre_prospective_metadata_audi
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / audit.RECEIPT_NAME
+RECEIPT_SHA256 = "f44c6c92858b87adec65e86794403cdd70f834b6101567aa725526afb79a7730"
 
 
 def _sdrx(*, band: str = "L1", forbidden: str = "") -> bytes:
@@ -150,3 +152,20 @@ def test_source_has_no_network_sample_decoder_or_orbital_scorer() -> None:
         "tlm_nav",
     ):
         assert forbidden not in source
+
+
+def test_committed_receipt_binds_source_and_terminal_boundary() -> None:
+    canonical = RECEIPT.read_bytes().replace(b"\r\n", b"\n")
+    value = json.loads(canonical)
+
+    assert len(canonical) == 16_089
+    assert audit.canonical_sha256(RECEIPT) == RECEIPT_SHA256
+    assert value["source_commit"] == "40dccba136e84a609a3abd3b98307b489a19565d"
+    assert value["source_sha256"] == (
+        "9a7846d73ad1674201f08c5f9d572664090953dca61f56b3d232ddcc4edb38c1"
+    )
+    assert value["outcome"] == audit.OUTCOME
+    assert value["time_semantics"]["adc_to_true_gpst_error_bound_s"] is None
+    assert value["access_boundary"]["iq_sample_values"] == 0
+    assert value["roles_frozen"] is False
+    assert value["prospective_plan_frozen"] is False
