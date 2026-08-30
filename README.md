@@ -423,6 +423,18 @@ generic QN400 `50 ns` figure were not promoted to accuracy. Candidate roles and
 the prospective plan remain unfrozen, with zero IQ and telemetry access. See
 [`LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md`](experiments/orbital_discriminability/LUGRE_PROSPECTIVE_METADATA_AUDIT_REPORT.md).
 
+The permitted outcome-independent provenance search is now complete and closes
+the route as `LUGRE_ROUTE_CLOSED_BY_ABSOLUTE_TIME_PROVENANCE`. NASA's public
+mission documentation establishes the command/GNSS/VCTCXO time mechanism, but
+publishes neither the capture-specific synchronization state nor a numerical
+ADC-latch-to-true-GPST error. The preflight Allan-deviation material describes
+frequency stability, the qualification manuscript publishes no end-to-end
+timing result, and the generic QN400-S `50 ns` remains inapplicable to the
+custom LuGRE IQS sample zero. OP73, OP76 and OP74 are closed unopened; the
+`11.019310 Hz` OP76 geometry remains valid but is not promoted to an executable
+experiment. See
+[`LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md`](experiments/orbital_discriminability/LUGRE_ADC_TIME_PROVENANCE_CLOSURE_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
