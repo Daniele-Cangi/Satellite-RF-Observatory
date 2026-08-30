@@ -449,6 +449,21 @@ specific orbit identity. No receiver was selected and no RF value was opened.
 See
 [`DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md).
 
+The orbit-first follow-up has now selected the current METEOR-M N2-4 / NORAD
+59051 candidate and evaluated only three explicitly bounded public station
+descriptions. Two Doncaster-envelope/YO3BN geometries retain positive margins
+across three adjacent element sets and nine Doncaster position/height members:
+90 s on 2026-08-30 and 80 s on 2026-08-31. The third ranked event is exactly
+on the 30 s boundary and is not admitted. YO3BN publishes exact GPS
+coordinates and a 2.4 MHz OpenWebRX+ profile covering 137.9 MHz, but its event
+time, sequence continuity, directional mask and same-path absence witness are
+unknown. AwareSignal does not publish an exact antenna coordinate, immutable
+IQ path or first-sample timing, and YO8TNB was unreachable in the bounded
+status check. The honest terminal is therefore
+`NO_FALSIFIABLE_VISIBILITY_EXPERIMENT_AVAILABLE`: geometry is positive, but no
+pair of measurement capabilities is admitted and no RF was accessed. See
+[`METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md`](experiments/orbital_discriminability/METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
