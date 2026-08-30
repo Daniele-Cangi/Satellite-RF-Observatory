@@ -1,0 +1,3629 @@
+{
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5",
+    "scipy": "1.17.1",
+    "spiceypy": "7.0.0"
+  },
+  "manifest": {
+    "candidate_family_selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_WITHOUT_USING_GAIN_OR_RF_VALUES",
+    "candidate_population": "ALL_HEALTHY_GPS_IN_DAILY_BROADCAST_FILE_WITH_UNOCCULTED_EARTH_LINE_OF_SIGHT",
+    "coordinate": {
+      "band": "GPS_L1",
+      "broadcast_clock_rate": "INCLUDED_FROM_SAME_HISTORICAL_NAVIGATION",
+      "carrier_hz": 1575420000.0,
+      "common_offset": "PROJECTED",
+      "common_positive_scale": "PROJECTED_WITH_EQUAL_COMPLEXITY_FOR_ALL_HYPOTHESES",
+      "one_way_light_time": "ITERATED",
+      "receiver_spectrum_sign": "MUST_BE_HEADER_DECLARED_BEFORE_FUTURE_SCORE",
+      "signals_per_snapshot": 4
+    },
+    "generic_framework": false,
+    "minimum_experiment": "SEVEN_PUBLIC_OPERATION_TIMES_HISTORICAL_BROADCAST_GPS_ARCHIVED_BLUE_GHOST_GEOMETRY_FOUR_SIGNAL_CODEBOOK_ZERO_RF",
+    "navigation": [
+      {
+        "bytes": 71994,
+        "name": "brdc0550.25n.gz",
+        "role": "OUTCOME_INDEPENDENT_GPS_BROADCAST_NAVIGATION",
+        "sha256": "8fb1012f925d8ca7f8f67fccf08cdab9f39337c147fcd88c5177ac53a0c796a1",
+        "url": "https://geodesy.noaa.gov/corsdata/rinex/2025/055/brdc0550.25n.gz"
+      },
+      {
+        "bytes": 73469,
+        "name": "brdc0580.25n.gz",
+        "role": "OUTCOME_INDEPENDENT_GPS_BROADCAST_NAVIGATION",
+        "sha256": "b5199bb55f7077f8cf3f8113f2017f8069d9c3e0ef4a9be18c3e5402fb61ae94",
+        "url": "https://geodesy.noaa.gov/corsdata/rinex/2025/058/brdc0580.25n.gz"
+      },
+      {
+        "bytes": 70276,
+        "name": "brdc0620.25n.gz",
+        "role": "OUTCOME_INDEPENDENT_GPS_BROADCAST_NAVIGATION",
+        "sha256": "6ddfae0fd29ed4c3ae9dd06af201741ffa1b5b4daf5d5fa2d57a13a476f96c5f",
+        "url": "https://geodesy.noaa.gov/corsdata/rinex/2025/062/brdc0620.25n.gz"
+      },
+      {
+        "bytes": 71061,
+        "name": "brdc0630.25n.gz",
+        "role": "OUTCOME_INDEPENDENT_GPS_BROADCAST_NAVIGATION",
+        "sha256": "f5bb70ecf2ea2c8f1f59c29c9db6514a0f0c38bacf4845a489ff89a0276cb3d7",
+        "url": "https://geodesy.noaa.gov/corsdata/rinex/2025/063/brdc0630.25n.gz"
+      },
+      {
+        "bytes": 72351,
+        "name": "brdc0730.25n.gz",
+        "role": "OUTCOME_INDEPENDENT_GPS_BROADCAST_NAVIGATION",
+        "sha256": "9720ee334e6c24e2a71e3db1ef16cbcee6c13cf7323ed60d881fec7895855390",
+        "url": "https://geodesy.noaa.gov/corsdata/rinex/2025/073/brdc0730.25n.gz"
+      },
+      {
+        "bytes": 70462,
+        "name": "brdc0740.25n.gz",
+        "role": "OUTCOME_INDEPENDENT_GPS_BROADCAST_NAVIGATION",
+        "sha256": "fa2827b8575f84d11a1b515e88dd99b79c4e8ad88bf5da5eef51ba1041dc45fa",
+        "url": "https://geodesy.noaa.gov/corsdata/rinex/2025/074/brdc0740.25n.gz"
+      }
+    ],
+    "new_gate": false,
+    "new_information": "EXACT_OPERATION_GEOMETRY_CODEBOOK_AND_ORBIT_VERSUS_NONORBITAL_NULL_MARGIN_BEFORE_LUGRE_ACCESS",
+    "nulls": [
+      "NEAREST_WRONG_GPS_SUBSET",
+      "RANK_AFFINE",
+      "EARTH_CENTER_OBSERVER",
+      "STATIC_OBSERVER"
+    ],
+    "observation_boundary": {
+      "iq_bytes": 0,
+      "lugre_archive_requests": 0,
+      "lugre_headers": 0,
+      "lugre_payload_bytes": 0,
+      "orbital_scores_from_measurement": 0,
+      "signal_derived_values": 0,
+      "telemetry_bytes": 0
+    },
+    "open_terms": [
+      "PRODUCT_APPLICABLE_ADC_TO_GPST_ERROR",
+      "SAMPLE_RATE_ACCURACY_AND_NONAFFINE_OSCILLATOR",
+      "PER_SIGNAL_TRANSMITTER_CLOCK_RESIDUAL_AFTER_BROADCAST_MODEL",
+      "DIFFERENTIAL_MEDIA_AFTER_ANY_L1_L5_WITNESS",
+      "TRACKER_AND_FREQUENCY_RESOLUTION",
+      "ACTUAL_FOUR_SIGNAL_AVAILABILITY_IN_FROZEN_CODEBOOK"
+    ],
+    "physical_question": "CAN_ONE_SIMULTANEOUS_ANONYMOUS_GPS_DOPPLER_SET_RETAIN_ORBITAL_IDENTITY_AFTER_COMMON_CLOCK_AND_SCALE_PROJECTION",
+    "primary_selected": false,
+    "prospective_plan_frozen": false,
+    "rf_detectability": "NOT_INFERRED_FROM_BORESIGHT_OR_GEOMETRY",
+    "schema": "lugre-snapshot-discriminability-manifest-v1",
+    "screen_version": "lugre-constellation-snapshot-discriminability-v1",
+    "snapshots": [
+      {
+        "advertised_duration_ms": 300,
+        "doy": 55,
+        "duration_state": "ARCHIVE_LISTING",
+        "observer_independence": "INDEPENDENT_OF_TARGET_RF_BUT_NOT_PROSPECTIVE_OBSERVER_ORBIT",
+        "observer_source": "RECONSTRUCTED_CRUISE_SPK",
+        "observer_target": "-2711",
+        "operation": "OP32",
+        "utc": "2025-02-24T12:04:49Z"
+      },
+      {
+        "advertised_duration_ms": 300,
+        "doy": 58,
+        "duration_state": "ARCHIVE_LISTING",
+        "observer_independence": "INDEPENDENT_OF_TARGET_RF_BUT_NOT_PROSPECTIVE_OBSERVER_ORBIT",
+        "observer_source": "RECONSTRUCTED_CRUISE_SPK",
+        "observer_target": "-2711",
+        "operation": "OP37",
+        "utc": "2025-02-27T16:09:37Z"
+      },
+      {
+        "advertised_duration_ms": 300,
+        "doy": 62,
+        "duration_state": "ARCHIVE_LISTING",
+        "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+        "observer_source": "ACTUAL_LANDING_SITE_SPK",
+        "observer_target": "-2711900",
+        "operation": "OP38",
+        "utc": "2025-03-03T06:13:00Z"
+      },
+      {
+        "advertised_duration_ms": 300,
+        "doy": 63,
+        "duration_state": "ARCHIVE_LISTING_L1_BIN_300MS_SDRX_400MS_CONFLICT",
+        "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+        "observer_source": "ACTUAL_LANDING_SITE_SPK",
+        "observer_target": "-2711900",
+        "operation": "OP40",
+        "utc": "2025-03-04T07:03:23Z"
+      },
+      {
+        "advertised_duration_ms": 2000,
+        "doy": 73,
+        "duration_state": "ARCHIVE_LISTING",
+        "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+        "observer_source": "ACTUAL_LANDING_SITE_SPK",
+        "observer_target": "-2711900",
+        "operation": "OP73",
+        "utc": "2025-03-14T10:09:45Z"
+      },
+      {
+        "advertised_duration_ms": 500,
+        "doy": 73,
+        "duration_state": "ARCHIVE_LISTING",
+        "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+        "observer_source": "ACTUAL_LANDING_SITE_SPK",
+        "observer_target": "-2711900",
+        "operation": "OP74",
+        "utc": "2025-03-14T12:47:17Z"
+      },
+      {
+        "advertised_duration_ms": 2000,
+        "doy": 74,
+        "duration_state": "ARCHIVE_LISTING",
+        "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+        "observer_source": "ACTUAL_LANDING_SITE_SPK",
+        "observer_target": "-2711900",
+        "operation": "OP76",
+        "utc": "2025-03-15T13:07:27Z"
+      }
+    ],
+    "spice": [
+      {
+        "bytes": 5257,
+        "name": "naif0012.tls",
+        "role": "UTC_ET_CONVERSION",
+        "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/lsk/naif0012.tls"
+      },
+      {
+        "bytes": 131226,
+        "name": "pck00011.tpc",
+        "role": "PLANETARY_CONSTANTS",
+        "sha256": "3dff7b1dbeceaa01f25467767d3fa25816051c85d162d1edf04acb310ee28bb1",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/pck/pck00011.tpc"
+      },
+      {
+        "bytes": 5030912,
+        "name": "earth_000101_260530_260303.bpc",
+        "role": "ARCHIVED_EARTH_ORIENTATION_INDEPENDENT_OF_LUGRE_RF",
+        "sha256": "0f25cf76320979dc1ea3dae007c1592f61e7b71b151cdb6ff58e2357463cf9b3",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/pck/earth_000101_260530_260303.bpc"
+      },
+      {
+        "bytes": 7522,
+        "name": "earth_assoc_itrf93.tf",
+        "role": "ITRF93_FRAME_ASSOCIATION",
+        "sha256": "aab7bbc19b8a69bad11988ee1b4812a3963812a03a029c2776863e680719b336",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/fk/earth_assoc_itrf93.tf"
+      },
+      {
+        "bytes": 12863488,
+        "name": "moon_pa_de440_200625.bpc",
+        "role": "LUNAR_ORIENTATION",
+        "sha256": "60cd55aa401ea2ea97360636f567554bfe4e37bb829f901b4460a455dfaf783f",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/pck/moon_pa_de440_200625.bpc"
+      },
+      {
+        "bytes": 19478,
+        "name": "moon_de440_250416.tf",
+        "role": "LUNAR_FRAME",
+        "sha256": "a47c71e9c9f33796bdafb2c9d69a7ee447b6016ecad80f71cd6f3e479f9cf768",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/fk/moon_de440_250416.tf"
+      },
+      {
+        "bytes": 8468,
+        "name": "moon_assoc_me.tf",
+        "role": "LUNAR_FRAME_ASSOCIATION",
+        "sha256": "52c622043ce0447d575e59ee01642f1894921e68c10f934ceff065f362da6c1c",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/fk/moon_assoc_me.tf"
+      },
+      {
+        "bytes": 32726016,
+        "name": "de440s.bsp",
+        "role": "EARTH_MOON_EPHEMERIS",
+        "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/spk/de440s.bsp"
+      },
+      {
+        "bytes": 23833600,
+        "name": "clps_to19d_bgm1_cru_rec_250115_250302_v01.bsp",
+        "role": "RECONSTRUCTED_BLUE_GHOST_CRUISE_OBSERVER_NOT_GNSS_TRANSMITTER_ORBIT",
+        "sha256": "0f12c2f0709fcbb53f8c5bcfbdf6bd45bf0007b30b8ce5707b2927c91d361abe",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/spk/clps_to19d_bgm1_cru_rec_250115_250302_v01.bsp"
+      },
+      {
+        "bytes": 8192,
+        "name": "clps_to19d_bgm1_ls_250302_v01.bsp",
+        "role": "ACTUAL_LANDING_SITE_OBSERVER_NOT_GNSS_TRANSMITTER_ORBIT",
+        "sha256": "36308426e78c3f5fe0287161972ee542b321bc89bcae072bd9b59df446a8917a",
+        "url": "https://naif.jpl.nasa.gov/pub/naif/pds/pds4/clps/clps_spice/spice_kernels/spk/clps_to19d_bgm1_ls_250302_v01.bsp"
+      }
+    ],
+    "stop_condition": "STOP_NO_SNAPSHOT_DISCRIMINABILITY_IF_EVERY_CONTROLLING_MARGIN_IS_NONPOSITIVE_OR_REQUIRES_TARGET_RF_DERIVED_GEOMETRY"
+  },
+  "maximum_authorized_claim": "BOUNDED_GEOMETRY_MECHANISM_ONLY_NO_LUGRE_SIGNAL_OR_ORBITAL_MEASUREMENT_CLAIM",
+  "measurement_admission": "NOT_EVALUATED_OPEN_TERMS",
+  "observation_access": {
+    "iq_bytes": 0,
+    "lugre_archive_requests": 0,
+    "lugre_headers": 0,
+    "lugre_payload_bytes": 0,
+    "orbital_scores_from_measurement": 0,
+    "signal_derived_values": 0,
+    "telemetry_bytes": 0
+  },
+  "outcome": "LUGRE_SNAPSHOT_GEOMETRY_DISCRIMINATIVE",
+  "ranked_operations": [
+    {
+      "candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 11.5851105605477,
+          "maximum_total_per_track_rms_envelope_hz": 5.79255528027385,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "true_subset": [
+            "G10",
+            "G26",
+            "G28",
+            "G31"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 11.019310141609873,
+          "geometry_only_maximum_detector_bin_width_hz": 11.019310141609873,
+          "maximum_total_per_track_rms_envelope_hz": 5.5096550708049365,
+          "source": "STATIC_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 12.097681736578593,
+            "maximum_total_per_track_rms_envelope_hz": 6.048840868289297,
+            "nearest_null_subset": [
+              "G01",
+              "G16",
+              "G24",
+              "G28"
+            ],
+            "true_subset": [
+              "G10",
+              "G26",
+              "G28",
+              "G31"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 1366.8363899310414,
+            "maximum_total_per_track_rms_envelope_hz": 683.4181949655207,
+            "true_subset": [
+              "G10",
+              "G26",
+              "G28",
+              "G31"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 11.019310141609873,
+            "maximum_total_per_track_rms_envelope_hz": 5.5096550708049365,
+            "nearest_null_subset": [
+              "G01",
+              "G08",
+              "G16",
+              "G31"
+            ],
+            "true_subset": [
+              "G10",
+              "G26",
+              "G28",
+              "G31"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G10": 34.527195895597735,
+          "G26": 32.54580316983382,
+          "G28": 23.03482170304998,
+          "G31": 17.46481576798934
+        },
+        "satellites": [
+          "G31",
+          "G28",
+          "G26",
+          "G10"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "operation": "OP76",
+      "rank": 1,
+      "utc": "2025-03-15T13:07:27Z"
+    },
+    {
+      "candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 17.999227449799253,
+          "maximum_total_per_track_rms_envelope_hz": 8.999613724899627,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "true_subset": [
+            "G05",
+            "G15",
+            "G18",
+            "G29"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 8.71376041818009,
+          "geometry_only_maximum_detector_bin_width_hz": 8.71376041818009,
+          "maximum_total_per_track_rms_envelope_hz": 4.356880209090045,
+          "source": "EARTH_CENTER_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 8.71376041818009,
+            "maximum_total_per_track_rms_envelope_hz": 4.356880209090045,
+            "nearest_null_subset": [
+              "G02",
+              "G09",
+              "G23",
+              "G31"
+            ],
+            "true_subset": [
+              "G05",
+              "G15",
+              "G18",
+              "G29"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 2578.8850131935965,
+            "maximum_total_per_track_rms_envelope_hz": 1289.4425065967982,
+            "true_subset": [
+              "G05",
+              "G15",
+              "G18",
+              "G29"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 16.780619664074713,
+            "maximum_total_per_track_rms_envelope_hz": 8.390309832037357,
+            "nearest_null_subset": [
+              "G05",
+              "G15",
+              "G23",
+              "G29"
+            ],
+            "true_subset": [
+              "G05",
+              "G15",
+              "G18",
+              "G29"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G05": 43.58086055415133,
+          "G15": 34.319965017754505,
+          "G18": 37.34346337664014,
+          "G29": 39.968307125782225
+        },
+        "satellites": [
+          "G15",
+          "G18",
+          "G29",
+          "G05"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "operation": "OP37",
+      "rank": 2,
+      "utc": "2025-02-27T16:09:37Z"
+    },
+    {
+      "candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 10.178695029388686,
+          "maximum_total_per_track_rms_envelope_hz": 5.089347514694343,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "true_subset": [
+            "G06",
+            "G11",
+            "G19",
+            "G20"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 8.055338523412576,
+          "geometry_only_maximum_detector_bin_width_hz": 8.055338523412576,
+          "maximum_total_per_track_rms_envelope_hz": 4.027669261706288,
+          "source": "STATIC_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 18.854926715067815,
+            "maximum_total_per_track_rms_envelope_hz": 9.427463357533908,
+            "nearest_null_subset": [
+              "G04",
+              "G14",
+              "G22",
+              "G23"
+            ],
+            "true_subset": [
+              "G06",
+              "G11",
+              "G19",
+              "G20"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 2092.5417920920804,
+            "maximum_total_per_track_rms_envelope_hz": 1046.2708960460402,
+            "true_subset": [
+              "G06",
+              "G11",
+              "G19",
+              "G20"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 8.055338523412576,
+            "maximum_total_per_track_rms_envelope_hz": 4.027669261706288,
+            "nearest_null_subset": [
+              "G08",
+              "G11",
+              "G20",
+              "G32"
+            ],
+            "true_subset": [
+              "G06",
+              "G11",
+              "G19",
+              "G20"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G06": 21.087440929845833,
+          "G11": 29.890120881592033,
+          "G19": 27.429472423676657,
+          "G20": 33.30041567778759
+        },
+        "satellites": [
+          "G06",
+          "G19",
+          "G11",
+          "G20"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "operation": "OP32",
+      "rank": 3,
+      "utc": "2025-02-24T12:04:49Z"
+    },
+    {
+      "candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 13.763494815137436,
+          "maximum_total_per_track_rms_envelope_hz": 6.881747407568718,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "true_subset": [
+            "G10",
+            "G23",
+            "G26",
+            "G31"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 6.328409344875698,
+          "geometry_only_maximum_detector_bin_width_hz": 6.328409344875698,
+          "maximum_total_per_track_rms_envelope_hz": 3.164204672437849,
+          "source": "EARTH_CENTER_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 6.328409344875698,
+            "maximum_total_per_track_rms_envelope_hz": 3.164204672437849,
+            "nearest_null_subset": [
+              "G06",
+              "G11",
+              "G17",
+              "G18"
+            ],
+            "true_subset": [
+              "G10",
+              "G23",
+              "G26",
+              "G31"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 1509.795379161919,
+            "maximum_total_per_track_rms_envelope_hz": 754.8976895809595,
+            "true_subset": [
+              "G10",
+              "G23",
+              "G26",
+              "G31"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 21.902157868098183,
+            "maximum_total_per_track_rms_envelope_hz": 10.951078934049091,
+            "nearest_null_subset": [
+              "G05",
+              "G10",
+              "G31",
+              "G32"
+            ],
+            "true_subset": [
+              "G10",
+              "G23",
+              "G26",
+              "G31"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G10": 37.780276240435484,
+          "G23": 44.43042004133921,
+          "G26": 44.901200623202165,
+          "G31": 16.87007716434757
+        },
+        "satellites": [
+          "G31",
+          "G10",
+          "G23",
+          "G26"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "operation": "OP74",
+      "rank": 4,
+      "utc": "2025-03-14T12:47:17Z"
+    },
+    {
+      "candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 5.033679711284175,
+          "maximum_total_per_track_rms_envelope_hz": 2.5168398556420875,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "true_subset": [
+            "G05",
+            "G12",
+            "G18",
+            "G24"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 5.033679711284175,
+          "geometry_only_maximum_detector_bin_width_hz": 5.033679711284175,
+          "maximum_total_per_track_rms_envelope_hz": 2.5168398556420875,
+          "source": "NEAREST_WRONG_GPS_SUBSET"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 15.501746131399234,
+            "maximum_total_per_track_rms_envelope_hz": 7.750873065699617,
+            "nearest_null_subset": [
+              "G07",
+              "G13",
+              "G14",
+              "G32"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G24"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 2245.2328811846946,
+            "maximum_total_per_track_rms_envelope_hz": 1122.6164405923473,
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G24"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 7.666347570651406,
+            "maximum_total_per_track_rms_envelope_hz": 3.833173785325703,
+            "nearest_null_subset": [
+              "G04",
+              "G05",
+              "G24",
+              "G28"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G24"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G05": 42.73674867618593,
+          "G12": 42.11177205464901,
+          "G18": 26.871898277958454,
+          "G24": 22.932867713276266
+        },
+        "satellites": [
+          "G24",
+          "G18",
+          "G12",
+          "G05"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "operation": "OP73",
+      "rank": 5,
+      "utc": "2025-03-14T10:09:45Z"
+    },
+    {
+      "candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 4.770605321105497,
+          "maximum_total_per_track_rms_envelope_hz": 2.3853026605527483,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "true_subset": [
+            "G18",
+            "G23",
+            "G25",
+            "G29"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 4.770605321105497,
+          "geometry_only_maximum_detector_bin_width_hz": 4.770605321105497,
+          "maximum_total_per_track_rms_envelope_hz": 2.3853026605527483,
+          "source": "NEAREST_WRONG_GPS_SUBSET"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 9.202252354220013,
+            "maximum_total_per_track_rms_envelope_hz": 4.6011261771100065,
+            "nearest_null_subset": [
+              "G07",
+              "G18",
+              "G23",
+              "G26"
+            ],
+            "true_subset": [
+              "G18",
+              "G23",
+              "G25",
+              "G29"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 801.7546176820725,
+            "maximum_total_per_track_rms_envelope_hz": 400.87730884103627,
+            "true_subset": [
+              "G18",
+              "G23",
+              "G25",
+              "G29"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 16.525256350208032,
+            "maximum_total_per_track_rms_envelope_hz": 8.262628175104016,
+            "nearest_null_subset": [
+              "G04",
+              "G09",
+              "G15",
+              "G28"
+            ],
+            "true_subset": [
+              "G18",
+              "G23",
+              "G25",
+              "G29"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G18": 23.081018999634292,
+          "G23": 32.311337437672606,
+          "G25": 17.383821291089664,
+          "G29": 32.34483652287082
+        },
+        "satellites": [
+          "G25",
+          "G18",
+          "G23",
+          "G29"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "operation": "OP40",
+      "rank": 6,
+      "utc": "2025-03-04T07:03:23Z"
+    },
+    {
+      "candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 0.4939378330592484,
+          "maximum_total_per_track_rms_envelope_hz": 0.2469689165296242,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "true_subset": [
+            "G05",
+            "G12",
+            "G18",
+            "G29"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 0.4939378330592484,
+          "geometry_only_maximum_detector_bin_width_hz": 0.4939378330592484,
+          "maximum_total_per_track_rms_envelope_hz": 0.2469689165296242,
+          "source": "NEAREST_WRONG_GPS_SUBSET"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 14.905108988638393,
+            "maximum_total_per_track_rms_envelope_hz": 7.452554494319196,
+            "nearest_null_subset": [
+              "G06",
+              "G10",
+              "G19",
+              "G24"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G29"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 1886.7310368405467,
+            "maximum_total_per_track_rms_envelope_hz": 943.3655184202734,
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G29"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 2.4446798827810183,
+            "maximum_total_per_track_rms_envelope_hz": 1.2223399413905092,
+            "nearest_null_subset": [
+              "G08",
+              "G19",
+              "G24",
+              "G26"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G29"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G05": 38.37308919128242,
+          "G12": 28.472088203706907,
+          "G18": 24.934680504759683,
+          "G29": 40.03464411191387
+        },
+        "satellites": [
+          "G18",
+          "G12",
+          "G05",
+          "G29"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "operation": "OP38",
+      "rank": 7,
+      "utc": "2025-03-03T06:13:00Z"
+    }
+  ],
+  "rows": [
+    {
+      "advertised_duration_ms": 300,
+      "assignment_codebook": {
+        "candidate_count": 31,
+        "candidate_satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "controlling_assignment": {
+          "affine_projected_rmse_hz": 0.061133423743519585,
+          "maximum_total_per_track_rms_envelope_hz": 0.030566711871759793,
+          "nearest_wrong_subset": [
+            "G10",
+            "G18",
+            "G22",
+            "G28"
+          ],
+          "normalized_shape_distance": 1.7274165952464455e-05,
+          "true_subset": [
+            "G06",
+            "G07",
+            "G11",
+            "G30"
+          ]
+        },
+        "hypothesis_count": 31465,
+        "signals_per_hypothesis": 4,
+        "strongest_assignment": {
+          "affine_projected_rmse_hz": 136.50698611356393,
+          "maximum_total_per_track_rms_envelope_hz": 68.25349305678196,
+          "nearest_wrong_subset": [
+            "G02",
+            "G04",
+            "G10",
+            "G30"
+          ],
+          "normalized_shape_distance": 0.009513342892816764,
+          "true_subset": [
+            "G05",
+            "G09",
+            "G13",
+            "G17"
+          ]
+        }
+      },
+      "candidate_pool": {
+        "count": 31,
+        "maximum_deg": 164.09230193459913,
+        "minimum_deg": 21.087440929845833,
+        "off_boresight_deg": {
+          "G01": 93.57803336587092,
+          "G02": 99.99477542454879,
+          "G03": 90.79210230904613,
+          "G04": 65.2197262958524,
+          "G05": 53.937502446927965,
+          "G06": 21.087440929845833,
+          "G07": 57.17360970802425,
+          "G08": 133.04323921659508,
+          "G09": 40.32548793577775,
+          "G10": 149.08309586482414,
+          "G11": 29.890120881592033,
+          "G12": 62.23710130121916,
+          "G13": 60.236437210099965,
+          "G14": 79.81884540336092,
+          "G15": 85.9654530551075,
+          "G16": 112.60546251727044,
+          "G17": 48.2437686873313,
+          "G18": 119.84265165016298,
+          "G19": 27.429472423676657,
+          "G20": 33.30041567778759,
+          "G22": 71.60306593387175,
+          "G23": 121.03560867839077,
+          "G24": 104.13849574359278,
+          "G25": 74.9907583566615,
+          "G26": 102.69493263516014,
+          "G27": 157.66763707277073,
+          "G28": 108.55075859345303,
+          "G29": 86.04826569291745,
+          "G30": 58.49815520401576,
+          "G31": 98.96775466350086,
+          "G32": 164.09230193459913
+        },
+        "satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "selection": "ALL_HEALTHY_BROADCAST_GPS_NOT_EARTH_OCCULTED_NO_RF_POWER_CLAIM"
+      },
+      "complete_pool_stress_controlling_separation": {
+        "affine_projected_rmse_hz": 0.010974048140410007,
+        "geometry_only_maximum_detector_bin_width_hz": 0.010974048140410007,
+        "maximum_total_per_track_rms_envelope_hz": 0.005487024070205003,
+        "source": "STATIC_OBSERVER"
+      },
+      "doy": 55,
+      "duration_state": "ARCHIVE_LISTING",
+      "geometry_selected_candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 10.178695029388686,
+          "maximum_total_per_track_rms_envelope_hz": 5.089347514694343,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "true_subset": [
+            "G06",
+            "G11",
+            "G19",
+            "G20"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 8.055338523412576,
+          "geometry_only_maximum_detector_bin_width_hz": 8.055338523412576,
+          "maximum_total_per_track_rms_envelope_hz": 4.027669261706288,
+          "source": "STATIC_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 18.854926715067815,
+            "maximum_total_per_track_rms_envelope_hz": 9.427463357533908,
+            "nearest_null_subset": [
+              "G04",
+              "G14",
+              "G22",
+              "G23"
+            ],
+            "true_subset": [
+              "G06",
+              "G11",
+              "G19",
+              "G20"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 2092.5417920920804,
+            "maximum_total_per_track_rms_envelope_hz": 1046.2708960460402,
+            "true_subset": [
+              "G06",
+              "G11",
+              "G19",
+              "G20"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 8.055338523412576,
+            "maximum_total_per_track_rms_envelope_hz": 4.027669261706288,
+            "nearest_null_subset": [
+              "G08",
+              "G11",
+              "G20",
+              "G32"
+            ],
+            "true_subset": [
+              "G06",
+              "G11",
+              "G19",
+              "G20"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G06": 21.087440929845833,
+          "G11": 29.890120881592033,
+          "G19": 27.429472423676657,
+          "G20": 33.30041567778759
+        },
+        "satellites": [
+          "G06",
+          "G19",
+          "G11",
+          "G20"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "nulls": {
+        "EARTH_CENTER_OBSERVER": {
+          "affine_projected_rmse_hz": 0.09682031009608838,
+          "controlling_true_subset": [
+            "G14",
+            "G19",
+            "G22",
+            "G31"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.04841015504804419,
+          "nearest_null_subset": [
+            "G07",
+            "G08",
+            "G23",
+            "G25"
+          ]
+        },
+        "RANK_AFFINE": {
+          "affine_projected_rmse_hz": 27.719295689826975,
+          "controlling_true_subset": [
+            "G14",
+            "G19",
+            "G22",
+            "G31"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 13.859647844913487
+        },
+        "STATIC_OBSERVER": {
+          "affine_projected_rmse_hz": 0.010974048140410007,
+          "controlling_true_subset": [
+            "G07",
+            "G12",
+            "G13",
+            "G24"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.005487024070205003,
+          "nearest_null_subset": [
+            "G08",
+            "G15",
+            "G20",
+            "G32"
+          ]
+        }
+      },
+      "observer_independence": "INDEPENDENT_OF_TARGET_RF_BUT_NOT_PROSPECTIVE_OBSERVER_ORBIT",
+      "observer_source": "RECONSTRUCTED_CRUISE_SPK",
+      "observer_target": "-2711",
+      "operation": "OP32",
+      "state": "GEOMETRY_COMPILED",
+      "timing_sensitivity_for_controlling_true_subset": [
+        {
+          "correct_subset_rmse_hz": 11.464108200953394,
+          "nearest_wrong_rmse_hz": 8.894943160590314,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G14",
+            "G20"
+          ],
+          "preference_margin_rmse_hz": -2.56916504036308,
+          "shift_s": -60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 1.9127908542264591,
+          "nearest_wrong_rmse_hz": 11.770627668108947,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "preference_margin_rmse_hz": 9.857836813882487,
+          "shift_s": -10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.19127982141349106,
+          "nearest_wrong_rmse_hz": 10.332699767490327,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "preference_margin_rmse_hz": 10.141419946076836,
+          "shift_s": -1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.01767433608505922,
+          "nearest_wrong_rmse_hz": 10.191955411101102,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "preference_margin_rmse_hz": 10.174281075016042,
+          "shift_s": -0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.01932334881333949,
+          "nearest_wrong_rmse_hz": 10.163239759337827,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "preference_margin_rmse_hz": 10.143916410524488,
+          "shift_s": 0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.19163876919626915,
+          "nearest_wrong_rmse_hz": 10.025740147554558,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "preference_margin_rmse_hz": 9.83410137835829,
+          "shift_s": 1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 1.9142441075739602,
+          "nearest_wrong_rmse_hz": 8.712388575546038,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "preference_margin_rmse_hz": 6.798144467972078,
+          "shift_s": 10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 11.494945367333262,
+          "nearest_wrong_rmse_hz": 6.842236743123674,
+          "nearest_wrong_subset": [
+            "G06",
+            "G11",
+            "G20",
+            "G22"
+          ],
+          "preference_margin_rmse_hz": -4.652708624209588,
+          "shift_s": 60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        }
+      ],
+      "utc": "2025-02-24T12:04:49Z"
+    },
+    {
+      "advertised_duration_ms": 300,
+      "assignment_codebook": {
+        "candidate_count": 30,
+        "candidate_satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "controlling_assignment": {
+          "affine_projected_rmse_hz": 0.057543365607738005,
+          "maximum_total_per_track_rms_envelope_hz": 0.028771682803869002,
+          "nearest_wrong_subset": [
+            "G03",
+            "G05",
+            "G25",
+            "G27"
+          ],
+          "normalized_shape_distance": 2.0219477379636283e-05,
+          "true_subset": [
+            "G18",
+            "G27",
+            "G28",
+            "G32"
+          ]
+        },
+        "hypothesis_count": 27405,
+        "signals_per_hypothesis": 4,
+        "strongest_assignment": {
+          "affine_projected_rmse_hz": 127.460127314447,
+          "maximum_total_per_track_rms_envelope_hz": 63.7300636572235,
+          "nearest_wrong_subset": [
+            "G09",
+            "G11",
+            "G12",
+            "G15"
+          ],
+          "normalized_shape_distance": 0.009001822293645132,
+          "true_subset": [
+            "G03",
+            "G16",
+            "G28",
+            "G30"
+          ]
+        }
+      },
+      "candidate_pool": {
+        "count": 30,
+        "maximum_deg": 172.05845769482482,
+        "minimum_deg": 34.319965017754505,
+        "off_boresight_deg": {
+          "G01": 172.05845769482482,
+          "G02": 160.8918893470025,
+          "G03": 135.17466085768723,
+          "G04": 150.4027992198366,
+          "G05": 43.58086055415133,
+          "G06": 86.11974017192207,
+          "G07": 119.13735105395885,
+          "G08": 113.33572486438023,
+          "G09": 137.98556493672342,
+          "G10": 82.41821702978278,
+          "G11": 59.559049106201755,
+          "G12": 60.65389197568752,
+          "G13": 53.922795900494414,
+          "G14": 85.50340621805799,
+          "G15": 34.319965017754505,
+          "G16": 106.38928154889821,
+          "G17": 120.86158141107492,
+          "G18": 37.34346337664014,
+          "G19": 105.01823958637978,
+          "G20": 56.9167950762243,
+          "G22": 80.11941523963446,
+          "G23": 57.76860761900788,
+          "G25": 67.54708803501258,
+          "G26": 105.83211715164794,
+          "G27": 92.94769298885437,
+          "G28": 98.61694173477302,
+          "G29": 39.968307125782225,
+          "G30": 90.68258114096115,
+          "G31": 119.69669132858937,
+          "G32": 74.01261231020189
+        },
+        "satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "selection": "ALL_HEALTHY_BROADCAST_GPS_NOT_EARTH_OCCULTED_NO_RF_POWER_CLAIM"
+      },
+      "complete_pool_stress_controlling_separation": {
+        "affine_projected_rmse_hz": 0.057543365607738005,
+        "geometry_only_maximum_detector_bin_width_hz": 0.057543365607738005,
+        "maximum_total_per_track_rms_envelope_hz": 0.028771682803869002,
+        "source": "NEAREST_WRONG_GPS_SUBSET"
+      },
+      "doy": 58,
+      "duration_state": "ARCHIVE_LISTING",
+      "geometry_selected_candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 17.999227449799253,
+          "maximum_total_per_track_rms_envelope_hz": 8.999613724899627,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "true_subset": [
+            "G05",
+            "G15",
+            "G18",
+            "G29"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 8.71376041818009,
+          "geometry_only_maximum_detector_bin_width_hz": 8.71376041818009,
+          "maximum_total_per_track_rms_envelope_hz": 4.356880209090045,
+          "source": "EARTH_CENTER_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 8.71376041818009,
+            "maximum_total_per_track_rms_envelope_hz": 4.356880209090045,
+            "nearest_null_subset": [
+              "G02",
+              "G09",
+              "G23",
+              "G31"
+            ],
+            "true_subset": [
+              "G05",
+              "G15",
+              "G18",
+              "G29"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 2578.8850131935965,
+            "maximum_total_per_track_rms_envelope_hz": 1289.4425065967982,
+            "true_subset": [
+              "G05",
+              "G15",
+              "G18",
+              "G29"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 16.780619664074713,
+            "maximum_total_per_track_rms_envelope_hz": 8.390309832037357,
+            "nearest_null_subset": [
+              "G05",
+              "G15",
+              "G23",
+              "G29"
+            ],
+            "true_subset": [
+              "G05",
+              "G15",
+              "G18",
+              "G29"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G05": 43.58086055415133,
+          "G15": 34.319965017754505,
+          "G18": 37.34346337664014,
+          "G29": 39.968307125782225
+        },
+        "satellites": [
+          "G15",
+          "G18",
+          "G29",
+          "G05"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "nulls": {
+        "EARTH_CENTER_OBSERVER": {
+          "affine_projected_rmse_hz": 0.1015249511771573,
+          "controlling_true_subset": [
+            "G04",
+            "G13",
+            "G14",
+            "G28"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.05076247558857865,
+          "nearest_null_subset": [
+            "G14",
+            "G17",
+            "G25",
+            "G29"
+          ]
+        },
+        "RANK_AFFINE": {
+          "affine_projected_rmse_hz": 18.51262668954412,
+          "controlling_true_subset": [
+            "G08",
+            "G18",
+            "G26",
+            "G27"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 9.25631334477206
+        },
+        "STATIC_OBSERVER": {
+          "affine_projected_rmse_hz": 0.09196804518718865,
+          "controlling_true_subset": [
+            "G08",
+            "G17",
+            "G20",
+            "G30"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.045984022593594326,
+          "nearest_null_subset": [
+            "G08",
+            "G17",
+            "G20",
+            "G30"
+          ]
+        }
+      },
+      "observer_independence": "INDEPENDENT_OF_TARGET_RF_BUT_NOT_PROSPECTIVE_OBSERVER_ORBIT",
+      "observer_source": "RECONSTRUCTED_CRUISE_SPK",
+      "observer_target": "-2711",
+      "operation": "OP37",
+      "state": "GEOMETRY_COMPILED",
+      "timing_sensitivity_for_controlling_true_subset": [
+        {
+          "correct_subset_rmse_hz": 18.62300616926146,
+          "nearest_wrong_rmse_hz": 9.518133330120573,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": -9.104872839140885,
+          "shift_s": -60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 3.115700164880328,
+          "nearest_wrong_rmse_hz": 15.40881135144286,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 12.293111186562532,
+          "shift_s": -10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.3144870900931635,
+          "nearest_wrong_rmse_hz": 17.729482744970642,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 17.41499565487748,
+          "shift_s": -1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.033620489804612214,
+          "nearest_wrong_rmse_hz": 17.969548454198772,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 17.93592796439416,
+          "shift_s": -0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.028819734119632727,
+          "nearest_wrong_rmse_hz": 18.024431419834738,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 17.995611685715104,
+          "shift_s": 0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.3095986932449925,
+          "nearest_wrong_rmse_hz": 18.264522169195505,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 17.954923475950512,
+          "shift_s": 1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 3.1184193018657806,
+          "nearest_wrong_rmse_hz": 20.728354364594498,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G15",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 17.609935062728717,
+          "shift_s": 10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 18.771848179265973,
+          "nearest_wrong_rmse_hz": 17.46283176777678,
+          "nearest_wrong_subset": [
+            "G05",
+            "G07",
+            "G10",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": -1.3090164114891927,
+          "shift_s": 60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        }
+      ],
+      "utc": "2025-02-27T16:09:37Z"
+    },
+    {
+      "advertised_duration_ms": 300,
+      "assignment_codebook": {
+        "candidate_count": 30,
+        "candidate_satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "controlling_assignment": {
+          "affine_projected_rmse_hz": 0.01612040246683433,
+          "maximum_total_per_track_rms_envelope_hz": 0.008060201233417165,
+          "nearest_wrong_subset": [
+            "G04",
+            "G06",
+            "G11",
+            "G22"
+          ],
+          "normalized_shape_distance": 1.8730199631692795e-06,
+          "true_subset": [
+            "G06",
+            "G11",
+            "G22",
+            "G29"
+          ]
+        },
+        "hypothesis_count": 27405,
+        "signals_per_hypothesis": 4,
+        "strongest_assignment": {
+          "affine_projected_rmse_hz": 128.55821148770684,
+          "maximum_total_per_track_rms_envelope_hz": 64.27910574385342,
+          "nearest_wrong_subset": [
+            "G09",
+            "G14",
+            "G15",
+            "G31"
+          ],
+          "normalized_shape_distance": 0.009654806775790678,
+          "true_subset": [
+            "G09",
+            "G11",
+            "G15",
+            "G16"
+          ]
+        }
+      },
+      "candidate_pool": {
+        "count": 30,
+        "maximum_deg": 149.9904269659777,
+        "minimum_deg": 24.934680504759683,
+        "off_boresight_deg": {
+          "G01": 148.54890730234067,
+          "G02": 133.63129916326588,
+          "G03": 149.9904269659777,
+          "G04": 107.33333622447668,
+          "G05": 38.37308919128242,
+          "G06": 105.74513247939711,
+          "G07": 140.67675155992887,
+          "G08": 121.54096191174801,
+          "G09": 106.983182278141,
+          "G10": 78.25894006975894,
+          "G11": 79.79519034215966,
+          "G12": 28.472088203706907,
+          "G13": 80.7985610941993,
+          "G14": 126.7349334205108,
+          "G15": 60.81959188358,
+          "G16": 101.05887006049642,
+          "G17": 118.03008298659186,
+          "G18": 24.934680504759683,
+          "G19": 100.57728362132087,
+          "G20": 62.23778865573993,
+          "G22": 109.28734206787975,
+          "G23": 47.11706116887667,
+          "G24": 60.702145467771935,
+          "G26": 79.12588081670938,
+          "G27": 98.84482355913048,
+          "G28": 49.88341508065789,
+          "G29": 40.03464411191387,
+          "G30": 134.58517984216425,
+          "G31": 64.99524069397047,
+          "G32": 78.49809103321383
+        },
+        "satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "selection": "ALL_HEALTHY_BROADCAST_GPS_NOT_EARTH_OCCULTED_NO_RF_POWER_CLAIM"
+      },
+      "complete_pool_stress_controlling_separation": {
+        "affine_projected_rmse_hz": 0.01612040246683433,
+        "geometry_only_maximum_detector_bin_width_hz": 0.01612040246683433,
+        "maximum_total_per_track_rms_envelope_hz": 0.008060201233417165,
+        "source": "NEAREST_WRONG_GPS_SUBSET"
+      },
+      "doy": 62,
+      "duration_state": "ARCHIVE_LISTING",
+      "geometry_selected_candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 0.4939378330592484,
+          "maximum_total_per_track_rms_envelope_hz": 0.2469689165296242,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "true_subset": [
+            "G05",
+            "G12",
+            "G18",
+            "G29"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 0.4939378330592484,
+          "geometry_only_maximum_detector_bin_width_hz": 0.4939378330592484,
+          "maximum_total_per_track_rms_envelope_hz": 0.2469689165296242,
+          "source": "NEAREST_WRONG_GPS_SUBSET"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 14.905108988638393,
+            "maximum_total_per_track_rms_envelope_hz": 7.452554494319196,
+            "nearest_null_subset": [
+              "G06",
+              "G10",
+              "G19",
+              "G24"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G29"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 1886.7310368405467,
+            "maximum_total_per_track_rms_envelope_hz": 943.3655184202734,
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G29"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 2.4446798827810183,
+            "maximum_total_per_track_rms_envelope_hz": 1.2223399413905092,
+            "nearest_null_subset": [
+              "G08",
+              "G19",
+              "G24",
+              "G26"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G29"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G05": 38.37308919128242,
+          "G12": 28.472088203706907,
+          "G18": 24.934680504759683,
+          "G29": 40.03464411191387
+        },
+        "satellites": [
+          "G18",
+          "G12",
+          "G05",
+          "G29"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "nulls": {
+        "EARTH_CENTER_OBSERVER": {
+          "affine_projected_rmse_hz": 0.061746042000584894,
+          "controlling_true_subset": [
+            "G04",
+            "G09",
+            "G15",
+            "G19"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.030873021000292447,
+          "nearest_null_subset": [
+            "G05",
+            "G07",
+            "G08",
+            "G24"
+          ]
+        },
+        "RANK_AFFINE": {
+          "affine_projected_rmse_hz": 9.562547873951926,
+          "controlling_true_subset": [
+            "G03",
+            "G18",
+            "G23",
+            "G30"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 4.781273936975963
+        },
+        "STATIC_OBSERVER": {
+          "affine_projected_rmse_hz": 0.07268508027027273,
+          "controlling_true_subset": [
+            "G02",
+            "G07",
+            "G29",
+            "G32"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.03634254013513637,
+          "nearest_null_subset": [
+            "G01",
+            "G03",
+            "G15",
+            "G16"
+          ]
+        }
+      },
+      "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+      "observer_source": "ACTUAL_LANDING_SITE_SPK",
+      "observer_target": "-2711900",
+      "operation": "OP38",
+      "state": "GEOMETRY_COMPILED",
+      "timing_sensitivity_for_controlling_true_subset": [
+        {
+          "correct_subset_rmse_hz": 12.596024341471123,
+          "nearest_wrong_rmse_hz": 13.004964590161935,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 0.40894024869081136,
+          "shift_s": -60.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 2.095616663229076,
+          "nearest_wrong_rmse_hz": 2.517707187867875,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 0.42209052463879937,
+          "shift_s": -10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.2091141987519562,
+          "nearest_wrong_rmse_hz": 0.6776139258822946,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 0.46849972713033844,
+          "shift_s": -1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.021107203765685954,
+          "nearest_wrong_rmse_hz": 0.5114638108878312,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 0.49035660712214524,
+          "shift_s": -0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.019682183288505264,
+          "nearest_wrong_rmse_hz": 0.4785632582409286,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 0.45888107495242336,
+          "shift_s": 0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.21204733532367243,
+          "nearest_wrong_rmse_hz": 0.3436853978120812,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": 0.13163806248840876,
+          "shift_s": 1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 2.099223916957384,
+          "nearest_wrong_rmse_hz": 1.7168501307512325,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": -0.3823737862061516,
+          "shift_s": 10.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 12.600217002021365,
+          "nearest_wrong_rmse_hz": 12.198068363749602,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G12",
+            "G18"
+          ],
+          "preference_margin_rmse_hz": -0.40214863827176295,
+          "shift_s": 60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        }
+      ],
+      "utc": "2025-03-03T06:13:00Z"
+    },
+    {
+      "advertised_duration_ms": 300,
+      "assignment_codebook": {
+        "candidate_count": 31,
+        "candidate_satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "controlling_assignment": {
+          "affine_projected_rmse_hz": 0.008811162795255227,
+          "maximum_total_per_track_rms_envelope_hz": 0.0044055813976276136,
+          "nearest_wrong_subset": [
+            "G12",
+            "G19",
+            "G22",
+            "G31"
+          ],
+          "normalized_shape_distance": 9.084922070304741e-07,
+          "true_subset": [
+            "G12",
+            "G19",
+            "G22",
+            "G32"
+          ]
+        },
+        "hypothesis_count": 31465,
+        "signals_per_hypothesis": 4,
+        "strongest_assignment": {
+          "affine_projected_rmse_hz": 130.76547576938327,
+          "maximum_total_per_track_rms_envelope_hz": 65.38273788469164,
+          "nearest_wrong_subset": [
+            "G01",
+            "G30",
+            "G31",
+            "G32"
+          ],
+          "normalized_shape_distance": 0.011047860567677557,
+          "true_subset": [
+            "G05",
+            "G16",
+            "G31",
+            "G32"
+          ]
+        }
+      },
+      "candidate_pool": {
+        "count": 31,
+        "maximum_deg": 155.54284476962513,
+        "minimum_deg": 17.383821291089664,
+        "off_boresight_deg": {
+          "G01": 135.38701650832138,
+          "G02": 122.81135317448368,
+          "G03": 155.54284476962513,
+          "G04": 108.06194504729395,
+          "G05": 46.25351720727297,
+          "G06": 115.95908860945933,
+          "G07": 118.88827745576185,
+          "G08": 117.42826743168001,
+          "G09": 106.31075052163112,
+          "G10": 65.19917906852149,
+          "G11": 91.00432537672046,
+          "G12": 47.26202267692187,
+          "G13": 76.44769611928538,
+          "G14": 152.4414227676368,
+          "G15": 56.71799565618198,
+          "G16": 79.39344741115552,
+          "G17": 130.28357050355444,
+          "G18": 23.081018999634292,
+          "G19": 110.78493767691648,
+          "G20": 74.93019783666865,
+          "G22": 133.5147916226159,
+          "G23": 32.311337437672606,
+          "G24": 79.23698920959995,
+          "G25": 17.383821291089664,
+          "G26": 56.85815651654101,
+          "G27": 90.75616454441766,
+          "G28": 51.22878958031434,
+          "G29": 32.34483652287082,
+          "G30": 125.59101813279877,
+          "G31": 57.001975391571946,
+          "G32": 82.81600813036611
+        },
+        "satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "selection": "ALL_HEALTHY_BROADCAST_GPS_NOT_EARTH_OCCULTED_NO_RF_POWER_CLAIM"
+      },
+      "complete_pool_stress_controlling_separation": {
+        "affine_projected_rmse_hz": 0.008811162795255227,
+        "geometry_only_maximum_detector_bin_width_hz": 0.008811162795255227,
+        "maximum_total_per_track_rms_envelope_hz": 0.0044055813976276136,
+        "source": "NEAREST_WRONG_GPS_SUBSET"
+      },
+      "doy": 63,
+      "duration_state": "ARCHIVE_LISTING_L1_BIN_300MS_SDRX_400MS_CONFLICT",
+      "geometry_selected_candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 4.770605321105497,
+          "maximum_total_per_track_rms_envelope_hz": 2.3853026605527483,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "true_subset": [
+            "G18",
+            "G23",
+            "G25",
+            "G29"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 4.770605321105497,
+          "geometry_only_maximum_detector_bin_width_hz": 4.770605321105497,
+          "maximum_total_per_track_rms_envelope_hz": 2.3853026605527483,
+          "source": "NEAREST_WRONG_GPS_SUBSET"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 9.202252354220013,
+            "maximum_total_per_track_rms_envelope_hz": 4.6011261771100065,
+            "nearest_null_subset": [
+              "G07",
+              "G18",
+              "G23",
+              "G26"
+            ],
+            "true_subset": [
+              "G18",
+              "G23",
+              "G25",
+              "G29"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 801.7546176820725,
+            "maximum_total_per_track_rms_envelope_hz": 400.87730884103627,
+            "true_subset": [
+              "G18",
+              "G23",
+              "G25",
+              "G29"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 16.525256350208032,
+            "maximum_total_per_track_rms_envelope_hz": 8.262628175104016,
+            "nearest_null_subset": [
+              "G04",
+              "G09",
+              "G15",
+              "G28"
+            ],
+            "true_subset": [
+              "G18",
+              "G23",
+              "G25",
+              "G29"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G18": 23.081018999634292,
+          "G23": 32.311337437672606,
+          "G25": 17.383821291089664,
+          "G29": 32.34483652287082
+        },
+        "satellites": [
+          "G25",
+          "G18",
+          "G23",
+          "G29"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "nulls": {
+        "EARTH_CENTER_OBSERVER": {
+          "affine_projected_rmse_hz": 0.05042196987392597,
+          "controlling_true_subset": [
+            "G03",
+            "G18",
+            "G31",
+            "G32"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.025210984936962985,
+          "nearest_null_subset": [
+            "G13",
+            "G23",
+            "G27",
+            "G31"
+          ]
+        },
+        "RANK_AFFINE": {
+          "affine_projected_rmse_hz": 11.06483786874892,
+          "controlling_true_subset": [
+            "G04",
+            "G15",
+            "G29",
+            "G30"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 5.53241893437446
+        },
+        "STATIC_OBSERVER": {
+          "affine_projected_rmse_hz": 0.05653263244154989,
+          "controlling_true_subset": [
+            "G05",
+            "G11",
+            "G12",
+            "G22"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.028266316220774947,
+          "nearest_null_subset": [
+            "G03",
+            "G15",
+            "G22",
+            "G30"
+          ]
+        }
+      },
+      "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+      "observer_source": "ACTUAL_LANDING_SITE_SPK",
+      "observer_target": "-2711900",
+      "operation": "OP40",
+      "state": "GEOMETRY_COMPILED",
+      "timing_sensitivity_for_controlling_true_subset": [
+        {
+          "correct_subset_rmse_hz": 8.048589010079645,
+          "nearest_wrong_rmse_hz": 9.433533203805322,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 1.3849441937256763,
+          "shift_s": -60.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 1.3423344292800738,
+          "nearest_wrong_rmse_hz": 4.980850503111893,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 3.638516073831819,
+          "shift_s": -10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.13494680355332794,
+          "nearest_wrong_rmse_hz": 4.774361520044459,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 4.639414716491131,
+          "shift_s": -1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.015210365354735536,
+          "nearest_wrong_rmse_hz": 4.77083220370316,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 4.755621838348424,
+          "shift_s": -0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.01312155316676721,
+          "nearest_wrong_rmse_hz": 4.770505117708096,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 4.757383564541328,
+          "shift_s": 0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.13346229619969963,
+          "nearest_wrong_rmse_hz": 4.768485732562699,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 4.635023436362999,
+          "shift_s": 1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 1.3409783759246532,
+          "nearest_wrong_rmse_hz": 4.929362137888991,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 3.588383761964338,
+          "shift_s": 10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 8.049478974792496,
+          "nearest_wrong_rmse_hz": 9.268934152923034,
+          "nearest_wrong_subset": [
+            "G09",
+            "G12",
+            "G18",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 1.2194551781305378,
+          "shift_s": 60.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        }
+      ],
+      "utc": "2025-03-04T07:03:23Z"
+    },
+    {
+      "advertised_duration_ms": 2000,
+      "assignment_codebook": {
+        "candidate_count": 31,
+        "candidate_satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "controlling_assignment": {
+          "affine_projected_rmse_hz": 0.060388441124045095,
+          "maximum_total_per_track_rms_envelope_hz": 0.030194220562022547,
+          "nearest_wrong_subset": [
+            "G07",
+            "G10",
+            "G31",
+            "G32"
+          ],
+          "normalized_shape_distance": 7.48931102046589e-06,
+          "true_subset": [
+            "G08",
+            "G15",
+            "G26",
+            "G32"
+          ]
+        },
+        "hypothesis_count": 31465,
+        "signals_per_hypothesis": 4,
+        "strongest_assignment": {
+          "affine_projected_rmse_hz": 146.3163509495741,
+          "maximum_total_per_track_rms_envelope_hz": 73.15817547478704,
+          "nearest_wrong_subset": [
+            "G03",
+            "G04",
+            "G11",
+            "G28"
+          ],
+          "normalized_shape_distance": 0.010170019319577879,
+          "true_subset": [
+            "G01",
+            "G03",
+            "G06",
+            "G31"
+          ]
+        }
+      },
+      "candidate_pool": {
+        "count": 31,
+        "maximum_deg": 163.62694123719433,
+        "minimum_deg": 22.932867713276266,
+        "off_boresight_deg": {
+          "G01": 163.62694123719433,
+          "G02": 145.74253076506767,
+          "G03": 137.1177107638958,
+          "G04": 127.57894139387187,
+          "G05": 42.73674867618593,
+          "G06": 97.83724296280302,
+          "G07": 153.5124602564826,
+          "G08": 113.7407982860651,
+          "G09": 127.75424283073959,
+          "G10": 81.50394711763323,
+          "G11": 70.7974418559547,
+          "G12": 42.11177205464901,
+          "G13": 73.77634739739659,
+          "G14": 96.59950632505473,
+          "G15": 52.503417916150084,
+          "G16": 116.11338465413975,
+          "G17": 115.7796615910764,
+          "G18": 26.871898277958454,
+          "G19": 104.05883921636037,
+          "G20": 59.535120844216706,
+          "G22": 82.71667704196362,
+          "G23": 55.0068620336979,
+          "G24": 22.932867713276266,
+          "G25": 47.2876842010268,
+          "G26": 104.13823456218077,
+          "G27": 95.519923105656,
+          "G28": 71.31407861881166,
+          "G29": 46.26798616942753,
+          "G30": 120.0876917047925,
+          "G31": 92.48428916532681,
+          "G32": 67.47067257884616
+        },
+        "satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "selection": "ALL_HEALTHY_BROADCAST_GPS_NOT_EARTH_OCCULTED_NO_RF_POWER_CLAIM"
+      },
+      "complete_pool_stress_controlling_separation": {
+        "affine_projected_rmse_hz": 0.060388441124045095,
+        "geometry_only_maximum_detector_bin_width_hz": 0.060388441124045095,
+        "maximum_total_per_track_rms_envelope_hz": 0.030194220562022547,
+        "source": "NEAREST_WRONG_GPS_SUBSET"
+      },
+      "doy": 73,
+      "duration_state": "ARCHIVE_LISTING",
+      "geometry_selected_candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 5.033679711284175,
+          "maximum_total_per_track_rms_envelope_hz": 2.5168398556420875,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "true_subset": [
+            "G05",
+            "G12",
+            "G18",
+            "G24"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 5.033679711284175,
+          "geometry_only_maximum_detector_bin_width_hz": 5.033679711284175,
+          "maximum_total_per_track_rms_envelope_hz": 2.5168398556420875,
+          "source": "NEAREST_WRONG_GPS_SUBSET"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 15.501746131399234,
+            "maximum_total_per_track_rms_envelope_hz": 7.750873065699617,
+            "nearest_null_subset": [
+              "G07",
+              "G13",
+              "G14",
+              "G32"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G24"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 2245.2328811846946,
+            "maximum_total_per_track_rms_envelope_hz": 1122.6164405923473,
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G24"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 7.666347570651406,
+            "maximum_total_per_track_rms_envelope_hz": 3.833173785325703,
+            "nearest_null_subset": [
+              "G04",
+              "G05",
+              "G24",
+              "G28"
+            ],
+            "true_subset": [
+              "G05",
+              "G12",
+              "G18",
+              "G24"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G05": 42.73674867618593,
+          "G12": 42.11177205464901,
+          "G18": 26.871898277958454,
+          "G24": 22.932867713276266
+        },
+        "satellites": [
+          "G24",
+          "G18",
+          "G12",
+          "G05"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "nulls": {
+        "EARTH_CENTER_OBSERVER": {
+          "affine_projected_rmse_hz": 0.09889564686250434,
+          "controlling_true_subset": [
+            "G17",
+            "G19",
+            "G20",
+            "G30"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.04944782343125217,
+          "nearest_null_subset": [
+            "G09",
+            "G16",
+            "G28",
+            "G31"
+          ]
+        },
+        "RANK_AFFINE": {
+          "affine_projected_rmse_hz": 18.228034316180274,
+          "controlling_true_subset": [
+            "G02",
+            "G16",
+            "G23",
+            "G32"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 9.114017158090137
+        },
+        "STATIC_OBSERVER": {
+          "affine_projected_rmse_hz": 0.06792893898693061,
+          "controlling_true_subset": [
+            "G01",
+            "G17",
+            "G18",
+            "G23"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.03396446949346531,
+          "nearest_null_subset": [
+            "G01",
+            "G17",
+            "G18",
+            "G23"
+          ]
+        }
+      },
+      "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+      "observer_source": "ACTUAL_LANDING_SITE_SPK",
+      "observer_target": "-2711900",
+      "operation": "OP73",
+      "state": "GEOMETRY_COMPILED",
+      "timing_sensitivity_for_controlling_true_subset": [
+        {
+          "correct_subset_rmse_hz": 13.783418010515966,
+          "nearest_wrong_rmse_hz": 11.115846100908243,
+          "nearest_wrong_subset": [
+            "G09",
+            "G13",
+            "G20",
+            "G23"
+          ],
+          "preference_margin_rmse_hz": -2.667571909607723,
+          "shift_s": -60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 2.295140986294032,
+          "nearest_wrong_rmse_hz": 6.597692530522635,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "preference_margin_rmse_hz": 4.302551544228603,
+          "shift_s": -10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.22751312275088267,
+          "nearest_wrong_rmse_hz": 5.164838924853799,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "preference_margin_rmse_hz": 4.937325802102917,
+          "shift_s": -1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.018013814860256296,
+          "nearest_wrong_rmse_hz": 5.0446591631290785,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "preference_margin_rmse_hz": 5.026645348268822,
+          "shift_s": -0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.02803171081325505,
+          "nearest_wrong_rmse_hz": 5.019398358699476,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "preference_margin_rmse_hz": 4.991366647886221,
+          "shift_s": 0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.234571424239117,
+          "nearest_wrong_rmse_hz": 4.907600476555048,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "preference_margin_rmse_hz": 4.673029052315932,
+          "shift_s": 1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 2.2987935893395712,
+          "nearest_wrong_rmse_hz": 4.207695598599959,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "preference_margin_rmse_hz": 1.9089020092603879,
+          "shift_s": 10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 13.774116641626394,
+          "nearest_wrong_rmse_hz": 11.733776262546012,
+          "nearest_wrong_subset": [
+            "G05",
+            "G18",
+            "G24",
+            "G29"
+          ],
+          "preference_margin_rmse_hz": -2.040340379080382,
+          "shift_s": 60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        }
+      ],
+      "utc": "2025-03-14T10:09:45Z"
+    },
+    {
+      "advertised_duration_ms": 500,
+      "assignment_codebook": {
+        "candidate_count": 30,
+        "candidate_satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "controlling_assignment": {
+          "affine_projected_rmse_hz": 0.05084601824726121,
+          "maximum_total_per_track_rms_envelope_hz": 0.025423009123630606,
+          "nearest_wrong_subset": [
+            "G03",
+            "G06",
+            "G16",
+            "G29"
+          ],
+          "normalized_shape_distance": 3.8704043247711463e-05,
+          "true_subset": [
+            "G05",
+            "G12",
+            "G15",
+            "G20"
+          ]
+        },
+        "hypothesis_count": 27405,
+        "signals_per_hypothesis": 4,
+        "strongest_assignment": {
+          "affine_projected_rmse_hz": 102.97056962710964,
+          "maximum_total_per_track_rms_envelope_hz": 51.48528481355482,
+          "nearest_wrong_subset": [
+            "G03",
+            "G05",
+            "G15",
+            "G25"
+          ],
+          "normalized_shape_distance": 0.008073861344543291,
+          "true_subset": [
+            "G05",
+            "G07",
+            "G15",
+            "G25"
+          ]
+        }
+      },
+      "candidate_pool": {
+        "count": 30,
+        "maximum_deg": 172.268981478323,
+        "minimum_deg": 16.87007716434757,
+        "off_boresight_deg": {
+          "G01": 83.60463313351055,
+          "G02": 67.283112520743,
+          "G03": 98.52876446045533,
+          "G04": 82.00452520568585,
+          "G05": 98.39324699189193,
+          "G06": 172.268981478323,
+          "G07": 124.11017133807546,
+          "G08": 68.2984938939475,
+          "G09": 101.71152356493452,
+          "G10": 37.780276240435484,
+          "G11": 149.5638096196297,
+          "G12": 78.50508335678359,
+          "G13": 125.2572771132479,
+          "G14": 136.3123786008671,
+          "G15": 95.76886471201883,
+          "G16": 61.65085218197529,
+          "G17": 118.2023252974091,
+          "G18": 46.791291900690595,
+          "G19": 127.14245382293655,
+          "G20": 123.59445182403184,
+          "G22": 131.05409989678515,
+          "G23": 44.43042004133921,
+          "G24": 95.07592498325485,
+          "G25": 54.87653852880594,
+          "G26": 44.901200623202165,
+          "G27": 53.072341911633366,
+          "G29": 77.55068621578414,
+          "G30": 155.9108807364802,
+          "G31": 16.87007716434757,
+          "G32": 48.53901105269372
+        },
+        "satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "selection": "ALL_HEALTHY_BROADCAST_GPS_NOT_EARTH_OCCULTED_NO_RF_POWER_CLAIM"
+      },
+      "complete_pool_stress_controlling_separation": {
+        "affine_projected_rmse_hz": 0.05084601824726121,
+        "geometry_only_maximum_detector_bin_width_hz": 0.05084601824726121,
+        "maximum_total_per_track_rms_envelope_hz": 0.025423009123630606,
+        "source": "NEAREST_WRONG_GPS_SUBSET"
+      },
+      "doy": 73,
+      "duration_state": "ARCHIVE_LISTING",
+      "geometry_selected_candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 13.763494815137436,
+          "maximum_total_per_track_rms_envelope_hz": 6.881747407568718,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "true_subset": [
+            "G10",
+            "G23",
+            "G26",
+            "G31"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 6.328409344875698,
+          "geometry_only_maximum_detector_bin_width_hz": 6.328409344875698,
+          "maximum_total_per_track_rms_envelope_hz": 3.164204672437849,
+          "source": "EARTH_CENTER_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 6.328409344875698,
+            "maximum_total_per_track_rms_envelope_hz": 3.164204672437849,
+            "nearest_null_subset": [
+              "G06",
+              "G11",
+              "G17",
+              "G18"
+            ],
+            "true_subset": [
+              "G10",
+              "G23",
+              "G26",
+              "G31"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 1509.795379161919,
+            "maximum_total_per_track_rms_envelope_hz": 754.8976895809595,
+            "true_subset": [
+              "G10",
+              "G23",
+              "G26",
+              "G31"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 21.902157868098183,
+            "maximum_total_per_track_rms_envelope_hz": 10.951078934049091,
+            "nearest_null_subset": [
+              "G05",
+              "G10",
+              "G31",
+              "G32"
+            ],
+            "true_subset": [
+              "G10",
+              "G23",
+              "G26",
+              "G31"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G10": 37.780276240435484,
+          "G23": 44.43042004133921,
+          "G26": 44.901200623202165,
+          "G31": 16.87007716434757
+        },
+        "satellites": [
+          "G31",
+          "G10",
+          "G23",
+          "G26"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "nulls": {
+        "EARTH_CENTER_OBSERVER": {
+          "affine_projected_rmse_hz": 0.07841724967873437,
+          "controlling_true_subset": [
+            "G15",
+            "G18",
+            "G20",
+            "G29"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.039208624839367184,
+          "nearest_null_subset": [
+            "G05",
+            "G06",
+            "G15",
+            "G20"
+          ]
+        },
+        "RANK_AFFINE": {
+          "affine_projected_rmse_hz": 16.32618569050993,
+          "controlling_true_subset": [
+            "G05",
+            "G10",
+            "G11",
+            "G32"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 8.163092845254965
+        },
+        "STATIC_OBSERVER": {
+          "affine_projected_rmse_hz": 0.12453440179327382,
+          "controlling_true_subset": [
+            "G01",
+            "G03",
+            "G16",
+            "G30"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.06226720089663691,
+          "nearest_null_subset": [
+            "G10",
+            "G20",
+            "G23",
+            "G24"
+          ]
+        }
+      },
+      "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+      "observer_source": "ACTUAL_LANDING_SITE_SPK",
+      "observer_target": "-2711900",
+      "operation": "OP74",
+      "state": "GEOMETRY_COMPILED",
+      "timing_sensitivity_for_controlling_true_subset": [
+        {
+          "correct_subset_rmse_hz": 17.105733746954176,
+          "nearest_wrong_rmse_hz": 2.772749740623159,
+          "nearest_wrong_subset": [
+            "G04",
+            "G05",
+            "G14",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": -14.332984006331017,
+          "shift_s": -60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 2.8511465626737347,
+          "nearest_wrong_rmse_hz": 13.41312312074674,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": 10.561976558073004,
+          "shift_s": -10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.28664827835604184,
+          "nearest_wrong_rmse_hz": 13.700885858980666,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": 13.414237580624624,
+          "shift_s": -1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.030117408607997064,
+          "nearest_wrong_rmse_hz": 13.75582674786133,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": 13.725709339253331,
+          "shift_s": -0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.02402812565192049,
+          "nearest_wrong_rmse_hz": 13.768067179798468,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": 13.744039054146548,
+          "shift_s": 0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.2831334891888831,
+          "nearest_wrong_rmse_hz": 13.828727323116164,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": 13.545593833927281,
+          "shift_s": 1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 2.848953298313672,
+          "nearest_wrong_rmse_hz": 14.667666252407745,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G13",
+            "G30"
+          ],
+          "preference_margin_rmse_hz": 11.818712954094073,
+          "shift_s": 10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 17.076291937002136,
+          "nearest_wrong_rmse_hz": 11.168484677924228,
+          "nearest_wrong_subset": [
+            "G07",
+            "G16",
+            "G23",
+            "G31"
+          ],
+          "preference_margin_rmse_hz": -5.907807259077908,
+          "shift_s": 60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        }
+      ],
+      "utc": "2025-03-14T12:47:17Z"
+    },
+    {
+      "advertised_duration_ms": 2000,
+      "assignment_codebook": {
+        "candidate_count": 31,
+        "candidate_satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "controlling_assignment": {
+          "affine_projected_rmse_hz": 0.14434226721544507,
+          "maximum_total_per_track_rms_envelope_hz": 0.07217113360772254,
+          "nearest_wrong_subset": [
+            "G01",
+            "G03",
+            "G12",
+            "G14"
+          ],
+          "normalized_shape_distance": 6.18990063576766e-05,
+          "true_subset": [
+            "G06",
+            "G14",
+            "G31",
+            "G32"
+          ]
+        },
+        "hypothesis_count": 31465,
+        "signals_per_hypothesis": 4,
+        "strongest_assignment": {
+          "affine_projected_rmse_hz": 118.60759689375834,
+          "maximum_total_per_track_rms_envelope_hz": 59.30379844687917,
+          "nearest_wrong_subset": [
+            "G16",
+            "G22",
+            "G24",
+            "G26"
+          ],
+          "normalized_shape_distance": 0.008700904900529249,
+          "true_subset": [
+            "G02",
+            "G06",
+            "G16",
+            "G24"
+          ]
+        }
+      },
+      "candidate_pool": {
+        "count": 31,
+        "maximum_deg": 166.38450091582158,
+        "minimum_deg": 17.46481576798934,
+        "off_boresight_deg": {
+          "G01": 82.64024951411508,
+          "G02": 66.42048351892734,
+          "G03": 101.3772520078965,
+          "G04": 82.87209655686624,
+          "G05": 97.43994531202334,
+          "G06": 166.38450091582158,
+          "G07": 112.46353315528059,
+          "G08": 71.2809752809717,
+          "G09": 99.39504745323099,
+          "G10": 34.527195895597735,
+          "G11": 149.09647944687316,
+          "G12": 82.88000826096419,
+          "G13": 117.25118299330056,
+          "G14": 147.12827852371964,
+          "G15": 91.80229388909667,
+          "G16": 51.91865103836104,
+          "G17": 121.61753663999131,
+          "G18": 48.40738014405964,
+          "G19": 128.5927373873608,
+          "G20": 124.75392019811532,
+          "G22": 144.2971593486525,
+          "G23": 40.415241181801456,
+          "G24": 103.69546341167626,
+          "G25": 55.63808360687698,
+          "G26": 32.54580316983382,
+          "G27": 54.09959669402787,
+          "G28": 23.03482170304998,
+          "G29": 73.4069837249103,
+          "G30": 141.35436216872884,
+          "G31": 17.46481576798934,
+          "G32": 56.70205842536289
+        },
+        "satellites": [
+          "G01",
+          "G02",
+          "G03",
+          "G04",
+          "G05",
+          "G06",
+          "G07",
+          "G08",
+          "G09",
+          "G10",
+          "G11",
+          "G12",
+          "G13",
+          "G14",
+          "G15",
+          "G16",
+          "G17",
+          "G18",
+          "G19",
+          "G20",
+          "G22",
+          "G23",
+          "G24",
+          "G25",
+          "G26",
+          "G27",
+          "G28",
+          "G29",
+          "G30",
+          "G31",
+          "G32"
+        ],
+        "selection": "ALL_HEALTHY_BROADCAST_GPS_NOT_EARTH_OCCULTED_NO_RF_POWER_CLAIM"
+      },
+      "complete_pool_stress_controlling_separation": {
+        "affine_projected_rmse_hz": 0.04168160877500656,
+        "geometry_only_maximum_detector_bin_width_hz": 0.04168160877500656,
+        "maximum_total_per_track_rms_envelope_hz": 0.02084080438750328,
+        "source": "STATIC_OBSERVER"
+      },
+      "doy": 74,
+      "duration_state": "ARCHIVE_LISTING",
+      "geometry_selected_candidate_family": {
+        "assignment": {
+          "affine_projected_rmse_hz": 11.5851105605477,
+          "maximum_total_per_track_rms_envelope_hz": 5.79255528027385,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "true_subset": [
+            "G10",
+            "G26",
+            "G28",
+            "G31"
+          ]
+        },
+        "controlling_separation": {
+          "affine_projected_rmse_hz": 11.019310141609873,
+          "geometry_only_maximum_detector_bin_width_hz": 11.019310141609873,
+          "maximum_total_per_track_rms_envelope_hz": 5.5096550708049365,
+          "source": "STATIC_OBSERVER"
+        },
+        "nulls": {
+          "EARTH_CENTER_OBSERVER": {
+            "affine_projected_rmse_hz": 12.097681736578593,
+            "maximum_total_per_track_rms_envelope_hz": 6.048840868289297,
+            "nearest_null_subset": [
+              "G01",
+              "G16",
+              "G24",
+              "G28"
+            ],
+            "true_subset": [
+              "G10",
+              "G26",
+              "G28",
+              "G31"
+            ]
+          },
+          "RANK_AFFINE": {
+            "affine_projected_rmse_hz": 1366.8363899310414,
+            "maximum_total_per_track_rms_envelope_hz": 683.4181949655207,
+            "true_subset": [
+              "G10",
+              "G26",
+              "G28",
+              "G31"
+            ]
+          },
+          "STATIC_OBSERVER": {
+            "affine_projected_rmse_hz": 11.019310141609873,
+            "maximum_total_per_track_rms_envelope_hz": 5.5096550708049365,
+            "nearest_null_subset": [
+              "G01",
+              "G08",
+              "G16",
+              "G31"
+            ],
+            "true_subset": [
+              "G10",
+              "G26",
+              "G28",
+              "G31"
+            ]
+          }
+        },
+        "off_boresight_deg": {
+          "G10": 34.527195895597735,
+          "G26": 32.54580316983382,
+          "G28": 23.03482170304998,
+          "G31": 17.46481576798934
+        },
+        "satellites": [
+          "G31",
+          "G28",
+          "G26",
+          "G10"
+        ],
+        "selection": "FOUR_MINIMUM_TRANSMIT_OFF_BORESIGHT_AMONG_UNOCCULTED_HEALTHY_GPS",
+        "selection_uses_rf_values": false,
+        "transmit_gain_or_received_power_inferred": false
+      },
+      "nulls": {
+        "EARTH_CENTER_OBSERVER": {
+          "affine_projected_rmse_hz": 0.0775054664978768,
+          "controlling_true_subset": [
+            "G07",
+            "G11",
+            "G18",
+            "G25"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.0387527332489384,
+          "nearest_null_subset": [
+            "G06",
+            "G16",
+            "G17",
+            "G29"
+          ]
+        },
+        "RANK_AFFINE": {
+          "affine_projected_rmse_hz": 10.135037644137643,
+          "controlling_true_subset": [
+            "G05",
+            "G08",
+            "G10",
+            "G23"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 5.067518822068822
+        },
+        "STATIC_OBSERVER": {
+          "affine_projected_rmse_hz": 0.04168160877500656,
+          "controlling_true_subset": [
+            "G05",
+            "G10",
+            "G27",
+            "G32"
+          ],
+          "maximum_total_per_track_rms_envelope_hz": 0.02084080438750328,
+          "nearest_null_subset": [
+            "G08",
+            "G15",
+            "G26",
+            "G31"
+          ]
+        }
+      },
+      "observer_independence": "INDEPENDENT_OF_TARGET_RF",
+      "observer_source": "ACTUAL_LANDING_SITE_SPK",
+      "observer_target": "-2711900",
+      "operation": "OP76",
+      "state": "GEOMETRY_COMPILED",
+      "timing_sensitivity_for_controlling_true_subset": [
+        {
+          "correct_subset_rmse_hz": 9.252628124832727,
+          "nearest_wrong_rmse_hz": 2.9388507502806203,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": -6.313777374552107,
+          "shift_s": -60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 1.540866341537388,
+          "nearest_wrong_rmse_hz": 10.068994814740764,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 8.528128473203376,
+          "shift_s": -10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.15255562055068483,
+          "nearest_wrong_rmse_hz": 11.435108157300988,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 11.282552536750304,
+          "shift_s": -1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.014889355067663118,
+          "nearest_wrong_rmse_hz": 11.570860138827705,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 11.555970783760042,
+          "shift_s": -0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.016710057370625562,
+          "nearest_wrong_rmse_hz": 11.60164704220412,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 11.584936984833494,
+          "shift_s": 0.1,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 0.1563834083425013,
+          "nearest_wrong_rmse_hz": 11.73968318153357,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 11.583299773191069,
+          "shift_s": 1.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 1.542572525960178,
+          "nearest_wrong_rmse_hz": 13.109578154036209,
+          "nearest_wrong_subset": [
+            "G04",
+            "G10",
+            "G17",
+            "G27"
+          ],
+          "preference_margin_rmse_hz": 11.56700562807603,
+          "shift_s": 10.0,
+          "state": "CORRECT_SUBSET_REMAINS_BEST"
+        },
+        {
+          "correct_subset_rmse_hz": 9.24709970837875,
+          "nearest_wrong_rmse_hz": 6.714781722499894,
+          "nearest_wrong_subset": [
+            "G05",
+            "G07",
+            "G14",
+            "G31"
+          ],
+          "preference_margin_rmse_hz": -2.532317985878856,
+          "shift_s": 60.0,
+          "state": "WRONG_SUBSET_BECOMES_BEST"
+        }
+      ],
+      "utc": "2025-03-15T13:07:27Z"
+    }
+  ],
+  "schema": "lugre-snapshot-discriminability-receipt-v1",
+  "screen_version": "lugre-constellation-snapshot-discriminability-v1",
+  "source_commit": "f8aa957ea0310f07ac0976e247c00308efc82314",
+  "source_sha256": "c30f38b365ca55bf4d29cceb55adee8b002d05dc78f44dc34d6c9e4e0b39d089"
+}

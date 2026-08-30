@@ -13,6 +13,11 @@ from experiments.orbital_discriminability import (
 )
 
 
+ROOT = Path(__file__).resolve().parents[1]
+RECEIPT = ROOT / screen.RECEIPT_NAME
+RECEIPT_SHA256 = "bbe20a00fb7f11b9979a70d352f8faff9d571749256716f10c752ef0d936f2de"
+
+
 def test_manifest_freezes_physical_question_and_zero_lugre_access() -> None:
     value = screen.manifest()
 
@@ -156,3 +161,24 @@ def test_source_has_no_lugre_network_or_sample_surface() -> None:
         "tlm_nav",
     ):
         assert forbidden not in source
+
+
+def test_committed_receipt_is_exact_and_remains_premeasurement() -> None:
+    canonical = RECEIPT.read_bytes().replace(b"\r\n", b"\n")
+    value = json.loads(canonical)
+
+    assert len(canonical) == 106_167
+    assert screen.canonical_sha256(RECEIPT) == RECEIPT_SHA256
+    assert value["source_commit"] == "f8aa957ea0310f07ac0976e247c00308efc82314"
+    assert value["source_sha256"] == (
+        "c30f38b365ca55bf4d29cceb55adee8b002d05dc78f44dc34d6c9e4e0b39d089"
+    )
+    assert value["outcome"] == screen.OUTCOME_POSITIVE
+    assert value["ranked_operations"][0]["operation"] == "OP76"
+    family = value["ranked_operations"][0]["candidate_family"]
+    assert family["satellites"] == ["G31", "G28", "G26", "G10"]
+    assert family["controlling_separation"][
+        "affine_projected_rmse_hz"
+    ] == pytest.approx(11.019310141609873)
+    assert value["measurement_admission"] == "NOT_EVALUATED_OPEN_TERMS"
+    assert not any(value["observation_access"].values())
