@@ -1491,3 +1491,16 @@ actual station coordinates. If the witnesses or timing cannot be qualified,
 the route stops `NO_FALSIFIABLE_VISIBILITY_EXPERIMENT_AVAILABLE` without RF
 access. See
 [`DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/DISTRIBUTED_VISIBILITY_EVENT_SPIKE_REPORT.md).
+
+The current-candidate geometry audit is also complete. METEOR-M N2-4 / NORAD
+59051 produces two positive Doncaster-envelope/YO3BN visibility margins (90 s
+and 80 s) under the frozen adjacent-orbit and position ensemble. A third event
+has zero positive timing slack, while the exact Bucharest–Dorohoi baseline
+does not produce the complete three-state topology. This result does not
+promote the Doncaster proxy to a station coordinate. None of the three bounded
+public station descriptions closes event time, sequence continuity and a
+same-path absence witness as a pair, so the branch stops
+`NO_FALSIFIABLE_VISIBILITY_EXPERIMENT_AVAILABLE` with zero RF access. The next
+maximum action is a reviewed, non-target-specific measurement-path check of
+one explicitly named pair, not a catalog or a new geometry search. See
+[`METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md`](experiments/orbital_discriminability/METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md).
