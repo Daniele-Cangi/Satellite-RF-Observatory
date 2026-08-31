@@ -35,6 +35,18 @@ def test_wire_parser_accepts_current_and_legacy_descriptive_envelopes() -> None:
     )
 
 
+def test_wire_profile_label_accounts_for_official_sdr_prefix_only() -> None:
+    assert probe.wire_profile_label_matches(
+        "Airspy AIR 136 - 142", "AIR 136 - 142"
+    )
+    assert probe.wire_profile_label_matches(
+        "[RTL] 24 MHz - 1.766 GHz", "24 MHz - 1.766 GHz"
+    )
+    assert not probe.wire_profile_label_matches(
+        "Airspy AIR 130 - 136", "AIR 136 - 142"
+    )
+
+
 def test_frozen_window_guard_is_inclusive() -> None:
     assert not probe.outside_frozen_windows(
         datetime(2026, 8, 31, 12, 32, 25, tzinfo=timezone.utc)

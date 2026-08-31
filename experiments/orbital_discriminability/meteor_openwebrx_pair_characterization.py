@@ -116,6 +116,19 @@ def parse_wire_text(message: str) -> tuple[str, Any]:
     return str(value.get("type", "description")), value.get("value")
 
 
+def wire_profile_label_matches(label: object, frozen_profile_name: str) -> bool:
+    """Match the UI label without weakening the frozen profile identity.
+
+    OpenWebRX constructs the wire label as ``<SDR name> <profile name>`` while
+    status.json exposes only ``<profile name>``.  The delivered center/span and
+    selected profile id are still checked independently after selection.
+    """
+
+    if not isinstance(label, str):
+        return False
+    return label == frozen_profile_name or label.endswith(" " + frozen_profile_name)
+
+
 def _percentile(values: list[float], fraction: float) -> float | None:
     if not values:
         return None
@@ -208,7 +221,8 @@ def _run_endpoint(
                 profiles_seen = len(value)
                 matches = [
                     row for row in value
-                    if isinstance(row, dict) and row.get("name") == endpoint.profile_name
+                    if isinstance(row, dict)
+                    and wire_profile_label_matches(row.get("name"), endpoint.profile_name)
                 ]
                 if len(matches) != 1:
                     raise CharacterizationError("FROZEN_PROFILE_NOT_UNIQUE_OR_ABSENT")
