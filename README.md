@@ -475,6 +475,19 @@ set. No waterfall or audio product has been opened and no primary pair is yet
 selected. See
 [`METEOR_OPENWEBRX_PATH_CLOSURE.md`](experiments/orbital_discriminability/METEOR_OPENWEBRX_PATH_CLOSURE.md).
 
+The bounded SatNOGS follow-up has now ranked exactly those four sealed primary
+roots. EA3AGB–hyperlink is the strongest geometry-only pair: its jointly
+visible held-out differential has a 4,506.364 Hz affine-residual span and a
+1,017.905 Hz best-null ceiling. This is not yet an instrumental margin. The
+official flowgraphs place the waterfall after model-driven Doppler
+compensation, while the observation metadata does not expose the exact
+applied control trace or deployed flowgraph commit. Native FFT dimensions and
+row event times also remain inside unopened development artifacts. The honest
+state is therefore
+`SATNOGS_GEOMETRY_SHORTLISTED_MEASUREMENT_TRANSFORM_UNRESOLVED`: geometry is
+positive, no primary pair is frozen and zero RF bytes were accessed. See
+[`METEOR_SATNOGS_FORWARD_SELECTION_REPORT.md`](experiments/orbital_discriminability/METEOR_SATNOGS_FORWARD_SELECTION_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
