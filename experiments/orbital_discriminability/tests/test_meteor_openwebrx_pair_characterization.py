@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 
@@ -157,3 +159,19 @@ def test_no_network_without_explicit_live_flag(monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.setattr("sys.argv", ["probe"])
     with pytest.raises(SystemExit, match="explicit --live"):
         probe.main()
+
+
+def test_path_closure_preserves_endpoint_uncertainty_and_zero_rf_persistence() -> None:
+    path = Path(probe.__file__).with_name("METEOR_OPENWEBRX_PATH_CLOSURE.json")
+    closure = json.loads(path.read_text(encoding="utf-8"))
+
+    assert closure["endpoint_capability_decision"] == "UNRESOLVED"
+    assert closure["measurement_path_decision"] == "MEASUREMENT_PATH_INSUFFICIENT"
+    assert closure["terminal_state"] == "OPENWEBRX_PATH_CLOSED"
+    assert closure["measurement_decision_changed_by_description_error"] is False
+    assert closure["rf_persistence"]["bytes_persisted"] == 0
+    assert closure["rf_persistence"]["spectrum_bins_decoded"] == 0
+    assert closure["replacement_route"]["metadata_scope"]["waterfalls_opened"] == 0
+    assert closure["replacement_route"]["metadata_scope"]["audio_payloads_opened"] == 0
+    assert closure["replacement_route"]["primary_pair_selected"] is False
+    assert closure["replacement_route"]["prospective_plan_frozen"] is False

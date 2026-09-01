@@ -1,0 +1,78 @@
+{
+  "schema": "SRO_METEOR_OPENWEBRX_PATH_CLOSURE_V1",
+  "candidate": {
+    "name": "METEOR-M N2-4",
+    "norad_cat_id": 59051,
+    "carrier_hz": 137900000
+  },
+  "closed_path": [
+    "OPENWEBRXNL_ALKMAAR",
+    "YO3BN_BUCHAREST"
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "state": "QUALIFICATION_ERROR",
+      "subtype": "DESCRIPTION_ERROR",
+      "source_commit": "eee7a7f7e1a0ef3dc68680401c3ff4b4dcf74098"
+    },
+    {
+      "attempt": 2,
+      "state": "QUALIFICATION_ERROR",
+      "subtype": "DESCRIPTION_ERROR_NON_ATOMIC_CONFIG_OBSERVATION",
+      "source_commit": "c03b81e279da45c5f4a65f2cdc1889b82a9fe5d0"
+    }
+  ],
+  "endpoint_capability_decision": "UNRESOLVED",
+  "measurement_path_decision": "MEASUREMENT_PATH_INSUFFICIENT",
+  "terminal_state": "OPENWEBRX_PATH_CLOSED",
+  "controlling_causal_cuts": [
+    "NO_SERVER_FRAME_EVENT_TIMESTAMP",
+    "NO_SERVER_FRAME_SEQUENCE",
+    "NO_FINITE_FFT_EVENT_TO_CLIENT_ARRIVAL_BOUND",
+    "NO_SAME_PATH_PHYSICAL_ABSENCE_WITNESS"
+  ],
+  "measurement_decision_changed_by_description_error": false,
+  "rf_persistence": {
+    "bytes_persisted": 0,
+    "spectrum_bins_decoded": 0,
+    "pre_admission_binary_frame_count": "UNKNOWN_BY_FAILED_DIAGNOSTICS"
+  },
+  "replacement_route": {
+    "type": "MODEL_CONDITIONED_TWO_STATION_SATNOGS_FORWARD_VALIDATION",
+    "metadata_scope": {
+      "norad_cat_id": 59051,
+      "transmitter_uuid": "dP82t5VrQC6hQDC39wxPo8",
+      "observation_frequency_hz": 137900000,
+      "cursor_pages_accepted": 2,
+      "waterfalls_opened": 0,
+      "audio_payloads_opened": 0
+    },
+    "development_pair": [
+      {
+        "observation_id": 14904366,
+        "station_id": 4545,
+        "station_name": "OE9BKJ",
+        "start_utc": "2026-08-29T13:21:42Z",
+        "end_utc": "2026-08-29T13:29:17Z",
+        "status": "good"
+      },
+      {
+        "observation_id": 14907984,
+        "station_id": 5066,
+        "station_name": "SA1CKW",
+        "start_utc": "2026-08-29T13:22:44Z",
+        "end_utc": "2026-08-29T13:32:58Z",
+        "status": "good"
+      }
+    ],
+    "primary_pair_selected": false,
+    "prospective_plan_frozen": false
+  },
+  "authorized_claim": "THE_BOUNDED_OPENWEBRX_PAIR_CANNOT_SUPPORT_THE_FROZEN_VISIBILITY_EXPERIMENT;_A_BOUNDED_SATNOGS_ROUTE_HAS_METADATA_ONLY_DEVELOPMENT_AND_PRIMARY_CANDIDATES",
+  "unauthorized_claims": [
+    "OPENWEBRX_ENDPOINTS_ARE_BROKEN",
+    "SATNOGS_RASTER_PATH_IS_ADMITTED",
+    "AN_ORBITAL_RF_RESULT_EXISTS"
+  ]
+}
