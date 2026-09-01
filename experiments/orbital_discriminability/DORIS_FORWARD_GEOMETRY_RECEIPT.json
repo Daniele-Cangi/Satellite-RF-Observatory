@@ -1,0 +1,179 @@
+{
+  "candidate": {
+    "candidate_day_utc": "2026-09-02",
+    "cospar": "2016-011A",
+    "norad": 41335,
+    "orbit_class": "CNES_EXTRAPOLATED_PRE_OBSERVATION",
+    "orbit_product": "exts3a30.b26243.e26246.D__.sp3.001.Z",
+    "orbit_sha256": "1f8662c0d77b4fbc08dc35121108eb18a70cf22a94185944da652b06dfd97376",
+    "satellite": "Sentinel-3A"
+  },
+  "candidate_interval_count": 10,
+  "claim_scope": "ORBIT_ONLY_GEOMETRY_SPIKE",
+  "ephemeral_orbit_artifact_retention": "ZERO_AFTER_HASHED_ANALYSIS",
+  "forecast_envelope_product": {
+    "name": "exts3a30.b26242.e26245.D__.sp3.001.Z",
+    "sha256": "17cd7dfa11016f7e389237572190cd02530966764ebce36cbd2c12d0d00ebf7a"
+  },
+  "input_artifacts": [
+    {
+      "bytes": 278021,
+      "name": "exts3a30.b26243.e26246.D__.sp3.001.Z",
+      "role": "CURRENT_PRE_OBSERVATION_S3A_FORECAST",
+      "sha256": "1f8662c0d77b4fbc08dc35121108eb18a70cf22a94185944da652b06dfd97376"
+    },
+    {
+      "bytes": 280545,
+      "name": "exts3a30.b26242.e26245.D__.sp3.001.Z",
+      "role": "PRIOR_S3A_FORECAST_ENVELOPE",
+      "sha256": "17cd7dfa11016f7e389237572190cd02530966764ebce36cbd2c12d0d00ebf7a"
+    },
+    {
+      "bytes": 279938,
+      "name": "exts3b30.b26243.e26246.D__.sp3.001.Z",
+      "role": "PHYSICALLY_DISTINCT_WRONG_ORBIT_ALTERNATIVE",
+      "sha256": "5c80e1374b9d2185b476c70ff51d8f46e2def0fba84ff7bef6f31b24ed4870e1"
+    }
+  ],
+  "measurement_admission": "NOT_EVALUATED",
+  "observation_rinex_access": "ZERO",
+  "observation_values_access": "ZERO",
+  "open_terms": [
+    "EXACT_DPOD_BEACON_COORDINATES_HEIGHTS_AND_PHASE_CENTERS",
+    "ONE_WAY_LIGHT_TIME_SAGNAC_SHAPIRO_AND_PROPER_TIME",
+    "TROPOSPHERE_IONOSPHERE_AND_ANTENNA_MAPS",
+    "RINEX_HEADER_FREQUENCY_SHIFT_K_AND_RECEIVER_CLOCK_SEMANTICS",
+    "L1_L2_PHASE_CONTINUITY_PSEUDORANGE_AND_TIME_REFERENCE",
+    "ONBOARD_SHARED_RECEIVER_AND_CHANNEL_DIFFERENTIAL_BIASES",
+    "ACTUAL_PRODUCT_COVERAGE_AND_EVENT_TIME_BOUND"
+  ],
+  "outcome": "DORIS_FORWARD_GEOMETRY_SHORTLISTED_MEASUREMENT_UNADMITTED",
+  "physical_alternative": {
+    "product": "exts3b30.b26243.e26246.D__.sp3.001.Z",
+    "satellite": "Sentinel-3B",
+    "sha256": "5c80e1374b9d2185b476c70ff51d8f46e2def0fba84ff7bef6f31b24ed4870e1"
+  },
+  "physical_question": "Can a pre-pass Sentinel-3A orbit predict simultaneous, beacon-dependent DORIS S-band phase dynamics better than affine and wrong-orbit alternatives?",
+  "root_topology": {
+    "claim_boundary": "BEACON_DEPENDENT_DISTRIBUTED_PROPAGATION_GEOMETRY; NOT_INDEPENDENT_RECEIVER_CONFIRMATION",
+    "independent_receive_hardware_roots": false,
+    "independent_upstream_roots": "DORIS_GROUND_BEACON_TRANSMITTERS",
+    "shared_downstream_components": "SENTINEL_3A_ANTENNA_DGXX_RECEIVER_CLOCK_AND_RINEX_GENERATION"
+  },
+  "rules": {
+    "calibration_fraction": 0.25,
+    "carrier_hz": 2036250000.0,
+    "frozen_along_track_shifts_s": [
+      -60.0,
+      60.0
+    ],
+    "grid_s": 10.0,
+    "minimum_calibration_s": 120.0,
+    "minimum_elevation_deg": 10.0,
+    "minimum_heldout_s": 240.0,
+    "minimum_joint_interval_s": 360.0,
+    "time_system": "SP3_TAI_TO_UTC_WITH_FROZEN_37_SECOND_OFFSET"
+  },
+  "shortlist": [
+    {
+      "affine_null_heldout_peak_to_peak_hz": 93663.01582754153,
+      "along_track_alternative_heldout_peak_to_peak_hz": {
+        "+60": 34858.04911732193,
+        "-60": 50827.246757223256
+      },
+      "calibration_count": 13,
+      "calibration_end_utc": "2026-09-02T01:54:30+00:00",
+      "closest_along_track_heldout_peak_to_peak_hz": 34858.04911732193,
+      "controlling_geometry_separation_hz": 34858.04911732193,
+      "differential_doppler_peak_to_peak_hz": 46107.42584681302,
+      "forecast_non_affine_envelope_peak_to_peak_hz": 2.4840919704327287,
+      "forecast_non_affine_envelope_rms_hz": 1.9000919133848042,
+      "heldout_count": 30,
+      "heldout_duration_s": 300.0,
+      "joint_duration_s": 420.0,
+      "joint_end_utc": "2026-09-02T01:59:30+00:00",
+      "joint_start_utc": "2026-09-02T01:52:30+00:00",
+      "minimum_elevation_deg": 10.306390805911253,
+      "pair": [
+        "KRWB",
+        "LAPB"
+      ],
+      "preliminary_geometry_margin_hz": 34855.5650253515,
+      "wrong_orbit_heldout_peak_to_peak_hz": 93761.96455600052
+    },
+    {
+      "affine_null_heldout_peak_to_peak_hz": 61500.467355900015,
+      "along_track_alternative_heldout_peak_to_peak_hz": {
+        "+60": 21467.81747566557,
+        "-60": 29243.449880714532
+      },
+      "calibration_count": 13,
+      "calibration_end_utc": "2026-09-02T10:53:10+00:00",
+      "closest_along_track_heldout_peak_to_peak_hz": 21467.81747566557,
+      "controlling_geometry_separation_hz": 21467.81747566557,
+      "differential_doppler_peak_to_peak_hz": 31536.403048220327,
+      "forecast_non_affine_envelope_peak_to_peak_hz": 1.8241106335461974,
+      "forecast_non_affine_envelope_rms_hz": 1.3899887183879047,
+      "heldout_count": 31,
+      "heldout_duration_s": 310.0,
+      "joint_duration_s": 430.0,
+      "joint_end_utc": "2026-09-02T10:58:20+00:00",
+      "joint_start_utc": "2026-09-02T10:51:10+00:00",
+      "minimum_elevation_deg": 10.140473409953016,
+      "pair": [
+        "TLSB",
+        "WEUC"
+      ],
+      "preliminary_geometry_margin_hz": 21465.993365032027,
+      "wrong_orbit_heldout_peak_to_peak_hz": 61563.374425610426
+    },
+    {
+      "affine_null_heldout_peak_to_peak_hz": 18147.76648921784,
+      "along_track_alternative_heldout_peak_to_peak_hz": {
+        "+60": 46065.55800616088,
+        "-60": 26264.172054160532
+      },
+      "calibration_count": 13,
+      "calibration_end_utc": "2026-09-02T19:37:50+00:00",
+      "closest_along_track_heldout_peak_to_peak_hz": 26264.172054160532,
+      "controlling_geometry_separation_hz": 18147.76648921784,
+      "differential_doppler_peak_to_peak_hz": 28496.070326577104,
+      "forecast_non_affine_envelope_peak_to_peak_hz": 2.966989671657788,
+      "forecast_non_affine_envelope_rms_hz": 1.7185573326503847,
+      "heldout_count": 36,
+      "heldout_duration_s": 360.0,
+      "joint_duration_s": 480.0,
+      "joint_end_utc": "2026-09-02T19:43:50+00:00",
+      "joint_start_utc": "2026-09-02T19:35:50+00:00",
+      "minimum_elevation_deg": 10.167103556197727,
+      "pair": [
+        "PAUB",
+        "RIMC"
+      ],
+      "preliminary_geometry_margin_hz": 18144.79949954618,
+      "wrong_orbit_heldout_peak_to_peak_hz": 18159.686710342085
+    }
+  ],
+  "station_scope": {
+    "coordinate_bound": "PLUS_MINUS_0_5_ARCMIN_HORIZONTAL; HEIGHT_UNRESOLVED",
+    "pairs": [
+      [
+        "TLSB",
+        "GR4B"
+      ],
+      [
+        "TLSB",
+        "WEUC"
+      ],
+      [
+        "PAUB",
+        "RIMC"
+      ],
+      [
+        "KRWB",
+        "LAPB"
+      ]
+    ],
+    "source": "IDS_CURRENT_STATION_TABLE_MINUTE_RESOLUTION"
+  }
+}
