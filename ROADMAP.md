@@ -1504,3 +1504,14 @@ same-path absence witness as a pair, so the branch stops
 maximum action is a reviewed, non-target-specific measurement-path check of
 one explicitly named pair, not a catalog or a new geometry search. See
 [`METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md`](experiments/orbital_discriminability/METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md).
+
+The bounded OpenWebRX path and its SatNOGS alternative are now both concluded.
+The SatNOGS development-only receipt found a common 160 kHz / 1,024-bin native
+configuration, but not a common native row event-time sequence and not the
+concrete model-driven Doppler control applied upstream of each waterfall.
+Thus the actual terminal is `SATNOGS_DEVELOPMENT_METADATA_PATH_BLOCKED`, not a
+negative orbital outcome. No detector was built and all four primary
+artifacts remain sealed. A next vertical must preserve raw pre-control samples
+or a reversible receiver-control ledger with bounded event time; repairing
+SatNOGS raster transport is not on the active roadmap. See
+[`METEOR_SATNOGS_DEVELOPMENT_METADATA_REPORT.md`](experiments/orbital_discriminability/METEOR_SATNOGS_DEVELOPMENT_METADATA_REPORT.md).
