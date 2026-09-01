@@ -488,6 +488,17 @@ state is therefore
 positive, no primary pair is frozen and zero RF bytes were accessed. See
 [`METEOR_SATNOGS_FORWARD_SELECTION_REPORT.md`](experiments/orbital_discriminability/METEOR_SATNOGS_FORWARD_SELECTION_REPORT.md).
 
+The authorized development-only characterization has now closed that SatNOGS
+route as `SATNOGS_DEVELOPMENT_METADATA_PATH_BLOCKED`. OE9BKJ preserves an HDF5
+native grid at 156.25 Hz spacing and a client-clock row sequence, but exposes
+no bounded ADC-to-UTC accuracy or applied Doppler-control trace. SA1CKW
+publishes only a PNG with native header configuration: it does not preserve
+the native row timestamp sequence or a reversible pixel-to-bin mapping. A
+model-blind detector was therefore not built, the four primary artifacts
+remain sealed and all three development products were destroyed after
+hash-first structural parsing. See
+[`METEOR_SATNOGS_DEVELOPMENT_METADATA_REPORT.md`](experiments/orbital_discriminability/METEOR_SATNOGS_DEVELOPMENT_METADATA_REPORT.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the

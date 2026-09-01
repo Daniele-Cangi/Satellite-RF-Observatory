@@ -1,0 +1,140 @@
+{
+  "schema": "SRO_METEOR_SATNOGS_DEVELOPMENT_METADATA_V1",
+  "outcome": "SATNOGS_DEVELOPMENT_METADATA_PATH_BLOCKED",
+  "authority": {
+    "source_commit": "2268ce1",
+    "development_observation_ids": [
+      14904366,
+      14907984
+    ],
+    "primary_observation_ids_sealed": [
+      14919555,
+      14919561,
+      14919551,
+      14919554
+    ],
+    "primary_artifact_access": "ZERO",
+    "signal_value_access": "ZERO"
+  },
+  "parser_manifest": {
+    "source": "meteor_satnogs_development_metadata.py",
+    "source_sha256": "d1bf76991ef02b61d699fed534f9c4ac90df43e67b7a90d79966566decf6a6bd",
+    "python": "3.13.5",
+    "h5py": "3.15.1",
+    "numpy": "2.3.3",
+    "hdf5_value_whitelist": [
+      "absolute_time",
+      "frequency",
+      "relative_time"
+    ],
+    "hdf5_value_denylist": [
+      "data",
+      "offset",
+      "scale"
+    ],
+    "png_value_policy": "IDAT_SKIPPED_WITHOUT_DECOMPRESSION"
+  },
+  "artifacts": [
+    {
+      "observation_id": 14904366,
+      "product": "SATNOGS_HDF5_ARTIFACT",
+      "byte_count": 3781711,
+      "sha256": "cbf9ec168433144454853fe4190e9070d278d8c5e5bf68aaf3bfdbf98c60a750",
+      "signal_value_access": "ZERO"
+    },
+    {
+      "observation_id": 14904366,
+      "product": "SATNOGS_WATERFALL_PNG",
+      "byte_count": 1400594,
+      "sha256": "4c0cd9fcf051d0b211c2694127bc6d2de02068db7c0c6d2050d2cb94a6fb2a21",
+      "pixel_value_access": "ZERO"
+    },
+    {
+      "observation_id": 14907984,
+      "product": "SATNOGS_WATERFALL_PNG",
+      "byte_count": 1390034,
+      "sha256": "f1eb5a5d486cf160353a3de5fa3cc5a7348d37a84c91454d317b5a2272d410a6",
+      "pixel_value_access": "ZERO"
+    }
+  ],
+  "receipts": [
+    {
+      "observation_id": 14904366,
+      "station": "OE9BKJ",
+      "products": [
+        "HDF5_V2_NATIVE_COORDINATES",
+        "PNG_DISPLAY_RASTER_ONLY"
+      ],
+      "center_frequency_hz": 137900000.0,
+      "native_span_hz": 160000.0,
+      "native_bin_count": 1024,
+      "native_bin_spacing_hz": 156.25,
+      "effective_spectral_resolution_hz": {
+        "state": "UNKNOWN",
+        "reason": "WINDOW_ENBW_NOT_EXPOSED"
+      },
+      "nominal_row_cadence_s": 0.096,
+      "event_time_median_row_cadence_s": 0.089263,
+      "event_time_minimum_row_cadence_s": 0.006688,
+      "event_time_maximum_row_cadence_s": 0.901252,
+      "event_time_first_utc": "2026-08-29T13:21:45.309990+00:00",
+      "event_time_last_utc": "2026-08-29T13:29:17.268987+00:00",
+      "row_count": 4702,
+      "gap_count_above_1_5x_nominal": 2,
+      "sequence_number": "NOT_EXPOSED",
+      "absolute_clock_error_bound_s": {
+        "state": "UNKNOWN",
+        "reason": "CLIENT_TIMESTAMP_HAS_NO_NUMERIC_ADC_OR_SERVER_UTC_BINDING"
+      },
+      "compression": "HDF5_GZIP_LEVEL_4_AND_PNG_DEFLATE",
+      "resampling_or_overlap": "NOT_EXPOSED",
+      "native_row_event_time_sequence": "PRESENT",
+      "applied_doppler_control_trace": "NOT_EXPOSED"
+    },
+    {
+      "observation_id": 14907984,
+      "station": "SA1CKW",
+      "products": [
+        "PNG_NATIVE_HEADER_CONFIGURATION_ONLY"
+      ],
+      "center_frequency_hz": 137900000.0,
+      "native_span_hz": 160000.0,
+      "native_bin_count": 1024,
+      "native_bin_spacing_hz": 156.25,
+      "effective_spectral_resolution_hz": {
+        "state": "UNKNOWN",
+        "reason": "WINDOW_ENBW_AND_PIXEL_TO_NATIVE_BIN_MAPPING_NOT_EXPOSED"
+      },
+      "ffts_per_native_row": 15,
+      "nominal_native_row_cadence_s": 0.096,
+      "native_start_time_utc": "2026-08-29T13:22:48.269677+00:00",
+      "display_time_extent_s": [
+        0.401203,
+        610.490885
+      ],
+      "sequence_number": "NOT_EXPOSED",
+      "sequence_gaps": "NOT_EVALUABLE",
+      "absolute_clock_error_bound_s": {
+        "state": "UNKNOWN",
+        "reason": "CLIENT_TIMESTAMP_HAS_NO_NUMERIC_ADC_OR_SERVER_UTC_BINDING"
+      },
+      "compression": "PNG_DEFLATE",
+      "resampling_or_overlap": "NOT_EXPOSED",
+      "native_row_event_time_sequence": "NOT_EXPOSED",
+      "applied_doppler_control_trace": "NOT_EXPOSED"
+    }
+  ],
+  "pair_admission": {
+    "native_frequency_configuration_pair": true,
+    "native_row_event_time_sequence_pair": false,
+    "applied_doppler_control_pair": false,
+    "model_and_null_transform_equivalence": false,
+    "detector_authorized": false,
+    "primary_pair_frozen": false
+  },
+  "persistence": {
+    "rf_artifacts_retained": 0,
+    "waterfall_artifacts_retained": 0,
+    "receipts_retained": 1
+  }
+}
