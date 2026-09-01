@@ -79,6 +79,11 @@ ENDPOINTS = (
 class CharacterizationError(RuntimeError):
     """Typed refusal for the one-shot characterization."""
 
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.code = code
+        self.receipt: dict[str, Any] | None = None
+
 
 def _parse_utc(value: str) -> datetime:
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -167,6 +172,40 @@ def _config_is_target(config: dict[str, Any], profile_id: str) -> bool:
     )
 
 
+def target_config_is_coherent(
+    config: dict[str, Any],
+    profile_id: str,
+    *,
+    fields_seen_after_selection: set[str] | None,
+) -> bool:
+    """Require one target identity and one coherent delivered RF coordinate.
+
+    OpenWebRX sends initial configuration snapshots but sends property deltas
+    during a profile transition.  When a selection was required, center and
+    span therefore have to have been observed after that selection; values
+    retained from the preceding profile cannot qualify the target profile.
+    ``None`` denotes an initial snapshot that already names the target.
+    """
+
+    if not _config_is_target(config, profile_id):
+        return False
+    if fields_seen_after_selection is not None and not {
+        "center_freq",
+        "samp_rate",
+    }.issubset(fields_seen_after_selection):
+        return False
+    try:
+        center_hz = float(config["center_freq"])
+        span_hz = float(config["samp_rate"])
+        fft_size = int(config["fft_size"])
+    except (KeyError, TypeError, ValueError, OverflowError):
+        return False
+    return (
+        fft_size > 0
+        and profile_covers(center_hz, span_hz, TARGET_CARRIER_HZ)
+    )
+
+
 def _descriptive_config(config: dict[str, Any]) -> dict[str, Any]:
     allowed = (
         "sdr_id",
@@ -199,10 +238,14 @@ def _run_endpoint(
     descriptions: list[str] = []
     target_profile_id: str | None = None
     current_config: dict[str, Any] = {}
+    fields_seen_after_selection: set[str] = set()
     selected = False
     target_ready = False
     profiles_seen = 0
     handshake = None
+    pre_admission_binary_frames = 0
+    pre_admission_binary_bytes = 0
+    pre_admission_stream_hash = hashlib.sha256()
 
     try:
         ws.send("SERVER DE CLIENT client=openwebrx.js type=receiver")
@@ -213,6 +256,11 @@ def _run_endpoint(
             except websocket_module.WebSocketTimeoutException:
                 continue
             if isinstance(item, bytes):
+                pre_admission_binary_frames += 1
+                pre_admission_binary_bytes += len(item)
+                pre_admission_stream_hash.update(struct.pack(">Q", len(item)))
+                pre_admission_stream_hash.update(item)
+                del item
                 continue
             kind, value = parse_wire_text(item)
             if kind == "handshake":
@@ -227,15 +275,31 @@ def _run_endpoint(
                 if len(matches) != 1:
                     raise CharacterizationError("FROZEN_PROFILE_NOT_UNIQUE_OR_ABSENT")
                 target_profile_id = str(matches[0]["id"])
-                if not selected:
+                if not selected and target_config_is_coherent(
+                    current_config,
+                    target_profile_id,
+                    fields_seen_after_selection=None,
+                ):
+                    target_ready = True
+                elif not selected:
                     ws.send(_strict_json({
                         "type": "selectprofile",
                         "params": {"profile": target_profile_id},
                     }))
                     selected = True
+                    fields_seen_after_selection.clear()
             elif kind == "config" and isinstance(value, dict):
-                current_config.update(_descriptive_config(value))
-                if target_profile_id and _config_is_target(current_config, target_profile_id):
+                changed = _descriptive_config(value)
+                current_config.update(changed)
+                if selected:
+                    fields_seen_after_selection.update(changed)
+                if target_profile_id and target_config_is_coherent(
+                    current_config,
+                    target_profile_id,
+                    fields_seen_after_selection=(
+                        fields_seen_after_selection if selected else None
+                    ),
+                ):
                     target_ready = True
             elif kind in {"log_message", "sdr_error", "description"}:
                 descriptions.append(str(value)[:240])
@@ -243,13 +307,9 @@ def _run_endpoint(
         if not target_ready or target_profile_id is None:
             raise CharacterizationError("TARGET_PROFILE_NOT_DELIVERED")
 
-        center_hz = float(current_config.get("center_freq", math.nan))
-        span_hz = float(current_config.get("samp_rate", math.nan))
-        fft_size = int(current_config.get("fft_size", 0))
-        if not profile_covers(center_hz, span_hz, TARGET_CARRIER_HZ):
-            raise CharacterizationError("DELIVERED_PROFILE_DOES_NOT_COVER_CARRIER")
-        if fft_size <= 0:
-            raise CharacterizationError("FFT_SIZE_NOT_EXPOSED")
+        center_hz = float(current_config["center_freq"])
+        span_hz = float(current_config["samp_rate"])
+        fft_size = int(current_config["fft_size"])
 
         ready.wait(timeout=PROFILE_TIMEOUT_S)
         capture_start_utc = datetime.now(timezone.utc)
@@ -364,6 +424,14 @@ def _run_endpoint(
                 "spectrum_values_decoded": False,
                 "rf_data_persisted": False,
             },
+            "pre_admission_artifact": {
+                "hash_input": "LENGTH_PREFIXED_RAW_BINARY_FRAMES",
+                "binary_frame_count": pre_admission_binary_frames,
+                "byte_count": pre_admission_binary_bytes,
+                "sha256_before_discard": pre_admission_stream_hash.hexdigest(),
+                "values_decoded": False,
+                "rf_data_persisted": False,
+            },
             "event_time": {
                 "server_frame_timestamp_exposed": False,
                 "finite_sample_to_utc_bound": None,
@@ -398,6 +466,55 @@ def _run_endpoint(
             raise CharacterizationError("NO_SPECTRUM_FRAMES_DELIVERED")
         validate_receipt(receipt)
         return receipt
+    except threading.BrokenBarrierError as error:
+        typed = CharacterizationError("PAIR_SYNCHRONIZATION_ABORTED_BY_PEER")
+        typed.receipt = {
+            "schema": SCHEMA,
+            "capability_id": endpoint.capability_id,
+            "state": "QUALIFICATION_ERROR",
+            "subtype": "DESCRIPTION_ERROR",
+            "failure": typed.code,
+            "downstream_measurement_admission": "NOT_EVALUATED",
+            "measurement_decision": "UNCHANGED",
+            "last_descriptive_config": _descriptive_config(current_config),
+            "pre_admission_artifact": {
+                "hash_input": "LENGTH_PREFIXED_RAW_BINARY_FRAMES",
+                "binary_frame_count": pre_admission_binary_frames,
+                "byte_count": pre_admission_binary_bytes,
+                "sha256_before_discard": pre_admission_stream_hash.hexdigest(),
+                "values_decoded": False,
+                "rf_data_persisted": False,
+            },
+        }
+        raise typed from error
+    except CharacterizationError as error:
+        ready.abort()
+        error.receipt = {
+            "schema": SCHEMA,
+            "capability_id": endpoint.capability_id,
+            "state": "QUALIFICATION_ERROR",
+            "subtype": "DESCRIPTION_ERROR",
+            "failure": error.code,
+            "downstream_measurement_admission": "NOT_EVALUATED",
+            "measurement_decision": "UNCHANGED",
+            "wire": {
+                "profiles_seen": profiles_seen,
+                "selected_profile_id": target_profile_id,
+                "descriptions": descriptions,
+            },
+            "last_descriptive_config": _descriptive_config(current_config),
+            "fields_seen_after_selection": sorted(fields_seen_after_selection),
+            "pre_admission_artifact": {
+                "hash_input": "LENGTH_PREFIXED_RAW_BINARY_FRAMES",
+                "binary_frame_count": pre_admission_binary_frames,
+                "byte_count": pre_admission_binary_bytes,
+                "sha256_before_discard": pre_admission_stream_hash.hexdigest(),
+                "values_decoded": False,
+                "rf_data_persisted": False,
+            },
+        }
+        validate_receipt(error.receipt)
+        raise
     finally:
         ws.close()
 
@@ -425,7 +542,33 @@ def run_live(websocket_module: Any) -> dict[str, Any]:
             pool.submit(_run_endpoint, endpoint, barrier, websocket_module)
             for endpoint in ENDPOINTS
         ]
-        receipts = [future.result() for future in futures]
+        receipts = []
+        failures = []
+        for endpoint, future in zip(ENDPOINTS, futures):
+            try:
+                receipts.append(future.result())
+            except CharacterizationError as error:
+                failures.append(error.receipt or {
+                    "schema": SCHEMA,
+                    "capability_id": endpoint.capability_id,
+                    "state": "QUALIFICATION_ERROR",
+                    "subtype": "DESCRIPTION_ERROR",
+                    "failure": error.code,
+                    "downstream_measurement_admission": "NOT_EVALUATED",
+                    "measurement_decision": "UNCHANGED",
+                })
+        if failures:
+            result = {
+                "schema": SCHEMA,
+                "bounded_candidate_count": 3,
+                "receipts": receipts,
+                "failures": failures,
+                "outcome": "QUALIFICATION_ERROR",
+                "downstream_measurement_admission": "NOT_EVALUATED",
+                "measurement_decision": "UNCHANGED",
+            }
+            validate_receipt(result)
+            return result
     result = {
         "schema": SCHEMA,
         "bounded_candidate_count": 3,

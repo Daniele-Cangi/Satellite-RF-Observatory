@@ -47,6 +47,59 @@ def test_wire_profile_label_accounts_for_official_sdr_prefix_only() -> None:
     )
 
 
+def test_profile_config_deltas_cannot_mix_old_coordinates_with_new_identity() -> None:
+    target = "airspy|air-136-142"
+    accumulated = {
+        "sdr_id": "other",
+        "profile_id": "old",
+        "center_freq": 7_100_000,
+        "samp_rate": 2_400_000,
+        "fft_size": 4096,
+    }
+    seen_after_selection: set[str] = set()
+
+    identity_delta = {"sdr_id": "airspy", "profile_id": "air-136-142"}
+    accumulated.update(identity_delta)
+    seen_after_selection.update(identity_delta)
+    assert not probe.target_config_is_coherent(
+        accumulated,
+        target,
+        fields_seen_after_selection=seen_after_selection,
+    )
+
+    center_delta = {"center_freq": 139_000_000}
+    accumulated.update(center_delta)
+    seen_after_selection.update(center_delta)
+    assert not probe.target_config_is_coherent(
+        accumulated,
+        target,
+        fields_seen_after_selection=seen_after_selection,
+    )
+
+    span_delta = {"samp_rate": 6_000_000}
+    accumulated.update(span_delta)
+    seen_after_selection.update(span_delta)
+    assert probe.target_config_is_coherent(
+        accumulated,
+        target,
+        fields_seen_after_selection=seen_after_selection,
+    )
+
+
+def test_initial_complete_target_snapshot_needs_no_transition_generation() -> None:
+    assert probe.target_config_is_coherent(
+        {
+            "sdr_id": "rtlsdr",
+            "profile_id": "airband",
+            "center_freq": 137_000_000,
+            "samp_rate": 2_400_000,
+            "fft_size": 4096,
+        },
+        "rtlsdr|airband",
+        fields_seen_after_selection=None,
+    )
+
+
 def test_frozen_window_guard_is_inclusive() -> None:
     assert not probe.outside_frozen_windows(
         datetime(2026, 8, 31, 12, 32, 25, tzinfo=timezone.utc)
@@ -63,6 +116,34 @@ def test_pair_remains_insufficient_without_event_time_sequence_and_witness() -> 
         "same_path_witness": {"state": "NOT_AVAILABLE"},
     }
     assert probe.pair_outcome([row, row]) == "MEASUREMENT_PATH_INSUFFICIENT"
+
+
+def test_live_description_failure_returns_receipt_not_physical_refusal(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    def fail_with_receipt(endpoint, ready, websocket_module):
+        del ready, websocket_module
+        error = probe.CharacterizationError("TARGET_PROFILE_NOT_DELIVERED")
+        error.receipt = {
+            "schema": probe.SCHEMA,
+            "capability_id": endpoint.capability_id,
+            "state": "QUALIFICATION_ERROR",
+            "subtype": "DESCRIPTION_ERROR",
+            "failure": error.code,
+            "downstream_measurement_admission": "NOT_EVALUATED",
+            "measurement_decision": "UNCHANGED",
+        }
+        raise error
+
+    monkeypatch.setattr(probe, "_run_endpoint", fail_with_receipt)
+    monkeypatch.setattr(probe, "outside_frozen_windows", lambda instant: True)
+    result = probe.run_live(object())
+
+    assert result["outcome"] == "QUALIFICATION_ERROR"
+    assert result["downstream_measurement_admission"] == "NOT_EVALUATED"
+    assert result["measurement_decision"] == "UNCHANGED"
+    assert len(result["failures"]) == 2
+    probe.validate_receipt(result)
 
 
 def test_receipt_forbids_rf_values_and_non_finite_json() -> None:
