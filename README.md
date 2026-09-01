@@ -464,6 +464,17 @@ status check. The honest terminal is therefore
 pair of measurement capabilities is admitted and no RF was accessed. See
 [`METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md`](experiments/orbital_discriminability/METEOR_M2_4_VISIBILITY_SHORTLIST_REPORT.md).
 
+The bounded Alkmaar–Bucharest OpenWebRX follow-up is now closed as
+`MEASUREMENT_PATH_INSUFFICIENT`. Two sessions exposed descriptive profile
+handling failures, but repairing them would not add a server-bound FFT event
+time, sequence number or same-path absence witness. The endpoint capability
+state remains unresolved; no receiver is declared broken. A metadata-only
+SatNOGS reconnaissance for the same NORAD ID, transmitter and carrier found a
+distinct two-root development fixture and a later unopened primary candidate
+set. No waterfall or audio product has been opened and no primary pair is yet
+selected. See
+[`METEOR_OPENWEBRX_PATH_CLOSURE.md`](experiments/orbital_discriminability/METEOR_OPENWEBRX_PATH_CLOSURE.md).
+
 One independent GOLD/NLIB qualification product on DOY 214 was then scanned
 structurally without persisting observation values. It failed because NLIB-G21
 was absent for the first 27 frozen epochs and reacquired with nonzero LLI; the
