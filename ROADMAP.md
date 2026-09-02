@@ -1515,3 +1515,38 @@ artifacts remain sealed. A next vertical must preserve raw pre-control samples
 or a reversible receiver-control ledger with bounded event time; repairing
 SatNOGS raster transport is not on the active roadmap. See
 [`METEOR_SATNOGS_DEVELOPMENT_METADATA_REPORT.md`](experiments/orbital_discriminability/METEOR_SATNOGS_DEVELOPMENT_METADATA_REPORT.md).
+
+## Post-METEOR DORIS geometry route
+
+The next abstraction is not another public-SDR transport. DORIS provides a
+different physical topology: independent ground beacon transmitters,
+beacon-specific propagation, and a shared spaceborne dual-frequency receiver.
+The bounded orbit-only calculation stops
+`DORIS_FORWARD_GEOMETRY_SHORTLISTED_MEASUREMENT_UNADMITTED` with zero DORIS
+RINEX access.
+
+The current bounded scope is Sentinel-3A / NORAD 41335 on 2026-09-02 and four
+predeclared current-beacon pairs. KRWB–LAPB, TLSB–WEUC and PAUB–RIMC are the
+ranked geometry shortlist. Their preliminary held-out margins are 34,855.565,
+21,465.993 and 18,144.799 Hz respectively after the same prefix-affine
+projection and a current-versus-prior forecast envelope. These are orbit-only
+screening margins, not measurement or detector margins.
+
+No observation role is frozen. The route may advance only through a separate
+development-only structural/metadata qualification that establishes:
+
+- exact DPOD beacon coordinates, heights and antenna phase centers;
+- actual station frequency-shift factors and dual-frequency observable map;
+- DORIS-time, receiver-clock, time-reference and event-time semantics;
+- continuous simultaneous L1/L2 phase with declared flags and C1/C2 witnesses;
+- one-way light time, relativistic, atmospheric and antenna corrections;
+- explicit treatment of shared receiver-clock and channel-dependent bias;
+- complete coverage of a later frozen candidate window.
+
+The tentative published development filename `s3arx26242.001.Z` and the
+convention-derived future filename `s3arx26245.001.Z` are not authority to
+download, decompress or inspect either product. The latter was not present and
+is not a frozen primary. If the development metadata cannot close the causal
+ledger without observation-value access, this route stops before a detector or
+primary. See
+[`DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md).

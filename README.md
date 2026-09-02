@@ -1245,6 +1245,26 @@ hypotheses remain `NOT_EVALUATED`. The receipt contains scalar decisions and
 hashes only; RF persistence is zero. See
 [`GATE_F2_5_38_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_38_OUTCOME_1.md).
 
+## Active post-METEOR route: DORIS transmitter geometry
+
+The METEOR OpenWebRX and SatNOGS measurement paths are closed. The bounded
+change-of-observable review now selects DORIS for an orbit-only geometry spike:
+independent ground beacons transmit to one simultaneous dual-frequency
+spaceborne receiver. For Sentinel-3A on 2026-09-02, three predeclared beacon
+pairs retain positive preliminary held-out geometry margins of 34.856 kHz,
+21.466 kHz and 18.145 kHz against the controlling affine/along-track
+alternatives after the prior-forecast envelope.
+
+The terminal is deliberately
+`DORIS_FORWARD_GEOMETRY_SHORTLISTED_MEASUREMENT_UNADMITTED`. The calculation
+opened only exact-hash CNES extrapolated SP3 products; DORIS RINEX access and
+observation-value access were both zero. Exact beacon coordinates, the
+one-way phase model, atmosphere, header frequency factors, receiver-clock
+semantics, phase continuity and candidate-window coverage remain unresolved.
+The next maximum action, after review, is one development-only structural and
+metadata qualification—not a primary score or another receiver search. See
+[`DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md).
+
 ## Repository map
 
 ```text
