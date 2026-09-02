@@ -173,9 +173,21 @@ def test_nonzero_phase_flag_breaks_only_the_affected_pair(tmp_path: Path) -> Non
     assert paub_rimc["structurally_admitted"] is True
 
 
-def test_epoch_prefix_keeps_i3_count_and_ignores_receiver_clock_value() -> None:
+@pytest.mark.parametrize(
+    ("seconds_token", "suffix"),
+    [
+        ("56.2500000", b"      999999.999\n"),
+        ("56.250000000", b"        9.999999999 9\n"),
+    ],
+)
+def test_epoch_prefix_keeps_count_and_ignores_receiver_clock_value(
+    seconds_token: str,
+    suffix: bytes,
+) -> None:
     epoch = datetime(2026, 8, 30, 12, 34, 56, 250_000, tzinfo=timezone.utc)
-    raw = _epoch_line(epoch, flag=0, count=56).rstrip(b"\n") + b"      999999.999\n"
+    raw = (
+        f"> 2026 08 30 12 34 {seconds_token}  0 56".encode("ascii") + suffix
+    )
 
     parsed_epoch, flag, count = scanner._parse_epoch_prefix(raw)
 

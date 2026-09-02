@@ -108,14 +108,35 @@ def _field_shape(slot: bytes) -> FieldShape:
     )
 
 
+def _leading_tokens(raw_line: bytes, count: int) -> tuple[bytes, ...]:
+    """Return exactly ``count`` tokens without representing the line suffix."""
+
+    tokens: list[bytes] = []
+    index = 0
+    whitespace = b" \t\r\n"
+    while len(tokens) < count:
+        while index < len(raw_line) and raw_line[index : index + 1] in whitespace:
+            index += 1
+        start = index
+        while index < len(raw_line) and raw_line[index : index + 1] not in whitespace:
+            index += 1
+        if start == index:
+            raise DorisStructuralError("STRUCTURAL_EPOCH_PREFIX_TOO_SHORT")
+        tokens.append(raw_line[start:index])
+    return tuple(tokens)
+
+
 def _parse_epoch_prefix(raw_line: bytes) -> tuple[datetime, int, int]:
     if not raw_line.startswith(b">"):
         raise DorisStructuralError("STRUCTURAL_EPOCH_RECORD_EXPECTED")
     try:
-        # RINEX 3 epoch metadata occupies columns 1--36.  Stop before the
-        # optional receiver-clock value so it cannot enter the represented
-        # state, while retaining the complete I3 station-record count.
-        prefix = raw_line[:36].decode("ascii", errors="strict").split()
+        # DORIS files in the family use more second decimals than the generic
+        # RINEX example.  Consume exactly the nine structural tokens and never
+        # tokenize the optional receiver clock / oscillator suffix.
+        prefix = [
+            token.decode("ascii", errors="strict")
+            for token in _leading_tokens(raw_line, 9)
+        ]
         if len(prefix) != 9 or prefix[0] != ">":
             raise ValueError
         year, month, day, hour, minute = (int(value) for value in prefix[1:6])
