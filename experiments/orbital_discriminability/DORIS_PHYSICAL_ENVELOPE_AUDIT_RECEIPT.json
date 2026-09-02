@@ -1,0 +1,235 @@
+{
+  "audit_manifest_sha256": "6697bda1fc33f45575c21588264f5f7ebc2879bf2bc27244073fe42c1bfee3ac",
+  "audit_source_commit": "42d7fe402926eb66064868b888b37f88ea04c139",
+  "audit_source_sha256": "3d76b59070e7b38dd64a2e9b5773272fd32fdcf25455bdcc8db25b4d9abb1fac",
+  "audit_version": "doris-paub-rimc-physical-envelope-audit-v1",
+  "combined_envelope": {
+    "combination_rule": "CONSERVATIVE_MINKOWSKI_SUM_ONLY_AFTER_EVERY_TERM_IS_BOUNDED",
+    "heldout_peak_to_peak_hz": null,
+    "missing_terms": [
+      "ABSOLUTE_DOR_TO_COORDINATE_TIME_ERROR_BOUND",
+      "HIGHER_ORDER_IONOSPHERE",
+      "DIFFERENTIAL_TROPOSPHERE",
+      "STATION_PHASE_CENTERS_AND_ANTENNA_MAPS",
+      "PHASE_WINDUP",
+      "SHAPIRO_AND_ONE_WAY_RELATIVITY",
+      "NONAFFINE_GROUND_OSCILLATOR_BEHAVIOR",
+      "CHANNEL_SWITCH_OR_RECEIVER_NONCOMMON_BIAS"
+    ],
+    "state": "UNAVAILABLE"
+  },
+  "coordinate": {
+    "first_order_ionosphere": "CANCELLED_EXACTLY",
+    "frequency_shift_k": [
+      0,
+      0
+    ],
+    "name": "EXACT_COEPOCH_PAUB_MINUS_RIMC_IONOSPHERE_FREE_PHASE",
+    "prefix_nuisance": "CONSTANT_AND_AFFINE_ONLY_NO_SUFFIX_REFIT",
+    "shared_receiver_clock": "CANCELLED_EXACTLY_AT_COMMON_EPOCH",
+    "shared_receiver_proper_time": "CANCELLED_EXACTLY_AT_COMMON_EPOCH"
+  },
+  "cross_date_boundary": {
+    "development_topology": {
+      "claim": "CAPABILITY_TOPOLOGY_ONLY",
+      "date_utc": "2026-08-30",
+      "duration_s": 633.0,
+      "end_dor": "2026-08-30T19:23:18.229949+00:00",
+      "epochs": 128,
+      "start_dor": "2026-08-30T19:12:45.229949+00:00"
+    },
+    "prospective_geometry": {
+      "claim": "ORBIT_ONLY_SCREENING_CEILING_NOT_MEASUREMENT_MARGIN",
+      "controlling_separation_hz": 18147.76648921784,
+      "date_utc": "2026-09-02",
+      "forecast_nonaffine_envelope_hz": 2.966989671657788,
+      "preliminary_margin_hz": 18144.79949954618
+    },
+    "same_grid": false,
+    "transfer_rule": "STRUCTURAL_CAPABILITY_MAY_TRANSFER_ONLY_AFTER_CANDIDATE_WINDOW_REQUALIFICATION"
+  },
+  "decision": {
+    "maximum_admissible_detector_resolution_hz": null,
+    "negative_result_interpretable": false,
+    "next_measurement_access_authorized": false,
+    "remaining_physical_margin_hz": null,
+    "why": "AT_LEAST_ONE_REQUIRED_CAUSAL_TERM_LACKS_A_FINITE_OUTCOME_INDEPENDENT_BOUND"
+  },
+  "descriptive_scales_not_bounds": {
+    "phase_noise_wording": "A_FEW_MILLIMETRES",
+    "policy": "NONE_OF_THESE_VALUES_REDUCES_THE_UNCERTAINTY_ENVELOPE",
+    "published_system_accuracy_0_3_mm_per_s_single_link_hz": 0.0020376596665417114,
+    "receiver_synchronisation_wording": "AROUND_10_MICROSECONDS",
+    "symmetric_two_link_scale_hz": 0.004075319333083423
+  },
+  "frozen_receipts": {
+    "geometry": {
+      "filename": "DORIS_FORWARD_GEOMETRY_RECEIPT.json",
+      "sha256": "1807784b8330a27942b5c2b6136e652720181dd6cd5d814b6ec129f58b450985"
+    },
+    "header": {
+      "filename": "DORIS_DEVELOPMENT_HEADER_RECEIPT.json",
+      "sha256": "afa1ebf9a3abf926e2b7cecbe4096939e2e86d0c889f453f9ff238ed27355fe6"
+    },
+    "observable_role": {
+      "filename": "DORIS_OBSERVABLE_ROLE_AUDIT_RECEIPT.json",
+      "sha256": "ed6e2e6c00b5b74a02559c2d60dde29069d1d2f529ad2306f463c6264f6cc5c3"
+    },
+    "topology": {
+      "filename": "DORIS_EXACT_COEPOCH_REQUALIFICATION_RECEIPT.json",
+      "sha256": "307fd8dba440b0086a726e704e49aca5c84637102f522251f8e3b4ff897a6000"
+    }
+  },
+  "outcome": "DORIS_PHYSICAL_ENVELOPE_BOUND_UNAVAILABLE",
+  "scope": {
+    "candidate_day_access": "ZERO",
+    "detector_implemented": false,
+    "g0_g1_changes": "ZERO",
+    "network_access_required_by_audit": false,
+    "observation_products_accessed": 0,
+    "observation_values_accessed": 0,
+    "orbit_products_accessed": 0,
+    "orbital_score": "NOT_EVALUATED"
+  },
+  "sources": {
+    "doris_for_beginners": {
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "DESCRIPTIVE_RECEIVER_SYNCHRONISATION_SCALE",
+      "url": "https://ids-doris.org/documents/BC/WhatIsDORIS.pdf"
+    },
+    "models_and_solutions": {
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "PHASE_CAUSAL_EQUATION_AND_USO_NUISANCE_STRUCTURE",
+      "url": "https://ids-doris.org/documents/BC/data/DORIS_models%26solutions_v1.0.pdf"
+    },
+    "rinex_doris_3": {
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "TIME_PHASE_FLAG_AND_HEADER_SEMANTICS",
+      "url": "https://ids-doris.org/documents/BC/data/RINEX_DORIS.pdf"
+    },
+    "sentinel3_phase_center_review": {
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "SENTINEL_3_PHASE_CENTER_MODEL_DEPENDENCE",
+      "url": "https://ids-doris.org/resources/presentations/ids-meetings/i03-2026-4618.html"
+    },
+    "uso_system_description": {
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "role": "DESCRIPTIVE_USO_PERFORMANCE_SCALE",
+      "url": "https://ids-doris.org/documents/1991-DORISnewsletter-2.pdf"
+    }
+  },
+  "terms": [
+    {
+      "affine_projection": "NOT_PROJECTABLE_AS_A_FREE_TIME_PHASE",
+      "causal_role": "Binds each common DOR receiver epoch to the orbit evaluation epoch.",
+      "central_or_scale": "RECEIVER_SYNCHRONISATION_DESCRIBED_AS_AROUND_10_MICROSECONDS_NOT_A_FINITE_BOUND",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "NUMERICAL_ADC_PHASE_EVENT_TO_COORDINATE_TIME_BOUND",
+        "DIRECT_T_MINUS_DELTA_T_AND_T_PLUS_DELTA_T_TRAJECTORY_ENVELOPE"
+      ],
+      "name": "ABSOLUTE_DOR_TO_COORDINATE_TIME_ERROR_BOUND",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "state": "UNRESOLVED"
+    },
+    {
+      "affine_projection": "PREFIX_AFFINE_MAY_REMOVE_ONLY_CONSTANT_AND_RATE_NOT_HIGHER_ORDER_MEDIA",
+      "causal_role": "Residual dispersive phase after the exact rational L1/L2 combination.",
+      "central_or_scale": "FIRST_ORDER_1_OVER_F_SQUARED_COEFFICIENT_IS_EXACTLY_ZERO",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "OUTCOME_INDEPENDENT_HIGHER_ORDER_IONOSPHERE_FAMILY",
+        "PATH_SPECIFIC_MAGNETIC_FIELD_AND_ELECTRON_CONTENT_LIMITS"
+      ],
+      "name": "HIGHER_ORDER_IONOSPHERE",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "state": "UNRESOLVED_AFTER_EXACT_FIRST_ORDER_CANCELLATION"
+    },
+    {
+      "affine_projection": "PREFIX_AFFINE_DOES_NOT_REMOVE_ELEVATION_DEPENDENT_CURVATURE",
+      "causal_role": "Nondispersive beacon-specific propagation curvature.",
+      "central_or_scale": "STANDARD_DORIS_SOLUTIONS_ESTIMATE_ZENITH_TROPOSPHERE_BUT_NO_PAIR_WINDOW_BOUND_IS_FROZEN",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "EXACT_BEACON_COORDINATES_AND_HEIGHTS",
+        "SLANT_DELAY_MODEL_AND_RESIDUAL_INTERVAL_FOR_BOTH_PATHS"
+      ],
+      "name": "DIFFERENTIAL_TROPOSPHERE",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "state": "MODELED_FORM_UNRESOLVED_UNCERTAINTY"
+    },
+    {
+      "affine_projection": "CONSTANT_PART_ONLY_MAY_PROJECT_OUT",
+      "causal_role": "Maps geometric line of sight to the electrical phase path.",
+      "central_or_scale": "SATELLITE_PCO_VECTOR_IS_DECLARED_BUT_EXACT_GROUND_PCO_PCV_AND_ATTITUDE_MAPPING_ARE_NOT_FROZEN",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "EXACT_DPOD_COORDINATES_AND_HEIGHTS",
+        "GROUND_AND_SPACE_ANTENNA_PCO_PCV_WITH_ATTITUDE_LINEAGE"
+      ],
+      "name": "STATION_PHASE_CENTERS_AND_ANTENNA_MAPS",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "state": "PARTIAL_METADATA_UNRESOLVED_UNCERTAINTY"
+    },
+    {
+      "affine_projection": "NOT_GUARANTEED_AFFINE",
+      "causal_role": "Orientation-dependent carrier-phase rotation.",
+      "central_or_scale": "PHASE_MODEL_REQUIRES_WINDUP_BUT_NO_SENTINEL_3A_ATTITUDE_POLARIZATION_GRID_IS_FROZEN",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "SPACECRAFT_ATTITUDE_AND_ANTENNA_ORIENTATION",
+        "BEACON_ANTENNA_ORIENTATION_AND_WINDUP_CONVENTION"
+      ],
+      "name": "PHASE_WINDUP",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "state": "MODELED_FORM_UNRESOLVED_INPUTS"
+    },
+    {
+      "affine_projection": "ONLY_PREDECLARED_CONSTANT_AND_RATE_ARE_PROJECTED",
+      "causal_role": "Coordinate/proper-time and relativistic propagation bridge.",
+      "central_or_scale": "GROUND_PROPER_TIME_BIAS_AND_RATE_CAN_SHARE_THE_AFFINE_NUISANCE_BUT_PATH_REMAINDERS_REQUIRE_EXACT_GEOMETRY",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "EXACT_ONE_WAY_LIGHT_TIME_AND_EARTH_ROTATION_MODEL",
+        "SHAPIRO_AND_NONAFFINE_PROPER_TIME_REMAINDER_INTERVAL"
+      ],
+      "name": "SHAPIRO_AND_ONE_WAY_RELATIVITY",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "state": "MODELED_FORM_UNRESOLVED_UNCERTAINTY"
+    },
+    {
+      "affine_projection": "OFFSET_AND_AFFINE_AGING_ONLY_PROJECTED_FROM_CALIBRATION_PREFIX",
+      "causal_role": "Differential transmitter phase/frequency curvature that can mimic orbit.",
+      "central_or_scale": "PUBLISHED_USO_PERFORMANCE_AND_0_3_MM_PER_S_SYSTEM_SCALE_ARE_DESCRIPTIVE_NOT_PRODUCT_SPECIFIC_HARD_BOUNDS",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "PAUB_AND_RIMC_SESSION_SPECIFIC_NONAFFINE_USO_INTERVAL",
+        "FROZEN_PREFIX_TO_SUFFIX_STABILITY_RULE"
+      ],
+      "name": "NONAFFINE_GROUND_OSCILLATOR_BEHAVIOR",
+      "provenance": "INDEPENDENT_OF_TARGET_RF",
+      "state": "MODELED_STOCHASTIC_FAMILY_UNRESOLVED_BOUND"
+    },
+    {
+      "affine_projection": "CONSTANT_BIAS_MAY_PROJECT_OUT_BUT_SWITCH_OR_CURVATURE_DOES_NOT",
+      "causal_role": "Channel-specific receiver transform after the shared antenna/clock boundary.",
+      "central_or_scale": "EXACT_COEPOCH_AND_LLI_CONTINUITY_PROVE_TOPOLOGY_NOT_ANALOG_OR_PROCESSING_UNIT_BIAS",
+      "epistemic_class": "UNRESOLVED",
+      "finite_outcome_independent_bound_hz": null,
+      "missing_for_bound": [
+        "PROCESSING_UNIT_ASSIGNMENT_AND_SWITCH_CONTINUITY",
+        "PRODUCT_SPECIFIC_NONCOMMON_PHASE_BIAS_INTERVAL"
+      ],
+      "name": "CHANNEL_SWITCH_OR_RECEIVER_NONCOMMON_BIAS",
+      "provenance": "UNKNOWN",
+      "state": "UNRESOLVED"
+    }
+  ]
+}
