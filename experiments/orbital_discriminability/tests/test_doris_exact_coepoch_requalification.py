@@ -207,6 +207,30 @@ def test_gap_one_microsecond_above_limit_breaks_every_segment(
     }
 
 
+def test_single_sided_intermediate_epoch_is_unused_within_allowed_pair_gap(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "synthetic.Z"
+    station_sets = [("D46", "D40") for _ in range(97)]
+    station_sets[48] = ("D46",)
+    authority, frozen = _synthetic_product(
+        path,
+        station_sets,
+        step_s=5.0,
+    )
+
+    receipt = _scan(path, authority, frozen)
+
+    assert receipt["outcome"] == "DORIS_EXACT_COEPOCH_TOPOLOGY_QUALIFIED"
+    assert receipt["pair"]["maximum_exact_coepoch_segment_s"] == 480.0
+    assert receipt["pair"]["valid_coepoch_pair_count"] == 96
+    assert receipt["pair"]["target_epoch_presence_counts"] == {
+        "BOTH": 96,
+        "LEFT_ONLY": 1,
+    }
+    assert receipt["pair"]["break_reasons"] == {}
+
+
 @pytest.mark.parametrize("failure", ["missing_pair", "phase_break"])
 def test_missing_or_discontinuous_phase_breaks_the_chain(
     tmp_path: Path,

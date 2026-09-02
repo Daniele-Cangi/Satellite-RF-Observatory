@@ -250,6 +250,11 @@ def scan_exact_coepoch_topology(
             )
             target_presence_counts[presence_state] += 1
             if not left_present or not right_present:
+                # A single-sided receiver epoch is not a quotient sample. It
+                # is neither interpolated nor an automatic phase break: the
+                # frozen continuity clause is evaluated between consecutive
+                # valid exact-pair samples, with the literal 10 s maximum gap
+                # and each station's LLI state.
                 continue
 
             coepoch_pair_count += 1

@@ -60,6 +60,14 @@ The admitted sample semantic is:
 IDENTICAL_DOR_EPOCH_TAG_NO_INTERPOLATION_MAX_10_SECOND_GAP
 ```
 
+Continuity is defined between consecutive valid exact-pair samples. An
+intervening epoch containing only one target station is unused; it is not
+interpolated and does not by itself assert a phase discontinuity. The chain
+continues only when the next exact pair is no more than 10 s later and both
+stations still declare zero LLI. A larger gap or nonzero LLI breaks it. This is
+the rule frozen before access, not a completeness claim over every global
+receiver epoch.
+
 The earlier 633 s intersection was therefore not an accidental overlap of two
 offset grids: for PAUB–RIMC it corresponds to a real simultaneous receiver
 chain. The old receipt was still correct to refuse that stronger claim because
