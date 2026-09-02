@@ -1550,3 +1550,18 @@ is not a frozen primary. If the development metadata cannot close the causal
 ledger without observation-value access, this route stops before a detector or
 primary. See
 [`DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md).
+
+The authorised development header spike is also complete. It stops
+`DORIS_DEVELOPMENT_HEADER_REJECTED`, without a measurement decision, because
+`INTERVAL`, `TIME OF LAST OBS` and `MARKER TYPE` are absent. The same header
+does materially confirm Sentinel-3A / DGXX-S, the complete dual-frequency
+observable schema, `K` values and the TLSB–WEUC and PAUB–RIMC shortlist pairs.
+
+Do not search for a more convenient header and do not weaken the missing-field
+rules after the result. If separately authorised, the next maximum action is
+one value-blind structural scan of this exact development product. It may
+retain only epoch time, station identifier, record presence/continuation and
+phase/code flags needed to determine cadence, simultaneous pair coverage and
+segment breaks. Numerical phase, pseudorange, power, oscillator and
+meteorological observations remain forbidden. See
+[`DORIS_DEVELOPMENT_HEADER_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_HEADER_REPORT.md).

@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 from hashlib import sha256
 import inspect
+import json
 from pathlib import Path
 
 import ncompress
@@ -160,3 +161,37 @@ def test_manifest_scope_cannot_name_or_open_candidate_day_product() -> None:
     assert "candidate_day_product_access" in source
     assert "requests" not in source
     assert "ftplib" not in source
+
+
+def test_frozen_real_receipt_preserves_header_only_refusal() -> None:
+    receipt_path = (
+        Path(__file__).parents[1] / "DORIS_DEVELOPMENT_HEADER_RECEIPT.json"
+    )
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+
+    assert receipt["outcome"] == "DORIS_DEVELOPMENT_HEADER_REJECTED"
+    assert receipt["artifact"]["sha256"] == header.DEVELOPMENT_SHA256
+    source_path = Path(__file__).parents[1] / "doris_development_header.py"
+    assert sha256(source_path.read_bytes()).hexdigest() == receipt["parser"][
+        "source_sha256"
+    ]
+    assert receipt["parser"]["commit"] == (
+        "0da158e964372cea18d55ef26a54810d678fbda2"
+    )
+    assert receipt["header_boundary"]["header_sha256"] == (
+        "47311d675dc0130a42676e423827bd63a4ac3b9083664c52741f5f75d185012a"
+    )
+    assert receipt["header_boundary"]["post_header_bytes_read_from_pipe"] == 0
+    assert set(receipt["observation_access"].values()) == {0}
+    assert receipt["candidate_day_product_access"] == "ZERO"
+    assert receipt["ephemeral_artifact_retention"] == "ZERO_AFTER_RECEIPT"
+    assert receipt["orbital_score"] == "NOT_EVALUATED"
+    assert receipt["missing_predeclared_header_labels"] == [
+        "INTERVAL",
+        "MARKER TYPE",
+        "TIME OF LAST OBS",
+    ]
+    assert receipt["qualification"]["supported_shortlist_pairs"] == [
+        ["TLSB", "WEUC"],
+        ["PAUB", "RIMC"],
+    ]
