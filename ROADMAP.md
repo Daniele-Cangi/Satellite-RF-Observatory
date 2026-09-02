@@ -1658,3 +1658,22 @@ screen of those six pairs. It must close with no observation access if none has
 positive geometry after frozen nulls; it must not become a new beacon catalog
 or a search for a convenient product. See
 [`DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md).
+
+That bounded screen now closes
+`DORIS_TIME_REFERENCE_TOPOLOGY_NO_JOINT_VISIBILITY`. On the unchanged 2026-09-02
+Sentinel-3A trajectory, none of the six pairs has even one simultaneous sample
+above 10 degrees, and a conservative continuous-cap proof excludes missed
+between-grid visibility. ADHC-PAUB is geometrically closest but remains 27.541
+degrees beyond the joint cap; no 360 s interval, calibration prefix or held-out
+suffix exists. The affine, along-track, wrong-orbit and forecast-envelope nulls
+remain frozen and `NOT_EVALUATED_NO_ADMISSIBLE_JOINT_WINDOW`, rather than being
+scored on an impossible coordinate.
+
+The single-satellite/two-time-reference-beacon topology is therefore closed
+for this candidate geometry. Do not search for a convenient observation or
+weaken elevation/duration. Before further DORIS access, compare a bounded-USO
+mixed beacon coordinate, a rigorously bounded short-lag multi-satellite
+coordinate, and a physically distinct satellite observable. Advance only a
+route that can instantiate its full causal graph and increase held-out orbital
+information. See
+[`DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md).

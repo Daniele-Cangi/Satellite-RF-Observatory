@@ -1,0 +1,240 @@
+{
+  "continuous_visibility_proof": {
+    "diagnostic_ranking_only": [
+      [
+        "ADHC",
+        "PAUB"
+      ],
+      [
+        "HBMB",
+        "TLSB"
+      ],
+      [
+        "ADHC",
+        "HBMB"
+      ],
+      [
+        "HBMB",
+        "PAUB"
+      ],
+      [
+        "PAUB",
+        "TLSB"
+      ],
+      [
+        "ADHC",
+        "TLSB"
+      ]
+    ],
+    "normal_policy": "STATION_SPECIFIC_GEODETIC_TO_GEOCENTRIC_NORMAL_OFFSET_SUBTRACTED_FROM_ELEVATION_CUTOFF",
+    "pair_results": [
+      {
+        "conservative_joint_cap_deg": 38.76388411765318,
+        "continuous_impossibility_excess_deg": 36.042517739646584,
+        "joint_grid_sample_count": 0,
+        "longest_joint_duration_s": 0,
+        "maximum_grid_minimum_elevation_deg": -8.857618791600787,
+        "maximum_grid_minimum_elevation_utc": "2026-09-02T20:06:50+00:00",
+        "minimum_required_joint_duration_s": 360,
+        "pair": [
+          "ADHC",
+          "HBMB"
+        ],
+        "station_geocentric_separation_deg": 74.80640185729976,
+        "visibility_state": "CONTINUOUSLY_IMPOSSIBLE_AT_FROZEN_ELEVATION_AND_ORBIT_RADIUS"
+      },
+      {
+        "conservative_joint_cap_deg": 38.70209968404693,
+        "continuous_impossibility_excess_deg": 27.540846568088583,
+        "joint_grid_sample_count": 0,
+        "longest_joint_duration_s": 0,
+        "maximum_grid_minimum_elevation_deg": -5.235425057664713,
+        "maximum_grid_minimum_elevation_utc": "2026-09-02T10:05:50+00:00",
+        "minimum_required_joint_duration_s": 360,
+        "pair": [
+          "ADHC",
+          "PAUB"
+        ],
+        "station_geocentric_separation_deg": 66.24294625213551,
+        "visibility_state": "CONTINUOUSLY_IMPOSSIBLE_AT_FROZEN_ELEVATION_AND_ORBIT_RADIUS"
+      },
+      {
+        "conservative_joint_cap_deg": 38.89000795660581,
+        "continuous_impossibility_excess_deg": 108.96465205988494,
+        "joint_grid_sample_count": 0,
+        "longest_joint_duration_s": 0,
+        "maximum_grid_minimum_elevation_deg": -32.44317823840437,
+        "maximum_grid_minimum_elevation_utc": "2026-09-02T20:17:10+00:00",
+        "minimum_required_joint_duration_s": 360,
+        "pair": [
+          "ADHC",
+          "TLSB"
+        ],
+        "station_geocentric_separation_deg": 147.85466001649075,
+        "visibility_state": "CONTINUOUSLY_IMPOSSIBLE_AT_FROZEN_ELEVATION_AND_ORBIT_RADIUS"
+      },
+      {
+        "conservative_joint_cap_deg": 38.48495953180735,
+        "continuous_impossibility_excess_deg": 98.22995995889457,
+        "joint_grid_sample_count": 0,
+        "longest_joint_duration_s": 0,
+        "maximum_grid_minimum_elevation_deg": -29.0689381931123,
+        "maximum_grid_minimum_elevation_utc": "2026-09-02T11:33:00+00:00",
+        "minimum_required_joint_duration_s": 360,
+        "pair": [
+          "HBMB",
+          "PAUB"
+        ],
+        "station_geocentric_separation_deg": 136.71491949070193,
+        "visibility_state": "CONTINUOUSLY_IMPOSSIBLE_AT_FROZEN_ELEVATION_AND_ORBIT_RADIUS"
+      },
+      {
+        "conservative_joint_cap_deg": 38.67286780436623,
+        "continuous_impossibility_excess_deg": 34.498041610724876,
+        "joint_grid_sample_count": 0,
+        "longest_joint_duration_s": 0,
+        "maximum_grid_minimum_elevation_deg": -8.563819715646812,
+        "maximum_grid_minimum_elevation_utc": "2026-09-02T20:27:30+00:00",
+        "minimum_required_joint_duration_s": 360,
+        "pair": [
+          "HBMB",
+          "TLSB"
+        ],
+        "station_geocentric_separation_deg": 73.1709094150911,
+        "visibility_state": "CONTINUOUSLY_IMPOSSIBLE_AT_FROZEN_ELEVATION_AND_ORBIT_RADIUS"
+      },
+      {
+        "conservative_joint_cap_deg": 38.61108337075998,
+        "continuous_impossibility_excess_deg": 105.79916566960969,
+        "joint_grid_sample_count": 0,
+        "longest_joint_duration_s": 0,
+        "maximum_grid_minimum_elevation_deg": -31.489501750485534,
+        "maximum_grid_minimum_elevation_utc": "2026-09-02T17:40:40+00:00",
+        "minimum_required_joint_duration_s": 360,
+        "pair": [
+          "PAUB",
+          "TLSB"
+        ],
+        "station_geocentric_separation_deg": 144.41024904036968,
+        "visibility_state": "CONTINUOUSLY_IMPOSSIBLE_AT_FROZEN_ELEVATION_AND_ORBIT_RADIUS"
+      }
+    ],
+    "radius_source": "MAXIMUM_ON_EXACT_CURRENT_SP3_COMMON_DAY_GRID",
+    "satellite_radius_ceiling_m": 7188967.933883307
+  },
+  "decision": {
+    "forbidden_next_action": "SEARCH_FOR_CONVENIENT_DORIS_OBSERVATION_OR_WEAKEN_VISIBILITY",
+    "measurement_access_authorized": false,
+    "next_action": "CHANGE_OF_ABSTRACTION_REVIEW_REQUIRED",
+    "shortlist": [],
+    "time_reference_pair_topology": "CLOSED_FOR_FROZEN_SENTINEL_3A_CANDIDATE_GEOMETRY"
+  },
+  "ephemeral_orbit_artifact_retention": "ZERO_AFTER_HASHED_ANALYSIS",
+  "frozen_parent_commit": "4c9fa63bbfba46a5ec6893abfb08df8221e4e75c",
+  "frozen_rules": {
+    "affine_null": "FROZEN_NOT_EVALUATED_NO_JOINT_WINDOW",
+    "along_track_nulls_s": [
+      -60,
+      60
+    ],
+    "calibration_fraction": 0.25,
+    "forecast_envelope": "PRIOR_S3A_FROZEN_NOT_EVALUATED_NO_JOINT_WINDOW",
+    "grid_s": 10,
+    "minimum_calibration_s": 120,
+    "minimum_elevation_deg": 10,
+    "minimum_heldout_s": 240,
+    "minimum_joint_interval_s": 360,
+    "wrong_orbit_null": "SENTINEL_3B_FROZEN_NOT_EVALUATED_NO_JOINT_WINDOW"
+  },
+  "input_artifacts": [
+    {
+      "bytes": 278021,
+      "name": "exts3a30.b26243.e26246.D__.sp3.001.Z",
+      "role": "CURRENT_PRE_OBSERVATION_S3A_FORECAST",
+      "sha256": "1f8662c0d77b4fbc08dc35121108eb18a70cf22a94185944da652b06dfd97376"
+    },
+    {
+      "bytes": 280545,
+      "name": "exts3a30.b26242.e26245.D__.sp3.001.Z",
+      "role": "PRIOR_S3A_FORECAST_ENVELOPE_FROZEN_NOT_SCORED",
+      "sha256": "17cd7dfa11016f7e389237572190cd02530966764ebce36cbd2c12d0d00ebf7a"
+    },
+    {
+      "bytes": 279938,
+      "name": "exts3b30.b26243.e26246.D__.sp3.001.Z",
+      "role": "WRONG_ORBIT_NULL_FROZEN_NOT_SCORED",
+      "sha256": "5c80e1374b9d2185b476c70ff51d8f46e2def0fba84ff7bef6f31b24ed4870e1"
+    }
+  ],
+  "null_evaluation": {
+    "reason": "NULL_COMPARISON_REQUIRES_A_CALIBRATION_PREFIX_AND_HELDOUT_SUFFIX_INSIDE_JOINT_VISIBILITY",
+    "state": "NOT_EVALUATED_NO_ADMISSIBLE_JOINT_WINDOW",
+    "thresholds_changed": false
+  },
+  "outcome": "DORIS_TIME_REFERENCE_TOPOLOGY_NO_JOINT_VISIBILITY",
+  "physical_question": "CAN_ANY_FROZEN_PAIR_OF_HEADER_DECLARED_TIME_REFERENCE_BEACONS_SUPPORT_A_JOINT_HELDOUT_SENTINEL_3A_ORBITAL_COORDINATE",
+  "scope": {
+    "candidate": "SENTINEL_3A_NORAD_41335",
+    "candidate_day_utc": "2026-09-02",
+    "new_gate": "NONE",
+    "observation_values_access": "ZERO",
+    "orbit_product_access": "THREE_PREVIOUSLY_FROZEN_EXACT_HASH_SP3_FILES",
+    "orbital_score": "NOT_EVALUATED_NO_ADMISSIBLE_JOINT_WINDOW",
+    "rinex_artifact_access": "ZERO",
+    "time_reference_pairs": [
+      [
+        "ADHC",
+        "HBMB"
+      ],
+      [
+        "ADHC",
+        "PAUB"
+      ],
+      [
+        "ADHC",
+        "TLSB"
+      ],
+      [
+        "HBMB",
+        "PAUB"
+      ],
+      [
+        "HBMB",
+        "TLSB"
+      ],
+      [
+        "PAUB",
+        "TLSB"
+      ]
+    ]
+  },
+  "screen_version": "doris-time-reference-geometry-screen-v1",
+  "shock": "THE_ONLY_HEADER_DECLARED_TIME_REFERENCE_ROOTS_ARE_GEOGRAPHICALLY_TOO_SEPARATED_FOR_THE_SHARED_LEO_RECEIVER_TO_OBSERVE_ANY_PAIR;_CLOCK_QUALITY_AND_JOINT_VISIBILITY_ARE_ANTI_CORRELATED_IN_THIS_SCOPE",
+  "station_source": {
+    "authority": "IDS_CURRENT_STATION_TABLE",
+    "coordinate_resolution_arcmin": 1,
+    "coordinates": {
+      "ADHC": {
+        "latitude_deg": -66.66666666666667,
+        "longitude_deg": 140
+      },
+      "HBMB": {
+        "latitude_deg": -25.883333333333333,
+        "longitude_deg": 27.7
+      },
+      "PAUB": {
+        "latitude_deg": -17.583333333333332,
+        "longitude_deg": -149.6
+      },
+      "TLSB": {
+        "latitude_deg": 43.55,
+        "longitude_deg": 1.4833333333333334
+      }
+    },
+    "height_state": "UNRESOLVED_SCREENING_ZERO_ONLY",
+    "last_updated": "2026-06-03",
+    "url": "https://ids-doris.org/network-stations/sites.html"
+  },
+  "topology_receipt_sha256": "2367428de48c354dca71a008754895d4d5af1967d9936d406d9d9b1d899007a7",
+  "screen_source_sha256": "fa0b682b4a215f52202d38f19dca5fae6149f3d730d1362d3b9f141de1579ed3"
+}
