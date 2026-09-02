@@ -1,0 +1,108 @@
+{
+  "artifact_hash_verified_before_decompression": true,
+  "authority": {
+    "bytes": 1869420,
+    "execution_role": "DEVELOPMENT_EXACT_COEPOCH_REQUALIFICATION_ONLY_NEVER_PRIMARY",
+    "name": "s3arx26242.001.Z",
+    "remote_last_modified_utc": "2026-08-31T22:20:14Z",
+    "role": "DEVELOPMENT_HEADER_ONLY_NEVER_PRIMARY",
+    "sha256": "240d84518beb409dceb5cf1816f02621e9def8c9bf750c9c340cad4f6fbd7add",
+    "url": "ftp://doris.ign.fr/pub/doris/data/s3a/2026/s3arx26242.001.Z"
+  },
+  "epochs": {
+    "count": 16704,
+    "first_dor": "2026-08-30T00:00:15.229949+00:00",
+    "last_dor": "2026-08-31T00:00:08.229949+00:00",
+    "power_failure_epoch_count": 0,
+    "special_event_count": 0
+  },
+  "execution": {
+    "completed_utc": "2026-09-02T10:09:20.1456039Z",
+    "materialization_attempts": 1,
+    "plan_sha256": "a6e868287ff0e8545501874d8e6c579e18b2b75f63eaca37836508d7637e5dac",
+    "pre_access_test_result": "22_PASSED",
+    "retry_count": 0,
+    "scanner_invocations": 1,
+    "source_commit": "7d954f576f000bd84d5a6b3bdc23f744bba7cb4c",
+    "source_sha256": "4cc40fcc2fed2521fc69c4b5654a35fd8803501d91b930d29d7c1d300b182ee8"
+  },
+  "frozen_header_sha256": "47311d675dc0130a42676e423827bd63a4ac3b9083664c52741f5f75d185012a",
+  "outcome": "DORIS_EXACT_COEPOCH_TOPOLOGY_QUALIFIED",
+  "pair": {
+    "break_reasons": {
+      "LEFT_PHASE_DISCONTINUITY": 5,
+      "RIGHT_PHASE_DISCONTINUITY": 5
+    },
+    "codes": [
+      "PAUB",
+      "RIMC"
+    ],
+    "coepoch_pair_count": 196,
+    "frequency_shift_k": [
+      0,
+      0
+    ],
+    "longest_exact_coepoch_segments": [
+      {
+        "duration_s": 633.0,
+        "end_dor": "2026-08-30T19:23:18.229949+00:00",
+        "epoch_count": 128,
+        "start_dor": "2026-08-30T19:12:45.229949+00:00"
+      },
+      {
+        "duration_s": 283.0,
+        "end_dor": "2026-08-30T08:09:28.229949+00:00",
+        "epoch_count": 58,
+        "start_dor": "2026-08-30T08:04:45.229949+00:00"
+      }
+    ],
+    "maximum_exact_coepoch_segment_s": 633.0,
+    "minimum_required_duration_s": 480.0,
+    "sample_semantic": "IDENTICAL_DOR_EPOCH_TAG_NO_INTERPOLATION_MAX_10_SECOND_GAP",
+    "station_ids": [
+      "D46",
+      "D40"
+    ],
+    "target_epoch_presence_counts": {
+      "BOTH": 196,
+      "LEFT_ONLY": 239,
+      "NEITHER": 15981,
+      "RIGHT_ONLY": 288
+    },
+    "topology_qualified": true,
+    "valid_coepoch_pair_count": 186
+  },
+  "records": {
+    "continuation_line_count": 39024,
+    "numeric_observation_values_decoded": 0,
+    "numeric_observation_values_persisted": 0,
+    "station_record_count": 39024
+  },
+  "remaining_open_terms": [
+    "ABSOLUTE_DOR_TO_COORDINATE_TIME_ERROR_BOUND",
+    "HIGHER_ORDER_IONOSPHERE",
+    "DIFFERENTIAL_TROPOSPHERE",
+    "STATION_PHASE_CENTERS_AND_ANTENNA_MAPS",
+    "PHASE_WINDUP",
+    "SHAPIRO_AND_ONE_WAY_RELATIVITY",
+    "NONAFFINE_GROUND_OSCILLATOR_BEHAVIOR",
+    "CHANNEL_SWITCH_OR_RECEIVER_NONCOMMON_BIAS"
+  ],
+  "scanner_version": "doris-exact-coepoch-requalification-v1",
+  "scope": {
+    "c1_c2_values_or_flags": "NOT_RETAINED_NOT_EVALUATED",
+    "candidate_day_product_access": "ZERO",
+    "measurement_admission": "NOT_EVALUATED",
+    "null_score": "NOT_EVALUATED",
+    "observation_magnitudes": "NEVER_DECODED_NEVER_PERSISTED",
+    "orbital_prediction": "NOT_EVALUATED"
+  },
+  "stream": {
+    "complete_stream_scanned": true,
+    "compressed_retention_after_receipt": "ZERO_CONFIRMED",
+    "decompressed_bytes": 7564590,
+    "decompressed_sha256": "9edb37c8a354602c20985a07edb87c594bcd9678d496e6e70ee0b4ee4f20db64",
+    "line_count": 94830,
+    "uncompressed_retention": "ZERO"
+  }
+}

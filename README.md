@@ -1301,6 +1301,18 @@ orbital scoring are still `NOT_EVALUATED`; candidate-day and observation-value
 access remain zero. See
 [`DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md).
 
+The separately authorised value-blind requalification now establishes
+`DORIS_EXACT_COEPOCH_TOPOLOGY_QUALIFIED`. PAUB–RIMC has 128 valid paired L1/L2
+epochs carrying identical receiver timestamps across 633 s, with no
+interpolation or nearest-neighbor matching, against the frozen 480 s
+requirement. This closes the shared receiver clock/proper-time topology cut;
+it does not close absolute event time or the remaining propagation, antenna,
+oscillator and receiver-noncommon terms. One exact development artifact was
+hash-verified, streamed once and destroyed; observation magnitudes, C1/C2
+values/flags and candidate DOY245 access remained zero. Measurement and
+orbital scoring remain `NOT_EVALUATED`. See
+[`DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md`](experiments/orbital_discriminability/DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md).
+
 ## Repository map
 
 ```text

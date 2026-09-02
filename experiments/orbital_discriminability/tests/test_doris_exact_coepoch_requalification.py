@@ -6,6 +6,7 @@ from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 import inspect
+import json
 from pathlib import Path
 
 import ncompress
@@ -18,6 +19,19 @@ from experiments.orbital_discriminability import (
 
 
 SECRET_OBSERVATION_TEXT = "1234567890.12"  # noqa: S105 - synthetic magnitude
+ROOT = Path(__file__).resolve().parents[3]
+RECEIPT = (
+    ROOT
+    / "experiments"
+    / "orbital_discriminability"
+    / "DORIS_EXACT_COEPOCH_REQUALIFICATION_RECEIPT.json"
+)
+PLAN = (
+    ROOT
+    / "experiments"
+    / "orbital_discriminability"
+    / "DORIS_EXACT_COEPOCH_REQUALIFICATION_PLAN.md"
+)
 
 
 def _header_line(data: str, label: str) -> bytes:
@@ -242,3 +256,36 @@ def test_scanner_surface_is_value_blind_and_candidate_blind() -> None:
     assert "numeric_observation_values_decoded" in source
     assert "candidate_day_product_access" in source
 
+
+def test_frozen_receipt_records_exact_coepoch_result_and_zero_retention() -> None:
+    receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
+
+    assert receipt["outcome"] == "DORIS_EXACT_COEPOCH_TOPOLOGY_QUALIFIED"
+    assert receipt["authority"]["sha256"] == header.DEVELOPMENT_SHA256
+    assert receipt["execution"]["materialization_attempts"] == 1
+    assert receipt["execution"]["scanner_invocations"] == 1
+    assert receipt["execution"]["retry_count"] == 0
+    assert receipt["pair"]["maximum_exact_coepoch_segment_s"] == 633.0
+    assert receipt["pair"]["longest_exact_coepoch_segments"][0][
+        "epoch_count"
+    ] == 128
+    assert receipt["stream"]["compressed_retention_after_receipt"] == (
+        "ZERO_CONFIRMED"
+    )
+    assert receipt["records"]["numeric_observation_values_decoded"] == 0
+    assert receipt["records"]["numeric_observation_values_persisted"] == 0
+    assert receipt["scope"]["candidate_day_product_access"] == "ZERO"
+    assert receipt["scope"]["measurement_admission"] == "NOT_EVALUATED"
+    assert receipt["scope"]["orbital_prediction"] == "NOT_EVALUATED"
+
+
+def test_frozen_receipt_binds_canonical_source_and_plan() -> None:
+    receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
+    source = Path(coepoch.__file__).read_bytes().replace(b"\r\n", b"\n")
+    plan = PLAN.read_bytes().replace(b"\r\n", b"\n")
+
+    assert receipt["execution"]["source_commit"] == (
+        "7d954f576f000bd84d5a6b3bdc23f744bba7cb4c"
+    )
+    assert receipt["execution"]["source_sha256"] == sha256(source).hexdigest()
+    assert receipt["execution"]["plan_sha256"] == sha256(plan).hexdigest()

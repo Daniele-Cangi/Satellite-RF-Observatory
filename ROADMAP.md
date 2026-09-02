@@ -1601,3 +1601,20 @@ would leave absolute event time, higher-order ionosphere, differential
 troposphere, phase centers, phase wind-up, relativity, non-affine ground-clock
 behavior and receiver-noncommon bias explicit. See
 [`DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md).
+
+The one authorised value-blind requalification is complete as
+`DORIS_EXACT_COEPOCH_TOPOLOGY_QUALIFIED`. The exact development stream contains
+a PAUB–RIMC segment of 128 valid simultaneous L1/L2 epochs over 633 s, exceeding
+the frozen 480 s requirement. Pairing uses identical DOR epoch tags, no
+interpolation and a maximum 10 s pair gap. This proves that the shared
+spaceborne receiver clock and proper-time terms can enter the predeclared
+common-mode quotient topology.
+
+The result does not admit observation magnitudes or the candidate day. The
+next maximum action is an offline physical-envelope audit on this fixed 633 s
+topology: absolute DOR-to-coordinate time, higher-order ionosphere,
+differential troposphere, phase centers, wind-up, relativistic terms,
+non-affine beacon oscillators and receiver-noncommon bias must leave a positive
+orbital-versus-null margin. If they cannot, the DORIS vertical closes before
+observation values. See
+[`DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md`](experiments/orbital_discriminability/DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md).
