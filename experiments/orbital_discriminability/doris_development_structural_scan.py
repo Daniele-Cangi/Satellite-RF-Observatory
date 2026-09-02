@@ -207,9 +207,14 @@ def _read_station_shape(next_line: Callable[[], bytes]) -> StationShape:
 def _phase_valid(shape: StationShape) -> tuple[bool, str]:
     if not shape.l1.present or not shape.l2.present:
         return False, "CORE_PHASE_ABSENT"
-    phase_flags = (shape.l1.flag1, shape.l1.flag2, shape.l2.flag1, shape.l2.flag2)
-    if any(flag not in {"", "0"} for flag in phase_flags):
-        return False, "PHASE_FLAG_NONZERO"
+    if shape.l1.flag1 not in {"", "0", "1"} or shape.l2.flag1 not in {
+        "",
+        "0",
+        "1",
+    }:
+        return False, "PHASE_CENTRAL_FREQUENCY_FLAG_UNSUPPORTED"
+    if shape.l1.flag2 not in {"", "0"} or shape.l2.flag2 not in {"", "0"}:
+        return False, "PHASE_DISCONTINUITY"
     return True, "VALID"
 
 
@@ -238,6 +243,76 @@ def _finish_segment(
     if accumulator.count:
         destination.append(_segment_receipt(accumulator))
         accumulator.clear()
+
+
+def _target_station_ids() -> tuple[str, ...]:
+    return tuple(
+        dict.fromkeys(
+            station_id
+            for rule in PAIR_RULES
+            for station_id in (rule.left_id, rule.right_id)
+        )
+    )
+
+
+def _new_station_state() -> dict[str, object]:
+    return {
+        "core_current": SegmentAccumulator(),
+        "witness_current": SegmentAccumulator(),
+        "core_segments": [],
+        "witness_segments": [],
+        "core_break_reasons": Counter(),
+        "witness_break_reasons": Counter(),
+        "flag_counts": Counter(),
+        "cadence_delta_counts": Counter(),
+        "last_observed_epoch": None,
+        "record_count": 0,
+    }
+
+
+def _finish_station_state(state: dict[str, object], reason: str) -> None:
+    _finish_segment(state["core_current"], state["core_segments"])
+    _finish_segment(state["witness_current"], state["witness_segments"])
+    state["core_break_reasons"][reason] += 1
+    state["witness_break_reasons"][reason] += 1
+
+
+def _segment_overlaps(
+    left_segments: list[dict[str, object]],
+    right_segments: list[dict[str, object]],
+) -> list[dict[str, object]]:
+    """Intersect independently sampled station coverage without interpolation."""
+
+    left_ordered = sorted(left_segments, key=lambda row: row["start_dor"])
+    right_ordered = sorted(right_segments, key=lambda row: row["start_dor"])
+    overlaps: list[dict[str, object]] = []
+    left_index = 0
+    right_index = 0
+    while left_index < len(left_ordered) and right_index < len(right_ordered):
+        left = left_ordered[left_index]
+        right = right_ordered[right_index]
+        left_start = datetime.fromisoformat(str(left["start_dor"]))
+        left_end = datetime.fromisoformat(str(left["end_dor"]))
+        right_start = datetime.fromisoformat(str(right["start_dor"]))
+        right_end = datetime.fromisoformat(str(right["end_dor"]))
+        start = max(left_start, right_start)
+        end = min(left_end, right_end)
+        if end >= start:
+            overlaps.append(
+                {
+                    "start_dor": start.isoformat(),
+                    "end_dor": end.isoformat(),
+                    "duration_s": (end - start).total_seconds(),
+                    "left_epoch_count": left["epoch_count"],
+                    "right_epoch_count": right["epoch_count"],
+                    "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+                }
+            )
+        if left_end <= right_end:
+            left_index += 1
+        else:
+            right_index += 1
+    return overlaps
 
 
 def scan_exact_development_structure(
@@ -278,17 +353,10 @@ def scan_exact_development_structure(
             raise DorisStructuralError("STRUCTURAL_STREAM_LINE_LIMIT_EXCEEDED")
         return raw_line
 
-    pair_state: dict[str, dict[str, object]] = {}
-    for rule in PAIR_RULES:
-        pair_state[rule.name] = {
-            "rule": rule,
-            "core_current": SegmentAccumulator(),
-            "witness_current": SegmentAccumulator(),
-            "core_segments": [],
-            "witness_segments": [],
-            "core_break_reasons": Counter(),
-            "witness_break_reasons": Counter(),
-        }
+    target_station_ids = _target_station_ids()
+    station_state = {
+        station_id: _new_station_state() for station_id in target_station_ids
+    }
     header_lines: list[bytes] = []
     epoch_count = 0
     special_event_epoch_count = 0
@@ -335,79 +403,51 @@ def scan_exact_development_structure(
                 special_event_epoch_count += 1
                 for _ in range(record_count):
                     next_line()
-                for state in pair_state.values():
-                    _finish_segment(state["core_current"], state["core_segments"])
-                    _finish_segment(
-                        state["witness_current"], state["witness_segments"]
-                    )
-                    state["core_break_reasons"]["SPECIAL_EPOCH_FLAG"] += 1
-                    state["witness_break_reasons"]["SPECIAL_EPOCH_FLAG"] += 1
+                for state in station_state.values():
+                    _finish_station_state(state, "SPECIAL_EPOCH_FLAG")
                 continue
 
             if epoch_flag == 1:
                 power_failure_epoch_count += 1
-                for state in pair_state.values():
-                    _finish_segment(state["core_current"], state["core_segments"])
-                    _finish_segment(
-                        state["witness_current"], state["witness_segments"]
-                    )
-                    state["core_break_reasons"][
-                        "EPOCH_FLAG_1_POWER_FAILURE"
-                    ] += 1
-                    state["witness_break_reasons"][
-                        "EPOCH_FLAG_1_POWER_FAILURE"
-                    ] += 1
+                for state in station_state.values():
+                    _finish_station_state(state, "EPOCH_FLAG_1_POWER_FAILURE")
 
             epoch_shapes: dict[str, StationShape] = {}
             for _ in range(record_count):
                 station_shape = _read_station_shape(next_line)
                 continuation_line_count += ceil(OBSERVABLE_COUNT / FIELDS_PER_LINE) - 1
                 station_record_count += 1
-                if any(
-                    station_shape.station_id in {rule.left_id, rule.right_id}
-                    for rule in PAIR_RULES
-                ):
+                if station_shape.station_id in target_station_ids:
+                    if station_shape.station_id in epoch_shapes:
+                        raise DorisStructuralError(
+                            "STRUCTURAL_DUPLICATE_STATION_IN_EPOCH"
+                        )
                     epoch_shapes[station_shape.station_id] = station_shape
 
-            for state in pair_state.values():
-                rule = state["rule"]
-                left = epoch_shapes.get(rule.left_id)
-                right = epoch_shapes.get(rule.right_id)
-                consecutive = (
-                    state["core_current"].last is None
-                    or abs(
-                        (epoch - state["core_current"].last).total_seconds()
-                        - EXPECTED_CADENCE_S
+            # Other stations' interleaved epochs do not break a target
+            # station's own phase-continuity chain.  Each target stream is
+            # qualified independently and pair coverage is intersected later.
+            for station_id, shape in epoch_shapes.items():
+                state = station_state[station_id]
+                state["record_count"] += 1
+                for name, field in (
+                    ("L1", shape.l1),
+                    ("L2", shape.l2),
+                    ("C1", shape.c1),
+                    ("C2", shape.c2),
+                ):
+                    state["flag_counts"][f"{name}_FLAG1_{field.flag1 or 'BLANK'}"] += 1
+                    state["flag_counts"][f"{name}_FLAG2_{field.flag2 or 'BLANK'}"] += 1
+                previous_station_epoch = state["last_observed_epoch"]
+                if previous_station_epoch is not None:
+                    delta = (epoch - previous_station_epoch).total_seconds()
+                    state["cadence_delta_counts"][f"{delta:.6f}"] += 1
+                    consecutive = (
+                        abs(delta - EXPECTED_CADENCE_S) <= CADENCE_TOLERANCE_S
                     )
-                    <= CADENCE_TOLERANCE_S
-                )
-                if left is None or right is None:
-                    core_valid, core_reason = False, "PAIR_STATION_MISSING"
-                    witness_valid, witness_reason = False, "PAIR_STATION_MISSING"
                 else:
-                    left_phase, left_phase_reason = _phase_valid(left)
-                    right_phase, right_phase_reason = _phase_valid(right)
-                    core_valid = left_phase and right_phase
-                    core_reason = (
-                        "VALID"
-                        if core_valid
-                        else f"LEFT_{left_phase_reason}"
-                        if not left_phase
-                        else f"RIGHT_{right_phase_reason}"
-                    )
-                    left_code, left_code_reason = _code_witness_valid(left)
-                    right_code, right_code_reason = _code_witness_valid(right)
-                    witness_valid = core_valid and left_code and right_code
-                    witness_reason = (
-                        "VALID"
-                        if witness_valid
-                        else core_reason
-                        if not core_valid
-                        else f"LEFT_{left_code_reason}"
-                        if not left_code
-                        else f"RIGHT_{right_code_reason}"
-                    )
-
+                    consecutive = True
+                state["last_observed_epoch"] = epoch
                 if not consecutive:
                     _finish_segment(state["core_current"], state["core_segments"])
                     _finish_segment(
@@ -415,17 +455,20 @@ def scan_exact_development_structure(
                     )
                     state["core_break_reasons"]["EPOCH_CADENCE_GAP"] += 1
                     state["witness_break_reasons"]["EPOCH_CADENCE_GAP"] += 1
-                if core_valid:
+                phase_valid, phase_reason = _phase_valid(shape)
+                code_valid, code_reason = _code_witness_valid(shape)
+                if phase_valid:
                     state["core_current"].add(epoch)
                 else:
                     _finish_segment(state["core_current"], state["core_segments"])
-                    state["core_break_reasons"][core_reason] += 1
-                if witness_valid:
+                    state["core_break_reasons"][phase_reason] += 1
+                if phase_valid and code_valid:
                     state["witness_current"].add(epoch)
                 else:
                     _finish_segment(
                         state["witness_current"], state["witness_segments"]
                     )
+                    witness_reason = phase_reason if not phase_valid else code_reason
                     state["witness_break_reasons"][witness_reason] += 1
     finally:
         process.stdout.close()
@@ -448,7 +491,7 @@ def scan_exact_development_structure(
         raise DorisStructuralError(
             f"STRUCTURAL_GZIP_FAILED:{stderr.decode('ascii', errors='replace').strip()}"
         )
-    for state in pair_state.values():
+    for state in station_state.values():
         _finish_segment(state["core_current"], state["core_segments"])
         _finish_segment(state["witness_current"], state["witness_segments"])
     if first_epoch is None or last_epoch is None:
@@ -456,16 +499,27 @@ def scan_exact_development_structure(
 
     pair_receipts: list[dict[str, object]] = []
     any_pair_admitted = False
-    for state in pair_state.values():
-        rule = state["rule"]
-        core_segments = sorted(
-            state["core_segments"], key=lambda row: row["duration_s"], reverse=True
+    for rule in PAIR_RULES:
+        left_state = station_state[rule.left_id]
+        right_state = station_state[rule.right_id]
+        core_overlaps = sorted(
+            _segment_overlaps(
+                left_state["core_segments"], right_state["core_segments"]
+            ),
+            key=lambda row: row["duration_s"],
+            reverse=True,
         )
-        witness_segments = sorted(
-            state["witness_segments"], key=lambda row: row["duration_s"], reverse=True
+        witness_overlaps = sorted(
+            _segment_overlaps(
+                left_state["witness_segments"], right_state["witness_segments"]
+            ),
+            key=lambda row: row["duration_s"],
+            reverse=True,
         )
-        maximum_core = core_segments[0]["duration_s"] if core_segments else 0.0
-        maximum_witness = witness_segments[0]["duration_s"] if witness_segments else 0.0
+        maximum_core = core_overlaps[0]["duration_s"] if core_overlaps else 0.0
+        maximum_witness = (
+            witness_overlaps[0]["duration_s"] if witness_overlaps else 0.0
+        )
         admitted = maximum_witness >= rule.minimum_duration_s
         any_pair_admitted = any_pair_admitted or admitted
         pair_receipts.append(
@@ -476,22 +530,48 @@ def scan_exact_development_structure(
                 "maximum_core_phase_segment_s": maximum_core,
                 "maximum_same_path_witnessed_segment_s": maximum_witness,
                 "structurally_admitted": admitted,
-                "longest_core_segments": core_segments[:5],
-                "longest_same_path_witnessed_segments": witness_segments[:5],
-                "core_break_reasons": dict(
-                    sorted(state["core_break_reasons"].items())
-                ),
-                "same_path_witness_break_reasons": dict(
-                    sorted(state["witness_break_reasons"].items())
+                "longest_joint_core_coverage": core_overlaps[:5],
+                "longest_joint_same_path_witnessed_coverage": witness_overlaps[:5],
+                "pair_semantic": (
+                    "INTERSECTION_OF_INDEPENDENT_10_SECOND_STATION_STREAMS_"
+                    "NO_INTERPOLATION"
                 ),
             }
         )
 
-    cadence_nonconforming = sum(
-        count
-        for delta, count in cadence_counts.items()
-        if abs(float(delta) - EXPECTED_CADENCE_S) > CADENCE_TOLERANCE_S
-    )
+    station_receipts: dict[str, dict[str, object]] = {}
+    for station_id, state in station_state.items():
+        core_segments = sorted(
+            state["core_segments"], key=lambda row: row["duration_s"], reverse=True
+        )
+        witness_segments = sorted(
+            state["witness_segments"],
+            key=lambda row: row["duration_s"],
+            reverse=True,
+        )
+        cadence_nonconforming = sum(
+            count
+            for delta, count in state["cadence_delta_counts"].items()
+            if abs(float(delta) - EXPECTED_CADENCE_S) > CADENCE_TOLERANCE_S
+        )
+        station_receipts[station_id] = {
+            "record_count": state["record_count"],
+            "expected_cadence_s": EXPECTED_CADENCE_S,
+            "cadence_delta_counts": dict(
+                sorted(state["cadence_delta_counts"].items())
+            ),
+            "nonconforming_delta_count": cadence_nonconforming,
+            "flag_counts": dict(sorted(state["flag_counts"].items())),
+            "longest_core_segments": core_segments[:5],
+            "longest_same_path_witnessed_segments": witness_segments[:5],
+            "core_break_reasons": dict(
+                sorted(state["core_break_reasons"].items())
+            ),
+            "same_path_witness_break_reasons": dict(
+                sorted(state["witness_break_reasons"].items())
+            ),
+        }
+
     outcome = (
         "DORIS_DEVELOPMENT_STRUCTURE_QUALIFIED_MEASUREMENT_UNADMITTED"
         if any_pair_admitted
@@ -516,9 +596,10 @@ def scan_exact_development_structure(
             "power_failure_epoch_count": power_failure_epoch_count,
             "first_dor": first_epoch.isoformat(),
             "last_dor": last_epoch.isoformat(),
-            "expected_cadence_s": EXPECTED_CADENCE_S,
-            "cadence_delta_counts": dict(sorted(cadence_counts.items())),
-            "nonconforming_delta_count": cadence_nonconforming,
+            "global_interleaved_cadence_delta_counts": dict(
+                sorted(cadence_counts.items())
+            ),
+            "station_cadence_semantic": "EVALUATED_PER_STATION_NOT_GLOBALLY",
         },
         "records": {
             "station_record_count": station_record_count,
@@ -527,6 +608,7 @@ def scan_exact_development_structure(
             "numeric_observation_values_decoded": 0,
             "numeric_observation_values_persisted": 0,
         },
+        "stations": station_receipts,
         "pairs": pair_receipts,
         "candidate_day_product_access": "ZERO",
         "orbital_prediction_access": "ZERO",

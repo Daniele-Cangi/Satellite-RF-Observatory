@@ -70,6 +70,7 @@ def _synthetic_product(
     epoch_count: int = 49,
     power_failure_index: int | None = None,
     phase_break_index: int | None = None,
+    central_frequency_index: int | None = None,
 ) -> tuple[header.ProductAuthority, str]:
     header_bytes = b"".join(
         [
@@ -87,8 +88,19 @@ def _synthetic_product(
         flag = 1 if index == power_failure_index else 0
         body.extend(_epoch_line(epoch, flag=flag, count=4))
         for station_id in ("D49", "D47", "D46", "D40"):
+            phase_flag1 = (
+                "1"
+                if index == central_frequency_index and station_id == "D49"
+                else ""
+            )
             phase_flag2 = "1" if index == phase_break_index and station_id == "D49" else ""
-            body.extend(_station_record(station_id, phase_flag2=phase_flag2))
+            body.extend(
+                _station_record(
+                    station_id,
+                    phase_flag1=phase_flag1,
+                    phase_flag2=phase_flag2,
+                )
+            )
     raw = header_bytes + bytes(body)
     compressed = ncompress.compress(raw)
     path.write_bytes(compressed)
@@ -150,9 +162,9 @@ def test_power_failure_epoch_is_a_hard_continuity_cut(tmp_path: Path) -> None:
         240.0,
         240.0,
     ]
-    for pair in receipt["pairs"]:
-        assert pair["core_break_reasons"]["EPOCH_FLAG_1_POWER_FAILURE"] == 1
-        assert pair["same_path_witness_break_reasons"][
+    for station in receipt["stations"].values():
+        assert station["core_break_reasons"]["EPOCH_FLAG_1_POWER_FAILURE"] == 1
+        assert station["same_path_witness_break_reasons"][
             "EPOCH_FLAG_1_POWER_FAILURE"
         ] == 1
 
@@ -165,12 +177,30 @@ def test_nonzero_phase_flag_breaks_only_the_affected_pair(tmp_path: Path) -> Non
 
     tlsb_weuc, paub_rimc = receipt["pairs"]
     assert tlsb_weuc["maximum_core_phase_segment_s"] == 230.0
-    assert tlsb_weuc["core_break_reasons"]["LEFT_PHASE_FLAG_NONZERO"] == 1
-    assert tlsb_weuc["same_path_witness_break_reasons"][
-        "LEFT_PHASE_FLAG_NONZERO"
+    assert receipt["stations"]["D49"]["core_break_reasons"][
+        "PHASE_DISCONTINUITY"
+    ] == 1
+    assert receipt["stations"]["D49"]["same_path_witness_break_reasons"][
+        "PHASE_DISCONTINUITY"
     ] == 1
     assert paub_rimc["maximum_core_phase_segment_s"] == 480.0
     assert paub_rimc["structurally_admitted"] is True
+
+
+def test_central_frequency_phase_flag_is_descriptive_not_a_break(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "synthetic.Z"
+    authority, header_hash = _synthetic_product(
+        path,
+        central_frequency_index=24,
+    )
+
+    receipt = _scan(path, authority, header_hash)
+
+    assert receipt["pairs"][0]["maximum_core_phase_segment_s"] == 480.0
+    assert receipt["stations"]["D49"]["flag_counts"]["L1_FLAG1_1"] == 1
+    assert receipt["stations"]["D49"]["flag_counts"]["L2_FLAG1_1"] == 1
 
 
 @pytest.mark.parametrize(
