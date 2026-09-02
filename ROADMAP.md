@@ -1565,3 +1565,20 @@ phase/code flags needed to determine cadence, simultaneous pair coverage and
 segment breaks. Numerical phase, pseudorange, power, oscillator and
 meteorological observations remain forbidden. See
 [`DORIS_DEVELOPMENT_HEADER_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_HEADER_REPORT.md).
+
+The authorised value-blind structural scan has now consumed that exact
+development artifact and terminates
+`DORIS_DEVELOPMENT_STRUCTURE_INSUFFICIENT`. The scanner retained only epoch
+time, station identity, presence and L1/L2/C1/C2 flags; all numerical
+observation magnitudes remained unrepresented and unpersisted. PAUB–RIMC
+provides a positive 633 s core L1/L2 overlap for a 480 s requirement, while
+TLSB–WEUC provides 393 s for 430 s. Both full contracts fail because the
+second station has no time-reference-valid C1/C2 witnessed segment.
+
+Do not access candidate DOY245 and do not weaken the witness after observing
+this result. The next maximum action is an offline physical-role audit of the
+compound DORIS observable: establish whether dual-frequency L1/L2 phase itself
+closes the dispersive/same-path cut, or whether the C1/C2 time-reference flag
+is causally necessary for the intended claim. Only a predeclared answer may
+change the minimum signal family. See
+[`DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md).

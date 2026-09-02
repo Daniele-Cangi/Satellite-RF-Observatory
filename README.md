@@ -1277,6 +1277,17 @@ separately authorised value-blind structural scan of this same development
 product, not another header search. See
 [`DORIS_DEVELOPMENT_HEADER_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_HEADER_REPORT.md).
 
+The separately authorised value-blind structural scan is also complete and
+stops `DORIS_DEVELOPMENT_STRUCTURE_INSUFFICIENT`. It scanned all 16,704 epochs
+and 39,024 station records while decoding and persisting zero observation
+magnitudes. PAUB–RIMC has 633 s of joint L1/L2 core phase coverage against a
+480 s requirement; TLSB–WEUC reaches 393 s against 430 s. Neither pair has a
+continuous C1/C2 witness admitted by the frozen time-reference-validity rule,
+so measurement admission and orbital scoring remain `NOT_EVALUATED`.
+Candidate DOY245 access remains zero. The result now requires an offline
+change-of-observable review, not a primary download or a weaker threshold. See
+[`DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md).
+
 ## Repository map
 
 ```text

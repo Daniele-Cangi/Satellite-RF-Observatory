@@ -1,0 +1,562 @@
+{
+  "artifact_hash_verified_before_decompression": true,
+  "authority": {
+    "bytes": 1869420,
+    "name": "s3arx26242.001.Z",
+    "remote_last_modified_utc": "2026-08-31T22:20:14Z",
+    "role": "DEVELOPMENT_HEADER_ONLY_NEVER_PRIMARY",
+    "sha256": "240d84518beb409dceb5cf1816f02621e9def8c9bf750c9c340cad4f6fbd7add",
+    "url": "ftp://doris.ign.fr/pub/doris/data/s3a/2026/s3arx26242.001.Z"
+  },
+  "authorization": {
+    "candidate_doy245_access": "ZERO",
+    "numerical_observation_values": "NEVER_DECODED_NEVER_REPRESENTED_NEVER_PERSISTED",
+    "orbital_prediction_and_score": "NOT_EVALUATED",
+    "role": "DEVELOPMENT_STRUCTURAL_ONLY_NEVER_PRIMARY"
+  },
+  "candidate_day_product_access": "ZERO",
+  "epochs": {
+    "count": 16704,
+    "first_dor": "2026-08-30T00:00:15.229949+00:00",
+    "global_interleaved_cadence_delta_counts": {
+      "10.000000": 18,
+      "100.000000": 3,
+      "120.000000": 1,
+      "170.000000": 1,
+      "20.000000": 13,
+      "200.000000": 1,
+      "210.000000": 1,
+      "230.000000": 2,
+      "290.000000": 1,
+      "3.000000": 8326,
+      "30.000000": 3,
+      "40.000000": 2,
+      "410.000000": 1,
+      "50.000000": 2,
+      "7.000000": 8325,
+      "90.000000": 3
+    },
+    "last_dor": "2026-08-31T00:00:08.229949+00:00",
+    "power_failure_epoch_count": 0,
+    "special_event_count": 0,
+    "station_cadence_semantic": "EVALUATED_PER_STATION_NOT_GLOBALLY"
+  },
+  "frozen_header_sha256": "47311d675dc0130a42676e423827bd63a4ac3b9083664c52741f5f75d185012a",
+  "measurement_admission": "NOT_EVALUATED",
+  "open_terms": [
+    "NUMERICAL_DOR_TO_TAI_PHASE_CENTER_EVENT_TIME_ERROR_BOUND",
+    "EXACT_DPOD_COORDINATES_HEIGHTS_AND_PHASE_CENTERS",
+    "ONE_WAY_RELATIVISTIC_AND_MEDIA_MODEL",
+    "SHARED_RECEIVER_AND_CHANNEL_DIFFERENTIAL_BIAS"
+  ],
+  "orbital_prediction_access": "ZERO",
+  "orbital_score": "NOT_EVALUATED",
+  "outcome": "DORIS_DEVELOPMENT_STRUCTURE_INSUFFICIENT",
+  "pairs": [
+    {
+      "longest_joint_core_coverage": [
+        {
+          "duration_s": 393,
+          "end_dor": "2026-08-30T22:00:58.229949+00:00",
+          "left_epoch_count": 142,
+          "right_epoch_count": 80,
+          "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+          "start_dor": "2026-08-30T21:54:25.229949+00:00"
+        },
+        {
+          "duration_s": 193,
+          "end_dor": "2026-08-30T10:34:08.229949+00:00",
+          "left_epoch_count": 118,
+          "right_epoch_count": 64,
+          "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+          "start_dor": "2026-08-30T10:30:55.229949+00:00"
+        },
+        {
+          "duration_s": 133,
+          "end_dor": "2026-08-30T08:55:18.229949+00:00",
+          "left_epoch_count": 28,
+          "right_epoch_count": 84,
+          "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+          "start_dor": "2026-08-30T08:53:05.229949+00:00"
+        },
+        {
+          "duration_s": 123,
+          "end_dor": "2026-08-30T20:17:38.229949+00:00",
+          "left_epoch_count": 76,
+          "right_epoch_count": 66,
+          "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+          "start_dor": "2026-08-30T20:15:35.229949+00:00"
+        },
+        {
+          "duration_s": 93,
+          "end_dor": "2026-08-30T08:51:48.229949+00:00",
+          "left_epoch_count": 20,
+          "right_epoch_count": 84,
+          "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+          "start_dor": "2026-08-30T08:50:15.229949+00:00"
+        }
+      ],
+      "longest_joint_same_path_witnessed_coverage": [],
+      "maximum_core_phase_segment_s": 393,
+      "maximum_same_path_witnessed_segment_s": 0,
+      "minimum_required_duration_s": 430,
+      "pair": [
+        "TLSB",
+        "WEUC"
+      ],
+      "pair_semantic": "INTERSECTION_OF_INDEPENDENT_10_SECOND_STATION_STREAMS_MAX_GAP_NO_INTERPOLATION",
+      "station_ids": [
+        "D49",
+        "D47"
+      ],
+      "structurally_admitted": false
+    },
+    {
+      "longest_joint_core_coverage": [
+        {
+          "duration_s": 633,
+          "end_dor": "2026-08-30T19:23:18.229949+00:00",
+          "left_epoch_count": 138,
+          "right_epoch_count": 136,
+          "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+          "start_dor": "2026-08-30T19:12:45.229949+00:00"
+        },
+        {
+          "duration_s": 283,
+          "end_dor": "2026-08-30T08:09:28.229949+00:00",
+          "left_epoch_count": 92,
+          "right_epoch_count": 78,
+          "sample_alignment": "INDEPENDENT_STATION_GRIDS_NO_INTERPOLATION",
+          "start_dor": "2026-08-30T08:04:45.229949+00:00"
+        }
+      ],
+      "longest_joint_same_path_witnessed_coverage": [],
+      "maximum_core_phase_segment_s": 633,
+      "maximum_same_path_witnessed_segment_s": 0,
+      "minimum_required_duration_s": 480,
+      "pair": [
+        "PAUB",
+        "RIMC"
+      ],
+      "pair_semantic": "INTERSECTION_OF_INDEPENDENT_10_SECOND_STATION_STREAMS_MAX_GAP_NO_INTERPOLATION",
+      "station_ids": [
+        "D46",
+        "D40"
+      ],
+      "structurally_admitted": false
+    }
+  ],
+  "records": {
+    "continuation_line_count": 39024,
+    "numeric_observation_values_decoded": 0,
+    "numeric_observation_values_persisted": 0,
+    "observable_count_per_station": 10,
+    "station_record_count": 39024
+  },
+  "scanner": {
+    "descriptive_correction_ledger": [
+      {
+        "commit": "fabe84f",
+        "state": "DESCRIPTION_ERROR_EXTENDED_EPOCH_SECONDS",
+        "terminal_outcome_authorized": false
+      },
+      {
+        "commit": "75f994a",
+        "state": "PROVISIONAL_WRONG_PAIR_EPOCH_TOPOLOGY",
+        "terminal_outcome_authorized": false
+      },
+      {
+        "commit": "b76098d",
+        "state": "PROVISIONAL_EXACT_10_SECOND_CADENCE_ASSUMPTION",
+        "terminal_outcome_authorized": false
+      },
+      {
+        "commit": "e233629",
+        "state": "TERMINAL_SPECIFICATION_ALIGNED_SCAN",
+        "terminal_outcome_authorized": true
+      }
+    ],
+    "frozen_commit": "e2336295eaefd91008636935db7510b974427335",
+    "source_sha256": "84a0d8171fd780bde03903e6018fb777b99430ad3bca5177aee8911ea7dc16ef",
+    "synthetic_test_result": "9_PASSED"
+  },
+  "scanner_version": "doris-development-structural-scan-v1",
+  "stations": {
+    "D40": {
+      "cadence_delta_counts": {
+        "10.000000": 2,
+        "20.000000": 1,
+        "3.000000": 238,
+        "33920.000000": 1,
+        "5250.000000": 1,
+        "5310.000000": 1,
+        "60.000000": 1,
+        "7.000000": 238
+      },
+      "core_break_reasons": {
+        "PHASE_DISCONTINUITY": 46,
+        "STATION_SAMPLE_GAP_EXCEEDED": 5
+      },
+      "flag_counts": {
+        "C1_FLAG1_1": 484,
+        "C1_FLAG2_1": 82,
+        "C1_FLAG2_2": 352,
+        "C1_FLAG2_6": 50,
+        "C2_FLAG1_1": 484,
+        "C2_FLAG2_1": 82,
+        "C2_FLAG2_2": 352,
+        "C2_FLAG2_6": 50,
+        "L1_FLAG1_1": 16,
+        "L1_FLAG1_BLANK": 468,
+        "L1_FLAG2_0": 438,
+        "L1_FLAG2_1": 46,
+        "L2_FLAG1_1": 16,
+        "L2_FLAG1_BLANK": 468,
+        "L2_FLAG2_0": 438,
+        "L2_FLAG2_1": 46
+      },
+      "longest_core_segments": [
+        {
+          "duration_s": 673,
+          "end_dor": "2026-08-30T19:23:58.229949+00:00",
+          "epoch_count": 136,
+          "start_dor": "2026-08-30T19:12:45.229949+00:00"
+        },
+        {
+          "duration_s": 583,
+          "end_dor": "2026-08-30T06:33:08.229949+00:00",
+          "epoch_count": 118,
+          "start_dor": "2026-08-30T06:23:25.229949+00:00"
+        },
+        {
+          "duration_s": 383,
+          "end_dor": "2026-08-30T08:09:28.229949+00:00",
+          "epoch_count": 78,
+          "start_dor": "2026-08-30T08:03:05.229949+00:00"
+        },
+        {
+          "duration_s": 313,
+          "end_dor": "2026-08-30T17:43:18.229949+00:00",
+          "epoch_count": 64,
+          "start_dor": "2026-08-30T17:38:05.229949+00:00"
+        },
+        {
+          "duration_s": 53,
+          "end_dor": "2026-08-30T17:36:38.229949+00:00",
+          "epoch_count": 12,
+          "start_dor": "2026-08-30T17:35:45.229949+00:00"
+        }
+      ],
+      "longest_same_path_witnessed_segments": [],
+      "maximum_station_sample_gap_s": 10,
+      "nonconforming_delta_count": 5,
+      "record_count": 484,
+      "same_path_witness_break_reasons": {
+        "CODE_VALIDITY_FLAG_NONZERO": 438,
+        "PHASE_DISCONTINUITY": 46,
+        "STATION_SAMPLE_GAP_EXCEEDED": 5
+      }
+    },
+    "D46": {
+      "cadence_delta_counts": {
+        "10.000000": 1,
+        "220.000000": 1,
+        "3.000000": 214,
+        "33610.000000": 1,
+        "5280.000000": 1,
+        "5400.000000": 1,
+        "7.000000": 214,
+        "70.000000": 1
+      },
+      "core_break_reasons": {
+        "PHASE_DISCONTINUITY": 35,
+        "STATION_SAMPLE_GAP_EXCEEDED": 5
+      },
+      "flag_counts": {
+        "C1_FLAG1_0": 435,
+        "C1_FLAG2_1": 143,
+        "C1_FLAG2_2": 98,
+        "C1_FLAG2_3": 95,
+        "C1_FLAG2_6": 99,
+        "C2_FLAG1_0": 435,
+        "C2_FLAG2_1": 143,
+        "C2_FLAG2_2": 98,
+        "C2_FLAG2_3": 95,
+        "C2_FLAG2_6": 99,
+        "L1_FLAG1_1": 16,
+        "L1_FLAG1_BLANK": 419,
+        "L1_FLAG2_0": 400,
+        "L1_FLAG2_1": 35,
+        "L2_FLAG1_1": 16,
+        "L2_FLAG1_BLANK": 419,
+        "L2_FLAG2_0": 400,
+        "L2_FLAG2_1": 35
+      },
+      "longest_core_segments": [
+        {
+          "duration_s": 683,
+          "end_dor": "2026-08-30T19:23:18.229949+00:00",
+          "epoch_count": 138,
+          "start_dor": "2026-08-30T19:11:55.229949+00:00"
+        },
+        {
+          "duration_s": 453,
+          "end_dor": "2026-08-30T08:12:18.229949+00:00",
+          "epoch_count": 92,
+          "start_dor": "2026-08-30T08:04:45.229949+00:00"
+        },
+        {
+          "duration_s": 353,
+          "end_dor": "2026-08-30T20:58:48.229949+00:00",
+          "epoch_count": 72,
+          "start_dor": "2026-08-30T20:52:55.229949+00:00"
+        },
+        {
+          "duration_s": 293,
+          "end_dor": "2026-08-30T09:51:18.229949+00:00",
+          "epoch_count": 60,
+          "start_dor": "2026-08-30T09:46:25.229949+00:00"
+        },
+        {
+          "duration_s": 63,
+          "end_dor": "2026-08-30T21:01:28.229949+00:00",
+          "epoch_count": 14,
+          "start_dor": "2026-08-30T21:00:25.229949+00:00"
+        }
+      ],
+      "longest_same_path_witnessed_segments": [
+        {
+          "duration_s": 683,
+          "end_dor": "2026-08-30T19:23:18.229949+00:00",
+          "epoch_count": 138,
+          "start_dor": "2026-08-30T19:11:55.229949+00:00"
+        },
+        {
+          "duration_s": 453,
+          "end_dor": "2026-08-30T08:12:18.229949+00:00",
+          "epoch_count": 92,
+          "start_dor": "2026-08-30T08:04:45.229949+00:00"
+        },
+        {
+          "duration_s": 353,
+          "end_dor": "2026-08-30T20:58:48.229949+00:00",
+          "epoch_count": 72,
+          "start_dor": "2026-08-30T20:52:55.229949+00:00"
+        },
+        {
+          "duration_s": 293,
+          "end_dor": "2026-08-30T09:51:18.229949+00:00",
+          "epoch_count": 60,
+          "start_dor": "2026-08-30T09:46:25.229949+00:00"
+        },
+        {
+          "duration_s": 63,
+          "end_dor": "2026-08-30T21:01:28.229949+00:00",
+          "epoch_count": 14,
+          "start_dor": "2026-08-30T21:00:25.229949+00:00"
+        }
+      ],
+      "maximum_station_sample_gap_s": 10,
+      "nonconforming_delta_count": 5,
+      "record_count": 435,
+      "same_path_witness_break_reasons": {
+        "PHASE_DISCONTINUITY": 35,
+        "STATION_SAMPLE_GAP_EXCEEDED": 5
+      }
+    },
+    "D47": {
+      "cadence_delta_counts": {
+        "20.000000": 1,
+        "23227.000000": 1,
+        "3.000000": 162,
+        "5567.000000": 1,
+        "5580.000000": 1,
+        "5630.000000": 1,
+        "57.000000": 1,
+        "5870.000000": 1,
+        "7.000000": 158
+      },
+      "core_break_reasons": {
+        "PHASE_DISCONTINUITY": 30,
+        "STATION_SAMPLE_GAP_EXCEEDED": 7
+      },
+      "flag_counts": {
+        "C1_FLAG1_1": 328,
+        "C1_FLAG2_6": 231,
+        "C1_FLAG2_7": 97,
+        "C2_FLAG1_1": 328,
+        "C2_FLAG2_6": 231,
+        "C2_FLAG2_7": 97,
+        "L1_FLAG1_1": 17,
+        "L1_FLAG1_BLANK": 311,
+        "L1_FLAG2_0": 298,
+        "L1_FLAG2_1": 30,
+        "L2_FLAG1_1": 17,
+        "L2_FLAG1_BLANK": 311,
+        "L2_FLAG2_0": 298,
+        "L2_FLAG2_1": 30
+      },
+      "longest_core_segments": [
+        {
+          "duration_s": 413,
+          "end_dor": "2026-08-30T08:55:48.229949+00:00",
+          "epoch_count": 84,
+          "start_dor": "2026-08-30T08:48:55.229949+00:00"
+        },
+        {
+          "duration_s": 393,
+          "end_dor": "2026-08-30T22:00:58.229949+00:00",
+          "epoch_count": 80,
+          "start_dor": "2026-08-30T21:54:25.229949+00:00"
+        },
+        {
+          "duration_s": 323,
+          "end_dor": "2026-08-30T20:20:58.229949+00:00",
+          "epoch_count": 66,
+          "start_dor": "2026-08-30T20:15:35.229949+00:00"
+        },
+        {
+          "duration_s": 313,
+          "end_dor": "2026-08-30T10:34:08.229949+00:00",
+          "epoch_count": 64,
+          "start_dor": "2026-08-30T10:28:55.229949+00:00"
+        },
+        {
+          "duration_s": 13,
+          "end_dor": "2026-08-30T12:13:08.229949+00:00",
+          "epoch_count": 4,
+          "start_dor": "2026-08-30T12:12:55.229949+00:00"
+        }
+      ],
+      "longest_same_path_witnessed_segments": [],
+      "maximum_station_sample_gap_s": 10,
+      "nonconforming_delta_count": 7,
+      "record_count": 328,
+      "same_path_witness_break_reasons": {
+        "CODE_VALIDITY_FLAG_NONZERO": 298,
+        "PHASE_DISCONTINUITY": 30,
+        "STATION_SAMPLE_GAP_EXCEEDED": 7
+      }
+    },
+    "D49": {
+      "cadence_delta_counts": {
+        "10.000000": 3,
+        "20.000000": 4,
+        "28380.000000": 1,
+        "3.000000": 297,
+        "30.000000": 1,
+        "40.000000": 1,
+        "50.000000": 3,
+        "5190.000000": 1,
+        "5260.000000": 1,
+        "5450.000000": 1,
+        "7.000000": 297
+      },
+      "core_break_reasons": {
+        "PHASE_DISCONTINUITY": 85,
+        "STATION_SAMPLE_GAP_EXCEEDED": 13
+      },
+      "flag_counts": {
+        "C1_FLAG1_0": 611,
+        "C1_FLAG2_1": 335,
+        "C1_FLAG2_2": 140,
+        "C1_FLAG2_5": 91,
+        "C1_FLAG2_6": 28,
+        "C1_FLAG2_7": 17,
+        "C2_FLAG1_0": 611,
+        "C2_FLAG2_1": 335,
+        "C2_FLAG2_2": 140,
+        "C2_FLAG2_5": 91,
+        "C2_FLAG2_6": 28,
+        "C2_FLAG2_7": 17,
+        "L1_FLAG1_1": 16,
+        "L1_FLAG1_BLANK": 595,
+        "L1_FLAG2_0": 526,
+        "L1_FLAG2_1": 85,
+        "L2_FLAG1_1": 16,
+        "L2_FLAG1_BLANK": 595,
+        "L2_FLAG2_0": 526,
+        "L2_FLAG2_1": 85
+      },
+      "longest_core_segments": [
+        {
+          "duration_s": 703,
+          "end_dor": "2026-08-30T22:01:28.229949+00:00",
+          "epoch_count": 142,
+          "start_dor": "2026-08-30T21:49:45.229949+00:00"
+        },
+        {
+          "duration_s": 583,
+          "end_dor": "2026-08-30T10:40:38.229949+00:00",
+          "epoch_count": 118,
+          "start_dor": "2026-08-30T10:30:55.229949+00:00"
+        },
+        {
+          "duration_s": 373,
+          "end_dor": "2026-08-30T20:17:38.229949+00:00",
+          "epoch_count": 76,
+          "start_dor": "2026-08-30T20:11:25.229949+00:00"
+        },
+        {
+          "duration_s": 203,
+          "end_dor": "2026-08-30T12:17:18.229949+00:00",
+          "epoch_count": 42,
+          "start_dor": "2026-08-30T12:13:55.229949+00:00"
+        },
+        {
+          "duration_s": 193,
+          "end_dor": "2026-08-30T12:13:08.229949+00:00",
+          "epoch_count": 40,
+          "start_dor": "2026-08-30T12:09:55.229949+00:00"
+        }
+      ],
+      "longest_same_path_witnessed_segments": [
+        {
+          "duration_s": 703,
+          "end_dor": "2026-08-30T22:01:28.229949+00:00",
+          "epoch_count": 142,
+          "start_dor": "2026-08-30T21:49:45.229949+00:00"
+        },
+        {
+          "duration_s": 583,
+          "end_dor": "2026-08-30T10:40:38.229949+00:00",
+          "epoch_count": 118,
+          "start_dor": "2026-08-30T10:30:55.229949+00:00"
+        },
+        {
+          "duration_s": 373,
+          "end_dor": "2026-08-30T20:17:38.229949+00:00",
+          "epoch_count": 76,
+          "start_dor": "2026-08-30T20:11:25.229949+00:00"
+        },
+        {
+          "duration_s": 203,
+          "end_dor": "2026-08-30T12:17:18.229949+00:00",
+          "epoch_count": 42,
+          "start_dor": "2026-08-30T12:13:55.229949+00:00"
+        },
+        {
+          "duration_s": 193,
+          "end_dor": "2026-08-30T12:13:08.229949+00:00",
+          "epoch_count": 40,
+          "start_dor": "2026-08-30T12:09:55.229949+00:00"
+        }
+      ],
+      "maximum_station_sample_gap_s": 10,
+      "nonconforming_delta_count": 13,
+      "record_count": 611,
+      "same_path_witness_break_reasons": {
+        "PHASE_DISCONTINUITY": 85,
+        "STATION_SAMPLE_GAP_EXCEEDED": 13
+      }
+    }
+  },
+  "stream": {
+    "complete_stream_scanned": true,
+    "decompressed_bytes": 7564590,
+    "decompressed_sha256": "9edb37c8a354602c20985a07edb87c594bcd9678d496e6e70ee0b4ee4f20db64",
+    "ephemeral_uncompressed_retention": "ZERO_AFTER_RECEIPT",
+    "line_count": 94830
+  }
+}
+
