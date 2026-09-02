@@ -1699,3 +1699,28 @@ independent structural qualification can make absences causally interpretable;
 otherwise change sensor family rather than extending receipt infrastructure.
 See
 [`DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md).
+
+Primary IDS/CNES documentation now makes the DORIS stop terminal. The
+DGXX/DGXX-S seven-channel receiver does not preserve a one-to-one map from
+physical visibility to station records: Sentinel-3 mixes DIODE designation
+and random DAS-T selection, and modes can change in flight. Missing records
+therefore cannot become occultation events without reconstructing historical
+on-board designation state. Do not extend the DORIS scanner or search another
+RINEX product for this observable.
+
+The next change of information is instead proven offline as
+`ALL_TRACK_BLIND_ASSIGNMENT_MECHANISM_DISCRIMINATIVE`. It removes the
+experiment's upstream target/reference choice without claiming that RINEX is
+code-blind. Six opaque tracks are scored against every one of 720 candidate
+bijections and one affine null after common-mode ensemble centering and the
+same prefix-only nuisance. Correct, permutation, code-discordance, affine,
+out-of-family and midpoint controls all terminate as designed.
+
+No station, date, product or primary is selected. The next maximum action is
+one orbit-only screen of a bounded predeclared station/date set. Admission
+requires complete predicted visibility for the full candidate codebook, a
+positive all-assignment margin after one conservative envelope, and a
+value-blind rule that includes every structurally complete track. If those
+conditions do not coexist, close this mechanism before product discovery.
+See
+[`GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md).
