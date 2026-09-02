@@ -297,6 +297,12 @@ def test_frozen_receipt_records_exact_coepoch_result_and_zero_retention() -> Non
     assert receipt["scope"]["candidate_day_product_access"] == "ZERO"
     assert receipt["scope"]["measurement_admission"] == "NOT_EVALUATED"
     assert receipt["scope"]["orbital_prediction"] == "NOT_EVALUATED"
+    boundary = receipt["post_outcome_boundary_audit"]
+    assert boundary["classification"] == "DESCRIPTION_ERROR_OUTCOME_UNCHANGED"
+    assert boundary["outcome_changed"] is False
+    assert boundary["additional_artifact_access"] == "ZERO"
+    assert "10.000001" not in boundary["retained_station_cadence_keys_s"]["D46"]
+    assert "10.000001" not in boundary["retained_station_cadence_keys_s"]["D40"]
 
 
 def test_frozen_receipt_binds_canonical_source_and_plan() -> None:

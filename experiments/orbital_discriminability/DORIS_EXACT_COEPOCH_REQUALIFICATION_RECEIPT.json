@@ -72,6 +72,39 @@
     "topology_qualified": true,
     "valid_coepoch_pair_count": 186
   },
+  "post_outcome_boundary_audit": {
+    "additional_artifact_access": "ZERO",
+    "classification": "DESCRIPTION_ERROR_OUTCOME_UNCHANGED",
+    "executed_source_gap_upper_bound_s": "10.000001",
+    "frozen_plan_gap_upper_bound_s": "10.000000",
+    "hardening_commit": "042fef43c9f3ff166410c11b880ce0b94f18bbf0",
+    "hardening_source_sha256": "169a71f42a43d39259502a63ba5a7d799c26e0af3a1b05afb5d559998d163cb3",
+    "historical_structural_receipt_sha256": "cf564053c1a866849475c46a33037a27a738e77f514958a89e69f4b802e188d8",
+    "outcome_changed": false,
+    "reason": "EVERY_EXACT_PAIR_GAP_IS_A_D46_AND_D40_STATION_GAP_AND_THE_FROZEN_MICROSECOND_CADENCE_KEYS_CONTAIN_NO_10.000001_SECOND_GAP",
+    "retained_station_cadence_keys_s": {
+      "D40": [
+        "3.000000",
+        "7.000000",
+        "10.000000",
+        "20.000000",
+        "60.000000",
+        "5250.000000",
+        "5310.000000",
+        "33920.000000"
+      ],
+      "D46": [
+        "3.000000",
+        "7.000000",
+        "10.000000",
+        "70.000000",
+        "220.000000",
+        "5280.000000",
+        "5400.000000",
+        "33610.000000"
+      ]
+    }
+  },
   "records": {
     "continuation_line_count": 39024,
     "numeric_observation_values_decoded": 0,

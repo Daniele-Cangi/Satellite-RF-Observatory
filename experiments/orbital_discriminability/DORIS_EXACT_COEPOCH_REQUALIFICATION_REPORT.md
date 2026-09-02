@@ -65,6 +65,26 @@ offset grids: for PAUB–RIMC it corresponds to a real simultaneous receiver
 chain. The old receipt was still correct to refuse that stronger claim because
 its algorithm had not tested exact epoch identity.
 
+## Post-outcome boundary audit
+
+Review found that the executed source implemented the frozen `10.000000 s`
+maximum gap as `10.000000 s + 0.000001 s` numerical tolerance. This is recorded
+as `DESCRIPTION_ERROR_OUTCOME_UNCHANGED`, not silently repaired and not treated
+as a new execution.
+
+No artifact was reopened. The immutable prior structural receipt already
+contains the complete microsecond-rounded cadence keys for both stations. D46
+contains `3.000000`, `7.000000`, `10.000000` and larger discontinuous gaps;
+D40 contains the same three in-window keys and larger discontinuous gaps.
+Neither contains `10.000001`. Every exact-pair gap is necessarily a cadence
+gap of both D46 and D40, so the one-microsecond implementation tolerance could
+not have admitted any sample in the reported chain.
+
+The current source now enforces the literal `10.000000 s` boundary and a
+synthetic regression proves that `10.000001 s` breaks the chain. The historical
+receipt remains bound to the exact source that executed; the hardening commit
+is recorded separately. The 633 s outcome is unchanged.
+
 ## What this closes
 
 Together with the preceding outcome-independent algebra, this result closes
@@ -121,4 +141,3 @@ The next smallest physical step is an offline envelope audit for the remaining
 terms and the absolute event-time bridge on this already proven 633 s topology.
 Observation magnitudes and candidate-day access remain unauthorized until that
 envelope leaves a positive orbital-versus-null margin.
-
