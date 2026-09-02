@@ -247,6 +247,7 @@ def evaluate_visibility(
     result: dict[str, object] = {
         "outcome": OUTCOME_NO_JOINT_VISIBILITY,
         "screen_version": SCREEN_VERSION,
+        "screen_source_sha256": canonical_sha256(Path(__file__)),
         "frozen_parent_commit": FROZEN_PARENT_COMMIT,
         "topology_receipt_sha256": TOPOLOGY_RECEIPT_SHA256,
         "physical_question": (

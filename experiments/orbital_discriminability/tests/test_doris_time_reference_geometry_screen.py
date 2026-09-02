@@ -79,6 +79,9 @@ def test_synthetic_day_closes_all_pairs_before_null_scoring() -> None:
         _trajectory("L98", 7_200_000.0),
     )
     assert result["outcome"] == screen.OUTCOME_NO_JOINT_VISIBILITY
+    assert result["screen_source_sha256"] == screen.canonical_sha256(
+        Path(screen.__file__)
+    )
     assert result["null_evaluation"]["state"] == (
         "NOT_EVALUATED_NO_ADMISSIBLE_JOINT_WINDOW"
     )
