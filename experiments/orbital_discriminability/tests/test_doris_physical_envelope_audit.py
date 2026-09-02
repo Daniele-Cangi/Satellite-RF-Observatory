@@ -92,7 +92,7 @@ def test_receipt_is_strict_json_and_reproducible() -> None:
     source = Path(audit.__file__).read_bytes().replace(b"\r\n", b"\n")
     assert actual["audit_source_sha256"] == sha256(source).hexdigest()
     assert actual["audit_source_commit"] == (
-        "42d7fe402926eb66064868b888b37f88ea04c139"
+        "f731b44c08f5304253940547e486c6ea15a907ca"
     )
     encoded = audit.strict_json(expected)
     assert "NaN" not in encoded

@@ -32,16 +32,16 @@ The audit verifies four immutable receipts before evaluation:
 
 | Role | Receipt SHA-256 |
 |---|---|
-| orbit-only geometry | `1807784b8330a27942b5c2b6136e652720181dd6cd5d814b6ec129f58b450985` |
-| development header | `afa1ebf9a3abf926e2b7cecbe4096939e2e86d0c889f453f9ff238ed27355fe6` |
-| observable-role audit | `ed6e2e6c00b5b74a02559c2d60dde29069d1d2f529ad2306f463c6264f6cc5c3` |
-| exact-coepoch topology | `307fd8dba440b0086a726e704e49aca5c84637102f522251f8e3b4ff897a6000` |
+| orbit-only geometry | `b342b64a2166f89d2adc05e1ee68e04e1abcccf234e8060449853b890a5e1117` |
+| development header | `b7e48ee0efb2e23be0981ead04df8894c57e23136bfe5facaeaa9fa70bdb0c5a` |
+| observable-role audit | `e509870fd01b4fac75b450fdb48beaecef9b544dbff789f09fb5a2424607388d` |
+| exact-coepoch topology | `d1668fccc982d550a949faf68131436b2713d12f28374617eaee82585bf67c9d` |
 
 The audit manifest SHA-256 is
-`6697bda1fc33f45575c21588264f5f7ebc2879bf2bc27244073fe42c1bfee3ac`.
-The frozen source commit is `42d7fe402926eb66064868b888b37f88ea04c139` and
+`77f722c28916250a92bf0ee358cd31006f13732859e5cf6c74b78492d58b545a`.
+The frozen source commit is `f731b44c08f5304253940547e486c6ea15a907ca` and
 its LF-normalized SHA-256 is
-`3d76b59070e7b38dd64a2e9b5773272fd32fdcf25455bdcc8db25b4d9abb1fac`.
+`b7a8afa0af1e1114e434597a14447c437ed2b20d29a8f8a977c0ff1491f2a850`.
 
 ## What cancels and what does not
 
