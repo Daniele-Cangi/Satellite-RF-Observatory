@@ -1392,12 +1392,23 @@ The exact correct fixture retains an `8,432.443650 m` assignment margin above
 a numerical-zero residual. Correct and permuted-track controls are concordant
 after reveal; swapped code labels remain discordant; affine data select the
 null; an out-of-family curvature fails the absolute-fit guard; and the closest
-assignment midpoint remains ambiguous. Zero observation or network access
-occurred. The receiver's upstream code correlation remains an explicit
-non-independent witness, so this is not code-free identity evidence. The next
-maximum work is one bounded orbit-only all-track geometry screen, not product
-discovery. See
+assignment midpoint remains ambiguous. The receiver's upstream code
+correlation remains an explicit non-independent witness, so this is not
+code-free identity evidence. See
 [`GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md).
+
+The bounded orbit-only screen now advances the mechanism to
+`ALL_TRACK_GEOMETRY_SHORTLISTED_MEASUREMENT_UNADMITTED`. Across three
+predeclared stations and five predeclared broadcast-navigation days, 3,403 of
+13,465 exactly-six-track windows pass the conservative three-guard decision
+condition. The top three are ALGO00CAN on DOY230, DOY229 and DOY231 with the
+same G05/G15/G18/G20/G21/G29 codebook and `48.749--49.100 km` robust lower
+margins. No observation product was searched or opened; all ephemeral
+navigation files were deleted. The next maximum action, only after review, is
+selection of one independent structural qualification artifact. A future
+seventh complete track is a refusal, not permission to select a PRN subset.
+See
+[`GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md).
 
 ## Repository map
 

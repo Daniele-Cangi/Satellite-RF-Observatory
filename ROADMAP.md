@@ -1724,3 +1724,28 @@ value-blind rule that includes every structurally complete track. If those
 conditions do not coexist, close this mechanism before product discovery.
 See
 [`GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md).
+
+That bounded screen now returns
+`ALL_TRACK_GEOMETRY_SHORTLISTED_MEASUREMENT_UNADMITTED`. Its station/date
+scope was committed before navigation access: DRAO00CAN, ALGO00CAN and
+WES200USA over GPS DOY229--233. The geometry itself defines the full six-orbit
+codebook; no target or reference is selected, and any seventh complete track
+makes a future measurement ineligible.
+
+The screen corrects the conservative decision accounting from an informal
+two-guard separation to three guards. The best true residual may grow by one
+guard, the wrong residual may shrink by one, and the scorer still requires a
+one-guard preference. On this rule, 3,403 of 13,465 exactly-six windows remain
+positive. The top three are ALGO00CAN DOY230/229/231 with the same
+G05/G15/G18/G20/G21/G29 family and robust lower margins of
+49,100.424, 48,939.826 and 48,748.701 m. The closest wrong bijection, not the
+affine null, controls each.
+
+No observation locator, product, header, payload or value was accessed, and
+the five exact-hash broadcast-navigation payloads were destroyed. The next
+maximum work, only after review, is selecting one independent structural
+qualification artifact rather than a primary. It must prove that all and only
+six structurally complete L1C/L2W tracks enter under a PRN- and value-blind
+rule and that ALGO-specific physical terms fit the frozen decision envelope.
+Failure closes this fixed-six vertical without subset selection. See
+[`GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md).
