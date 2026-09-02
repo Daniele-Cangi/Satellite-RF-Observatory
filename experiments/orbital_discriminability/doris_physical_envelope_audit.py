@@ -24,19 +24,19 @@ ROOT: Final = Path(__file__).resolve().parent
 FROZEN_RECEIPTS: Final = {
     "geometry": (
         ROOT / "DORIS_FORWARD_GEOMETRY_RECEIPT.json",
-        "1807784b8330a27942b5c2b6136e652720181dd6cd5d814b6ec129f58b450985",
+        "b342b64a2166f89d2adc05e1ee68e04e1abcccf234e8060449853b890a5e1117",
     ),
     "header": (
         ROOT / "DORIS_DEVELOPMENT_HEADER_RECEIPT.json",
-        "afa1ebf9a3abf926e2b7cecbe4096939e2e86d0c889f453f9ff238ed27355fe6",
+        "b7e48ee0efb2e23be0981ead04df8894c57e23136bfe5facaeaa9fa70bdb0c5a",
     ),
     "observable_role": (
         ROOT / "DORIS_OBSERVABLE_ROLE_AUDIT_RECEIPT.json",
-        "ed6e2e6c00b5b74a02559c2d60dde29069d1d2f529ad2306f463c6264f6cc5c3",
+        "e509870fd01b4fac75b450fdb48beaecef9b544dbff789f09fb5a2424607388d",
     ),
     "topology": (
         ROOT / "DORIS_EXACT_COEPOCH_REQUALIFICATION_RECEIPT.json",
-        "307fd8dba440b0086a726e704e49aca5c84637102f522251f8e3b4ff897a6000",
+        "d1668fccc982d550a949faf68131436b2713d12f28374617eaee82585bf67c9d",
     ),
 }
 
@@ -102,7 +102,8 @@ class OpenTerm:
 
 def _load_strict_receipt(path: Path, expected_sha256: str) -> dict[str, object]:
     raw = path.read_bytes()
-    if sha256(raw).hexdigest() != expected_sha256:
+    canonical = raw.replace(b"\r\n", b"\n")
+    if sha256(canonical).hexdigest() != expected_sha256:
         raise DorisEnvelopeError(f"frozen receipt hash changed: {path.name}")
     try:
         value = json.loads(
