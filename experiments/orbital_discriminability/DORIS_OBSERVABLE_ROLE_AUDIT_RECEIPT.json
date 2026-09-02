@@ -1,0 +1,159 @@
+{
+  "audit_source_commit": "1fee7f45c24351f31c40ccd85a87abacd89bb36e",
+  "audit_source_sha256": "1d56bef8c807d5fab7a07879697c0b50f20780bda32d188d178974b5491e5ec6",
+  "audit_version": "doris-observable-role-audit-v1",
+  "causal_topologies": {
+    "exact_coepoch_inter_beacon_phase_difference": {
+      "claim": "CONDITIONALLY_PLAUSIBLE_NOT_STRUCTURALLY_QUALIFIED",
+      "per_target_c1_c2_time_reference_witness": "NOT_CAUSALLY_REQUIRED_FOR_COMMON_RECEIVER_CLOCK_CANCELLATION",
+      "receiver_side_coefficients": {
+        "FIRST_ORDER_IONOSPHERE_AFTER_DUAL_FREQUENCY_COMBINATION": 0,
+        "LEFT_GEOMETRY_AND_NONDISPERSIVE_PATH": 1,
+        "LEFT_PASS_PHASE_BIAS": 1,
+        "LEFT_TRANSMITTER_CLOCK_AND_PROPER_TIME": -1,
+        "RIGHT_GEOMETRY_AND_NONDISPERSIVE_PATH": -1,
+        "RIGHT_PASS_PHASE_BIAS": -1,
+        "RIGHT_TRANSMITTER_CLOCK_AND_PROPER_TIME": 1,
+        "SHARED_RECEIVER_CLOCK_AT_COMMON_EPOCH": 0,
+        "SHARED_RECEIVER_PROPER_TIME_AT_COMMON_EPOCH": 0
+      },
+      "remaining_required_event_time": "ABSOLUTE_DOR_TO_COORDINATE_TIME_BOUND_FOR_ORBIT_EVALUATION"
+    },
+    "overlapping_but_noncoepoch_station_streams": {
+      "claim": "NOT_ADMITTED",
+      "current_633_second_overlap": "INSUFFICIENT_TO_PROVE_RECEIVER_CLOCK_CANCELLATION",
+      "receiver_side_coefficients": {
+        "SHARED_RECEIVER_CLOCK_AT_LEFT_EPOCH": 1,
+        "SHARED_RECEIVER_CLOCK_AT_RIGHT_EPOCH": -1,
+        "SHARED_RECEIVER_PROPER_TIME_AT_LEFT_EPOCH": 1,
+        "SHARED_RECEIVER_PROPER_TIME_AT_RIGHT_EPOCH": -1
+      }
+    },
+    "single_station_or_asynchronous_pair": {
+      "claim": "NOT_ADMITTED_BY_CURRENT_STRUCTURAL_RECEIPT",
+      "minimum_time_bridge": "IONOSPHERE_FREE_C1_C2_OR_INDEPENDENT_BOUNDED_RECEIVER_CLOCK_MODEL",
+      "receiver_clock": "DOES_NOT_CANCEL",
+      "target_station_code_flag_role": "TIME_REFERENCE_VALIDITY_NOT_GENERIC_FIELD_PRESENCE"
+    }
+  },
+  "decision": {
+    "current_measurement_admission": "NOT_EVALUATED",
+    "dual_phase_core": "SUFFICIENT_ONLY_FOR_EXACT_COEPOCH_INTER_BEACON_DIFFERENTIAL_AFTER_REMAINING_TERMS_ARE_BOUNDED",
+    "next_minimum_action": "VALUE_BLIND_EXACT_COEPOCH_TOPOLOGY_REQUALIFICATION_OF_DEVELOPMENT_ARTIFACT_REQUIRES_SEPARATE_AUTHORITY",
+    "old_per_target_code_witness": "NOT_UNIVERSAL_REPLACE_WITH_CLAIM_SCOPED_TIME_BRIDGE"
+  },
+  "frozen_structural_facts": [
+    {
+      "frequency_shift_k": [
+        0,
+        18
+      ],
+      "joint_core_overlap_s": 393.0,
+      "pair": [
+        "TLSB",
+        "WEUC"
+      ],
+      "required_duration_s": 430.0,
+      "station_ids": [
+        "D49",
+        "D47"
+      ],
+      "time_reference_valid_code_overlap_s": 0.0
+    },
+    {
+      "frequency_shift_k": [
+        0,
+        0
+      ],
+      "joint_core_overlap_s": 633.0,
+      "pair": [
+        "PAUB",
+        "RIMC"
+      ],
+      "required_duration_s": 480.0,
+      "station_ids": [
+        "D46",
+        "D40"
+      ],
+      "time_reference_valid_code_overlap_s": 0.0
+    }
+  ],
+  "historical_structural_receipt_sha256": "cf564053c1a866849475c46a33037a27a738e77f514958a89e69f4b802e188d8",
+  "ionosphere_free_phase": {
+    "alpha": {
+      "decimal": "1.040398729710656316",
+      "denominator": 283400,
+      "numerator": 294849
+    },
+    "beta": {
+      "decimal": "-0.040398729710656316",
+      "denominator": 283400,
+      "numerator": -11449
+    },
+    "coordinate": "Q_IF=alpha*(lambda1*L1)+beta*(lambda2*L2)",
+    "invariants": {
+      "first_order_ionosphere": "alpha/f1^2+beta/f2^2=0_EXACT",
+      "l1_l2_reception_epoch": "SYNCHRONOUS_BY_RECEIVER_DESIGN",
+      "nondispersive_gain": "alpha+beta=1_EXACT"
+    }
+  },
+  "outcome": "DORIS_DUAL_PHASE_DIFFERENTIAL_REQUIRES_COEPOCH_REQUALIFICATION",
+  "physical_roles": {
+    "C1_C2": "RECEIVER_TIME_CLOCK_SOLUTION_AND_OPTIONAL_SAME_PATH_DIAGNOSTIC",
+    "C1_C2_FLAG1": "VALIDITY_FOR_TIME_REFERENCE_USE",
+    "C1_C2_FLAG2": "PROCESSING_UNIT_IDENTITY_NOT_VALIDITY",
+    "EPOCH_CLOCK_OFFSET": "ALTERNATIVE_RECEIVER_TIME_BRIDGE_REQUIRING_NUMERICAL_PROVENANCE",
+    "L1_L2": "CORE_RANGE_EQUIVALENT_PHASE_AND_FIRST_ORDER_IONOSPHERE_CONTROL",
+    "L1_L2_FLAG1": "DESCRIPTIVE_CENTRAL_FREQUENCY_STATE",
+    "L1_L2_FLAG2": "FATAL_PHASE_CONTINUITY_LLI"
+  },
+  "preferred_conditional_pair": {
+    "pair": [
+      "PAUB",
+      "RIMC"
+    ],
+    "unproved_clause": "CONTIGUOUS_EXACT_COEPOCH_L1_L2_COVERAGE_FOR_FROZEN_WINDOW",
+    "why": [
+      "CORE_OVERLAP_633_S_EXCEEDS_480_S_REQUIREMENT",
+      "BOTH_BEACON_FREQUENCY_SHIFT_FACTORS_K_ARE_ZERO",
+      "NO_SHIFTED_FREQUENCY_PHASE_CORRECTION_REQUIRED"
+    ]
+  },
+  "published_frequency_constants_hz": {
+    "phase_l1_s_band": 2036250000,
+    "phase_l2_uhf": 401250000
+  },
+  "same_epoch_pair_terms": {
+    "cancelled_exactly_in_symbolic_model": [
+      "FIRST_ORDER_IONOSPHERE",
+      "SHARED_RECEIVER_CLOCK",
+      "SHARED_RECEIVER_PROPER_TIME"
+    ],
+    "conditional_common_mode_reduction": [
+      "COMMON_RECEPTION_EPOCH_ERROR_TO_FIRST_ORDER_IF_SAME_TAG"
+    ],
+    "must_remain_explicit_or_bounded": [
+      "ABSOLUTE_EVENT_TIME_ERROR_AGAINST_ORBIT",
+      "HIGHER_ORDER_IONOSPHERE",
+      "DIFFERENTIAL_TROPOSPHERE",
+      "STATION_PHASE_CENTERS_AND_ANTENNA_MAPS",
+      "PHASE_WINDUP",
+      "SHAPIRO_AND_ONE_WAY_RELATIVITY",
+      "NONAFFINE_GROUND_OSCILLATOR_BEHAVIOR",
+      "CHANNEL_SWITCH_OR_RECEIVER_NONCOMMON_BIAS"
+    ],
+    "prefix_affine_nuisance_candidates": [
+      "LEFT_MINUS_RIGHT_GROUND_OSCILLATOR_OFFSET",
+      "LEFT_MINUS_RIGHT_GROUND_OSCILLATOR_AFFINE_AGING",
+      "CONSTANT_INTERFREQUENCY_AND_PASS_PHASE_BIASES"
+    ]
+  },
+  "scope": {
+    "candidate_day_access": "ZERO",
+    "changes_to_g0_or_g1": "ZERO",
+    "null_score": "NOT_EVALUATED",
+    "observation_artifact_access": "ZERO",
+    "observation_values": "NEVER_ACCESSED",
+    "orbital_prediction": "NOT_EVALUATED"
+  }
+}
