@@ -148,10 +148,12 @@ def scan_exact_coepoch_topology(
     decompressed_bytes = 0
     line_count = 0
 
-    def next_line() -> bytes:
+    def next_line(*, allow_eof: bool = False) -> bytes:
         nonlocal decompressed_bytes, line_count
         raw_line = process.stdout.readline()
         if not raw_line:
+            if allow_eof:
+                return b""
             raise DorisCoepochError("COEPOCH_UNEXPECTED_END_OF_STREAM")
         digest.update(raw_line)
         decompressed_bytes += len(raw_line)
@@ -201,15 +203,10 @@ def scan_exact_coepoch_topology(
         header_lines.clear()
 
         while True:
-            raw_line = process.stdout.readline()
+            raw_line = next_line(allow_eof=True)
             if not raw_line:
                 completed = True
                 break
-            digest.update(raw_line)
-            decompressed_bytes += len(raw_line)
-            line_count += 1
-            if line_count > structural.MAX_STREAM_LINES:
-                raise DorisCoepochError("COEPOCH_STREAM_LINE_LIMIT_EXCEEDED")
 
             epoch, epoch_flag, record_count = structural._parse_epoch_prefix(raw_line)
             epoch_count += 1
@@ -271,9 +268,7 @@ def scan_exact_coepoch_topology(
                 gap_s = (epoch - segment_last).total_seconds()
                 if (
                     gap_s <= 0.0
-                    or gap_s
-                    > structural.MAX_STATION_SAMPLE_GAP_S
-                    + structural.CADENCE_TOLERANCE_S
+                    or gap_s > structural.MAX_STATION_SAMPLE_GAP_S
                 ):
                     finish_segment("EXACT_COEPOCH_SAMPLE_GAP_EXCEEDED")
             if segment_start is None:

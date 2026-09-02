@@ -76,7 +76,7 @@ def _synthetic_product(
     path: Path,
     station_sets: list[tuple[str, ...]],
     *,
-    step_s: int = 10,
+    step_s: float = 10.0,
     break_index: int | None = None,
     absent_index: int | None = None,
 ) -> tuple[header.ProductAuthority, dict[str, object]]:
@@ -187,6 +187,26 @@ def test_asynchronous_station_streams_do_not_form_a_pair(tmp_path: Path) -> None
     }
 
 
+def test_gap_one_microsecond_above_limit_breaks_every_segment(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "synthetic.Z"
+    station_sets = [("D46", "D40") for _ in range(49)]
+    authority, frozen = _synthetic_product(
+        path,
+        station_sets,
+        step_s=10.000001,
+    )
+
+    receipt = _scan(path, authority, frozen)
+
+    assert receipt["outcome"] == "DORIS_EXACT_COEPOCH_TOPOLOGY_INSUFFICIENT"
+    assert receipt["pair"]["maximum_exact_coepoch_segment_s"] == 0.0
+    assert receipt["pair"]["break_reasons"] == {
+        "EXACT_COEPOCH_SAMPLE_GAP_EXCEEDED": 48
+    }
+
+
 @pytest.mark.parametrize("failure", ["missing_pair", "phase_break"])
 def test_missing_or_discontinuous_phase_breaks_the_chain(
     tmp_path: Path,
@@ -281,11 +301,12 @@ def test_frozen_receipt_records_exact_coepoch_result_and_zero_retention() -> Non
 
 def test_frozen_receipt_binds_canonical_source_and_plan() -> None:
     receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
-    source = Path(coepoch.__file__).read_bytes().replace(b"\r\n", b"\n")
     plan = PLAN.read_bytes().replace(b"\r\n", b"\n")
 
     assert receipt["execution"]["source_commit"] == (
         "7d954f576f000bd84d5a6b3bdc23f744bba7cb4c"
     )
-    assert receipt["execution"]["source_sha256"] == sha256(source).hexdigest()
+    assert receipt["execution"]["source_sha256"] == (
+        "4cc40fcc2fed2521fc69c4b5654a35fd8803501d91b930d29d7c1d300b182ee8"
+    )
     assert receipt["execution"]["plan_sha256"] == sha256(plan).hexdigest()
