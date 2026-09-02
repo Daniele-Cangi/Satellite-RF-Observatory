@@ -1339,6 +1339,20 @@ screen of the six frozen pairs from ADHC, HBMB, PAUB and TLSB; no observation
 access is authorized. See
 [`DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md).
 
+That orbit-only screen is now complete as
+`DORIS_TIME_REFERENCE_TOPOLOGY_NO_JOINT_VISIBILITY`. All six frozen pairs are
+continuously outside the simultaneous Sentinel-3A visibility caps at the
+unchanged 10 degree elevation threshold. The closest pair, ADHC-PAUB, still
+exceeds the conservative joint cap by 27.541 degrees; every direct 10 s-grid
+check has zero joint samples. With no 360 s common window there can be no
+calibration prefix or held-out suffix, so every frozen null is correctly
+`NOT_EVALUATED_NO_ADMISSIBLE_JOINT_WINDOW`. No RINEX or observation value was
+opened, and all exact-hash SP3 artifacts were destroyed after analysis. This
+time-reference-pair topology is closed for the frozen Sentinel-3A geometry;
+the next work must change the observable abstraction, not search for a more
+convenient file or weaken visibility. See
+[`DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md).
+
 ## Repository map
 
 ```text
