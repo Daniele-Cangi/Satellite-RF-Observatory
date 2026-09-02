@@ -1,6 +1,6 @@
 {
-  "audit_source_commit": "bb7f3e2b576228d7daaa9e599a2bb37fe8addbb4",
-  "audit_source_sha256": "41a66a84bfe4c7e15b0cbb170412c916537e3de154d375fad3df56321d62408d",
+  "audit_source_commit": "1fee7f45c24351f31c40ccd85a87abacd89bb36e",
+  "audit_source_sha256": "1d56bef8c807d5fab7a07879697c0b50f20780bda32d188d178974b5491e5ec6",
   "audit_version": "doris-observable-role-audit-v1",
   "causal_topologies": {
     "exact_coepoch_inter_beacon_phase_difference": {

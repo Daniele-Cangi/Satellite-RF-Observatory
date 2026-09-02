@@ -98,5 +98,5 @@ def test_frozen_receipt_matches_audit_and_binds_source() -> None:
     source_hash = sha256(Path(audit.__file__).read_bytes()).hexdigest()
     assert receipt["audit_source_sha256"] == source_hash
     assert receipt["audit_source_commit"] == (
-        "bb7f3e2b576228d7daaa9e599a2bb37fe8addbb4"
+        "1fee7f45c24351f31c40ccd85a87abacd89bb36e"
     )
