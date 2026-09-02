@@ -18,7 +18,7 @@ from experiments.orbital_discriminability import (
 )
 
 
-SECRET_OBSERVATION_TEXT = "9876543210.12"
+SECRET_OBSERVATION_TEXT = "9876543210.12"  # noqa: S105 - synthetic magnitude
 
 
 def _header_line(data: str, label: str) -> bytes:
@@ -73,6 +73,8 @@ def _synthetic_product(
     phase_break_index: int | None = None,
     central_frequency_index: int | None = None,
     cadence_pattern_s: tuple[int, ...] | None = None,
+    special_event_index: int | None = None,
+    duplicate_station_index: int | None = None,
 ) -> tuple[header.ProductAuthority, str]:
     header_bytes = b"".join(
         [
@@ -92,9 +94,16 @@ def _synthetic_product(
         elif index:
             elapsed_s += 10
         epoch = start + timedelta(seconds=elapsed_s)
+        if index == special_event_index:
+            body.extend(_epoch_line(epoch, flag=4, count=1))
+            body.extend(_header_line("synthetic event", "COMMENT"))
+            continue
         flag = 1 if index == power_failure_index else 0
         body.extend(_epoch_line(epoch, flag=flag, count=4))
-        for station_id in ("D49", "D47", "D46", "D40"):
+        station_ids = ["D49", "D47", "D46", "D40"]
+        if index == duplicate_station_index:
+            station_ids[-1] = "D49"
+        for station_id in station_ids:
             phase_flag1 = (
                 "1"
                 if index == central_frequency_index and station_id == "D49"
@@ -230,6 +239,39 @@ def test_interleaved_three_seven_second_station_cadence_is_continuous(
     }
 
 
+def test_special_event_consumes_declared_lines_and_cuts_all_segments(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "synthetic.Z"
+    authority, header_hash = _synthetic_product(path, special_event_index=24)
+
+    receipt = _scan(path, authority, header_hash)
+
+    assert receipt["epochs"]["special_event_count"] == 1
+    assert receipt["epochs"]["count"] == 49
+    assert receipt["records"]["station_record_count"] == 48 * 4
+    for station in receipt["stations"].values():
+        assert station["core_break_reasons"]["SPECIAL_EPOCH_FLAG"] == 1
+        assert station["same_path_witness_break_reasons"][
+            "SPECIAL_EPOCH_FLAG"
+        ] == 1
+
+
+def test_duplicate_station_in_epoch_is_a_typed_refusal(tmp_path: Path) -> None:
+    path = tmp_path / "synthetic.Z"
+    authority, header_hash = _synthetic_product(
+        path,
+        epoch_count=1,
+        duplicate_station_index=0,
+    )
+
+    with pytest.raises(
+        scanner.DorisStructuralError,
+        match="STRUCTURAL_DUPLICATE_STATION_IN_EPOCH",
+    ):
+        _scan(path, authority, header_hash)
+
+
 @pytest.mark.parametrize(
     ("seconds_token", "suffix"),
     [
@@ -251,6 +293,24 @@ def test_epoch_prefix_keeps_count_and_ignores_receiver_clock_value(
     assert parsed_epoch == epoch
     assert flag == 0
     assert count == 56
+
+
+def test_epoch_prefix_rounding_carries_without_invalid_microsecond() -> None:
+    raw = b"> 2026 08 30 12 34 59.999999999  0  1\n"
+
+    epoch, flag, count = scanner._parse_epoch_prefix(raw)
+
+    assert epoch == datetime(2026, 8, 30, 12, 35, tzinfo=timezone.utc)
+    assert flag == 0
+    assert count == 1
+
+
+def test_short_epoch_prefix_preserves_typed_structural_refusal() -> None:
+    with pytest.raises(
+        scanner.DorisStructuralError,
+        match="STRUCTURAL_EPOCH_PREFIX_TOO_SHORT",
+    ):
+        scanner._parse_epoch_prefix(b"> 2026 08\n")
 
 
 def test_hash_is_verified_before_decompressor_resolution(tmp_path: Path) -> None:

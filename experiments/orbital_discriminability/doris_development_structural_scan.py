@@ -10,7 +10,8 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import asdict, dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from decimal import Decimal, InvalidOperation, ROUND_HALF_EVEN
 from hashlib import sha256
 import json
 from math import ceil
@@ -129,36 +130,50 @@ def _leading_tokens(raw_line: bytes, count: int) -> tuple[bytes, ...]:
 def _parse_epoch_prefix(raw_line: bytes) -> tuple[datetime, int, int]:
     if not raw_line.startswith(b">"):
         raise DorisStructuralError("STRUCTURAL_EPOCH_RECORD_EXPECTED")
+    # Keep this outside the conversion handler so its precise structural
+    # refusal is not collapsed into a generic invalid-prefix description.
+    raw_prefix = _leading_tokens(raw_line, 9)
     try:
         # DORIS files in the family use more second decimals than the generic
         # RINEX example.  Consume exactly the nine structural tokens and never
         # tokenize the optional receiver clock / oscillator suffix.
         prefix = [
             token.decode("ascii", errors="strict")
-            for token in _leading_tokens(raw_line, 9)
+            for token in raw_prefix
         ]
         if len(prefix) != 9 or prefix[0] != ">":
             raise ValueError
         year, month, day, hour, minute = (int(value) for value in prefix[1:6])
-        second = float(prefix[6])
+        second = Decimal(prefix[6])
         epoch_flag = int(prefix[7])
         record_count = int(prefix[8])
-    except (UnicodeDecodeError, ValueError) as error:
+        if not second.is_finite() or second < 0 or second >= 60:
+            raise ValueError
+        total_microseconds = int(
+            (second * 1_000_000).to_integral_value(rounding=ROUND_HALF_EVEN)
+        )
+        epoch = datetime(
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            tzinfo=timezone.utc,
+        ) + timedelta(microseconds=total_microseconds)
+    except (InvalidOperation, UnicodeDecodeError, ValueError) as error:
         raise DorisStructuralError("STRUCTURAL_INVALID_EPOCH_PREFIX") from error
-    whole_second = int(second)
-    epoch = datetime(
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        whole_second,
-        round((second - whole_second) * 1_000_000),
-        tzinfo=timezone.utc,
-    )
-    if record_count < 0 or record_count > 99:
+    if record_count < 0 or record_count > 999:
         raise DorisStructuralError("STRUCTURAL_INVALID_EPOCH_RECORD_COUNT")
     return epoch, epoch_flag, record_count
+
+
+def _terminate_with_kill_fallback(process: subprocess.Popen[bytes]) -> None:
+    process.terminate()
+    try:
+        process.wait(timeout=5.0)
+    except subprocess.TimeoutExpired:
+        process.kill()
+        process.wait(timeout=5.0)
 
 
 def _record_fields(lines: list[bytes], station_id: str) -> list[FieldShape]:
@@ -483,11 +498,9 @@ def scan_exact_development_structure(
                 try:
                     process.wait(timeout=5.0)
                 except subprocess.TimeoutExpired:
-                    process.terminate()
-                    process.wait(timeout=5.0)
+                    _terminate_with_kill_fallback(process)
             else:
-                process.terminate()
-                process.wait(timeout=5.0)
+                _terminate_with_kill_fallback(process)
         stderr = process.stderr.read()
         process.stderr.close()
 

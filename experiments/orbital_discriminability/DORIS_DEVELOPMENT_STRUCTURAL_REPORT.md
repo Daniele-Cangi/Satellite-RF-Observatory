@@ -72,7 +72,9 @@ or authorize access to observation values.
 The terminal scanner is commit
 `e2336295eaefd91008636935db7510b974427335` with source SHA-256
 `84a0d8171fd780bde03903e6018fb777b99430ad3bca5177aee8911ea7dc16ef`.
-Nine synthetic specification-shaped tests passed before the terminal scan.
+Nine synthetic cases passed before the terminal scan. A tenth frozen-receipt
+regression was added after the receipt was materialized; this distinction keeps
+the pre-outcome test statement exact.
 
 ## Description corrections before the terminal scan
 
