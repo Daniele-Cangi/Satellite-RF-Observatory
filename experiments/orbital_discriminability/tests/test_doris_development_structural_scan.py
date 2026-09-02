@@ -6,6 +6,7 @@ from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 import inspect
+import json
 from pathlib import Path
 
 import ncompress
@@ -275,3 +276,27 @@ def test_scanner_scope_excludes_candidate_and_observation_decoding() -> None:
     assert "float(slot" not in source
     assert "numeric_observation_values_decoded" in source
     assert "candidate_day_product_access" in source
+
+
+def test_frozen_terminal_receipt_preserves_value_blind_refusal() -> None:
+    receipt_path = (
+        Path(__file__).parents[1] / "DORIS_DEVELOPMENT_STRUCTURAL_RECEIPT.json"
+    )
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+
+    assert receipt["outcome"] == "DORIS_DEVELOPMENT_STRUCTURE_INSUFFICIENT"
+    assert receipt["authority"]["sha256"] == header.DEVELOPMENT_SHA256
+    assert receipt["scanner"]["frozen_commit"] == (
+        "e2336295eaefd91008636935db7510b974427335"
+    )
+    assert receipt["records"]["numeric_observation_values_decoded"] == 0
+    assert receipt["records"]["numeric_observation_values_persisted"] == 0
+    assert receipt["candidate_day_product_access"] == "ZERO"
+    assert receipt["orbital_score"] == "NOT_EVALUATED"
+    assert receipt["measurement_admission"] == "NOT_EVALUATED"
+    assert receipt["pairs"][0]["maximum_core_phase_segment_s"] == 393.0
+    assert receipt["pairs"][1]["maximum_core_phase_segment_s"] == 633.0
+    assert all(
+        pair["maximum_same_path_witnessed_segment_s"] == 0.0
+        for pair in receipt["pairs"]
+    )
