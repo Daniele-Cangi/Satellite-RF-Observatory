@@ -383,7 +383,9 @@ def strict_json(payload: Mapping[str, object]) -> str:
 
 def main() -> int:
     quarantine = Path(".quarantine-doris-time-reference-geometry")
-    print(strict_json(run_from_directory(quarantine)))
+    # The callable returns the receipt to its trusted caller; the command-line
+    # boundary deliberately emits no receipt fields.
+    run_from_directory(quarantine)
     return 0
 
 

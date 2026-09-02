@@ -129,6 +129,7 @@ def test_screen_has_no_observation_or_network_surface() -> None:
         "phase_values",
     ):
         assert forbidden not in source
+    assert "print(" not in source
 
 
 def test_receipt_is_source_bound_and_strict_json() -> None:
