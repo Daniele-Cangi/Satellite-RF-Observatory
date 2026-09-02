@@ -1,0 +1,730 @@
+{
+  "claim_scope": "SYNTHETIC_ALL_TRACK_SELECTION_MECHANISM_ONLY",
+  "closed_development_fixture": {
+    "consumed_primary_reopened_or_rescored": false,
+    "mapping_seal_sha256": "b719a2bf17e66fcafa3597c4018d6acd039bdac4e33ecb173795646ff47245db",
+    "observation_values_used": 0,
+    "prediction_bundle_sha256": "a36aed59f32ee9b409778e44a0b661aebbf83c0675c58473c6655ad562c82ee2"
+  },
+  "new_gate": false,
+  "next_maximum_action": "ORBIT_ONLY_SEARCH_FOR_ONE_ALL_TRACK_GEOMETRY_WITH_A_PREDECLARED_BOUNDED_STATION_DATE_SET",
+  "observation_access": {
+    "headers": 0,
+    "network_requests": 0,
+    "payload_bytes": 0,
+    "product_locators": 0,
+    "values": 0
+  },
+  "opaque_surface": {
+    "bijective_assignments": 720,
+    "curve_matrix_manifest_sha256": "941bc437bfafac2470e0de724ec357294886b674b547eda6d83bd99a8512da0e",
+    "hypothesis_count": 721,
+    "mapping_available_to_scorer": false,
+    "non_orbital_nulls": 1,
+    "track_count": 6
+  },
+  "outcome": "ALL_TRACK_BLIND_ASSIGNMENT_MECHANISM_DISCRIMINATIVE",
+  "physical_question": "CAN_HELDOUT_ORBIT_DYNAMICS_ASSIGN_EVERY_CONTINUOUS_TRACK_WITHOUT_PRN_CONDITIONED_TRACK_PRESELECTION",
+  "primary_selected": false,
+  "real_capability_admission": "NOT_EVALUATED",
+  "remaining_real_capability_limits": [
+    "RINEX_RECEIVER_CODE_CORRELATION_REMAINS_UPSTREAM_AND_NOT_INDEPENDENT",
+    "ALL_TRACK_INCLUSION_REQUIRES_A_VALUE_BLIND_STRUCTURAL_RULE",
+    "REAL_CANDIDATE_CODEBOOK_AND_VISIBILITY_MUST_BE_FROZEN_ORBIT_FIRST",
+    "EVENT_TIME_PROPAGATION_PHASE_AND_HARDWARE_ENVELOPES_REMAIN_REQUIRED",
+    "ONE_DISTINCT_QUALIFICATION_AND_ONE_LATER_PRIMARY_WOULD_BE_REQUIRED"
+  ],
+  "scenarios": [
+    {
+      "code_witness_sha256_before_score": "659d39f2a2cc2ba2f77e9a85e83a19d6b738c47e7428811523c08e003291b396",
+      "name": "complete_correct_assignment",
+      "reveal_after_score_hash": {
+        "best_model": {
+          "assignment_by_track_order": [
+            "G06",
+            "G14",
+            "G17",
+            "G19",
+            "G22",
+            "G30"
+          ],
+          "model_class": "BIJECTIVE_ORBIT_ASSIGNMENT"
+        },
+        "best_opaque_id": "H_995A8D3C98DEAA84",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_physical_witness": false,
+          "same_samples_and_tracking_output": true,
+          "schema": "synthetic-all-track-code-witness-v1",
+          "track_identity": [
+            {
+              "code_identity": "G06",
+              "track_id": "T_3C5A325B30ED13CF"
+            },
+            {
+              "code_identity": "G14",
+              "track_id": "T_3E5A3532CFE70EF8"
+            },
+            {
+              "code_identity": "G17",
+              "track_id": "T_5867530D40B21D16"
+            },
+            {
+              "code_identity": "G19",
+              "track_id": "T_8A0077F55290A3BC"
+            },
+            {
+              "code_identity": "G22",
+              "track_id": "T_CC8D3E95C3287F7F"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "T_FD8DE9673D7433E5"
+            }
+          ]
+        },
+        "state": "ORBIT_CODE_CONCORDANT"
+      },
+      "role": "POSITIVE_CONTROL",
+      "score_receipt": {
+        "all_scores_sha256": "0468437cce846a80d4ed352fa8ea9bf38ea2435594a9cf3817f4f63ca405e082",
+        "best_heldout_max_track_peak_to_peak_m": 0.686778860385374,
+        "best_opaque_id": "H_995A8D3C98DEAA84",
+        "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
+        "effective_prefix_parameter_count_per_hypothesis": 10,
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "opaque_hypothesis_count": 721,
+        "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 8431.91629247143,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_4239B2BD455404D3",
+        "schema": "gnss-all-track-assignment-score-receipt-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "top_scores": [
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 0.686778860385374,
+            "heldout_rms_m": 0.17577400000512444,
+            "opaque_id": "H_995A8D3C98DEAA84",
+            "prefix_rms_m": 0.08490546192754933
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 8432.603071331814,
+            "heldout_rms_m": 7081.772146959754,
+            "opaque_id": "H_4239B2BD455404D3",
+            "prefix_rms_m": 1964.6546932122317
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 18763.820673686918,
+            "heldout_rms_m": 13546.344328344638,
+            "opaque_id": "H_BF3B4ED4E97FB401",
+            "prefix_rms_m": 3035.7889785712
+          }
+        ],
+        "track_count": 6,
+        "track_ids": [
+          "T_3C5A325B30ED13CF",
+          "T_3E5A3532CFE70EF8",
+          "T_5867530D40B21D16",
+          "T_8A0077F55290A3BC",
+          "T_CC8D3E95C3287F7F",
+          "T_FD8DE9673D7433E5"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_set_sha256": "307b35d7b3bda133c9e901fb6ddd8109f28347bb43833d6f553492a211832143"
+      },
+      "score_receipt_sha256_before_reveal": "679c3680396873a573cf1c180ac2226ad9ff932a63545dfa04e88db9b1910a0c"
+    },
+    {
+      "code_witness_sha256_before_score": "138e666248670c19deb3d6cea4994e645fb6bb389fe292ccc63fbae5780bface",
+      "name": "complete_code_discordance",
+      "reveal_after_score_hash": {
+        "best_model": {
+          "assignment_by_track_order": [
+            "G06",
+            "G14",
+            "G17",
+            "G19",
+            "G22",
+            "G30"
+          ],
+          "model_class": "BIJECTIVE_ORBIT_ASSIGNMENT"
+        },
+        "best_opaque_id": "H_995A8D3C98DEAA84",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_physical_witness": false,
+          "same_samples_and_tracking_output": true,
+          "schema": "synthetic-all-track-code-witness-v1",
+          "track_identity": [
+            {
+              "code_identity": "G22",
+              "track_id": "T_3C5A325B30ED13CF"
+            },
+            {
+              "code_identity": "G14",
+              "track_id": "T_3E5A3532CFE70EF8"
+            },
+            {
+              "code_identity": "G17",
+              "track_id": "T_5867530D40B21D16"
+            },
+            {
+              "code_identity": "G19",
+              "track_id": "T_8A0077F55290A3BC"
+            },
+            {
+              "code_identity": "G06",
+              "track_id": "T_CC8D3E95C3287F7F"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "T_FD8DE9673D7433E5"
+            }
+          ]
+        },
+        "state": "ORBIT_CODE_DISCORDANT"
+      },
+      "role": "SEPARATE_WITNESS_NEGATIVE_CONTROL",
+      "score_receipt": {
+        "all_scores_sha256": "0468437cce846a80d4ed352fa8ea9bf38ea2435594a9cf3817f4f63ca405e082",
+        "best_heldout_max_track_peak_to_peak_m": 0.686778860385374,
+        "best_opaque_id": "H_995A8D3C98DEAA84",
+        "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
+        "effective_prefix_parameter_count_per_hypothesis": 10,
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "opaque_hypothesis_count": 721,
+        "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 8431.91629247143,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_4239B2BD455404D3",
+        "schema": "gnss-all-track-assignment-score-receipt-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "top_scores": [
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 0.686778860385374,
+            "heldout_rms_m": 0.17577400000512444,
+            "opaque_id": "H_995A8D3C98DEAA84",
+            "prefix_rms_m": 0.08490546192754933
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 8432.603071331814,
+            "heldout_rms_m": 7081.772146959754,
+            "opaque_id": "H_4239B2BD455404D3",
+            "prefix_rms_m": 1964.6546932122317
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 18763.820673686918,
+            "heldout_rms_m": 13546.344328344638,
+            "opaque_id": "H_BF3B4ED4E97FB401",
+            "prefix_rms_m": 3035.7889785712
+          }
+        ],
+        "track_count": 6,
+        "track_ids": [
+          "T_3C5A325B30ED13CF",
+          "T_3E5A3532CFE70EF8",
+          "T_5867530D40B21D16",
+          "T_8A0077F55290A3BC",
+          "T_CC8D3E95C3287F7F",
+          "T_FD8DE9673D7433E5"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_set_sha256": "307b35d7b3bda133c9e901fb6ddd8109f28347bb43833d6f553492a211832143"
+      },
+      "score_receipt_sha256_before_reveal": "679c3680396873a573cf1c180ac2226ad9ff932a63545dfa04e88db9b1910a0c"
+    },
+    {
+      "code_witness_sha256_before_score": "6eeaf9008979d6c4ff29bbc498fb6d2f20424bae79db2f4a763976a9d66d92ca",
+      "name": "track_slot_permutation",
+      "reveal_after_score_hash": {
+        "best_model": {
+          "assignment_by_track_order": [
+            "G22",
+            "G06",
+            "G30",
+            "G14",
+            "G19",
+            "G17"
+          ],
+          "model_class": "BIJECTIVE_ORBIT_ASSIGNMENT"
+        },
+        "best_opaque_id": "H_4CB40A5D737F4728",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_physical_witness": false,
+          "same_samples_and_tracking_output": true,
+          "schema": "synthetic-all-track-code-witness-v1",
+          "track_identity": [
+            {
+              "code_identity": "G22",
+              "track_id": "T_3C5A325B30ED13CF"
+            },
+            {
+              "code_identity": "G06",
+              "track_id": "T_3E5A3532CFE70EF8"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "T_5867530D40B21D16"
+            },
+            {
+              "code_identity": "G14",
+              "track_id": "T_8A0077F55290A3BC"
+            },
+            {
+              "code_identity": "G19",
+              "track_id": "T_CC8D3E95C3287F7F"
+            },
+            {
+              "code_identity": "G17",
+              "track_id": "T_FD8DE9673D7433E5"
+            }
+          ]
+        },
+        "state": "ORBIT_CODE_CONCORDANT"
+      },
+      "role": "TARGET_SELECTION_INVARIANCE_CONTROL",
+      "score_receipt": {
+        "all_scores_sha256": "00633d2071b48a2301c8a02ef5fd1af6fa2a024d5e29fdf5b3e48d536910c6cb",
+        "best_heldout_max_track_peak_to_peak_m": 0.6867788606204499,
+        "best_opaque_id": "H_4CB40A5D737F4728",
+        "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
+        "effective_prefix_parameter_count_per_hypothesis": 10,
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "opaque_hypothesis_count": 721,
+        "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 8431.977388325364,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_6FFCEE43AF8F1309",
+        "schema": "gnss-all-track-assignment-score-receipt-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "top_scores": [
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 0.6867788606204499,
+            "heldout_rms_m": 0.1757740000011523,
+            "opaque_id": "H_4CB40A5D737F4728",
+            "prefix_rms_m": 0.0849054619300766
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 8432.664167185983,
+            "heldout_rms_m": 7081.805302097095,
+            "opaque_id": "H_6FFCEE43AF8F1309",
+            "prefix_rms_m": 1964.6477976735712
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 18763.45394244534,
+            "heldout_rms_m": 13546.311744176779,
+            "opaque_id": "H_4EC2FF6CD8E23FBD",
+            "prefix_rms_m": 3035.7960855787737
+          }
+        ],
+        "track_count": 6,
+        "track_ids": [
+          "T_3C5A325B30ED13CF",
+          "T_3E5A3532CFE70EF8",
+          "T_5867530D40B21D16",
+          "T_8A0077F55290A3BC",
+          "T_CC8D3E95C3287F7F",
+          "T_FD8DE9673D7433E5"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_set_sha256": "4687d7bb97d1e1f418b744e0e9a34c586ee561e18ee12e3bc460826cddcabdce"
+      },
+      "score_receipt_sha256_before_reveal": "bc230a81bf5c811a191a3daf65b5f635b254a3bde24e9ef241611bda6a1c71ad"
+    },
+    {
+      "code_witness_sha256_before_score": "659d39f2a2cc2ba2f77e9a85e83a19d6b738c47e7428811523c08e003291b396",
+      "name": "prefix_affine_tracks",
+      "reveal_after_score_hash": {
+        "best_model": {
+          "assignment_by_track_order": null,
+          "model_class": "PREFIX_AFFINE_ONLY_NULL"
+        },
+        "best_opaque_id": "H_9639A07B40BE46BA",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_physical_witness": false,
+          "same_samples_and_tracking_output": true,
+          "schema": "synthetic-all-track-code-witness-v1",
+          "track_identity": [
+            {
+              "code_identity": "G06",
+              "track_id": "T_3C5A325B30ED13CF"
+            },
+            {
+              "code_identity": "G14",
+              "track_id": "T_3E5A3532CFE70EF8"
+            },
+            {
+              "code_identity": "G17",
+              "track_id": "T_5867530D40B21D16"
+            },
+            {
+              "code_identity": "G19",
+              "track_id": "T_8A0077F55290A3BC"
+            },
+            {
+              "code_identity": "G22",
+              "track_id": "T_CC8D3E95C3287F7F"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "T_FD8DE9673D7433E5"
+            }
+          ]
+        },
+        "state": "NON_ORBITAL_NULL_SUPPORTED"
+      },
+      "role": "NON_ORBITAL_NULL_CONTROL",
+      "score_receipt": {
+        "all_scores_sha256": "6420919dbad3baaa939366e2500420a4ddabd4cd93be2bc72d2ec19489654df4",
+        "best_heldout_max_track_peak_to_peak_m": 0.6867788607225975,
+        "best_opaque_id": "H_9639A07B40BE46BA",
+        "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
+        "effective_prefix_parameter_count_per_hypothesis": 10,
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "opaque_hypothesis_count": 721,
+        "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 54161.4842103252,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_86FCA13A71A05F45",
+        "schema": "gnss-all-track-assignment-score-receipt-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "top_scores": [
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 0.6867788607225975,
+            "heldout_rms_m": 0.17577400000053053,
+            "opaque_id": "H_9639A07B40BE46BA",
+            "prefix_rms_m": 0.08490546192402888
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 54162.17098918592,
+            "heldout_rms_m": 21517.06680997781,
+            "opaque_id": "H_86FCA13A71A05F45",
+            "prefix_rms_m": 3263.037450983492
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 54162.17098918592,
+            "heldout_rms_m": 21517.067428887683,
+            "opaque_id": "H_8BA39AE35066743E",
+            "prefix_rms_m": 3263.037296813573
+          }
+        ],
+        "track_count": 6,
+        "track_ids": [
+          "T_3C5A325B30ED13CF",
+          "T_3E5A3532CFE70EF8",
+          "T_5867530D40B21D16",
+          "T_8A0077F55290A3BC",
+          "T_CC8D3E95C3287F7F",
+          "T_FD8DE9673D7433E5"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_set_sha256": "0a2a00043699bfef960da32141c5c52a1ffb953a5ab07db6982247d4bd6468f2"
+      },
+      "score_receipt_sha256_before_reveal": "944fac868564675808c6a802a79b860ee41348f14ac99e29baf365cf3471fa9a"
+    },
+    {
+      "code_witness_sha256_before_score": "659d39f2a2cc2ba2f77e9a85e83a19d6b738c47e7428811523c08e003291b396",
+      "name": "out_of_family_curvature",
+      "reveal_after_score_hash": {
+        "best_model": {
+          "assignment_by_track_order": [
+            "G17",
+            "G06",
+            "G14",
+            "G19",
+            "G22",
+            "G30"
+          ],
+          "model_class": "BIJECTIVE_ORBIT_ASSIGNMENT"
+        },
+        "best_opaque_id": "H_42EB6E39CD7E053D",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_physical_witness": false,
+          "same_samples_and_tracking_output": true,
+          "schema": "synthetic-all-track-code-witness-v1",
+          "track_identity": [
+            {
+              "code_identity": "G06",
+              "track_id": "T_3C5A325B30ED13CF"
+            },
+            {
+              "code_identity": "G14",
+              "track_id": "T_3E5A3532CFE70EF8"
+            },
+            {
+              "code_identity": "G17",
+              "track_id": "T_5867530D40B21D16"
+            },
+            {
+              "code_identity": "G19",
+              "track_id": "T_8A0077F55290A3BC"
+            },
+            {
+              "code_identity": "G22",
+              "track_id": "T_CC8D3E95C3287F7F"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "T_FD8DE9673D7433E5"
+            }
+          ]
+        },
+        "state": "ORBIT_ASSIGNMENT_UNRESOLVED"
+      },
+      "role": "ABSOLUTE_FIT_MODEL_MISMATCH_CONTROL",
+      "score_receipt": {
+        "all_scores_sha256": "423f81e53f71c81c87bbd3909b3717576a854bb36b067373ea1d0e1f00920703",
+        "best_heldout_max_track_peak_to_peak_m": 22515.985404137522,
+        "best_opaque_id": "H_42EB6E39CD7E053D",
+        "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
+        "effective_prefix_parameter_count_per_hypothesis": 10,
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "opaque_hypothesis_count": 721,
+        "orbital_score_state": "NO_ADMISSIBLE_OPAQUE_ASSIGNMENT",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 0.0,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_A3595055419B9CBB",
+        "schema": "gnss-all-track-assignment-score-receipt-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "top_scores": [
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 22515.985404137522,
+            "heldout_rms_m": 11699.919330447876,
+            "opaque_id": "H_42EB6E39CD7E053D",
+            "prefix_rms_m": 7118.374805547828
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 22515.985404137522,
+            "heldout_rms_m": 15610.716648680262,
+            "opaque_id": "H_A3595055419B9CBB",
+            "prefix_rms_m": 7537.990570210448
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 25603.642197175417,
+            "heldout_rms_m": 10490.050866863641,
+            "opaque_id": "H_A7B8127106A18A68",
+            "prefix_rms_m": 7531.098844088473
+          }
+        ],
+        "track_count": 6,
+        "track_ids": [
+          "T_3C5A325B30ED13CF",
+          "T_3E5A3532CFE70EF8",
+          "T_5867530D40B21D16",
+          "T_8A0077F55290A3BC",
+          "T_CC8D3E95C3287F7F",
+          "T_FD8DE9673D7433E5"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_set_sha256": "eb47e4ac20606d6a06b91fedf9ec484297f6ed6df53f7c71de2ab07f9671684f"
+      },
+      "score_receipt_sha256_before_reveal": "446efc1a428f8db9d8f27a5810b48b2196c000f03ff1292c0d854f58e7760832"
+    },
+    {
+      "code_witness_sha256_before_score": "659d39f2a2cc2ba2f77e9a85e83a19d6b738c47e7428811523c08e003291b396",
+      "name": "assignment_midpoint",
+      "reveal_after_score_hash": {
+        "best_model": {
+          "assignment_by_track_order": [
+            "G06",
+            "G17",
+            "G14",
+            "G19",
+            "G22",
+            "G30"
+          ],
+          "model_class": "BIJECTIVE_ORBIT_ASSIGNMENT"
+        },
+        "best_opaque_id": "H_4239B2BD455404D3",
+        "code_witness": {
+          "available_to_orbit_scorer": false,
+          "independent_physical_witness": false,
+          "same_samples_and_tracking_output": true,
+          "schema": "synthetic-all-track-code-witness-v1",
+          "track_identity": [
+            {
+              "code_identity": "G06",
+              "track_id": "T_3C5A325B30ED13CF"
+            },
+            {
+              "code_identity": "G14",
+              "track_id": "T_3E5A3532CFE70EF8"
+            },
+            {
+              "code_identity": "G17",
+              "track_id": "T_5867530D40B21D16"
+            },
+            {
+              "code_identity": "G19",
+              "track_id": "T_8A0077F55290A3BC"
+            },
+            {
+              "code_identity": "G22",
+              "track_id": "T_CC8D3E95C3287F7F"
+            },
+            {
+              "code_identity": "G30",
+              "track_id": "T_FD8DE9673D7433E5"
+            }
+          ]
+        },
+        "state": "ORBIT_ASSIGNMENT_UNRESOLVED"
+      },
+      "role": "AMBIGUITY_CONTROL",
+      "score_receipt": {
+        "all_scores_sha256": "0e0d69a42cc3f0997f518cdc0e0a3af612ed08e09f36fcca4fff744a1850bf09",
+        "best_heldout_max_track_peak_to_peak_m": 4216.221824781584,
+        "best_opaque_id": "H_4239B2BD455404D3",
+        "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
+        "effective_prefix_parameter_count_per_hypothesis": 10,
+        "free_time_phase": false,
+        "heldout_indices_inclusive": [
+          79,
+          138
+        ],
+        "heldout_refit": false,
+        "identity_reveal_performed": false,
+        "opaque_hypothesis_count": 721,
+        "orbital_score_state": "AMBIGUOUS",
+        "pairwise_guard_m": 7339.701234647398,
+        "preference_margin_m": 0.0,
+        "prefix_indices_inclusive": [
+          0,
+          78
+        ],
+        "runner_up_opaque_id": "H_995A8D3C98DEAA84",
+        "schema": "gnss-all-track-assignment-score-receipt-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "top_scores": [
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 4216.221824781584,
+            "heldout_rms_m": 3540.8847824474683,
+            "opaque_id": "H_4239B2BD455404D3",
+            "prefix_rms_m": 982.3272893860714
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 4216.221824781584,
+            "heldout_rms_m": 3540.8847824474688,
+            "opaque_id": "H_995A8D3C98DEAA84",
+            "prefix_rms_m": 982.3272893860714
+          },
+          {
+            "effective_prefix_parameter_count": 10,
+            "heldout_max_track_peak_to_peak_m": 18763.71656478918,
+            "heldout_rms_m": 14001.459165157927,
+            "opaque_id": "H_6092A65793803335",
+            "prefix_rms_m": 3190.7674667827773
+          }
+        ],
+        "track_count": 6,
+        "track_ids": [
+          "T_3C5A325B30ED13CF",
+          "T_3E5A3532CFE70EF8",
+          "T_5867530D40B21D16",
+          "T_8A0077F55290A3BC",
+          "T_CC8D3E95C3287F7F",
+          "T_FD8DE9673D7433E5"
+        ],
+        "track_or_observation_values_persisted": 0,
+        "track_set_sha256": "1da76bbecbeeafe1882be15a9a7fbd6b0a7a44f317acbc8911d76e39cf5cdec3"
+      },
+      "score_receipt_sha256_before_reveal": "17c0873b66d9d33d51a1a8b1245c3f317cf5f9a72e6007b6430a971277272e25"
+    }
+  ],
+  "schema": "gnss-all-track-assignment-spike-receipt-v1",
+  "scoring": {
+    "absolute_fit_guard_m": 7339.701234647398,
+    "common_mode": "PER_EPOCH_ENSEMBLE_CENTERING",
+    "effective_parameters_per_hypothesis": 10,
+    "exact_fixture_best_residual_m": 1.861309328887728e-09,
+    "exact_fixture_preference_margin_m": 8432.443649560884,
+    "free_time_phase": false,
+    "heldout_refit": false,
+    "nuisance": "PREFIX_ONLY_CONSTANT_AND_RATE_PER_CENTERED_TRACK",
+    "preference_guard_m": 7339.701234647398
+  },
+  "selection_boundary": {
+    "assignment_family": "ALL_6_FACTORIAL_BIJECTIONS_PLUS_AFFINE_NULL",
+    "fixture_prediction_gauge": "G30_ZERO_COMMON_CURVE_ONLY; ENSEMBLE_CENTERING_MAKES_THE_SCORER_INVARIANT_TO_THIS_COMMON_GAUGE",
+    "input": "ALL_SIX_COMPLETE_TRACKS_IN_THE_FROZEN_SYNTHETIC_SET",
+    "posthoc_track_exclusion": false,
+    "reference_prn_available_to_scorer": false,
+    "target_prn_available_to_scorer": false
+  },
+  "shock": "RAW_IQ_IS_NOT_REQUIRED_TO_REMOVE_EXPERIMENT_SIDE_PRN_PRESELECTION;_ALL_TRACK_RINEX_ASSIGNMENT_CAN_TEST_DYNAMICS_FIRST_WHILE_RETAINING_RECEIVER_CODE_IDENTITY_AS_AN_EXPLICIT_NONINDEPENDENT_WITNESS",
+  "source": {
+    "scorer_sha256": "6f43592ccf5893b68726a025f3cc3f6ea7e63d93b0a48fc164ad796ca440ecc8",
+    "spike_sha256": "08ba9375aafac3150703969c29c912b9265a8295a72e0f497d42da71ae9334fb"
+  },
+  "version": "gnss-all-track-blind-assignment-spike-v1"
+}

@@ -1245,7 +1245,7 @@ hypotheses remain `NOT_EVALUATED`. The receipt contains scalar decisions and
 hashes only; RF persistence is zero. See
 [`GATE_F2_5_38_OUTCOME_1.md`](experiments/live_instrument/GATE_F2_5_38_OUTCOME_1.md).
 
-## Active post-METEOR route: DORIS transmitter geometry
+## Closed post-METEOR route: DORIS transmitter geometry
 
 The METEOR OpenWebRX and SatNOGS measurement paths are closed. The bounded
 change-of-observable review now selects DORIS for an orbit-only geometry spike:
@@ -1368,6 +1368,36 @@ nonvisibility. Every contact-topology null remains
 `NOT_EVALUATED_INSUFFICIENT_EVENT_TOPOLOGY`; no new artifact, orbit product,
 measurement value or primary was accessed. See
 [`DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md).
+
+The official 2026 IDS receiver-designation description now closes the missing
+causal edge rather than rescuing it. DGXX/DGXX-S has seven processing units,
+but more beacons can be physically co-visible. Selection may depend on
+frequency, power, random DAS-T choice or DIODE; Sentinel-3 assigns channels
+1--5 through DIODE and 6--7 through DAS-T, and configurations can change in
+flight. A missing RINEX station record therefore cannot be identified with
+geometric nonvisibility even if a future scanner retained every station.
+Reconstructing historical receiver designation is not the next experiment.
+
+## Current route: identity-blind all-track GNSS assignment
+
+An offline mechanism spike now returns
+`ALL_TRACK_BLIND_ASSIGNMENT_MECHANISM_DISCRIMINATIVE`. It removes the earlier
+experiment-side G22/G30 selection: all six synthetic tracks enter as opaque
+identifiers and are compared against all 720 orbit-to-track bijections plus a
+prefix-affine null. Common-mode ensemble centering avoids a privileged
+reference, every hypothesis receives the same ten effective prefix-affine
+parameters, and no suffix refit or free time phase exists.
+
+The exact correct fixture retains an `8,432.443650 m` assignment margin above
+a numerical-zero residual. Correct and permuted-track controls are concordant
+after reveal; swapped code labels remain discordant; affine data select the
+null; an out-of-family curvature fails the absolute-fit guard; and the closest
+assignment midpoint remains ambiguous. Zero observation or network access
+occurred. The receiver's upstream code correlation remains an explicit
+non-independent witness, so this is not code-free identity evidence. The next
+maximum work is one bounded orbit-only all-track geometry screen, not product
+discovery. See
+[`GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_ASSIGNMENT_SPIKE_REPORT.md).
 
 ## Repository map
 
