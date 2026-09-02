@@ -1265,6 +1265,18 @@ The next maximum action, after review, is one development-only structural and
 metadata qualification—not a primary score or another receiver search. See
 [`DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_FORWARD_GEOMETRY_SPIKE_REPORT.md).
 
+That header-only development qualification is now complete and stops
+`DORIS_DEVELOPMENT_HEADER_REJECTED`. The exact Sentinel-3A DGXX-S product
+declares L1/L2 phase, C1/C2 same-path code, the receiver/antenna identity, the
+L2/L1 date offset, 56 station references and two complete shortlist pairs.
+However, the predeclared `INTERVAL`, `TIME OF LAST OBS` and `MARKER TYPE`
+records are absent. Cadence, final coverage, simultaneous pair epochs and
+phase flags therefore remain unproved. Zero observation records and zero
+candidate-day bytes were accessed. The smallest next physical test would be a
+separately authorised value-blind structural scan of this same development
+product, not another header search. See
+[`DORIS_DEVELOPMENT_HEADER_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_HEADER_REPORT.md).
+
 ## Repository map
 
 ```text

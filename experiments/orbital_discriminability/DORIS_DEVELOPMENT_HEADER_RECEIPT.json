@@ -1,0 +1,251 @@
+{
+  "artifact": {
+    "bytes": 1869420,
+    "complete_file_hash_verified_before_decompression": true,
+    "name": "s3arx26242.001.Z",
+    "remote_last_modified_utc": "2026-08-31T22:20:14Z",
+    "role": "DEVELOPMENT_HEADER_ONLY_NEVER_PRIMARY",
+    "sha256": "240d84518beb409dceb5cf1816f02621e9def8c9bf750c9c340cad4f6fbd7add",
+    "url": "ftp://doris.ign.fr/pub/doris/data/s3a/2026/s3arx26242.001.Z"
+  },
+  "candidate_day_product_access": "ZERO",
+  "ephemeral_artifact_retention": "ZERO_AFTER_RECEIPT",
+  "header_boundary": {
+    "boundary": "FIRST_END_OF_HEADER_NEWLINE",
+    "compressed_bytes_consumed_by_subprocess": "NOT_EXPOSED",
+    "header_decompressed_bytes_exposed": 6318,
+    "header_lines": 78,
+    "header_sha256": "47311d675dc0130a42676e423827bd63a4ac3b9083664c52741f5f75d185012a",
+    "post_header_bytes_read_from_pipe": 0,
+    "subprocess_terminated_at_boundary": true
+  },
+  "metadata": {
+    "antenna": [
+      "DORIS",
+      "STAREC"
+    ],
+    "antenna_phase_center_xyz_m": [
+      1.57,
+      0.073,
+      1.076
+    ],
+    "center_of_mass_xyz_m": [
+      1.5,
+      0.22,
+      0.01
+    ],
+    "cospar": "2016-011A",
+    "declared_station_count": 56,
+    "declared_time_reference_station_count": 4,
+    "file_type": "O",
+    "l2_l1_date_offset_us": -0.1,
+    "observable_types": [
+      "L1",
+      "L2",
+      "C1",
+      "C2",
+      "W1",
+      "W2",
+      "F",
+      "P",
+      "T",
+      "H"
+    ],
+    "producer": [
+      "Expert",
+      "CNES",
+      "20260831 073335 UTC"
+    ],
+    "receiver": [
+      "CHAIN1",
+      "DGXX-S",
+      "1.00"
+    ],
+    "rinex_version": 3.0,
+    "satellite_name": "SENTINEL-3A",
+    "satellite_system": "D",
+    "scale_factors": [
+      {
+        "count": 2,
+        "factor": 100,
+        "observables": [
+          "C1",
+          "C2"
+        ],
+        "system": "D"
+      }
+    ],
+    "station_codes": [
+      "PDOC",
+      "STKC",
+      "HOGC",
+      "THUB",
+      "SVBC",
+      "YEMB",
+      "COBB",
+      "MLAC",
+      "MANB",
+      "MSPB",
+      "YASB",
+      "ADHC",
+      "BEMB",
+      "ROBC",
+      "RISC",
+      "CADC",
+      "SJVC",
+      "ARFB",
+      "LAPB",
+      "MIAB",
+      "ULAC",
+      "JIWC",
+      "CIDB",
+      "AMVB",
+      "KEZC",
+      "CRRC",
+      "SCSC",
+      "MNAC",
+      "GONC",
+      "EVEC",
+      "KANC",
+      "MAMC",
+      "MAVC",
+      "HROC",
+      "SOFC",
+      "KIVC",
+      "DJIB",
+      "MAIB",
+      "REVC",
+      "RIMC",
+      "KOLB",
+      "MEUB",
+      "DIOB",
+      "GAVC",
+      "HBMB",
+      "PAUB",
+      "WEUC",
+      "GR4B",
+      "TLSB",
+      "LICB",
+      "HEMB",
+      "ASEB",
+      "OWGC",
+      "NOXC",
+      "FUUC",
+      "BETB"
+    ],
+    "time_of_first_observation": {
+      "declared_time_system": "DOR",
+      "semantic": "DORIS_RECEIVER_PROPER_TIME_MONITORED_AGAINST_TAI",
+      "tag": "2026-08-30T00:00:18.853332+00:00"
+    },
+    "time_reference_date": "2026-08-30T00:00:00+00:00",
+    "time_reference_stations": [
+      {
+        "frequency_shift_1e_minus_14": 0.0,
+        "internal_id": "D12",
+        "station_code": "ADHC",
+        "tai_bias_us": 2.2
+      },
+      {
+        "frequency_shift_1e_minus_14": 2.712,
+        "internal_id": "D45",
+        "station_code": "HBMB",
+        "tai_bias_us": 0.247
+      },
+      {
+        "frequency_shift_1e_minus_14": 0.0,
+        "internal_id": "D46",
+        "station_code": "PAUB",
+        "tai_bias_us": -0.05
+      },
+      {
+        "frequency_shift_1e_minus_14": 0.0,
+        "internal_id": "D49",
+        "station_code": "TLSB",
+        "tai_bias_us": 0.95
+      }
+    ]
+  },
+  "missing_predeclared_header_labels": [
+    "INTERVAL",
+    "MARKER TYPE",
+    "TIME OF LAST OBS"
+  ],
+  "observation_access": {
+    "epoch_records_read": 0,
+    "flags": 0,
+    "meteorological_values": 0,
+    "observation_records_read": 0,
+    "oscillator_values": 0,
+    "phase_values": 0,
+    "power_values": 0,
+    "pseudorange_values": 0
+  },
+  "orbital_score": "NOT_EVALUATED",
+  "outcome": "DORIS_DEVELOPMENT_HEADER_REJECTED",
+  "parser": {
+    "commit": "0da158e964372cea18d55ef26a54810d678fbda2",
+    "gzip": "1.14",
+    "ncompress_test_fixture_dependency": "1.0.2",
+    "python": "3.13.5",
+    "source_sha256": "c1c081aebd57fb3e843d816e0e221c525e70c562529363fa8a787b8c127ef0d0",
+    "version": "doris-rinex-header-whitelist-v1"
+  },
+  "qualification": {
+    "measurement_admission": "NOT_EVALUATED",
+    "open_terms": [
+      "NUMERICAL_ADC_PHASE_CENTER_EVENT_TIME_ERROR_BOUND",
+      "OBSERVATION_RECORD_CONTINUITY_AND_PHASE_FLAGS",
+      "SIMULTANEOUS_SHORTLIST_PAIR_WINDOW_COVERAGE",
+      "EXACT_DPOD_COORDINATES_HEIGHTS_AND_PHASE_CENTERS",
+      "ONE_WAY_RELATIVISTIC_AND_MEDIA_MODEL",
+      "SHARED_RECEIVER_AND_CHANNEL_DIFFERENTIAL_BIAS"
+    ],
+    "refusals": [
+      "MISSING_REQUIRED_HEADER_FIELD:marker_type",
+      "MISSING_REQUIRED_HEADER_FIELD:time_of_last_observation",
+      "MISSING_REQUIRED_HEADER_FIELD:interval_s",
+      "MARKER_NOT_SPACEBORNE"
+    ],
+    "supported_shortlist_pairs": [
+      [
+        "TLSB",
+        "WEUC"
+      ],
+      [
+        "PAUB",
+        "RIMC"
+      ]
+    ]
+  },
+  "shortlist_station_metadata": {
+    "KRWB": {
+      "state": "NOT_DECLARED_IN_DEVELOPMENT_HEADER"
+    },
+    "LAPB": {
+      "frequency_shift_k": 0,
+      "internal_id": "D19",
+      "state": "DECLARED"
+    },
+    "PAUB": {
+      "frequency_shift_k": 0,
+      "internal_id": "D46",
+      "state": "DECLARED"
+    },
+    "RIMC": {
+      "frequency_shift_k": 0,
+      "internal_id": "D40",
+      "state": "DECLARED"
+    },
+    "TLSB": {
+      "frequency_shift_k": 0,
+      "internal_id": "D49",
+      "state": "DECLARED"
+    },
+    "WEUC": {
+      "frequency_shift_k": 18,
+      "internal_id": "D47",
+      "state": "DECLARED"
+    }
+  }
+}
