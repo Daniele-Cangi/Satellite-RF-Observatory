@@ -1313,6 +1313,18 @@ values/flags and candidate DOY245 access remained zero. Measurement and
 orbital scoring remain `NOT_EVALUATED`. See
 [`DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md`](experiments/orbital_discriminability/DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md).
 
+The bounded follow-on physical audit stops
+`DORIS_PHYSICAL_ENVELOPE_BOUND_UNAVAILABLE`. It preserves the exact
+first-order-ionosphere and shared-receiver clock/proper-time cancellations,
+but finds no finite outcome-independent uncertainty family for all eight
+surviving event-time, propagation, antenna, ground-USO and receiver-noncommon
+terms. It also prevents a subtle cross-date error: the 633 s topology proof is
+from the 2026-08-30 development file, while the 18.145 kHz orbit-only ceiling
+belongs to the unopened 2026-09-02 candidate geometry. No combined physical
+margin or detector requirement can yet be computed, and candidate access
+remains unauthorized. See
+[`DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md).
+
 ## Repository map
 
 ```text

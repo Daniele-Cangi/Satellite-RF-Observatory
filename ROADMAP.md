@@ -1618,3 +1618,24 @@ non-affine beacon oscillators and receiver-noncommon bias must leave a positive
 orbital-versus-null margin. If they cannot, the DORIS vertical closes before
 observation values. See
 [`DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md`](experiments/orbital_discriminability/DORIS_EXACT_COEPOCH_REQUALIFICATION_REPORT.md).
+
+That audit is now complete as `DORIS_PHYSICAL_ENVELOPE_BOUND_UNAVAILABLE`.
+Three terms cancel exactly in the qualified coordinate—first-order
+ionosphere, shared receiver clock and shared receiver proper time—but all
+eight surviving term families still lack an applicable finite
+outcome-independent uncertainty bound. Descriptive scales such as around
+10 microseconds synchronization, a few millimetres phase noise and 0.3 mm/s
+system performance are retained as diagnostics only, never converted into
+hard bounds.
+
+The audit also closes an implicit cross-date shortcut: the 633 s exact-coepoch
+chain is a 2026-08-30 development capability proof, whereas the 18,144.799 Hz
+preliminary geometry margin belongs to the unopened 2026-09-02 candidate.
+There is no shared exact grid and therefore no combined measurement margin.
+Do not access candidate phase or build a detector. A next physical proposal
+must either close the eight families on a predeclared prospective grid or
+change the observable topology so the independent beacon-USO and
+receiver-noncommon curvature are observed/cancelled before discriminability is
+recomputed. Do not search for a more convenient RINEX file as a substitute.
+See
+[`DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md).
