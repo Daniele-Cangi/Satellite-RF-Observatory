@@ -1,0 +1,204 @@
+{
+  "frozen_coordinate": {
+    "event_key_rule": "CLOCK_STATES_CANCEL_ONLY_WHEN_HARDWARE_OWNER_AND_PHYSICAL_EVENT_ARE_IDENTICAL",
+    "first_order_ionosphere": "CANCELLED_EXACTLY_PER_LINK",
+    "input": "EXACT_RATIONAL_L1_L2_IONOSPHERE_FREE_PHASE"
+  },
+  "frozen_input_receipt_sha256": {
+    "development_header": "b7e48ee0efb2e23be0981ead04df8894c57e23136bfe5facaeaa9fa70bdb0c5a",
+    "observable_role": "e509870fd01b4fac75b450fdb48beaecef9b544dbff789f09fb5a2424607388d",
+    "physical_envelope": "7f41c3f10b3206f1f7aa420da5d2c63101192c05ecfca34e026f6c25e08eef66"
+  },
+  "frozen_parent_commit": "d41635bd3b22f26f45dd6a4e4ab0ff70200e4fc0",
+  "noncommutation_result": {
+    "consequence": "TWO_SATELLITES_DO_NOT_BY_THEMSELVES_CREATE_A_CLOCK_FREE_FOUR_LINK_OBSERVABLE_IN_NONDEGENERATE_GEOMETRY",
+    "same_receive_epoch": "CANCELS_RECEIVER_CLOCKS_BUT_NOT_BEACON_CLOCKS_AT_RETARDED_EPOCHS",
+    "same_transmit_epoch": "CANCELS_BEACON_CLOCKS_BUT_NOT_RECEIVER_CLOCKS_AT_LINK_DEPENDENT_RECEPTION_EPOCHS"
+  },
+  "outcome": "DORIS_TIME_REFERENCE_PAIR_SELECTED_GEOMETRY_UNEVALUATED",
+  "physical_question": "WHICH_COMPOUND_DORIS_OBSERVABLE_PRESERVES_ORBITAL_GEOMETRY_WHILE_REMOVING_OR_INDEPENDENTLY_WITNESSING_CLOCK_AND_CHANNEL_TERMS",
+  "review_version": "doris-observable-topology-review-v1",
+  "scope": {
+    "geometry_search": "NOT_EVALUATED",
+    "network_access": "ZERO",
+    "new_gate": "NONE",
+    "observation_values_access": "ZERO",
+    "orbit_product_access": "ZERO",
+    "orbital_score": "NOT_EVALUATED",
+    "rinex_artifact_access": "ZERO"
+  },
+  "selection": {
+    "maximum_next_action": "ORBIT_ONLY_DISCRIMINABILITY_SCREEN_OF_THE_SIX_FROZEN_HEADER_DECLARED_TIME_REFERENCE_PAIRS; NO_OBSERVATION_ACCESS",
+    "not_yet_admitted": [
+      "NO_ORBITAL_GEOMETRY_HAS_BEEN_EVALUATED_FOR_THE_SIX_FROZEN_PAIRS",
+      "TIME_REFERENCE_CALIBRATION_UNCERTAINTY_AND_HELDOUT_APPLICABILITY",
+      "PROCESSING_UNIT_IDENTITY_AND_NONCOMMON_CHANNEL_STABILITY",
+      "ABSOLUTE_EVENT_TIME_AND_REMAINING_PATH_ENVELOPES"
+    ],
+    "recommended_topology": "ONE_SATELLITE_TWO_TIME_REFERENCE_BEACONS",
+    "why": [
+      "PRESERVES_DISTRIBUTED_BEACON_GEOMETRY",
+      "CANCELS_SHARED_RECEIVER_CLOCK_AND_PROPER_TIME_EXACTLY",
+      "REPLACES_UNCHARACTERIZED_STANDARD_BEACON_USO_WITH_AN_EXTERNAL_TIME_REFERENCE_PATH_RATHER_THAN_AN_ALGEBRAIC_APPROXIMATION",
+      "ADDS_NO_SECOND_SPACEBORNE_RECEIVER_OR_FOUR_EXTRA_CHANNEL_CUTS"
+    ]
+  },
+  "shock": "ADDING_A_SECOND_SATELLITE_MOVES_THE_BEACON_CLOCK_TO_A_RETARDED_TIME_DIFFERENCE_BUT_DOES_NOT_CANCEL_IT; RECEIVE_EPOCH_AND_TRANSMIT_EPOCH_CLOCK_CANCELLATIONS_DO_NOT_COMMUTE",
+  "time_reference_scope": {
+    "bounded_pair_set_for_later_geometry_only_review": [
+      [
+        "ADHC",
+        "HBMB"
+      ],
+      [
+        "ADHC",
+        "PAUB"
+      ],
+      [
+        "ADHC",
+        "TLSB"
+      ],
+      [
+        "HBMB",
+        "PAUB"
+      ],
+      [
+        "HBMB",
+        "TLSB"
+      ],
+      [
+        "PAUB",
+        "TLSB"
+      ]
+    ],
+    "current_numerical_calibration_state": "DESCRIPTIVE_BIAS_AND_FREQUENCY_SHIFT_PRESENT; FINITE_HELDOUT_UNCERTAINTY_AND_APPLICABILITY_NOT_YET_PROVED",
+    "header_declared_stations": [
+      "ADHC",
+      "HBMB",
+      "PAUB",
+      "TLSB"
+    ],
+    "pair_count": 6,
+    "station_count": 4
+  },
+  "topologies": {
+    "limited_c1_c2_time_witness": {
+      "claim_ceiling": "SAME_PATH_DIAGNOSTIC_WITHOUT_A_SEPARATE_CLOCK_MODEL",
+      "exact_cuts": [],
+      "minimum_if_used": "TIME_REFERENCE_VALID_CODE_PLUS_MULTI_BEACON_CLOCK_SOLUTION;LIKELY_FULL_DORIS_TIME_OR_POD_SCOPE",
+      "rank": 4,
+      "receiver_clock_role": "REDUNDANT_FOR_AN_EXACT_COEPOCH_INTER_BEACON_PHASE_DIFFERENCE_WHERE_RECEIVER_CLOCK_ALREADY_CANCELS",
+      "transmitter_clock_role": "STANDARD_BEACON_USO_IS_NOT_INDEPENDENTLY_IDENTIFIED_BY_CODE_ON_THE_SAME_LINK"
+    },
+    "one_satellite_two_time_reference_beacons": {
+      "channel_role": "NOT_CANCELLED; REQUIRES_FIXED_PROCESSING_UNIT_IDENTITY_AND_FINITE_NONCOMMON_STABILITY_BOUND",
+      "claim_ceiling": "ORBITAL_VERSUS_FROZEN_NULL_AFTER_GEOMETRY_AND_ALL_REMAINING_FINITE_ENVELOPES_ARE_ADMITTED",
+      "coefficients": {
+        "CHANNEL_NONCOMMON_BIAS": {
+          "S0/C1": 1,
+          "S0/C2": -1
+        },
+        "GEOMETRY_AND_NONDISPERSIVE_PATH": {
+          "S0/B1": 1,
+          "S0/B2": -1
+        },
+        "RECEIVER_CLOCK": {},
+        "RECEIVER_PROPER_TIME": {},
+        "TRANSMITTER_CLOCK": {
+          "B1/E01": -1,
+          "B2/E02": 1
+        },
+        "TRANSMITTER_PROPER_TIME": {
+          "B1/E01": -1,
+          "B2/E02": 1
+        }
+      },
+      "exact_cuts": [
+        "FIRST_ORDER_IONOSPHERE_PER_LINK",
+        "SHARED_RECEIVER_CLOCK_AT_COMMON_RECEIVE_EPOCH",
+        "SHARED_RECEIVER_PROPER_TIME_AT_COMMON_RECEIVE_EPOCH"
+      ],
+      "rank": 1,
+      "transmitter_clock_role": "NOT_CANCELLED; POTENTIALLY_OBSERVABLE_AGAINST_EXTERNAL_TIME_REFERENCE_IF_APPLICABLE_UNCERTAINTY_IS_FINITE"
+    },
+    "two_satellites_two_beacons_same_receive_epoch_per_satellite": {
+      "channel_role": "FOUR_NONCOMMON_BRANCH_TERMS_REMAIN",
+      "claim_ceiling": "CROSS_SATELLITE_CONSISTENCY_OR_SHORT_LAG_USO_TEST; NOT_AN_USO_FREE_ORBITAL_OBSERVABLE",
+      "coefficients": {
+        "CHANNEL_NONCOMMON_BIAS": {
+          "S1/C11": 1,
+          "S1/C12": -1,
+          "S2/C21": -1,
+          "S2/C22": 1
+        },
+        "GEOMETRY_AND_NONDISPERSIVE_PATH": {
+          "S1/B1": 1,
+          "S1/B2": -1,
+          "S2/B1": -1,
+          "S2/B2": 1
+        },
+        "RECEIVER_CLOCK": {},
+        "RECEIVER_PROPER_TIME": {},
+        "TRANSMITTER_CLOCK": {
+          "B1/E11": -1,
+          "B1/E21": 1,
+          "B2/E12": 1,
+          "B2/E22": -1
+        },
+        "TRANSMITTER_PROPER_TIME": {
+          "B1/E11": -1,
+          "B1/E21": 1,
+          "B2/E12": 1,
+          "B2/E22": -1
+        }
+      },
+      "exact_cuts": [
+        "FIRST_ORDER_IONOSPHERE_PER_LINK",
+        "EACH_SATELLITE_RECEIVER_CLOCK_AT_ITS_COMMON_RECEIVE_EPOCH",
+        "EACH_SATELLITE_RECEIVER_PROPER_TIME_AT_ITS_COMMON_RECEIVE_EPOCH"
+      ],
+      "rank": 2,
+      "transmitter_clock_role": "NOT_CANCELLED; EACH_BEACON_REMAINS_A_DIFFERENCE_BETWEEN_TWO_RETARDED_EMISSION_EPOCHS"
+    },
+    "two_satellites_two_beacons_same_transmit_epoch_per_beacon": {
+      "channel_role": "FOUR_NONCOMMON_BRANCH_TERMS_REMAIN",
+      "claim_ceiling": "CLOCK_TRADE_ONLY; NOT_A_CLOCK_FREE_OBSERVABLE",
+      "coefficients": {
+        "CHANNEL_NONCOMMON_BIAS": {
+          "S1/C11": 1,
+          "S1/C12": -1,
+          "S2/C21": -1,
+          "S2/C22": 1
+        },
+        "GEOMETRY_AND_NONDISPERSIVE_PATH": {
+          "S1/B1": 1,
+          "S1/B2": -1,
+          "S2/B1": -1,
+          "S2/B2": 1
+        },
+        "RECEIVER_CLOCK": {
+          "S1/R11": 1,
+          "S1/R12": -1,
+          "S2/R21": -1,
+          "S2/R22": 1
+        },
+        "RECEIVER_PROPER_TIME": {
+          "S1/R11": 1,
+          "S1/R12": -1,
+          "S2/R21": -1,
+          "S2/R22": 1
+        },
+        "TRANSMITTER_CLOCK": {},
+        "TRANSMITTER_PROPER_TIME": {}
+      },
+      "exact_cuts": [
+        "FIRST_ORDER_IONOSPHERE_PER_LINK",
+        "EACH_BEACON_CLOCK_AT_ITS_COMMON_TRANSMIT_EPOCH",
+        "EACH_BEACON_PROPER_TIME_AT_ITS_COMMON_TRANSMIT_EPOCH"
+      ],
+      "rank": 3,
+      "receiver_clock_role": "NOT_CANCELLED; EACH_SATELLITE_IS_EVALUATED_AT_DIFFERENT_RECEIVE_EPOCHS_FOR_THE_TWO_BEACONS"
+    }
+  },
+  "review_source_sha256": "543338a344407ebe109f09306eee30c6c2b61fc5d03926faf6d4a90865a5f263"
+}

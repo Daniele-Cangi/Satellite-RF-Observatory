@@ -1639,3 +1639,22 @@ receiver-noncommon curvature are observed/cancelled before discriminability is
 recomputed. Do not search for a more convenient RINEX file as a substitute.
 See
 [`DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md).
+
+The required change-of-abstraction review is complete as
+`DORIS_TIME_REFERENCE_PAIR_SELECTED_GEOMETRY_UNEVALUATED`. It compares the
+single-satellite time-reference pair, two distinct four-link/two-satellite
+epoch alignments, and a limited C1/C2 clock bridge with exact symbolic event
+keys. A receive-coepoch four-link difference leaves short-lag beacon-clock
+differences; a transmit-coepoch alignment instead leaves receiver-clock
+differences. Two satellites therefore do not create a generally clock-free
+observable and add four receiver-channel terms.
+
+The minimum forward candidate is one satellite and two header-declared
+time-reference beacons, retaining the existing exact receiver-clock and
+first-order-ionosphere cancellations. Its six-pair scope is frozen from ADHC,
+HBMB, PAUB and TLSB, but no pair geometry or calibration uncertainty is yet
+admitted. The next maximum physical action is one orbit-only discriminability
+screen of those six pairs. It must close with no observation access if none has
+positive geometry after frozen nulls; it must not become a new beacon catalog
+or a search for a convenient product. See
+[`DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md).

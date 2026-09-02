@@ -1325,6 +1325,20 @@ margin or detector requirement can yet be computed, and candidate access
 remains unauthorized. See
 [`DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_PHYSICAL_ENVELOPE_AUDIT_REPORT.md).
 
+The resulting offline change-of-abstraction review selects
+`DORIS_TIME_REFERENCE_PAIR_SELECTED_GEOMETRY_UNEVALUATED`. Exact symbolic
+coefficients disprove a tempting shortcut: a two-satellite/four-link double
+difference cancels receiver clocks only by leaving each beacon clock sampled
+at two different retarded emission epochs. Aligning emission epochs restores
+receiver-clock differences instead. The minimum candidate topology is now one
+satellite plus two header-declared time-reference beacons at exact common
+receive epochs. This replaces uncharacterized standard-beacon USOs with an
+external calibration path, but does not yet admit that path or cancel
+receiver-noncommon channel behavior. The next maximum action is an orbit-only
+screen of the six frozen pairs from ADHC, HBMB, PAUB and TLSB; no observation
+access is authorized. See
+[`DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_TOPOLOGY_REVIEW_REPORT.md).
+
 ## Repository map
 
 ```text
