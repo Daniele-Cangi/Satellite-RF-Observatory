@@ -1582,3 +1582,22 @@ closes the dispersive/same-path cut, or whether the C1/C2 time-reference flag
 is causally necessary for the intended claim. Only a predeclared answer may
 change the minimum signal family. See
 [`DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md).
+
+The offline compound-observable audit is complete as
+`DORIS_DUAL_PHASE_DIFFERENTIAL_REQUIRES_COEPOCH_REQUALIFICATION`. It shows that
+L1/L2 ionosphere-free phase plus an exact common receiver epoch can cancel the
+first-order ionosphere and shared receiver clock/proper-time terms without a
+time-reference-valid C1/C2 field on every target record. It does not show that
+the frozen development pair actually has that topology: the previous receipt
+proved only overlapping independent station grids. PAUB–RIMC is the preferred
+conditional pair because its 633 s core overlap exceeds the 480 s geometry
+requirement and both frequency-shift factors are zero.
+
+No primary, candidate-day product or observation magnitude may be accessed on
+this result. The maximum next action, under separate authority, is a
+value-blind requalification of the same development artifact for one
+contiguous exact-coepoch PAUB–RIMC L1/L2 chain. Even a positive topology result
+would leave absolute event time, higher-order ionosphere, differential
+troposphere, phase centers, phase wind-up, relativity, non-affine ground-clock
+behavior and receiver-noncommon bias explicit. See
+[`DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md).

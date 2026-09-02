@@ -3,9 +3,21 @@
 from __future__ import annotations
 
 from fractions import Fraction
+from hashlib import sha256
 import inspect
+import json
+from pathlib import Path
 
 from experiments.orbital_discriminability import doris_observable_role_audit as audit
+
+
+ROOT = Path(__file__).resolve().parents[3]
+RECEIPT = (
+    ROOT
+    / "experiments"
+    / "orbital_discriminability"
+    / "DORIS_OBSERVABLE_ROLE_AUDIT_RECEIPT.json"
+)
 
 
 def test_ionosphere_free_phase_coefficients_preserve_geometry() -> None:
@@ -63,3 +75,16 @@ def test_audit_has_no_artifact_or_network_surface() -> None:
     assert "ftplib" not in source
     assert "subprocess" not in source
     assert "open(" not in source
+
+
+def test_frozen_receipt_matches_audit_and_binds_source() -> None:
+    receipt = json.loads(RECEIPT.read_text(encoding="utf-8"))
+    expected = json.loads(audit.strict_json(audit.build_audit()))
+
+    for key, value in expected.items():
+        assert receipt[key] == value
+    source_hash = sha256(Path(audit.__file__).read_bytes()).hexdigest()
+    assert receipt["audit_source_sha256"] == source_hash
+    assert receipt["audit_source_commit"] == (
+        "bb7f3e2b576228d7daaa9e599a2bb37fe8addbb4"
+    )

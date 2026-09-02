@@ -1288,6 +1288,19 @@ Candidate DOY245 access remains zero. The result now requires an offline
 change-of-observable review, not a primary download or a weaker threshold. See
 [`DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md`](experiments/orbital_discriminability/DORIS_DEVELOPMENT_STRUCTURAL_REPORT.md).
 
+That offline role audit now stops
+`DORIS_DUAL_PHASE_DIFFERENTIAL_REQUIRES_COEPOCH_REQUALIFICATION`. Exact rational
+L1/L2 combination cancels first-order ionosphere, and an exact-coepoch
+left-minus-right beacon difference cancels the shared receiver clock and
+receiver proper-time terms. The existing 633 s PAUB–RIMC result is only an
+intersection of independent station grids, however, so it does not establish
+that topology. Per-target C1/C2 time-reference validity is no longer treated as
+a universal witness, but an independently bounded absolute event-time bridge
+and every surviving physical term remain mandatory. Measurement admission and
+orbital scoring are still `NOT_EVALUATED`; candidate-day and observation-value
+access remain zero. See
+[`DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md`](experiments/orbital_discriminability/DORIS_OBSERVABLE_ROLE_AUDIT_REPORT.md).
+
 ## Repository map
 
 ```text
