@@ -1353,6 +1353,22 @@ the next work must change the observable abstraction, not search for a more
 convenient file or weaken visibility. See
 [`DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md).
 
+The follow-on offline contact-topology spike now stops
+`DORIS_STRUCTURAL_VISIBILITY_NOT_FALSIFIABLE_FROM_RETAINED_RECEIPT`. Beacon
+contact order and duration could in principle preserve orbital visibility
+while avoiding the impossible simultaneous time-reference pair, but the
+frozen structural evidence cannot test that observable. The header declares
+56 stations while the receipt summarizes only four preselected stations and
+only their five longest phase-continuity segments. Those boundaries are
+LLI/discontinuity or gap events, not geometric rise/set; receiver scheduling,
+tracking allocation, acquisition/dropout and telemetry-retention semantics
+are also unresolved. A positive record is therefore evidence of receiver
+output, while an absent record cannot be interpreted as physical
+nonvisibility. Every contact-topology null remains
+`NOT_EVALUATED_INSUFFICIENT_EVENT_TOPOLOGY`; no new artifact, orbit product,
+measurement value or primary was accessed. See
+[`DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md).
+
 ## Repository map
 
 ```text
