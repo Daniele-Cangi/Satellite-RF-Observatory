@@ -71,6 +71,7 @@ def _synthetic_product(
     power_failure_index: int | None = None,
     phase_break_index: int | None = None,
     central_frequency_index: int | None = None,
+    cadence_pattern_s: tuple[int, ...] | None = None,
 ) -> tuple[header.ProductAuthority, str]:
     header_bytes = b"".join(
         [
@@ -83,8 +84,13 @@ def _synthetic_product(
     )
     body = bytearray()
     start = datetime(2026, 8, 30, tzinfo=timezone.utc)
+    elapsed_s = 0
     for index in range(epoch_count):
-        epoch = start + timedelta(seconds=10 * index)
+        if index and cadence_pattern_s:
+            elapsed_s += cadence_pattern_s[(index - 1) % len(cadence_pattern_s)]
+        elif index:
+            elapsed_s += 10
+        epoch = start + timedelta(seconds=elapsed_s)
         flag = 1 if index == power_failure_index else 0
         body.extend(_epoch_line(epoch, flag=flag, count=4))
         for station_id in ("D49", "D47", "D46", "D40"):
@@ -201,6 +207,26 @@ def test_central_frequency_phase_flag_is_descriptive_not_a_break(
     assert receipt["pairs"][0]["maximum_core_phase_segment_s"] == 480.0
     assert receipt["stations"]["D49"]["flag_counts"]["L1_FLAG1_1"] == 1
     assert receipt["stations"]["D49"]["flag_counts"]["L2_FLAG1_1"] == 1
+
+
+def test_interleaved_three_seven_second_station_cadence_is_continuous(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "synthetic.Z"
+    authority, header_hash = _synthetic_product(
+        path,
+        epoch_count=97,
+        cadence_pattern_s=(3, 7),
+    )
+
+    receipt = _scan(path, authority, header_hash)
+
+    assert receipt["pairs"][0]["maximum_core_phase_segment_s"] == 480.0
+    assert receipt["stations"]["D49"]["nonconforming_delta_count"] == 0
+    assert receipt["stations"]["D49"]["cadence_delta_counts"] == {
+        "3.000000": 48,
+        "7.000000": 48,
+    }
 
 
 @pytest.mark.parametrize(

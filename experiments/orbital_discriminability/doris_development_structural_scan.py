@@ -26,7 +26,7 @@ SCANNER_VERSION: Final = "doris-development-structural-scan-v1"
 EXPECTED_HEADER_SHA256: Final = (
     "47311d675dc0130a42676e423827bd63a4ac3b9083664c52741f5f75d185012a"
 )
-EXPECTED_CADENCE_S: Final = 10.0
+MAX_STATION_SAMPLE_GAP_S: Final = 10.0
 CADENCE_TOLERANCE_S: Final = 1.0e-6
 OBSERVABLE_COUNT: Final = 10
 FIELDS_PER_LINE: Final = 5
@@ -443,7 +443,9 @@ def scan_exact_development_structure(
                     delta = (epoch - previous_station_epoch).total_seconds()
                     state["cadence_delta_counts"][f"{delta:.6f}"] += 1
                     consecutive = (
-                        abs(delta - EXPECTED_CADENCE_S) <= CADENCE_TOLERANCE_S
+                        delta > 0.0
+                        and delta
+                        <= MAX_STATION_SAMPLE_GAP_S + CADENCE_TOLERANCE_S
                     )
                 else:
                     consecutive = True
@@ -453,8 +455,12 @@ def scan_exact_development_structure(
                     _finish_segment(
                         state["witness_current"], state["witness_segments"]
                     )
-                    state["core_break_reasons"]["EPOCH_CADENCE_GAP"] += 1
-                    state["witness_break_reasons"]["EPOCH_CADENCE_GAP"] += 1
+                    state["core_break_reasons"][
+                        "STATION_SAMPLE_GAP_EXCEEDED"
+                    ] += 1
+                    state["witness_break_reasons"][
+                        "STATION_SAMPLE_GAP_EXCEEDED"
+                    ] += 1
                 phase_valid, phase_reason = _phase_valid(shape)
                 code_valid, code_reason = _code_witness_valid(shape)
                 if phase_valid:
@@ -534,7 +540,7 @@ def scan_exact_development_structure(
                 "longest_joint_same_path_witnessed_coverage": witness_overlaps[:5],
                 "pair_semantic": (
                     "INTERSECTION_OF_INDEPENDENT_10_SECOND_STATION_STREAMS_"
-                    "NO_INTERPOLATION"
+                    "MAX_GAP_NO_INTERPOLATION"
                 ),
             }
         )
@@ -552,11 +558,12 @@ def scan_exact_development_structure(
         cadence_nonconforming = sum(
             count
             for delta, count in state["cadence_delta_counts"].items()
-            if abs(float(delta) - EXPECTED_CADENCE_S) > CADENCE_TOLERANCE_S
+            if float(delta) <= 0.0
+            or float(delta) > MAX_STATION_SAMPLE_GAP_S + CADENCE_TOLERANCE_S
         )
         station_receipts[station_id] = {
             "record_count": state["record_count"],
-            "expected_cadence_s": EXPECTED_CADENCE_S,
+            "maximum_station_sample_gap_s": MAX_STATION_SAMPLE_GAP_S,
             "cadence_delta_counts": dict(
                 sorted(state["cadence_delta_counts"].items())
             ),
