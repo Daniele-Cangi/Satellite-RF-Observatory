@@ -1677,3 +1677,25 @@ coordinate, and a physically distinct satellite observable. Advance only a
 route that can instantiate its full causal graph and increase held-out orbital
 information. See
 [`DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/DORIS_TIME_REFERENCE_GEOMETRY_SCREEN_REPORT.md).
+
+The bounded contact-topology spike is also closed as
+`DORIS_STRUCTURAL_VISIBILITY_NOT_FALSIFIABLE_FROM_RETAINED_RECEIPT`. It tests
+the abstraction change offline: use ordered beacon-contact intervals as the
+orbital observable rather than requiring simultaneous dual-beacon phase. The
+mechanism is physically plausible, but the existing receipt retained only
+four of 56 station streams and the five longest phase-continuity segments for
+each. It did not retain the complete station/epoch presence sequence, and its
+segment boundaries are not acquisition or geometric rise/set events.
+
+The decisive cut is absence semantics. Without a predeclared receiver
+scheduling/channel-allocation policy, acquisition/dropout envelope and
+telemetry-retention rule, a missing station record cannot mean that the beacon
+was not visible. DOR-to-orbit event-time error and the matching development
+orbit grid are also unbound. Time-shift, wrong-orbit, station-permutation and
+schedule-only nulls therefore remain
+`NOT_EVALUATED_INSUFFICIENT_EVENT_TOPOLOGY`. No retrospective score, primary
+selection or new data access is allowed. Continue this DORIS route only if an
+independent structural qualification can make absences causally interpretable;
+otherwise change sensor family rather than extending receipt infrastructure.
+See
+[`DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md`](experiments/orbital_discriminability/DORIS_CONTACT_TOPOLOGY_SPIKE_REPORT.md).
