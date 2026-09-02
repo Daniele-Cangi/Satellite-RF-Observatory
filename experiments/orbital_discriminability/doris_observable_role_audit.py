@@ -8,7 +8,7 @@ artifact and cannot evaluate an orbital prediction or observation value.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
-from decimal import Decimal, getcontext
+from decimal import Decimal, localcontext
 from fractions import Fraction
 import json
 from typing import Final, Mapping
@@ -62,13 +62,14 @@ def ionosphere_free_coefficients() -> tuple[Fraction, Fraction]:
 
 
 def _fraction_receipt(value: Fraction) -> dict[str, object]:
-    getcontext().prec = 30
-    decimal_value = Decimal(value.numerator) / Decimal(value.denominator)
-    return {
-        "numerator": value.numerator,
-        "denominator": value.denominator,
-        "decimal": format(decimal_value, ".18f"),
-    }
+    with localcontext() as context:
+        context.prec = 30
+        decimal_value = Decimal(value.numerator) / Decimal(value.denominator)
+        return {
+            "numerator": value.numerator,
+            "denominator": value.denominator,
+            "decimal": format(decimal_value, ".18f"),
+        }
 
 
 def same_epoch_pair_coefficients() -> dict[str, int]:

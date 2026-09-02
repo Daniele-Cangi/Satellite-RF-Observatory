@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 from datetime import datetime, timedelta, timezone
+from decimal import localcontext
 from hashlib import sha256
 import inspect
 import json
@@ -299,6 +300,19 @@ def test_epoch_prefix_rounding_carries_without_invalid_microsecond() -> None:
     raw = b"> 2026 08 30 12 34 59.999999999  0  1\n"
 
     epoch, flag, count = scanner._parse_epoch_prefix(raw)
+
+    assert epoch == datetime(2026, 8, 30, 12, 35, tzinfo=timezone.utc)
+    assert flag == 0
+    assert count == 1
+
+
+def test_epoch_prefix_rounding_is_independent_of_ambient_decimal_precision() -> None:
+    raw = b"> 2026 08 30 12 34 59.999999999  0  1\n"
+
+    with localcontext() as context:
+        context.prec = 6
+        epoch, flag, count = scanner._parse_epoch_prefix(raw)
+        assert context.prec == 6
 
     assert epoch == datetime(2026, 8, 30, 12, 35, tzinfo=timezone.utc)
     assert flag == 0

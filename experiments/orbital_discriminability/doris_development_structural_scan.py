@@ -11,7 +11,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import asdict, dataclass
 from datetime import datetime, timedelta, timezone
-from decimal import Decimal, InvalidOperation, ROUND_HALF_EVEN
+from decimal import Decimal, InvalidOperation, ROUND_HALF_EVEN, localcontext
 from hashlib import sha256
 import json
 from math import ceil
@@ -149,9 +149,11 @@ def _parse_epoch_prefix(raw_line: bytes) -> tuple[datetime, int, int]:
         record_count = int(prefix[8])
         if not second.is_finite() or second < 0 or second >= 60:
             raise ValueError
-        total_microseconds = int(
-            (second * 1_000_000).to_integral_value(rounding=ROUND_HALF_EVEN)
-        )
+        with localcontext() as context:
+            context.prec = 30
+            total_microseconds = int(
+                (second * 1_000_000).to_integral_value(rounding=ROUND_HALF_EVEN)
+            )
         epoch = datetime(
             year,
             month,

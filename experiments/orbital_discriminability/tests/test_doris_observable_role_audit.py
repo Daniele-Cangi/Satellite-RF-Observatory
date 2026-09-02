@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from decimal import localcontext
 from fractions import Fraction
 from hashlib import sha256
 import inspect
@@ -34,6 +35,17 @@ def test_ionosphere_free_phase_coefficients_cancel_inverse_frequency_squared() -
         + beta * Fraction(1, audit.UHF_BAND_HZ**2)
     )
     assert ionosphere_gain == 0
+
+
+def test_audit_does_not_mutate_callers_decimal_context() -> None:
+    with localcontext() as context:
+        context.prec = 7
+        receipt = audit.build_audit()
+        assert context.prec == 7
+
+    assert receipt["ionosphere_free_phase"]["alpha"]["decimal"] == (
+        "1.040398729710656316"
+    )
 
 
 def test_receiver_clock_cancels_only_for_exact_coepoch_pair() -> None:
