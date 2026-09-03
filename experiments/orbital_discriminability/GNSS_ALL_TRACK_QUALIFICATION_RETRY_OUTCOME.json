@@ -1,0 +1,97 @@
+{
+  "artifact": {
+    "attempts": 1,
+    "complete_file_bytes": 4317738,
+    "complete_file_sha256": "88aa876b787cac583345d512b2f705ec19062a5f71c38c3a4ae0da45f8095f24",
+    "hash_completed_before_decompression": true,
+    "matches_frozen_complete_identity": true,
+    "product": "ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz",
+    "response_content_length": "4317738",
+    "response_etag": "\"41e22a-65970adb01b5e\"",
+    "response_last_modified": "Thu, 20 Aug 2026 01:45:45 GMT",
+    "station": "ALGO00CAN",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/229/ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz"
+  },
+  "clause_states": {
+    "complete_grid": "SATISFIED",
+    "exact_six_complete_tracks": "UNSATISFIED",
+    "header_description": "SATISFIED",
+    "measurement_admission": "NOT_EVALUATED",
+    "orbital_score": "NOT_EVALUATED",
+    "primary_selection": "NOT_EVALUATED",
+    "same_path_code": "DESCRIPTIVE_NOT_ADMISSION_CLAUSE"
+  },
+  "coverage": {
+    "name": "GNSS_ALL_TRACK_QUALIFICATION_RETRY_COVERAGE.jsonl",
+    "sha256": "abf28fdc011a8e37844914b4ba660994c184457119031efe5b8b02d21a67b791"
+  },
+  "outcome": "GNSS_ALL_TRACK_STRUCTURAL_QUALIFICATION_FAILED",
+  "persistence": {
+    "compressed_artifact_bytes": 0,
+    "decompressed_observation_bytes": 0,
+    "observation_values": 0,
+    "structural_receipts_only": true
+  },
+  "retry_lineage": {
+    "execution_commit": "c7ee1731f18243d3006b8054e8a1a90c87c1a755",
+    "historical_outcome": {
+      "canonical_sha256": "57f863b7047d8efe96e54111186cebb5d338a4d580045ef5a37b1847c5bf675b",
+      "immutable": true,
+      "name": "GNSS_ALL_TRACK_QUALIFICATION_OUTCOME.json",
+      "outcome": "QUALIFICATION_DESCRIPTION_ERROR",
+      "reason": "ANTENNA_TYPE_CHANGED",
+      "structure": "NOT_EVALUATED"
+    },
+    "original_contract": {
+      "antenna_record_semantics": {
+        "igs_type_partition": "A16_MODEL_PLUS_A4_RADOME",
+        "rinex_format": "2A20_ANTENNA_NUMBER_AND_TYPE",
+        "specification": "RINEX_3_04_TABLE_A2"
+      },
+      "complete_track_count_required": 6,
+      "core_phase": [
+        "L1C",
+        "L2W"
+      ],
+      "header_parser_canonical_sha256": "bf6043b7c994e931ddab314a8e8be3a660a305ed5e714741690d244467c5bbef",
+      "plan_canonical_sha256": "fade4f11457575d06b117b96f533e544d431be850ce1a7d8491e16d37f45e211",
+      "plan_name": "GNSS_ALL_TRACK_QUALIFICATION_PLAN.md",
+      "same_path_code_descriptive": [
+        "C1C",
+        "C2W"
+      ],
+      "scanner_source_canonical_sha256": "47b687376abe4da3e0ae97ff76440f553732453faf3615ef07577227ff1f7e5a",
+      "selection_canonical_sha256": "bd1aac6edc7d6c6a5392ac8271652a0b1a430d6253ea39a7753dc537a5e5a6ad",
+      "selection_name": "GNSS_ALL_TRACK_QUALIFICATION_SELECTION_RECEIPT.json",
+      "structural_manifest_sha256": "d217019eff3be2584913903c94f6f25a60a0451072df5e6776de07ac47a3adb5",
+      "track_identity": "OPAQUE_FIRST_SEEN_ORDER_WITHIN_FROZEN_WINDOW",
+      "window_gps": {
+        "epoch_count": 139,
+        "start": "2026-08-17T12:49:30 GPS",
+        "step_s": 30.0,
+        "stop": "2026-08-17T13:58:30 GPS"
+      }
+    },
+    "repair_commit": "e4bf316c3c15728ad6821dedb25d41e0a3f44866",
+    "retry_executor_canonical_sha256": "962eab7f13da461de5f40a2134cdf37d09412ca9cd6bbf74be572dab96a92038",
+    "retry_manifest_sha256": "2b811c9ffdc46257a07a457a370a55dfbed5eed31d4244d41202c241d8d6e6bc",
+    "retry_plan": {
+      "canonical_sha256": "97df64bb942c15ccc447b59b6eb76e690fc6db07c4f75e6688fd70e410e8c263",
+      "name": "GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md"
+    },
+    "seal_canonical_sha256": "1b34272cc698690c832478876ef267719bda2b7ec4edc045a445ddcbcf748313",
+    "seal_name": "GNSS_ALL_TRACK_QUALIFICATION_RETRY_SEAL.json",
+    "source_commit": "426db74efe173a3f60376aa1b5a0070e96f24dd6"
+  },
+  "reveal": {
+    "created_after_structural_hash": true,
+    "membership_changed": false,
+    "name": "GNSS_ALL_TRACK_QUALIFICATION_RETRY_REVEAL.json",
+    "sha256": "d071d9f75147d4247943d9f12d859f63a239b83e74ba2d7238becdc062493d00"
+  },
+  "schema": "gnss-all-track-qualification-retry-v1",
+  "structure": {
+    "name": "GNSS_ALL_TRACK_QUALIFICATION_RETRY_STRUCTURE.json",
+    "sha256": "9eec2cbfc934c52b3ae592ff5570c83e82871d0f9ec87f29cb75bd5147b571cc"
+  }
+}

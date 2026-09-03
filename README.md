@@ -1449,6 +1449,16 @@ complete hash, and zero retry after hashing. No ALGO bytes were accessed while
 building this contract. See
 [`GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md).
 
+The single retry is now consumed as
+`GNSS_ALL_TRACK_STRUCTURAL_QUALIFICATION_FAILED`. Header admission and all 139
+epochs passed, but the value-blind scan found 7 complete L1C/L2W tracks among
+11 seen, not the required 6. The post-decision reveal shows that all six
+orbit-codebook PRNs are complete and G11 is an additional complete track.
+Removing G11 would be post-hoc codebook selection, so the exact-six ALGO path
+is closed. No observation value, measurement admission, orbital score or
+primary selection occurred. See
+[`GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md).
+
 ## Repository map
 
 ```text
