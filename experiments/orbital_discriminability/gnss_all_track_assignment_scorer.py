@@ -16,19 +16,29 @@ from typing import Final, Mapping, Sequence
 import numpy as np
 
 
-SCORER_VERSION: Final = "gnss-all-track-assignment-scorer-v1"
+SCORER_VERSION: Final = "gnss-all-track-assignment-scorer-v2"
 RAW_EPOCHS: Final = 139
 PREFIX_EPOCHS: Final = 79
 HELDOUT_EPOCHS: Final = 60
 STEP_S: Final = 30.0
 TRACK_COUNT: Final = 6
 HYPOTHESIS_COUNT: Final = 721
+METRIC_DECIMALS: Final = 6
 TRACK_ID_PATTERN: Final = re.compile(r"T_[0-9A-F]{16}")
 HYPOTHESIS_ID_PATTERN: Final = re.compile(r"H_[0-9A-F]{16}")
 
 
 class AllTrackScorerError(ValueError):
     """The closed synthetic scoring surface is malformed."""
+
+
+def _quantized(value: float) -> float:
+    """Canonicalize derived score metrics without changing input coordinates."""
+
+    result = round(float(value), METRIC_DECIMALS)
+    if not isfinite(result):
+        raise AllTrackScorerError("NONFINITE_SCORE_METRIC")
+    return result
 
 
 def strict_json(value: object, *, pretty: bool = False) -> str:
@@ -133,7 +143,11 @@ def score_anonymous_tracks(
         rows.append(
             {
                 "opaque_id": identifier,
-                **metrics,
+                "prefix_rms_m": _quantized(metrics["prefix_rms_m"]),
+                "heldout_max_track_peak_to_peak_m": _quantized(
+                    metrics["heldout_max_track_peak_to_peak_m"]
+                ),
+                "heldout_rms_m": _quantized(metrics["heldout_rms_m"]),
                 "effective_prefix_parameter_count": 2 * (TRACK_COUNT - 1),
             }
         )
@@ -146,9 +160,9 @@ def score_anonymous_tracks(
     )
     best, runner_up = rows[:2]
     best_residual = float(best["heldout_max_track_peak_to_peak_m"])
-    preference_margin = float(
-        runner_up["heldout_max_track_peak_to_peak_m"]
-    ) - best_residual
+    preference_margin = _quantized(
+        float(runner_up["heldout_max_track_peak_to_peak_m"]) - best_residual
+    )
     if best_residual > guard:
         state = "NO_ADMISSIBLE_OPAQUE_ASSIGNMENT"
     elif preference_margin > guard:
@@ -182,6 +196,7 @@ def score_anonymous_tracks(
         "orbital_score_state": state,
         "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
         "effective_prefix_parameter_count_per_hypothesis": 2 * (TRACK_COUNT - 1),
+        "metric_quantization_decimal_places": METRIC_DECIMALS,
         "prefix_indices_inclusive": [0, PREFIX_EPOCHS - 1],
         "heldout_indices_inclusive": [PREFIX_EPOCHS, RAW_EPOCHS - 1],
         "heldout_refit": False,

@@ -87,6 +87,11 @@ only when both clauses pass:
 There is no free time phase, suffix refit, target-specific exclusion or
 candidate-dependent complexity.
 
+Derived score metrics are canonicalized to six decimal places before ranking
+and hashing. This is a receipt-level reproducibility boundary (one micrometre),
+not a change to input coordinates, the `7,339.701235 m` guard or any physical
+outcome.
+
 ## Synthetic results
 
 The historical `7,339.701235 m` pairwise guard is used only as a conservative

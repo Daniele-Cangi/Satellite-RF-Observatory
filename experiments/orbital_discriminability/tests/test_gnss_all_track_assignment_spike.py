@@ -142,6 +142,7 @@ def test_score_receipts_are_hashed_before_reveal_and_contain_no_identity() -> No
         assert score["identity_reveal_performed"] is False
         assert score["track_or_observation_values_persisted"] == 0
         assert score["opaque_hypothesis_count"] == 721
+        assert score["metric_quantization_decimal_places"] == 6
         for forbidden in (*spike.MODEL_CODES, "code_identity"):
             assert forbidden not in rendered
 

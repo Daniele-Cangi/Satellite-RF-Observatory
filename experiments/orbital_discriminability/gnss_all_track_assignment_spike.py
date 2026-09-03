@@ -8,7 +8,6 @@ from __future__ import annotations
 
 from hashlib import sha256
 from itertools import permutations
-import json
 from pathlib import Path
 from typing import Final, Mapping, Sequence
 
@@ -359,6 +358,7 @@ def build_receipt(root: Path) -> dict[str, object]:
             "free_time_phase": False,
             "preference_guard_m": PAIRWISE_GUARD_M,
             "absolute_fit_guard_m": PAIRWISE_GUARD_M,
+            "receipt_metric_quantization_decimal_places": blind.METRIC_DECIMALS,
             "exact_fixture_preference_margin_m": exact_score[
                 "preference_margin_m"
             ],
