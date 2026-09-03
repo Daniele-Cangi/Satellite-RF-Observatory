@@ -87,8 +87,8 @@
       },
       "role": "POSITIVE_CONTROL",
       "score_receipt": {
-        "all_scores_sha256": "0468437cce846a80d4ed352fa8ea9bf38ea2435594a9cf3817f4f63ca405e082",
-        "best_heldout_max_track_peak_to_peak_m": 0.686778860385374,
+        "all_scores_sha256": "da873a6a835d4edb80427ae1dc1fd9b5b7c8d0c1dbd94779d2169d30ede14cbd",
+        "best_heldout_max_track_peak_to_peak_m": 0.686779,
         "best_opaque_id": "H_995A8D3C98DEAA84",
         "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
         "effective_prefix_parameter_count_per_hypothesis": 10,
@@ -99,38 +99,39 @@
         ],
         "heldout_refit": false,
         "identity_reveal_performed": false,
+        "metric_quantization_decimal_places": 6,
         "opaque_hypothesis_count": 721,
         "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
         "pairwise_guard_m": 7339.701234647398,
-        "preference_margin_m": 8431.91629247143,
+        "preference_margin_m": 8431.916292,
         "prefix_indices_inclusive": [
           0,
           78
         ],
         "runner_up_opaque_id": "H_4239B2BD455404D3",
         "schema": "gnss-all-track-assignment-score-receipt-v1",
-        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v2",
         "top_scores": [
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 0.686778860385374,
-            "heldout_rms_m": 0.17577400000512444,
+            "heldout_max_track_peak_to_peak_m": 0.686779,
+            "heldout_rms_m": 0.175774,
             "opaque_id": "H_995A8D3C98DEAA84",
-            "prefix_rms_m": 0.08490546192754933
+            "prefix_rms_m": 0.084905
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 8432.603071331814,
-            "heldout_rms_m": 7081.772146959754,
+            "heldout_max_track_peak_to_peak_m": 8432.603071,
+            "heldout_rms_m": 7081.772147,
             "opaque_id": "H_4239B2BD455404D3",
-            "prefix_rms_m": 1964.6546932122317
+            "prefix_rms_m": 1964.654693
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 18763.820673686918,
-            "heldout_rms_m": 13546.344328344638,
+            "heldout_max_track_peak_to_peak_m": 18763.820674,
+            "heldout_rms_m": 13546.344328,
             "opaque_id": "H_BF3B4ED4E97FB401",
-            "prefix_rms_m": 3035.7889785712
+            "prefix_rms_m": 3035.788979
           }
         ],
         "track_count": 6,
@@ -145,7 +146,7 @@
         "track_or_observation_values_persisted": 0,
         "track_set_sha256": "307b35d7b3bda133c9e901fb6ddd8109f28347bb43833d6f553492a211832143"
       },
-      "score_receipt_sha256_before_reveal": "679c3680396873a573cf1c180ac2226ad9ff932a63545dfa04e88db9b1910a0c"
+      "score_receipt_sha256_before_reveal": "45d24e0e3e97a1c33896d175ce8d5df8c6d5d445cd6ddbd2f2d3324b0c5039fc"
     },
     {
       "code_witness_sha256_before_score": "138e666248670c19deb3d6cea4994e645fb6bb389fe292ccc63fbae5780bface",
@@ -199,8 +200,8 @@
       },
       "role": "SEPARATE_WITNESS_NEGATIVE_CONTROL",
       "score_receipt": {
-        "all_scores_sha256": "0468437cce846a80d4ed352fa8ea9bf38ea2435594a9cf3817f4f63ca405e082",
-        "best_heldout_max_track_peak_to_peak_m": 0.686778860385374,
+        "all_scores_sha256": "da873a6a835d4edb80427ae1dc1fd9b5b7c8d0c1dbd94779d2169d30ede14cbd",
+        "best_heldout_max_track_peak_to_peak_m": 0.686779,
         "best_opaque_id": "H_995A8D3C98DEAA84",
         "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
         "effective_prefix_parameter_count_per_hypothesis": 10,
@@ -211,38 +212,39 @@
         ],
         "heldout_refit": false,
         "identity_reveal_performed": false,
+        "metric_quantization_decimal_places": 6,
         "opaque_hypothesis_count": 721,
         "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
         "pairwise_guard_m": 7339.701234647398,
-        "preference_margin_m": 8431.91629247143,
+        "preference_margin_m": 8431.916292,
         "prefix_indices_inclusive": [
           0,
           78
         ],
         "runner_up_opaque_id": "H_4239B2BD455404D3",
         "schema": "gnss-all-track-assignment-score-receipt-v1",
-        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v2",
         "top_scores": [
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 0.686778860385374,
-            "heldout_rms_m": 0.17577400000512444,
+            "heldout_max_track_peak_to_peak_m": 0.686779,
+            "heldout_rms_m": 0.175774,
             "opaque_id": "H_995A8D3C98DEAA84",
-            "prefix_rms_m": 0.08490546192754933
+            "prefix_rms_m": 0.084905
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 8432.603071331814,
-            "heldout_rms_m": 7081.772146959754,
+            "heldout_max_track_peak_to_peak_m": 8432.603071,
+            "heldout_rms_m": 7081.772147,
             "opaque_id": "H_4239B2BD455404D3",
-            "prefix_rms_m": 1964.6546932122317
+            "prefix_rms_m": 1964.654693
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 18763.820673686918,
-            "heldout_rms_m": 13546.344328344638,
+            "heldout_max_track_peak_to_peak_m": 18763.820674,
+            "heldout_rms_m": 13546.344328,
             "opaque_id": "H_BF3B4ED4E97FB401",
-            "prefix_rms_m": 3035.7889785712
+            "prefix_rms_m": 3035.788979
           }
         ],
         "track_count": 6,
@@ -257,7 +259,7 @@
         "track_or_observation_values_persisted": 0,
         "track_set_sha256": "307b35d7b3bda133c9e901fb6ddd8109f28347bb43833d6f553492a211832143"
       },
-      "score_receipt_sha256_before_reveal": "679c3680396873a573cf1c180ac2226ad9ff932a63545dfa04e88db9b1910a0c"
+      "score_receipt_sha256_before_reveal": "45d24e0e3e97a1c33896d175ce8d5df8c6d5d445cd6ddbd2f2d3324b0c5039fc"
     },
     {
       "code_witness_sha256_before_score": "6eeaf9008979d6c4ff29bbc498fb6d2f20424bae79db2f4a763976a9d66d92ca",
@@ -311,8 +313,8 @@
       },
       "role": "TARGET_SELECTION_INVARIANCE_CONTROL",
       "score_receipt": {
-        "all_scores_sha256": "00633d2071b48a2301c8a02ef5fd1af6fa2a024d5e29fdf5b3e48d536910c6cb",
-        "best_heldout_max_track_peak_to_peak_m": 0.6867788606204499,
+        "all_scores_sha256": "13953bf480829471fb4e414eddbe0be936737c17eaf6aa04aaac13c8bd15e71c",
+        "best_heldout_max_track_peak_to_peak_m": 0.686779,
         "best_opaque_id": "H_4CB40A5D737F4728",
         "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
         "effective_prefix_parameter_count_per_hypothesis": 10,
@@ -323,38 +325,39 @@
         ],
         "heldout_refit": false,
         "identity_reveal_performed": false,
+        "metric_quantization_decimal_places": 6,
         "opaque_hypothesis_count": 721,
         "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
         "pairwise_guard_m": 7339.701234647398,
-        "preference_margin_m": 8431.977388325364,
+        "preference_margin_m": 8431.977388,
         "prefix_indices_inclusive": [
           0,
           78
         ],
         "runner_up_opaque_id": "H_6FFCEE43AF8F1309",
         "schema": "gnss-all-track-assignment-score-receipt-v1",
-        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v2",
         "top_scores": [
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 0.6867788606204499,
-            "heldout_rms_m": 0.1757740000011523,
+            "heldout_max_track_peak_to_peak_m": 0.686779,
+            "heldout_rms_m": 0.175774,
             "opaque_id": "H_4CB40A5D737F4728",
-            "prefix_rms_m": 0.0849054619300766
+            "prefix_rms_m": 0.084905
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 8432.664167185983,
-            "heldout_rms_m": 7081.805302097095,
+            "heldout_max_track_peak_to_peak_m": 8432.664167,
+            "heldout_rms_m": 7081.805302,
             "opaque_id": "H_6FFCEE43AF8F1309",
-            "prefix_rms_m": 1964.6477976735712
+            "prefix_rms_m": 1964.647798
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 18763.45394244534,
-            "heldout_rms_m": 13546.311744176779,
+            "heldout_max_track_peak_to_peak_m": 18763.453942,
+            "heldout_rms_m": 13546.311744,
             "opaque_id": "H_4EC2FF6CD8E23FBD",
-            "prefix_rms_m": 3035.7960855787737
+            "prefix_rms_m": 3035.796086
           }
         ],
         "track_count": 6,
@@ -369,7 +372,7 @@
         "track_or_observation_values_persisted": 0,
         "track_set_sha256": "4687d7bb97d1e1f418b744e0e9a34c586ee561e18ee12e3bc460826cddcabdce"
       },
-      "score_receipt_sha256_before_reveal": "bc230a81bf5c811a191a3daf65b5f635b254a3bde24e9ef241611bda6a1c71ad"
+      "score_receipt_sha256_before_reveal": "fa7d485e08d5d74338ffd82fa3d3dcd0f605956a8fa315c3e696861428ed2d91"
     },
     {
       "code_witness_sha256_before_score": "659d39f2a2cc2ba2f77e9a85e83a19d6b738c47e7428811523c08e003291b396",
@@ -416,8 +419,8 @@
       },
       "role": "NON_ORBITAL_NULL_CONTROL",
       "score_receipt": {
-        "all_scores_sha256": "6420919dbad3baaa939366e2500420a4ddabd4cd93be2bc72d2ec19489654df4",
-        "best_heldout_max_track_peak_to_peak_m": 0.6867788607225975,
+        "all_scores_sha256": "c659ac162099b0211fea32084b663f37876058c1ee7b72aefc42e1ecf631ee8b",
+        "best_heldout_max_track_peak_to_peak_m": 0.686779,
         "best_opaque_id": "H_9639A07B40BE46BA",
         "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
         "effective_prefix_parameter_count_per_hypothesis": 10,
@@ -428,38 +431,39 @@
         ],
         "heldout_refit": false,
         "identity_reveal_performed": false,
+        "metric_quantization_decimal_places": 6,
         "opaque_hypothesis_count": 721,
         "orbital_score_state": "OPAQUE_ASSIGNMENT_PREFERRED",
         "pairwise_guard_m": 7339.701234647398,
-        "preference_margin_m": 54161.4842103252,
+        "preference_margin_m": 54161.48421,
         "prefix_indices_inclusive": [
           0,
           78
         ],
         "runner_up_opaque_id": "H_86FCA13A71A05F45",
         "schema": "gnss-all-track-assignment-score-receipt-v1",
-        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v2",
         "top_scores": [
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 0.6867788607225975,
-            "heldout_rms_m": 0.17577400000053053,
+            "heldout_max_track_peak_to_peak_m": 0.686779,
+            "heldout_rms_m": 0.175774,
             "opaque_id": "H_9639A07B40BE46BA",
-            "prefix_rms_m": 0.08490546192402888
+            "prefix_rms_m": 0.084905
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 54162.17098918592,
-            "heldout_rms_m": 21517.06680997781,
+            "heldout_max_track_peak_to_peak_m": 54162.170989,
+            "heldout_rms_m": 21517.06681,
             "opaque_id": "H_86FCA13A71A05F45",
-            "prefix_rms_m": 3263.037450983492
+            "prefix_rms_m": 3263.037451
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 54162.17098918592,
-            "heldout_rms_m": 21517.067428887683,
+            "heldout_max_track_peak_to_peak_m": 54162.170989,
+            "heldout_rms_m": 21517.067429,
             "opaque_id": "H_8BA39AE35066743E",
-            "prefix_rms_m": 3263.037296813573
+            "prefix_rms_m": 3263.037297
           }
         ],
         "track_count": 6,
@@ -474,7 +478,7 @@
         "track_or_observation_values_persisted": 0,
         "track_set_sha256": "0a2a00043699bfef960da32141c5c52a1ffb953a5ab07db6982247d4bd6468f2"
       },
-      "score_receipt_sha256_before_reveal": "944fac868564675808c6a802a79b860ee41348f14ac99e29baf365cf3471fa9a"
+      "score_receipt_sha256_before_reveal": "e3bd986008ad1ff75a86d1d9bb0c1fdfe59f398d6bcce98cf746b17c510a2cd0"
     },
     {
       "code_witness_sha256_before_score": "659d39f2a2cc2ba2f77e9a85e83a19d6b738c47e7428811523c08e003291b396",
@@ -528,8 +532,8 @@
       },
       "role": "ABSOLUTE_FIT_MODEL_MISMATCH_CONTROL",
       "score_receipt": {
-        "all_scores_sha256": "423f81e53f71c81c87bbd3909b3717576a854bb36b067373ea1d0e1f00920703",
-        "best_heldout_max_track_peak_to_peak_m": 22515.985404137522,
+        "all_scores_sha256": "6b6245bbbd5b74ebe714ee90645c49878b3354e1a20b6f48bca3bf9c54e6fa0a",
+        "best_heldout_max_track_peak_to_peak_m": 22515.985404,
         "best_opaque_id": "H_42EB6E39CD7E053D",
         "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
         "effective_prefix_parameter_count_per_hypothesis": 10,
@@ -540,6 +544,7 @@
         ],
         "heldout_refit": false,
         "identity_reveal_performed": false,
+        "metric_quantization_decimal_places": 6,
         "opaque_hypothesis_count": 721,
         "orbital_score_state": "NO_ADMISSIBLE_OPAQUE_ASSIGNMENT",
         "pairwise_guard_m": 7339.701234647398,
@@ -550,28 +555,28 @@
         ],
         "runner_up_opaque_id": "H_A3595055419B9CBB",
         "schema": "gnss-all-track-assignment-score-receipt-v1",
-        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v2",
         "top_scores": [
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 22515.985404137522,
-            "heldout_rms_m": 11699.919330447876,
+            "heldout_max_track_peak_to_peak_m": 22515.985404,
+            "heldout_rms_m": 11699.91933,
             "opaque_id": "H_42EB6E39CD7E053D",
-            "prefix_rms_m": 7118.374805547828
+            "prefix_rms_m": 7118.374806
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 22515.985404137522,
-            "heldout_rms_m": 15610.716648680262,
+            "heldout_max_track_peak_to_peak_m": 22515.985404,
+            "heldout_rms_m": 15610.716649,
             "opaque_id": "H_A3595055419B9CBB",
-            "prefix_rms_m": 7537.990570210448
+            "prefix_rms_m": 7537.99057
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 25603.642197175417,
-            "heldout_rms_m": 10490.050866863641,
+            "heldout_max_track_peak_to_peak_m": 25603.642197,
+            "heldout_rms_m": 10490.050867,
             "opaque_id": "H_A7B8127106A18A68",
-            "prefix_rms_m": 7531.098844088473
+            "prefix_rms_m": 7531.098844
           }
         ],
         "track_count": 6,
@@ -586,7 +591,7 @@
         "track_or_observation_values_persisted": 0,
         "track_set_sha256": "eb47e4ac20606d6a06b91fedf9ec484297f6ed6df53f7c71de2ab07f9671684f"
       },
-      "score_receipt_sha256_before_reveal": "446efc1a428f8db9d8f27a5810b48b2196c000f03ff1292c0d854f58e7760832"
+      "score_receipt_sha256_before_reveal": "7a4b670d19355b629cb7c02daba241727b4ac45f7b86c077905a5ce902571613"
     },
     {
       "code_witness_sha256_before_score": "659d39f2a2cc2ba2f77e9a85e83a19d6b738c47e7428811523c08e003291b396",
@@ -640,8 +645,8 @@
       },
       "role": "AMBIGUITY_CONTROL",
       "score_receipt": {
-        "all_scores_sha256": "0e0d69a42cc3f0997f518cdc0e0a3af612ed08e09f36fcca4fff744a1850bf09",
-        "best_heldout_max_track_peak_to_peak_m": 4216.221824781584,
+        "all_scores_sha256": "23dccb104992a4bc4a57172f3ab4b4cec709209b5fb9aa8aa5062aba537d909a",
+        "best_heldout_max_track_peak_to_peak_m": 4216.221825,
         "best_opaque_id": "H_4239B2BD455404D3",
         "common_mode": "REMOVED_BY_PER_EPOCH_TRACK_ENSEMBLE_CENTERING",
         "effective_prefix_parameter_count_per_hypothesis": 10,
@@ -652,6 +657,7 @@
         ],
         "heldout_refit": false,
         "identity_reveal_performed": false,
+        "metric_quantization_decimal_places": 6,
         "opaque_hypothesis_count": 721,
         "orbital_score_state": "AMBIGUOUS",
         "pairwise_guard_m": 7339.701234647398,
@@ -662,28 +668,28 @@
         ],
         "runner_up_opaque_id": "H_995A8D3C98DEAA84",
         "schema": "gnss-all-track-assignment-score-receipt-v1",
-        "scorer_version": "gnss-all-track-assignment-scorer-v1",
+        "scorer_version": "gnss-all-track-assignment-scorer-v2",
         "top_scores": [
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 4216.221824781584,
-            "heldout_rms_m": 3540.8847824474683,
+            "heldout_max_track_peak_to_peak_m": 4216.221825,
+            "heldout_rms_m": 3540.884782,
             "opaque_id": "H_4239B2BD455404D3",
-            "prefix_rms_m": 982.3272893860714
+            "prefix_rms_m": 982.327289
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 4216.221824781584,
-            "heldout_rms_m": 3540.8847824474688,
+            "heldout_max_track_peak_to_peak_m": 4216.221825,
+            "heldout_rms_m": 3540.884782,
             "opaque_id": "H_995A8D3C98DEAA84",
-            "prefix_rms_m": 982.3272893860714
+            "prefix_rms_m": 982.327289
           },
           {
             "effective_prefix_parameter_count": 10,
-            "heldout_max_track_peak_to_peak_m": 18763.71656478918,
-            "heldout_rms_m": 14001.459165157927,
+            "heldout_max_track_peak_to_peak_m": 18763.716565,
+            "heldout_rms_m": 14001.459165,
             "opaque_id": "H_6092A65793803335",
-            "prefix_rms_m": 3190.7674667827773
+            "prefix_rms_m": 3190.767467
           }
         ],
         "track_count": 6,
@@ -698,7 +704,7 @@
         "track_or_observation_values_persisted": 0,
         "track_set_sha256": "1da76bbecbeeafe1882be15a9a7fbd6b0a7a44f317acbc8911d76e39cf5cdec3"
       },
-      "score_receipt_sha256_before_reveal": "17c0873b66d9d33d51a1a8b1245c3f317cf5f9a72e6007b6430a971277272e25"
+      "score_receipt_sha256_before_reveal": "9c62986408d84153618b6874bd6e8ac96c8e2a54e27b2b1bf3f621fd60964a2e"
     }
   ],
   "schema": "gnss-all-track-assignment-spike-receipt-v1",
@@ -706,12 +712,13 @@
     "absolute_fit_guard_m": 7339.701234647398,
     "common_mode": "PER_EPOCH_ENSEMBLE_CENTERING",
     "effective_parameters_per_hypothesis": 10,
-    "exact_fixture_best_residual_m": 1.861309328887728e-09,
-    "exact_fixture_preference_margin_m": 8432.443649560884,
+    "exact_fixture_best_residual_m": 0.0,
+    "exact_fixture_preference_margin_m": 8432.44365,
     "free_time_phase": false,
     "heldout_refit": false,
     "nuisance": "PREFIX_ONLY_CONSTANT_AND_RATE_PER_CENTERED_TRACK",
-    "preference_guard_m": 7339.701234647398
+    "preference_guard_m": 7339.701234647398,
+    "receipt_metric_quantization_decimal_places": 6
   },
   "selection_boundary": {
     "assignment_family": "ALL_6_FACTORIAL_BIJECTIONS_PLUS_AFFINE_NULL",
@@ -723,8 +730,8 @@
   },
   "shock": "RAW_IQ_IS_NOT_REQUIRED_TO_REMOVE_EXPERIMENT_SIDE_PRN_PRESELECTION;_ALL_TRACK_RINEX_ASSIGNMENT_CAN_TEST_DYNAMICS_FIRST_WHILE_RETAINING_RECEIVER_CODE_IDENTITY_AS_AN_EXPLICIT_NONINDEPENDENT_WITNESS",
   "source": {
-    "scorer_sha256": "6f43592ccf5893b68726a025f3cc3f6ea7e63d93b0a48fc164ad796ca440ecc8",
-    "spike_sha256": "08ba9375aafac3150703969c29c912b9265a8295a72e0f497d42da71ae9334fb"
+    "scorer_sha256": "c550f1a24e36acc14f677fe8fcb2b7221f7935c0f8f995239e954903f0a55a66",
+    "spike_sha256": "0d41649b14cbc5e5936a04dfe1e052c6ee82aa8bbaa2665231789643d3d367b6"
   },
   "version": "gnss-all-track-blind-assignment-spike-v1"
 }

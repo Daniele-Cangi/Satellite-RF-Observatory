@@ -1459,6 +1459,17 @@ is closed. No observation value, measurement admission, orbital score or
 primary selection occurred. See
 [`GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md).
 
+The bounded offline change-of-abstraction spike now returns
+`ALL_TRACK_ONE_CLUTTER_MECHANISM_DISCRIMINATIVE`. It enumerates all 5,040 ways
+to inject six orbital curves into seven opaque tracks, plus equally bounded
+time-reversed and affine null families. Positive and permutation controls
+clear both assignment and null guards; affine and reversed data select nulls;
+two clutter tracks are inadmissible; an orbit-like duplicate remains
+ambiguous. This shows that exact track-count equality is not essential, but it
+does not retroactively admit ALGO because the clutter model was designed after
+that outcome. See
+[`GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md).
+
 ## Repository map
 
 ```text
