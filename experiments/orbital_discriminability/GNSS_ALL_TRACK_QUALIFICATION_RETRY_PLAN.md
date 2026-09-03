@@ -137,4 +137,3 @@ not select or access a primary.
 
 Stop offline after freezing and testing the executor and its seal. A later
 materialization requires separate explicit authority for this exact retry.
-
