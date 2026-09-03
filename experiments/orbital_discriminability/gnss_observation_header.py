@@ -388,6 +388,28 @@ def split_twenty(data: str) -> dict[str, str]:
     }
 
 
+def parse_antenna_two_a20(data: str) -> dict[str, str]:
+    """Parse the RINEX ``ANT # / TYPE`` record without receiver semantics.
+
+    RINEX 3.04 Table A2 defines two A20 fields: antenna number and antenna
+    type.  For IGS equipment names, the second A20 contains a 16-character
+    antenna model followed by the four-character radome code.
+    """
+
+    padded = data.ljust(40)
+    if padded[40:].strip():
+        raise HeaderAdmissionError("ANTENNA_RECORD_EXCEEDS_2A20")
+    type_field = padded[20:40]
+    return {
+        "serial": padded[:20].strip(),
+        "type_field": type_field.strip(),
+        "model": type_field[:16].strip(),
+        "radome": type_field[16:20].strip(),
+        "rinex_format": "2A20_ANTENNA_NUMBER_AND_TYPE",
+        "igs_type_partition": "A16_MODEL_PLUS_A4_RADOME",
+    }
+
+
 def floats(data: str, count: int) -> list[float]:
     values = [float(value) for value in data.split()]
     if len(values) != count:

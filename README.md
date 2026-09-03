@@ -1433,6 +1433,13 @@ score all remain `NOT_EVALUATED`; this is not evidence that ALGO lacks the
 required tracks. The product will not be reopened without new authority. See
 [`GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md).
 
+The bounded offline repair now parses the antenna record as RINEX `2A20` and
+the IGS type field as A16 model plus A4 radome. It changes no geometry, window,
+observable role, LLI rule or six-track criterion. The historical description
+error remains immutable and the runner still refuses a repeat before network
+access; a distinct retry receipt and new explicit materialization authority
+would be required to resume the same physical qualification.
+
 ## Repository map
 
 ```text

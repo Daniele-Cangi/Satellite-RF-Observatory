@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from experiments.orbital_discriminability import (
     gnss_all_track_structural_qualification as qualification,
 )
@@ -33,6 +35,8 @@ def fixture(
     lli: tuple[int, str, str] | None = None,
     code_blank: tuple[int, str, str] | None = None,
     epoch_flag: tuple[int, int] | None = None,
+    antenna_model: str = qualification.EXPECTED_ANTENNA_TYPE,
+    antenna_radome: str = qualification.EXPECTED_RADOME,
 ) -> bytearray:
     observables = ("C1C", "L1C", "C2W", "L2W", "D1C", "S1C")
     lines = [
@@ -47,8 +51,7 @@ def fixture(
             "REC # / TYPE / VERS",
         ),
         header_line(
-            f"ANTENNA             {qualification.EXPECTED_ANTENNA_TYPE:<20}"
-            f"{qualification.EXPECTED_RADOME:<20}",
+            f"{'ANTENNA':<20}{antenna_model:<16}{antenna_radome:<4}",
             "ANT # / TYPE",
         ),
         header_line(" 918129.0 -4346071.0 4561977.0", "APPROX POSITION XYZ"),
@@ -187,6 +190,11 @@ def test_manifest_is_bounded_and_selection_is_hash_bound() -> None:
     assert selection["primary_selected"] is False
     assert manifest["product"]["name"] == qualification.PRODUCT_NAME
     assert manifest["post_complete_hash_retry"] == 0
+    assert manifest["antenna_record_semantics"] == {
+        "rinex_format": "2A20_ANTENNA_NUMBER_AND_TYPE",
+        "igs_type_partition": "A16_MODEL_PLUS_A4_RADOME",
+        "specification": "RINEX_3_04_TABLE_A2",
+    }
     assert "Doppler or signal-strength field reads" in manifest["forbidden"]
     assert manifest["selection_receipt_canonical_sha256"] == (
         qualification.canonical_file_sha256(root / qualification.SELECTION_NAME)
@@ -225,3 +233,52 @@ def test_recorded_description_error_preserves_physical_nondecision() -> None:
     assert receipt["observation_values_parsed"] == 0
     assert receipt["observation_values_persisted"] == 0
     assert receipt["observation_artifact_bytes_persisted"] == 0
+
+
+def test_rinex_antenna_record_uses_two_a20_and_igs_model_radome_partition() -> None:
+    parsed = qualification.headers.parse_antenna_two_a20(
+        f"{'725235':<20}{'LEIAR25.R4':<16}{'NONE':<4}" + " " * 20
+    )
+
+    assert parsed == {
+        "serial": "725235",
+        "type_field": "LEIAR25.R4      NONE",
+        "model": "LEIAR25.R4",
+        "radome": "NONE",
+        "rinex_format": "2A20_ANTENNA_NUMBER_AND_TYPE",
+        "igs_type_partition": "A16_MODEL_PLUS_A4_RADOME",
+    }
+
+
+def test_third_a20_receiver_shape_is_rejected_for_antenna() -> None:
+    invalid = f"{'ANTENNA':<20}{qualification.EXPECTED_ANTENNA_TYPE:<20}{'NONE':<20}"
+
+    try:
+        qualification.headers.parse_antenna_two_a20(invalid)
+    except qualification.headers.HeaderAdmissionError as exc:
+        assert str(exc) == "ANTENNA_RECORD_EXCEEDS_2A20"
+    else:  # pragma: no cover - protects the specification boundary
+        raise AssertionError("receiver-shaped antenna record was accepted")
+
+
+def test_description_error_retains_observed_and_expected_antenna_model() -> None:
+    try:
+        qualification.scan_decoded(fixture(antenna_model="WRONG_MODEL"))
+    except qualification.DescriptionError as exc:
+        reason = str(exc)
+    else:  # pragma: no cover - protects typed failure attribution
+        raise AssertionError("mismatched antenna model was accepted")
+
+    assert reason == (
+        "ANTENNA_TYPE_CHANGED:OBSERVED=WRONG_MODEL:EXPECTED=AOAD/M_T"
+    )
+
+
+def test_repaired_parser_cannot_overwrite_or_repeat_frozen_execution() -> None:
+    root = Path(qualification.__file__).resolve().parent
+
+    with pytest.raises(
+        qualification.DescriptionError,
+        match="QUALIFICATION_EXECUTION_ALREADY_RECORDED",
+    ):
+        qualification.run_once(root)

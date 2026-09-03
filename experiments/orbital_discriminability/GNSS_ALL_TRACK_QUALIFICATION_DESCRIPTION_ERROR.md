@@ -97,3 +97,23 @@ Do not reopen the artifact in this branch.  First review and freeze the bounded
 `2A20` parser repair.  Any repeat materialization requires separate authority;
 the present terminal receipt remains immutable.
 
+## Offline parser repair
+
+The bounded repair is now implemented without product access. The shared
+header module exposes a dedicated `parse_antenna_two_a20` function while its
+legacy receiver-shaped representation remains available to historical
+receipts. The ALGO scanner now obtains antenna number and type from exactly two
+A20 fields and partitions the IGS type field as A16 model plus A4 radome.
+
+Specification-derived fixtures cover `LEIAR25.R4 / NONE`, the frozen
+`AOAD/M_T / NONE` description, refusal of a synthetic third A20 field and an
+error receipt that retains both observed and expected normalized model names.
+The physical window, observable roles, LLI rule, six-track count and opaque
+selection remain unchanged.
+
+The original outcome file is still the execution guard. Calling the repaired
+runner against this directory stops at
+`QUALIFICATION_EXECUTION_ALREADY_RECORDED` before network access. A future
+review must explicitly define a distinct, non-overwriting retry receipt and
+authorize one new materialization before the repaired path can be executed.
+
