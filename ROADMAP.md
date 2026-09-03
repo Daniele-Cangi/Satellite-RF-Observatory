@@ -1810,3 +1810,19 @@ later explicit authority can permit the single materialization. A structural
 pass would permit review of a distinct primary; it would not select one
 automatically. See
 [`GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md).
+
+The authorized retry has now produced a valid structural refusal:
+`GNSS_ALL_TRACK_STRUCTURAL_QUALIFICATION_FAILED`. The exact artifact identity,
+header and 139-epoch grid were satisfied, but 7 opaque tracks were complete
+where the frozen contract required exactly 6. Only after the count failed did
+the reveal show the complete set as G05/G11/G15/G18/G20/G21/G29: the intended
+six-code family plus G11. No subset may be selected after reveal, and no
+measurement or orbital score was evaluated.
+
+This closes the ALGO DOY229 exact-six measurement path. Do not retry it or
+search for a convenient count. The next possible information-bearing work is
+an offline change-of-abstraction test: determine whether a six-orbit injection
+can be discriminated inside an `N >= 6` opaque all-track set with explicit
+clutter and equal combinatorial freedom for every null. That alternative is
+not yet authorized. See
+[`GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md).
