@@ -1440,6 +1440,15 @@ error remains immutable and the runner still refuses a repeat before network
 access; a distinct retry receipt and new explicit materialization authority
 would be required to resume the same physical qualification.
 
+That distinct retry is now frozen offline, not executed. It binds the old
+terminal, the repair, both parser hashes, the unchanged scientific contract
+and the already observed exact artifact identity. A future authorized run may
+write only `*_RETRY_*` receipts and must leave the historical outcome intact.
+There is one parser-repair execution, at most two transport attempts before a
+complete hash, and zero retry after hashing. No ALGO bytes were accessed while
+building this contract. See
+[`GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md).
+
 ## Repository map
 
 ```text

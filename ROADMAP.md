@@ -1795,3 +1795,18 @@ outcome remains the execution guard, so the repaired code cannot contact ALGO
 or overwrite the terminal receipt. The next maximum action is review of a
 distinct non-overwriting retry contract; only separate explicit authority may
 permit one new materialization of the same qualification product.
+
+The bounded retry contract is now implemented and frozen offline without a
+new gate. It changes only the RINEX antenna-description parser and preserves
+the same ALGO DOY229 artifact, exact SHA-256, 139-epoch window, field roles,
+LLI rules, opaque membership and exactly-six clause. The first description
+error remains an immutable predecessor; the retry has four distinct output
+names and cannot overwrite it. The executor verifies its seal before any
+network operation and stops after one structural terminal with measurement
+admission, orbital scoring and primary selection still `NOT_EVALUATED`.
+
+The next maximum action is review and merge of this offline contract. Only a
+later explicit authority can permit the single materialization. A structural
+pass would permit review of a distinct primary; it would not select one
+automatically. See
+[`GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_PLAN.md).
