@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from experiments.orbital_discriminability import (
@@ -9,6 +10,10 @@ from experiments.orbital_discriminability import (
 
 SIX_TRACKS = ("G05", "G15", "G18", "G20", "G21", "G29")
 SECRET = "987654321.123"
+OUTCOME = (
+    Path(__file__).resolve().parents[1]
+    / "GNSS_ALL_TRACK_QUALIFICATION_OUTCOME.json"
+)
 
 
 def header_line(data: str, label: str) -> str:
@@ -202,3 +207,21 @@ def test_failure_kinds_do_not_become_physical_scores() -> None:
         assert receipt["orbital_score"] == "NOT_EVALUATED"
         assert receipt["primary_selection"] == "NOT_EVALUATED"
         assert receipt["observation_values_persisted"] == 0
+
+
+def test_recorded_description_error_preserves_physical_nondecision() -> None:
+    receipt = json.loads(OUTCOME.read_text(encoding="utf-8"))
+
+    assert receipt["outcome"] == "QUALIFICATION_DESCRIPTION_ERROR"
+    assert receipt["reason"] == "ANTENNA_TYPE_CHANGED"
+    assert receipt["artifact"]["complete_file_bytes"] == 4_317_738
+    assert receipt["artifact"]["complete_file_sha256"] == (
+        "88aa876b787cac583345d512b2f705ec19062a5f71c38c3a4ae0da45f8095f24"
+    )
+    assert receipt["structure"] == "NOT_EVALUATED"
+    assert receipt["measurement_admission"] == "NOT_EVALUATED"
+    assert receipt["orbital_score"] == "NOT_EVALUATED"
+    assert receipt["primary_selection"] == "NOT_EVALUATED"
+    assert receipt["observation_values_parsed"] == 0
+    assert receipt["observation_values_persisted"] == 0
+    assert receipt["observation_artifact_bytes_persisted"] == 0

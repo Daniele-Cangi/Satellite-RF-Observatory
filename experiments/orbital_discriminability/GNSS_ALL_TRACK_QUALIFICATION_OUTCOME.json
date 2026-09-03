@@ -1,0 +1,24 @@
+{
+  "artifact": {
+    "attempts": 1,
+    "complete_file_bytes": 4317738,
+    "complete_file_sha256": "88aa876b787cac583345d512b2f705ec19062a5f71c38c3a4ae0da45f8095f24",
+    "hash_completed_before_decompression": true,
+    "product": "ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz",
+    "response_content_length": "4317738",
+    "response_etag": "\"41e22a-65970adb01b5e\"",
+    "response_last_modified": "Thu, 20 Aug 2026 01:45:45 GMT",
+    "station": "ALGO00CAN",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/229/ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz"
+  },
+  "measurement_admission": "NOT_EVALUATED",
+  "observation_artifact_bytes_persisted": 0,
+  "observation_values_parsed": 0,
+  "observation_values_persisted": 0,
+  "orbital_score": "NOT_EVALUATED",
+  "outcome": "QUALIFICATION_DESCRIPTION_ERROR",
+  "primary_selection": "NOT_EVALUATED",
+  "reason": "ANTENNA_TYPE_CHANGED",
+  "schema": "gnss-all-track-qualification-outcome-v1",
+  "structure": "NOT_EVALUATED"
+}

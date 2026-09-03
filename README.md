@@ -1421,6 +1421,18 @@ exactly six complete GPS tracks exist. DOY230 and DOY231 retain no measurement
 role. Separate authorization is required before materialization. See
 [`GNSS_ALL_TRACK_QUALIFICATION_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_PLAN.md).
 
+The authorized ALGO DOY229 qualification then terminated before record
+traversal as `QUALIFICATION_DESCRIPTION_ERROR / ANTENNA_TYPE_CHANGED`. The
+complete artifact was hashed in RAM (`4,317,738` bytes, SHA-256
+`88aa876b787cac583345d512b2f705ec19062a5f71c38c3a4ae0da45f8095f24`)
+before decompression; no observation scalar or artifact byte was persisted.
+The error is descriptive: the scanner reused a `3A20` receiver-field split for
+the RINEX `ANT # / TYPE` record, which the specification defines as `2A20`.
+Consequently, the exact-six-track topology, measurement admission and orbital
+score all remain `NOT_EVALUATED`; this is not evidence that ALGO lacks the
+required tracks. The product will not be reopened without new authority. See
+[`GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md).
+
 ## Repository map
 
 ```text
