@@ -1410,6 +1410,17 @@ seventh complete track is a refusal, not permission to select a PRN subset.
 See
 [`GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md).
 
+The next bounded selection is now frozen as
+`QUALIFICATION_ARTIFACT_SELECTED_PAYLOAD_UNOPENED`. The single qualification
+artifact is ALGO00CAN DOY229,
+`ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz`, verified by metadata-only BKG
+directory and HEAD requests. Its body remains unopened. The future scanner is
+limited to all-track structural presence, L1C/L2W LLI and exact 30 s
+continuity; it may retain no measurement magnitude and must fail unless
+exactly six complete GPS tracks exist. DOY230 and DOY231 retain no measurement
+role. Separate authorization is required before materialization. See
+[`GNSS_ALL_TRACK_QUALIFICATION_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_PLAN.md).
+
 ## Repository map
 
 ```text

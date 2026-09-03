@@ -1,0 +1,128 @@
+{
+  "artifact": {
+    "authority": "BKG_GNSS_DATA_CENTER_IGS_OBSERVATION_ARCHIVE",
+    "content_length_hint_bytes": 4317738,
+    "content_type_hint": "application/x-gzip",
+    "data_frequency": "30S",
+    "data_type": "MIXED_OBSERVATION",
+    "doy": 229,
+    "etag_hint": "\"41e22a-65970adb01b5e\"",
+    "format": "HATANAKA_COMPACT_RINEX_IN_GZIP_TRANSPORT",
+    "gps_date": "2026-08-17",
+    "head_status": 200,
+    "last_modified_hint_utc": "2026-08-20T01:45:45Z",
+    "name": "ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz",
+    "period": "01D",
+    "role": "STRUCTURAL_QUALIFICATION_ONLY",
+    "station": "ALGO00CAN",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/229/ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz"
+  },
+  "artifact_identity": {
+    "complete_file_bytes": null,
+    "complete_file_sha256": null,
+    "descriptive_head_fields_are_identity": false,
+    "must_be_computed_before_decompression": true,
+    "state": "UNVERIFIED_UNTIL_AUTHORIZED_MATERIALIZATION"
+  },
+  "future_structural_contract": {
+    "complete_track_count_required": 6,
+    "core_phase": [
+      "L1C",
+      "L2W"
+    ],
+    "forbidden_selection": [
+      "PRN",
+      "PHASE_VALUE",
+      "PSEUDORANGE_VALUE",
+      "DOPPLER_VALUE",
+      "SIGNAL_STRENGTH",
+      "RESIDUAL",
+      "SNR"
+    ],
+    "grid": {
+      "epoch_count": 139,
+      "interval_s": 30.0,
+      "start_gps": "2026-08-17T12:49:30 GPS",
+      "stop_gps": "2026-08-17T13:58:30 GPS"
+    },
+    "inclusion": "ALL_STRUCTURALLY_COMPLETE_GPS_TRACKS",
+    "nonzero_lli_breaks_track": true,
+    "same_path_code_presence_descriptive": [
+      "C1C",
+      "C2W"
+    ],
+    "track_identity_during_scan": "OPAQUE_FIRST_SEEN_ORDER",
+    "unsupported_continuation_breaks_track": true,
+    "value_persistence": 0
+  },
+  "geometry_parent": {
+    "main_merge_commit": "0bdd0bdb7d6b0e6c159aa4510fbc3bfb59bf8d8e",
+    "outcome": "ALL_TRACK_GEOMETRY_SHORTLISTED_MEASUREMENT_UNADMITTED",
+    "receipt_canonical_sha256": "09456cae2dcb97550f44a16e45d8cb4b0b5d28a19e0a5b3ef25893c45710089c"
+  },
+  "network_metadata_access": {
+    "artifact_body_requested": false,
+    "bkg_directory_index_status": 200,
+    "directory_match_count_for_station": 2,
+    "exact_observation_name_found": true,
+    "head_request_only": true,
+    "performed_utc_date": "2026-09-03",
+    "sources": [
+      "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/229/",
+      "https://network.igs.org/ALGO00CAN",
+      "https://igs.bkg.bund.de/access",
+      "https://cddis.nasa.gov/Data_and_Derived_Products/GNSS/daily_gnss_x.html",
+      "https://gssc.esa.int/wp-content/uploads/2018/07/RINEX-303.pdf"
+    ]
+  },
+  "observation_access": {
+    "decompressed_bytes": 0,
+    "headers": 0,
+    "measurement_values": 0,
+    "payload_bytes": 0,
+    "product_body_bytes": 0,
+    "records": 0
+  },
+  "plan": {
+    "canonical_sha256": "fade4f11457575d06b117b96f533e544d431be850ce1a7d8491e16d37f45e211",
+    "commit": "7f66ebecaa666fe60c15e03a3ed263e2286cac3d",
+    "filename": "GNSS_ALL_TRACK_QUALIFICATION_PLAN.md"
+  },
+  "primary_selected": false,
+  "prospective_plan_frozen": false,
+  "remaining_geometry_shortlist": [
+    {
+      "doy": 230,
+      "role": "GEOMETRY_ONLY_NO_MEASUREMENT_ROLE",
+      "station": "ALGO00CAN"
+    },
+    {
+      "doy": 231,
+      "role": "GEOMETRY_ONLY_NO_MEASUREMENT_ROLE",
+      "station": "ALGO00CAN"
+    }
+  ],
+  "schema": "gnss-all-track-qualification-selection-receipt-v1",
+  "selection_rationale": {
+    "distinct_from_highest_ranked_geometry": true,
+    "earliest_repeated_algo_geometry": true,
+    "measurement_values_used": false,
+    "primary_convenience_used": false,
+    "receiver_configuration_expected_same_as_doy230": true
+  },
+  "station_authority": {
+    "antenna_radome": "AOAD/M_T_NONE",
+    "clock": "INTERNAL",
+    "domes": "40104M002",
+    "equipment_effective_date": "2026-03-25",
+    "height_m": 200.8294485278988,
+    "latitude_deg": 45.9558,
+    "longitude_deg": -78.071368,
+    "receiver_firmware": "SEPT_POLARX5_5.3.2",
+    "station_log_sha256_from_frozen_2026_08_25_snapshot": "416fb5167b77cb97c9040b9c0e37b956c97b0b846401e5258909d8cd89c4dca8",
+    "station_page_sha256_from_frozen_2026_08_25_snapshot": "419836c1c273c81e6ae52517fec37847953a6fe8362b2ec20b71e2e8eacf72db"
+  },
+  "state": "QUALIFICATION_ARTIFACT_SELECTED_PAYLOAD_UNOPENED",
+  "stop": "SEPARATE_AUTHORITY_REQUIRED_BEFORE_MATERIALIZATION_OR_STRUCTURAL_SCAN",
+  "new_gate_created": false
+}
