@@ -1826,3 +1826,18 @@ can be discriminated inside an `N >= 6` opaque all-track set with explicit
 clutter and equal combinatorial freedom for every null. That alternative is
 not yet authorized. See
 [`GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME_REPORT.md).
+
+The minimum offline change-of-abstraction test is now positive:
+`ALL_TRACK_ONE_CLUTTER_MECHANISM_DISCRIMINATIVE`. Seven anonymous tracks enter;
+every possible one-track exclusion and every six-orbit assignment are scored.
+Time-reversed geometry receives the same 5,040-hypothesis freedom, and the
+affine family receives every exclusion. Positive controls clear the frozen
+guard, while excess clutter and orbit-like duplicates terminate unresolved.
+
+This proves a synthetic selection mechanism, not a real measurement. The
+model was motivated by the consumed seven-track ALGO outcome and therefore
+cannot be applied retroactively to it. The next maximum action, only after
+review, is to decide whether one independent prospective experiment should
+freeze the seven-track/one-clutter topology before accessing a distinct
+qualification artifact. No inventory or search chain is implied. See
+[`GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md).
