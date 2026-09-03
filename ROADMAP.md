@@ -1749,3 +1749,21 @@ six structurally complete L1C/L2W tracks enter under a PRN- and value-blind
 rule and that ALGO-specific physical terms fit the frozen decision envelope.
 Failure closes this fixed-six vertical without subset selection. See
 [`GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_GEOMETRY_SCREEN_REPORT.md).
+
+The independent qualification artifact is now selected, but still unopened:
+ALGO00CAN DOY229,
+`ALGO00CAN_R_20262290000_01D_30S_MO.crx.gz`. The official BKG index and a HEAD
+request confirm its exact name and a 4,317,738-byte content-length hint; these
+descriptive fields are not substituted for a future full-file SHA-256. The
+frozen scanner contract includes every GPS track, persists no observation
+magnitude, requires full-window L1C/L2W with zero LLI breaks and passes only
+with exactly six complete opaque tracks. It does not read Doppler or signal
+strength fields. DOY230 and DOY231 remain geometry-only candidates with no
+primary/reserve role.
+
+The next maximum action requires separate authority to materialize this exact
+qualification artifact, verify its complete-file hash before decompression and
+run one structural-only scan. A pass permits review of one distinct primary;
+a valid structural failure closes the fixed-six path. Materialization or
+description errors remain separate from physical topology. See
+[`GNSS_ALL_TRACK_QUALIFICATION_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_PLAN.md).
