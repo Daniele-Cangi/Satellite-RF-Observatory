@@ -1767,3 +1767,21 @@ run one structural-only scan. A pass permits review of one distinct primary;
 a valid structural failure closes the fixed-six path. Materialization or
 description errors remain separate from physical topology. See
 [`GNSS_ALL_TRACK_QUALIFICATION_PLAN.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_PLAN.md).
+
+The single authorized ALGO DOY229 attempt is now closed as
+`QUALIFICATION_DESCRIPTION_ERROR / ANTENNA_TYPE_CHANGED`. It materialized and
+hashed the exact `4,317,738`-byte product at
+`88aa876b787cac583345d512b2f705ec19062a5f71c38c3a4ae0da45f8095f24`
+before decompression, then stopped during header admission. No observation
+value or artifact byte was persisted, no primary was selected, and neither
+the exact-six-track clause nor any orbital score was evaluated.
+
+The failure is attributable to a software description boundary: the common
+header helper shaped `ANT # / TYPE` like the receiver's `3A20` record, while
+RINEX 3.04 defines the antenna record as `2A20` and carries model plus radome
+inside its second field. The failed receipt did not retain the encountered
+antenna text, so it cannot assert a real hardware mismatch. The next maximum
+action is an offline specification-derived `2A20` parser repair, not another
+artifact, primary or gate. A second access to DOY229 would require new explicit
+authority after that repair is reviewed. See
+[`GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md).
