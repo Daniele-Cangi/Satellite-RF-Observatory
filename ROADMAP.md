@@ -1785,3 +1785,13 @@ action is an offline specification-derived `2A20` parser repair, not another
 artifact, primary or gate. A second access to DOY229 would require new explicit
 authority after that repair is reviewed. See
 [`GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_QUALIFICATION_DESCRIPTION_ERROR.md).
+
+The ordinary parser repair is now frozen offline. `ANT # / TYPE` is read as
+RINEX `2A20`, with the IGS antenna type partitioned into A16 model plus A4
+radome; receiver `3A20` semantics and historical receipts remain unchanged.
+Specification-derived tests cover the two formats and require future mismatch
+receipts to retain observed and expected normalized descriptions. The old
+outcome remains the execution guard, so the repaired code cannot contact ALGO
+or overwrite the terminal receipt. The next maximum action is review of a
+distinct non-overwriting retry contract; only separate explicit authority may
+permit one new materialization of the same qualification product.

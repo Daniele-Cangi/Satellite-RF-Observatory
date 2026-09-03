@@ -28,7 +28,7 @@ import hatanaka
 from experiments.orbital_discriminability import gnss_observation_header as headers
 
 
-SCAN_VERSION: Final = "algo-doy229-all-track-structural-qualification-v1"
+SCAN_VERSION: Final = "algo-doy229-all-track-structural-qualification-v2-antenna-2a20"
 PLAN_NAME: Final = "GNSS_ALL_TRACK_QUALIFICATION_PLAN.md"
 SELECTION_NAME: Final = "GNSS_ALL_TRACK_QUALIFICATION_SELECTION_RECEIPT.json"
 COVERAGE_NAME: Final = "GNSS_ALL_TRACK_QUALIFICATION_COVERAGE.jsonl"
@@ -205,6 +205,11 @@ def manifest() -> dict[str, object]:
         },
         "complete_track_count_required": COMPLETE_TRACK_COUNT_REQUIRED,
         "track_identity": "OPAQUE_FIRST_SEEN_ORDER_WITHIN_FROZEN_WINDOW",
+        "antenna_record_semantics": {
+            "rinex_format": "2A20_ANTENNA_NUMBER_AND_TYPE",
+            "igs_type_partition": "A16_MODEL_PLUS_A4_RADOME",
+            "specification": "RINEX_3_04_TABLE_A2",
+        },
         "core_phase": list(CORE_PHASE),
         "same_path_code_descriptive": list(SAME_PATH_CODE),
         "maximum_transport_attempts_before_complete_hash": MAX_TRANSPORT_ATTEMPTS,
@@ -276,10 +281,24 @@ def _header_lineage(lines: Sequence[bytes], gps_types: Sequence[str]) -> dict[st
     return dict(zip(gps_types, classes, strict=True))
 
 
+def _antenna_two_a20(lines: Sequence[bytes]) -> dict[str, str]:
+    records: list[dict[str, str]] = []
+    for raw in lines:
+        body = raw.rstrip(b"\r\n").decode("ascii", errors="strict").ljust(80)
+        if body[60:80].strip() == "ANT # / TYPE":
+            try:
+                records.append(headers.parse_antenna_two_a20(body[:60]))
+            except headers.HeaderAdmissionError as exc:
+                raise DescriptionError(f"ANTENNA_2A20_DESCRIPTION_ERROR:{exc}") from exc
+    if len(records) != 1:
+        raise DescriptionError(f"ANTENNA_2A20_RECORD_COUNT:{len(records)}")
+    return records[0]
+
+
 def _validate_header(parsed: dict[str, object], lines: Sequence[bytes]) -> dict[str, object]:
     try:
         receiver = parsed["receiver"]
-        antenna = parsed["antenna"]
+        antenna = _antenna_two_a20(lines)
         gps_types = tuple(parsed["observable_types"].get("G", ()))
         first_record = parsed["time_of_first_observation"]
         last_record = parsed["time_of_last_observation"]
@@ -299,10 +318,17 @@ def _validate_header(parsed: dict[str, object], lines: Sequence[bytes]) -> dict[
         raise DescriptionError("RECEIVER_TYPE_CHANGED")
     if _normalize(receiver["version_or_radome"]) != EXPECTED_RECEIVER_VERSION:
         raise DescriptionError("RECEIVER_VERSION_CHANGED")
-    if _normalize(antenna["type"]) != EXPECTED_ANTENNA_TYPE:
-        raise DescriptionError("ANTENNA_TYPE_CHANGED")
-    if _normalize(antenna["version_or_radome"]) != EXPECTED_RADOME:
-        raise DescriptionError("ANTENNA_RADOME_CHANGED")
+    if _normalize(antenna["model"]) != EXPECTED_ANTENNA_TYPE:
+        raise DescriptionError(
+            "ANTENNA_TYPE_CHANGED:"
+            f"OBSERVED={_normalize(antenna['model'])}:"
+            f"EXPECTED={EXPECTED_ANTENNA_TYPE}"
+        )
+    if _normalize(antenna["radome"]) != EXPECTED_RADOME:
+        raise DescriptionError(
+            "ANTENNA_RADOME_CHANGED:"
+            f"OBSERVED={_normalize(antenna['radome'])}:EXPECTED={EXPECTED_RADOME}"
+        )
     missing = sorted(set(RETAINED_OBSERVABLES) - set(gps_types))
     if missing:
         raise DescriptionError(f"REQUIRED_GPS_OBSERVABLE_NOT_DECLARED:{','.join(missing)}")
@@ -312,8 +338,9 @@ def _validate_header(parsed: dict[str, object], lines: Sequence[bytes]) -> dict[
         "marker_name": parsed["marker_name"],
         "receiver_type": _normalize(receiver["type"]),
         "receiver_version": _normalize(receiver["version_or_radome"]),
-        "antenna_type": _normalize(antenna["type"]),
-        "antenna_radome": _normalize(antenna["version_or_radome"]),
+        "antenna_type": _normalize(antenna["model"]),
+        "antenna_radome": _normalize(antenna["radome"]),
+        "antenna_record_format": antenna["rinex_format"],
         "interval_s": parsed["interval_s"],
         "time_of_first_observation": first_record,
         "time_of_last_observation": last_record,
