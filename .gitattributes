@@ -1,6 +1,12 @@
 # Receipt artifacts are byte-addressed evidence; never normalize line endings.
 experiments/live_instrument/session_receipts/*.jsonl -text
 
+# Machine-readable experiment evidence is frequently bound by byte count and
+# SHA-256. Preserve repository bytes on every platform instead of adding one
+# filename exception after each Windows checkout failure.
+experiments/**/*.json -text
+experiments/**/*.jsonl -text
+
 # Pinned protocol evidence is also verified by its byte-exact SHA-256.
 experiments/live_instrument/protocol_sources/gate_f2_5_17/rx_sound_cmd.h -text
 
