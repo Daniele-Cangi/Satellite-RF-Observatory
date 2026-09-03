@@ -1,0 +1,2023 @@
+{
+  "day_results": [
+    {
+      "doy": 229,
+      "gps_date": "2026-08-17",
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "station_results": [
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49145.176559219704,
+              "heldout_rms_m": 29256.796628274384,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 229,
+            "exact_controlling_separation_m": 49145.176559219704,
+            "gps_date": "2026-08-17",
+            "heldout_start_gps": "2026-08-17T02:10:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.67941601119266,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49145.176559219704,
+              "heldout_rms_m": 29256.796628274384,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82295.01254446676,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194614.65487629175
+            },
+            "raw_start_gps": "2026-08-17T01:31:00 GPS",
+            "raw_stop_gps": "2026-08-17T02:40:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27126.07285527751,
+            "robustly_discriminative": true,
+            "start_index": 182,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 229,
+          "exact_six_window_count": 834,
+          "gps_date": "2026-08-17",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 9,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 179,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49145.176559219704,
+              "heldout_rms_m": 29256.796628274384,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 229,
+            "exact_controlling_separation_m": 49145.176559219704,
+            "gps_date": "2026-08-17",
+            "heldout_start_gps": "2026-08-17T02:10:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.67941601119266,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49145.176559219704,
+              "heldout_rms_m": 29256.796628274384,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82295.01254446676,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194614.65487629175
+            },
+            "raw_start_gps": "2026-08-17T01:31:00 GPS",
+            "raw_stop_gps": "2026-08-17T02:40:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27126.07285527751,
+            "robustly_discriminative": true,
+            "start_index": 182,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "DRAO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70958.92947937734,
+              "heldout_rms_m": 29777.077654273995,
+              "satellites": [
+                "G15",
+                "G21"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 229,
+            "exact_controlling_separation_m": 70958.92947937734,
+            "gps_date": "2026-08-17",
+            "heldout_start_gps": "2026-08-17T13:29:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.499855250887183,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70958.92947937734,
+              "heldout_rms_m": 29777.077654273995,
+              "satellites": [
+                "G15",
+                "G21"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88013.79760080125,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203153.91584121942
+            },
+            "raw_start_gps": "2026-08-17T12:49:30 GPS",
+            "raw_stop_gps": "2026-08-17T13:58:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48939.82577543515,
+            "robustly_discriminative": true,
+            "start_index": 1539,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 229,
+          "exact_six_window_count": 798,
+          "gps_date": "2026-08-17",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 245,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70958.92947937734,
+              "heldout_rms_m": 29777.077654273995,
+              "satellites": [
+                "G15",
+                "G21"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 229,
+            "exact_controlling_separation_m": 70958.92947937734,
+            "gps_date": "2026-08-17",
+            "heldout_start_gps": "2026-08-17T13:29:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.499855250887183,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70958.92947937734,
+              "heldout_rms_m": 29777.077654273995,
+              "satellites": [
+                "G15",
+                "G21"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88013.79760080125,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203153.91584121942
+            },
+            "raw_start_gps": "2026-08-17T12:49:30 GPS",
+            "raw_stop_gps": "2026-08-17T13:58:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48939.82577543515,
+            "robustly_discriminative": true,
+            "start_index": 1539,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "ALGO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47416.30622400157,
+              "heldout_rms_m": 35071.05179230226,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 229,
+            "exact_controlling_separation_m": 47416.30622400157,
+            "gps_date": "2026-08-17",
+            "heldout_start_gps": "2026-08-17T15:33:00 GPS",
+            "minimum_time_shifted_elevation_deg": 21.161334309458525,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47416.30622400157,
+              "heldout_rms_m": 35071.05179230226,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74482.86583455968,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 170899.6284389309
+            },
+            "raw_start_gps": "2026-08-17T14:53:30 GPS",
+            "raw_stop_gps": "2026-08-17T16:02:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25397.202520059378,
+            "robustly_discriminative": true,
+            "start_index": 1787,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "doy": 229,
+          "exact_six_window_count": 1097,
+          "gps_date": "2026-08-17",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 256,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47416.30622400157,
+              "heldout_rms_m": 35071.05179230226,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 229,
+            "exact_controlling_separation_m": 47416.30622400157,
+            "gps_date": "2026-08-17",
+            "heldout_start_gps": "2026-08-17T15:33:00 GPS",
+            "minimum_time_shifted_elevation_deg": 21.161334309458525,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47416.30622400157,
+              "heldout_rms_m": 35071.05179230226,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74482.86583455968,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 170899.6284389309
+            },
+            "raw_start_gps": "2026-08-17T14:53:30 GPS",
+            "raw_stop_gps": "2026-08-17T16:02:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25397.202520059378,
+            "robustly_discriminative": true,
+            "start_index": 1787,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "WES200USA"
+        }
+      ]
+    },
+    {
+      "doy": 230,
+      "gps_date": "2026-08-18",
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "station_results": [
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49235.12003050867,
+              "heldout_rms_m": 29309.46647137471,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 230,
+            "exact_controlling_separation_m": 49235.12003050867,
+            "gps_date": "2026-08-18",
+            "heldout_start_gps": "2026-08-18T02:06:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.699468186221697,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49235.12003050867,
+              "heldout_rms_m": 29309.46647137471,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82274.13688565223,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194482.35722083296
+            },
+            "raw_start_gps": "2026-08-18T01:27:00 GPS",
+            "raw_stop_gps": "2026-08-18T02:36:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27216.016326566474,
+            "robustly_discriminative": true,
+            "start_index": 174,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 230,
+          "exact_six_window_count": 838,
+          "gps_date": "2026-08-18",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 9,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 181,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49235.12003050867,
+              "heldout_rms_m": 29309.46647137471,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 230,
+            "exact_controlling_separation_m": 49235.12003050867,
+            "gps_date": "2026-08-18",
+            "heldout_start_gps": "2026-08-18T02:06:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.699468186221697,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49235.12003050867,
+              "heldout_rms_m": 29309.46647137471,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82274.13688565223,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194482.35722083296
+            },
+            "raw_start_gps": "2026-08-18T01:27:00 GPS",
+            "raw_stop_gps": "2026-08-18T02:36:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27216.016326566474,
+            "robustly_discriminative": true,
+            "start_index": 174,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "DRAO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 71119.52742148645,
+              "heldout_rms_m": 51539.63711746837,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 230,
+            "exact_controlling_separation_m": 71119.52742148645,
+            "gps_date": "2026-08-18",
+            "heldout_start_gps": "2026-08-18T13:25:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.55597949684467,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 71119.52742148645,
+              "heldout_rms_m": 51539.63711746837,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88028.74647805696,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203129.94129240577
+            },
+            "raw_start_gps": "2026-08-18T12:45:30 GPS",
+            "raw_stop_gps": "2026-08-18T13:54:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 49100.423717544254,
+            "robustly_discriminative": true,
+            "start_index": 1531,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 230,
+          "exact_six_window_count": 786,
+          "gps_date": "2026-08-18",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 241,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 71119.52742148645,
+              "heldout_rms_m": 51539.63711746837,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 230,
+            "exact_controlling_separation_m": 71119.52742148645,
+            "gps_date": "2026-08-18",
+            "heldout_start_gps": "2026-08-18T13:25:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.55597949684467,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 71119.52742148645,
+              "heldout_rms_m": 51539.63711746837,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88028.74647805696,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203129.94129240577
+            },
+            "raw_start_gps": "2026-08-18T12:45:30 GPS",
+            "raw_stop_gps": "2026-08-18T13:54:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 49100.423717544254,
+            "robustly_discriminative": true,
+            "start_index": 1531,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "ALGO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47173.72850459861,
+              "heldout_rms_m": 34921.92149701778,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 230,
+            "exact_controlling_separation_m": 47173.72850459861,
+            "gps_date": "2026-08-18",
+            "heldout_start_gps": "2026-08-18T15:29:00 GPS",
+            "minimum_time_shifted_elevation_deg": 21.185527456491055,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47173.72850459861,
+              "heldout_rms_m": 34921.92149701778,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74550.88925113164,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171207.31115392962
+            },
+            "raw_start_gps": "2026-08-18T14:49:30 GPS",
+            "raw_stop_gps": "2026-08-18T15:58:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25154.624800656413,
+            "robustly_discriminative": true,
+            "start_index": 1779,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "doy": 230,
+          "exact_six_window_count": 1096,
+          "gps_date": "2026-08-18",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 261,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47173.72850459861,
+              "heldout_rms_m": 34921.92149701778,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 230,
+            "exact_controlling_separation_m": 47173.72850459861,
+            "gps_date": "2026-08-18",
+            "heldout_start_gps": "2026-08-18T15:29:00 GPS",
+            "minimum_time_shifted_elevation_deg": 21.185527456491055,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47173.72850459861,
+              "heldout_rms_m": 34921.92149701778,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74550.88925113164,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171207.31115392962
+            },
+            "raw_start_gps": "2026-08-18T14:49:30 GPS",
+            "raw_stop_gps": "2026-08-18T15:58:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25154.624800656413,
+            "robustly_discriminative": true,
+            "start_index": 1779,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "WES200USA"
+        }
+      ]
+    },
+    {
+      "doy": 231,
+      "gps_date": "2026-08-19",
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "station_results": [
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49319.268201329585,
+              "heldout_rms_m": 29357.95315152212,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 231,
+            "exact_controlling_separation_m": 49319.268201329585,
+            "gps_date": "2026-08-19",
+            "heldout_start_gps": "2026-08-19T02:02:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.71848831204289,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49319.268201329585,
+              "heldout_rms_m": 29357.95315152212,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82251.76638285187,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194342.93745552667
+            },
+            "raw_start_gps": "2026-08-19T01:23:00 GPS",
+            "raw_stop_gps": "2026-08-19T02:32:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27300.16449738739,
+            "robustly_discriminative": true,
+            "start_index": 166,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 231,
+          "exact_six_window_count": 833,
+          "gps_date": "2026-08-19",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 9,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 180,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49319.268201329585,
+              "heldout_rms_m": 29357.95315152212,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 231,
+            "exact_controlling_separation_m": 49319.268201329585,
+            "gps_date": "2026-08-19",
+            "heldout_start_gps": "2026-08-19T02:02:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.71848831204289,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49319.268201329585,
+              "heldout_rms_m": 29357.95315152212,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82251.76638285187,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194342.93745552667
+            },
+            "raw_start_gps": "2026-08-19T01:23:00 GPS",
+            "raw_stop_gps": "2026-08-19T02:32:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27300.16449738739,
+            "robustly_discriminative": true,
+            "start_index": 166,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "DRAO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70767.80503745959,
+              "heldout_rms_m": 51313.537296745264,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 231,
+            "exact_controlling_separation_m": 70767.80503745959,
+            "gps_date": "2026-08-19",
+            "heldout_start_gps": "2026-08-19T13:21:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.612240430174412,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70767.80503745959,
+              "heldout_rms_m": 51313.537296745264,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88043.50346607105,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203104.40932362643
+            },
+            "raw_start_gps": "2026-08-19T12:41:30 GPS",
+            "raw_stop_gps": "2026-08-19T13:50:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48748.7013335174,
+            "robustly_discriminative": true,
+            "start_index": 1523,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 231,
+          "exact_six_window_count": 775,
+          "gps_date": "2026-08-19",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 244,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70767.80503745959,
+              "heldout_rms_m": 51313.537296745264,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 231,
+            "exact_controlling_separation_m": 70767.80503745959,
+            "gps_date": "2026-08-19",
+            "heldout_start_gps": "2026-08-19T13:21:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.612240430174412,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70767.80503745959,
+              "heldout_rms_m": 51313.537296745264,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88043.50346607105,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203104.40932362643
+            },
+            "raw_start_gps": "2026-08-19T12:41:30 GPS",
+            "raw_stop_gps": "2026-08-19T13:50:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48748.7013335174,
+            "robustly_discriminative": true,
+            "start_index": 1523,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "ALGO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 46940.67129227333,
+              "heldout_rms_m": 34778.90715210309,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 231,
+            "exact_controlling_separation_m": 46940.67129227333,
+            "gps_date": "2026-08-19",
+            "heldout_start_gps": "2026-08-19T15:25:00 GPS",
+            "minimum_time_shifted_elevation_deg": 21.210310070664658,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 46940.67129227333,
+              "heldout_rms_m": 34778.90715210309,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74621.09336345995,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171511.14694217354
+            },
+            "raw_start_gps": "2026-08-19T14:45:30 GPS",
+            "raw_stop_gps": "2026-08-19T15:54:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 24921.567588331134,
+            "robustly_discriminative": true,
+            "start_index": 1771,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "doy": 231,
+          "exact_six_window_count": 1089,
+          "gps_date": "2026-08-19",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 262,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 46940.67129227333,
+              "heldout_rms_m": 34778.90715210309,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 231,
+            "exact_controlling_separation_m": 46940.67129227333,
+            "gps_date": "2026-08-19",
+            "heldout_start_gps": "2026-08-19T15:25:00 GPS",
+            "minimum_time_shifted_elevation_deg": 21.210310070664658,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 46940.67129227333,
+              "heldout_rms_m": 34778.90715210309,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74621.09336345995,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171511.14694217354
+            },
+            "raw_start_gps": "2026-08-19T14:45:30 GPS",
+            "raw_stop_gps": "2026-08-19T15:54:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 24921.567588331134,
+            "robustly_discriminative": true,
+            "start_index": 1771,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "WES200USA"
+        }
+      ]
+    },
+    {
+      "doy": 232,
+      "gps_date": "2026-08-20",
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "station_results": [
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49116.931203930406,
+              "heldout_rms_m": 43954.08807784673,
+              "satellites": [
+                "G08",
+                "G21"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 232,
+            "exact_controlling_separation_m": 49116.931203930406,
+            "gps_date": "2026-08-20",
+            "heldout_start_gps": "2026-08-20T01:58:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.736566255018772,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49116.931203930406,
+              "heldout_rms_m": 43954.08807784673,
+              "satellites": [
+                "G08",
+                "G21"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82228.97603425628,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194198.54396296246
+            },
+            "raw_start_gps": "2026-08-20T01:19:00 GPS",
+            "raw_stop_gps": "2026-08-20T02:28:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27097.827499988212,
+            "robustly_discriminative": true,
+            "start_index": 158,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 232,
+          "exact_six_window_count": 832,
+          "gps_date": "2026-08-20",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 9,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 176,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49116.931203930406,
+              "heldout_rms_m": 43954.08807784673,
+              "satellites": [
+                "G08",
+                "G21"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 232,
+            "exact_controlling_separation_m": 49116.931203930406,
+            "gps_date": "2026-08-20",
+            "heldout_start_gps": "2026-08-20T01:58:30 GPS",
+            "minimum_time_shifted_elevation_deg": 22.736566255018772,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49116.931203930406,
+              "heldout_rms_m": 43954.08807784673,
+              "satellites": [
+                "G08",
+                "G21"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82228.97603425628,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194198.54396296246
+            },
+            "raw_start_gps": "2026-08-20T01:19:00 GPS",
+            "raw_stop_gps": "2026-08-20T02:28:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27097.827499988212,
+            "robustly_discriminative": true,
+            "start_index": 158,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "DRAO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70414.64479285676,
+              "heldout_rms_m": 51086.614058462255,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 232,
+            "exact_controlling_separation_m": 70414.64479285676,
+            "gps_date": "2026-08-20",
+            "heldout_start_gps": "2026-08-20T13:17:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.668412670057885,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70414.64479285676,
+              "heldout_rms_m": 51086.614058462255,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88057.59422015045,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203077.22138294292
+            },
+            "raw_start_gps": "2026-08-20T12:37:30 GPS",
+            "raw_stop_gps": "2026-08-20T13:46:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48395.54108891457,
+            "robustly_discriminative": true,
+            "start_index": 1515,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 232,
+          "exact_six_window_count": 777,
+          "gps_date": "2026-08-20",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 244,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70414.64479285676,
+              "heldout_rms_m": 51086.614058462255,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 232,
+            "exact_controlling_separation_m": 70414.64479285676,
+            "gps_date": "2026-08-20",
+            "heldout_start_gps": "2026-08-20T13:17:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.668412670057885,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70414.64479285676,
+              "heldout_rms_m": 51086.614058462255,
+              "satellites": [
+                "G20",
+                "G29"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88057.59422015045,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203077.22138294292
+            },
+            "raw_start_gps": "2026-08-20T12:37:30 GPS",
+            "raw_stop_gps": "2026-08-20T13:46:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48395.54108891457,
+            "robustly_discriminative": true,
+            "start_index": 1515,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "ALGO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47251.45717296668,
+              "heldout_rms_m": 20702.7876187041,
+              "satellites": [
+                "G15",
+                "G18"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 232,
+            "exact_controlling_separation_m": 47251.45717296668,
+            "gps_date": "2026-08-20",
+            "heldout_start_gps": "2026-08-20T15:20:30 GPS",
+            "minimum_time_shifted_elevation_deg": 21.028869779356135,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47251.45717296668,
+              "heldout_rms_m": 20702.7876187041,
+              "satellites": [
+                "G15",
+                "G18"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74627.84265157126,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171000.88537106744
+            },
+            "raw_start_gps": "2026-08-20T14:41:00 GPS",
+            "raw_stop_gps": "2026-08-20T15:50:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25232.353469024485,
+            "robustly_discriminative": true,
+            "start_index": 1762,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "doy": 232,
+          "exact_six_window_count": 1083,
+          "gps_date": "2026-08-20",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 263,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47251.45717296668,
+              "heldout_rms_m": 20702.7876187041,
+              "satellites": [
+                "G15",
+                "G18"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 232,
+            "exact_controlling_separation_m": 47251.45717296668,
+            "gps_date": "2026-08-20",
+            "heldout_start_gps": "2026-08-20T15:20:30 GPS",
+            "minimum_time_shifted_elevation_deg": 21.028869779356135,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47251.45717296668,
+              "heldout_rms_m": 20702.7876187041,
+              "satellites": [
+                "G15",
+                "G18"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74627.84265157126,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171000.88537106744
+            },
+            "raw_start_gps": "2026-08-20T14:41:00 GPS",
+            "raw_stop_gps": "2026-08-20T15:50:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25232.353469024485,
+            "robustly_discriminative": true,
+            "start_index": 1762,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "WES200USA"
+        }
+      ]
+    },
+    {
+      "doy": 233,
+      "gps_date": "2026-08-21",
+      "healthy_gps_satellites": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G09",
+        "G10",
+        "G11",
+        "G12",
+        "G14",
+        "G15",
+        "G16",
+        "G17",
+        "G18",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G23",
+        "G24",
+        "G25",
+        "G26",
+        "G27",
+        "G28",
+        "G29",
+        "G30",
+        "G31",
+        "G32"
+      ],
+      "station_results": [
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49091.54489091561,
+              "heldout_rms_m": 29185.16488991559,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 233,
+            "exact_controlling_separation_m": 49091.54489091561,
+            "gps_date": "2026-08-21",
+            "heldout_start_gps": "2026-08-21T01:54:00 GPS",
+            "minimum_time_shifted_elevation_deg": 22.577489381782506,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49091.54489091561,
+              "heldout_rms_m": 29185.16488991559,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82275.23924566632,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194491.64624670707
+            },
+            "raw_start_gps": "2026-08-21T01:14:30 GPS",
+            "raw_stop_gps": "2026-08-21T02:23:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27072.441186973418,
+            "robustly_discriminative": true,
+            "start_index": 149,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 233,
+          "exact_six_window_count": 824,
+          "gps_date": "2026-08-21",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 180,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G07",
+              "G08",
+              "G09",
+              "G21",
+              "G27",
+              "G30"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 49091.54489091561,
+              "heldout_rms_m": 29185.16488991559,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 233,
+            "exact_controlling_separation_m": 49091.54489091561,
+            "gps_date": "2026-08-21",
+            "heldout_start_gps": "2026-08-21T01:54:00 GPS",
+            "minimum_time_shifted_elevation_deg": 22.577489381782506,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 49091.54489091561,
+              "heldout_rms_m": 29185.16488991559,
+              "satellites": [
+                "G21",
+                "G27"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 82275.23924566632,
+              "controlling_satellite": "G30",
+              "heldout_max_track_peak_to_peak_m": 194491.64624670707
+            },
+            "raw_start_gps": "2026-08-21T01:14:30 GPS",
+            "raw_stop_gps": "2026-08-21T02:23:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 27072.441186973418,
+            "robustly_discriminative": true,
+            "start_index": 149,
+            "station_id": "DRAO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "DRAO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70060.09974928945,
+              "heldout_rms_m": 57094.47145562109,
+              "satellites": [
+                "G18",
+                "G21"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 233,
+            "exact_controlling_separation_m": 70060.09974928945,
+            "gps_date": "2026-08-21",
+            "heldout_start_gps": "2026-08-21T13:13:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.724338437793287,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70060.09974928945,
+              "heldout_rms_m": 57094.47145562109,
+              "satellites": [
+                "G18",
+                "G21"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88070.84372209765,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203048.98261871707
+            },
+            "raw_start_gps": "2026-08-21T12:33:30 GPS",
+            "raw_stop_gps": "2026-08-21T13:42:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48040.99604534726,
+            "robustly_discriminative": true,
+            "start_index": 1507,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "doy": 233,
+          "exact_six_window_count": 779,
+          "gps_date": "2026-08-21",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 242,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G21",
+              "G29"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 70060.09974928945,
+              "heldout_rms_m": 57094.47145562109,
+              "satellites": [
+                "G18",
+                "G21"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 233,
+            "exact_controlling_separation_m": 70060.09974928945,
+            "gps_date": "2026-08-21",
+            "heldout_start_gps": "2026-08-21T13:13:00 GPS",
+            "minimum_time_shifted_elevation_deg": 15.724338437793287,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 70060.09974928945,
+              "heldout_rms_m": 57094.47145562109,
+              "satellites": [
+                "G18",
+                "G21"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 88070.84372209765,
+              "controlling_satellite": "G29",
+              "heldout_max_track_peak_to_peak_m": 203048.98261871707
+            },
+            "raw_start_gps": "2026-08-21T12:33:30 GPS",
+            "raw_stop_gps": "2026-08-21T13:42:30 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 48040.99604534726,
+            "robustly_discriminative": true,
+            "start_index": 1507,
+            "station_id": "ALGO00CAN",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "ALGO00CAN"
+        },
+        {
+          "best_attempt_descriptive_only": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47415.88514001388,
+              "heldout_rms_m": 35063.472534181914,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 233,
+            "exact_controlling_separation_m": 47415.88514001388,
+            "gps_date": "2026-08-21",
+            "heldout_start_gps": "2026-08-21T15:16:30 GPS",
+            "minimum_time_shifted_elevation_deg": 21.053275470495617,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47415.88514001388,
+              "heldout_rms_m": 35063.472534181914,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74699.80919247853,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171294.64337602578
+            },
+            "raw_start_gps": "2026-08-21T14:37:00 GPS",
+            "raw_stop_gps": "2026-08-21T15:46:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25396.781436071687,
+            "robustly_discriminative": true,
+            "start_index": 1754,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "doy": 233,
+          "exact_six_window_count": 1024,
+          "gps_date": "2026-08-21",
+          "healthy_gps_satellite_count": 31,
+          "maximum_complete_track_count": 8,
+          "minimum_complete_track_count": 3,
+          "possible_window_count": 2742,
+          "robust_exact_six_window_count": 249,
+          "selected_cell_window": {
+            "bijective_assignment_count": 720,
+            "candidate_codebook": [
+              "G05",
+              "G15",
+              "G18",
+              "G20",
+              "G23",
+              "G24"
+            ],
+            "controlling_runner": {
+              "heldout_peak_to_peak_m": 47415.88514001388,
+              "heldout_rms_m": 35063.472534181914,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+            "doy": 233,
+            "exact_controlling_separation_m": 47415.88514001388,
+            "gps_date": "2026-08-21",
+            "heldout_start_gps": "2026-08-21T15:16:30 GPS",
+            "minimum_time_shifted_elevation_deg": 21.053275470495617,
+            "nearest_wrong_assignment": {
+              "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+              "heldout_peak_to_peak_m": 47415.88514001388,
+              "heldout_rms_m": 35063.472534181914,
+              "satellites": [
+                "G05",
+                "G23"
+              ]
+            },
+            "prefix_affine_null": {
+              "aggregate_heldout_rms_m": 74699.80919247853,
+              "controlling_satellite": "G18",
+              "heldout_max_track_peak_to_peak_m": 171294.64337602578
+            },
+            "raw_start_gps": "2026-08-21T14:37:00 GPS",
+            "raw_stop_gps": "2026-08-21T15:46:00 GPS",
+            "required_exact_separation_m": 22019.103703942194,
+            "robust_scorer_margin_lower_bound_m": 25396.781436071687,
+            "robustly_discriminative": true,
+            "start_index": 1754,
+            "station_id": "WES200USA",
+            "total_hypothesis_count": 721
+          },
+          "station_id": "WES200USA"
+        }
+      ]
+    }
+  ],
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "exact_six_window_count": 13465,
+  "manifest_sha256": "345d5425bc05e13f9842d9b758f45f392155bedad05c6c8018bf7dface9121d3",
+  "maximum_authorized_claim": null,
+  "measurement_scored": false,
+  "navigation": [
+    {
+      "compressed_bytes": 71123,
+      "compressed_sha256": "1c5a6c45cd6c7ceca1814cd03f2daf52ff4d95079010be84b6d1b6be56ec81eb",
+      "doy": 229,
+      "gps_date": "2026-08-17",
+      "name": "brdc2290.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 297215,
+      "uncompressed_name": "brdc2290.26n",
+      "uncompressed_sha256": "0bc26f24c4cdc4e616f2ebdb32730353fe84f3f664b28b23845eb11c0238479e",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/229/brdc2290.26n.gz"
+    },
+    {
+      "compressed_bytes": 70769,
+      "compressed_sha256": "f4aab2fc81a17c0c432634def50aead49cc2dfaad77d80369f34aa3c544c71ce",
+      "doy": 230,
+      "gps_date": "2026-08-18",
+      "name": "brdc2300.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 296049,
+      "uncompressed_name": "brdc2300.26n",
+      "uncompressed_sha256": "0eafef6bd14e089b1b0c83636a407cf4bfb90ff518b65acf3cc316e8d47c9ebe",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/230/brdc2300.26n.gz"
+    },
+    {
+      "compressed_bytes": 70669,
+      "compressed_sha256": "4e9de3dcd73a0e42736c7f5df63e27abeee2cc0999ece2242bbaf0f7bfd74665",
+      "doy": 231,
+      "gps_date": "2026-08-19",
+      "name": "brdc2310.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 294845,
+      "uncompressed_name": "brdc2310.26n",
+      "uncompressed_sha256": "e2b239b3a2306f21b8fbb39f8559952c2747cb0a3e19ce7710077bd66a1ce9f0",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/231/brdc2310.26n.gz"
+    },
+    {
+      "compressed_bytes": 70721,
+      "compressed_sha256": "95c1262abdd0088e6a22687ea815671e5a37e8260742ae7c60d3f90242512f25",
+      "doy": 232,
+      "gps_date": "2026-08-20",
+      "name": "brdc2320.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 296651,
+      "uncompressed_name": "brdc2320.26n",
+      "uncompressed_sha256": "b37a553a82fe83e298e989fda714c4aad364ec2ce689c2666ad9457ed9939e33",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/232/brdc2320.26n.gz"
+    },
+    {
+      "compressed_bytes": 70893,
+      "compressed_sha256": "35e51e28aee55160723444c5f3a19a9f5048ca8c49e07fa90e2a16e832003bbf",
+      "doy": 233,
+      "gps_date": "2026-08-21",
+      "name": "brdc2330.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 294845,
+      "uncompressed_name": "brdc2330.26n",
+      "uncompressed_sha256": "f81333d83325df29e734936ea65474d64c4cc8d37049bf80d39e9ccf2dc241f8",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/233/brdc2330.26n.gz"
+    }
+  ],
+  "navigation_payloads_retained": 0,
+  "new_gate_created": false,
+  "next_maximum": "REVIEW_BEFORE_ONE_STRUCTURAL_QUALIFICATION_ARTIFACT_SELECTION",
+  "observation_access": {
+    "decoders": 0,
+    "headers": 0,
+    "locators": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "outcome": "ALL_TRACK_GEOMETRY_SHORTLISTED_MEASUREMENT_UNADMITTED",
+  "primary_selected": false,
+  "prospective_plan_frozen": false,
+  "qualification_artifact_selected": false,
+  "robust_exact_six_window_count": 3403,
+  "schema": "gnss-all-track-geometry-screen-receipt-v1",
+  "scope": {
+    "canonical_sha256": "67e0a71156cf7e02326e74fd69e89dde4d3a7fbf63c7147bbfe8e809313986d5",
+    "filename": "GNSS_ALL_TRACK_GEOMETRY_SCOPE.md",
+    "scope_commit": "33dba523f8c7c599b36b487e943486ad276926e0"
+  },
+  "screen_version": "gnss-all-track-geometry-screen-v1",
+  "shortlist": [
+    {
+      "bijective_assignment_count": 720,
+      "candidate_codebook": [
+        "G05",
+        "G15",
+        "G18",
+        "G20",
+        "G21",
+        "G29"
+      ],
+      "controlling_runner": {
+        "heldout_peak_to_peak_m": 71119.52742148645,
+        "heldout_rms_m": 51539.63711746837,
+        "satellites": [
+          "G20",
+          "G29"
+        ]
+      },
+      "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+      "doy": 230,
+      "exact_controlling_separation_m": 71119.52742148645,
+      "gps_date": "2026-08-18",
+      "heldout_start_gps": "2026-08-18T13:25:00 GPS",
+      "minimum_time_shifted_elevation_deg": 15.55597949684467,
+      "nearest_wrong_assignment": {
+        "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+        "heldout_peak_to_peak_m": 71119.52742148645,
+        "heldout_rms_m": 51539.63711746837,
+        "satellites": [
+          "G20",
+          "G29"
+        ]
+      },
+      "prefix_affine_null": {
+        "aggregate_heldout_rms_m": 88028.74647805696,
+        "controlling_satellite": "G29",
+        "heldout_max_track_peak_to_peak_m": 203129.94129240577
+      },
+      "raw_start_gps": "2026-08-18T12:45:30 GPS",
+      "raw_stop_gps": "2026-08-18T13:54:30 GPS",
+      "required_exact_separation_m": 22019.103703942194,
+      "robust_scorer_margin_lower_bound_m": 49100.423717544254,
+      "robustly_discriminative": true,
+      "start_index": 1531,
+      "station_id": "ALGO00CAN",
+      "total_hypothesis_count": 721
+    },
+    {
+      "bijective_assignment_count": 720,
+      "candidate_codebook": [
+        "G05",
+        "G15",
+        "G18",
+        "G20",
+        "G21",
+        "G29"
+      ],
+      "controlling_runner": {
+        "heldout_peak_to_peak_m": 70958.92947937734,
+        "heldout_rms_m": 29777.077654273995,
+        "satellites": [
+          "G15",
+          "G21"
+        ]
+      },
+      "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+      "doy": 229,
+      "exact_controlling_separation_m": 70958.92947937734,
+      "gps_date": "2026-08-17",
+      "heldout_start_gps": "2026-08-17T13:29:00 GPS",
+      "minimum_time_shifted_elevation_deg": 15.499855250887183,
+      "nearest_wrong_assignment": {
+        "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+        "heldout_peak_to_peak_m": 70958.92947937734,
+        "heldout_rms_m": 29777.077654273995,
+        "satellites": [
+          "G15",
+          "G21"
+        ]
+      },
+      "prefix_affine_null": {
+        "aggregate_heldout_rms_m": 88013.79760080125,
+        "controlling_satellite": "G29",
+        "heldout_max_track_peak_to_peak_m": 203153.91584121942
+      },
+      "raw_start_gps": "2026-08-17T12:49:30 GPS",
+      "raw_stop_gps": "2026-08-17T13:58:30 GPS",
+      "required_exact_separation_m": 22019.103703942194,
+      "robust_scorer_margin_lower_bound_m": 48939.82577543515,
+      "robustly_discriminative": true,
+      "start_index": 1539,
+      "station_id": "ALGO00CAN",
+      "total_hypothesis_count": 721
+    },
+    {
+      "bijective_assignment_count": 720,
+      "candidate_codebook": [
+        "G05",
+        "G15",
+        "G18",
+        "G20",
+        "G21",
+        "G29"
+      ],
+      "controlling_runner": {
+        "heldout_peak_to_peak_m": 70767.80503745959,
+        "heldout_rms_m": 51313.537296745264,
+        "satellites": [
+          "G20",
+          "G29"
+        ]
+      },
+      "controlling_runner_class": "CLOSEST_NONIDENTITY_BIJECTION",
+      "doy": 231,
+      "exact_controlling_separation_m": 70767.80503745959,
+      "gps_date": "2026-08-19",
+      "heldout_start_gps": "2026-08-19T13:21:00 GPS",
+      "minimum_time_shifted_elevation_deg": 15.612240430174412,
+      "nearest_wrong_assignment": {
+        "form": "SWAP_CLOSEST_PREFIX_PROJECTED_ORBIT_PAIR",
+        "heldout_peak_to_peak_m": 70767.80503745959,
+        "heldout_rms_m": 51313.537296745264,
+        "satellites": [
+          "G20",
+          "G29"
+        ]
+      },
+      "prefix_affine_null": {
+        "aggregate_heldout_rms_m": 88043.50346607105,
+        "controlling_satellite": "G29",
+        "heldout_max_track_peak_to_peak_m": 203104.40932362643
+      },
+      "raw_start_gps": "2026-08-19T12:41:30 GPS",
+      "raw_stop_gps": "2026-08-19T13:50:30 GPS",
+      "required_exact_separation_m": 22019.103703942194,
+      "robust_scorer_margin_lower_bound_m": 48748.7013335174,
+      "robustly_discriminative": true,
+      "start_index": 1523,
+      "station_id": "ALGO00CAN",
+      "total_hypothesis_count": 721
+    }
+  ],
+  "source_commit": "91eb9ac134a3388612f81929dce73f25bdce96ae",
+  "source_sha256": "6c27a9d07032abc257a9d951b568c3a422f4e7d331c149dfbb7ef1941f2b4062",
+  "stop": "NO_OBSERVATION_PRODUCT_DISCOVERY_OR_ACCESS"
+}
