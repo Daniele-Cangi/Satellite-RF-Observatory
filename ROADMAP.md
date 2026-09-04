@@ -71,6 +71,11 @@ They are not on the active dependency chain, and repairing search-result
 partitioning is not a prerequisite for a physical observation. No successor
 inventory/search gate is planned.
 
+GitHub issues #21 and #22 are correspondingly closed as superseded by the
+terminal work merged in PR #50; they are not latent roadmap dependencies.
+Issue #14 remains maintenance-only and is also outside the scientific critical
+path.
+
 ## Forward physical attempts — CONCLUDED WITHOUT ORBITAL SCORE
 
 The bounded Berlin–Utrecht OpenWebRX path, RSP-03, MAVEN RSR and the tested
@@ -1832,12 +1837,18 @@ The minimum offline change-of-abstraction test is now positive:
 every possible one-track exclusion and every six-orbit assignment are scored.
 Time-reversed geometry receives the same 5,040-hypothesis freedom, and the
 affine family receives every exclusion. Positive controls clear the frozen
-guard, while excess clutter and orbit-like duplicates terminate unresolved.
+guard, including a clutter track constructed from an independently frozen
+orbital prediction rather than a sinusoid. Removing an expected member while
+adding two structured nonmembers is inadmissible. A preferred anonymous score
+whose post-hash code witness disagrees is discordant, not confirmed. Exact and
+non-identical near-degenerate orbit-like clutter terminate ambiguous.
 
 This proves a synthetic selection mechanism, not a real measurement. The
 model was motivated by the consumed seven-track ALGO outcome and therefore
 cannot be applied retroactively to it. The next maximum action, only after
 review, is to decide whether one independent prospective experiment should
-freeze the seven-track/one-clutter topology before accessing a distinct
-qualification artifact. No inventory or search chain is implied. See
+freeze the seven-track/one-clutter topology, code witness, all-exclusion
+surface and refusal rules before selecting or accessing a distinct
+qualification artifact. No parser work, new geometry search, inventory or
+search chain is implied by the spike. See
 [`GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md).

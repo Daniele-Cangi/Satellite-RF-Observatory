@@ -934,11 +934,19 @@ source .venv/bin/activate
 # .venv\Scripts\Activate.ps1
 
 python -m pip install -r requirements-live-instrument.txt
-python -m pytest experiments/live_instrument/tests -q
+python -m pytest experiments/live_instrument/tests experiments/orbital_discriminability/tests -q
 ```
 
 The test suite is offline. It uses deterministic fixtures and synthetic IQ;
 it does not contact SatNOGS, KiwiSDR or any other remote service.
+
+Machine-readable experiment evidence is byte-bound. Repository
+`.gitattributes` therefore disables platform line-ending conversion for every
+experiment JSON/JSONL artifact. On a Windows host where the default pytest
+temporary root has inherited unusable ACLs, use a fresh user-owned
+`--basetemp` path before treating `PermissionError` as a repository failure;
+do not alter evidence files or relax hashes to make such an environmental
+failure pass.
 
 ## Live execution policy
 
@@ -1463,12 +1471,23 @@ The bounded offline change-of-abstraction spike now returns
 `ALL_TRACK_ONE_CLUTTER_MECHANISM_DISCRIMINATIVE`. It enumerates all 5,040 ways
 to inject six orbital curves into seven opaque tracks, plus equally bounded
 time-reversed and affine null families. Positive and permutation controls
-clear both assignment and null guards; affine and reversed data select nulls;
-two clutter tracks are inadmissible; an orbit-like duplicate remains
-ambiguous. This shows that exact track-count equality is not essential, but it
-does not retroactively admit ALGO because the clutter model was designed after
-that outcome. See
+clear both assignment and null guards. The hardened controls also admit an
+independently compiled orbital-shaped extra track, refuse a codebook with one
+expected member missing and two structured nonmembers, and let a post-score
+code witness veto an otherwise preferred anonymous assignment. Affine and
+reversed data select nulls; excess clutter is inadmissible; an exact duplicate
+and a non-identical 1.5 s local time-shift remain ambiguous. This shows that
+exact track-count equality is not essential without turning the clutter budget
+into a rescue mechanism. It does not retroactively admit ALGO because the
+model was designed after that outcome, and it is not a novelty claim without a
+separate systematic literature review. See
 [`GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md).
+
+The current boundary is therefore procedural as well as numerical: no new
+parser, decoder or artifact access is justified merely by this synthetic
+result. The next possible physical step is one separately reviewed prospective
+seven-track/one-clutter experiment whose complete topology, witness and null
+surface are frozen before selecting or opening its qualification artifact.
 
 ## Repository map
 
