@@ -1489,6 +1489,21 @@ result. The next possible physical step is one separately reviewed prospective
 seven-track/one-clutter experiment whose complete topology, witness and null
 surface are frozen before selecting or opening its qualification artifact.
 
+That prospective proof is now frozen around DRAO00CAN without selecting an
+observation product. It excludes consumed ALGO and the already rejected WES
+signal path, assigns DOY230 to structural qualification and DOY231 to a later
+held-out primary geometry, and fixes exactly seven opaque tracks, one symmetric
+exclusion, all 10,087 orbital/null hypotheses and post-hash code-witness
+semantics. DOY231 retains `49,319.268 m` exact separation from the closest
+wrong assignment and a `27,300.164 m` three-guard lower margin.
+
+This is `DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN_FROZEN`, not product selection or
+measurement authority. Before any locator is chosen, a DRAO-specific physical
+envelope must bound every declared timing, propagation, orbit/clock, antenna
+and receiver term inside the frozen `7,339.701 m` ceiling. Failure ends the
+route without observation access. See
+[`GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md`](experiments/orbital_discriminability/GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md).
+
 ## Repository map
 
 ```text
