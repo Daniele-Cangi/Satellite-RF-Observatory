@@ -1852,3 +1852,21 @@ surface and refusal rules before selecting or accessing a distinct
 qualification artifact. No parser work, new geometry search, inventory or
 search chain is implied by the spike. See
 [`GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md`](experiments/orbital_discriminability/GNSS_ALL_TRACK_CLUTTER_SPIKE_REPORT.md).
+
+The separately reviewed prospective proof now selects DRAO00CAN from the
+existing orbit-only scope without any new geometry or receiver search. ALGO is
+excluded as consumed and outcome-conditioned; WES retains its signal-product
+semantics refusal. DRAO DOY230 is the structural-only qualification geometry
+and DOY231 the distinct held-out primary geometry, but both observation
+artifacts remain unselected and unopened.
+
+The proof freezes exactly seven opaque tracks, one symmetric exclusion, all
+5,040 orbital assignments, 5,040 time-reversed alternatives and seven affine
+alternatives. The primary's closest-assignment separation is `49,319.268 m`
+and its three-guard lower margin `27,300.164 m`. This does not yet establish a
+DRAO physical envelope: the next maximum action is an offline,
+outcome-independent bound of the declared timing, propagation, orbit/clock,
+antenna and receiver terms on that exact grid. If their aggregate cannot fit
+inside `7,339.701 m`, terminate `DRAO_PHYSICAL_ENVELOPE_NOT_ADMITTED` before
+selecting any product. See
+[`GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md`](experiments/orbital_discriminability/GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md).
