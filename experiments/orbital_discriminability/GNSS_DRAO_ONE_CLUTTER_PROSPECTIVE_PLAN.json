@@ -1,0 +1,202 @@
+{
+  "artifact_access": {
+    "observation_values": 0,
+    "primary_headers": 0,
+    "primary_locators": 0,
+    "primary_payload_bytes": 0,
+    "qualification_headers": 0,
+    "qualification_locators": 0,
+    "qualification_payload_bytes": 0
+  },
+  "bounded_route_review": [
+    {
+      "evidence": "GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME.json",
+      "route": "ALGO00CAN",
+      "state": "EXCLUDED_CONSUMED_AND_OUTCOME_CONDITIONED"
+    },
+    {
+      "evidence": "GNSS_CROSS_FAMILY_BOUNDED_SCREEN_RECEIPT.json",
+      "route": "WES200USA",
+      "state": "EXCLUDED_SIGNAL_PRODUCT_SEMANTICS"
+    },
+    {
+      "reason": "UNCONSUMED_RINEX3_CAPABLE_ROOT_WITH_POSITIVE_REPEATED_GEOMETRY_AND_NO_NEW_SEARCH",
+      "route": "DRAO00CAN",
+      "state": "SELECTED_FROM_EXISTING_ORBIT_ONLY_SCOPE"
+    }
+  ],
+  "claim_exclusions": [
+    "UNCONSTRAINED_ORBIT_RECOVERY",
+    "CODE_FREE_IDENTITY",
+    "RECEIVER_FAMILY_INDEPENDENCE",
+    "MULTI_OBSERVER_GEOMETRY",
+    "CATALOG_WIDE_IDENTITY"
+  ],
+  "frozen_sources": {
+    "GNSS_ALL_TRACK_GEOMETRY_SCREEN_RECEIPT.json": "09456cae2dcb97550f44a16e45d8cb4b0b5d28a19e0a5b3ef25893c45710089c",
+    "GNSS_ALL_TRACK_QUALIFICATION_RETRY_OUTCOME.json": "233e34084c0ffe86749919dd3f9b73ff243f9a51f530749328a7456dc7ad828e",
+    "GNSS_CROSS_FAMILY_BOUNDED_SCREEN_RECEIPT.json": "59125fedbe1afbfa40255681f82d575a516589ca0f7d40186f601a23495e88f0",
+    "GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_RECEIPT.json": "24ea926f667749500cd380ebf3c2bd68d730e7faaa84572b0b0bc31bfaba679c",
+    "plan_source_canonical_sha256": "85bf70f8adaf256862f936429586653ea09442b87354cd1f5181ca482e677b71"
+  },
+  "future_outcomes": [
+    "DRAO_PHYSICAL_ENVELOPE_NOT_ADMITTED",
+    "NO_QUALIFICATION_ARTIFACT_AVAILABLE",
+    "QUALIFICATION_DESCRIPTION_ERROR",
+    "QUALIFICATION_TOPOLOGY_REJECTED",
+    "QUALIFICATION_PASSED_PRIMARY_STILL_SEALED",
+    "MEASUREMENT_INVALID",
+    "NO_ADMISSIBLE_HYPOTHESIS",
+    "AMBIGUOUS",
+    "NONORBITAL_NULL_SUPPORTED",
+    "ORBITAL_INJECTION_DISCORDANT",
+    "ORBITAL_INJECTION_CONCORDANT"
+  ],
+  "geometry": {
+    "candidate_codebook": [
+      "G07",
+      "G08",
+      "G09",
+      "G21",
+      "G27",
+      "G30"
+    ],
+    "codebook_available_to_scorer": false,
+    "heldout_epochs": 60,
+    "pairwise_guard_m": 7339.701234647398,
+    "prefix_epochs": 79,
+    "primary_controlling_runner": {
+      "heldout_peak_to_peak_m": 49319.268201329585,
+      "heldout_rms_m": 29357.95315152212,
+      "satellites": [
+        "G21",
+        "G27"
+      ]
+    },
+    "primary_exact_controlling_separation_m": 49319.268201329585,
+    "primary_minimum_time_shifted_elevation_deg": 22.71848831204289,
+    "primary_robust_lower_margin_m": 27300.16449738739,
+    "raw_epochs": 139,
+    "three_guard_required_separation_m": 22019.103703942194
+  },
+  "maximum_authorized_claim": "WITHIN_ONE_FROZEN_DRAO_SIX_ORBIT_CODEBOOK_ANONYMOUS_HELDOUT_PHASE_DYNAMICS_AND_THE_POSTHASH_RECEIVER_LABEL_WITNESS_ARE_CONCORDANT_OR_DISCORDANT",
+  "measurement_contract": {
+    "continuity": [
+      "EXACT_30_SECOND_GRID",
+      "ZERO_LLI_ON_BOTH_CORE_FIELDS",
+      "NO_INTERPOLATION",
+      "NO_GAP_BRIDGING"
+    ],
+    "core_phase": [
+      "L1C",
+      "L2W"
+    ],
+    "identity_boundary": "PRN_LABELS_SEALED_UNTIL_AFTER_OPAQUE_SCORE_RECEIPT_HASH",
+    "persisted_observation_values": 0,
+    "same_path_code_witness": {
+      "fields": [
+        "C1C",
+        "C2W"
+      ],
+      "may_correct_phase": false,
+      "minimum_coverage_fraction_per_track": 0.95,
+      "required_raw_indices": [
+        1,
+        77,
+        78,
+        137
+      ]
+    }
+  },
+  "minimum_experiment": "ONE_DRAO_STRUCTURAL_QUALIFICATION_DAY_THEN_ONE_DISTINCT_ZERO_RETRY_PRIMARY_WITH_SEVEN_OPAQUE_TRACKS",
+  "new_gate": false,
+  "new_information": "A_REAL_PREVIOUSLY_UNOPENED_OBSERVER_EITHER_PRESERVES_OR_REFUSES_THE_ANONYMOUS_ORBIT_ASSIGNMENT_UNDER_ONE_PREDECLARED_EXCLUSION",
+  "observer": {
+    "antenna_metadata": "TWIVC6050 - SCIS",
+    "domes": "40105M002",
+    "equipment_effective": "2021-09-02",
+    "height_m": 542.0,
+    "latitude_deg": 49.3226,
+    "longitude_deg": -119.625,
+    "metadata_is_not_product_qualification": true,
+    "receiver_family_independence_claimed": false,
+    "receiver_metadata": "SEPT POLARX5 - 5.2.0",
+    "station_id": "DRAO00CAN",
+    "station_log_sha256": "2d738f85955f5896c999ed5c1cd42c034b825ccce1e153becc24210a015f9d3d"
+  },
+  "outcome": "DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN_FROZEN",
+  "physical_question": "CAN_SIX_PREDECLARED_ORBIT_CURVES_BE_ASSIGNED_TO_SEVEN_OPAQUE_DRAO_PHASE_TRACKS_WITH_ONE_SYMMETRIC_CLUTTER_ALLOWANCE_AND_PREDICT_THE_HELDOUT_SUFFIX_BETTER_THAN_FROZEN_NULLS",
+  "pre_artifact_admission": {
+    "artifact_selection_allowed_before_admission": false,
+    "failure_terminal": "DRAO_PHYSICAL_ENVELOPE_NOT_ADMITTED",
+    "maximum_aggregate_effect_m": 7339.701234647398,
+    "state": "REQUIRED_NOT_YET_EVALUATED",
+    "terms_that_cannot_default_to_zero": [
+      "EVENT_TIME_DIRECT_TRAJECTORY_ENVELOPE",
+      "BROADCAST_ORBIT_AND_CLOCK",
+      "DIFFERENTIAL_TROPOSPHERE",
+      "IONOSPHERE_FREE_AND_HIGHER_ORDER_REMAINDER",
+      "ANTENNA_PCV_AND_PHASE_WINDUP",
+      "MULTIPATH_AND_SIGNAL_SPECIFIC_HARDWARE",
+      "RECEIVER_CLOCK_AND_IMPLEMENTATION",
+      "RINEX_QUANTIZATION"
+    ]
+  },
+  "retry_policy": {
+    "before_artifact_selection": "ZERO",
+    "post_primary_freeze": "ZERO_RETRY_ZERO_NEW_WINDOW_ZERO_REFIT",
+    "qualification_transport_budget": "MUST_BE_FINITE_AND_FROZEN_WITH_LOCATOR_BEFORE_ACCESS"
+  },
+  "roles": {
+    "primary": {
+      "artifact_locator": null,
+      "doy": 231,
+      "gps_date": "2026-08-19",
+      "heldout_start_gps": "2026-08-19T02:02:30 GPS",
+      "raw_start_gps": "2026-08-19T01:23:00 GPS",
+      "raw_stop_gps": "2026-08-19T02:32:00 GPS",
+      "role": "HELDOUT_PRIMARY_GEOMETRY_FROZEN_ARTIFACT_UNSELECTED"
+    },
+    "qualification": {
+      "artifact_locator": null,
+      "doy": 230,
+      "gps_date": "2026-08-18",
+      "heldout_start_gps": "2026-08-18T02:06:30 GPS",
+      "raw_start_gps": "2026-08-18T01:27:00 GPS",
+      "raw_stop_gps": "2026-08-18T02:36:00 GPS",
+      "role": "STRUCTURAL_ONLY_NEVER_SCORED"
+    },
+    "reserve": null
+  },
+  "root_topology": {
+    "affine_null_hypotheses": 7,
+    "all_exclusions_enumerated": true,
+    "clutter_budget": 1,
+    "evaluated_tracks_per_hypothesis": 6,
+    "observed_tracks_required": 7,
+    "orbital_hypotheses": 5040,
+    "posthoc_track_removal": false,
+    "same_exclusion_budget_for_every_family": true,
+    "time_reversed_null_hypotheses": 5040,
+    "total_hypotheses": 10087
+  },
+  "schema": "gnss-drao-one-clutter-prospective-plan-v1",
+  "scoring_contract": {
+    "absolute_fit_guard_m": 7339.701234647398,
+    "assignment_margin_guard_m": 7339.701234647398,
+    "common_mode": "PER_HYPOTHESIS_INCLUDED_SIX_TRACK_CENTERING",
+    "effective_continuous_parameters": 10,
+    "free_time_phase": false,
+    "heldout_refit": false,
+    "null_families": [
+      "PREFIX_AFFINE_ONLY_NULL",
+      "TIME_REVERSED_GEOMETRY_NULL"
+    ],
+    "orbital_vs_null_margin_guard_m": 7339.701234647398,
+    "prefix_nuisance": "CONSTANT_AND_RATE_PER_CENTERED_INCLUDED_TRACK"
+  },
+  "stop": "STOP_BEFORE_ANY_DRAO_OBSERVATION_ARTIFACT_SELECTION_OR_ACCESS",
+  "stop_condition": "STOP_NOW_BEFORE_ARTIFACT_SELECTION;_LATER_STOP_AFTER_ONE_PRIMARY_TERMINAL_WITH_NO_RETRY",
+  "version": "drao-seven-track-one-clutter-prospective-plan-v1",
+  "why_existing_experiment_cannot_answer": "THE_CLOSED_SPIKE_IS_MODEL_ONLY_AND_ALGO_CANNOT_BE_RESCORED_PROSPECTIVELY_WITH_A_MODEL_CREATED_AFTER_ITS_STRUCTURAL_OUTCOME"
+}
