@@ -1870,3 +1870,19 @@ antenna and receiver terms on that exact grid. If their aggregate cannot fit
 inside `7,339.701 m`, terminate `DRAO_PHYSICAL_ENVELOPE_NOT_ADMITTED` before
 selecting any product. See
 [`GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md`](experiments/orbital_discriminability/GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md).
+
+That pre-artifact audit is complete and terminates exactly
+`DRAO_PHYSICAL_ENVELOPE_NOT_ADMITTED`. The historical pairwise envelope was not
+relabelled as a DRAO common-mode bound. The six-track transfer operator was
+derived directly; it cancels an epoch-common receiver clock but leaves
+track-dependent terms. Troposphere admits a conservative `18.125 m` partial
+bound, while seven terms remain unresolved. In particular, the prior geometry
+receipt destroyed the direct `t +/- 15 s` range curves after retaining only
+visibility summaries, and 95 percent code-witness coverage leaves six possible
+unbounded phase epochs. The aggregate is unavailable and no unresolved term is
+zeroed. This closes the frozen DRAO route before any product selection or
+measurement access; a future proof must retain its direct shifted trajectory
+envelope and require complete same-path coverage or an independent all-epoch
+track-error bound. This is a change-of-abstraction result, not a successor gate.
+See
+[`GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md).

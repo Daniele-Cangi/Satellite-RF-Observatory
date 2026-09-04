@@ -1504,6 +1504,19 @@ and receiver term inside the frozen `7,339.701 m` ceiling. Failure ends the
 route without observation access. See
 [`GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md`](experiments/orbital_discriminability/GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.md).
 
+The bounded offline audit has now closed that route as
+`DRAO_PHYSICAL_ENVELOPE_NOT_ADMITTED`. Six-track ensemble centering was derived
+explicitly: a uniform per-track peak-to-peak bound has gain at most two and an
+epoch-common receiver clock cancels, but track-dependent implementation error
+does not. Only a conservative `18.125 m` troposphere contribution is active.
+The exact direct-time range curves were not retained, the 95 percent code
+witness leaves as many as six unbounded epochs per track, and several
+product-dependent terms cannot be established before a product is selected.
+The aggregate is therefore `UNAVAILABLE`, not zero. DRAO geometry remains
+positive, but no locator, header, payload, observation value or score was
+opened. See
+[`GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md).
+
 ## Repository map
 
 ```text
