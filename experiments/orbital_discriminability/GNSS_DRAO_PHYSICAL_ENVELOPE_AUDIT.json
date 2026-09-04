@@ -1,0 +1,138 @@
+{
+  "aggregate": {
+    "admitted": false,
+    "common_mode_heldout_peak_to_peak_bound_m": null,
+    "comparison_to_guard": "NOT_EVALUABLE_WITH_UNRESOLVED_TERMS",
+    "finite_partial_bound_m": 18.125149614907023,
+    "guard_m": 7339.701234647398,
+    "numeric_state": "UNAVAILABLE",
+    "unresolved_terms": [
+      "EVENT_TIME_DIRECT_TRAJECTORY_ENVELOPE",
+      "BROADCAST_ORBIT_AND_CLOCK",
+      "IONOSPHERE_FREE_AND_HIGHER_ORDER_REMAINDER",
+      "ANTENNA_PCV_AND_PHASE_WINDUP",
+      "MULTIPATH_AND_SIGNAL_SPECIFIC_HARDWARE",
+      "RECEIVER_CLOCK_AND_IMPLEMENTATION",
+      "RINEX_QUANTIZATION"
+    ],
+    "unresolved_terms_defaulted_to_zero": false
+  },
+  "artifact_access": {
+    "observation_values": 0,
+    "primary_headers": 0,
+    "primary_locators": 0,
+    "primary_payload_bytes": 0,
+    "qualification_headers": 0,
+    "qualification_locators": 0,
+    "qualification_payload_bytes": 0
+  },
+  "authority": {
+    "AMC_OBSERVER_PRIMARY_PREDICTIONS.json": {
+      "role": "PRIMITIVE_BOUND_PROVENANCE_ONLY_NOT_A_DRAO_ENVELOPE",
+      "sha256": "c9f7236f3cc221cb8485fe82f0a739e720ee3725f9dbf7c7fcc54c4167794155"
+    },
+    "GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.json": {
+      "outcome": "DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN_FROZEN",
+      "role": "FROZEN_PROSPECTIVE_PROOF",
+      "sha256": "a26dcc8e2f2ef00c345d93f2e64132a2536349fcfe0790ba198ae50046e9bb58"
+    },
+    "audit_source_canonical_sha256": "541170731385c96e58de7821eea15ed8e0fad0fe3b03b644b04c77f9c190f369"
+  },
+  "common_mode_topology": {
+    "epoch_common_additive_receiver_clock_cancels_exactly": true,
+    "historical_pairwise_guard_reused_as_a_DRAO_model": false,
+    "included_tracks_per_hypothesis": 6,
+    "operator": "C=I-(1/6)11T",
+    "per_track_transfer_rule": "PP(C_E_I)<=PP(E_I)+MEAN_J(PP(E_J))",
+    "prefix_projection_commutes_with_centering": true,
+    "uniform_per_track_peak_to_peak_gain_upper_bound": 2.0
+  },
+  "failure_attribution": {
+    "artifact_selection_deadlock": "THE_FROZEN_PRE_ARTIFACT_ORDER_REQUIRES_FORMAT_SIGNAL_AND_WITNESS_BOUNDS_THAT_CANNOT_BE_PROVED_BEFORE_SELECTING_A_PRODUCT",
+    "geometry_discriminability": "POSITIVE_AND_UNCHANGED",
+    "measurement_path": "NOT_EVALUATED",
+    "observation_outcome": "NOT_EVALUATED",
+    "physical_envelope": "NOT_CLOSED"
+  },
+  "new_gate": false,
+  "new_information": "THE_FROZEN_DRAO_PROOF_CANNOT_INTERPRET_A_NEGATIVE_BECAUSE_SEVEN_REQUIRED_TERMS_REMAIN_UNBOUNDED_BEFORE_ARTIFACT_SELECTION",
+  "next_change_of_abstraction": "A_FUTURE_PROOF_MUST_FREEZE_DIRECT_SHIFTED_RANGE_ENVELOPES_AND_EITHER_REQUIRE_COMPLETE_SAME_PATH_WITNESS_COVERAGE_OR_SUPPLY_AN_INDEPENDENT_ALL_EPOCH_TRACK_ERROR_BOUND_BEFORE_PRIMARY",
+  "orbital_scores_produced": 0,
+  "outcome": "DRAO_PHYSICAL_ENVELOPE_NOT_ADMITTED",
+  "physical_question": "CAN_OUTCOME_INDEPENDENT_DRAO_UNCERTAINTY_BOUNDS_BE_TRANSFERRED_THROUGH_THE_FROZEN_SIX_TRACK_COMMON_MODE_TO_FIT_INSIDE_THE_GUARD",
+  "route_state": "CLOSED_BEFORE_DRAO_ARTIFACT_SELECTION",
+  "schema": "gnss-drao-physical-envelope-audit-v1",
+  "stop": "STOP_WITHOUT_DRAO_LOCATOR_HEADER_PAYLOAD_VALUE_OR_SCORE",
+  "terms": [
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": null,
+      "forbidden_substitute": "LOCAL_SLOPE_TIMES_CLOCK_ERROR",
+      "numeric_state": "UNAVAILABLE",
+      "reason": "THE_COMMITTED_DRAO_RECEIPT_RETAINS_DIRECT_TIME_SHIFTED_VISIBILITY_BUT_NOT_THE_SIX_NOMINAL_AND_T_PLUS_MINUS_15_S_RANGE_CURVES_AFTER_PREFIX_AFFINE_PROJECTION",
+      "state": "UNRESOLVED",
+      "term": "EVENT_TIME_DIRECT_TRAJECTORY_ENVELOPE"
+    },
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": null,
+      "historical_two_track_analogue_m": 20.0,
+      "numeric_state": "CONDITIONAL_HISTORICAL_ANALOGUE_ONLY",
+      "reason": "DOY231_SV_ACCURACY_AND_CLOCK_REMAINDER_FIELDS_WERE_NOT_RETAINED;_DOY221_AMC_VALUES_DO_NOT_ESTABLISH_A_DRAO_BOUND",
+      "state": "UNRESOLVED",
+      "term": "BROADCAST_ORBIT_AND_CLOCK"
+    },
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": 18.125149614907023,
+      "mapping": "ONE_OVER_SINE_THEN_SIX_TRACK_CENTERING",
+      "minimum_direct_time_shifted_elevation_deg": 22.71848831204289,
+      "numeric_state": "FINITE_CONSERVATIVE_BOUND",
+      "state": "MODELED_CONSERVATIVE_INTERVAL",
+      "term": "DIFFERENTIAL_TROPOSPHERE",
+      "zenith_delay_interval_m": [
+        0.0,
+        3.5
+      ]
+    },
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": null,
+      "conditional_higher_order_bound_m": 2.0,
+      "numeric_state": "CONDITIONAL_HISTORICAL_ANALOGUE_ONLY",
+      "reason": "THE_HIGHER_ORDER_INTERVAL_IS_TRANSFERABLE_ONLY_AFTER_THE_UNSELECTED_PRODUCT_PROVES_EXACT_L1C_L2W_SIGNAL_AND_SCALE_SEMANTICS",
+      "state": "UNRESOLVED",
+      "term": "IONOSPHERE_FREE_AND_HIGHER_ORDER_REMAINDER"
+    },
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": null,
+      "historical_two_track_analogue_m": 4.0,
+      "numeric_state": "CONDITIONAL_HISTORICAL_ANALOGUE_ONLY",
+      "reason": "THE_STATION LOG IDENTIFIES THE ANTENNA BUT THE FROZEN_AUTHORITY DOES_NOT_BIND_A_DRAO_PCV_CALIBRATION_OR_PHASE_WINDUP_IMPLEMENTATION",
+      "state": "UNRESOLVED",
+      "term": "ANTENNA_PCV_AND_PHASE_WINDUP"
+    },
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": null,
+      "conditional_bound_if_every_epoch_witnessed_m": 2500.0,
+      "maximum_unwitnessed_epochs_per_track": 6,
+      "numeric_state": "WITNESS_DOES_NOT_COVER_REQUIRED_WINDOW",
+      "reason": "NINETY_FIVE_PERCENT_CODE_COVERAGE_PERMITS_UNBOUNDED_PHASE_ERROR_AT_SIX_EPOCHS;_NO_INTERPOLATION_OR_GAP_BRIDGING_IS_ALLOWED_AND_ONE_UNBOUNDED_EPOCH_CAN_DOMINATE_PEAK_TO_PEAK",
+      "state": "UNRESOLVED",
+      "term": "MULTIPATH_AND_SIGNAL_SPECIFIC_HARDWARE"
+    },
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": null,
+      "epoch_common_receiver_clock_contribution_m": 0.0,
+      "numeric_state": "UNAVAILABLE",
+      "reason": "AN_ADDITIVE_EPOCH_COMMON_CLOCK_TERM_CANCELS_EXACTLY_UNDER_ENSEMBLE_CENTERING;_TRACK_SIGNAL_OR_CHANNEL_DEPENDENT_IMPLEMENTATION_ERROR_DOES_NOT_AND_HAS_NO_FROZEN_BOUND",
+      "state": "PARTIAL_EXACT_CANCELLATION_REMAINDER_UNRESOLVED",
+      "term": "RECEIVER_CLOCK_AND_IMPLEMENTATION"
+    },
+    {
+      "common_mode_heldout_peak_to_peak_bound_m": null,
+      "conditional_f14_3_bound_m": 0.0017238368006440115,
+      "numeric_state": "CONDITIONAL_HISTORICAL_ANALOGUE_ONLY",
+      "reason": "NO_DRAO_ARTIFACT_OR_SERIALIZATION_HAS_BEEN_SELECTED;_THE_F14_3_QUANTIZATION_MODEL_CANNOT_BE_ASSUMED_PRE_ARTIFACT",
+      "state": "UNRESOLVED",
+      "term": "RINEX_QUANTIZATION"
+    }
+  ],
+  "version": "drao-one-clutter-physical-envelope-audit-v1"
+}
