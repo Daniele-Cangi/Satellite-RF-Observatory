@@ -7,6 +7,11 @@ experiments/live_instrument/session_receipts/*.jsonl -text
 experiments/**/*.json -text
 experiments/**/*.jsonl -text
 
+# This historical parser receipt binds the repository's LF source blob. Force
+# the same checkout bytes on Windows; the regression also canonicalizes CRLF
+# so a pre-existing checkout cannot produce a false provenance failure.
+experiments/orbital_discriminability/doris_development_header.py text eol=lf
+
 # Pinned protocol evidence is also verified by its byte-exact SHA-256.
 experiments/live_instrument/protocol_sources/gate_f2_5_17/rx_sound_cmd.h -text
 
