@@ -7,9 +7,12 @@ ALL_TRACK_ONE_CLUTTER_MECHANISM_DISCRIMINATIVE
 ```
 
 This is a bounded offline change-of-abstraction spike, not a new gate. It uses
-only the already closed synthetic orbital prediction fixture. It does not
-reopen or score ALGO, access an observation product, select a primary or make a
-real measurement claim.
+the already closed synthetic orbital prediction fixture plus two frozen,
+model-only orbital curves compiled for another observer and pass. The latter
+are adversarial structured clutter only: they assert neither concurrent
+visibility nor a relation to an ALGO track. The spike does not reopen or score
+ALGO, access an observation product, select a primary or make a real
+measurement claim.
 
 ## Information-gain test
 
@@ -76,16 +79,33 @@ prevents platform-level floating noise from changing receipt hashes.
 |---|---|---|---|
 | six orbits + arbitrary clutter | orbital preferred | concordant | assignment margin 8,431.948803 m; null margin 16,577.588442 m |
 | permuted track/clutter slots | orbital preferred | concordant | assignment margin 8,432.165039 m; null margin 16,577.551587 m |
+| six orbits + independent compiled orbital shape | orbital preferred | concordant | 0.733056 m residual; assignment margin 8,431.948803 m; null margin 14,670.872232 m |
 | all tracks affine | non-orbital preferred | affine null supported | orbital margin is negative |
 | time-reversed geometry | non-orbital preferred | geometry null supported | destroyed event ordering is not called orbital |
 | two arbitrary clutter tracks, budget one | no admissible hypothesis | unresolved | excess contamination cannot be hidden |
+| one expected orbit removed, two independent compiled orbital shapes added | no admissible hypothesis | unresolved | best orbital residual 26,567.921503 m |
+| orbital score preferred, code witness swaps two identities | orbital preferred | discordant | post-hash witness vetoes physical confirmation |
 | orbit-like duplicate clutter | ambiguous | unresolved | assignment margin 0 m |
+| orbit-like clutter shifted locally by 1.5 s | ambiguous | unresolved | nonzero 1,683.810869 m assignment margin remains below the 7,339.701235 m guard |
 
 The positive controls exceed the guard both against the next orbital
-assignment and against the best null. The two critical negative controls show
-that the clutter allowance is not a general escape hatch: it cannot absorb two
-bad tracks and cannot choose between physically indistinguishable duplicate
-tracks.
+assignment and against the best null. The compiled-curve control shows that
+the result is not specific to sinusoidal clutter. The missing-candidate,
+duplicate and small time-coordinate perturbation controls show that the
+clutter allowance is not a general escape hatch: it cannot manufacture a
+complete codebook from two structured nonmembers and cannot force a decision
+when two orbital shapes are identical or merely too close at the frozen
+resolution. The 1.5 s resampling is a local near-degeneracy stress, not a claim
+that it is a separately propagated satellite orbit. Finally, a preferred
+anonymous orbital assignment is not promoted to a physical confirmation when
+the post-score code witness disagrees.
+
+The structured curves come from
+`AMC_OBSERVER_PRIMARY_PREDICTIONS.json`, exact SHA-256
+`c9f7236f3cc221cb8485fe82f0a739e720ee3725f9dbf7c7fcc54c4167794155`.
+Its own observation-access counters are zero. Only `WRONG_ORBIT_G01` and
+`ORBITAL_G22` model coordinates enter these controls; no AMC or ALGO
+observation value enters the scorer.
 
 ## What changed conceptually
 
@@ -127,7 +147,7 @@ envelopes. This spike proves only the selection mechanism.
 | Source | Canonical SHA-256 |
 |---|---|
 | clutter scorer | `ecdf2afffed80f279a23bcaa46a870b5acee3272709e166c8e9c2a97d1205033` |
-| clutter spike | `ca98054bc79ff12902a0eba8b5ccd0c489e643ef5a00876aa5f60f40c37ab614` |
+| clutter spike | `d61d73a55529a5659b5860481cedf089d4c20f653a53b1bd9aeefa480dd29e45` |
 
 ## SHOCK
 
