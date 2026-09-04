@@ -73,6 +73,7 @@ def test_positive_and_permutation_controls_are_concordant(
     for name in (
         "six_orbits_plus_one_arbitrary_clutter",
         "track_and_clutter_slot_permutation",
+        "six_orbits_plus_independent_compiled_orbital_shape",
     ):
         row = rows[name]
         score = row["score_receipt"]
@@ -92,9 +93,7 @@ def test_affine_and_destroyed_geometry_controls_select_nulls(
     reversed_geometry = rows["time_reversed_geometry"]
 
     assert affine["score_receipt"]["score_state"] == "NONORBITAL_FAMILY_PREFERRED"
-    assert affine["score_receipt"]["preferred_family"] == (
-        scorer.FAMILY_AFFINE_NULL
-    )
+    assert affine["score_receipt"]["preferred_family"] == (scorer.FAMILY_AFFINE_NULL)
     assert reversed_geometry["score_receipt"]["score_state"] == (
         "NONORBITAL_FAMILY_PREFERRED"
     )
@@ -112,17 +111,55 @@ def test_excess_and_orbit_like_clutter_do_not_force_confirmation(
 ) -> None:
     rows = scenarios(receipt)
     excess = rows["two_arbitrary_clutter_tracks_with_budget_one"]
+    missing = rows["missing_expected_candidate_plus_two_compiled_orbital_shapes"]
     duplicate = rows["orbit_like_duplicate_clutter"]
+    near_duplicate = rows["locally_time_shifted_orbit_like_clutter"]
 
     assert excess["score_receipt"]["score_state"] == "NO_ADMISSIBLE_HYPOTHESIS"
+    assert missing["score_receipt"]["score_state"] == "NO_ADMISSIBLE_HYPOTHESIS"
     assert duplicate["score_receipt"]["score_state"] == "AMBIGUOUS"
+    assert near_duplicate["score_receipt"]["score_state"] == "AMBIGUOUS"
     assert duplicate["score_receipt"]["orbital_assignment_margin_m"] == 0.0
+    assert (
+        0.0
+        < near_duplicate["score_receipt"]["orbital_assignment_margin_m"]
+        < spike.PAIRWISE_GUARD_M
+    )
     assert excess["reveal_after_score_hash"]["state"] == (
+        "ORBITAL_INJECTION_UNRESOLVED"
+    )
+    assert missing["reveal_after_score_hash"]["state"] == (
         "ORBITAL_INJECTION_UNRESOLVED"
     )
     assert duplicate["reveal_after_score_hash"]["state"] == (
         "ORBITAL_INJECTION_UNRESOLVED"
     )
+    assert near_duplicate["reveal_after_score_hash"]["state"] == (
+        "ORBITAL_INJECTION_UNRESOLVED"
+    )
+
+
+def test_post_score_identity_witness_can_veto_physical_confirmation(
+    receipt: dict[str, object],
+) -> None:
+    row = scenarios(receipt)["post_score_code_witness_disagrees_with_selected_orbits"]
+
+    assert row["score_receipt"]["score_state"] == "ORBITAL_INJECTION_PREFERRED"
+    assert row["reveal_after_score_hash"]["state"] == ("ORBITAL_INJECTION_DISCORDANT")
+
+
+def test_structured_clutter_fixture_is_hash_bound_and_model_only(
+    receipt: dict[str, object],
+) -> None:
+    fixture = receipt["closed_development_fixture"]["structured_clutter_fixture"]
+
+    assert fixture["artifact"] == spike.STRUCTURED_CLUTTER_FIXTURE_NAME
+    assert fixture["sha256"] == spike.STRUCTURED_CLUTTER_FIXTURE_SHA256
+    assert fixture["curve_names"] == list(spike.STRUCTURED_CLUTTER_CURVES)
+    assert fixture["raw_epoch_count"] == 139
+    assert fixture["same_observer_or_pass_as_synthetic_tracks"] is False
+    assert fixture["concurrent_visibility_claim"] is False
+    assert fixture["observation_values_used"] == 0
 
 
 def test_score_receipts_are_value_free_identity_blind_and_pre_reveal(
@@ -148,9 +185,12 @@ def test_spike_is_offline_development_only(receipt: dict[str, object]) -> None:
     assert set(receipt["observation_access"].values()) == {0}
     assert receipt["closed_development_fixture"]["network_requests"] == 0
     assert receipt["closed_development_fixture"]["algo_observation_values_used"] == 0
-    assert receipt["closed_development_fixture"][
-        "consumed_algo_receipts_used_as_numerical_input"
-    ] is False
+    assert (
+        receipt["closed_development_fixture"][
+            "consumed_algo_receipts_used_as_numerical_input"
+        ]
+        is False
+    )
     assert receipt["algo_retry_consumed_again"] is False
     assert receipt["real_measurement_score"] == "NOT_EVALUATED"
     assert receipt["primary_selected"] is False
@@ -165,7 +205,9 @@ def test_missing_or_nonfinite_seventh_track_is_refused_before_surface_use() -> N
     missing = dict(tracks)
     missing.pop(track_ids[0])
 
-    with pytest.raises(scorer.ClutterScorerError, match="OPAQUE_SEVEN_TRACK_SET_INVALID"):
+    with pytest.raises(
+        scorer.ClutterScorerError, match="OPAQUE_SEVEN_TRACK_SET_INVALID"
+    ):
         scorer.score_one_clutter_tracks(
             missing, (), pairwise_guard_m=spike.PAIRWISE_GUARD_M
         )

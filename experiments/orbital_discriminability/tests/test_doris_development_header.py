@@ -172,9 +172,12 @@ def test_frozen_real_receipt_preserves_header_only_refusal() -> None:
     assert receipt["outcome"] == "DORIS_DEVELOPMENT_HEADER_REJECTED"
     assert receipt["artifact"]["sha256"] == header.DEVELOPMENT_SHA256
     source_path = Path(__file__).parents[1] / "doris_development_header.py"
-    assert sha256(source_path.read_bytes()).hexdigest() == receipt["parser"][
-        "source_sha256"
-    ]
+    repository_source = source_path.read_bytes().replace(b"\r\n", b"\n")
+    assert sha256(repository_source).hexdigest() == receipt["parser"]["source_sha256"]
+    crlf_checkout = repository_source.replace(b"\n", b"\r\n")
+    assert sha256(crlf_checkout.replace(b"\r\n", b"\n")).hexdigest() == receipt[
+        "parser"
+    ]["source_sha256"]
     assert receipt["parser"]["commit"] == (
         "0da158e964372cea18d55ef26a54810d678fbda2"
     )
