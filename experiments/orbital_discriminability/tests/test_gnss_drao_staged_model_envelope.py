@@ -88,3 +88,44 @@ def test_persisted_result_is_model_only_if_present() -> None:
     assert value["retained_model_curves_sha256"] == staged.sha256(
         staged.strict_json(value["retained_model_curves"]).encode("ascii")
     ).hexdigest()
+
+
+def test_persisted_numerical_regression_and_seal() -> None:
+    result_path = ROOT / staged.RECEIPT_NAME
+    seal_path = ROOT / "GNSS_DRAO_STAGED_MODEL_ENVELOPE_SEAL.json"
+    result = json.loads(result_path.read_text(encoding="ascii"))
+    seal = json.loads(seal_path.read_text(encoding="ascii"))
+
+    assert result["outcome"] == staged.OUTCOME_ADMITTED
+    assert result["geometry"]["screen_exact_controlling_separation_m"] == (
+        pytest.approx(49_091.54489091561)
+    )
+    assert result["geometry"][
+        "retarded_geometry_exact_controlling_separation_m"
+    ] == pytest.approx(49_090.48543325415)
+    assert result["envelope"]["model_side_m"] == pytest.approx(
+        881.9589614531837
+    )
+    assert result["envelope"]["combined_if_capability_conditions_pass_m"] == (
+        pytest.approx(3_387.960685289984)
+    )
+    assert result["envelope"]["remaining_margin_m"] == pytest.approx(
+        3_951.7405493574142
+    )
+    assert result["timing_metrics"][0]["common_mode_bound_m"] == pytest.approx(
+        836.7817478080009
+    )
+    assert result["satellite_clock_transform"]["tgd_included"] is False
+    assert seal["source"]["commit"] == (
+        "39789401e71a35747c329421ea3ccbf39256c812"
+    )
+    assert seal["source"]["canonical_sha256"] == staged.canonical_sha256(
+        Path(staged.__file__)
+    )
+    assert seal["result"]["canonical_sha256"] == staged.canonical_sha256(
+        result_path
+    )
+    assert seal["result"]["curve_set_sha256"] == result[
+        "retained_model_curves_sha256"
+    ]
+    assert set(seal["observation_access"].values()) == {0}
