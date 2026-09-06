@@ -1,0 +1,234 @@
+{
+  "access_at_freeze": {
+    "primary_headers": 0,
+    "primary_locators": 0,
+    "primary_payload_bytes": 0,
+    "primary_values": 0,
+    "qualification_headers": 0,
+    "qualification_locators": 0,
+    "qualification_payload_bytes": 0,
+    "qualification_values": 0
+  },
+  "authorities": {
+    "GNSS_DRAO_STAGED_MODEL_ENVELOPE.json": "12578d1ea24fef1d71875280e41588e8a96cba78b3c45f6f8787eab8599e4626",
+    "GNSS_DRAO_STAGED_MODEL_ENVELOPE_SEAL.json": "b942fde2366813346f476a58ec94b8bab170ef3b307c2ff229f4e2cb6e69554b",
+    "GNSS_DRAO_STAGED_MODEL_SCOPE.md": "f74894c7e12e311565ec4a7eb021d352527b3bc07bfdbc1df3df90611a9604a9",
+    "GNSS_PHASE_INDEPENDENT_PAIR_SCREEN_RECEIPT.json": "24ea926f667749500cd380ebf3c2bd68d730e7faaa84572b0b0bc31bfaba679c"
+  },
+  "clauses": {
+    "artifact_identity": {
+      "requires": [
+        "ONE_EXACT_DOY232_DRAO_OBSERVATION_ARTIFACT",
+        "FULL_BYTE_COUNT_AND_SHA256_BEFORE_DECODE",
+        "NO_FALLBACK_STATION_DATE_OR_SIGNAL_FAMILY"
+      ],
+      "state_at_freeze": "NOT_EVALUATED"
+    },
+    "complete_core_phase": {
+      "fields": [
+        "L1C",
+        "L2W"
+      ],
+      "gap_bridging": "FORBIDDEN",
+      "interpolation": "FORBIDDEN",
+      "missing_blank_omitted_or_invalid_breaks_track": true,
+      "nonzero_lli_breaks_track": true,
+      "required_epoch_count_each_satellite_field": 139,
+      "required_fraction_each_satellite_field": 1.0,
+      "state_at_freeze": "NOT_EVALUATED"
+    },
+    "complete_same_path_code": {
+      "fields": [
+        "C1C",
+        "C2W"
+      ],
+      "may_correct_or_replace_phase": false,
+      "missing_epoch_bound": 0,
+      "required_epoch_count_each_satellite_field": 139,
+      "required_fraction_each_satellite_field": 1.0,
+      "state_at_freeze": "NOT_EVALUATED"
+    },
+    "cycle_slip_and_continuity": {
+      "blank_lli_semantics": "ZERO_ONLY_WHEN_PHASE_FIELD_IS_PRESENT",
+      "geometry_free_coordinate_m": "LAMBDA_L1*L1C-LAMBDA_L2*L2W",
+      "lli_allowed_values": [
+        0,
+        null
+      ],
+      "maximum_absolute_second_difference_m": 0.09514683639918244,
+      "state_at_freeze": "NOT_EVALUATED",
+      "violation_selects_alternate_segment": false
+    },
+    "header_identity_and_time": {
+      "requires": [
+        "MARKER_AND_DOMES_MATCH_DRAO00CAN_40105M002",
+        "RECEIVER_AND_ANTENNA_MATCH_FROZEN_INDEPENDENT_METADATA",
+        "TIME_OF_FIRST_OBS_GPS_COVERS_WINDOW_START",
+        "TIME_OF_LAST_OBS_GPS_COVERS_WINDOW_STOP",
+        "INTERVAL_EQUALS_30_SECONDS",
+        "EXACT_SIGNAL_SCALE_PHASE_SHIFT_AND_CLOCK_OFFSET_SEMANTICS"
+      ],
+      "state_at_freeze": "NOT_EVALUATED"
+    },
+    "physical_same_path_witness": {
+      "common_mode_gain_upper_bound": 2.0,
+      "common_mode_operator": "C=I-(1/6)11T",
+      "derived_common_mode_reserve_m": 2500.0,
+      "heldout_refit": false,
+      "per_track_heldout_peak_to_peak_limit_m": 1250.0,
+      "prefix_projection": "PER_TRACK_CONSTANT_PLUS_RATE_FIT_ON_FIRST_79_EPOCHS_ONLY",
+      "qualification_may_change_limit": false,
+      "state_at_freeze": "NOT_EVALUATED"
+    }
+  },
+  "envelope_binding": {
+    "all_clauses_required_to_activate_reserve": true,
+    "complete_witness_component_m": 2500.0,
+    "conditional_reserve_m": 2506.0017238368005,
+    "guard_m": 7339.701234647398,
+    "model_side_m": 881.9589614531837,
+    "qualification_may_change_numbers": false,
+    "remaining_margin_m": 3951.7405493574142
+  },
+  "format_and_transform": {
+    "admitted_container": "RINEX3_OBSERVATION_WITH_EXPLICIT_GPS_SIGNAL_IDENTITIES",
+    "code_units": "METERS",
+    "complete_compressed_hash_before_decode": true,
+    "decoded_artifact_hash_required": true,
+    "gzip_allowed": true,
+    "hatanaka_allowed": true,
+    "ionosphere_free_coefficients": [
+      2.54572778016316,
+      -1.5457277801631601
+    ],
+    "l1_hz": 1575420000.0,
+    "l1_wavelength_m": 0.19029367279836487,
+    "l2_hz": 1227600000.0,
+    "l2_wavelength_m": 0.24421021342456825,
+    "optional_diagnostics": [
+      "S1C",
+      "S2W"
+    ],
+    "phase_coordinate_m": "IF_L1*LAMBDA_L1*L1C+IF_L2*LAMBDA_L2*L2W",
+    "phase_shift_semantics": "APPLY_DECLARED_SYS_PHASE_SHIFT;UNSUPPORTED_IS_REJECTION",
+    "phase_units": "CYCLES",
+    "receiver_clock_offset_semantics": "PARSE_RCV_CLOCK_OFFS_APPL_AND_APPLY_ONLY_SPEC_DEFINED_EPOCH_TAG_SEMANTICS",
+    "same_path_code_coordinate_m": "IF_L1*C1C+IF_L2*C2W",
+    "same_path_witness_m": "IF_PHASE_M-IF_CODE_M",
+    "scale_factor_semantics": "APPLY_SYS_SCALE_FACTOR_OR_SPEC_DEFINED_UNITY_IF_ABSENT",
+    "tgd_applied_to_carrier_phase": false
+  },
+  "future_executor_boundary": {
+    "artifact_payload_retained_after_run": 0,
+    "observation_values": "EPHEMERAL_RAM_ONLY_AFTER_SEPARATE_AUTHORITY",
+    "orbital_model_available": false,
+    "predicted_assignment_available": false,
+    "qualification_failure_selects_fallback": false,
+    "retained_model_curves_available": false,
+    "retry_after_complete_hash_or_decode": 0,
+    "retry_before_complete_hash": [
+      "TIMEOUT",
+      "TRANSPORT_INTERRUPTION",
+      "DESCRIPTION_ERROR",
+      "SERIALIZATION_ERROR",
+      "SOFTWARE_TRANSFORM_ERROR"
+    ]
+  },
+  "future_outcomes": [
+    "NO_QUALIFICATION_ARTIFACT_AVAILABLE",
+    "QUALIFICATION_ARTIFACT_MATERIALIZATION_FAILED",
+    "QUALIFICATION_DESCRIPTION_ERROR",
+    "QUALIFICATION_TOPOLOGY_REJECTED",
+    "QUALIFICATION_PHYSICAL_WITNESS_REJECTED",
+    "DRAO_QUALIFICATION_PASSED_PRIMARY_STILL_SEALED"
+  ],
+  "new_gate": false,
+  "new_physical_information_if_executed": "WHETHER_THE_DRAO_MEASUREMENT_PATH_CAN_MAKE_A_LATER_NEGATIVE_DOY233_ORBITAL_RESULT_INTERPRETABLE",
+  "next_maximum": "REVIEW_THEN_SELECT_AT_MOST_ONE_DOY232_ARTIFACT_WITHOUT_SELECTING_OR_ACCESSING_DOY233",
+  "outcome_semantics": {
+    "description_error": "CLAUSES_NOT_EVALUATED_AND_NO_PHYSICAL_REJECTION",
+    "passed": "EVERY_CLAUSE_SATISFIED_BUT_DOY233_REMAINS_UNSELECTED",
+    "physical_witness_rejected": "COMPLETE_PATH_EXISTS_BUT_FROZEN_WITNESS_LIMIT_FAILED",
+    "topology_rejected": "IDENTITY_HEADER_TIME_FORMAT_STRUCTURE_OR_CONTINUITY_FAILED"
+  },
+  "physical_question": "CAN_ONE_DISTINCT_DRAO_DOY232_ARTIFACT_PRESERVE_THE_SIX_TRACK_PHASE_COORDINATE_AND_CLOSE_THE_PREDECLARED_CAPABILITY_RESERVE_WITHOUT_RECEIVING_AN_ORBITAL_MODEL",
+  "roles": {
+    "closed_doys": [
+      230,
+      231
+    ],
+    "possible_primary": {
+      "access": "FORBIDDEN",
+      "artifact_identity": "UNSELECTED",
+      "artifact_locators": [],
+      "doy": 233,
+      "role": "UNSELECTED_UNFROZEN_UNAUTHORISED",
+      "station": "DRAO00CAN"
+    },
+    "qualification": {
+      "artifact_identity": "UNSELECTED",
+      "artifact_locators": [],
+      "doy": 232,
+      "role": "MODEL_BLIND_CAPABILITY_QUALIFICATION_NEVER_SCORED",
+      "station": "DRAO00CAN"
+    }
+  },
+  "schema": "gnss-drao-doy232-qualification-contract-v1",
+  "state": "DRAO_DOY232_QUALIFICATION_CONTRACT_FROZEN",
+  "station_root": {
+    "antenna_type": "TWIVC6050",
+    "artifact_header_must_match_independent_metadata": true,
+    "domes": "40105M002",
+    "equipment_effective": "2021-09-02",
+    "independent_metadata_sha256": "2d738f85955f5896c999ed5c1cd42c034b825ccce1e153becc24210a015f9d3d",
+    "radome": "SCIS",
+    "receiver_type": "SEPT_POLARX5",
+    "receiver_version": "5.2.0",
+    "station": "DRAO00CAN",
+    "unknown_or_conflicting_identity": "QUALIFICATION_TOPOLOGY_REJECTED"
+  },
+  "stop": "STOP_BEFORE_ANY_DRAO_OBSERVATION_LOCATOR_OR_ARTIFACT_ACCESS",
+  "structural_receipt": {
+    "allowed_field_states": [
+      "PRESENT",
+      "BLANK",
+      "TRAILING_FIELD_OMITTED",
+      "CONTINUATION_SUPPORTED",
+      "CONTINUATION_UNSUPPORTED",
+      "RECORD_INVALID"
+    ],
+    "description_error_changes_physical_decision": false,
+    "one_row_per_station_epoch_satellite_relevant_observable": true,
+    "permitted_numeric_summaries": [
+      "COUNTS",
+      "MAX_ABS_GEOMETRY_FREE_SECOND_DIFFERENCE_M",
+      "PER_TRACK_WITNESS_HELDOUT_PEAK_TO_PEAK_M"
+    ],
+    "persisted_derived_series": 0,
+    "persisted_observation_values": 0
+  },
+  "version": "drao-doy232-qualification-contract-v1",
+  "window": {
+    "cadence_s": 30,
+    "event_time_bound_may_be_reduced_by_qualification": false,
+    "event_time_bound_s": [
+      -15.0,
+      15.0
+    ],
+    "expected_link_epochs": 834,
+    "heldout_epochs": 60,
+    "prefix_epochs": 79,
+    "raw_epochs": 139,
+    "raw_start": "2026-08-20T01:19:00 GPS",
+    "raw_stop": "2026-08-20T02:28:00 GPS",
+    "satellites": [
+      "G07",
+      "G08",
+      "G09",
+      "G21",
+      "G27",
+      "G30"
+    ],
+    "time_system": "GPS"
+  }
+}
