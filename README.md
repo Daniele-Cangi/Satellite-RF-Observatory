@@ -1517,6 +1517,21 @@ positive, but no locator, header, payload, observation value or score was
 opened. See
 [`GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md).
 
+The subsequent change-of-abstraction does not reopen that plan. It assigns
+the two unused days from the original bounded scope to a staged candidate:
+DOY232 may later qualify the measurement path and DOY233 may become a primary
+only after every capability-dependent clause closes. An exact-hash DOY233
+broadcast-navigation compilation now returns
+`DRAO_MODEL_SIDE_ENVELOPE_ADMITTED`. Direct `t +/- 15 s` trajectories,
+iterated one-way light time, Earth rotation during transit and broadcast-clock
+non-affinity are retained as model curves. The retarded-geometry controlling
+separation is `49,090.485 m`. The model-side envelope is `881.959 m`; adding
+the immutable complete-witness reserve gives `3,387.961 m`, leaving
+`3,951.741 m` inside the unchanged guard. The result authorizes only review of
+one DOY232 qualification contract, requires 100 percent same-path code
+coverage and leaves every DRAO observation locator unselected. See
+[`GNSS_DRAO_STAGED_MODEL_ENVELOPE.md`](experiments/orbital_discriminability/GNSS_DRAO_STAGED_MODEL_ENVELOPE.md).
+
 ## Repository map
 
 ```text

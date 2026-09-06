@@ -1,0 +1,44 @@
+{
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "navigation": {
+    "compressed_bytes": 70893,
+    "compressed_sha256": "35e51e28aee55160723444c5f3a19a9f5048ca8c49e07fa90e2a16e832003bbf",
+    "name": "brdc2330.26n.gz",
+    "payloads_retained": 0,
+    "uncompressed_bytes": 294845,
+    "uncompressed_sha256": "f81333d83325df29e734936ea65474d64c4cc8d37049bf80d39e9ccf2dc241f8"
+  },
+  "observation_access": {
+    "headers": 0,
+    "locators": 0,
+    "payload_bytes": 0,
+    "values": 0
+  },
+  "outcome": "DRAO_MODEL_SIDE_ENVELOPE_SEALED",
+  "report": {
+    "bytes": 1319,
+    "canonical_sha256": "2afcea15e0f2798c66740a233594adca7e2d3c453d58f1e4c277adef499b7f5e",
+    "name": "GNSS_DRAO_STAGED_MODEL_ENVELOPE.md"
+  },
+  "result": {
+    "bytes": 156765,
+    "canonical_sha256": "12578d1ea24fef1d71875280e41588e8a96cba78b3c45f6f8787eab8599e4626",
+    "curve_set_sha256": "6b0b6f1000645cd7c03861bc78bd0615c1d81699eeae62410f4e7b88eeca34ee",
+    "name": "GNSS_DRAO_STAGED_MODEL_ENVELOPE.json",
+    "outcome": "DRAO_MODEL_SIDE_ENVELOPE_ADMITTED"
+  },
+  "schema": "gnss-drao-staged-model-envelope-seal-v1",
+  "scope": {
+    "canonical_sha256": "f74894c7e12e311565ec4a7eb021d352527b3bc07bfdbc1df3df90611a9604a9",
+    "name": "GNSS_DRAO_STAGED_MODEL_SCOPE.md"
+  },
+  "source": {
+    "canonical_sha256": "af357179885c61434638c69c8a67e0a6cd789af9574412b23fa0744a916dcce0",
+    "commit": "39789401e71a35747c329421ea3ccbf39256c812",
+    "name": "gnss_drao_staged_model_envelope.py"
+  },
+  "stop": "STOP_BEFORE_DOY232_QUALIFICATION_LOCATOR_OR_DOY233_PRIMARY_PLAN"
+}

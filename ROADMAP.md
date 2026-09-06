@@ -1886,3 +1886,23 @@ envelope and require complete same-path coverage or an independent all-epoch
 track-error bound. This is a change-of-abstraction result, not a successor gate.
 See
 [`GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_PHYSICAL_ENVELOPE_AUDIT.md).
+
+The change-of-abstraction is now instantiated without reopening the closed
+roles. DOY232 and DOY233 are the only chronological unused pair in the prior
+bounded DRAO orbit scope. A committed scope assigned them as qualification
+candidate and possible primary before re-materializing the exact-hash DOY233
+navigation model. The compiler retained direct timing curves, solved one-way
+light time iteratively, applied Earth rotation during transit and bounded the
+omitted broadcast-clock non-affinity at transmit epoch. TGD is correctly
+excluded from the carrier-phase clock term.
+
+The resulting `DRAO_MODEL_SIDE_ENVELOPE_ADMITTED` has a retarded-geometry
+controlling separation of `49,090.485 m`, `881.959 m` of model-side envelope
+and a predeclared `2,506.002 m` capability reserve. The combined conditional
+envelope is `3,387.961 m`, leaving `3,951.741 m` inside the unchanged
+`7,339.701 m` guard. Navigation bytes were destroyed and observation access
+remains zero. This does not admit a DRAO capability or freeze a primary. The
+next maximum action is review of one DOY232 qualification contract that must
+require exact signal/scale semantics and C1C/C2W at every core-phase epoch;
+failure closes the staged route without selecting a DOY233 primary. See
+[`GNSS_DRAO_STAGED_MODEL_ENVELOPE.md`](experiments/orbital_discriminability/GNSS_DRAO_STAGED_MODEL_ENVELOPE.md).
