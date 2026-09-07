@@ -2110,3 +2110,16 @@ was queried or selected. After review, the next maximum action is metadata-only
 selection of at most one exact DOY237 artifact; body access remains separately
 unauthorized. See
 [`GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_CONTRACT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_CONTRACT.md).
+
+The exact DOY237 product is now selected metadata-only as
+`DRAO_LABELLED_FORWARD_ARTIFACT_SELECTED_UNOPENED`:
+`DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz`. One deterministic BKG `HEAD`
+request returned 200 and a declared 2,849,014-byte gzip body. No alternate
+locator, body byte, RINEX header, observation value or orbital score was
+accessed. The ETag is transport metadata and the complete SHA-256 remains
+unknown. This receipt grants no body authority and does not make the artifact
+a primary. After review, the next maximum action is one separately authorized
+materialization and value-blind structural scan under the already frozen
+contract, with bounded pre-hash transport and zero retry after the complete
+hash. See
+[`GNSS_DRAO_LABELLED_FORWARD_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_ARTIFACT_SELECTION.md).
