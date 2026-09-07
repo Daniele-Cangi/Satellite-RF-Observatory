@@ -1,0 +1,10 @@
+{
+  "executor_seal_sha256": "9f021dcf9da8961eef114b423950d064035eb8df69ec346225dcf9fa82bb6a5e",
+  "network_requests_before_marker": 0,
+  "primary_access": 0,
+  "qualification_decompressions_before_marker": 0,
+  "qualification_values_before_marker": 0,
+  "schema": "gnss-drao-doy232-qualification-authority-consumed-v1",
+  "source_commit": "d227f19335a7237f6f2e7176c9a5a34f8ddaeea1",
+  "state": "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}

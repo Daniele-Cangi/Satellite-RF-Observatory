@@ -1,0 +1,7 @@
+{
+  "downstream_clauses": "NOT_EVALUATED",
+  "outcome": "QUALIFICATION_TOPOLOGY_REJECTED",
+  "physical_decision": "MEASUREMENT_PATH_REJECTED",
+  "reason": "MARKER_NAME_MISMATCH",
+  "schema": "gnss-drao-doy232-qualification-outcome-v1"
+}

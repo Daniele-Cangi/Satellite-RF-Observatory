@@ -1974,3 +1974,17 @@ header exposure. The seal itself authorizes no network or decode. After
 review, the maximum next action is one one-use, model-blind DOY232
 qualification and then a stop with DOY233 still unselected. See
 [`GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md).
+
+The one-use qualification has now stopped before observation-field access with
+the immutable runtime record `QUALIFICATION_TOPOLOGY_REJECTED /
+MARKER_NAME_MISMATCH`. The executor compared `MARKER NAME` to the literal
+four-character `DRAO` before retaining either the observed marker or DOMES.
+The resulting receipt therefore cannot attribute a real identity mismatch and
+does not authorize its persisted `MEASUREMENT_PATH_REJECTED` interpretation.
+The audited state is
+`DRAO_DOY232_IDENTITY_CLAUSE_UNRESOLVED_BY_RECEIPT`: artifact identity is
+control-flow proven, header identity is unresolved and all measurement/orbit
+clauses are not evaluated. DOY232 is consumed with zero retry; DOY233 remains
+unselected. The next action must be a change-of-abstraction review, not a
+repaired replay or another parser gate. See
+[`GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md).
