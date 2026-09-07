@@ -1919,3 +1919,14 @@ unselected. The next maximum action after review is selection of at most one
 exact DOY232 artifact; no observation access is authorized by the contract.
 See
 [`GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md).
+
+The contract now has exactly one metadata-only qualification selection:
+`DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz` at BKG, with HTTP 200 and declared
+length `2,904,457` bytes. The single HEAD request opened no product body.
+ETag and Last-Modified are not treated as cryptographic integrity; the full
+SHA-256 remains pending a separately authorized complete materialization.
+No fallback locator was tested, all physical clauses remain not evaluated and
+DOY233 still has no locator. The next maximum action after review is bounded
+materialization of this exact DOY232 artifact, full hashing before any decode,
+and then a separate model-blind qualification decision. See
+[`GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md).
