@@ -1,0 +1,81 @@
+{
+  "access": {
+    "decompression_attempted": false,
+    "observation_body_bytes": 0,
+    "observation_headers_parsed": 0,
+    "observation_values_accessed": 0,
+    "primary_headers_parsed": 0,
+    "primary_locators": 0,
+    "primary_payload_bytes": 0,
+    "primary_values_accessed": 0,
+    "replay_transport_attempts": 0
+  },
+  "artifact": {
+    "expected_complete_bytes": 2904457,
+    "expected_etag_if_present": "\"2c5189-6598ad1ef8dbf\"",
+    "expected_last_modified_if_present": "Fri, 21 Aug 2026 08:57:02 GMT",
+    "name": "DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz",
+    "role": "QUALIFICATION_ONLY_NEVER_SCORED_NEVER_PRIMARY",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/232/DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz"
+  },
+  "authority": {
+    "base_commit": "1fabfb33e231e862e14812e12a414daba9dca1a3",
+    "contract": {
+      "commit": "f3f1fe724f5025e932c682b92e1fcf0c9939d8a8",
+      "name": "GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.json",
+      "semantic_sha256": "667be5b59b9da90c11710c9c6ae4c3d6ff24b06d73ac0337136b4371e8051e72",
+      "sha256": "f0a02eb1d49b7ea01db6db263a1fb81af0d317fd959d1c78c3aece822c842df1"
+    },
+    "description_error": {
+      "commit": "6cf72642c6a3ae8ec6f42fd8052464d5edff8f54",
+      "name": "GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.json",
+      "semantic_sha256": "dfa05b01e172e84b7cb0740f19b53450203359ed9c124d5733991d8ce2d61ce4",
+      "sha256": "63ed93bd13101fce87883584644bb13527c42608ae0c5b515c46541d6c40022f"
+    },
+    "selection": {
+      "commit": "66ddacd21dfefaeb2ad65421edeafcf0ec6abe0a",
+      "name": "GNSS_DRAO_DOY232_ARTIFACT_SELECTION.json",
+      "semantic_sha256": "c05dd1faf876ed545cc299f215b8e00195ceb878b5328422e50021724500dcd6",
+      "sha256": "b11ba459b97a13f47992f0f5ed9645d6be5a25a1dbdcf4e1885c4562f33f0ca0"
+    }
+  },
+  "boundary": {
+    "content_blind_receipt_replay_is_scientific_retry": false,
+    "historical_failure_mutated": false,
+    "irreversibility_begins": "FIRST_DECOMPRESSION_OR_RINEX_HEADER_OR_OBSERVATION_VALUE_EXPOSURE",
+    "physical_parameters_changed": false,
+    "qualification_outcome_retry_after_irreversibility": 0,
+    "receipt_replay_transport_attempts_authorized": 1
+  },
+  "materialization_contract": {
+    "actual_streamed_byte_count_is_authoritative": true,
+    "complete_sha256_required": true,
+    "content_encoding_allowed": [
+      "ABSENT",
+      "identity"
+    ],
+    "get_content_length": "OPTIONAL_DESCRIPTOR_IF_PRESENT_MUST_MATCH",
+    "http_accept_encoding": "identity",
+    "locator_fallback": false,
+    "same_artifact_and_url_only": true,
+    "two_phase_receipt": {
+      "final": "DIGEST_AND_BYTE_COUNT_PRESERVED_PAYLOAD_REMOVED_CLEANUP_RECORDED",
+      "prepared": "DIGEST_AND_BYTE_COUNT_ATOMICALLY_PERSISTED_BEFORE_PAYLOAD_DESTRUCTION"
+    }
+  },
+  "new_gate": false,
+  "next_maximum": "ONE_SEPARATELY_REVIEWED_CONTENT_BLIND_RECEIPT_REPLAY_OF_THE_EXACT_DOY232_ARTIFACT",
+  "outcome": "DRAO_DOY232_RECEIPT_REPLAY_AUTHORIZED_NOT_EXECUTED",
+  "physical_claims_authorized": [],
+  "physical_decision": "NOT_EVALUATED",
+  "qualification_clauses": {
+    "artifact_identity": "NOT_EVALUATED",
+    "complete_core_phase": "NOT_EVALUATED",
+    "complete_same_path_code": "NOT_EVALUATED",
+    "cycle_slip_and_continuity": "NOT_EVALUATED",
+    "header_identity_and_time": "NOT_EVALUATED",
+    "physical_same_path_witness": "NOT_EVALUATED"
+  },
+  "schema": "gnss-drao-doy232-receipt-replay-authority-v1",
+  "stop": "STOP_BEFORE_NETWORK_REPLAY_DECOMPRESSION_HEADER_OR_VALUE_ACCESS"
+}
