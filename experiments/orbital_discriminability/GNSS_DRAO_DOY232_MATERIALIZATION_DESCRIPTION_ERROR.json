@@ -1,0 +1,63 @@
+{
+  "access": {
+    "decompression_attempted": false,
+    "observation_headers_parsed": 0,
+    "observation_values_accessed": 0,
+    "primary_headers_parsed": 0,
+    "primary_locators": 0,
+    "primary_payload_bytes": 0,
+    "primary_values_accessed": 0,
+    "transport_attempts": 1
+  },
+  "artifact": {
+    "actual_complete_bytes": {
+      "state": "UNAVAILABLE_AFTER_RECEIPT_CONSTRUCTION_ERROR",
+      "value": null
+    },
+    "complete_download_returned": true,
+    "complete_sha256": {
+      "state": "COMPUTED_IN_FAILED_PROCESS_BUT_NOT_RETAINED",
+      "value": null
+    },
+    "expected_bytes": 2904457,
+    "name": "DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz",
+    "payload_retained_after_attempt": 0,
+    "role": "QUALIFICATION_ONLY_NEVER_SCORED_NEVER_PRIMARY",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/232/DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz"
+  },
+  "failure": {
+    "artifact_materialization_failed": false,
+    "cause": "GET_RESPONSE_CONTENT_LENGTH_HEADER_NULL_WAS_INDEXED_AS_AN_ARRAY",
+    "classification": "QUALIFICATION_DESCRIPTION_ERROR",
+    "failed_operation": "RECEIPT_CONSTRUCTION",
+    "physical_rejection": false,
+    "stage": "AFTER_COMPLETE_FILE_HASH_BEFORE_ANY_DECOMPRESSION",
+    "trace": "CANNOT_INDEX_INTO_A_NULL_ARRAY"
+  },
+  "frozen_authority": {
+    "artifact_selection_commit": "66ddacd",
+    "artifact_selection_receipt": "GNSS_DRAO_DOY232_ARTIFACT_SELECTION.json",
+    "contract_commit": "f3f1fe724f5025e932c682b92e1fcf0c9939d8a8",
+    "contract_manifest": "GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.json"
+  },
+  "new_gate": false,
+  "next_action": "CHANGE_OF_ABSTRACTION_REVIEW_REQUIRED_BEFORE_ANY_REPEAT_TRANSFER",
+  "outcome": "QUALIFICATION_DESCRIPTION_ERROR",
+  "physical_decision": "NOT_EVALUATED",
+  "qualification_clauses": {
+    "artifact_identity": "NOT_EVALUATED",
+    "complete_core_phase": "NOT_EVALUATED",
+    "complete_same_path_code": "NOT_EVALUATED",
+    "cycle_slip_and_continuity": "NOT_EVALUATED",
+    "header_identity_and_time": "NOT_EVALUATED",
+    "physical_same_path_witness": "NOT_EVALUATED"
+  },
+  "retry": {
+    "contract_retry_after_complete_hash_or_decode": 0,
+    "performed_after_failure": 0,
+    "same_artifact_transport_attempts_nominally_remaining": 1,
+    "state": "PROHIBITED_AFTER_HASH_BY_FROZEN_CONTRACT"
+  },
+  "schema": "gnss-drao-doy232-materialization-description-error-v1",
+  "stop": "STOP_WITHOUT_RETRY_DECODE_QUALIFICATION_OR_PRIMARY_ACCESS"
+}

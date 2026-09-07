@@ -1930,3 +1930,14 @@ DOY233 still has no locator. The next maximum action after review is bounded
 materialization of this exact DOY232 artifact, full hashing before any decode,
 and then a separate model-blind qualification decision. See
 [`GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md).
+
+The first exact-artifact materialization ends in
+`QUALIFICATION_DESCRIPTION_ERROR`, not a measurement or capability rejection.
+The download and full-file hash calculation completed, but receipt
+construction failed on a null GET `Content-Length` header before emitting the
+digest and actual byte count. The payload was destroyed without decompression;
+all qualification clauses and the physical decision remain `NOT_EVALUATED`,
+and DOY233 access is still zero. No retry followed because the current frozen
+contract forbids retry after hashing. A change-of-abstraction review is now
+required before any repeat transport. See
+[`GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md).
