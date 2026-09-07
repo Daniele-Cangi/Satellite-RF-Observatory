@@ -2052,3 +2052,16 @@ geometry-free, witness and orbital-score clauses remain `NOT_EVALUATED`; no
 observation values or derived series were persisted. DOY233 is closed without
 retry. See
 [`GNSS_DRAO_DOY233_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_PRIMARY_OUTCOME_REPORT.md).
+
+The post-outcome change-of-abstraction review rejects an automatic
+eight-track/two-clutter successor. Exact total track cardinality protected the
+targetless identity surface, not measurement integrity, and should not remain
+on the first forward experiment's critical path. The all-track inverse route
+is demoted. The recommended next physical route is a model-conditioned
+forward vertical whose station, window and receiver-labelled PRN codebook are
+selected from orbit-only geometry before artifact access. Extra tracks then
+cannot invalidate or enter the test, while missing or invalid required tracks
+still stop admission. The maximum claim is deliberately narrowed to
+`ORBITAL_MODEL_PREDICTIVELY_PREFERRED`, never independently discovered
+identity. No new artifact is selected by this review. See
+[`POST_DRAO_DOY233_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY233_CHANGE_OF_ABSTRACTION.md).
