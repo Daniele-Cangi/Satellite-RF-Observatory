@@ -1,0 +1,86 @@
+{
+  "access_at_audit": {
+    "new_network_requests": 0,
+    "new_qualification_decompressions": 0,
+    "new_qualification_header_access": 0,
+    "new_qualification_value_access": 0,
+    "primary_locators": 0,
+    "primary_headers": 0,
+    "primary_payload_bytes": 0,
+    "primary_values": 0
+  },
+  "artifact_lifecycle": {
+    "compressed_artifact_persisted": 0,
+    "decoded_rinex_persisted": 0,
+    "observation_values_persisted": 0,
+    "qualification_artifact": "DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz",
+    "qualification_artifact_sha256": "fca688310e9bd48a70452e0f9409a24d4b036add44ee31024ca1d76e130fe8d3"
+  },
+  "audit_outcome": "DRAO_DOY232_IDENTITY_CLAUSE_UNRESOLVED_BY_RECEIPT",
+  "authority_marker": {
+    "name": "GNSS_DRAO_DOY232_QUALIFICATION_AUTHORITY_CONSUMED.json",
+    "sha256": "631a09b30892ef382b23dc8f5aae51acefb1561ae7b2006ba74edb0f082dd26a",
+    "state": "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+  },
+  "clause_attribution": {
+    "artifact_identity": "CONTROL_FLOW_PROVEN_SATISFIED_BEFORE_DECODE",
+    "complete_core_phase": "NOT_EVALUATED",
+    "complete_same_path_code": "NOT_EVALUATED",
+    "cycle_slip_and_continuity": "NOT_EVALUATED",
+    "header_identity_and_time": "UNRESOLVED_RECEIPT_INSUFFICIENT",
+    "physical_same_path_witness": "NOT_EVALUATED"
+  },
+  "failure_attribution": {
+    "classifier": "LITERAL_MARKER_CHECK_COLLAPSED_TO_TOPOLOGY_REJECTION",
+    "contract_identity": "DRAO00CAN_AND_40105M002",
+    "executor_predicate": "NORMALIZED_MARKER_NAME_EQUALS_LITERAL_DRAO",
+    "missing_receipt_fields": [
+      "OBSERVED_MARKER_NAME",
+      "OBSERVED_MARKER_NUMBER_DOMES",
+      "HEADER_SUMMARY"
+    ],
+    "possible_but_unproven_false_negative": "FOUR_CHARACTER_MARKER_ALIAS_VERSUS_NINE_CHARACTER_IGS_SITE_ID",
+    "root_cause_class": "TRANSFORM_FROM_STATION_IDENTITY_CONTRACT_TO_HEADER_PREDICATE_AND_RECEIPT",
+    "software_can_distinguish_real_identity_change_from_alias": false
+  },
+  "historical_runtime_record": {
+    "name": "GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME.json",
+    "outcome": "QUALIFICATION_TOPOLOGY_REJECTED",
+    "reason": "MARKER_NAME_MISMATCH",
+    "sha256": "b0c4b1d96969f0fb997013de0dc7229f59c38439ba65a10f342784dd851695aa"
+  },
+  "observed_execution_path": {
+    "complete_compressed_hash_verified_before_decode": "PROVEN_BY_FROZEN_SOURCE_CONTROL_FLOW",
+    "decoded_rinex_materialized_ephemerally_in_ram": true,
+    "header_parsed_before_failure": true,
+    "marker_predicate_result": "NOT_EQUAL_TO_LITERAL_DRAO",
+    "observation_fields_parsed": 0,
+    "orbital_model_used": false,
+    "orbital_scores_produced": 0
+  },
+  "physical_interpretation": {
+    "authorized_assertions": [
+      "THE_ONE_SHOT_DOY232_AUTHORITY_WAS_CONSUMED",
+      "THE_EXACT_HASH_BOUND_ARTIFACT_REACHED_HEADER_VALIDATION",
+      "THE_PARSED_MARKER_DID_NOT_EQUAL_THE_EXECUTORS_LITERAL_DRAO_STRING",
+      "NO_OBSERVATION_FIELD_OR_ORBITAL_SCORE_WAS_EVALUATED"
+    ],
+    "not_authorized_assertions": [
+      "DRAO_HARDWARE_IDENTITY_CHANGED",
+      "THE_DOMES_IDENTIFIER_MISMATCHED",
+      "THE_MEASUREMENT_PATH_FAILED",
+      "THE_DRAO_CAPABILITY_IS_PHYSICALLY_UNSUITABLE",
+      "ANY_ORBITAL_HYPOTHESIS_WAS_TESTED"
+    ],
+    "physical_decision": "NOT_EVALUATED",
+    "runtime_physical_decision_measurement_path_rejected_is_supported": false
+  },
+  "roles_after_audit": {
+    "doy232": "CONSUMED_CLOSED_NO_RETRY",
+    "doy233": "UNSELECTED_UNFROZEN_UNAUTHORISED",
+    "fallback_selected": false
+  },
+  "schema": "gnss-drao-doy232-qualification-outcome-audit-v1",
+  "state": "DRAO_DOY232_QUALIFICATION_RUNTIME_OUTCOME_PRESERVED_EPISTEMIC_CLAIM_CORRECTED",
+  "stop": "STOP_WITHOUT_RETRY_PRIMARY_SELECTION_OR_ORBITAL_SCORING"
+}

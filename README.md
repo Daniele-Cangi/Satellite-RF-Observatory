@@ -1586,6 +1586,17 @@ no RINEX header or observation value was accessed. The seal grants no live
 authority and DOY233 remains unselected. See
 [`GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md).
 
+The single DOY232 authority was consumed and the runtime stopped at
+`QUALIFICATION_TOPOLOGY_REJECTED / MARKER_NAME_MISMATCH`, before parsing any
+observation field. A bounded offline audit shows that the receipt retained
+neither the observed marker nor the DOMES field: it cannot distinguish a real
+station change from a marker-name representation difference. The runtime
+record remains immutable, but `MEASUREMENT_PATH_REJECTED` is not an authorized
+physical claim; the identity clause is `UNRESOLVED_RECEIPT_INSUFFICIENT` and
+all measurement/orbital clauses are `NOT_EVALUATED`. DOY232 is closed without
+retry and DOY233 remains unselected. See
+[`GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md).
+
 ## Repository map
 
 ```text
