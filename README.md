@@ -1578,6 +1578,14 @@ preserved the integrity record. Decompression, RINEX header/value access,
 physical qualification and DOY233 access remain zero. See
 [`GNSS_DRAO_DOY232_RECEIPT_REPLAY.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_RECEIPT_REPLAY.md).
 
+The model-blind DOY232 qualifier is now frozen but remains unopened. It binds
+the known complete artifact hash, the exact 139-epoch/six-track contract and
+the RINEX scale, phase-shift and receiver-clock transformations to source
+commit `d227f19`. Synthetic tests exercise every admission/refusal boundary;
+no RINEX header or observation value was accessed. The seal grants no live
+authority and DOY233 remains unselected. See
+[`GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md).
+
 ## Repository map
 
 ```text

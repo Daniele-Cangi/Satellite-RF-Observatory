@@ -1963,3 +1963,14 @@ orbital evidence. After review, the next maximum physical step is one
 model-blind structural qualification of this exact DOY232 artifact under the
 already frozen clauses. See
 [`GNSS_DRAO_DOY232_RECEIPT_REPLAY.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_RECEIPT_REPLAY.md).
+
+The corresponding experiment-specific qualifier is now implemented and
+sealed as `DRAO_DOY232_QUALIFICATION_EXECUTOR_FROZEN_UNOPENED`. It can decode
+only the exact previously hashed DOY232 artifact, has no orbital-model or
+DOY233 surface, and persists only structural rows plus the predeclared
+aggregate health metrics. RINEX scaling, already-applied phase shifts and
+receiver-clock corrections are frozen from the official specification before
+header exposure. The seal itself authorizes no network or decode. After
+review, the maximum next action is one one-use, model-blind DOY232
+qualification and then a stop with DOY233 still unselected. See
+[`GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_EXECUTOR.md).
