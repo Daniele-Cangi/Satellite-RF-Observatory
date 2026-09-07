@@ -2040,3 +2040,15 @@ failures can become `MEASUREMENT_INVALID`. The seal grants no live authority
 and all access counters remain zero. The next action after review is the one
 primary execution itself, not another preparation layer. See
 [`GNSS_DRAO_DOY233_PRIMARY_RUNNER_SEAL.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_PRIMARY_RUNNER_SEAL.md).
+
+The single DRAO DOY233 authority has now been consumed. The exact selected
+2,886,587-byte artifact matched its frozen transport identity and was hashed as
+`6c25fc9934bf90a861bf9637398a6ab436a820d7c47e2cb611e85ce00d09d903`
+before in-memory decompression. Structural admission found eight complete
+opaque tracks where the prospective contract required exactly seven, so the
+terminal outcome is `MEASUREMENT_INVALID` with reason
+`COMPLETE_OPAQUE_TRACK_COUNT_NOT_SEVEN:8`. No track was chosen post hoc and all
+geometry-free, witness and orbital-score clauses remain `NOT_EVALUATED`; no
+observation values or derived series were persisted. DOY233 is closed without
+retry. See
+[`GNSS_DRAO_DOY233_PRIMARY_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_PRIMARY_OUTCOME_REPORT.md).
