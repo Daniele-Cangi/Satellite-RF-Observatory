@@ -1941,3 +1941,14 @@ and DOY233 access is still zero. No retry followed because the current frozen
 contract forbids retry after hashing. A change-of-abstraction review is now
 required before any repeat transport. See
 [`GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md).
+
+That review now authorizes one exact-artifact `RECEIPT_REPLAY`, but does not
+execute it. Content-blind hashing is no longer treated as a scientific retry:
+the irreversible boundary is first decompression or RINEX header/value
+exposure. The DRAO-specific materializer accepts an absent GET
+`Content-Length`, makes the actual streamed byte count authoritative, and uses
+a two-phase atomic receipt so digest and byte count survive any cleanup-stage
+description failure. All physical parameters and the historical failure remain
+frozen; DOY233 remains unselected and inaccessible. After review, the next
+maximum action is the single authorized receipt replay. See
+[`POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md).

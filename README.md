@@ -1560,6 +1560,15 @@ header/value access and DOY233 access remain zero. Because the frozen contract
 permits no retry after hashing, no second transfer was attempted. See
 [`GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md).
 
+A bounded change-of-abstraction now separates a content-blind
+`RECEIPT_REPLAY` from a scientific qualification retry. The historical failure
+is unchanged. One replay of the exact frozen URL may capture the streamed byte
+count and SHA-256 without decompression; a two-phase receipt persists both
+before deleting the payload. Scientific irreversibility begins only at first
+decompression or RINEX header/value exposure, after which the frozen zero-retry
+rule still applies. The replay is authorized but has not been executed. See
+[`POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md).
+
 ## Repository map
 
 ```text
