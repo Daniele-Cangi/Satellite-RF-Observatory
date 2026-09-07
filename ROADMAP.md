@@ -1988,3 +1988,20 @@ clauses are not evaluated. DOY232 is consumed with zero retry; DOY233 remains
 unselected. The next action must be a change-of-abstraction review, not a
 repaired replay or another parser gate. See
 [`GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md).
+
+The change-of-abstraction review selects
+`DRAO_SINGLE_PRIMARY_ADMISSION_PATH_SELECTED`. It does not reopen DOY232 and
+does not create another qualification artifact. The scientifically necessary
+boundary is that every frozen identity, structure, continuity and same-path
+clause pass before scoring; it is not necessary that those clauses be evaluated
+on a separate date. They can therefore be integrated into the one still-sealed
+DOY233 execution. Failure of any admission clause leaves the orbital comparison
+`NOT_EVALUATED`, while a passed admission permits the already frozen opaque
+seven-track/one-clutter held-out comparison.
+
+DOY233 remains without a locator, unfrozen and unopened. The next maximum
+action is an offline integrated primary plan and executor in the strict order
+complete hash -> attributable identity receipt -> structural admission ->
+model-blind witnesses -> opaque score receipt -> post-hash code reveal. No
+observation access, alternate date or new geometry search is implied. See
+[`POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md).

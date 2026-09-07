@@ -1,0 +1,140 @@
+{
+  "schema": "post-drao-doy232-qualification-change-of-abstraction-v1",
+  "outcome": "DRAO_SINGLE_PRIMARY_ADMISSION_PATH_SELECTED",
+  "block": {
+    "physical_failure": "NONE_OBSERVED",
+    "failed_bridge": "STATION_IDENTITY_CONTRACT_TO_HEADER_PREDICATE_TO_RECEIPT",
+    "orbital_hypotheses_evaluated": 0,
+    "measurement_fields_parsed": 0
+  },
+  "information_value": {
+    "about_orbital_hypothesis": "NONE",
+    "about_measurement_path": "IDENTITY_CLAUSE_UNRESOLVED_BECAUSE_RECEIPT_WAS_INSUFFICIENT",
+    "historical_runtime_outcome_immutable": true
+  },
+  "current_abstraction": {
+    "separate_prior_day_qualification_is_causally_required": false,
+    "primary_local_admission_is_causally_required": true,
+    "reason": "A_NEGATIVE_ORBITAL_RESULT_IS_INTERPRETABLE_ONLY_AFTER_ALL_FROZEN_MEASUREMENT_CLAUSES_PASS_BUT_THOSE_CLAUSES_CAN_BE_EVALUATED_INSIDE_THE_SAME_ONE_SHOT_PRIMARY_BEFORE_SCORING"
+  },
+  "alternatives": [
+    {
+      "name": "REOPEN_DOY232_AFTER_PREDICATE_REPAIR",
+      "decision": "FORBIDDEN",
+      "reason": "CONSUMED_ARTIFACT_AND_OUTCOME_KNOWLEDGE"
+    },
+    {
+      "name": "DIRECT_DOY233_WITHOUT_MEASUREMENT_ADMISSION",
+      "decision": "REJECTED",
+      "reason": "A_NEGATIVE_WOULD_NOT_DISTINGUISH_ORBITAL_FAILURE_FROM_MEASUREMENT_FAILURE"
+    },
+    {
+      "name": "NEW_QUALIFICATION_DAY_THEN_DOY233_PRIMARY",
+      "decision": "NOT_SELECTED",
+      "reason": "ADDS_ANOTHER_NON_ORBITAL_ARTIFACT_ACCESS_WHEN_THE_SAME_FROZEN_CLAUSES_CAN_GUARD_THE_PRIMARY"
+    },
+    {
+      "name": "ONE_SHOT_DOY233_PRIMARY_WITH_LOCAL_ADMISSION_THEN_SCORE",
+      "decision": "SELECTED_FOR_OFFLINE_PLAN_REVIEW",
+      "reason": "PRESERVES_EXISTING_POSITIVE_GEOMETRY_AND_REACHES_THE_HELD_OUT_ORBITAL_QUESTION_WITH_ONE_UNOPENED_ARTIFACT"
+    },
+    {
+      "name": "ABANDON_DRAO_ONE_CLUTTER_ROUTE",
+      "decision": "CONDITIONAL_FALLBACK",
+      "reason": "REQUIRED_IF_A_PRIMARY_PLAN_CANNOT_FREEZE_SUFFICIENT_IDENTITY_MEASUREMENT_AND_WITNESS_CLAUSES_BEFORE_ACCESS"
+    }
+  ],
+  "best_physical_path": {
+    "observer": "DRAO00CAN",
+    "domes": "40105M002",
+    "candidate_day": "2026-08-21_GPS_DOY233",
+    "window_gps": {
+      "start": "2026-08-21T01:14:30",
+      "stop": "2026-08-21T02:23:30",
+      "cadence_seconds": 30,
+      "epochs": 139,
+      "calibration_prefix_epochs": 79,
+      "heldout_epochs": 60
+    },
+    "orbit_codebook": [
+      "G07",
+      "G08",
+      "G09",
+      "G21",
+      "G27",
+      "G30"
+    ],
+    "controlling_retarded_geometry_separation_m": 49090.48543325415,
+    "combined_conditional_envelope_m": 3387.960685289984,
+    "frozen_guard_m": 7339.701234647398,
+    "remaining_margin_m": 3951.7405493574142,
+    "artifact_locator_selected": false,
+    "observation_access_authorized": false,
+    "primary_frozen": false
+  },
+  "integrated_primary_boundary": {
+    "order": [
+      "COMPLETE_ARTIFACT_HASH",
+      "HEADER_AND_IDENTITY_RECEIPT",
+      "FULL_WINDOW_STRUCTURAL_ADMISSION",
+      "MODEL_BLIND_PHASE_CODE_AND_CONTINUITY_WITNESSES",
+      "OPAQUE_ONE_CLUTTER_SCORE_RECEIPT",
+      "POST_HASH_CODE_IDENTITY_REVEAL",
+      "ONE_TERMINAL_OUTCOME"
+    ],
+    "scoring_permitted_only_after_every_admission_clause_passes": true,
+    "admission_failure_or_description_error": "ORBITAL_COMPARISON_NOT_EVALUATED",
+    "heldout_refit": false,
+    "post_hash_retry": 0,
+    "alternate_artifact_or_window": false
+  },
+  "identity_semantics_for_future_plan": {
+    "binding_keys": [
+      "FROZEN_ARTIFACT_SITE_ID_DRAO00CAN",
+      "MARKER_NUMBER_DOMES_40105M002",
+      "FROZEN_RECEIVER_AND_ANTENNA_IDENTITY"
+    ],
+    "marker_name_role": "DESCRIPTIVE_CONSISTENCY_FIELD_NOT_A_STANDALONE_IDENTITY_KEY",
+    "receipt_must_retain_before_decision": [
+      "OBSERVED_MARKER_NAME",
+      "OBSERVED_MARKER_NUMBER",
+      "OBSERVED_RECEIVER_IDENTITY",
+      "OBSERVED_ANTENNA_IDENTITY",
+      "TIME_OF_FIRST_OBS",
+      "TIME_OF_LAST_OBS"
+    ],
+    "identity_conflict_semantics": "TYPED_NOT_EVALUATED_WITH_COMPLETE_ATTRIBUTION_NOT_MEASUREMENT_PATH_REJECTION"
+  },
+  "measurement_admission_for_future_plan": {
+    "opaque_complete_tracks_required": 7,
+    "symmetric_clutter_exclusions": 1,
+    "core_phase": [
+      "L1C",
+      "L2W"
+    ],
+    "same_path_code": [
+      "C1C",
+      "C2W"
+    ],
+    "complete_same_path_coverage_required_for_every_admitted_track": true,
+    "nonzero_lli_breaks_admission": true,
+    "gap_bridging": false,
+    "observation_values_persisted": 0
+  },
+  "source_bindings": {
+    "doy232_outcome_audit": {
+      "name": "GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.json",
+      "sha256": "e557e03ec0736e2aca5dcd7fe97596d6317d4fc11a4c4d3d3cd6029c5af473f0"
+    },
+    "doy233_model_envelope": {
+      "name": "GNSS_DRAO_STAGED_MODEL_ENVELOPE.json",
+      "sha256": "12578d1ea24fef1d71875280e41588e8a96cba78b3c45f6f8787eab8599e4626"
+    },
+    "one_clutter_plan": {
+      "name": "GNSS_DRAO_ONE_CLUTTER_PROSPECTIVE_PLAN.json",
+      "sha256": "a26dcc8e2f2ef00c345d93f2e64132a2536349fcfe0790ba198ae50046e9bb58"
+    }
+  },
+  "next_maximum_action": "FREEZE_ONE_INTEGRATED_DOY233_PRIMARY_PLAN_AND_EXECUTOR_OFFLINE_WITHOUT_SELECTING_OR_ACCESSING_AN_OBSERVATION_ARTIFACT",
+  "stop": "STOP_BEFORE_DOY233_LOCATOR_HEADER_PAYLOAD_OR_OBSERVATION_ACCESS"
+}
