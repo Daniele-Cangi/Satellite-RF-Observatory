@@ -117,6 +117,9 @@ def test_committed_receipt_is_strict_and_physically_consistent() -> None:
         "PREFIX_AFFINE_ONLY",
         "TIME_REVERSED_GEOMETRY",
     }
+    assert value["geometry"]["minimum_retarded_time_shifted_elevation_deg"] <= (
+        value["geometry"]["minimum_retarded_nominal_elevation_deg"]
+    )
     envelope = value["envelope"]
     assert envelope["required_separation_3b_m"] == pytest.approx(
         3.0 * envelope["one_model_bound_b_m"]

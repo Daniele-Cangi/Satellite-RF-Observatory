@@ -525,17 +525,21 @@ def compile_envelope(payload: bytes | bytearray, root: Path) -> dict[str, object
         raise DraoLabelledEnvelopeError("BROADCAST_ACCURACY_UNAVAILABLE")
     broadcast_bound = 8.0 * max(accuracy_by_satellite.values())
 
-    elevation = np.stack(
-        [
-            geometry.elevation_deg(
-                positions[(satellite, 0.0)], station, station_ecef
-            )
-            for satellite in CODEBOOK
-        ]
-    )
-    if np.any(elevation <= 0.0) or not np.all(np.isfinite(elevation)):
+    elevation_by_offset = {
+        offset: np.stack(
+            [
+                geometry.elevation_deg(
+                    positions[(satellite, offset)], station, station_ecef
+                )
+                for satellite in CODEBOOK
+            ]
+        )
+        for offset in (0.0, *TIMING_OFFSETS_S)
+    }
+    robust_elevation = np.min(np.stack(tuple(elevation_by_offset.values())), axis=0)
+    if np.any(robust_elevation <= 0.0) or not np.all(np.isfinite(robust_elevation)):
         raise DraoLabelledEnvelopeError("RETARDED_ELEVATION_INVALID")
-    slant_upper = ZENITH_DELAY_MAX_M / np.sin(np.radians(elevation))
+    slant_upper = ZENITH_DELAY_MAX_M / np.sin(np.radians(robust_elevation))
     troposphere_bound, troposphere_by_satellite = transformed_box_peak_to_peak_bound(
         slant_upper
     )
@@ -608,7 +612,12 @@ def compile_envelope(payload: bytes | bytearray, root: Path) -> dict[str, object
             "retarded_time_reversed_separation_m": corrected_geometry[
                 "time_reversed_geometry_null"
             ]["heldout_max_track_peak_to_peak_m"],
-            "minimum_retarded_elevation_deg": float(np.min(elevation)),
+            "minimum_retarded_nominal_elevation_deg": float(
+                np.min(elevation_by_offset[0.0])
+            ),
+            "minimum_retarded_time_shifted_elevation_deg": float(
+                np.min(robust_elevation)
+            ),
         },
         "model_side_terms": terms,
         "event_time_metrics": corrected_geometry["direct_time_shift_rows"],
@@ -687,7 +696,9 @@ def compile_envelope(payload: bytes | bytearray, root: Path) -> dict[str, object
         value.fill(0.0)
     for value in positions.values():
         value.fill(0.0)
-    elevation.fill(0.0)
+    for value in elevation_by_offset.values():
+        value.fill(0.0)
+    robust_elevation.fill(0.0)
     slant_upper.fill(0.0)
     clock_paths.fill(0.0)
     clock_residual.fill(0.0)
@@ -727,7 +738,8 @@ def render_report(value: Mapping[str, object]) -> str:
             f"- retarded separation: `{float(geometry_value['retarded_controlling_separation_m']):.9f} m`;",
             f"- prefix-affine separation: `{float(geometry_value['retarded_prefix_affine_separation_m']):.9f} m`;",
             f"- time-reversed separation: `{float(geometry_value['retarded_time_reversed_separation_m']):.9f} m`;",
-            f"- minimum retarded elevation: `{float(geometry_value['minimum_retarded_elevation_deg']):.9f} deg`.",
+            f"- minimum nominal retarded elevation: `{float(geometry_value['minimum_retarded_nominal_elevation_deg']):.9f} deg`;",
+            f"- minimum `t+/-15 s` retarded elevation: `{float(geometry_value['minimum_retarded_time_shifted_elevation_deg']):.9f} deg`.",
             "",
             "## Date-specific model-side bounds",
             "",
