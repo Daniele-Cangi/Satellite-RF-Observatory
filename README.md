@@ -1542,6 +1542,15 @@ distinct from topology and physical-witness rejection. DOY233 remains
 unselected and inaccessible. See
 [`GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md).
 
+The single qualification artifact is now selected metadata-only as
+`DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz` at the predeclared BKG archive.
+One HEAD request returned HTTP 200 and a declared length of `2,904,457` bytes;
+no body or observation header was opened. ETag and Last-Modified are retained
+only as transport metadata, while the complete SHA-256 remains explicitly
+pending materialization. No alternate locator was tried and every physical
+qualification clause remains `NOT_EVALUATED`. See
+[`GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md).
+
 ## Repository map
 
 ```text
