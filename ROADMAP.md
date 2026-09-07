@@ -1952,3 +1952,14 @@ description failure. All physical parameters and the historical failure remain
 frozen; DOY233 remains unselected and inaccessible. After review, the next
 maximum action is the single authorized receipt replay. See
 [`POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md).
+
+The one content-blind replay is complete. The exact selected artifact yielded
+`2,904,457` streamed bytes and full SHA-256
+`fca688310e9bd48a70452e0f9409a24d4b036add44ee31024ca1d76e130fe8d3`;
+GET metadata matched but remains descriptive. The two-phase receipt completed,
+the payload and quarantine directory were removed, and observation/primary
+access stayed at zero. This is artifact-integrity provenance, not capability or
+orbital evidence. After review, the next maximum physical step is one
+model-blind structural qualification of this exact DOY232 artifact under the
+already frozen clauses. See
+[`GNSS_DRAO_DOY232_RECEIPT_REPLAY.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_RECEIPT_REPLAY.md).
