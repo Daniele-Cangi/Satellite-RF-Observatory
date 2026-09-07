@@ -1597,6 +1597,22 @@ all measurement/orbital clauses are `NOT_EVALUATED`. DOY232 is closed without
 retry and DOY233 remains unselected. See
 [`GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_OUTCOME_AUDIT.md).
 
+The required change-of-abstraction review now selects
+`DRAO_SINGLE_PRIMARY_ADMISSION_PATH_SELECTED`. DOY232 remains consumed and is
+not repaired or retried. A separate replacement qualification day is also not
+selected: it would add another non-orbital artifact access, while the necessary
+identity, structure, continuity and same-path clauses can guard the unopened
+primary itself before any orbital score is permitted.
+
+The shortest physical path therefore preserves the already compiled DOY233
+geometry and replaces the two-artifact staging with one integrated, one-shot
+primary boundary: complete hash, attributable identity receipt, full-window
+admission, model-blind witnesses, opaque one-clutter score, then code-identity
+reveal. Any admission failure leaves the orbital comparison `NOT_EVALUATED`;
+only a fully admitted artifact can produce an orbital or null outcome. DOY233
+still has no locator, is not frozen and remains unopened. See
+[`POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md).
+
 ## Repository map
 
 ```text
