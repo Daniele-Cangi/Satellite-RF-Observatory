@@ -125,8 +125,14 @@ def test_strict_json_rejects_nonfinite() -> None:
 
 
 @pytest.mark.skipif(not OUTPUT.exists(), reason="generated after source freeze")
-def test_generated_contract_matches_compiler_exactly() -> None:
+def test_generated_contract_matches_frozen_compiler_exactly(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     persisted = json.loads(OUTPUT.read_text(encoding="ascii"))
+    frozen_source_commit = persisted["source_commit"]
+    assert isinstance(frozen_source_commit, str)
+    assert len(frozen_source_commit) == 40
+    monkeypatch.setattr(contract, "_git_commit", lambda: frozen_source_commit)
     assert persisted == compiled()
     assert persisted["state"] == contract.CONTRACT_STATE
     assert persisted["new_gate"] is False
