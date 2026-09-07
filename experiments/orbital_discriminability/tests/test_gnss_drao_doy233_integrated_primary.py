@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+from hashlib import sha256
+import json
 
 import numpy as np
 import pytest
@@ -12,6 +14,7 @@ from experiments.orbital_discriminability import gnss_drao_doy233_integrated_pri
 
 ROOT = Path(__file__).resolve().parents[1]
 SATELLITES = ("G07", "G08", "G09", "G21", "G27", "G30", "G31")
+MANIFEST = ROOT / "GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.json"
 
 
 def header_line(data: str, label: str) -> str:
@@ -116,6 +119,21 @@ def test_manifest_refuses_unselected_primary_without_access() -> None:
     assert not any(manifest["access_at_freeze"].values())
     with pytest.raises(PermissionError, match="PRIMARY_ARTIFACT_UNSELECTED"):
         primary.refuse_unselected_primary(ROOT)
+
+
+def test_post_commit_executor_seal_binds_source_and_contract() -> None:
+    value = json.loads(MANIFEST.read_text(encoding="ascii"))
+    source = Path(primary.__file__).read_bytes().replace(b"\r\n", b"\n")
+    contract_hash = sha256(
+        primary.strict_json(primary.executor_manifest(ROOT)).encode("ascii")
+    ).hexdigest()
+
+    assert value["source_commit"] == "505237d3fa962a441e8a7a8389e854120881d9da"
+    assert value["executor_source_canonical_sha256"] == sha256(source).hexdigest()
+    assert value["executor_contract_sha256"] == contract_hash
+    assert value["state"].endswith("ARTIFACT_UNSELECTED")
+    assert not any(value["access_at_freeze"].values())
+    assert value["authority"]["observation_access_authorized"] is False
 
 
 def test_opaque_surface_is_complete_symmetric_and_identity_blind() -> None:
