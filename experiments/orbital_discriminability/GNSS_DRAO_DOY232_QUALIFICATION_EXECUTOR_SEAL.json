@@ -1,0 +1,42 @@
+{
+  "access_at_seal": {
+    "network_requests": 0,
+    "primary_headers": 0,
+    "primary_locators": 0,
+    "primary_payload_bytes": 0,
+    "primary_values": 0,
+    "qualification_decompressions": 0,
+    "qualification_headers": 0,
+    "qualification_values": 0
+  },
+  "authority": {
+    "live_execution_authorized_by_seal": false,
+    "separate_review_and_one_use_token_required": true
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3"
+  },
+  "frozen_inputs": {
+    "GNSS_DRAO_DOY232_ARTIFACT_SELECTION.json": "b11ba459b97a13f47992f0f5ed9645d6be5a25a1dbdcf4e1885c4562f33f0ca0",
+    "GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.json": "f0a02eb1d49b7ea01db6db263a1fb81af0d317fd959d1c78c3aece822c842df1",
+    "GNSS_DRAO_DOY232_RECEIPT_REPLAY.json": "10e6c002333080087c5d87787d74a7882175ae72f875f55162ee53653d3341b0",
+    "GNSS_DRAO_DOY232_RECEIPT_REPLAY_AUTHORITY.json": "1d63f1b7f12b933ad67c19d8bbc0ee1a2f4510b475f32e28de901bd8b75f30f0"
+  },
+  "manifest_sha256": "2156fdf81b88498276f51a8903260df58c1249d56835ba02df19414f8b1041cf",
+  "product": {
+    "bytes": 2904457,
+    "doy": 232,
+    "fallback": false,
+    "name": "DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz",
+    "role": "MODEL_BLIND_CAPABILITY_QUALIFICATION_NEVER_SCORED",
+    "sha256": "fca688310e9bd48a70452e0f9409a24d4b036add44ee31024ca1d76e130fe8d3",
+    "station": "DRAO00CAN",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/232/DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz"
+  },
+  "schema": "gnss-drao-doy232-qualification-executor-seal-v1",
+  "source_commit": "d227f19335a7237f6f2e7176c9a5a34f8ddaeea1",
+  "source_sha256": "737c1e9f5fb09994970c2b86e28262219bb959155f3aaa5b4b8d55c30a28fa25",
+  "state": "DRAO_DOY232_QUALIFICATION_EXECUTOR_FROZEN_UNOPENED",
+  "stop": "STOP_BEFORE_DRAO_DOY232_DECODE_FOR_SEPARATE_REVIEW"
+}

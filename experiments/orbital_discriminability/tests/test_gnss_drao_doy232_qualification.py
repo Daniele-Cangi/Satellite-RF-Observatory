@@ -13,6 +13,8 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SEAL = ROOT / qualification.SEAL_NAME
+SEAL_SHA256 = "9f021dcf9da8961eef114b423950d064035eb8df69ec346225dcf9fa82bb6a5e"
 
 
 def header_line(data: str, label: str) -> str:
@@ -282,6 +284,18 @@ def test_strict_json_and_unopened_seal_are_finite() -> None:
     assert json.loads(qualification.strict_json(seal)) == seal
     with pytest.raises(ValueError):
         qualification.strict_json({"bad": float("nan")})
+
+
+def test_frozen_executor_seal_binds_source_without_granting_authority() -> None:
+    seal = qualification.validate_executor_seal(ROOT, SEAL, SEAL_SHA256)
+
+    assert qualification.file_sha256(SEAL) == SEAL_SHA256
+    assert seal["source_commit"] == "d227f19335a7237f6f2e7176c9a5a34f8ddaeea1"
+    assert seal["source_sha256"] == qualification.source_sha256()
+    assert seal["manifest_sha256"] == qualification.manifest_sha256(ROOT)
+    assert seal["product"]["sha256"] == qualification.ARTIFACT_SHA256
+    assert seal["authority"]["live_execution_authorized_by_seal"] is False
+    assert not any(seal["access_at_seal"].values())
 
 
 def test_live_executor_requires_separate_authority_before_any_network(tmp_path) -> None:
