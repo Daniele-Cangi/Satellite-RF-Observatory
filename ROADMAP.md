@@ -2065,3 +2065,16 @@ still stop admission. The maximum claim is deliberately narrowed to
 `ORBITAL_MODEL_PREDICTIVELY_PREFERRED`, never independently discovered
 identity. No new artifact is selected by this review. See
 [`POST_DRAO_DOY233_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY233_CHANGE_OF_ABSTRACTION.md).
+
+The bounded DRAO labelled-forward orbit screen now returns
+`DRAO_LABELLED_FORWARD_GEOMETRY_SHORTLISTED`. Its top cell is GPS DOY237,
+2026-08-25 04:55:00--06:04:00, with held-out beginning 05:34:30 and frozen
+codebook G14/G15/G17/G20/G24/G30. Nine satellites are robustly visible, but
+the extra three are correctly descriptive rather than fatal. The controlling
+time-reversed separation is `36,546.470629 m`; after three historical guards
+the screening lower margin is `14,527.366926 m`, while the direct +/-15 s
+timing envelope is `1,396.870014 m`. This is geometry only: no observation
+product was queried or selected. The next maximum action is a rank-1
+date/codebook-specific physical-envelope audit, especially at the
+`15.103639 deg` elevation edge, before any artifact lookup. See
+[`GNSS_DRAO_LABELLED_FORWARD_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_GEOMETRY_SCREEN_REPORT.md).

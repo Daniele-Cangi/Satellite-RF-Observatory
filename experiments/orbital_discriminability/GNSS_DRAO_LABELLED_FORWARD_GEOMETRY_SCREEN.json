@@ -1,0 +1,765 @@
+{
+  "day_results": [
+    {
+      "best_attempt_descriptive_only": {
+        "candidate_codebook": [
+          "G14",
+          "G15",
+          "G17",
+          "G20",
+          "G24",
+          "G30"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1385.863580465115,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1384.5670215341693,
+            "heldout_rms_m": 437.77668650196443,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1385.863580465115,
+            "heldout_rms_m": 438.2799191711879,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 234,
+        "exact_controlling_separation_m": 36208.70448109973,
+        "gps_date": "2026-08-22",
+        "heldout_start_gps": "2026-08-22T05:44:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 9,
+        "minimum_time_shifted_elevation_deg": 15.226519684082586,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 103856.21276953013,
+          "heldout_rms_m": 50504.822709225555
+        },
+        "raw_start_gps": "2026-08-22T05:05:00 GPS",
+        "raw_stop_gps": "2026-08-22T06:14:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 14189.600777157539,
+        "robustly_discriminative": true,
+        "start_index": 610,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 36208.70448109973,
+          "heldout_rms_m": 10430.509268074991
+        }
+      },
+      "combination_evaluations": 945,
+      "doy": 234,
+      "gps_date": "2026-08-22",
+      "healthy_gps_satellite_count": 31,
+      "maximum_complete_track_count": 9,
+      "minimum_complete_track_count": 3,
+      "robust_candidate_count": 541,
+      "sampled_window_count": 275,
+      "selected_daily_window": {
+        "candidate_codebook": [
+          "G14",
+          "G15",
+          "G17",
+          "G20",
+          "G24",
+          "G30"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1385.863580465115,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1384.5670215341693,
+            "heldout_rms_m": 437.77668650196443,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1385.863580465115,
+            "heldout_rms_m": 438.2799191711879,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 234,
+        "exact_controlling_separation_m": 36208.70448109973,
+        "gps_date": "2026-08-22",
+        "heldout_start_gps": "2026-08-22T05:44:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 9,
+        "minimum_time_shifted_elevation_deg": 15.226519684082586,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 103856.21276953013,
+          "heldout_rms_m": 50504.822709225555
+        },
+        "raw_start_gps": "2026-08-22T05:05:00 GPS",
+        "raw_stop_gps": "2026-08-22T06:14:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 14189.600777157539,
+        "robustly_discriminative": true,
+        "start_index": 610,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 36208.70448109973,
+          "heldout_rms_m": 10430.509268074991
+        }
+      },
+      "windows_with_at_least_six_visible": 137
+    },
+    {
+      "best_attempt_descriptive_only": {
+        "candidate_codebook": [
+          "G05",
+          "G15",
+          "G16",
+          "G18",
+          "G20",
+          "G23"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1341.8833138389018,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1341.8833138389018,
+            "heldout_rms_m": 437.1768783390703,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1340.589366259619,
+            "heldout_rms_m": 436.9177933387155,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 235,
+        "exact_controlling_separation_m": 35681.84933607839,
+        "gps_date": "2026-08-23",
+        "heldout_start_gps": "2026-08-23T13:24:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 8,
+        "minimum_time_shifted_elevation_deg": 15.826420633124592,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 138639.88071448955,
+          "heldout_rms_m": 56809.924255026795
+        },
+        "raw_start_gps": "2026-08-23T12:45:00 GPS",
+        "raw_stop_gps": "2026-08-23T13:54:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 13662.745632136197,
+        "robustly_discriminative": true,
+        "start_index": 1530,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 35681.84933607839,
+          "heldout_rms_m": 10273.297472989789
+        }
+      },
+      "combination_evaluations": 887,
+      "doy": 235,
+      "gps_date": "2026-08-23",
+      "healthy_gps_satellite_count": 31,
+      "maximum_complete_track_count": 9,
+      "minimum_complete_track_count": 3,
+      "robust_candidate_count": 493,
+      "sampled_window_count": 275,
+      "selected_daily_window": {
+        "candidate_codebook": [
+          "G05",
+          "G15",
+          "G16",
+          "G18",
+          "G20",
+          "G23"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1341.8833138389018,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1341.8833138389018,
+            "heldout_rms_m": 437.1768783390703,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1340.589366259619,
+            "heldout_rms_m": 436.9177933387155,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 235,
+        "exact_controlling_separation_m": 35681.84933607839,
+        "gps_date": "2026-08-23",
+        "heldout_start_gps": "2026-08-23T13:24:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 8,
+        "minimum_time_shifted_elevation_deg": 15.826420633124592,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 138639.88071448955,
+          "heldout_rms_m": 56809.924255026795
+        },
+        "raw_start_gps": "2026-08-23T12:45:00 GPS",
+        "raw_stop_gps": "2026-08-23T13:54:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 13662.745632136197,
+        "robustly_discriminative": true,
+        "start_index": 1530,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 35681.84933607839,
+          "heldout_rms_m": 10273.297472989789
+        }
+      },
+      "windows_with_at_least_six_visible": 134
+    },
+    {
+      "best_attempt_descriptive_only": {
+        "candidate_codebook": [
+          "G05",
+          "G15",
+          "G16",
+          "G18",
+          "G20",
+          "G23"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1346.7165888871682,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1346.7165888871682,
+            "heldout_rms_m": 438.196059867122,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1345.4969919289897,
+            "heldout_rms_m": 437.9549331489885,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 236,
+        "exact_controlling_separation_m": 35792.384476530366,
+        "gps_date": "2026-08-24",
+        "heldout_start_gps": "2026-08-24T13:19:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 8,
+        "minimum_time_shifted_elevation_deg": 15.404970562773437,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 138212.60504010483,
+          "heldout_rms_m": 56949.255747947376
+        },
+        "raw_start_gps": "2026-08-24T12:40:00 GPS",
+        "raw_stop_gps": "2026-08-24T13:49:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 13773.280772588172,
+        "robustly_discriminative": true,
+        "start_index": 1520,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 35792.384476530366,
+          "heldout_rms_m": 10300.875566714141
+        }
+      },
+      "combination_evaluations": 843,
+      "doy": 236,
+      "gps_date": "2026-08-24",
+      "healthy_gps_satellite_count": 31,
+      "maximum_complete_track_count": 9,
+      "minimum_complete_track_count": 3,
+      "robust_candidate_count": 494,
+      "sampled_window_count": 275,
+      "selected_daily_window": {
+        "candidate_codebook": [
+          "G05",
+          "G15",
+          "G16",
+          "G18",
+          "G20",
+          "G23"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1346.7165888871682,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1346.7165888871682,
+            "heldout_rms_m": 438.196059867122,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1345.4969919289897,
+            "heldout_rms_m": 437.9549331489885,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 236,
+        "exact_controlling_separation_m": 35792.384476530366,
+        "gps_date": "2026-08-24",
+        "heldout_start_gps": "2026-08-24T13:19:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 8,
+        "minimum_time_shifted_elevation_deg": 15.404970562773437,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 138212.60504010483,
+          "heldout_rms_m": 56949.255747947376
+        },
+        "raw_start_gps": "2026-08-24T12:40:00 GPS",
+        "raw_stop_gps": "2026-08-24T13:49:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 13773.280772588172,
+        "robustly_discriminative": true,
+        "start_index": 1520,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 35792.384476530366,
+          "heldout_rms_m": 10300.875566714141
+        }
+      },
+      "windows_with_at_least_six_visible": 138
+    },
+    {
+      "best_attempt_descriptive_only": {
+        "candidate_codebook": [
+          "G14",
+          "G15",
+          "G17",
+          "G20",
+          "G24",
+          "G30"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1396.8700135458348,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1395.7568785234419,
+            "heldout_rms_m": 442.0929581114421,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1396.8700135458348,
+            "heldout_rms_m": 442.548591221686,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 237,
+        "exact_controlling_separation_m": 36546.47062947322,
+        "gps_date": "2026-08-25",
+        "heldout_start_gps": "2026-08-25T05:34:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 9,
+        "minimum_time_shifted_elevation_deg": 15.103639282444858,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 102951.56926110527,
+          "heldout_rms_m": 49912.82966095343
+        },
+        "raw_start_gps": "2026-08-25T04:55:00 GPS",
+        "raw_stop_gps": "2026-08-25T06:04:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 14527.366925531023,
+        "robustly_discriminative": true,
+        "start_index": 590,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 36546.47062947322,
+          "heldout_rms_m": 10523.86387292608
+        }
+      },
+      "combination_evaluations": 889,
+      "doy": 237,
+      "gps_date": "2026-08-25",
+      "healthy_gps_satellite_count": 31,
+      "maximum_complete_track_count": 9,
+      "minimum_complete_track_count": 3,
+      "robust_candidate_count": 535,
+      "sampled_window_count": 275,
+      "selected_daily_window": {
+        "candidate_codebook": [
+          "G14",
+          "G15",
+          "G17",
+          "G20",
+          "G24",
+          "G30"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1396.8700135458348,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1395.7568785234419,
+            "heldout_rms_m": 442.0929581114421,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1396.8700135458348,
+            "heldout_rms_m": 442.548591221686,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 237,
+        "exact_controlling_separation_m": 36546.47062947322,
+        "gps_date": "2026-08-25",
+        "heldout_start_gps": "2026-08-25T05:34:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 9,
+        "minimum_time_shifted_elevation_deg": 15.103639282444858,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 102951.56926110527,
+          "heldout_rms_m": 49912.82966095343
+        },
+        "raw_start_gps": "2026-08-25T04:55:00 GPS",
+        "raw_stop_gps": "2026-08-25T06:04:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 14527.366925531023,
+        "robustly_discriminative": true,
+        "start_index": 590,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 36546.47062947322,
+          "heldout_rms_m": 10523.86387292608
+        }
+      },
+      "windows_with_at_least_six_visible": 137
+    },
+    {
+      "best_attempt_descriptive_only": {
+        "candidate_codebook": [
+          "G14",
+          "G15",
+          "G17",
+          "G20",
+          "G24",
+          "G30"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1392.8069935469507,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1391.6134927566127,
+            "heldout_rms_m": 440.3818238041406,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1392.8069935469507,
+            "heldout_rms_m": 440.85775746648386,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 238,
+        "exact_controlling_separation_m": 36418.3839726951,
+        "gps_date": "2026-08-26",
+        "heldout_start_gps": "2026-08-26T05:29:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 9,
+        "minimum_time_shifted_elevation_deg": 15.49185774596078,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 102651.84270507761,
+          "heldout_rms_m": 50252.409996662085
+        },
+        "raw_start_gps": "2026-08-26T04:50:00 GPS",
+        "raw_stop_gps": "2026-08-26T05:59:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 14399.280268752904,
+        "robustly_discriminative": true,
+        "start_index": 580,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 36418.3839726951,
+          "heldout_rms_m": 10487.082415663912
+        }
+      },
+      "combination_evaluations": 925,
+      "doy": 238,
+      "gps_date": "2026-08-26",
+      "healthy_gps_satellite_count": 31,
+      "maximum_complete_track_count": 9,
+      "minimum_complete_track_count": 3,
+      "robust_candidate_count": 556,
+      "sampled_window_count": 275,
+      "selected_daily_window": {
+        "candidate_codebook": [
+          "G14",
+          "G15",
+          "G17",
+          "G20",
+          "G24",
+          "G30"
+        ],
+        "controlling_null": "TIME_REVERSED_GEOMETRY",
+        "direct_time_shift_envelope_m": 1392.8069935469507,
+        "direct_time_shift_rows": [
+          {
+            "heldout_max_track_peak_to_peak_m": 1391.6134927566127,
+            "heldout_rms_m": 440.3818238041406,
+            "offset_s": -15.0
+          },
+          {
+            "heldout_max_track_peak_to_peak_m": 1392.8069935469507,
+            "heldout_rms_m": 440.85775746648386,
+            "offset_s": 15.0
+          }
+        ],
+        "doy": 238,
+        "exact_controlling_separation_m": 36418.3839726951,
+        "gps_date": "2026-08-26",
+        "heldout_start_gps": "2026-08-26T05:29:30 GPS",
+        "historical_drao_guard_m": 7339.701234647398,
+        "jointly_visible_track_count": 9,
+        "minimum_time_shifted_elevation_deg": 15.49185774596078,
+        "prefix_affine_null": {
+          "heldout_max_track_peak_to_peak_m": 102651.84270507761,
+          "heldout_rms_m": 50252.409996662085
+        },
+        "raw_start_gps": "2026-08-26T04:50:00 GPS",
+        "raw_stop_gps": "2026-08-26T05:59:00 GPS",
+        "required_exact_separation_m": 22019.103703942194,
+        "robust_margin_lower_bound_m": 14399.280268752904,
+        "robustly_discriminative": true,
+        "start_index": 580,
+        "station_id": "DRAO00CAN",
+        "time_reversed_geometry_null": {
+          "heldout_max_track_peak_to_peak_m": 36418.3839726951,
+          "heldout_rms_m": 10487.082415663912
+        }
+      },
+      "windows_with_at_least_six_visible": 140
+    }
+  ],
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "manifest_sha256": "bd11cb563700503070fbba3bf23acd58f8d2e2247c1388d10c79ae4c7e2f29aa",
+  "maximum_authorized_claim": null,
+  "navigation": [
+    {
+      "compressed_bytes": 70000,
+      "compressed_sha256": "bcb196bf8a2e44ad587a1af2bcd118df9d39c5ada4c81a291f3b85d58d6e84bd",
+      "doy": 234,
+      "gps_date": "2026-08-22",
+      "healthy_gps_satellite_count": 31,
+      "name": "brdc2340.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 290593,
+      "uncompressed_name": "brdc2340.26n",
+      "uncompressed_sha256": "afdf5ca23e33de17b6d056ca649b080e9d06841f541fa78afb5ec4640e0f1336",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/234/brdc2340.26n.gz"
+    },
+    {
+      "compressed_bytes": 71248,
+      "compressed_sha256": "12f1f6c8bfd8c7b73868f7ac8590efb5a8119e889add8b859e026f74bc978f55",
+      "doy": 235,
+      "gps_date": "2026-08-23",
+      "healthy_gps_satellite_count": 31,
+      "name": "brdc2350.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 295992,
+      "uncompressed_name": "brdc2350.26n",
+      "uncompressed_sha256": "0c3c5932acfb56719c66085cfc0191c18530554cb5e3fa1ae475c4ac8911f0a2",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/235/brdc2350.26n.gz"
+    },
+    {
+      "compressed_bytes": 71319,
+      "compressed_sha256": "760ae749576ce33d1480f50e8dde30fdb8877eb8bd22cfcdee0dbf01443b146e",
+      "doy": 236,
+      "gps_date": "2026-08-24",
+      "healthy_gps_satellite_count": 31,
+      "name": "brdc2360.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 297302,
+      "uncompressed_name": "brdc2360.26n",
+      "uncompressed_sha256": "87d19935ad792003bcb27b03b498077b3d4f03072a4843cf6e11d447a186efe8",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/236/brdc2360.26n.gz"
+    },
+    {
+      "compressed_bytes": 71512,
+      "compressed_sha256": "7676ce71221f4a0313f5ba2981886826c87ff346782b0993b9505b0dc0722ca8",
+      "doy": 237,
+      "gps_date": "2026-08-25",
+      "healthy_gps_satellite_count": 31,
+      "name": "brdc2370.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 297283,
+      "uncompressed_name": "brdc2370.26n",
+      "uncompressed_sha256": "09ebad2417413c30f507c4f7a784b8f67c61a129b4246d45e1d58803d1cddb22",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/237/brdc2370.26n.gz"
+    },
+    {
+      "compressed_bytes": 71505,
+      "compressed_sha256": "456036b3e4f247c96d834476cb51cbd88d420e37a6abdae6e6d8b2f7d3526e26",
+      "doy": 238,
+      "gps_date": "2026-08-26",
+      "healthy_gps_satellite_count": 31,
+      "name": "brdc2380.26n.gz",
+      "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+      "rinex_version": "2.11",
+      "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+      "uncompressed_bytes": 296681,
+      "uncompressed_name": "brdc2380.26n",
+      "uncompressed_sha256": "a3481251cb013f84e12f0442f63d3190afa146b990550e59dafdd74149a26ee1",
+      "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/238/brdc2380.26n.gz"
+    }
+  ],
+  "navigation_payloads_retained": 0,
+  "new_gate_created": false,
+  "next_maximum": "DATE_CODEBOOK_SPECIFIC_PHYSICAL_ENVELOPE_AUDIT",
+  "observation_access": {
+    "decoders": 0,
+    "headers": 0,
+    "locators": 0,
+    "payload_bytes": 0,
+    "products_discovered": 0,
+    "values": 0
+  },
+  "outcome": "DRAO_LABELLED_FORWARD_GEOMETRY_SHORTLISTED",
+  "primary_selected": false,
+  "prospective_plan_frozen": false,
+  "schema": "gnss-drao-labelled-forward-geometry-screen-v1",
+  "scope": {
+    "canonical_sha256": "fee2577189e47460bd7efe210e978c00e756c376ed4d7241316d16af95f8cf1c",
+    "filename": "GNSS_DRAO_LABELLED_FORWARD_GEOMETRY_SCOPE.md"
+  },
+  "screen_version": "gnss-drao-labelled-forward-geometry-screen-v1",
+  "shortlist": [
+    {
+      "candidate_codebook": [
+        "G14",
+        "G15",
+        "G17",
+        "G20",
+        "G24",
+        "G30"
+      ],
+      "controlling_null": "TIME_REVERSED_GEOMETRY",
+      "direct_time_shift_envelope_m": 1396.8700135458348,
+      "direct_time_shift_rows": [
+        {
+          "heldout_max_track_peak_to_peak_m": 1395.7568785234419,
+          "heldout_rms_m": 442.0929581114421,
+          "offset_s": -15.0
+        },
+        {
+          "heldout_max_track_peak_to_peak_m": 1396.8700135458348,
+          "heldout_rms_m": 442.548591221686,
+          "offset_s": 15.0
+        }
+      ],
+      "doy": 237,
+      "exact_controlling_separation_m": 36546.47062947322,
+      "gps_date": "2026-08-25",
+      "heldout_start_gps": "2026-08-25T05:34:30 GPS",
+      "historical_drao_guard_m": 7339.701234647398,
+      "jointly_visible_track_count": 9,
+      "minimum_time_shifted_elevation_deg": 15.103639282444858,
+      "prefix_affine_null": {
+        "heldout_max_track_peak_to_peak_m": 102951.56926110527,
+        "heldout_rms_m": 49912.82966095343
+      },
+      "raw_start_gps": "2026-08-25T04:55:00 GPS",
+      "raw_stop_gps": "2026-08-25T06:04:00 GPS",
+      "required_exact_separation_m": 22019.103703942194,
+      "robust_margin_lower_bound_m": 14527.366925531023,
+      "robustly_discriminative": true,
+      "start_index": 590,
+      "station_id": "DRAO00CAN",
+      "time_reversed_geometry_null": {
+        "heldout_max_track_peak_to_peak_m": 36546.47062947322,
+        "heldout_rms_m": 10523.86387292608
+      }
+    },
+    {
+      "candidate_codebook": [
+        "G14",
+        "G15",
+        "G17",
+        "G20",
+        "G24",
+        "G30"
+      ],
+      "controlling_null": "TIME_REVERSED_GEOMETRY",
+      "direct_time_shift_envelope_m": 1392.8069935469507,
+      "direct_time_shift_rows": [
+        {
+          "heldout_max_track_peak_to_peak_m": 1391.6134927566127,
+          "heldout_rms_m": 440.3818238041406,
+          "offset_s": -15.0
+        },
+        {
+          "heldout_max_track_peak_to_peak_m": 1392.8069935469507,
+          "heldout_rms_m": 440.85775746648386,
+          "offset_s": 15.0
+        }
+      ],
+      "doy": 238,
+      "exact_controlling_separation_m": 36418.3839726951,
+      "gps_date": "2026-08-26",
+      "heldout_start_gps": "2026-08-26T05:29:30 GPS",
+      "historical_drao_guard_m": 7339.701234647398,
+      "jointly_visible_track_count": 9,
+      "minimum_time_shifted_elevation_deg": 15.49185774596078,
+      "prefix_affine_null": {
+        "heldout_max_track_peak_to_peak_m": 102651.84270507761,
+        "heldout_rms_m": 50252.409996662085
+      },
+      "raw_start_gps": "2026-08-26T04:50:00 GPS",
+      "raw_stop_gps": "2026-08-26T05:59:00 GPS",
+      "required_exact_separation_m": 22019.103703942194,
+      "robust_margin_lower_bound_m": 14399.280268752904,
+      "robustly_discriminative": true,
+      "start_index": 580,
+      "station_id": "DRAO00CAN",
+      "time_reversed_geometry_null": {
+        "heldout_max_track_peak_to_peak_m": 36418.3839726951,
+        "heldout_rms_m": 10487.082415663912
+      }
+    },
+    {
+      "candidate_codebook": [
+        "G14",
+        "G15",
+        "G17",
+        "G20",
+        "G24",
+        "G30"
+      ],
+      "controlling_null": "TIME_REVERSED_GEOMETRY",
+      "direct_time_shift_envelope_m": 1385.863580465115,
+      "direct_time_shift_rows": [
+        {
+          "heldout_max_track_peak_to_peak_m": 1384.5670215341693,
+          "heldout_rms_m": 437.77668650196443,
+          "offset_s": -15.0
+        },
+        {
+          "heldout_max_track_peak_to_peak_m": 1385.863580465115,
+          "heldout_rms_m": 438.2799191711879,
+          "offset_s": 15.0
+        }
+      ],
+      "doy": 234,
+      "exact_controlling_separation_m": 36208.70448109973,
+      "gps_date": "2026-08-22",
+      "heldout_start_gps": "2026-08-22T05:44:30 GPS",
+      "historical_drao_guard_m": 7339.701234647398,
+      "jointly_visible_track_count": 9,
+      "minimum_time_shifted_elevation_deg": 15.226519684082586,
+      "prefix_affine_null": {
+        "heldout_max_track_peak_to_peak_m": 103856.21276953013,
+        "heldout_rms_m": 50504.822709225555
+      },
+      "raw_start_gps": "2026-08-22T05:05:00 GPS",
+      "raw_stop_gps": "2026-08-22T06:14:00 GPS",
+      "required_exact_separation_m": 22019.103703942194,
+      "robust_margin_lower_bound_m": 14189.600777157539,
+      "robustly_discriminative": true,
+      "start_index": 610,
+      "station_id": "DRAO00CAN",
+      "time_reversed_geometry_null": {
+        "heldout_max_track_peak_to_peak_m": 36208.70448109973,
+        "heldout_rms_m": 10430.509268074991
+      }
+    }
+  ],
+  "source_commit": "834da0c10de2ef075cb137f19bd165750546fe46",
+  "source_sha256": "cada0d5694e85cbf4d710b998e4df0f55b51f43212ca841e27692ee477adf4b9",
+  "stop": "NO_OBSERVATION_PRODUCT_QUERY_SELECTION_OR_ACCESS"
+}
