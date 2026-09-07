@@ -2018,3 +2018,14 @@ remain zero. The next maximum action after review is one bounded metadata-only
 selection of the exact DOY233 product and a separate one-use authority; it is
 not another geometry search, qualification date or parser gate. See
 [`GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md).
+
+The exact DOY233 primary product is now selected metadata-only as
+`DRAO_DOY233_PRIMARY_ARTIFACT_SELECTED_UNOPENED`. One HEAD request confirmed
+the deterministic BKG long-name product with a declared 2,886,587-byte gzip
+body; no directory search, fallback, RINEX header, body byte, observation value
+or score was accessed. ETag and length remain transport metadata, while the
+complete SHA-256 is correctly pending materialization. This receipt grants no
+body access. After review, the next maximum action is one separately authorized
+materialization/admission/opaque-score execution against this locator only,
+with bounded pre-hash transport and zero retry after the complete hash. See
+[`GNSS_DRAO_DOY233_PRIMARY_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_PRIMARY_ARTIFACT_SELECTION.md).
