@@ -2078,3 +2078,20 @@ product was queried or selected. The next maximum action is a rank-1
 date/codebook-specific physical-envelope audit, especially at the
 `15.103639 deg` elevation edge, before any artifact lookup. See
 [`GNSS_DRAO_LABELLED_FORWARD_GEOMETRY_SCREEN_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_GEOMETRY_SCREEN_REPORT.md).
+
+The rank-1 date-specific audit now returns
+`DRAO_LABELLED_FORWARD_PHYSICAL_MARGIN_ADMITTED`. Iterated transmit time and
+Earth rotation preserve the time-reversed null as controlling at
+`36,546.465334 m`. A deliberately relaxed, per-track/per-epoch troposphere box
+at the `15.104333 deg` shifted-elevation edge contributes `52.522062 m`; the
+complete model-side envelope is `1,469.974821 m`. With the unchanged
+`2,506.001724 m` conditional complete-measurement reserve, `B` is
+`3,975.976545 m`, `3B` is `11,927.929634 m`, and the remaining physical
+margin is `24,618.535699 m`. This admits no capability and selects no product:
+the reserve becomes usable only if a distinct structural qualification proves
+all six L1C/L2W tracks, zero/blank LLI, complete C1C/C2W witnesses,
+geometry-free continuity and exact timing/format coverage on all 139 epochs.
+Observation access remains zero. The next maximum action is review of that one
+structural-only qualification contract, not an observation lookup or a new
+geometry search. See
+[`GNSS_DRAO_LABELLED_FORWARD_PHYSICAL_ENVELOPE_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_PHYSICAL_ENVELOPE_REPORT.md).
