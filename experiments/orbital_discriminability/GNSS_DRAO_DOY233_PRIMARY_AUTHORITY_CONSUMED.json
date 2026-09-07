@@ -1,0 +1,9 @@
+{
+  "body_bytes_before_marker": 0,
+  "network_requests_before_marker": 0,
+  "observation_values_before_marker": 0,
+  "runner_seal_sha256": "eca7b78efb2420c2b714e4cd878e7d825196b314a74d4d9db336bb0fff50303a",
+  "runner_source_commit": "c40be1045469a956c046b64e1d940b2ecd79bb4c",
+  "schema": "gnss-drao-doy233-primary-authority-consumed-v1",
+  "state": "ONE_SHOT_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}
