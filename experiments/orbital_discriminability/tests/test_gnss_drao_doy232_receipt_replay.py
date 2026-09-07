@@ -257,14 +257,21 @@ def test_real_replay_receipt_preserves_scientific_seal() -> None:
 
 def test_real_replay_receipt_binds_frozen_execution() -> None:
     value = json.loads(RECEIPT.read_text(encoding="ascii"))
+    source_bytes = (ROOT / "gnss_drao_doy232_receipt_replay.py").read_bytes()
+    executed_windows_bytes = source_bytes.replace(b"\r\n", b"\n").replace(
+        b"\n", b"\r\n"
+    )
 
     assert value["authority"]["authority_sha256"] == replay.file_sha256(AUTHORITY)
     assert value["authority"]["executed_source_commit"] == (
         "4a0777267cf57f84ac8dc7f2e3b33f9f02b8c785"
     )
-    assert value["authority"]["materializer_code_sha256"] == replay.file_sha256(
-        ROOT / "gnss_drao_doy232_receipt_replay.py"
-    )
+    # The execution receipt intentionally hashes the actual Windows worktree
+    # bytes. GitHub's Linux checkout uses LF for the same source commit, so the
+    # regression reconstructs the recorded CRLF byte stream explicitly.
+    assert value["authority"]["materializer_code_sha256"] == replay.sha256(
+        executed_windows_bytes
+    ).hexdigest()
     assert replay.file_sha256(RECEIPT) == (
         "10e6c002333080087c5d87787d74a7882175ae72f875f55162ee53653d3341b0"
     )
