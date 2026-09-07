@@ -14,6 +14,7 @@ from experiments.orbital_discriminability import (
 
 ROOT = Path(__file__).resolve().parents[1]
 AUTHORITY = ROOT / "GNSS_DRAO_DOY232_RECEIPT_REPLAY_AUTHORITY.json"
+RECEIPT = ROOT / "GNSS_DRAO_DOY232_RECEIPT_REPLAY.json"
 SOURCE_COMMIT = "a" * 40
 
 
@@ -211,3 +212,59 @@ def test_prepared_receipt_can_be_finalized_without_network_or_content(
 def test_strict_json_rejects_non_finite_values() -> None:
     with pytest.raises(ValueError):
         replay.strict_json({"bad": float("nan")})
+
+
+def test_real_replay_receipt_freezes_integrity_and_cleanup() -> None:
+    value = json.loads(
+        RECEIPT.read_text(encoding="ascii"),
+        parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+    )
+
+    assert value["outcome"] == replay.FINAL
+    assert value["physical_decision"] == "NOT_EVALUATED"
+    assert value["physical_claims_authorized"] == []
+    assert value["artifact"]["actual_complete_bytes"] == 2_904_457
+    assert value["artifact"]["expected_bytes"] == 2_904_457
+    assert value["artifact"]["complete_sha256"] == (
+        "fca688310e9bd48a70452e0f9409a24d4b036add44ee31024ca1d76e130fe8d3"
+    )
+    assert value["cleanup"] == {
+        "artifact_unlinked": True,
+        "payload_retained": False,
+        "quarantine_directory_removed": True,
+        "state": "CONFIRMED",
+    }
+
+
+def test_real_replay_receipt_preserves_scientific_seal() -> None:
+    value = json.loads(RECEIPT.read_text(encoding="ascii"))
+    access = value["access"]
+
+    assert access["transport_attempts"] == 1
+    assert access["compressed_artifact_bytes_hashed"] == 2_904_457
+    assert access["decompression_attempted"] is False
+    assert access["observation_headers_parsed"] == 0
+    assert access["observation_values_accessed"] == 0
+    assert access["primary_locators"] == 0
+    assert access["primary_headers_parsed"] == 0
+    assert access["primary_payload_bytes"] == 0
+    assert access["primary_values_accessed"] == 0
+    assert set(value["qualification_clauses"].values()) == {
+        "COMPLETE_HASH_CAPTURED_PHYSICAL_ADMISSION_NOT_EVALUATED",
+        "NOT_EVALUATED",
+    }
+
+
+def test_real_replay_receipt_binds_frozen_execution() -> None:
+    value = json.loads(RECEIPT.read_text(encoding="ascii"))
+
+    assert value["authority"]["authority_sha256"] == replay.file_sha256(AUTHORITY)
+    assert value["authority"]["executed_source_commit"] == (
+        "4a0777267cf57f84ac8dc7f2e3b33f9f02b8c785"
+    )
+    assert value["authority"]["materializer_code_sha256"] == replay.file_sha256(
+        ROOT / "gnss_drao_doy232_receipt_replay.py"
+    )
+    assert replay.file_sha256(RECEIPT) == (
+        "10e6c002333080087c5d87787d74a7882175ae72f875f55162ee53653d3341b0"
+    )

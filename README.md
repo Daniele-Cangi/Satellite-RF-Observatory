@@ -1569,6 +1569,15 @@ decompression or RINEX header/value exposure, after which the frozen zero-retry
 rule still applies. The replay is authorized but has not been executed. See
 [`POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_MATERIALIZATION_CHANGE_OF_ABSTRACTION.md).
 
+The single authorized content-blind replay has now completed as
+`DRAO_DOY232_RECEIPT_REPLAY_MATERIALIZED`. The exact compressed artifact is
+`2,904,457` bytes with SHA-256
+`fca688310e9bd48a70452e0f9409a24d4b036add44ee31024ca1d76e130fe8d3`.
+Its payload and quarantine directory were removed after the two-phase receipt
+preserved the integrity record. Decompression, RINEX header/value access,
+physical qualification and DOY233 access remain zero. See
+[`GNSS_DRAO_DOY232_RECEIPT_REPLAY.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_RECEIPT_REPLAY.md).
+
 ## Repository map
 
 ```text

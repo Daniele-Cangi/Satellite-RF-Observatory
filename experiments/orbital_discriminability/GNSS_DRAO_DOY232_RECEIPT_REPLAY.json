@@ -1,0 +1,67 @@
+{
+  "access": {
+    "compressed_artifact_bytes_hashed": 2904457,
+    "decompression_attempted": false,
+    "observation_headers_parsed": 0,
+    "observation_values_accessed": 0,
+    "primary_headers_parsed": 0,
+    "primary_locators": 0,
+    "primary_payload_bytes": 0,
+    "primary_values_accessed": 0,
+    "transport_attempts": 1
+  },
+  "artifact": {
+    "actual_complete_bytes": 2904457,
+    "complete_sha256": "fca688310e9bd48a70452e0f9409a24d4b036add44ee31024ca1d76e130fe8d3",
+    "expected_bytes": 2904457,
+    "name": "DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz",
+    "role": "QUALIFICATION_ONLY_NEVER_SCORED_NEVER_PRIMARY",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/232/DRAO00CAN_R_20262320000_01D_30S_MO.crx.gz"
+  },
+  "authority": {
+    "authority_name": "GNSS_DRAO_DOY232_RECEIPT_REPLAY_AUTHORITY.json",
+    "authority_sha256": "1d63f1b7f12b933ad67c19d8bbc0ee1a2f4510b475f32e28de901bd8b75f30f0",
+    "base_commit": "1fabfb33e231e862e14812e12a414daba9dca1a3",
+    "executed_source_commit": "4a0777267cf57f84ac8dc7f2e3b33f9f02b8c785",
+    "materializer_code_sha256": "c6c29e83a744e737f270a2ff672bd3bf0b470352803cb341026bc3260fc1b4fe"
+  },
+  "cleanup": {
+    "artifact_unlinked": true,
+    "payload_retained": false,
+    "quarantine_directory_removed": true,
+    "state": "CONFIRMED"
+  },
+  "new_gate": false,
+  "next_maximum": "SEPARATE_REVIEW_THEN_MODEL_BLIND_DOY232_STRUCTURAL_QUALIFICATION",
+  "outcome": "DRAO_DOY232_RECEIPT_REPLAY_MATERIALIZED",
+  "physical_claims_authorized": [],
+  "physical_decision": "NOT_EVALUATED",
+  "qualification_clauses": {
+    "artifact_identity": "COMPLETE_HASH_CAPTURED_PHYSICAL_ADMISSION_NOT_EVALUATED",
+    "complete_core_phase": "NOT_EVALUATED",
+    "complete_same_path_code": "NOT_EVALUATED",
+    "cycle_slip_and_continuity": "NOT_EVALUATED",
+    "header_identity_and_time": "NOT_EVALUATED",
+    "physical_same_path_witness": "NOT_EVALUATED"
+  },
+  "response_metadata": {
+    "content_encoding": {
+      "state": "ABSENT",
+      "value": null
+    },
+    "content_length": {
+      "state": "PRESENT_AND_MATCHED",
+      "value": 2904457
+    },
+    "etag": {
+      "state": "PRESENT_AND_MATCHED",
+      "value": "\"2c5189-6598ad1ef8dbf\""
+    },
+    "last_modified": {
+      "state": "PRESENT_AND_MATCHED",
+      "value": "Fri, 21 Aug 2026 08:57:02 GMT"
+    }
+  },
+  "schema": "gnss-drao-doy232-receipt-replay-v1",
+  "stop": "NO_DECOMPRESSION_HEADER_VALUE_OR_PRIMARY_ACCESS"
+}
