@@ -1,0 +1,41 @@
+{
+  "code_witness_is_same_receiver_not_independent_hardware": true,
+  "expected_orbit_codebook": [
+    "G07",
+    "G08",
+    "G09",
+    "G21",
+    "G27",
+    "G30"
+  ],
+  "model_mapping": [
+    {
+      "opaque_model_id": "M_D904F122C3EFC72F",
+      "satellite": "G07"
+    },
+    {
+      "opaque_model_id": "M_C2C0BE9AA16B7F4A",
+      "satellite": "G08"
+    },
+    {
+      "opaque_model_id": "M_AC3490D9D95E2A0B",
+      "satellite": "G09"
+    },
+    {
+      "opaque_model_id": "M_F00D219641E036D1",
+      "satellite": "G21"
+    },
+    {
+      "opaque_model_id": "M_EDE6A8B9A14F2759",
+      "satellite": "G27"
+    },
+    {
+      "opaque_model_id": "M_3425507F05DB6CB6",
+      "satellite": "G30"
+    }
+  ],
+  "reveal_only_after_opaque_score_receipt_hash": true,
+  "schema": "gnss-drao-doy233-identity-reveal-v1",
+  "track_id_salt": "DRAO_DOY233_TRACK_REVEAL_V1",
+  "track_identity_function": "T_ + FIRST_16_HEX(SHA256(TRACK_ID_SALT + ':' + PRN))"
+}
