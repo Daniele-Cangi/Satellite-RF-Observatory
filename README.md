@@ -1551,6 +1551,15 @@ pending materialization. No alternate locator was tried and every physical
 qualification clause remains `NOT_EVALUATED`. See
 [`GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_ARTIFACT_SELECTION.md).
 
+The first materialization attempt terminates `QUALIFICATION_DESCRIPTION_ERROR`.
+The complete download and SHA-256 computation returned, but receipt creation
+then indexed a missing GET `Content-Length` header as an array. The digest and
+actual byte count were not emitted and are therefore unavailable, not inferred
+from transport metadata. Cleanup removed the payload; decompression, RINEX
+header/value access and DOY233 access remain zero. Because the frozen contract
+permits no retry after hashing, no second transfer was attempted. See
+[`GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_MATERIALIZATION_DESCRIPTION_ERROR.md).
+
 ## Repository map
 
 ```text
