@@ -2095,3 +2095,18 @@ Observation access remains zero. The next maximum action is review of that one
 structural-only qualification contract, not an observation lookup or a new
 geometry search. See
 [`GNSS_DRAO_LABELLED_FORWARD_PHYSICAL_ENVELOPE_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_PHYSICAL_ENVELOPE_REPORT.md).
+
+The observation-free structural boundary is now frozen as
+`DRAO_LABELLED_FORWARD_STRUCTURAL_CONTRACT_FROZEN_UNOPENED`. It binds the
+DOY237 window and G14/G15/G17/G20/G24/G30 labels to one later selected DRAO
+30-second mixed-observation artifact, while leaving its filename, locator,
+hashes and access authority empty. The future value-blind scan must traverse
+all 834 required satellite/epoch pairs and require L1C/L2W/C1C/C2W plus
+blank-or-zero LLI at every epoch. Extra tracks are descriptive; no required
+PRN may be substituted. Crucially, structural readiness cannot activate the
+physical reserve: geometry-free phase continuity, phase-minus-code,
+multipath/hardware and every orbital score remain `NOT_EVALUATED`. No product
+was queried or selected. After review, the next maximum action is metadata-only
+selection of at most one exact DOY237 artifact; body access remains separately
+unauthorized. See
+[`GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_CONTRACT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_CONTRACT.md).
