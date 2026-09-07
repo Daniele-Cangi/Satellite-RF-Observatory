@@ -1,0 +1,72 @@
+{
+  "access": {
+    "http_head_requests": 1,
+    "locator_candidates_attempted": 1,
+    "observation_body_bytes": 0,
+    "observation_headers_parsed": 0,
+    "observation_values_accessed": 0,
+    "orbital_scores": 0
+  },
+  "artifact": {
+    "archive": "BKG_IGS_PUBLIC_ARCHIVE",
+    "body_access_authorized": false,
+    "complete_sha256": null,
+    "complete_sha256_state": "PENDING_COMPLETE_MATERIALIZATION",
+    "doy": 233,
+    "gps_date": "2026-08-21",
+    "name": "DRAO00CAN_R_20262330000_01D_30S_MO.crx.gz",
+    "product_class": "RINEX3_LONG_NAME_01D_30S_MIXED_OBSERVATION_HATANAKA_GZIP",
+    "published_cryptographic_checksum": {
+      "state": "UNKNOWN_NOT_QUERIED",
+      "value": null
+    },
+    "role": "HELDOUT_PRIMARY_ONE_SHOT",
+    "station": "DRAO00CAN",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/233/DRAO00CAN_R_20262330000_01D_30S_MO.crx.gz"
+  },
+  "future_one_shot_execution": {
+    "complete_sha256_before_decompression": true,
+    "description_or_transport_failure_outcome": "PRIMARY_NOT_EVALUATED",
+    "etag_is_cryptographic_hash": false,
+    "failure_selects_alternate_archive_artifact_date_or_station": false,
+    "maximum_transport_attempts_before_complete_hash": 2,
+    "metadata_mismatch_outcome": "PRIMARY_NOT_EVALUATED",
+    "post_complete_hash_retry": 0,
+    "resume_allowed_before_complete_hash": true,
+    "same_locator_only": true,
+    "state": "NOT_AUTHORIZED_BY_THIS_RECEIPT"
+  },
+  "http_head_receipt": {
+    "accept_ranges": "bytes",
+    "body_bytes_accessed": 0,
+    "content_length": 2886587,
+    "content_type": "application/x-gzip",
+    "etag": "\"2c0bbb-6599ef1b69d62\"",
+    "last_modified": "Sat, 22 Aug 2026 08:57:35 GMT",
+    "method": "HEAD",
+    "response_date": "Mon, 07 Sep 2026 16:09:24 GMT",
+    "status": 200
+  },
+  "new_gate": false,
+  "next_maximum": "SEPARATE_REVIEW_AND_ONE_USE_AUTHORITY_FOR_EXACT_MATERIALIZATION_ADMISSION_OPAQUE_SCORE_AND_ONE_OUTCOME",
+  "outcome": "DRAO_DOY233_PRIMARY_ARTIFACT_SELECTED_UNOPENED",
+  "physical_claims_authorized": [],
+  "proof_authority": {
+    "executor_manifest_canonical_sha256": "8bae785ad8511f3757944528821a27e9faac31797b5c4aee50896e0ba9bd31c1",
+    "executor_manifest_name": "GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.json",
+    "executor_source_canonical_sha256": "b7f46defd23001d553952ca38f5f6f8eee43dbd37ac996842167df030d0fd2cc",
+    "executor_source_commit": "505237d3fa962a441e8a7a8389e854120881d9da",
+    "main_merge_commit": "dfea90243c0ecd00389d6192bbc320c606c25412",
+    "plan_canonical_sha256": "c6352b12c2a768a449cb73f3f62732e839c4e5d0633ff7de2ddb4e57a7b326cf",
+    "plan_name": "GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_PLAN.json"
+  },
+  "schema": "gnss-drao-doy233-primary-artifact-selection-v1",
+  "selection": {
+    "alternate_locators_tested": 0,
+    "fallback_enabled": false,
+    "rule": "EXACT_IGS_LONG_NAME_FROM_FROZEN_DRAO_DOY233_DURATION_CADENCE_AND_OBSERVATION_CLASS_AT_PREDECLARED_BKG_ARCHIVE",
+    "selected_from_observation_content": false
+  },
+  "state": "DRAO_DOY233_PRIMARY_ARTIFACT_SELECTED_UNOPENED",
+  "stop": "STOP_BEFORE_OBSERVATION_HEADER_BODY_DECOMPRESSION_ADMISSION_OR_SCORE"
+}
