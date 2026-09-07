@@ -1613,6 +1613,16 @@ only a fully admitted artifact can produce an orbital or null outcome. DOY233
 still has no locator, is not frozen and remains unopened. See
 [`POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md).
 
+That integrated DOY233 plan and its experiment-specific executor are now
+frozen offline. Exactly seven complete anonymous GPS tracks must pass identity,
+timing, structure, zero-LLI, geometry-free continuity and all seven possible
+same-path phase/code exclusion tests before the existing 10,087-hypothesis
+one-clutter scorer can run. Code identity remains outside the scorer and is
+revealed only after the opaque score receipt is hashed. The primary still has
+no logical product, locator or complete-file hash, so real execution hard-
+refuses `PRIMARY_ARTIFACT_UNSELECTED`; observation access remains zero. See
+[`GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md).
+
 ## Repository map
 
 ```text

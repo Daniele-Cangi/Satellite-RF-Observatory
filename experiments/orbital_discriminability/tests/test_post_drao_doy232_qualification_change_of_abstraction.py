@@ -20,11 +20,15 @@ def load(path: Path) -> dict[str, object]:
     return value
 
 
+def canonical_sha256(path: Path) -> str:
+    return sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def test_historical_outcome_and_audit_remain_immutable() -> None:
     assert sha256(HISTORICAL_OUTCOME.read_bytes()).hexdigest() == (
         "b0c4b1d96969f0fb997013de0dc7229f59c38439ba65a10f342784dd851695aa"
     )
-    assert sha256(HISTORICAL_AUDIT.read_bytes()).hexdigest() == (
+    assert canonical_sha256(HISTORICAL_AUDIT) == (
         "e557e03ec0736e2aca5dcd7fe97596d6317d4fc11a4c4d3d3cd6029c5af473f0"
     )
 

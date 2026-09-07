@@ -2005,3 +2005,16 @@ complete hash -> attributable identity receipt -> structural admission ->
 model-blind witnesses -> opaque score receipt -> post-hash code reveal. No
 observation access, alternate date or new geometry search is implied. See
 [`POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.md).
+
+The integrated DOY233 proof and offline executor are now frozen without
+selecting or opening an observation artifact. The parser discovers all GPS
+tracks from structure rather than a PRN filter, requires exactly seven complete
+L1C/L2W/C1C/C2W tracks with zero LLI, and evaluates geometry-free continuity
+plus the phase/code witness under every one of the seven possible exclusions.
+Only opaque tracks reach the symmetric 10,087-hypothesis scorer; code and model
+identity are revealed only after the opaque score receipt hash. The executable
+hard-refuses `PRIMARY_ARTIFACT_UNSELECTED`, and all observation-access counters
+remain zero. The next maximum action after review is one bounded metadata-only
+selection of the exact DOY233 product and a separate one-use authority; it is
+not another geometry search, qualification date or parser gate. See
+[`GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md).

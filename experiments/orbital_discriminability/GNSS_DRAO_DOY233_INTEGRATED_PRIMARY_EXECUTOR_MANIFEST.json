@@ -1,0 +1,46 @@
+{
+  "access_at_freeze": {
+    "headers": 0,
+    "network_requests": 0,
+    "observation_values": 0,
+    "payload_bytes": 0,
+    "scores": 0
+  },
+  "artifact": {
+    "complete_sha256": null,
+    "locator": null,
+    "logical_product": null,
+    "selected": false
+  },
+  "authority": {
+    "observation_access_authorized": false,
+    "post_complete_hash_retry": 0,
+    "real_execution_behavior": "HARD_REFUSAL_PRIMARY_ARTIFACT_UNSELECTED"
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3"
+  },
+  "executor_contract_sha256": "4dcc2dabdd4a1e94caee55d50f143d11f228013ce63b5d5e3224227e2b50899b",
+  "executor_source_canonical_sha256": "b7f46defd23001d553952ca38f5f6f8eee43dbd37ac996842167df030d0fd2cc",
+  "frozen_inputs": {
+    "GNSS_DRAO_DOY233_IDENTITY_REVEAL.json": "d75243571639b00d51d059f452ef08d4c493e210f0ad2c78ae4ba23d4c4ef07a",
+    "GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_PLAN.json": "c6352b12c2a768a449cb73f3f62732e839c4e5d0633ff7de2ddb4e57a7b326cf",
+    "GNSS_DRAO_DOY233_OPAQUE_PREDICTION_BUNDLE.json": "1d8888b6a5cffdab6d6412d935c3b704e4ae42fa878b79bb90831e93f8431117",
+    "gnss_all_track_clutter_scorer.py": "ecdf2afffed80f279a23bcaa46a870b5acee3272709e166c8e9c2a97d1205033"
+  },
+  "new_gate": false,
+  "persistence": {
+    "compressed_primary": 0,
+    "decoded_primary": 0,
+    "derived_series": 0,
+    "observation_values": 0
+  },
+  "schema": "gnss-drao-doy233-integrated-primary-executor-seal-v1",
+  "source_commit": "505237d3fa962a441e8a7a8389e854120881d9da",
+  "state": "DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_FROZEN_ARTIFACT_UNSELECTED",
+  "tests": {
+    "ci_command": "python -m pytest experiments/live_instrument/tests experiments/orbital_discriminability/tests -q",
+    "passed": 1611
+  }
+}
