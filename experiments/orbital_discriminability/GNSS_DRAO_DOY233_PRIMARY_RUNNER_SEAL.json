@@ -1,0 +1,39 @@
+{
+  "access_at_seal": {
+    "body_bytes": 0,
+    "headers": 0,
+    "network_requests": 0,
+    "observation_values": 0,
+    "scores": 0
+  },
+  "authority": {
+    "marker_written_before_network": true,
+    "one_use_token_required": true,
+    "post_complete_hash_retry": 0,
+    "second_execution_allowed": false
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3",
+    "python": "3.13"
+  },
+  "frozen_core": {
+    "executor_manifest_sha256": "8bae785ad8511f3757944528821a27e9faac31797b5c4aee50896e0ba9bd31c1",
+    "executor_source_sha256": "b7f46defd23001d553952ca38f5f6f8eee43dbd37ac996842167df030d0fd2cc",
+    "opaque_bundle_sha256": "1d8888b6a5cffdab6d6412d935c3b704e4ae42fa878b79bb90831e93f8431117",
+    "plan_sha256": "c6352b12c2a768a449cb73f3f62732e839c4e5d0633ff7de2ddb4e57a7b326cf",
+    "reveal_sha256": "d75243571639b00d51d059f452ef08d4c493e210f0ad2c78ae4ba23d4c4ef07a"
+  },
+  "live_authority_granted": false,
+  "new_gate": false,
+  "runner_manifest_sha256": "da8df242123cf05331b727b7c18580a7b6ed52f8ff12119131c250373f4f8a20",
+  "runner_source_canonical_sha256": "1d6f132d3029fb2703dab57369feb260f1343aa58aaecbb003b6f26036131ad3",
+  "runner_source_commit": "c40be1045469a956c046b64e1d940b2ecd79bb4c",
+  "schema": "gnss-drao-doy233-primary-runner-seal-v1",
+  "selection_canonical_sha256": "4cc85f077feb7e784920494f2b56b83ce9b2e0d3bda703f7e937b180914d9ea3",
+  "state": "DRAO_DOY233_PRIMARY_RUNNER_FROZEN_UNEXECUTED",
+  "tests": {
+    "ci_command": "python -m pytest experiments/live_instrument/tests experiments/orbital_discriminability/tests -q",
+    "passed": 1625
+  }
+}

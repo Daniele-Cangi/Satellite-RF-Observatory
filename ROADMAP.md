@@ -2029,3 +2029,14 @@ body access. After review, the next maximum action is one separately authorized
 materialization/admission/opaque-score execution against this locator only,
 with bounded pre-hash transport and zero retry after the complete hash. See
 [`GNSS_DRAO_DOY233_PRIMARY_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_PRIMARY_ARTIFACT_SELECTION.md).
+
+The experiment-specific one-shot runner is now frozen offline as
+`DRAO_DOY233_PRIMARY_RUNNER_FROZEN_UNEXECUTED`. It binds the exact selection
+and existing integrated core, consumes its authority marker before network,
+persists complete byte count and SHA-256 before decompression, then permits the
+frozen admission and opaque score exactly once. Transport/software failures
+remain `PRIMARY_NOT_EVALUATED`; only parsed structural or physical-admission
+failures can become `MEASUREMENT_INVALID`. The seal grants no live authority
+and all access counters remain zero. The next action after review is the one
+primary execution itself, not another preparation layer. See
+[`GNSS_DRAO_DOY233_PRIMARY_RUNNER_SEAL.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_PRIMARY_RUNNER_SEAL.md).
