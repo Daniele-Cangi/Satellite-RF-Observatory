@@ -1906,3 +1906,16 @@ next maximum action is review of one DOY232 qualification contract that must
 require exact signal/scale semantics and C1C/C2W at every core-phase epoch;
 failure closes the staged route without selecting a DOY233 primary. See
 [`GNSS_DRAO_STAGED_MODEL_ENVELOPE.md`](experiments/orbital_discriminability/GNSS_DRAO_STAGED_MODEL_ENVELOPE.md).
+
+The DOY232 qualification contract is now frozen before artifact selection.
+It binds the model-side result and DRAO root metadata, requires the complete
+139-epoch L1C/L2W plus C1C/C2W topology on all six tracks, and makes RINEX
+scale, phase-shift and receiver-clock semantics explicit. The phase-code
+witness uses the same common-mode and prefix-only affine topology: at most
+`1,250 m` held-out peak-to-peak per track, whose gain-two bound activates the
+unchanged `2,500 m` reserve. Receipt failures do not become physical
+rejections, no failed clause can select a fallback and DOY233 stays
+unselected. The next maximum action after review is selection of at most one
+exact DOY232 artifact; no observation access is authorized by the contract.
+See
+[`GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md).

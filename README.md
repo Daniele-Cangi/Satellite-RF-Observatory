@@ -1532,6 +1532,16 @@ one DOY232 qualification contract, requires 100 percent same-path code
 coverage and leaves every DRAO observation locator unselected. See
 [`GNSS_DRAO_STAGED_MODEL_ENVELOPE.md`](experiments/orbital_discriminability/GNSS_DRAO_STAGED_MODEL_ENVELOPE.md).
 
+That qualification boundary is now frozen without selecting an artifact.
+DOY232 must provide the exact 139-epoch L1C/L2W path and C1C/C2W at every
+epoch for all six satellites. The model-blind same-path witness is centered
+across the six tracks, fitted only on the 79-epoch prefix and limited to
+`1,250 m` held-out peak-to-peak per track; the proven common-mode gain of two
+therefore closes the existing `2,500 m` reserve. Description failures remain
+distinct from topology and physical-witness rejection. DOY233 remains
+unselected and inaccessible. See
+[`GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY232_QUALIFICATION_CONTRACT.md).
+
 ## Repository map
 
 ```text
