@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from hashlib import sha256
 import json
 
 import numpy as np
@@ -18,6 +19,7 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SEAL = ROOT / "GNSS_DRAO_LABELLED_FORWARD_DOY234_EXECUTOR_MANIFEST.json"
 
 
 def phase_record(observable: str, correction: str = "") -> str:
@@ -96,6 +98,21 @@ def test_manifest_binds_final_shortlist_proof_and_refuses_selection() -> None:
     assert not any(value["access_at_freeze"].values())
     with pytest.raises(PermissionError, match="DRAO_DOY234_ARTIFACT_UNSELECTED"):
         executor.refuse_unselected(ROOT)
+
+
+def test_post_commit_seal_binds_source_contract_and_zero_access() -> None:
+    value = json.loads(SEAL.read_text(encoding="ascii"))
+    contract_hash = sha256(
+        executor.strict_json(executor.executor_manifest(ROOT)).encode("ascii")
+    ).hexdigest()
+
+    assert value["source_commit"] == "f3421b3bf78259d1abc61e0d0847cf35556c925f"
+    assert value["executor_source_canonical_sha256"] == executor.source_sha256()
+    assert value["executor_contract_sha256"] == contract_hash
+    assert value["frozen_inputs"] == executor.executor_manifest(ROOT)["frozen_inputs"]
+    assert value["selection_receipt"]["present_at_freeze"] is False
+    assert value["authority"]["observation_access_authorized"] is False
+    assert not any(value["access_at_freeze"].values())
 
 
 def test_reference_signal_blank_and_explicit_zero_are_distinct_valid_states() -> None:
