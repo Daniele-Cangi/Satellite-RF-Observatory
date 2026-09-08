@@ -1623,6 +1623,16 @@ no logical product, locator or complete-file hash, so real execution hard-
 refuses `PRIMARY_ARTIFACT_UNSELECTED`; observation access remains zero. See
 [`GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md`](experiments/orbital_discriminability/GNSS_DRAO_DOY233_INTEGRATED_PRIMARY_EXECUTOR_MANIFEST.md).
 
+The current forward path is the pre-observation DRAO DOY238 labelled vertical.
+Its orbit, six fixed PRNs, prefix/held-out split, physical envelope and two null
+families were frozen before observation selection. The source-specific executor
+now also freezes composite identity, exact RINEX transform semantics,
+model-blind phase/code witnesses and the three-family decision table. It has no
+artifact locator or transport and refuses while the separately reviewable
+selection receipt is absent; therefore no DOY238 observation header, payload,
+value or score has been accessed. See
+[`GNSS_DRAO_LABELLED_FORWARD_DOY238_EXECUTOR_MANIFEST.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY238_EXECUTOR_MANIFEST.md).
+
 ## Repository map
 
 ```text

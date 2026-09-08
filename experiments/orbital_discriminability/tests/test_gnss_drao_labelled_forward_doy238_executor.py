@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from hashlib import sha256
 from pathlib import Path
 import json
 
@@ -15,6 +16,7 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SEAL = ROOT / "GNSS_DRAO_LABELLED_FORWARD_DOY238_EXECUTOR_MANIFEST.json"
 
 
 def header_line(data: str, label: str) -> str:
@@ -167,6 +169,22 @@ def test_manifest_binds_plan_and_refuses_before_artifact_access() -> None:
     assert not any(manifest["access_at_freeze"].values())
     with pytest.raises(PermissionError, match="DRAO_DOY238_ARTIFACT_UNSELECTED"):
         executor.refuse_unselected_artifact(ROOT)
+
+
+def test_post_commit_seal_binds_source_contract_dependencies_and_zero_access() -> None:
+    value = json.loads(SEAL.read_text(encoding="ascii"))
+    contract_hash = sha256(
+        executor.strict_json(executor.executor_manifest(ROOT)).encode("ascii")
+    ).hexdigest()
+
+    assert value["source_commit"] == "93e4c2dacbc503516c4f5fa1cfb43e7353655adf"
+    assert value["executor_source_canonical_sha256"] == executor.source_sha256()
+    assert value["executor_contract_sha256"] == contract_hash
+    assert value["dependencies"] == executor.dependency_versions()
+    assert value["frozen_inputs"] == executor.executor_manifest(ROOT)["frozen_inputs"]
+    assert value["selection_receipt"]["present_at_freeze"] is False
+    assert value["authority"]["observation_access_authorized"] is False
+    assert not any(value["access_at_freeze"].values())
 
 
 def test_marker_literal_is_descriptive_and_extra_track_is_not_scored() -> None:

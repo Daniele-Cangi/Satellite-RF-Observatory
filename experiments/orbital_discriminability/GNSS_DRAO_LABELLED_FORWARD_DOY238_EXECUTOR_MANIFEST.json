@@ -1,0 +1,109 @@
+{
+  "access_at_freeze": {
+    "observation_file_opens": 0,
+    "observation_locator_requests": 0,
+    "observation_payload_bytes": 0,
+    "observation_values": 0,
+    "orbital_scores": 0
+  },
+  "authority": {
+    "artifact_selection_authorized": false,
+    "observation_access_authorized": false,
+    "separate_immutable_selection_receipt_required": true
+  },
+  "dependencies": {
+    "numpy": "2.3.3"
+  },
+  "executor_contract_sha256": "2434cdc160e3d2126e46b59de9465b419ed9318b3da459a4a9f9e1de65b7e0e4",
+  "executor_source_canonical_sha256": "0c72a4fdcc3c2100726b43e800f4eaf09d465e12a2c104858f045f740ecfd394",
+  "frozen_contract": {
+    "identity": {
+      "antenna_radome": "TWIVC6050_SCIS",
+      "archive_site_id": "DRAO00CAN",
+      "domes": "40105M002",
+      "marker_name": "DESCRIPTIVE_NOT_LITERAL_BINDING",
+      "receiver": "SEPT_POLARX5_5.2.0"
+    },
+    "model_blind_witnesses": {
+      "geometry_free_second_difference_limit_m": 0.09514683639918244,
+      "phase_minus_code_heldout_peak_to_peak_limit_m_per_track": 1250.0,
+      "prediction_bundle_available": false
+    },
+    "required": {
+      "extra_tracks": "DESCRIPTIVE_NOT_FATAL_NOT_SCORED",
+      "fields": [
+        "L1C",
+        "L2W",
+        "C1C",
+        "C2W"
+      ],
+      "lli": "ZERO_OR_BLANK_ON_L1C_AND_L2W",
+      "normal_epochs": 139,
+      "pairs": 834,
+      "prns": [
+        "G14",
+        "G15",
+        "G17",
+        "G20",
+        "G24",
+        "G30"
+      ]
+    },
+    "score": {
+      "controlling_metric": "MAX_TRACK_HELDOUT_PEAK_TO_PEAK_M",
+      "coordinate": "IONOSPHERE_FREE_L1C_L2W_PHASE_RANGE_M",
+      "families": [
+        "ORBITAL",
+        "PREFIX_AFFINE_ONLY",
+        "TIME_REVERSED_GEOMETRY"
+      ],
+      "free_time_phase": false,
+      "guard_b_m": 3971.647488808212,
+      "heldout_refit": false,
+      "noncontrolling_metric": "MAX_TRACK_HELDOUT_RMS_M",
+      "nuisance": "PER_TRACK_PREFIX_ONLY_CONSTANT_PLUS_RATE",
+      "spatial_operator": "SIX_TRACK_EPOCHWISE_ENSEMBLE_CENTER"
+    },
+    "transform_ledger": {
+      "RCV_CLOCK_OFFS_APPL": "EXPLICIT_OR_SPEC_DEFAULT_ZERO;EVENT_AND_MEASUREMENT_CORRECTION_EXACTLY_ONCE",
+      "SYS_PHASE_SHIFT": "EXPLICIT_OR_SPEC_DEFINED_ABSENCE;STORED_PHASE_ALREADY_INCLUDES_DECLARED_CORRECTION;NEVER_APPLY_AGAIN",
+      "SYS_SCALE_FACTOR": "EXPLICIT_OR_SPEC_DEFINED_ABSENCE_UNITY;PHYSICAL_VALUE_EQUALS_STORED_VALUE_DIVIDED_BY_FACTOR",
+      "malformed_conflict_incomplete_are_typed": true
+    },
+    "window": {
+      "heldout_indices": [
+        79,
+        138
+      ],
+      "prefix_indices": [
+        0,
+        78
+      ],
+      "raw_epochs": 139,
+      "start_gps": "2026-08-26T04:50:00.000000Z",
+      "step_s": 30,
+      "stop_gps": "2026-08-26T05:59:00.000000Z"
+    }
+  },
+  "frozen_inputs": {
+    "GNSS_DRAO_LABELLED_FORWARD_DOY238_INTEGRATED_PLAN.json": "81e894a403066bc35187cfe9dd463ac5602eae5b80c7d278b270065449802d26",
+    "GNSS_DRAO_LABELLED_FORWARD_DOY238_PREDICTION_BUNDLE.json": "52fa87052c01f407cfe7d4ba09131bdaaf38846106afcf7ae3dbcc27a8e9dbc5"
+  },
+  "generic_framework": false,
+  "new_gate": false,
+  "persistence": {
+    "compressed_observation": 0,
+    "decoded_observation": 0,
+    "derived_series": 0,
+    "observation_values": 0
+  },
+  "schema": "gnss-drao-labelled-forward-doy238-executor-seal-v1",
+  "selection_receipt": {
+    "name": "GNSS_DRAO_LABELLED_FORWARD_DOY238_ARTIFACT_SELECTION.json",
+    "present_at_freeze": false,
+    "required_before_observation_network_or_file_access": true
+  },
+  "source_commit": "93e4c2dacbc503516c4f5fa1cfb43e7353655adf",
+  "state": "DRAO_DOY238_EXECUTOR_FROZEN_ARTIFACT_UNSELECTED",
+  "stop": "STOP_BEFORE_DOY238_OBSERVATION_LOOKUP_SELECTION_HEADER_PAYLOAD_VALUE_OR_SCORE"
+}
