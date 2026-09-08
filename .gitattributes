@@ -40,3 +40,11 @@ experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.jso
 
 # The LuGRE metadata audit receipt is frozen from its exact LF byte stream.
 experiments/orbital_discriminability/LUGRE_PROSPECTIVE_METADATA_AUDIT_RECEIPT.json -text
+
+# Independent-position evidence retains its frozen bytes across platforms.
+experiments/gnss_inverse_positioning/*.py -text
+experiments/gnss_inverse_positioning/event_2026249/*.json -text whitespace=cr-at-eol
+experiments/positioning_g12_doy250/*.json -text whitespace=cr-at-eol
+
+# Fixed-width SP3 source excerpts include meaningful record padding.
+positioning/tests/fixtures/*.sp3 -text whitespace=-blank-at-eol

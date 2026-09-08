@@ -1,0 +1,86 @@
+# Active inverse-positioning code
+
+This is the small active implementation for the independent-position mission
+in the root `AGENTS.md`. The original G08 implementation remains frozen under
+`experiments/gnss_inverse_positioning/`.
+
+The first active real-data attempt is G12 DOY250 with seven fit receivers and
+GOLD held out. It closed at structural admission: 18 consecutive common epochs
+were available, below the predeclared 41. No new position or oracle comparison
+was produced. See `experiments/positioning_g12_doy250/OUTCOME.md`.
+
+## Portable execution
+
+From the repository root, using Python 3.13:
+
+```powershell
+python -m pip install -r requirements-positioning.txt
+python -m positioning acquire experiments/positioning_g12_doy250/plan.json work/g12_reproduction
+python -m positioning estimate work/g12_reproduction
+python -m positioning verify work/g12_reproduction
+```
+
+This example reproduces a **closed failed qualification**, not a new experiment.
+It does not change the closed event. A fresh experiment needs a separately
+predeclared plan and unexposed confirmation evidence.
+
+- `acquire` freezes the exact plan before downloads, hashes compressed sources
+  before decoding, scans structure, selects the frozen window, then constructs
+  reference-only navigation and observation inputs. Held-out target codes remain
+  outside the estimator packet. Mixed raw navigation is not persisted.
+- `estimate` uses only admitted inputs. The CLI denies Python socket operations
+  and subprocess creation in this stage. It calibrates clocks, reconstructs an
+  emitted event, solves xyz+B, evaluates uncertainty, predicts the excluded
+  receiver, and saves solution/hash before any confirmation access.
+- `verify` first checks the freeze, source hashes and input hashes. It reveals
+  the excluded receiver, then downloads the specified oracle. It never refits
+  the position. An existing terminal result is returned without new access.
+
+The offline audit hook prevents accidental networking through these Python
+capabilities. It is not a security boundary against malicious native code or an
+administrator. File hashes and stage separation are audit evidence, not a
+trusted external timestamp.
+
+The kernel supports GPS RINEX 3 C1C/C2W data, 5–8 distinct fit roots and one
+excluded root. Date, target, window and station set are explicit inputs. GPST
+calendar and GPS-week offsets are handled separately from fine local time.
+The currently implemented calibration thresholds are checked against the plan;
+unsupported threshold changes are rejected rather than silently ignored.
+
+Unknown clock/code/coordinate header changes are not silently accepted. The
+current parser supports the phase-only header updates needed by the measured
+files. It is deliberately not a universal RINEX implementation.
+
+## Error and claim limits
+
+Keep a 20 m statistical code floor, shared-reference and terrestrial-coordinate
+uncertainty, and a stated ±20 m per-root systematic design envelope for the new
+event. The G12 plan adds 64 deterministic interior bias probes to all 128 corners
+and a 5% numerical envelope margin. These probes investigate sensitivity;
+they do not certify global coverage or remove unknown physical biases.
+
+An uncertainty-qualified numerical solution is not yet externally confirmed.
+The primary label requires the frozen uncertainty, excluded-receiver and oracle
+criteria all to pass. A small observed error does not permit retroactive
+uncertainty reduction.
+
+## Verification
+
+```powershell
+python -m pytest positioning/tests experiments/gnss_inverse_positioning/tests -q
+```
+
+If a local sandbox does not permit the system temporary directory, add
+`--basetemp work/pytest-positioning-local` with a dedicated workspace directory.
+GitHub Actions runs these suites on Windows and Linux. A workflow definition
+is not evidence that a remote CI run has already occurred.
+
+Tests include target mutation/removal, independent clock-gauge shifts, GPST day
+and week rollover, 7-root inverse recovery, rank failure, frozen G08 regression,
+and the complete acquisition-independent calibration/freeze/reveal chain using
+previously revealed G08 excerpts. The oracle is supplied from a local fixture
+in that regression; it is never counted as new scientific evidence.
+
+Numerical paths are implemented and tested. The active new-event path has so
+far reached structural admission only. It is not yet a demonstrated general
+verification service.

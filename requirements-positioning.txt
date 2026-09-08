@@ -1,0 +1,5 @@
+# Dedicated positioning runtime; inherited from the measured G08 environment.
+numpy==2.3.3
+scipy==1.17.1
+hatanaka==2.8.1
+pytest==8.4.2
