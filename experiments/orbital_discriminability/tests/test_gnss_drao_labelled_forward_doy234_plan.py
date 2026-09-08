@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
 
 import pytest
 
@@ -39,3 +40,18 @@ def test_navigation_rejects_wrong_bytes_before_parse() -> None:
 def test_json_is_strict() -> None:
     with pytest.raises(ValueError):
         plan.strict_json({"bad": float("nan")})
+
+
+def test_generated_proof_has_positive_exact_margin_and_zero_observation_access() -> None:
+    envelope = json.loads((ROOT / plan.ENVELOPE_NAME).read_text(encoding="ascii"))
+    frozen = json.loads((ROOT / plan.PLAN_NAME).read_text(encoding="ascii"))
+    bundle = json.loads((ROOT / plan.BUNDLE_NAME).read_text(encoding="ascii"))
+
+    assert envelope["outcome"] == "DRAO_DOY234_PHYSICAL_MARGIN_ADMITTED"
+    assert envelope["envelope"]["remaining_physical_margin_m"] > 24_000.0
+    assert not any(envelope["observation_access"].values())
+    assert frozen["state"] == "DRAO_DOY234_INTEGRATED_PLAN_FROZEN_ARTIFACT_UNSELECTED"
+    assert frozen["transform_policy"]["REFERENCE_SIGNAL_BLANK_CORRECTION"].startswith("VALID")
+    assert frozen["transform_policy"]["SYSTEM_ALIGNMENT_UNKNOWN_BLANK_RECORD"] == "PRIMARY_NOT_EVALUATED"
+    assert set(bundle["labelled_model_curves_m"]) == set(plan.CODEBOOK)
+    assert all(len(values) == 139 for values in bundle["labelled_model_curves_m"].values())

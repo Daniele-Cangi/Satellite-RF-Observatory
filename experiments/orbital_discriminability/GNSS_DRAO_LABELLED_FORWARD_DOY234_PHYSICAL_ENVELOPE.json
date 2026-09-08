@@ -1,0 +1,144 @@
+{
+  "authority": {
+    "GNSS_DRAO_LABELLED_FORWARD_DOY238_OUTCOME_AUDIT.json": "efe0148bf94b5c00faca3e8576bf5966a12be62a73ef52931c5b0483552cf321",
+    "GNSS_DRAO_LABELLED_FORWARD_GEOMETRY_SCREEN.json": "06161af57ada12e081faef7cf470e540ea5fff5dd7cf2f6614077b738852ed62",
+    "doy237_reopened": false,
+    "doy238_reopened": false,
+    "selection_rule": "ONLY_REMAINING_UNCONSUMED_MEMBER_OF_PRE_OBSERVATION_SHORTLIST"
+  },
+  "broadcast_sv_accuracy_m_by_satellite": {
+    "G14": 2.0,
+    "G15": 2.0,
+    "G17": 2.0,
+    "G20": 2.0,
+    "G24": 2.0,
+    "G30": 2.0
+  },
+  "dependencies": {
+    "numpy": "2.3.3",
+    "python": "3.13.5"
+  },
+  "envelope": {
+    "conditional_measurement_reserve_m": 2506.0017238368005,
+    "controlling_separation_m": 36208.69042667281,
+    "model_side_m": 1458.1559429154333,
+    "one_model_bound_b_m": 3964.157666752234,
+    "remaining_physical_margin_m": 24316.217426416108,
+    "required_separation_3b_m": 11892.473000256701
+  },
+  "event_time_metrics": [
+    {
+      "heldout_max_track_peak_to_peak_m": 1384.566534043482,
+      "heldout_rms_m": 437.77567437196376,
+      "offset_s": -15.0
+    },
+    {
+      "heldout_max_track_peak_to_peak_m": 1385.8635585451616,
+      "heldout_rms_m": 438.279311537346,
+      "offset_s": 15.0
+    }
+  ],
+  "geometry": {
+    "codebook": [
+      "G14",
+      "G15",
+      "G17",
+      "G20",
+      "G24",
+      "G30"
+    ],
+    "controlling_null": "TIME_REVERSED_GEOMETRY",
+    "controlling_separation_m": 36208.69042667281,
+    "doy": 234,
+    "gps_date": "2026-08-22",
+    "minimum_time_shifted_elevation_deg": 15.225798869238334,
+    "station": "DRAO00CAN"
+  },
+  "model_side_terms": [
+    {
+      "basis": "T_PLUS_MINUS_15_S_ON_EACH_RETARDED_TRAJECTORY",
+      "heldout_max_track_peak_to_peak_bound_m": 1385.8635585451616,
+      "provenance": "INDEPENDENT_OF_FUTURE_TARGET_OBSERVATION",
+      "state": "MODELED_DIRECT_TRAJECTORY_ENVELOPE",
+      "term": "EVENT_TIME_DIRECT_RETARDED_TRAJECTORY_ENVELOPE"
+    },
+    {
+      "basis": "EIGHT_TIMES_MAXIMUM_SELECTED_EPHEMERIS_SV_ACCURACY",
+      "heldout_max_track_peak_to_peak_bound_m": 16.0,
+      "provenance": "INDEPENDENT_OF_FUTURE_TARGET_OBSERVATION",
+      "state": "MODELED_CONSERVATIVE_INTERVAL",
+      "term": "BROADCAST_ORBIT_USER_RANGE_ACCURACY_FAMILY"
+    },
+    {
+      "basis": "AF0_AF1_AF2_AND_ECCENTRICITY_RELATIVITY",
+      "heldout_max_track_peak_to_peak_bound_m": 0.6260152358290725,
+      "provenance": "INDEPENDENT_OF_FUTURE_TARGET_OBSERVATION",
+      "state": "MODELED_FROM_BROADCAST_CLOCK_FIELDS",
+      "term": "OMITTED_BROADCAST_SATELLITE_CLOCK_NONAFFINITY"
+    },
+    {
+      "basis": "ZERO_TO_3_5_M_OVER_SIN_ELEVATION_BOX",
+      "heldout_max_track_peak_to_peak_bound_m": 51.666369134442625,
+      "provenance": "INDEPENDENT_OF_FUTURE_TARGET_OBSERVATION",
+      "state": "MODELED_CONSERVATIVE_INTERVAL",
+      "term": "DIFFERENTIAL_TROPOSPHERE_RELAXED_BOX"
+    },
+    {
+      "basis": "FROZEN_DRAO_COMMON_MODE_HELDOUT_INTERVAL",
+      "heldout_max_track_peak_to_peak_bound_m": 4.0,
+      "provenance": "INDEPENDENT_OF_FUTURE_TARGET_OBSERVATION",
+      "state": "MODELED_CONSERVATIVE_INTERVAL",
+      "term": "STATION_DISPLACEMENT_EOP_AND_RELATIVITY"
+    }
+  ],
+  "navigation": {
+    "compressed_bytes": 70000,
+    "compressed_sha256": "bcb196bf8a2e44ad587a1af2bcd118df9d39c5ada4c81a291f3b85d58d6e84bd",
+    "doy": 234,
+    "gps_date": "2026-08-22",
+    "healthy_gps_satellite_count": 31,
+    "name": "brdc2340.26n.gz",
+    "provider": "NOAA_NGS_DAILY_GLOBAL_NAVIGATION_FILE",
+    "rinex_version": "2.11",
+    "semantics": "BROADCAST_EPHEMERIS_MODEL_NOT_RECEIVER_OBSERVATION",
+    "uncompressed_bytes": 290593,
+    "uncompressed_name": "brdc2340.26n",
+    "uncompressed_sha256": "afdf5ca23e33de17b6d056ca649b080e9d06841f541fa78afb5ec4640e0f1336",
+    "url": "https://geodesy.noaa.gov/corsdata/rinex/2026/234/brdc2340.26n.gz"
+  },
+  "navigation_payloads_retained": 0,
+  "observation_access": {
+    "headers": 0,
+    "locators": 0,
+    "payload_bytes": 0,
+    "scores": 0,
+    "values": 0
+  },
+  "outcome": "DRAO_DOY234_PHYSICAL_MARGIN_ADMITTED",
+  "satellite_clock_metrics": {
+    "heldout_max_track_peak_to_peak_m": 0.6260152358290725,
+    "heldout_peak_to_peak_m_by_satellite": {
+      "G14": 0.5202728032312818,
+      "G15": 0.6260152358290725,
+      "G17": 0.4170866345438453,
+      "G20": 0.1791358362979465,
+      "G24": 0.140814600916924,
+      "G30": 0.4845078316499096
+    },
+    "heldout_rms_m": 0.2735459723351882
+  },
+  "schema": "gnss-drao-labelled-forward-doy234-physical-envelope-v1",
+  "source_commit": "1d454d30d929409c96c70ba1a1dfadc250961fea",
+  "source_sha256": "a5e00b55b7ad96fdf3a7bcb8dda487424f159a0b795fdb946a3912172b78a827",
+  "troposphere": {
+    "heldout_box_bound_m_by_satellite": {
+      "G14": 40.06544906428214,
+      "G15": 51.666369134442625,
+      "G17": 38.60738420098312,
+      "G20": 50.5838064924511,
+      "G24": 50.0317742609967,
+      "G30": 49.9557533038094
+    },
+    "heldout_max_track_peak_to_peak_bound_m": 51.666369134442625
+  }
+}
