@@ -1,0 +1,190 @@
+{
+  "schema": "post-drao-labelled-forward-structural-change-of-abstraction-v1",
+  "outcome": "DRAO_CORE_STRUCTURE_PROVEN_TRANSFORM_RECEIPT_UNRESOLVED",
+  "new_gate": false,
+  "physical_question": "CAN_THE_FROZEN_RECEIPTS_PLACE_THE_TWO_DESCRIPTION_FAILURES_AT_THE_CORRECT_CAUSAL_BOUNDARY_WITHOUT_WEAKENING_THE_FINAL_ORBITAL_TEST",
+  "new_information": "THE_MARKER_LITERAL_IS_NOT_AN_INDEPENDENT_IDENTITY_ROOT_AND_TRANSFORM_SEMANTICS_ARE_NOT_A_STRUCTURAL_TOPOLOGY_CLAUSE_BUT_REMAIN_A_HARD_PRE_MEASUREMENT_LEDGER",
+  "access": {
+    "network_requests": 0,
+    "artifact_reopens": 0,
+    "header_reopens": 0,
+    "observation_values": 0,
+    "derived_measurement_series": 0,
+    "orbital_scores": 0
+  },
+  "frozen_runtime_preserved": {
+    "outcome": "DRAO_STRUCTURE_TOPOLOGY_REJECTED",
+    "raw_sha256": "cb97fc2810a1c92a2ae2c17a2201b19eb2fda1d18407eaf8ac93ad367b2272a5",
+    "rewritten": false
+  },
+  "pre_access_authority": {
+    "document": "POST_DRAO_DOY232_QUALIFICATION_CHANGE_OF_ABSTRACTION.json",
+    "raw_sha256": "7c293462c0e0fe1602519eb339c8c96fc6aef7cc735d7c84e416eeb8d28c2934",
+    "marker_name_role": "DESCRIPTIVE_CONSISTENCY_FIELD_NOT_A_STANDALONE_IDENTITY_KEY",
+    "existence_before_doy237_access": true
+  },
+  "identity_root": {
+    "state": "SATISFIED_BY_COMPOSITE_ROOTS",
+    "controlling_roots": [
+      {
+        "root": "FROZEN_ARCHIVE_PRODUCT_AND_SITE_ID",
+        "value": "BKG:DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz",
+        "state": "SATISFIED"
+      },
+      {
+        "root": "MARKER_NUMBER_DOMES",
+        "value": "40105M002",
+        "state": "SATISFIED"
+      },
+      {
+        "root": "RECEIVER",
+        "value": "SEPT_POLARX5_5.2.0",
+        "state": "SATISFIED"
+      },
+      {
+        "root": "ANTENNA_AND_RADOME",
+        "value": "TWIVC6050_SCIS",
+        "state": "SATISFIED"
+      },
+      {
+        "root": "FROZEN_TIME_COVERAGE",
+        "value": "2026-08-25T04:55:00--06:04:00_GPS",
+        "state": "SATISFIED"
+      }
+    ],
+    "marker_name_literal": {
+      "state": "UNRESOLVED_DESCRIPTIVE_NOT_FATAL",
+      "reason": "THE_ACTUAL_VALUE_WAS_NOT_RETAINED_AND_PRE_ACCESS_AUTHORITY_ALREADY_EXCLUDED_IT_AS_A_STANDALONE_KEY"
+    },
+    "claims_not_authorized": [
+      "OBSERVED_MARKER_NAME_EQUALS_DRAO",
+      "OBSERVED_MARKER_NAME_CONTRADICTS_DRAO",
+      "MARKER_ALIAS_RELATION_RECOVERED"
+    ]
+  },
+  "clause_relocation": {
+    "structural_topology": {
+      "state": "SATISFIED",
+      "basis": [
+        "139_OF_139_NORMAL_EPOCHS_ON_EXACT_GRID",
+        "834_OF_834_REQUIRED_SATELLITE_EPOCH_PAIRS",
+        "C1C_C2W_L1C_L2W_PRESENT_ON_ALL_REQUIRED_PAIRS",
+        "L1C_L2W_LLI_ZERO_OR_BLANK_ON_ALL_REQUIRED_PAIRS",
+        "SIX_COMPLETE_139_EPOCH_SEGMENTS"
+      ]
+    },
+    "transform_ledger": {
+      "state": "UNRESOLVED_BY_RECEIPT",
+      "causal_position": "AFTER_STRUCTURAL_TOPOLOGY_AND_BEFORE_ANY_NUMERIC_MEASUREMENT_INTERPRETATION",
+      "hard_precondition_for_measurement": true,
+      "hard_precondition_for_orbital_score": true,
+      "not_a_structural_presence_or_continuity_predicate": true
+    },
+    "measurement_and_orbit": {
+      "measurement_validity": "NOT_EVALUATED",
+      "detectability": "NOT_EVALUATED",
+      "orbital_model_preference": "NOT_EVALUATED"
+    }
+  },
+  "transform_terms": [
+    {
+      "term": "SYS_SCALE_FACTOR",
+      "structural_role": "NONE",
+      "numeric_role": "REQUIRED_TO_MAP_STORED_OBSERVATIONS_TO_DECLARED_UNITS",
+      "outcome_independent_semantics": "SPEC_DEFINED_ABSENCE_MEANS_UNITY",
+      "artifact_specific_state": "UNRESOLVED_BY_RECEIPT",
+      "may_be_assumed": false
+    },
+    {
+      "term": "SYS_PHASE_SHIFT",
+      "structural_role": "NONE",
+      "numeric_role": "THE_STORED_PHASE_ALREADY_CONTAINS_THE_DECLARED_STATIC_CORRECTION_AND_IT_MUST_NOT_BE_APPLIED_TWICE",
+      "invariance": "A_VALID_STATIC_PER_TRACK_OFFSET_IS_REMOVED_BY_SECOND_TIME_DIFFERENCE_AND_PREFIX_CONSTANT_OR_AFFINE_PROJECTION",
+      "artifact_specific_state": "UNRESOLVED_BY_RECEIPT",
+      "may_be_assumed": false
+    },
+    {
+      "term": "RCV_CLOCK_OFFS_APPL",
+      "structural_role": "EVENT_TIME_AND_COORDINATE_TRANSFORM_BOUNDARY",
+      "artifact_specific_state": "SATISFIED_BY_FROZEN_RUNTIME_RECEIPT"
+    }
+  ],
+  "artifact_disposition": {
+    "artifact": "DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz",
+    "role": "CONSUMED_STRUCTURAL_EVIDENCE_ONLY",
+    "core_structure": "PROVEN",
+    "integrated_proof_ready": false,
+    "primary_admitted": false,
+    "same_artifact_reopen": false,
+    "same_artifact_retry": 0,
+    "fallback_artifact": false
+  },
+  "authorized_claims": [
+    "COMPOSITE_DRAO_SITE_ROOT_SATISFIED_WITHOUT_MARKER_LITERAL",
+    "CORE_RECORD_TOPOLOGY_SATISFIED",
+    "TRANSFORM_LEDGER_UNRESOLVED_BY_RECEIPT",
+    "DESCRIPTION_FAILURE_DID_NOT_REJECT_THE_MEASUREMENT_PATH"
+  ],
+  "forbidden_claims": [
+    "DRAO_TRANSFORM_SEMANTICS_SUPPORTED",
+    "DRAO_TRANSFORM_SEMANTICS_UNSUPPORTED",
+    "MEASUREMENT_VALID",
+    "ORBITAL_SIGNATURE_DETECTABLE",
+    "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+    "DOY237_PRIMARY_ADMITTED"
+  ],
+  "alternatives": [
+    {
+      "name": "REINTERPRET_RUNTIME_AS_PHYSICAL_REJECTION",
+      "decision": "REJECTED",
+      "reason": "DESCRIPTION_FAILURES_DID_NOT_TEST_MEASUREMENT_OR_ORBIT"
+    },
+    {
+      "name": "PROMOTE_DOY237_TO_PRIMARY_FROM_POSITIVE_STRUCTURE",
+      "decision": "REJECTED",
+      "reason": "ARTIFACT_SPECIFIC_TRANSFORM_LEDGER_AND_PHYSICAL_WITNESSES_REMAIN_UNEVALUATED"
+    },
+    {
+      "name": "REOPEN_OR_RETRY_DOY237_TO_REPAIR_RECEIPT",
+      "decision": "FORBIDDEN",
+      "reason": "ONE_USE_AUTHORITY_CONSUMED_AFTER_COMPLETE_HASH_AND_DECODE"
+    },
+    {
+      "name": "CREATE_ANOTHER_PARSER_OR_QUALIFICATION_GATE",
+      "decision": "REJECTED",
+      "reason": "IT_WOULD_PRODUCE_DESCRIPTION_INFORMATION_INSTEAD_OF_AN_ORBITAL_RESULT"
+    },
+    {
+      "name": "ONE_FUTURE_INTEGRATED_LABELLED_FORWARD_VERTICAL",
+      "decision": "RECOMMENDED_FOR_SEPARATE_REVIEW",
+      "reason": "ONE_EXECUTION_CAN_RETAIN_AN_ATTRIBUTABLE_HEADER_TRANSFORM_LEDGER_THEN_EVALUATE_FROZEN_WITNESSES_AND_ORBIT_ONLY_IF_EVERY_PRECONDITION_PASSES"
+    }
+  ],
+  "next_physical_vertical_constraints": {
+    "new_geometry_search_started": false,
+    "new_artifact_selected": false,
+    "new_access_authorized": false,
+    "separate_structural_gate": false,
+    "required_order": [
+      "COMPLETE_ARTIFACT_HASH",
+      "COMPOSITE_IDENTITY_RECEIPT_WITH_DESCRIPTIVE_MARKER_RETAINED",
+      "CORE_RECORD_TOPOLOGY",
+      "TYPED_TRANSFORM_LEDGER_WITH_SPEC_DEFAULTS_DISTINCT_FROM_ERRORS",
+      "MODEL_BLIND_PHYSICAL_WITNESSES",
+      "FROZEN_ORBITAL_VERSUS_NULL_SCORE",
+      "ONE_TERMINAL_OUTCOME"
+    ],
+    "admission_or_description_failure": "ALL_DOWNSTREAM_MEASUREMENT_AND_ORBITAL_CLAUSES_NOT_EVALUATED",
+    "post_hash_retry": 0,
+    "heldout_refit": false
+  },
+  "source_bindings": {
+    "artifact_selection_raw_sha256": "5baa794f71c83068081c6ba766df31b6e66475b93a072e1da565e3a3d93eba09",
+    "structural_contract_raw_sha256": "e98644daf1611f52ea744fb23e696250217bafa19e239405f39ae26a6f8bda74",
+    "structural_outcome_raw_sha256": "cb97fc2810a1c92a2ae2c17a2201b19eb2fda1d18407eaf8ac93ad367b2272a5",
+    "structural_outcome_audit_raw_sha256": "ecd0aedefc050a23170129d32a785f3b785bde3d2a08f819db15d55715fab2c1",
+    "independent_station_metadata_raw_sha256": "24ea926f667749500cd380ebf3c2bd68d730e7faaa84572b0b0bc31bfaba679c"
+  },
+  "next_maximum_action": "REVIEW_ONE_INTEGRATED_LABELLED_FORWARD_VERTICAL_WITHOUT_SELECTING_OR_ACCESSING_AN_ARTIFACT",
+  "stop": "STOP_BEFORE_GEOMETRY_SEARCH_PRODUCT_SELECTION_NETWORK_HEADER_PAYLOAD_MEASUREMENT_OR_SCORE"
+}

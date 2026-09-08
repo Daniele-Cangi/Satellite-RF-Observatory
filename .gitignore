@@ -93,6 +93,7 @@ coverage.xml
 work/pytest-*/
 .pytest-tmp-*/
 .pytest_tmp_*/
+.test-tmp/
 .pytest-cassini*/
 pytest-gate-*/
 
