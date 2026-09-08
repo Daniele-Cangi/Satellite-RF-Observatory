@@ -2161,3 +2161,29 @@ an attributable transform ledger and physical witnesses before permitting one
 frozen orbital/null comparison; it is not another parser or qualification
 gate. No geometry search, artifact selection or access is started here. See
 [`POST_DRAO_LABELLED_FORWARD_STRUCTURAL_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_LABELLED_FORWARD_STRUCTURAL_CHANGE_OF_ABSTRACTION.md).
+
+The next pre-observation geometry already existed in the frozen shortlist:
+DOY238 was rank 2 before any DRAO observation access. A bounded exact-hash
+broadcast-navigation audit now returns
+`DRAO_LABELLED_FORWARD_RANK2_PHYSICAL_MARGIN_ADMITTED`. Iterated transmit time,
+Earth rotation, direct +/-15 s timing trajectories, broadcast orbit/clock,
+the relaxed troposphere box and the unchanged conditional measurement reserve
+leave a `36,418.373424 m` controlling time-reversed separation against
+`3B = 11,914.942466 m`, for `24,503.430958 m` remaining margin. The NAV payload
+was destroyed and no observation product was queried. See
+[`GNSS_DRAO_LABELLED_FORWARD_RANK2_PHYSICAL_ENVELOPE_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_RANK2_PHYSICAL_ENVELOPE_REPORT.md).
+
+One integrated prospective proof is now frozen as
+`DRAO_DOY238_INTEGRATED_PLAN_FROZEN_ARTIFACT_UNSELECTED`. The exact nominal
+retarded-range curves for G14/G15/G17/G20/G24/G30 and both null constructors
+are bound before observation selection. A future one-use executor must pass
+composite identity, complete labelled topology, an attributable typed RINEX
+transform ledger and model-blind phase/code witnesses before the prediction
+bundle can reach the scorer. Extra tracks remain descriptive; thresholds,
+window, PRNs, transforms and nulls cannot change, and there is zero post-hash
+retry or held-out refit. The maximum positive claim remains the deliberately
+narrow `ORBITAL_MODEL_PREDICTIVELY_PREFERRED`, not identity, anomaly or orbit
+determination. The next maximum action is an experiment-specific executor that
+hard-refuses while the artifact identity is still unselected; no observation
+locator, header, payload, value or score has yet been accessed. See
+[`GNSS_DRAO_LABELLED_FORWARD_DOY238_INTEGRATED_PLAN.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY238_INTEGRATED_PLAN.md).
