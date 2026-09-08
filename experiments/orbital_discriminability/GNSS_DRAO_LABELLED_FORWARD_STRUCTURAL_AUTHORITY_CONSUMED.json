@@ -1,0 +1,11 @@
+{
+  "artifact": "DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz",
+  "contract_sha256": "e98644daf1611f52ea744fb23e696250217bafa19e239405f39ae26a6f8bda74",
+  "fallback": false,
+  "manifest_sha256": "b4fbcf9ba3e33a0118407132b5cad6d56035a38e3e18de7bb558c9a18492deb0",
+  "schema": "gnss-drao-labelled-forward-structural-authority-v1",
+  "selection_sha256": "5baa794f71c83068081c6ba766df31b6e66475b93a072e1da565e3a3d93eba09",
+  "source_commit": "26015788261c59f6076848bf2787a894c01b4952",
+  "source_sha256": "cf0cadea9a67abbcec4f7e8fa2f4242623f976bb74e700994c4fd3f05e51024b",
+  "state": "AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}

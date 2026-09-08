@@ -1,0 +1,155 @@
+{
+  "artifact": {
+    "bytes": 2849014,
+    "name": "DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz",
+    "sha256": "bf9cc66a9a109566cd7011ddb9768b5f00a195d7d4b282bee536432dc97ec967"
+  },
+  "authority": {
+    "artifact": "DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz",
+    "contract_sha256": "e98644daf1611f52ea744fb23e696250217bafa19e239405f39ae26a6f8bda74",
+    "fallback": false,
+    "manifest_sha256": "b4fbcf9ba3e33a0118407132b5cad6d56035a38e3e18de7bb558c9a18492deb0",
+    "schema": "gnss-drao-labelled-forward-structural-authority-v1",
+    "selection_sha256": "5baa794f71c83068081c6ba766df31b6e66475b93a072e1da565e3a3d93eba09",
+    "source_commit": "26015788261c59f6076848bf2787a894c01b4952",
+    "source_sha256": "cf0cadea9a67abbcec4f7e8fa2f4242623f976bb74e700994c4fd3f05e51024b",
+    "state": "AUTHORITY_CONSUMED_BEFORE_NETWORK"
+  },
+  "cleanup": {
+    "compressed_artifact_retained": false,
+    "decoded_rinex_retained": false,
+    "derived_measurement_series_persisted": 0,
+    "observation_values_persisted": 0
+  },
+  "decoded": {
+    "bytes": 23676145,
+    "sha256": "2b8cf9d4cde28a2f3568a1c79032eff7b9152d95e2cd93e6ec6b220284409c38"
+  },
+  "frozen_inputs": {
+    "GNSS_DRAO_LABELLED_FORWARD_ARTIFACT_SELECTION.json": "5baa794f71c83068081c6ba766df31b6e66475b93a072e1da565e3a3d93eba09",
+    "GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_CONTRACT.json": "e98644daf1611f52ea744fb23e696250217bafa19e239405f39ae26a6f8bda74"
+  },
+  "outcome": "DRAO_STRUCTURE_TOPOLOGY_REJECTED",
+  "schema": "gnss-drao-labelled-forward-structural-outcome-v1",
+  "structural_scan": {
+    "derived_measurement_series_persisted": 0,
+    "epoch_grid": {
+      "bound_reduced_by_scan": false,
+      "expected": 139,
+      "frozen_event_time_bound_s": [
+        -15.0,
+        15.0
+      ],
+      "maximum_absolute_grid_deviation_s": 0.0,
+      "normal_flags": 139,
+      "observed": 139
+    },
+    "extra_gps_track_records_descriptive_only": 604,
+    "field_state_counts": {
+      "C1C": {
+        "PRESENT": 834
+      },
+      "C2W": {
+        "PRESENT": 834
+      },
+      "L1C": {
+        "PRESENT": 834
+      },
+      "L2W": {
+        "PRESENT": 834
+      }
+    },
+    "header_clause_states": {
+      "ANTENNA_TWIVC6050": "SATISFIED",
+      "DOMES_40105M002": "SATISFIED",
+      "GPS_TIME_SYSTEM": "SATISFIED",
+      "INTERVAL_30_SECONDS": "SATISFIED",
+      "MARKER_SITE_DRAO": "UNSATISFIED",
+      "RADOME_SCIS": "SATISFIED",
+      "RECEIVER_CLOCK_SEMANTICS_SUPPORTED": "SATISFIED",
+      "RECEIVER_SEPT_POLARX5": "SATISFIED",
+      "RECEIVER_VERSION_5_2_0": "SATISFIED",
+      "REQUIRED_GPS_FIELDS_DECLARED": "SATISFIED",
+      "RINEX_VERSION_3": "SATISFIED",
+      "SCALE_AND_PHASE_SHIFT_SEMANTICS_SUPPORTED": "UNSATISFIED",
+      "TIME_OF_FIRST_OBS_COVERS_WINDOW": "SATISFIED",
+      "TIME_OF_LAST_OBS_COVERS_WINDOW": "SATISFIED"
+    },
+    "header_lines": 276,
+    "header_sha256": "e224a6f0fecfcd74a6d766ca45392a3fa8b9b1530d2e1d1d15c0be76bf576310",
+    "lli_state_counts": {
+      "L1C": {
+        "ZERO_OR_BLANK": 834
+      },
+      "L2W": {
+        "ZERO_OR_BLANK": 834
+      }
+    },
+    "observation_scalar_conversions": 0,
+    "observation_values_persisted": 0,
+    "orbital_scores": 0,
+    "physical_clauses": {
+      "geometry_free_phase_continuity": "NOT_EVALUATED",
+      "multipath_hardware_receiver": "NOT_EVALUATED",
+      "orbital_null_comparison": "NOT_EVALUATED",
+      "phase_minus_code_same_path_witness": "NOT_EVALUATED"
+    },
+    "required_satellite_epoch_pairs": 834,
+    "schema": "gnss-drao-labelled-forward-structural-scan-v1",
+    "segments": {
+      "G14": {
+        "full_window": true,
+        "maximal_segment": {
+          "epoch_count": 139,
+          "first_index": 0,
+          "last_index": 138
+        }
+      },
+      "G15": {
+        "full_window": true,
+        "maximal_segment": {
+          "epoch_count": 139,
+          "first_index": 0,
+          "last_index": 138
+        }
+      },
+      "G17": {
+        "full_window": true,
+        "maximal_segment": {
+          "epoch_count": 139,
+          "first_index": 0,
+          "last_index": 138
+        }
+      },
+      "G20": {
+        "full_window": true,
+        "maximal_segment": {
+          "epoch_count": 139,
+          "first_index": 0,
+          "last_index": 138
+        }
+      },
+      "G24": {
+        "full_window": true,
+        "maximal_segment": {
+          "epoch_count": 139,
+          "first_index": 0,
+          "last_index": 138
+        }
+      },
+      "G30": {
+        "full_window": true,
+        "maximal_segment": {
+          "epoch_count": 139,
+          "first_index": 0,
+          "last_index": 138
+        }
+      }
+    },
+    "state": "DRAO_STRUCTURE_TOPOLOGY_REJECTED",
+    "typed_refusal_reasons": [
+      "HEADER_CLAUSE_UNSATISFIED:MARKER_SITE_DRAO",
+      "HEADER_CLAUSE_UNSATISFIED:SCALE_AND_PHASE_SHIFT_SEMANTICS_SUPPORTED"
+    ]
+  }
+}
