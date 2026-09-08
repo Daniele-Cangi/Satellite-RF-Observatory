@@ -158,7 +158,7 @@ def scan(payload: bytearray) -> executor.ForwardScan:
     return executor.scan_decoded_fixture(payload, archive_site_id=plan.STATION)
 
 
-def test_manifest_binds_plan_and_refuses_before_artifact_access() -> None:
+def test_manifest_binds_plan_and_core_refuses_unreviewed_selection() -> None:
     manifest = executor.executor_manifest(ROOT)
 
     assert manifest["state"] == "DRAO_DOY238_EXECUTOR_FROZEN_ARTIFACT_UNSELECTED"
@@ -167,7 +167,9 @@ def test_manifest_binds_plan_and_refuses_before_artifact_access() -> None:
         plan.BUNDLE_NAME: executor.BUNDLE_RAW_SHA256,
     }
     assert not any(manifest["access_at_freeze"].values())
-    with pytest.raises(PermissionError, match="DRAO_DOY238_ARTIFACT_UNSELECTED"):
+    with pytest.raises(
+        executor.ForwardDescriptionError, match="UNREVIEWED_SELECTION_RECEIPT_PRESENT"
+    ):
         executor.refuse_unselected_artifact(ROOT)
 
 
