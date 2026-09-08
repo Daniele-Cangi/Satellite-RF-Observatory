@@ -11,6 +11,8 @@ from experiments.orbital_discriminability import gnss_drao_labelled_forward_doy2
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SEAL = ROOT / runner.RUNNER_SEAL_NAME
+SEAL_SHA256 = "cd083939e6d5e3f855521747f0d71f2661d0931a72cfab60fa55523dd2b467ca"
 
 
 class Response:
@@ -45,6 +47,16 @@ def test_manifest_binds_one_product_and_grants_no_access() -> None:
     assert value["transport"]["retry_after_complete_hash"] == 0
     assert value["transport"]["fallback"] is False
     assert not any(value["access_at_freeze"].values())
+
+
+def test_post_commit_seal_binds_runner_selection_and_zero_access() -> None:
+    value = runner.validate_seal(ROOT, SEAL, SEAL_SHA256)
+    assert value["runner_source_commit"] == "a26f2e7f2442f713e5a4c6e57789f1937388b7fa"
+    assert value["runner_source_canonical_sha256"] == runner.source_sha256()
+    assert value["runner_manifest_sha256"] == runner.manifest_sha256(ROOT)
+    assert value["selection_canonical_sha256"] == runner.SELECTION_SHA256
+    assert value["live_authority_granted"] is False
+    assert not any(value["access_at_seal"].values())
 
 
 def test_no_authority_means_no_network_or_receipt(tmp_path: Path, monkeypatch) -> None:
