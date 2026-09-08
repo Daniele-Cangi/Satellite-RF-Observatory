@@ -96,7 +96,10 @@ def test_manifest_binds_final_shortlist_proof_and_refuses_selection() -> None:
     assert value["phase_shift_states"][executor.REFERENCE_BLANK].startswith("VALID")
     assert value["phase_shift_states"][executor.UNKNOWN] == "PRIMARY_NOT_EVALUATED"
     assert not any(value["access_at_freeze"].values())
-    with pytest.raises(PermissionError, match="DRAO_DOY234_ARTIFACT_UNSELECTED"):
+    with pytest.raises(
+        executor.Doy234DescriptionError,
+        match="UNREVIEWED_DOY234_SELECTION_PRESENT",
+    ):
         executor.refuse_unselected(ROOT)
 
 
