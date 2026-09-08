@@ -9,6 +9,12 @@ GOLD held out. It closed at structural admission: 18 consecutive common epochs
 were available, below the predeclared 41. No new position or oracle comparison
 was produced. See `experiments/positioning_g12_doy250/OUTCOME.md`.
 
+The separately preregistered G12 DOY248 eleven-epoch attempt completed the full
+real-data pipeline: 15.139 m external orbit error and -3.137 m excluded-receiver
+residual. Its 10.121 km prospective uncertainty exceeded the fixed 10 km limit;
+the primary outcome remains `UNCERTAINTY_TOO_LARGE`. See
+`experiments/positioning_g12_doy248/OUTCOME.md`.
+
 ## Portable execution
 
 From the repository root, using Python 3.13:
@@ -35,6 +41,11 @@ predeclared plan and unexposed confirmation evidence.
 - `verify` first checks the freeze, source hashes and input hashes. It reveals
   the excluded receiver, then downloads the specified oracle. It never refits
   the position. An existing terminal result is returned without new access.
+
+All stages now retain byte-exact source snapshots alongside their hash receipts.
+Acquisition also returns a closed terminal without re-downloading or rewriting
+the experiment. Odd support/fit sizes and the implemented reference count are
+validated before new acquisition.
 
 The offline audit hook prevents accidental networking through these Python
 capabilities. It is not a security boundary against malicious native code or an
@@ -81,6 +92,7 @@ and the complete acquisition-independent calibration/freeze/reveal chain using
 previously revealed G08 excerpts. The oracle is supplied from a local fixture
 in that regression; it is never counted as new scientific evidence.
 
-Numerical paths are implemented and tested. The active new-event path has so
-far reached structural admission only. It is not yet a demonstrated general
-verification service.
+The 32 active/frozen tests passed locally and on GitHub Actions Windows and
+Linux at the preregistration commit `118c683`. The real new-event path has
+reached full confirmation, with its primary uncertainty criterion still failed.
+This is not yet a demonstrated general verification service.

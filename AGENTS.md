@@ -33,6 +33,14 @@ User instructions continue to take precedence over this file.
   remains `UNCERTAINTY_TOO_LARGE`. It did not pass the 10 km uncertainty limit.
 - Preserve G08's frozen implementation, inputs and outcome under
   `experiments/gnss_inverse_positioning/`. Replay is a regression, not new proof.
+- G12 DOY250 with seven fit roots closed `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`:
+  eighteen consecutive common epochs did not meet its frozen 41-epoch rule.
+- A separate G12 DOY248 eleven-epoch attempt reconstructed a new position:
+  15.139 m external orbit error, -3.137 m excluded-GOLD residual, but prospective
+  uncertainty radius 10,121.469 m. It remains `UNCERTAINTY_TOO_LARGE` and is
+  closed. Its 5% margin and uncertainty floors must not be lowered after reveal.
+  Preserve its plan, solution, receipts and executed sources under
+  `experiments/positioning_g12_doy248/`.
 - Historical forward and measurement-integrity experiments are reference
   material. Their gate sequence is not the roadmap for new work.
 

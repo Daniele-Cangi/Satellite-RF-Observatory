@@ -17,17 +17,22 @@ uncertainties, withheld tests and reproducible evidence, including failures.
 | DRAO labelled-forward DOY234 | A known orbit predicts held-out RF dynamics better than the frozen alternatives | `ORBITAL_MODEL_PREDICTIVELY_PREFERRED`; closed |
 | G08 DOY249 inverse | 188.705 m orbit error; 1.849 m excluded-GOLD residual; 21.608 km prospective uncertainty radius | `UNCERTAINTY_TOO_LARGE`; closed |
 | G12 DOY250, seven fit roots | Eight sources individually contain G12, but only 18 consecutive common epochs against a required 41 | `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`; closed before fit/oracle |
+| G12 DOY248, eleven-epoch support | 15.139 m orbit error; -3.137 m excluded-GOLD residual; 10.121 km prospective uncertainty radius | `UNCERTAINTY_TOO_LARGE`; new position, primary criterion failed |
 
-The small G08 error did not override its uncertainty failure. The G12 attempt
-adds southern stations to address radial/clock degeneracy, but its predeclared
-common support block was absent. It yielded no new position. Neither old result
-has been reopened or improved after confirmation.
+The small observed G08 and G12 DOY248 errors did not override their prospective
+uncertainty failures. After DOY250's structural failure, a separate plan used
+the eleven samples actually needed by the estimator on an unexamined day.
+It yielded a new position and passed the excluded-receiver and orbit tests,
+but exceeded the unchanged 10 km uncertainty threshold by 121.469 m.
+No closed result has been reopened or improved after confirmation.
 
 - [Active mission and operating rules](AGENTS.md)
 - [Active positioning implementation](positioning/README.md)
 - [Closed G08 experiment](experiments/gnss_inverse_positioning/README.md)
 - [G12 plan](experiments/positioning_g12_doy250/plan.json)
 - [G12 outcome and physical interpretation](experiments/positioning_g12_doy250/OUTCOME.md)
+- [New G12 position and frozen outcome](experiments/positioning_g12_doy248/OUTCOME.md)
+- [Eleven-epoch support justification](experiments/positioning_g12_doy248/SUPPORT.md)
 
 ## Calculation before comparison
 
@@ -74,11 +79,13 @@ Windows and Linux. Local test results and remote CI execution are distinct.
 
 ## Next physical work
 
-The G12 outcome showed that the chosen twenty-minute support requirement was
-too restrictive for the available common observations. It is not a mathematical
-minimum for snapshot positioning. Justify the necessary interpolation/clock
-support duration before preregistering a new event; retain the closed plan and
-failure rather than shortening its rule after access.
+The separate DOY248 attempt established that eleven-epoch support can reach
+position estimation and held-out confirmation on a new event. Its numerical
+uncertainty is still dominated by weak radial-distance/clock separation.
+The next physical design must add useful independent geometry or independently
+justify calibration-error bounds before new confirmation data are examined.
+Removing the 5% margin or reducing a floor to pass the revealed event is not an
+acceptable continuation. An accurate single event does not establish coverage.
 
 Software work must serve that next physical result. Date, GPS week, target,
 station roles and time window are explicit inputs. Frozen experiments stay
