@@ -1,0 +1,72 @@
+{
+  "access": {
+    "alternate_locators_attempted": 0,
+    "http_head_requests": 1,
+    "observation_body_bytes": 0,
+    "observation_headers_parsed": 0,
+    "observation_values_accessed": 0,
+    "orbital_scores": 0
+  },
+  "artifact": {
+    "archive": "BKG_IGS_PUBLIC_ARCHIVE",
+    "body_access_authorized": false,
+    "complete_sha256": null,
+    "complete_sha256_state": "PENDING_COMPLETE_MATERIALIZATION",
+    "doy": 234,
+    "gps_date": "2026-08-22",
+    "name": "DRAO00CAN_R_20262340000_01D_30S_MO.crx.gz",
+    "product_class": "RINEX3_LONG_NAME_01D_30S_MIXED_OBSERVATION_HATANAKA_GZIP",
+    "published_cryptographic_checksum": {
+      "state": "UNKNOWN_NOT_QUERIED",
+      "value": null
+    },
+    "role": "FINAL_ORIGINAL_SHORTLIST_FORWARD_PRIMARY_CANDIDATE_UNOPENED",
+    "station": "DRAO00CAN",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/234/DRAO00CAN_R_20262340000_01D_30S_MO.crx.gz"
+  },
+  "frozen_authority": {
+    "executor_manifest_raw_sha256": "42f8fb271bdb0d6d437cfa459578cd6c624832e61becfd58c9af2a04c094853d",
+    "executor_state": "DRAO_DOY234_EXECUTOR_FROZEN_ARTIFACT_UNSELECTED",
+    "main_merge_commit": "d92170d7f5c2a4698ff7d6f91162e6ffb7b4cbc1",
+    "plan_raw_sha256": "5dca953372dbd2fed07f6750bd3ef029989a5b33b9734ec40c4c7e274482c06c",
+    "plan_state": "DRAO_DOY234_INTEGRATED_PLAN_FROZEN_ARTIFACT_UNSELECTED"
+  },
+  "future_execution": {
+    "complete_transport_sha256_before_decompression": true,
+    "fallback_date_endpoint_artifact_prn_feature_or_threshold": false,
+    "maximum_transport_attempts_before_complete_hash": 2,
+    "observation_values_may_be_persisted": false,
+    "post_complete_hash_retry": 0,
+    "same_locator_only": true,
+    "state": "REQUIRES_FROZEN_ONE_USE_RUNNER"
+  },
+  "http_head_receipt": {
+    "accept_ranges": "bytes",
+    "body_bytes_accessed": 0,
+    "content_length": 2850623,
+    "content_type": "application/x-gzip",
+    "etag": "\"2b7f3f-659d4b378b5bb\"",
+    "final_url_matches_selected_url": true,
+    "last_modified": "Tue, 25 Aug 2026 01:05:39 GMT",
+    "method": "HEAD",
+    "receipt_recorded_utc": "2026-09-08T11:18:41.6961093Z",
+    "response_date": "NOT_RETAINED_BY_BOUNDED_COMMAND",
+    "status": 200
+  },
+  "new_gate": false,
+  "outcome": "DRAO_DOY234_ARTIFACT_SELECTED_UNOPENED",
+  "physical_claims_authorized": [],
+  "schema": "gnss-drao-labelled-forward-doy234-artifact-selection-v1",
+  "selection": {
+    "fallback_enabled": false,
+    "rule": "EXACT_IGS_LONG_NAME_FROM_FROZEN_DRAO_DOY234_DURATION_CADENCE_AND_MIXED_OBSERVATION_CLASS_AT_PREDECLARED_BKG_ARCHIVE",
+    "selected_from_observation_content": false
+  },
+  "shortlist_role": {
+    "doy237": "CONSUMED_STRUCTURAL_ONLY",
+    "doy238": "CONSUMED_DESCRIPTION_ERROR_NO_PHYSICAL_OUTCOME",
+    "doy234": "RANK_3_FINAL_UNCONSUMED_MEMBER_SELECTED_WITHOUT_RF_OR_RINEX_CONTENT"
+  },
+  "state": "DRAO_DOY234_ARTIFACT_SELECTED_UNOPENED",
+  "stop": "STOP_BEFORE_BODY_HEADER_DECOMPRESSION_MEASUREMENT_OR_SCORE"
+}
