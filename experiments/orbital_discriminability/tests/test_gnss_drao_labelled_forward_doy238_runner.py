@@ -13,6 +13,8 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SEAL = ROOT / runner.RUNNER_SEAL_NAME
+SEAL_SHA256 = "7d2b5db0cae2a4f4a500b95fcbf8107baf315d76a962ef62038429c4c057a4bf"
 
 
 class Response:
@@ -49,6 +51,17 @@ def test_manifest_binds_one_artifact_and_grants_no_access() -> None:
     assert not any(value["access_at_freeze"].values())
     assert value["transport"]["retry_after_complete_hash"] == 0
     assert value["transport"]["fallback"] is False
+
+
+def test_post_commit_seal_binds_runner_selection_and_zero_access() -> None:
+    value = runner.validate_seal(ROOT, SEAL, SEAL_SHA256)
+
+    assert value["runner_source_commit"] == "8daa5727c0e0defbb0ef0fdccbe4f972fcbb1fa1"
+    assert value["runner_source_canonical_sha256"] == runner.source_sha256()
+    assert value["runner_manifest_sha256"] == runner.manifest_sha256(ROOT)
+    assert value["selection_canonical_sha256"] == runner.SELECTION_SHA256
+    assert value["live_authority_granted"] is False
+    assert not any(value["access_at_seal"].values())
 
 
 def test_no_authority_means_no_network_or_receipt(tmp_path: Path, monkeypatch) -> None:
