@@ -5,7 +5,7 @@ import sys
 import numpy as np
 
 from .context import Context
-from .acquisition import digest, write_json, source_hashes, utc_now
+from .acquisition import digest, write_json, source_hashes, snapshot_sources, utc_now
 from .calibration import C, OMEGA, rotate_z, parse_reference_navigation, calibrate_station, reference_model
 from .solver import interpolate_event, measurement_model, model_jacobian, solve, uncertainty_box, heldout_prediction, far_field_cost, CHI95
 
@@ -67,6 +67,7 @@ def estimate(run_path):
     if admitted['stations'][names[-1]]['target_if_codes_m'] is not None:
         raise ValueError('held-out target values cannot enter estimation')
     navigation=parse_reference_navigation(nav_path.read_text(),context.target)
+    snapshot_sources(run, 'estimation')
     calibration={}
     for name in names:
         data=admitted['stations'][name]

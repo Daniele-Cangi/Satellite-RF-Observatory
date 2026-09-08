@@ -177,6 +177,20 @@ and public-data acquisition without repeated confirmation. Honor the freeze/
 reveal order and the experiment's stopping rules.
 
 Do not message other people or publish/deploy externally without authorization.
+The user has authorized ordinary Git commits and pushes when needed for this
+work. Review the exact outgoing changes and push without forcing history.
+This does not authorize deployment or merging protected/default branches.
+
+### GitHub CLI on Windows
+
+- GitHub CLI is authenticated as `Daniele-Cangi` through the Windows keyring.
+- Always run `gh` commands requiring network or authentication outside the
+  Windows sandbox. Verify authentication with `gh auth status` outside it.
+- Socket, DNS and `api.github.com` access errors inside the sandbox are network
+  failures, not evidence of expired credentials. Never run or request
+  `gh auth login` based only on an error from inside the sandbox.
+- Prefer `gh` over the browser or GitHub connector for forks and pull requests.
+
 Do not spawn sub-agents merely because this file is named AGENTS.md; use them
 only when separately requested or instructed.
 

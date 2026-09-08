@@ -32,6 +32,24 @@ def source_hashes():
     return {p.name:digest(p) for p in sorted(Path(__file__).parent.glob('*.py'))}
 
 
+def snapshot_sources(run, stage):
+    """Keep byte-exact implementation alongside each stage's hash receipt."""
+    destination = Path(run)/'sources'/stage
+    destination.mkdir(parents=True, exist_ok=True)
+    hashes = source_hashes()
+    for name, expected in hashes.items():
+        path = destination/name
+        if path.exists():
+            if digest(path) != expected:
+                raise ValueError('stage source snapshot differs: '+stage+'/'+name)
+        else:
+            with path.open('xb') as handle:
+                handle.write((Path(__file__).parent/name).read_bytes())
+        if digest(path) != expected:
+            raise ValueError('source changed while snapshotting: '+name)
+    return hashes
+
+
 def download(url, limit=50_000_000):
     if not url.startswith('https://igs.bkg.bund.de/root_ftp/'):
         raise ValueError('this bounded runner supports public BKG HTTPS inputs only')
@@ -53,6 +71,12 @@ def acquire(plan_path, run_path):
     Context(plan['target'], plan['date_gpst'])
     if plan['calibration_limits'] != {'max_reference_absolute_residual_m':50,'max_reference_rms_m':20,'max_alternating_subset_clock_difference_m':30,'max_ground_coordinate_check_m':30}:
         raise ValueError('this version implements only the documented calibration thresholds')
+    support_count = plan['selection']['support_epochs']
+    fit_count = plan['selection']['fit_epochs']
+    if not isinstance(support_count, int) or not isinstance(fit_count, int) or support_count % 2 != 1 or fit_count % 2 != 1 or not 7 <= fit_count <= support_count:
+        raise ValueError('support and fit must be odd, with support >= fit >= 7')
+    if plan['selection']['minimum_reference_count'] != 4:
+        raise ValueError('this structural scanner implements four reference codes')
     names = plan['fit_stations'] + [plan['withheld_station']]
     if len(set(names)) != len(names) or not 5 <= len(plan['fit_stations']) <= 8:
         raise ValueError('need 5..8 distinct fit roots and one distinct held-out root')
@@ -61,9 +85,15 @@ def acquire(plan_path, run_path):
     if freeze.exists():
         if json.loads(freeze.read_text())['plan_sha256'] != plan_sha:
             raise ValueError('plan differs from frozen plan')
+        if (run/'outcome.json').exists():
+            return json.loads((run/'outcome.json').read_text())
+        if json.loads(freeze.read_text())['sources'] != source_hashes():
+            raise ValueError('acquisition source changed since plan freeze')
+        snapshot_sources(run, 'acquisition')
     else:
         (run/'plan.json').write_bytes(plan_bytes)
-        write_json(freeze, {'plan_sha256':plan_sha,'freeze_utc':utc_now(),'sources':source_hashes()},exclusive=True)
+        frozen_sources = snapshot_sources(run, 'acquisition')
+        write_json(freeze, {'plan_sha256':plan_sha,'freeze_utc':utc_now(),'sources':frozen_sources},exclusive=True)
     raw_dir = run/'raw_observations'
     raw_dir.mkdir(exist_ok=True)
     structures, receipts = {}, []

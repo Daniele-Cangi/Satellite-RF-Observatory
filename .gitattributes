@@ -48,3 +48,6 @@ experiments/positioning_g12_doy250/*.json -text whitespace=cr-at-eol
 
 # Fixed-width SP3 source excerpts include meaningful record padding.
 positioning/tests/fixtures/*.sp3 -text whitespace=-blank-at-eol
+
+experiments/positioning_g12_doy248/*.json -text whitespace=cr-at-eol
+experiments/positioning_g12_doy248/sources/** -text whitespace=cr-at-eol

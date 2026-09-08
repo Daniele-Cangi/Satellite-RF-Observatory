@@ -7,7 +7,7 @@ import numpy as np
 import hatanaka
 
 from .context import Context
-from .acquisition import digest, write_json, source_hashes, download, utc_now
+from .acquisition import digest, write_json, source_hashes, snapshot_sources, download, utc_now
 from .calibration import observation_window, rotate_z, OMEGA, C
 from .solver import interpolate_event
 
@@ -60,6 +60,7 @@ def verify(run_path):
         raise ValueError('source changed since solution freeze')
     for name,expected in solution['input_hashes'].items():
         if digest(run/name)!=expected:raise ValueError('input changed since freeze: '+name)
+    snapshot_sources(run, 'verification')
     plan=json.loads((run/'plan.json').read_text())
     context=Context(**solution['context'])
     if (run/'oracle_access.json').exists():
