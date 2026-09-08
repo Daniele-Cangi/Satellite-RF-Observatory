@@ -2187,3 +2187,19 @@ determination. The next maximum action is an experiment-specific executor that
 hard-refuses while the artifact identity is still unselected; no observation
 locator, header, payload, value or score has yet been accessed. See
 [`GNSS_DRAO_LABELLED_FORWARD_DOY238_INTEGRATED_PLAN.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY238_INTEGRATED_PLAN.md).
+
+The corresponding one-experiment executor is now frozen as
+`DRAO_DOY238_EXECUTOR_FROZEN_ARTIFACT_UNSELECTED`. It implements the fixed
+six-label coordinate directly, so no anonymous-track permutation machinery is
+carried into this vertical. Identity, complete topology and a typed RINEX
+scale/phase/receiver-clock ledger must pass before model-blind physical
+witnesses can release the frozen prediction bundle. Orbit, prefix-affine and
+time-reversed families receive the same six-track centering, prefix-only
+constant/rate nuisance and untouched held-out metric. A failed orbital prefix
+detectability clause is `NOT_DETECTABLE`, not a null preference. The real entry
+point has no locator or transport and hard-refuses while the separate DOY238
+selection receipt is absent. Synthetic controls pass and observation access
+remains zero. The next maximum action after review is metadata-only selection
+of at most one exact DOY238 DRAO observation product; no body access is implied.
+See
+[`GNSS_DRAO_LABELLED_FORWARD_DOY238_EXECUTOR_MANIFEST.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY238_EXECUTOR_MANIFEST.md).
