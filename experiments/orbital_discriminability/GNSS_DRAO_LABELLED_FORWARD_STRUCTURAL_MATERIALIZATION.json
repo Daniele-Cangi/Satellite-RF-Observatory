@@ -1,0 +1,19 @@
+{
+  "artifact": {
+    "bytes": 2849014,
+    "name": "DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz",
+    "sha256": "bf9cc66a9a109566cd7011ddb9768b5f00a195d7d4b282bee536432dc97ec967"
+  },
+  "decompressions_at_receipt": 0,
+  "headers_at_receipt": 0,
+  "http": {
+    "content_length": 2849014,
+    "etag": "\"2b78f6-659ef7024f09a\"",
+    "received_bytes": 2849014,
+    "status": 200
+  },
+  "observation_values_at_receipt": 0,
+  "schema": "gnss-drao-labelled-forward-materialization-v1",
+  "state": "COMPLETE_ARTIFACT_HASHED_BEFORE_DECOMPRESSION",
+  "transport_attempts": 1
+}

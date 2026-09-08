@@ -2123,3 +2123,21 @@ materialization and value-blind structural scan under the already frozen
 contract, with bounded pre-hash transport and zero retry after the complete
 hash. See
 [`GNSS_DRAO_LABELLED_FORWARD_ARTIFACT_SELECTION.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_ARTIFACT_SELECTION.md).
+
+The one-use DOY237 structural authority has now been consumed. The selected
+2,849,014-byte artifact and complete 23,676,145-byte decoded RINEX were hashed
+before traversal. The value-blind scan found a completely positive core record
+topology: all 139 normal epochs, all four required fields on all 834 fixed
+satellite/epoch pairs, blank-or-zero LLI throughout and full 139-epoch segments
+for every required PRN. No observation scalar was converted or persisted.
+
+The runtime nevertheless emitted `DRAO_STRUCTURE_TOPOLOGY_REJECTED` for a
+literal `MARKER NAME == DRAO` predicate and a combined scale/phase-shift
+boolean. The closing audit classifies this as
+`DRAO_STRUCTURE_DESCRIPTION_ERROR`: the marker predicate repeats an already
+documented representation bug, while the transform receipt discarded the
+exact parser state needed to distinguish specification-defined absence from
+unsupported syntax. Neither can authorize measurement-path rejection. The
+runtime record remains immutable, there is zero retry, and all physical and
+orbital clauses remain `NOT_EVALUATED`. See
+[`GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_OUTCOME_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_OUTCOME_AUDIT.md).

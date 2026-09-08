@@ -1,0 +1,113 @@
+{
+  "artifact": {
+    "bytes": 2849014,
+    "name": "DRAO00CAN_R_20262370000_01D_30S_MO.crx.gz",
+    "sha256": "bf9cc66a9a109566cd7011ddb9768b5f00a195d7d4b282bee536432dc97ec967",
+    "structural_authority_consumed": true,
+    "structural_retry": 0
+  },
+  "audit_outcome": "DRAO_STRUCTURE_DESCRIPTION_ERROR",
+  "authorized_claims": [
+    "COMPLETE_ARTIFACT_MATERIALIZED_AND_HASHED_BEFORE_DECOMPRESSION",
+    "COMPLETE_DECODE_HASHED_BEFORE_RECORD_TRAVERSAL",
+    "FROZEN_EPOCH_GRID_AND_REQUIRED_FIELD_LLI_TOPOLOGY_SATISFIED",
+    "TWELVE_NONCONTROLLING_HEADER_CLAUSES_SATISFIED"
+  ],
+  "decoded": {
+    "bytes": 23676145,
+    "sha256": "2b8cf9d4cde28a2f3568a1c79032eff7b9152d95e2cd93e6ec6b220284409c38"
+  },
+  "epistemic_classification": {
+    "core_record_topology": "SATISFIED",
+    "identity_compatibility": "UNRESOLVED_BY_RECEIPT",
+    "integrated_proof_readiness": "NOT_EVALUATED",
+    "measurement_validity": "NOT_EVALUATED",
+    "orbital_model_preference": "NOT_EVALUATED",
+    "transform_semantics": "UNRESOLVED_BY_RECEIPT"
+  },
+  "failure_attribution": [
+    {
+      "contract_requirement": "MARKER_SITE_IDENTITY_COMPATIBLE_WITH_DRAO00CAN_AND_DOMES_40105M002",
+      "missing_receipt_evidence": [
+        "OBSERVED_MARKER_NAME",
+        "NORMALIZED_MARKER_ALIAS_RELATION"
+      ],
+      "runner_predicate": "NORMALIZED_MARKER_NAME_EQUALS_LITERAL_DRAO",
+      "state": "DESCRIPTION_ERROR",
+      "why_not_topology_rejection": "THE_DOMES_ARTIFACT_RECEIVER_AND_ANTENNA_CLAUSES_PASSED_BUT_THE_RECEIPT_RETAINS_ONLY_FAILURE_OF_A_KNOWN_OVER_NARROW_LITERAL_PREDICATE"
+    },
+    {
+      "contract_requirement": "EXPLICIT_HANDLING_OF_SCALE_PHASE_SHIFT_AND_RECEIVER_CLOCK_SEMANTICS_WITH_SPEC_DEFINED_ABSENCE_DISTINCT_FROM_UNSUPPORTED",
+      "missing_receipt_evidence": [
+        "EXACT_PHASE_SHIFT_PARSE_STATE",
+        "EXACT_TYPED_EXCEPTION",
+        "RECORD_ABSENCE_VERSUS_MALFORMED_VERSUS_INCOMPLETE_COVERAGE"
+      ],
+      "runner_predicate": "LEGACY_PARSER_REQUIRES_EXPLICIT_PER_SATELLITE_PHASE_SHIFT_COVERAGE_AND_COLLAPSES_ALL_EXCEPTIONS_TO_FALSE",
+      "state": "DESCRIPTION_ERROR",
+      "why_not_topology_rejection": "THE_BOOLEAN_RECEIPT_CANNOT_DISTINGUISH_A_SPEC_DEFINED_DEFAULT_FROM_AN_UNSUPPORTED_OR_MALFORMED_TRANSFORM_DECLARATION"
+    }
+  ],
+  "forbidden_claims": [
+    "DRAO_IDENTITY_CONTRADICTION",
+    "DRAO_TRANSFORM_SEMANTICS_UNSUPPORTED",
+    "DRAO_MEASUREMENT_PATH_REJECTED",
+    "MEASUREMENT_VALID",
+    "ORBITAL_SIGNATURE_DETECTABLE",
+    "ORBITAL_MODEL_PREDICTIVELY_PREFERRED"
+  ],
+  "no_causal_inference_from_missing_receipt_evidence": true,
+  "observation_access": {
+    "derived_measurement_series_persisted": 0,
+    "observation_scalar_conversions": 0,
+    "observation_values_persisted": 0,
+    "orbital_scores": 0
+  },
+  "parent_runtime_record": {
+    "outcome": "DRAO_STRUCTURE_TOPOLOGY_REJECTED",
+    "preserved_byte_for_byte": true,
+    "sha256": "cb97fc2810a1c92a2ae2c17a2201b19eb2fda1d18407eaf8ac93ad367b2272a5",
+    "typed_refusal_reasons": [
+      "HEADER_CLAUSE_UNSATISFIED:MARKER_SITE_DRAO",
+      "HEADER_CLAUSE_UNSATISFIED:SCALE_AND_PHASE_SHIFT_SEMANTICS_SUPPORTED"
+    ]
+  },
+  "receipt_hashes": {
+    "authority": "9e704c4f3c78afbc7b13b2e1cbfa7f12e8c60c6c5c148538af39cd33bbae02cb",
+    "decode": "0bb10134af21939deb89dd6c81e90d47c11a3699dc5e395a39ff4015a31b3eba",
+    "materialization": "3d1870eaf9abf79bb6bdff4cb206c22fefc1bbd661cd8357662046d5e2a14a5a",
+    "runtime_outcome": "cb97fc2810a1c92a2ae2c17a2201b19eb2fda1d18407eaf8ac93ad367b2272a5"
+  },
+  "schema": "gnss-drao-labelled-forward-structural-outcome-audit-v1",
+  "structural_facts": {
+    "all_required_fields_present": {
+      "C1C": 834,
+      "C2W": 834,
+      "L1C": 834,
+      "L2W": 834
+    },
+    "complete_segments": {
+      "G14": 139,
+      "G15": 139,
+      "G17": 139,
+      "G20": 139,
+      "G24": 139,
+      "G30": 139
+    },
+    "epoch_grid_deviation_s": 0.0,
+    "extra_gps_track_records_descriptive_only": 604,
+    "normal_epochs": 139,
+    "phase_lli_zero_or_blank": {
+      "L1C": 834,
+      "L2W": 834
+    },
+    "required_satellite_epoch_pairs": 834
+  },
+  "terminal_policy": {
+    "artifact_reopen_authorized": false,
+    "automatic_success_reclassification": false,
+    "fallback_artifact_date_endpoint_or_prn": false,
+    "next_action": "CHANGE_OF_ABSTRACTION_REVIEW_USING_ONLY_FROZEN_RECEIPTS_AND_OUTCOME_INDEPENDENT_DOCUMENTATION",
+    "same_artifact_structural_retry": 0
+  }
+}

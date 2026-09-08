@@ -1,0 +1,9 @@
+{
+  "decoded_bytes": 23676145,
+  "decoded_sha256": "2b8cf9d4cde28a2f3568a1c79032eff7b9152d95e2cd93e6ec6b220284409c38",
+  "hatanaka_version": "2.8.1",
+  "observation_values_at_receipt": 0,
+  "record_traversals_at_receipt": 0,
+  "schema": "gnss-drao-labelled-forward-decode-v1",
+  "state": "COMPLETE_DECODE_HASHED_BEFORE_RECORD_TRAVERSAL"
+}
