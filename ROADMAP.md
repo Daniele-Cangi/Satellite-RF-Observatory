@@ -2203,3 +2203,33 @@ remains zero. The next maximum action after review is metadata-only selection
 of at most one exact DOY238 DRAO observation product; no body access is implied.
 See
 [`GNSS_DRAO_LABELLED_FORWARD_DOY238_EXECUTOR_MANIFEST.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY238_EXECUTOR_MANIFEST.md).
+
+## DRAO labelled-forward terminal event — COMPLETE
+
+DOY238 remains consumed as `PRIMARY_NOT_EVALUATED / DESCRIPTION_ERROR`; it was
+not replayed. The final unconsumed member of the original orbit-only shortlist,
+DOY234, was compiled and frozen before its exact observation product was
+selected. The phase-shift description repair distinguishes a valid blank-
+correction reference signal from explicit numeric correction and unknown
+system alignment without altering the physical hypothesis.
+
+The single one-use DOY234 execution is now complete as
+`ORBITAL_MODEL_PREDICTIVELY_PREFERRED`. All 139 epochs, six labelled tracks,
+3,336 required fields, event-time mapping, geometry-free continuity and
+same-path phase/code witnesses passed. The orbital held-out residual is
+`1.651111 m` p-p. The closest frozen alternative is time-reversed geometry at
+`36,208.777701 m`; prefix-affine is `103,857.524914 m`. The resulting
+`36,207.126590 m` preference margin is greater than the frozen
+`B = 3,964.157667 m`, with no held-out refit or free time phase.
+
+The exact 2,850,623-byte artifact was hashed before decode as
+`5eb4c7f8b2fa3a0b2f3b4fe40de1f69a85a9150bd5eafd61667fc84bcf9e5335`.
+No raw observation, decoded RINEX, observation scalar or derived series was
+persisted. The claim is limited to this model-conditioned, labelled,
+single-station held-out coordinate; identity, distributed confirmation and
+orbit determination remain outside scope. The primary is consumed with zero
+retry or rescore. See
+[`GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md).
+
+The requested stop condition is satisfied. Do not begin another DRAO event,
+geometry search or successor experiment without a new scientific review.

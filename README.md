@@ -84,6 +84,19 @@ critical path. No global receiver catalog is required.
 
 ## Current physical outcome
 
+The DRAO labelled-forward route has now reached its requested terminal event.
+On the frozen DOY234 suffix, the six-track orbital model left only `1.651 m`
+controlling peak-to-peak residual, compared with `36,208.778 m` for the closest
+time-reversed-geometry null and `103,857.525 m` for the prefix-affine null. The
+preference margin is `36,207.127 m`, exceeding the prospectively frozen
+`3,964.158 m` guard. All 3,336 required structural cells and both independent
+measurement-witness families passed before model reveal. The exact product was
+hashed before decoding and no observation values or derived series persist.
+This is `ORBITAL_MODEL_PREDICTIVELY_PREFERRED` for one labelled, single-station
+held-out coordinate; it is not independent satellite identity, distributed
+confirmation or orbit determination. See
+[`GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md).
+
 The project has reached real held-out orbital evidence. The frozen
 GOLD00USA/NLIB00USA G22/G30 DOY 220 primary was measurement-valid and
 preferred the orbital prediction: its held-out residual was `2.313 m`

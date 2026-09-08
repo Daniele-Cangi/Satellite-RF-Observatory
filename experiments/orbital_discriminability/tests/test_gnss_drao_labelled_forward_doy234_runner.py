@@ -150,3 +150,29 @@ def test_materialization_failure_is_distinct_and_authority_is_single_use(tmp_pat
 def test_strict_json_rejects_nonfinite() -> None:
     with pytest.raises(ValueError):
         runner.strict_json({"bad": float("inf")})
+
+
+def test_frozen_real_outcome_preserves_terminal_claim_and_zero_persistence() -> None:
+    outcome_path = ROOT / runner.OUTCOME_NAME
+    materialization_path = ROOT / runner.MATERIALIZATION_NAME
+    outcome = runner._read_json(outcome_path)
+    materialization = runner._read_json(materialization_path)
+
+    assert runner.canonical_sha256(outcome_path) == "f499981c19540013f99695de2a39b996cb415075ff97ee6564cf15d6c6aef3d0"
+    assert runner.canonical_sha256(materialization_path) == "d4b1d69458a332f385a0237c886e8f01d0f952eddeed5b4f4483d80b3621040e"
+    assert outcome["outcome"] == "ORBITAL_MODEL_PREDICTIVELY_PREFERRED"
+    assert outcome["admission_receipt"]["structural_counts"] == {"PRESENT": 3336}
+    assert outcome["score_receipt"]["best_family"] == "ORBITAL"
+    assert outcome["score_receipt"]["heldout_refit"] is False
+    assert outcome["score_receipt"]["free_time_phase"] is False
+    assert outcome["score_receipt"]["preference_margin_m"] == pytest.approx(36207.12658968102)
+    assert outcome["persistence"] == {
+        "compressed_artifact": 0,
+        "decoded_rinex": 0,
+        "derived_series": 0,
+        "observation_values": 0,
+    }
+    assert materialization["complete_file_bytes"] == 2850623
+    assert materialization["complete_file_sha256"] == "5eb4c7f8b2fa3a0b2f3b4fe40de1f69a85a9150bd5eafd61667fc84bcf9e5335"
+    assert materialization["hash_persisted_before_decompression"] is True
+    assert not (ROOT / runner.ARTIFACT_NAME).exists()

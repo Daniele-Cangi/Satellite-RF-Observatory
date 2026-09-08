@@ -1,0 +1,13 @@
+{
+  "artifact": "DRAO00CAN_R_20262340000_01D_30S_MO.crx.gz",
+  "attempts": 1,
+  "body_persisted": false,
+  "complete_file_bytes": 2850623,
+  "complete_file_sha256": "5eb4c7f8b2fa3a0b2f3b4fe40de1f69a85a9150bd5eafd61667fc84bcf9e5335",
+  "frozen_http_identity_matched": true,
+  "hash_persisted_before_decompression": true,
+  "retry_after_complete_hash": 0,
+  "schema": "gnss-drao-labelled-forward-doy234-materialization-v1",
+  "state": "DRAO_DOY234_COMPLETE_HASH_RECORDED_BEFORE_DECODE",
+  "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/234/DRAO00CAN_R_20262340000_01D_30S_MO.crx.gz"
+}
