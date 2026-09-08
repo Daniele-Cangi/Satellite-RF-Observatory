@@ -2141,3 +2141,23 @@ unsupported syntax. Neither can authorize measurement-path rejection. The
 runtime record remains immutable, there is zero retry, and all physical and
 orbital clauses remain `NOT_EVALUATED`. See
 [`GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_OUTCOME_AUDIT.md`](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_STRUCTURAL_OUTCOME_AUDIT.md).
+
+The bounded offline change-of-abstraction review now returns
+`DRAO_CORE_STRUCTURE_PROVEN_TRANSFORM_RECEIPT_UNRESOLVED`. It applies the
+pre-access decision that `MARKER NAME` is descriptive rather than an
+independent station key: the frozen archive/site ID, DOMES, receiver,
+antenna/radome and time-coverage roots jointly satisfy the DRAO identity
+boundary, while the unretained marker literal remains unresolved and cannot be
+invented. The 139-epoch, six-track core record topology is therefore preserved
+as positive structural evidence.
+
+Scale and phase-shift semantics are removed only from the structural-presence
+predicate, not from the experiment. They remain an unresolved, hard transform
+ledger between topology and every numeric witness or orbital score. DOY237 is
+closed as consumed structural evidence, not admitted as a primary, with zero
+reopen, retry or fallback. The next useful action, if the DRAO route remains
+selected, is review of one integrated labelled-forward vertical that records
+an attributable transform ledger and physical witnesses before permitting one
+frozen orbital/null comparison; it is not another parser or qualification
+gate. No geometry search, artifact selection or access is started here. See
+[`POST_DRAO_LABELLED_FORWARD_STRUCTURAL_CHANGE_OF_ABSTRACTION.md`](experiments/orbital_discriminability/POST_DRAO_LABELLED_FORWARD_STRUCTURAL_CHANGE_OF_ABSTRACTION.md).
