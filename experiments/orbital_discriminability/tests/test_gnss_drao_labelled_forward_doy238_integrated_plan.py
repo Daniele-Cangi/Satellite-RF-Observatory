@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from hashlib import sha256
+import json
+from math import isfinite
 from pathlib import Path
 
 import pytest
@@ -10,6 +13,8 @@ from experiments.orbital_discriminability import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+FROZEN_PLAN = ROOT / plan.PLAN_NAME
+FROZEN_BUNDLE = ROOT / plan.BUNDLE_NAME
 
 
 def synthetic_bundle() -> dict[str, object]:
@@ -97,3 +102,38 @@ def test_changed_envelope_is_refused_before_prediction_compilation(tmp_path: Pat
 
     with pytest.raises(plan.IntegratedPlanError, match="FROZEN_INPUT_CHANGED"):
         plan.validate_authority(tmp_path)
+
+
+def test_real_frozen_plan_binds_compiler_and_prediction_before_observation() -> None:
+    frozen = json.loads(
+        FROZEN_PLAN.read_text(encoding="ascii"),
+        parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+    )
+    bundle = json.loads(
+        FROZEN_BUNDLE.read_text(encoding="ascii"),
+        parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+    )
+
+    assert sha256(FROZEN_PLAN.read_bytes()).hexdigest() == (
+        "81e894a403066bc35187cfe9dd463ac5602eae5b80c7d278b270065449802d26"
+    )
+    assert frozen["source_commit"] == "af0349e4132c1872cfdbf21a57467b31ea110592"
+    assert frozen["source_sha256"] == plan.source_sha256()
+    assert frozen["prediction"]["bundle_sha256"] == plan.object_sha256(bundle)
+    assert frozen["candidate"]["artifact_selected"] is False
+    assert set(frozen["access_at_freeze"].values()) == {0}
+
+
+def test_real_prediction_bundle_has_six_complete_finite_model_only_curves() -> None:
+    bundle = json.loads(
+        FROZEN_BUNDLE.read_text(encoding="ascii"),
+        parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+    )
+    curves = bundle["labelled_model_curves_m"]
+
+    assert set(curves) == set(plan.CODEBOOK)
+    assert all(len(values) == 139 for values in curves.values())
+    assert all(isfinite(float(value)) for values in curves.values() for value in values)
+    assert bundle["role"] == "FROZEN_MODEL_ONLY_NOT_AVAILABLE_TO_MEASUREMENT_ADMISSION"
+    assert bundle["observation_values"] == 0
+    assert bundle["identity_scope"]["specific_satellite_identity_independently_established"] is False
