@@ -56,47 +56,28 @@ User instructions continue to take precedence over this file.
   Preserve `experiments/positioning_g14_doy246_network/` and its original scope.
   Do not rerun, tune or generalize this success into universal accuracy/coverage.
 
-## Current delivery objective
+## Current delivery objective — scientific software first
 
-The user approved the broad website plan in `docs/WEBSITE_ROADMAP.md` on
-2026-09-09. Implement its dependent product milestones: first the five-event
-archive, then a verified remote execution connection and private web requests.
-Private publication within the existing owner-only audience is part of this
-delivery. A public launch and new scientific experiments still require their
-separate decisions. Keep progress and unresolved hosting choices in that plan.
+On 2026-09-10 the user postponed website, API, Docker and hosting development
+and approved the scientific project in `docs/SCIENTIFIC_ROADMAP.md`.
+That plan supersedes the website roadmap. Keep the five-event private archive
+and service queue as delivered; do not extend or deploy them during this work.
 
-The availability-to-dossier path has now completed a new passing G14 event.
-The bounded scientific attempt is closed. The next product milestone is to
-connect this controlled worker to web requests; no further search for passing
-examples is implied. Broader repeatability needs a separate preregistered design.
+Deliver S0: read-only diagnosis of the frozen events, with provenance and local
+uncertainty geometry; never re-estimate or relabel a closed event.
+Deliver S1: an isolated synthetic code/range-rate kinematic prototype, comparing
+identical data with and without the new observable and predicting excluded
+times/receivers. Report failed and mismodelled cases alongside nominal gains.
+The first physical information is whether time/range-rate observations can
+separate position, velocity and clock nuisance under explicit assumptions.
+Synthetic results are not real satellite confirmation or a full Doppler pipeline.
 
-The next accepted step is explicit network availability before execution.
-The bounded candidate pool, fixed excluded receiver, structural subset/window
-rule and terrestrial distribution requirements must be frozen before new data.
-An availability report is permission to attempt calibration, not a verified
-position. Never reopen G13 with the newly implemented subset rule.
-
-The private three-event web archive is delivered. The user has now authorized
-the next milestone: a configurable historical GPS request that can eventually
-be launched from the site. First validate the reusable local request-to-dossier
-path on one new predeclared event. Then connect a separately controlled job
-runner to the web interface; do not execute the estimator inside a page request.
-Keep operational completion separate from a scientific pass. Parameterization
-alone adds no physical observable and must not be described as reducing uncertainty.
-
-The user accepted continuing product work despite G12 DOY248 exceeding the
-uncertainty criterion by 121.469 m (about 1.21%). This authorizes a first usable
-web archive of the closed results. The 10 km scientific criterion is not a
-blocking release gate for that archive. Preserve the original failed outcomes;
-do not relabel them or equate 15 m observed error with 15 m prospective accuracy.
-
-The web slice must let users select a documented event, see its inferred
-position, observed error, prospective uncertainty and excluded-receiver check,
-and download its evidence dossier. Missing positions stay missing. Consume
-frozen receipts through a deterministic export with provenance checks; never
-run the estimator or read a target oracle from an interactive page request.
-Keep this archive visibly historical and experimental. A private review edition
-precedes any separately authorized public launch.
+Proceed to S2 only with explicit emission/reception, rotation, clock-drift,
+correlation and model-truncation treatment. Real campaigns in S3 require exact
+frozen manifests before acquisition; the symbolic 24-case blueprint is not a
+ready-to-run experiment. No search for passing targets or post-reveal tuning.
+Keep the current real-data estimator unchanged as the v1 reference. Use
+`research/kinematic/` for the new prototype and report progress in its results.
 
 ## Scientific objective and information value
 
@@ -230,7 +211,7 @@ prediction. GPS support is not support for all satellites. Worldwide uniqueness
 is an unproven product claim.
 
 The web layer consumes sealed results and must not substitute an oracle-derived
-position or hide uncertainty. The thin archive is the current product milestone.
+position or hide uncertainty. The five-event archive is delivered; further product work is paused.
 On-demand positioning, monitoring and a public launch remain separate work;
 they are not implied by publishing historical verification dossiers privately.
 
