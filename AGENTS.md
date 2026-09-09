@@ -87,6 +87,10 @@ S2 is not complete: S2b still requires real RINEX/header/receiver qualification,
 reference-residual generation, propagation and a total inverse-error envelope.
 Taylor remainder checks are not fitted-state uncertainty bounds. No S3 data
 acquisition is authorized by the S2a synthetic result. Keep S1 evidence intact.
+The current S2a report is `receiver_time_study_v2.json`. Its noisy case stops
+at a rejected reference calibration; no fit/holdout prediction is admissible.
+The first S2a report and commit `5f2a922` retain the diagnosed runner defect.
+Never cite that superseded noisy fit as an accepted performance result.
 
 ## Scientific objective and information value
 

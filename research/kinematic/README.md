@@ -11,12 +11,12 @@ joint estimation. See [equations and remaining S2b work](S2_MODEL.md) and
 [S2a results](results/S2_REPORT.md). Full RF qualification remains pending;
 S2a does not authorize S3 acquisition.
 
-## Scope
+## Preserved S1 study
 
 The original S1 modules `model.py` and `synthetic.py` are a development
 research prototype, not an RF estimator. They use
 known common ideal times, fixed receivers, Euclidean ranges, an affine shared
-clock, and independent known noise. It omits light-time, rotating-frame effects,
+clock, and independent known noise. They omit light-time, rotating-frame effects,
 propagation, individual receiver-clock calibration and actual Doppler conversion.
 Its local covariance excludes systematic/truncation envelopes. Nominal criteria
 passing is permission to investigate S2, not permission to use it on real RF

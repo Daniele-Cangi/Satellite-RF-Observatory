@@ -117,9 +117,17 @@ def evaluate(case):
         # A mismodelled 300 m step in one station; no synthetic clock repair.
         codes[len(TIMES)//2:, 0] += 300
     row = {'case': case, 'seed': 20260910, 'reference_calibrations': calibration}
+    rejected_calibrations = [index for index, result in enumerate(calibration)
+                             if result['status'] != 'CONDITIONAL_CLOCK_MODEL_ACCEPTED']
+    if rejected_calibrations:
+        row.update(status='REFERENCE_CALIBRATION_REJECTED',
+                   rejected_station_indices=rejected_calibrations,
+                   reason='Reference clock rejection stops before target fit and excluded prediction.')
+        return row
     try:
         result = fit(TIMES, stations[:7], codes, rates, cov, clock_mean, clock_cov)
         row['fit'] = result
+        row['status'] = result['status']
         predictions = [forecast(result, t, stations[7], CLOCKS[7]) for t in (0., 30., 60.)]
         # Development-only seal before asking the generator for excluded data.
         encoded = json.dumps(native(predictions), sort_keys=True, allow_nan=False).encode()
@@ -138,7 +146,7 @@ def evaluate(case):
                 'heldout_rate_error_m_s': prediction['heldout_rate_m_s']-float(true_rates[i, 0])})
         row['evaluation'] = evaluations
     except (ValueError, RuntimeError) as error:
-        row['failure'] = str(error)
+        row.update(status='FIT_UNAVAILABLE', failure=str(error))
     return row
 
 
@@ -158,18 +166,26 @@ def run():
     criteria = {
         'independent_code_within_1mm': diagnostics['independent_max_code_difference_m'] < .001,
         'independent_rate_within_10um_s': diagnostics['independent_max_rate_difference_m_s'] < 1e-5,
-        'all_four_cases_retained': len(cases) == 4 and all('fit' in row or 'failure' in row for row in cases),
+        'all_four_cases_retained': len(cases) == 4 and all('status' in row for row in cases),
         'noiseless_prediction_recovered': 'evaluation' in cases[0] and all(
             e['position_error_m'] < .1 and e['velocity_error_m_s'] < .001 for e in cases[0]['evaluation']),
         'noiseless_model_accepted': cases[0].get('fit', {}).get('status') == 'CONDITIONAL_MODEL_ACCEPTED',
         'jerk_model_rejected': cases[2].get('fit', {}).get('status') == 'MODEL_REJECTED',
         'clock_step_rejected': cases[3].get('fit', {}).get('status') == 'MODEL_REJECTED',
-        'declared_jerk_exceeds_budget': remainder['status'] == 'TRUNCATION_BUDGET_EXCEEDED'}
+        'declared_jerk_exceeds_budget': remainder['status'] == 'TRUNCATION_BUDGET_EXCEEDED',
+        'calibration_rejection_blocks_fit_and_prediction':
+            cases[1]['status'] == 'REFERENCE_CALIBRATION_REJECTED' and all(
+                row['status'] == 'REFERENCE_CALIBRATION_REJECTED' and 'fit' not in row and 'predictions' not in row
+                for row in cases if any(cal['status'] != 'CONDITIONAL_CLOCK_MODEL_ACCEPTED'
+                                       for cal in row['reference_calibrations']))}
     root = Path(__file__).resolve().parents[2]
     files = [root/'research/kinematic'/name for name in
              ('receiver_time.py', 'clock_drift.py', 'doppler.py', 's2_validation.py', 'synthetic.py', 'model.py')]
     files += [root/'positioning'/name for name in ('solver.py', 'calibration.py', 'errors.py')]
-    return native({'schema': 'receiver-time-synthetic-study-v1',
+    return native({'schema': 'receiver-time-synthetic-study-v2',
+        'supersedes': {'report': 'receiver_time_study_v1.json', 'source_commit': '5f2a922',
+                      'sha256': '99ff17dca9010b4eb3c9d4f61e42c13160a8a09cd05514e6514d3592df499a12',
+                      'reason': 'Runner now stops on rejected reference calibration; seed, data design and thresholds unchanged.'},
         'scope': 'S2a vacuum synthetic validation only. Real RF integration and total error budget remain pending; no S3 admission.',
         'design': {'fit_tags_s': TIMES, 'state': STATE, 'receiver_clocks': CLOCKS,
                    'station_positions_m': receiver_positions(), 'jerk_stress_m_s3': JERK,

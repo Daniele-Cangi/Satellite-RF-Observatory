@@ -96,6 +96,9 @@ orologio derivati da riferimenti non bersaglio: almeno tre epoche e quattro
 satelliti distinti a ciascuna. La matrice completa conserva correlazioni nel
 tempo e fra riferimenti. Un salto non viene corretto tagliando residui: il
 modello affine può fallire il controllo chi-quadro nominale all'1%.
+Il runner deve fermarsi prima del fit del bersaglio se una calibrazione viene
+respinta. Nel caso rumoroso registrato accade alla quinta stazione: il report
+corrente conserva il terminale e non produce una previsione esclusa.
 
 L'ammissione elimina i record etichettati come bersaglio prima di accedere ai
 valori; il confine numerico li rifiuta nuovamente. I test introducono payload
@@ -179,3 +182,8 @@ L'output rifiuta la sovrascrittura. Il report registra tutti i casi, le
 predizioni, le covarianze, le impronte dei sorgenti e le versioni del runtime.
 I confronti numerici fra piattaforme richiedono tolleranze; non si promettono
 risultati byte-identici. Il report S1 e i suoi sorgenti non sono modificati.
+
+Il report S2a corrente è `results/receiver_time_study_v2.json`. La revisione
+corregge la precedenza del rifiuto di calibrazione; non cambia il disegno.
+`receiver_time_study_v1.json` resta una diagnostica storica, con i sorgenti al
+commit `5f2a922`. Leggere l'audit in `results/S2_REPORT.md` prima di usarlo.

@@ -1,12 +1,9 @@
 # S2a — Prima verifica del modello fisico
 
-**Audit del primo report:** `receiver_time_study_v1.json` conserva un difetto
-del runner: nel caso rumoroso la quinta calibrazione viene respinta, ma il
-fit successivo viene comunque eseguito. Il suo esito accettato è soltanto
-diagnostico e non costituisce un caso ammissibile. Gli otto controlli numerici
-non verificavano la precedenza del rifiuto della calibrazione. Questa versione
-viene conservata con i sorgenti per rendere riproducibile la correzione; il
-prossimo report deve interrompere quel caso mantenendo seme e soglie invariati.
+**Report corrente:** `receiver_time_study_v2.json`. Il caso rumoroso termina
+alla calibrazione respinta; nessun fit o previsione esclusa viene eseguito.
+Il primo report è conservato come diagnostica di un difetto del runner,
+corretto senza cambiare seme, dati o soglie. Vedere l'audit sotto.
 
 Esecuzione del 10 settembre 2026. Consegna di sviluppo sintetico: nessun nuovo
 dato RF, nessuna orbita reale e nessuna conferma satellitare. S2 resta aperto;
@@ -57,7 +54,7 @@ simulazione. Nessun caso viene scartato dal report.
 | Caso | Controllo residui | Errore di posizione a +60 s | Residuo codice escluso a +60 s |
 |---|---|---:|---:|
 | Senza rumore | Accettato condizionatamente | 0,000128 m | 0,000003 m |
-| Rumore correlato, seme 20260910 | Accettato condizionatamente, p = 0,265 | 109,989 m | +3,404 m |
+| Rumore correlato, seme 20260910 | Calibrazione respinta, p = 0,00123 | Non stimata | Non prevista |
 | Jerk non modellato | Respinto, p = 3,94 × 10⁻²⁷ | 111,269 m | +20,248 m |
 | Salto non segnalato di 300 m su un codice | Respinto, p = 6,61 × 10⁻⁵⁵ | 1939,436 m | −17,043 m |
 
@@ -66,10 +63,14 @@ salto d'orologio mostra ancora che un residuo contenuto su un ricevitore escluso
 può accompagnare un errore di posizione grande. Il controllo va effettuato
 sull'insieme delle misure e del modello, non su un solo residuo favorevole.
 
-Nel caso rumoroso il raggio locale condizionale di posizione al 95% a +60 s
-è 1862,231 m; quello di velocità a fine arco è 3,743 m/s. Non includono un
-inviluppo completo di errori sistematici. Una sola replica non misura copertura
-e il suo errore di 110 m non è confrontabile come mediana con i 20 casi S1.
+Il caso rumoroso non produce una prestazione ammissibile. Anche in una
+simulazione con modello noto, un controllo statistico può respingere una
+realizzazione del rumore; il risultato non autorizza a cambiare seme o soglia.
+Una sola replica non misura copertura o frequenza dei fallimenti.
+
+Nel caso senza rumore, con le scale di incertezza dichiarate comunque presenti
+nel fit, il raggio locale condizionale a +60 s è 1862,217 m; quello di velocità
+a fine arco è 3,743 m/s. Non includono un inviluppo completo di errori sistematici.
 Il maggiore realismo del modello non implica da solo un guadagno di precisione.
 
 ## Limite che decide il prossimo lavoro
@@ -86,25 +87,45 @@ del difetto di modello nell'incertezza della soluzione.
 
 ## Verifiche e provenienza
 
-Tutti gli otto criteri dello studio sono soddisfatti. Venti nuovi test coprono
+Tutti i nove controlli dello studio aggiornato sono soddisfatti, compresa la
+precedenza del rifiuto di calibrazione; non significa che tutti i casi siano
+accettati. Ventuno nuovi test coprono
 generatore indipendente, stima, clock, Doppler, quantizzazione RINEX, covarianze,
 esclusione del bersaglio, tempi a cavallo di giorno/settimana e casi respinti.
-La suite locale comprende 99 test superati, incluse le regressioni esistenti.
+La suite locale comprende 100 test superati, incluse le regressioni esistenti.
 La CI della repository include già tutti i test di `research/kinematic/tests`.
 
-I sorgenti v1 e i risultati S0/S1 non sono modificati. Le impronte dei sorgenti
-registrate sia nello studio S1 sia in quello S2a coincidono con i file locali.
+I sorgenti del riferimento RF v1 e i risultati S0/S1 non sono modificati.
+Le impronte dello studio S1 e del report S2a corrente coincidono con i file
+locali; i sorgenti del primo report S2a restano nella storia Git.
 
-Dati: [receiver_time_study_v1.json](receiver_time_study_v1.json).
+Dati correnti: [receiver_time_study_v2.json](receiver_time_study_v2.json).
 SHA-256 del report:
 
 ```text
-99ff17dca9010b4eb3c9d4f61e42c13160a8a09cd05514e6514d3592df499a12
+f9d9303e563caabf5e004b2d4da505b2c77603adae186d3dad5225ae15c3d104
 ```
 
 Il JSON conserva parametri, tutti i fit e le covarianze, tutte le predizioni,
 gli esiti sfavorevoli, runtime e impronte. Il comando di riproduzione rifiuta
 di sovrascrivere un report esistente. Non è una preregistrazione pubblica.
+
+## Audit della correzione del runner
+
+Nel [primo report](receiver_time_study_v1.json), la quinta calibrazione del
+caso rumoroso ha p = 0,001233, sotto la soglia dichiarata di 0,01. Il runner
+continuava e produceva un fit apparentemente accettato, con errore di circa
+110 m a +60 s. Quel valore resta solo una diagnostica non ammissibile.
+
+I sorgenti di quell'esecuzione sono nel commit `5f2a922`; il JSON originale
+resta invariato, con impronta `99ff17dc…99a12`. I sorgenti RF v1 importati
+possono avere terminatori diversi nel checkout Windows e nel blob Git, come
+già documentato per S1. I nuovi sorgenti di ricerca conservano i byte in Git.
+
+La seconda esecuzione corregge esclusivamente l'ordine di ammissione. Mantiene
+gli stessi quattro casi, seme, rumori, soglie e budget; aggiunge un controllo
+di regressione che impedisce fit e previsione dopo un rifiuto di calibrazione.
+Non è una nuova conferma né una modifica del disegno per ottenere un successo.
 
 ## Prossima consegna S2b
 

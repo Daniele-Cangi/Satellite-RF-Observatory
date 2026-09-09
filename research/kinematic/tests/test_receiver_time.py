@@ -10,6 +10,7 @@ from research.kinematic.doppler import ALPHA, BETA, F1_HZ, F2_HZ, admit_fields, 
 from research.kinematic.receiver_time import C, fit, noise_covariance, predict, quadratic_remainder
 from research.kinematic.s2_validation import (CLOCKS, STATE, TIMES, inertial_observations,
                                               reference_calibrations, run)
+from research.kinematic import s2_validation
 from research.kinematic.synthetic import receiver_positions
 
 
@@ -22,6 +23,9 @@ def test_independent_inertial_generator_and_inverse_recovery(study):
     assert study['criteria_pass'], study['criteria']
     assert study['diagnostics']['rotation_omission_max_code_difference_m'] > 10
     for row in study['cases']:
+        if row['status'] == 'REFERENCE_CALIBRATION_REJECTED':
+            assert 'fit' not in row and 'predictions' not in row and 'evaluation' not in row
+            continue
         serialized = json.dumps(row['predictions'], sort_keys=True, allow_nan=False).encode()
         assert hashlib.sha256(serialized).hexdigest() == row['predictions_sha256_before_evaluation']
         assert row['fit']['rank'] == 25
@@ -29,6 +33,17 @@ def test_independent_inertial_generator_and_inverse_recovery(study):
     noiseless = study['cases'][0]['fit']
     np.testing.assert_allclose(noiseless['state'][9:], STATE[9:], atol=.001)
     np.testing.assert_allclose(noiseless['receiver_clocks'], CLOCKS[:7], atol=1e-5)
+
+
+def test_rejected_reference_calibration_stops_before_fit_or_holdout(monkeypatch):
+    def forbidden_fit(*args, **kwargs):
+        raise AssertionError('fit or forecast must not run after calibration rejection')
+    monkeypatch.setattr(s2_validation, 'fit', forbidden_fit)
+    monkeypatch.setattr(s2_validation, 'forecast', forbidden_fit)
+    row = s2_validation.evaluate('correlated_noise')
+    assert row['status'] == 'REFERENCE_CALIBRATION_REJECTED'
+    assert row['rejected_station_indices'] == [4]
+    assert 'fit' not in row and 'predictions' not in row and 'evaluation' not in row
 
 
 def test_rate_differentiates_receiver_tag_and_not_coordinate_seconds():
