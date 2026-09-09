@@ -63,7 +63,7 @@ def verify(run_path):
     snapshot_sources(run, 'verification')
     plan=json.loads((run/'plan.json').read_text())
     context=Context(**solution['context'])
-    if (run/'oracle_access.json').exists():
+    if (run/'oracle_access.json').exists() or (run/'oracle_request.json').exists():
         raise ValueError('oracle already accessed without terminal; do not silently retry revealed event')
     gold_path=run/'heldout_reveal.json'
     if not gold_path.exists():
@@ -87,6 +87,8 @@ def verify(run_path):
         write_json(gold_path,gold,exclusive=True)
     else:
         gold=json.loads(gold_path.read_text())
+    write_json(run/'oracle_request.json', {'url':plan['oracle_url'],'attempt_utc':utc_now(),
+               'solution_sha256':freeze['solution_sha256']}, exclusive=True)
     data,receipt=download(plan['oracle_url'],20_000_000)
     (run/'oracle_after_freeze.SP3.gz').write_bytes(data)
     write_json(run/'oracle_access.json',receipt,exclusive=True)

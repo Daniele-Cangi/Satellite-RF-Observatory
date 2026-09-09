@@ -46,6 +46,14 @@ User instructions continue to take precedence over this file.
 
 ## Current delivery objective
 
+The private three-event web archive is delivered. The user has now authorized
+the next milestone: a configurable historical GPS request that can eventually
+be launched from the site. First validate the reusable local request-to-dossier
+path on one new predeclared event. Then connect a separately controlled job
+runner to the web interface; do not execute the estimator inside a page request.
+Keep operational completion separate from a scientific pass. Parameterization
+alone adds no physical observable and must not be described as reducing uncertainty.
+
 The user accepted continuing product work despite G12 DOY248 exceeding the
 uncertainty criterion by 121.469 m (about 1.21%). This authorizes a first usable
 web archive of the closed results. The 10 km scientific criterion is not a

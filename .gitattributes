@@ -55,3 +55,6 @@ experiments/positioning_g12_doy248/sources/** -text whitespace=cr-at-eol
 # Downloaded dossiers and their catalog hashes must survive Windows checkouts.
 web/app/results.json -text
 web/public/evidence/*.json -text
+
+# Configured-request evidence is sealed byte-for-byte across platforms.
+experiments/positioning_g13_doy247_request/** -text whitespace=cr-at-eol

@@ -5,6 +5,7 @@ import sys
 import numpy as np
 
 from .context import Context
+from .errors import ScientificRejection
 from .acquisition import digest, write_json, source_hashes, snapshot_sources, utc_now
 from .calibration import C, OMEGA, rotate_z, parse_reference_navigation, calibrate_station, reference_model
 from .solver import interpolate_event, measurement_model, model_jacobian, solve, uncertainty_box, heldout_prediction, far_field_cost, CHI95
@@ -126,10 +127,10 @@ def estimate(run_path):
     covariance_z=cov_code+cov_reference[:n,:n]+np.diag(np.array(clock_noise[:n])+ground_variance)
     best=solve(z,stations,covariance_z)
     if best['ambiguous'] or np.max(abs(best['residuals']))>100:
-        raise ValueError('ambiguous or inadmissible target fit')
+        raise ScientificRejection('ambiguous or inadmissible target fit')
     far_cost=far_field_cost(z,stations,covariance_z,best['q'])
     if far_cost-best['cost']<=CHI95:
-        raise ValueError('infinite-range alternative inside confidence region')
+        raise ScientificRejection('infinite-range alternative inside confidence region')
     bias=plan['uncertainty']['per_root_systematic_envelope_m']
     uncertainty=uncertainty_box(z,stations,covariance_z,best,bias_m=bias,interior_samples=64,seed=2026250,margin=plan['uncertainty']['nonlinear_margin_factor'])
     gold_station=np.array(admitted['stations'][names[-1]]['antenna_ecef_m'])

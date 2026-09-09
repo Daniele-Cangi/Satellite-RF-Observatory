@@ -68,6 +68,9 @@ def acquire(plan_path, run_path):
         raise ValueError('event already frozen; acquisition cannot overwrite it')
     plan_bytes = Path(plan_path).read_bytes()
     plan = json.loads(plan_bytes)
+    if 'profile' in plan:
+        from .plans import validate_plan
+        validate_plan(plan)
     Context(plan['target'], plan['date_gpst'])
     if plan['calibration_limits'] != {'max_reference_absolute_residual_m':50,'max_reference_rms_m':20,'max_alternating_subset_clock_difference_m':30,'max_ground_coordinate_check_m':30}:
         raise ValueError('this version implements only the documented calibration thresholds')

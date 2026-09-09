@@ -17,6 +17,42 @@ the primary outcome remains `UNCERTAINTY_TOO_LARGE`. See
 
 ## Portable execution
 
+### Configurable request (current product slice)
+
+The `gps-code-snapshot-v1` profile fixes the physical model, eleven-epoch
+selection, calibration and uncertainty/confirmation criteria. Target, historical
+GPST date and 5–8 fit station IDs plus a distinct excluded station are explicit.
+URL generation includes the GPS-week rollover. Unsupported settings and arbitrary
+source URLs are rejected before a job starts. Prior exposure must be declared;
+the software cannot certify that a person has never seen an event's orbit.
+
+```powershell
+python -m positioning plan G13 2026-09-04 work/example-plan.json --prior-access "Example only: declare actual prior exposure before an experiment."
+python -m positioning run work/example-plan.json work/example-run
+python -m positioning status work/example-run
+python -m positioning dossier work/example-run
+```
+
+`run` starts bounded acquisition, offline estimation and post-freeze verification
+in separate processes (30-minute limit per stage). Source/measurement failures
+stop before estimation or oracle access. Each stage writes a log under `logs/`.
+An unknown software exception produces `FAILED` / `ENGINEERING_FAILURE`, not a
+scientific rejection or a passing result. A completed request is read back without
+re-execution; interrupted/failed requests require inspection and are not retried
+automatically. The initial directory must be empty. Do not delete an attempt to
+retry a revealed event or search for a passing result.
+
+`dossier.json` provides one summary schema for successful, rejected and missing
+positions, with UTF-8 source/input/result evidence and SHA-256 hashes. Unavailable
+position/error fields are null, never zero. `terminal_receipt.json` seals the
+published dossier and its included artifacts; a later edit is rejected on read.
+Raw observations and the post-freeze SP3 remain in the run directory and have
+separate acquisition receipts. These local hashes are not a trusted timestamp.
+
+This is the local worker foundation. The deployed archive remains read-only;
+it does not yet accept or execute requests. Running a new local request does not
+automatically publish it or add it to the historical archive.
+
 From the repository root, using Python 3.13:
 
 ```powershell

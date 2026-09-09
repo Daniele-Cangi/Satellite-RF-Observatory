@@ -6,6 +6,7 @@ import numpy as np
 from scipy.optimize import least_squares, brentq
 
 from .calibration import C, OMEGA, rotate_z, troposphere
+from .errors import ScientificRejection
 
 CHI95 = 7.814727903251179
 
@@ -26,11 +27,11 @@ def interpolate_event(codes, clocks, stations, u0=None, degree=3, time_offsets=N
     z, weights, positions = [], [], []
     for i, row in enumerate(tags):
         if np.any(np.diff(row) <= 0) or not row[0] <= u0 <= row[-1]:
-            raise ValueError("emission tags do not bracket event monotonically")
+            raise ScientificRejection("emission tags do not bracket event monotonically", 'SOURCE_OR_MEASUREMENT_NOT_QUALIFIED')
         selected = np.sort(np.argsort(abs(row - u0), kind="stable")[:degree + 1])
         nodes = row[selected]
         if not nodes[0] <= u0 <= nodes[-1]:
-            raise ValueError("interpolation stencil does not bracket event")
+            raise ScientificRejection("interpolation stencil does not bracket event", 'SOURCE_OR_MEASUREMENT_NOT_QUALIFIED')
         w = np.ones(len(nodes))
         for j in range(len(nodes)):
             for k in range(len(nodes)):
@@ -78,7 +79,7 @@ def algebraic_seeds(z, stations):
         return a, rhs, yy, ss
     a, rhs, _, _ = matrix(list(range(len(y))))
     if np.linalg.matrix_rank(a) != 4:
-        raise ValueError("multi-root algebraic matrix is rank deficient")
+        raise ScientificRejection("multi-root algebraic matrix is rank deficient")
     seeds = [np.linalg.lstsq(a, rhs, rcond=None)[0] * scale]
     for indices in combinations(range(len(y)), 4):
         a, rhs, yy, ss = matrix(list(indices))
@@ -122,7 +123,7 @@ def solve(z, stations, covariance, atmosphere=True):
         if all(np.linalg.norm(q - previous["q"]) > 0.1 for previous in fits):
             fits.append(result)
     if not fits:
-        raise ValueError("no admissible finite emitted-event solution")
+        raise ScientificRejection("no admissible finite emitted-event solution")
     fits.sort(key=lambda v: v["cost"])
     best = fits[0]
     best["branches"] = [{"q": f["q"].tolist(), "cost": f["cost"]} for f in fits]
@@ -131,7 +132,7 @@ def solve(z, stations, covariance, atmosphere=True):
     h = model_jacobian(best["q"], stations, atmosphere)
     _, sv, vh = np.linalg.svd(np.linalg.solve(np.linalg.cholesky(covariance), h), full_matrices=False)
     if sv[-1] <= sv[0] * 1e-12:
-        raise ValueError("position-clock Jacobian rank deficient")
+        raise ScientificRejection("position-clock Jacobian rank deficient")
     best["covariance"] = (vh.T / sv**2) @ vh
     return best
 
@@ -158,7 +159,7 @@ def profile_axes(z, stations, covariance, best):
             while profile(upper) < 0 and upper < 1e9:
                 upper *= 2
             if upper >= 1e9:
-                raise ValueError("nonlinear confidence profile not bounded")
+                raise ScientificRejection("nonlinear confidence profile not bounded", 'UNCERTAINTY_NOT_QUALIFIED')
             radius = brentq(profile, 0.0, upper, xtol=0.01)
             radii.append({"axis": k, "sign": sign, "radius_m": float(radius)})
     return radii
@@ -174,7 +175,7 @@ def uncertainty_box(z, stations, covariance, best, bias_m=20., interior_samples=
         shifted = z + bias_m * np.array(signs)
         corner = refine(shifted, stations, covariance, best["q"])
         if not corner["success"]:
-            raise ValueError("bias-box sensitivity fit did not converge")
+            raise ScientificRejection("bias-box sensitivity fit did not converge", 'NUMERICAL_ASSESSMENT_FAILED')
         h = model_jacobian(corner["q"], stations)
         cw = np.linalg.solve(np.linalg.cholesky(covariance), h)
         _, singular, vh = np.linalg.svd(cw, full_matrices=False)
