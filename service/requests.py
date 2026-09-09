@@ -153,7 +153,7 @@ class RequestStore:
             # operator has inspected and stopped it; no concurrent replacement.
             if db.execute("SELECT 1 FROM requests WHERE state IN ('RUNNING','NEEDS_REVIEW') LIMIT 1").fetchone():
                 return None
-            row = db.execute("SELECT * FROM requests WHERE state='QUEUED' ORDER BY created_at,id LIMIT 1").fetchone()
+            row = db.execute("SELECT * FROM requests WHERE state='QUEUED' ORDER BY created_at,rowid LIMIT 1").fetchone()
             if row is None:
                 return None
             token = secrets.token_urlsafe(32)

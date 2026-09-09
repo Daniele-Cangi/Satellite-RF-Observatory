@@ -43,12 +43,16 @@ def test_competing_workers_claim_once(tmp_path,declaration):
     assert sum(claim is not None for claim in claims)==1
 
 
-def test_expired_worker_is_quarantined_and_cannot_finish(tmp_path,declaration):
+def test_expired_worker_is_quarantined_and_cannot_finish(tmp_path,declaration,monkeypatch):
     now=[1000.0]
+    # Equal timestamps must retain insertion order, not random UUID order.
+    identifiers=iter(['ffffffff-ffff-4fff-8fff-ffffffffffff','00000000-0000-4000-8000-000000000000'])
+    monkeypatch.setattr('service.requests.uuid.uuid4',lambda:next(identifiers))
     store=RequestStore(tmp_path/'queue.sqlite',clock=lambda:now[0])
     row=store.submit('owner','one',**declaration)
     store.submit('owner','two',**declaration)
     claim=store.claim(lease_seconds=10)
+    assert claim['id']==row['id']
     now[0]+=11
     with pytest.raises(Conflict): store.heartbeat(row['id'],claim['lease_token'])
     with pytest.raises(Conflict): store.finish(row['id'],claim['lease_token'],state='COMPLETED',result_hash='a'*64)
