@@ -79,6 +79,15 @@ ready-to-run experiment. No search for passing targets or post-reveal tuning.
 Keep the current real-data estimator unchanged as the v1 reference. Use
 `research/kinematic/` for the new prototype and report progress in its results.
 
+S0/S1 are delivered. S2a now supplies a synthetic receiver-time vacuum model,
+independent inertial generator, narrow GPS Doppler field conversion, non-target
+reference-residual clock fitting and joint correlated covariance. Read
+`research/kinematic/S2_MODEL.md` and `results/S2_REPORT.md` in that package.
+S2 is not complete: S2b still requires real RINEX/header/receiver qualification,
+reference-residual generation, propagation and a total inverse-error envelope.
+Taylor remainder checks are not fitted-state uncertainty bounds. No S3 data
+acquisition is authorized by the S2a synthetic result. Keep S1 evidence intact.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

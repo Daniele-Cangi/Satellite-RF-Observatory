@@ -15,6 +15,12 @@ roadmap as the current priority. Its first [S0/S1 report](research/kinematic/res
 finds a conditional gain from added range-rate observations in an idealized
 synthetic model. This is not yet real Doppler integration or new satellite proof.
 
+The next [S2a result](research/kinematic/results/S2_REPORT.md) validates a
+receiver-time vacuum model with Earth rotation, clock drift and correlated
+noise against an independent inertial generator. The
+[remaining S2 requirements](research/kinematic/S2_MODEL.md) precede any real
+campaign: RF qualification and the total model-error envelope are still open.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |
@@ -89,8 +95,9 @@ Windows and Linux. Local test results and remote CI execution are distinct.
 Read-only diagnosis of G12 and G14 finds a weak approximately radial direction.
 The S1 synthetic study supports investigating the information added by range
 rate, while rejecting concentrated-network ambiguities and inappropriate motion
-models. Next implement S2's receiver-time observation model, drift calibration,
-correlations and truncation treatment before any real v2 confirmation.
+models. S2a now validates receiver-time vacuum geometry, drift nuisance and
+correlated fitting. Next qualify the real RF adapter and calibration, and
+complete propagation and inverse model-error bounds before any v2 confirmation.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 

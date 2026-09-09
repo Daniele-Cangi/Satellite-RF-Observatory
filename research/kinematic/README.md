@@ -1,13 +1,20 @@
-# Kinematic research — S0/S1 delivered, S2 pending
+# Kinematic research — S0/S1 and S2a delivered
 
 The approved project is `docs/SCIENTIFIC_ROADMAP.md`. Website and remote-service
 work are paused. The first deliverable is complete: read-only archive diagnosis
 and an idealized code/range-rate synthetic comparison, with explicit failure
 cases. See `results/REPORT.md` and the machine-readable reports alongside it.
 
+S2a adds the receiver-time vacuum model, independent inertial validation,
+GPS Doppler field conversion, reference-only affine clock fitting and correlated
+joint estimation. See [equations and remaining S2b work](S2_MODEL.md) and
+[S2a results](results/S2_REPORT.md). Full RF qualification remains pending;
+S2a does not authorize S3 acquisition.
+
 ## Scope
 
-This package is a development research prototype, not an RF estimator. It uses
+The original S1 modules `model.py` and `synthetic.py` are a development
+research prototype, not an RF estimator. They use
 known common ideal times, fixed receivers, Euclidean ranges, an affine shared
 clock, and independent known noise. It omits light-time, rotating-frame effects,
 propagation, individual receiver-clock calibration and actual Doppler conversion.
@@ -36,6 +43,7 @@ Use `requirements-positioning.txt` and run from the repository root:
 python -m pytest research/kinematic/tests -q
 python -m research.kinematic.diagnose PATH_TO_NEW_DIAGNOSIS.json
 python -m research.kinematic.synthetic PATH_TO_NEW_STUDY.json
+python -m research.kinematic.s2_validation PATH_TO_NEW_S2_STUDY.json
 ```
 
 Report writers refuse to overwrite an existing output. Compare numerical
@@ -44,7 +52,7 @@ report records exact source bytes and runtime versions at execution time;
 the imported v1 source hashes can differ with checkout line endings. It does
 not claim externally trusted timestamping or byte-identical numerical execution.
 
-## Next bounded work: S2 observation model
+## S2 scope and remaining work
 
 1. Derive the receiver-tagged code/rate model with distinct transmit/receive
    times and Earth rotation. Validate it against an independent synthetic
@@ -56,6 +64,11 @@ not claim externally trusted timestamping or byte-identical numerical execution.
    do not reject it: a shorter arc or a richer model needs prior justification.
 4. Complete exact campaign manifests, code freeze and access history before
    S3 acquisitions. A symbolic target/date blueprint is not ready to execute.
+
+S2a delivers the vacuum geometry and synthetic clock/correlation checks in
+items 1–3. Real headers and receiver conventions, reference-residual generation,
+propagation and a total inverse-error envelope are still required. The exact
+boundary and the next bounded S2b tasks are listed in `S2_MODEL.md`.
 
 Do not edit the five frozen experiments, lower their floors, use the target
 orbit to initialize, or present the synthetic error reduction as measured RF
