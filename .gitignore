@@ -208,3 +208,8 @@ transfer/
 
 # Raw payloads for the closed network-selection experiment.
 /work/g14_doy246_network/
+
+# Explicit, bounded synthetic research reports (not raw production runs).
+!research/kinematic/results/
+!research/kinematic/results/*.json
+!research/kinematic/results/*.md

@@ -1,0 +1,4430 @@
+{
+  "schema": "synthetic-kinematic-study-v1",
+  "scope": "Idealized development simulation only; no RF/Doppler integration, satellite proof or real uncertainty coverage.",
+  "noise_assumptions": {
+    "independent_code_sigma_m": 20,
+    "independent_rate_sigma_m_s": 0.05
+  },
+  "truth": {
+    "position": [
+      26000000.0,
+      2000000.0,
+      4000000.0
+    ],
+    "velocity": [
+      -250.0,
+      2300.0,
+      500.0
+    ],
+    "acceleration": [
+      -0.52,
+      -0.04,
+      -0.08
+    ],
+    "clock_m": 75000.0,
+    "clock_rate_m_s": 12.0
+  },
+  "fit_times_s": [
+    -300.0,
+    -270.0,
+    -240.0,
+    -210.0,
+    -180.0,
+    -150.0,
+    -120.0,
+    -90.0,
+    -60.0,
+    -30.0,
+    0.0
+  ],
+  "station_lat_lon_deg": [
+    [
+      50,
+      0
+    ],
+    [
+      -45,
+      0
+    ],
+    [
+      0,
+      60
+    ],
+    [
+      0,
+      -55
+    ],
+    [
+      35,
+      40
+    ],
+    [
+      -30,
+      -35
+    ],
+    [
+      15,
+      -10
+    ],
+    [
+      -10,
+      45
+    ]
+  ],
+  "sources_sha256": {
+    "research/kinematic/__init__.py": "383e676033b01376ce8d8103ad84525184f3047a36a1cf194dccfa8ef257fce2",
+    "research/kinematic/diagnose.py": "6d74d1daf4aa181f73abda6328c7a3cbd4d0302975a6d92a8e80fb6c7969af7d",
+    "research/kinematic/model.py": "f5e630a7c8e88feb9828a657e2ecf41518f0db54603c9554d0a49e47e4510bb5",
+    "research/kinematic/synthetic.py": "cf2d0af7a65488b2bd4de166fe93c9a11cffad9d64bd201dc900692cfbcd9844",
+    "positioning/solver.py": "87f6a564e4a42c7e21cdb33d0dfa0f9f46d97b4e03debfab8eb0e3957c0b9318",
+    "positioning/calibration.py": "112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491",
+    "positioning/errors.py": "49ee71ad1458232342fcb9383fe41ff3ec2f218bf9482cbe9030ae0f443414df",
+    "docs/SCIENTIFIC_ROADMAP.md": "9c5ae67f742d2e6c3a3c6c11bae7c03c1b96c2c57c2774dd0f0d22483342262b"
+  },
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.3",
+    "scipy": "1.17.1"
+  },
+  "criteria": {
+    "all_nominal_fits_finite": true,
+    "noiseless_recovery": true,
+    "nominal_rank_full": true,
+    "velocity_radius_at_least_halved": true,
+    "median_60s_error_not_worse": true,
+    "linear_mismatch_rejected": true
+  },
+  "nominal_criteria_pass": true,
+  "summary": {
+    "code_only": {
+      "attempts": 20,
+      "finite_fits": 20,
+      "nominal_model_accepted": 20,
+      "median_position_error_60s_m": 606.6651942365113,
+      "median_velocity_radius_0s_m_s": 9.784911709435367,
+      "median_position_radius_60s_m": 2264.960147528238
+    },
+    "code_and_range_rate": {
+      "attempts": 20,
+      "finite_fits": 20,
+      "nominal_model_accepted": 20,
+      "median_position_error_60s_m": 228.26499887657235,
+      "median_velocity_radius_0s_m_s": 2.258150847920617,
+      "median_position_radius_60s_m": 1054.3508867440382
+    }
+  },
+  "noiseless": [
+    {
+      "seed": 20260910,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 1.4224732503009823e-18,
+      "residual_dof": 66,
+      "nominal_residual_p": 1.0,
+      "scaled_condition": 1472847.0691092422,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000000.000000086,
+            2000000.00000001,
+            4000000.000000021
+          ],
+          "velocity_m_s": [
+            -249.9999999999869,
+            2300.000000000023,
+            500.00000000011363
+          ],
+          "local_position_radius95_m": 1745.9941444595486,
+          "local_velocity_radius95_m_s": 9.785007462541193,
+          "heldout_code_m": 22368364.329210453,
+          "heldout_rate_m_s": -366.66620687181245,
+          "heldout_code_band3sigma_m": 68.97530887136566,
+          "heldout_rate_band3sigma_m_s": 0.5252551082626173,
+          "position_error_m": 8.87732286279865e-08,
+          "velocity_error_m_s": 1.1671042325001562e-10,
+          "heldout_code_error_m": 0.0,
+          "heldout_rate_error_m_s": 5.7411853049416095e-12
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992266.000000086,
+            2068982.0000000107,
+            4014964.0000000247
+          ],
+          "velocity_m_s": [
+            -265.59999999999076,
+            2298.800000000024,
+            497.6000000001307
+          ],
+          "local_position_radius95_m": 2000.7394004957569,
+          "local_velocity_radius95_m_s": 9.788246784420842,
+          "heldout_code_m": 22357241.857345056,
+          "heldout_rate_m_s": -374.8339775505379,
+          "heldout_code_band3sigma_m": 76.93385667322761,
+          "heldout_rate_band3sigma_m_s": 0.6077021847354354,
+          "position_error_m": 8.980625323820815e-08,
+          "velocity_error_m_s": 1.3312803938063964e-10,
+          "heldout_code_error_m": 0.0,
+          "heldout_rate_error_m_s": 6.195932655828074e-12
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984064.000000086,
+            2137928.000000011,
+            4029856.000000029
+          ],
+          "velocity_m_s": [
+            -281.1999999999946,
+            2297.6000000000245,
+            495.2000000001477
+          ],
+          "local_position_radius95_m": 2264.9598498707446,
+          "local_velocity_radius95_m_s": 9.79210326457507,
+          "heldout_code_m": 22345874.170539062,
+          "heldout_rate_m_s": -383.01375004668324,
+          "heldout_code_band3sigma_m": 88.92229294470641,
+          "heldout_rate_band3sigma_m_s": 0.6897849224641524,
+          "position_error_m": 9.110315291366723e-08,
+          "velocity_error_m_s": 1.498603189290884e-10,
+          "heldout_code_error_m": 0.0,
+          "heldout_rate_error_m_s": 6.650680006714538e-12
+        }
+      ]
+    },
+    {
+      "seed": 20260910,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 7.313026194796384e-19,
+      "residual_dof": 143,
+      "nominal_residual_p": 1.0,
+      "scaled_condition": 340003.3658243402,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000000.00000011,
+            2000000.000000011,
+            4000000.0000000196
+          ],
+          "velocity_m_s": [
+            -250.00000000000392,
+            2300.00000000001,
+            500.00000000000335
+          ],
+          "local_position_radius95_m": 996.9663865620765,
+          "local_velocity_radius95_m_s": 2.258171265494962,
+          "heldout_code_m": 22368364.329210453,
+          "heldout_rate_m_s": -366.66620687181756,
+          "heldout_code_band3sigma_m": 61.809744584314444,
+          "heldout_rate_band3sigma_m_s": 0.16183790169750084,
+          "position_error_m": 1.1398362024184405e-07,
+          "velocity_error_m_s": 1.125700637087865e-11,
+          "heldout_code_error_m": 0.0,
+          "heldout_rate_error_m_s": 6.252776074688882e-13
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992266.00000011,
+            2068982.0000000112,
+            4014964.0000000196
+          ],
+          "velocity_m_s": [
+            -265.60000000000394,
+            2298.8000000000097,
+            497.60000000000343
+          ],
+          "local_position_radius95_m": 1023.824662621991,
+          "local_velocity_radius95_m_s": 2.2586715159372477,
+          "heldout_code_m": 22357241.857345056,
+          "heldout_rate_m_s": -374.83397755054335,
+          "heldout_code_band3sigma_m": 61.98816217402165,
+          "heldout_rate_band3sigma_m_s": 0.16497753047960734,
+          "position_error_m": 1.1400620879476795e-07,
+          "velocity_error_m_s": 1.087255768377082e-11,
+          "heldout_code_error_m": 0.0,
+          "heldout_rate_error_m_s": 7.389644451905042e-13
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984064.00000011,
+            2137928.0000000116,
+            4029856.0000000196
+          ],
+          "velocity_m_s": [
+            -281.20000000000397,
+            2297.6000000000095,
+            495.20000000000346
+          ],
+          "local_position_radius95_m": 1054.3629385703607,
+          "local_velocity_radius95_m_s": 2.2592635514902892,
+          "heldout_code_m": 22345874.170539062,
+          "heldout_rate_m_s": -383.01375004668915,
+          "heldout_code_band3sigma_m": 62.25264799347947,
+          "heldout_rate_band3sigma_m_s": 0.16848303798457984,
+          "position_error_m": 1.1405279840953743e-07,
+          "velocity_error_m_s": 1.0911123493781384e-11,
+          "heldout_code_error_m": 0.0,
+          "heldout_rate_error_m_s": 7.389644451905042e-13
+        }
+      ]
+    }
+  ],
+  "nominal": [
+    {
+      "seed": 20260910,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 58.86838742363044,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.7210631445912584,
+      "scaled_condition": 1472875.5913934358,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000384.133591812,
+            2000015.9761227295,
+            4000108.5031289053
+          ],
+          "velocity_m_s": [
+            -248.96835415216947,
+            2299.8961074294316,
+            500.1887825833022
+          ],
+          "local_position_radius95_m": 1746.0394074019655,
+          "local_velocity_radius95_m_s": 9.78518320948754,
+          "heldout_code_m": 22368373.413749818,
+          "heldout_rate_m_s": -366.6244430736271,
+          "heldout_code_band3sigma_m": 68.975276254483,
+          "heldout_rate_band3sigma_m_s": 0.5252528361615445,
+          "position_error_m": 399.48314337175594,
+          "velocity_error_m_s": 1.053909714028458,
+          "heldout_code_error_m": 9.084539365023375,
+          "heldout_rate_error_m_s": 0.041763798191084334
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992681.17774687,
+            2068993.8427184757,
+            4015077.783113802
+          ],
+          "velocity_m_s": [
+            -264.5620355108332,
+            2298.6283322869913,
+            497.7632164097955
+          ],
+          "local_position_radius95_m": 2000.7898006986634,
+          "local_velocity_radius95_m_s": 9.788421722657134,
+          "heldout_code_m": 22357252.304095525,
+          "heldout_rate_m_s": -374.78504514627775,
+          "heldout_code_band3sigma_m": 76.93376761765518,
+          "heldout_rate_band3sigma_m_s": 0.6076994992164947,
+          "position_error_m": 430.64998370263277,
+          "velocity_error_m_s": 1.064650027421023,
+          "heldout_code_error_m": 10.446750469505787,
+          "heldout_rate_error_m_s": 0.04893240426633838
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984510.411461163,
+            2137933.6760599487,
+            4029974.296113493
+          ],
+          "velocity_m_s": [
+            -280.155716869497,
+            2297.360557144551,
+            495.33765023628877
+          ],
+          "local_position_radius95_m": 2265.015336457925,
+          "local_velocity_radius95_m_s": 9.792277459810876,
+          "heldout_code_m": 22345886.18394758,
+          "heldout_rate_m_s": -382.95835654957983,
+          "heldout_code_band3sigma_m": 88.92212353970743,
+          "heldout_rate_band3sigma_m_s": 0.6897821754018846,
+          "position_error_m": 461.8542852264502,
+          "velocity_error_m_s": 1.0801887451871797,
+          "heldout_code_error_m": 12.01340851932764,
+          "heldout_rate_error_m_s": 0.05539349711006025
+        }
+      ]
+    },
+    {
+      "seed": 20260910,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 135.7019388651478,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.6552402530421566,
+      "scaled_condition": 340009.9938955344,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000231.97535659,
+            2000005.6216182632,
+            4000062.4466199083
+          ],
+          "velocity_m_s": [
+            -249.99260046650028,
+            2300.038778796845,
+            499.9512881027838
+          ],
+          "local_position_radius95_m": 996.9851483910453,
+          "local_velocity_radius95_m_s": 2.258213356092291,
+          "heldout_code_m": 22368371.250374675,
+          "heldout_rate_m_s": -366.6641024106863,
+          "heldout_code_band3sigma_m": 61.80974284793963,
+          "heldout_rate_band3sigma_m_s": 0.16183786521439308,
+          "position_error_m": 240.29929045865043,
+          "velocity_error_m_s": 0.06270085415004102,
+          "heldout_code_error_m": 6.921164222061634,
+          "heldout_rate_error_m_s": 0.0021044611318643547
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992498.232540347,
+            2068988.6472204563,
+            4015024.889403743
+          ],
+          "velocity_m_s": [
+            -265.5902539496969,
+            2298.82959468269,
+            497.5448974861931
+          ],
+          "local_position_radius95_m": 1023.8439541377177,
+          "local_velocity_radius95_m_s": 2.258713635198212,
+          "heldout_code_m": 22357248.869534954,
+          "heldout_rate_m_s": -374.8300299567471,
+          "heldout_code_band3sigma_m": 61.98816003385811,
+          "heldout_rate_band3sigma_m_s": 0.16497746895392962,
+          "position_error_m": 240.17422389563475,
+          "velocity_error_m_s": 0.06330179908875369,
+          "heldout_code_error_m": 7.012189898639917,
+          "heldout_rate_error_m_s": 0.003947593796965521
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984296.560119607,
+            2137935.3972992245,
+            4029915.14046908
+          ],
+          "velocity_m_s": [
+            -281.18790743289344,
+            2297.6204105685356,
+            495.1385068696025
+          ],
+          "local_position_radius95_m": 1054.3828256430306,
+          "local_velocity_radius95_m_s": 2.259305704257188,
+          "heldout_code_m": 22345881.327578638,
+          "heldout_rate_m_s": -383.0080573478767,
+          "heldout_code_band3sigma_m": 62.25264497977632,
+          "heldout_rate_band3sigma_m_s": 0.168482944572647,
+          "position_error_m": 240.0760803374944,
+          "velocity_error_m_s": 0.06591074702396865,
+          "heldout_code_error_m": 7.157039575278759,
+          "heldout_rate_error_m_s": 0.0056926988132204315
+        }
+      ]
+    },
+    {
+      "seed": 20260911,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 53.74404958986362,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.860370217016063,
+      "scaled_condition": 1472914.5115025896,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000506.65104852,
+            1999978.2046157932,
+            4000010.7259033127
+          ],
+          "velocity_m_s": [
+            -250.1307032358554,
+            2299.002247864854,
+            499.33038658881753
+          ],
+          "local_position_radius95_m": 1746.0676492319847,
+          "local_velocity_radius95_m_s": 9.785436558079871,
+          "heldout_code_m": 22368376.68378923,
+          "heldout_rate_m_s": -366.5537610604212,
+          "heldout_code_band3sigma_m": 68.97529691151863,
+          "heldout_rate_band3sigma_m_s": 0.525256612405842,
+          "position_error_m": 507.23305170277587,
+          "velocity_error_m_s": 1.208707896676097,
+          "heldout_code_error_m": 12.354578778147697,
+          "heldout_rate_error_m_s": 0.11244581139698084
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992768.81189822,
+            2068927.9113343079,
+            4014954.122680539
+          ],
+          "velocity_m_s": [
+            -265.72524011722425,
+            2297.6448667027976,
+            496.89606522626815
+          ],
+          "local_position_radius95_m": 2000.8238817283413,
+          "local_velocity_radius95_m_s": 9.7886756031988,
+          "heldout_code_m": 22357257.687093385,
+          "heldout_rate_m_s": -374.71499714440404,
+          "heldout_code_band3sigma_m": 76.93388513457366,
+          "heldout_rate_band3sigma_m_s": 0.6077066031803848,
+          "position_error_m": 505.80920334452816,
+          "velocity_error_m_s": 1.3585073378298165,
+          "heldout_code_error_m": 15.829748328775167,
+          "heldout_rate_error_m_s": 0.11898040614005367
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984563.136641484,
+            2137836.896617961,
+            4029824.4898168887
+          ],
+          "velocity_m_s": [
+            -281.3197769985931,
+            2296.2874855407413,
+            494.4617438637188
+          ],
+          "local_position_radius95_m": 2265.055773275719,
+          "local_velocity_radius95_m_s": 9.792531684737972,
+          "heldout_code_m": 22345893.648831286,
+          "heldout_rate_m_s": -382.88974614369545,
+          "heldout_code_band3sigma_m": 88.9224631166114,
+          "heldout_rate_band3sigma_m_s": 0.6897937098799202,
+          "position_error_m": 508.3602115924415,
+          "velocity_error_m_s": 1.5106498131306818,
+          "heldout_code_error_m": 19.47829222306609,
+          "heldout_rate_error_m_s": 0.12400390299444553
+        }
+      ]
+    },
+    {
+      "seed": 20260911,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 138.45685289972934,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.5917315830807505,
+      "scaled_condition": 340019.18364884803,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000551.285821807,
+            2000058.890512343,
+            4000098.9841745687
+          ],
+          "velocity_m_s": [
+            -249.83165481824443,
+            2300.106978488987,
+            500.07949717391483
+          ],
+          "local_position_radius95_m": 997.0125306642648,
+          "local_velocity_radius95_m_s": 2.2582717239967804,
+          "heldout_code_m": 22368366.221455857,
+          "heldout_rate_m_s": -366.6477954542694,
+          "heldout_code_band3sigma_m": 61.80974293025893,
+          "heldout_rate_band3sigma_m_s": 0.16183785328592448,
+          "position_error_m": 563.1891481412686,
+          "velocity_error_m_s": 0.21471911416238693,
+          "heldout_code_error_m": 1.8922454044222832,
+          "heldout_rate_error_m_s": 0.01841141754880482
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992822.364745375,
+            2069044.1703761632,
+            4015065.5397746917
+          ],
+          "velocity_m_s": [
+            -265.4297502771407,
+            2298.911679099021,
+            497.6908761676331
+          ],
+          "local_position_radius95_m": 1023.872318983712,
+          "local_velocity_radius95_m_s": 2.2587719599789158,
+          "heldout_code_m": 22357244.370911743,
+          "heldout_rate_m_s": -374.8109565431826,
+          "heldout_code_band3sigma_m": 61.98816010370073,
+          "heldout_rate_band3sigma_m_s": 0.16497744962718636,
+          "position_error_m": 568.9615201510949,
+          "velocity_error_m_s": 0.22297010368087608,
+          "heldout_code_error_m": 2.5135666877031326,
+          "heldout_rate_error_m_s": 0.023021007361478496
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984625.50080518,
+            2137993.591258284,
+            4029960.4367446266
+          ],
+          "velocity_m_s": [
+            -281.027845736037,
+            2297.716379709055,
+            495.30225516135135
+          ],
+          "local_position_radius95_m": 1054.4122457364972,
+          "local_velocity_radius95_m_s": 2.2593639855699794,
+          "heldout_code_m": 22345877.444704916,
+          "heldout_rate_m_s": -382.9860534486274,
+          "heldout_code_band3sigma_m": 62.25264498303896,
+          "heldout_rate_band3sigma_m_s": 0.16848291610161614,
+          "position_error_m": 574.8846849672349,
+          "velocity_error_m_s": 0.2315975934750246,
+          "heldout_code_error_m": 3.274165853857994,
+          "heldout_rate_error_m_s": 0.027696598062505018
+        }
+      ]
+    },
+    {
+      "seed": 20260912,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 53.66350129699697,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.8621502253254115,
+      "scaled_condition": 1472772.4452400443,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999084.58105032,
+            1999957.0513328996,
+            3999843.7262248616
+          ],
+          "velocity_m_s": [
+            -251.95471211853362,
+            2299.3033733535376,
+            499.73165163474204
+          ],
+          "local_position_radius95_m": 1745.883621380009,
+          "local_velocity_radius95_m_s": 9.784545402165492,
+          "heldout_code_m": 22368367.645695824,
+          "heldout_rate_m_s": -366.4161463779892,
+          "heldout_code_band3sigma_m": 68.97538319064364,
+          "heldout_rate_band3sigma_m_s": 0.5252634571975489,
+          "position_error_m": 929.6547392619897,
+          "velocity_error_m_s": 2.092414632915822,
+          "heldout_code_error_m": 3.316485371440649,
+          "heldout_rate_error_m_s": 0.25006049382898254
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991292.583005704,
+            2068916.4866298416,
+            4014799.5462595127
+          ],
+          "velocity_m_s": [
+            -267.5118241892918,
+            2297.992313109253,
+            497.32301734201275
+          ],
+          "local_position_radius95_m": 2000.615663965305,
+          "local_velocity_radius95_m_s": 9.78778710674339,
+          "heldout_code_m": 22357253.371167842,
+          "heldout_rate_m_s": -374.53770813684224,
+          "heldout_code_band3sigma_m": 76.93414414725679,
+          "heldout_rate_band3sigma_m_s": 0.6077165098423815,
+          "position_error_m": 989.3824736743994,
+          "velocity_error_m_s": 2.0938360100714912,
+          "heldout_code_error_m": 11.51382278650999,
+          "heldout_rate_error_m_s": 0.2962694137018502
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983033.871598966,
+            2137836.590119455,
+            4029683.107265382
+          ],
+          "velocity_m_s": [
+            -283.06893626004995,
+            2296.681252864968,
+            494.91438304928346
+          ],
+          "local_position_radius95_m": 2264.8229192088274,
+          "local_velocity_radius95_m_s": 9.791645983320768,
+          "heldout_code_m": 22345895.253618244,
+          "heldout_rate_m_s": -382.6722288182357,
+          "heldout_code_band3sigma_m": 88.92302314881353,
+          "heldout_rate_band3sigma_m_s": 0.6898069389205136,
+          "position_error_m": 1048.5285816614228,
+          "velocity_error_m_s": 2.1020456904633504,
+          "heldout_code_error_m": 21.083079181611538,
+          "heldout_rate_error_m_s": 0.3415212284542122
+        }
+      ]
+    },
+    {
+      "seed": 20260912,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 141.41503790519775,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.5217709503786353,
+      "scaled_condition": 339985.9188255266,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999300.400375787,
+            1999985.0279628744,
+            3999860.7613215237
+          ],
+          "velocity_m_s": [
+            -250.66022983344408,
+            2299.7830950714306,
+            499.89773186079833
+          ],
+          "local_position_radius95_m": 996.9106570628662,
+          "local_velocity_radius95_m_s": 2.258061266923734,
+          "heldout_code_m": 22368355.15116568,
+          "heldout_rate_m_s": -366.6537240427604,
+          "heldout_code_band3sigma_m": 61.809749490823805,
+          "heldout_rate_band3sigma_m_s": 0.16183800100411622,
+          "position_error_m": 713.4782447126569,
+          "velocity_error_m_s": 0.7024314580819053,
+          "heldout_code_error_m": -9.178044773638248,
+          "heldout_rate_error_m_s": 0.01248282905777387
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991546.620651055,
+            2068960.1494819163,
+            4014821.797521767
+          ],
+          "velocity_m_s": [
+            -266.2584184821111,
+            2298.558339531362,
+            497.5046814887703
+          ],
+          "local_position_radius95_m": 1023.7663724266079,
+          "local_velocity_radius95_m_s": 2.2585616573126943,
+          "heldout_code_m": 22357233.12185009,
+          "heldout_rate_m_s": -374.8169885307785,
+          "heldout_code_band3sigma_m": 61.98816806574972,
+          "heldout_rate_band3sigma_m_s": 0.16497771652506857,
+          "position_error_m": 733.6249979685954,
+          "velocity_error_m_s": 0.7078137454662321,
+          "heldout_code_error_m": -8.73549496755004,
+          "heldout_rate_error_m_s": 0.016989019765617286
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983324.89526686,
+            2137898.5283347564,
+            4029711.04221085
+          ],
+          "velocity_m_s": [
+            -281.8566071307781,
+            2297.3335839912934,
+            495.1116311167423
+          ],
+          "local_position_radius95_m": 1054.3020075263203,
+          "local_velocity_radius95_m_s": 2.259153828720878,
+          "heldout_code_m": 22345866.009946004,
+          "heldout_rate_m_s": -382.99244378414573,
+          "heldout_code_band3sigma_m": 62.25265618925148,
+          "heldout_rate_band3sigma_m_s": 0.16848334912163843,
+          "position_error_m": 753.7619957495789,
+          "velocity_error_m_s": 0.7140864607398864,
+          "heldout_code_error_m": -8.160593058913946,
+          "heldout_rate_error_m_s": 0.021306262544158017
+        }
+      ]
+    },
+    {
+      "seed": 20260913,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 53.5334385169467,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.8649953911474674,
+      "scaled_condition": 1472859.7469545254,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000867.26548839,
+            2000056.3655126668,
+            4000140.7110400246
+          ],
+          "velocity_m_s": [
+            -245.1731802521709,
+            2300.4591314720888,
+            501.08398771419456
+          ],
+          "local_position_radius95_m": 1746.07130309444,
+          "local_velocity_radius95_m_s": 9.785059739795976,
+          "heldout_code_m": 22368353.66007289,
+          "heldout_rate_m_s": -366.92228081788244,
+          "heldout_code_band3sigma_m": 68.9752022858107,
+          "heldout_rate_band3sigma_m_s": 0.5252438556292154,
+          "position_error_m": 880.412457405698,
+          "velocity_error_m_s": 4.968301515731512,
+          "heldout_code_error_m": -10.669137563556433,
+          "heldout_rate_error_m_s": -0.25607394606424805
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25993277.029931087,
+            2069052.751009121,
+            4015137.990413584
+          ],
+          "velocity_m_s": [
+            -260.84252356797145,
+            2299.2999016248646,
+            498.73463718973994
+          ],
+          "local_position_radius95_m": 2000.8207110813175,
+          "local_velocity_radius95_m_s": 9.788293438293245,
+          "heldout_code_m": 22357222.69444253,
+          "heldout_rate_m_s": -375.1441021198908,
+          "heldout_code_band3sigma_m": 76.93346752122312,
+          "heldout_rate_band3sigma_m_s": 0.6076849555812526,
+          "position_error_m": 1028.3286881462539,
+          "velocity_error_m_s": 4.916389446350871,
+          "heldout_code_error_m": -19.162902526557446,
+          "heldout_rate_error_m_s": -0.3101245693467263
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25985216.71407431,
+            2138014.3596101585,
+            4030064.789271409
+          ],
+          "velocity_m_s": [
+            -276.51186688377203,
+            2298.14067177764,
+            496.3852866652854
+          ],
+          "local_position_radius95_m": 2265.0442542341902,
+          "local_velocity_radius95_m_s": 9.79214429137549,
+          "heldout_code_m": 22345844.897100057,
+          "heldout_rate_m_s": -383.37760796677924,
+          "heldout_code_band3sigma_m": 88.9213775678568,
+          "heldout_rate_band3sigma_m_s": 0.6897609569268494,
+          "position_error_m": 1174.6491728318108,
+          "velocity_error_m_s": 4.865780776557143,
+          "heldout_code_error_m": -29.27343900501728,
+          "heldout_rate_error_m_s": -0.3638579200893446
+        }
+      ]
+    },
+    {
+      "seed": 20260913,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 113.843837669728,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.9654173986110777,
+      "scaled_condition": 340006.8497007039,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000218.837031916,
+            2000013.6368915713,
+            4000015.7883066353
+          ],
+          "velocity_m_s": [
+            -249.3022327210705,
+            2300.0638095631743,
+            500.08208959799816
+          ],
+          "local_position_radius95_m": 996.9837422777324,
+          "local_velocity_radius95_m_s": 2.25819257761989,
+          "heldout_code_m": 22368363.778351385,
+          "heldout_rate_m_s": -366.6632221168883,
+          "heldout_code_band3sigma_m": 61.80974386940075,
+          "heldout_rate_band3sigma_m_s": 0.1618378298757773,
+          "position_error_m": 219.8292109248672,
+          "velocity_error_m_s": 0.7054711461120614,
+          "heldout_code_error_m": -0.5508590675890446,
+          "heldout_rate_error_m_s": 0.0029847549299120146
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992505.750156753,
+            2068997.5904582145,
+            4014982.2891290756
+          ],
+          "velocity_m_s": [
+            -264.9035589564165,
+            2298.8664282130453,
+            497.6846318980104
+          ],
+          "local_position_radius95_m": 1023.8436159270084,
+          "local_velocity_radius95_m_s": 2.2586926619109797,
+          "heldout_code_m": 22357241.39119247,
+          "heldout_rate_m_s": -374.8313138488223,
+          "heldout_code_band3sigma_m": 61.98816071839529,
+          "heldout_rate_band3sigma_m_s": 0.16497740042432826,
+          "position_error_m": 240.95163890842863,
+          "velocity_error_m_s": 0.7047023434308648,
+          "heldout_code_error_m": -0.466152586042881,
+          "heldout_rate_error_m_s": 0.0026637017218149595
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984324.623494532,
+            2137945.622584354,
+            4029876.8662205157
+          ],
+          "velocity_m_s": [
+            -280.50488519176247,
+            2297.669046862916,
+            495.2871741980226
+          ],
+          "local_position_radius95_m": 1054.383415834591,
+          "local_velocity_radius95_m_s": 2.259284531456995,
+          "heldout_code_m": 22345873.77958421,
+          "heldout_rate_m_s": -383.01139918724795,
+          "heldout_code_band3sigma_m": 62.252644833760286,
+          "heldout_rate_band3sigma_m_s": 0.168482830850756,
+          "position_error_m": 262.0506831511378,
+          "velocity_error_m_s": 0.7039541225893223,
+          "heldout_code_error_m": -0.390954852104187,
+          "heldout_rate_error_m_s": 0.0023508594419467954
+        }
+      ]
+    },
+    {
+      "seed": 20260914,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 79.09691753088434,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.12936795833207362,
+      "scaled_condition": 1472836.1427648445,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999834.90559812,
+            2000012.7461760219,
+            4000066.807878702
+          ],
+          "velocity_m_s": [
+            -250.7696473219649,
+            2299.3482094942096,
+            501.6108962323991
+          ],
+          "local_position_radius95_m": 1745.978101105534,
+          "local_velocity_radius95_m_s": 9.784941004112396,
+          "heldout_code_m": 22368354.300094757,
+          "heldout_rate_m_s": -366.52653098149176,
+          "heldout_code_band3sigma_m": 68.97534334767431,
+          "heldout_rate_band3sigma_m_s": 0.5252630920218858,
+          "position_error_m": 178.55508727648294,
+          "velocity_error_m_s": 1.900572159957061,
+          "heldout_code_error_m": -10.029115695506334,
+          "heldout_rate_error_m_s": 0.1396758903264299
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992076.934257146,
+            2068972.5331951345,
+            4015083.825632101
+          ],
+          "velocity_m_s": [
+            -266.42844207614,
+            2297.9709251132986,
+            499.523620660879
+          ],
+          "local_position_radius95_m": 2000.721345817516,
+          "local_velocity_radius95_m_s": 9.78818124950642,
+          "heldout_code_m": 22357236.502222046,
+          "heldout_rate_m_s": -374.6621997863559,
+          "heldout_code_band3sigma_m": 76.9341184059702,
+          "heldout_rate_band3sigma_m_s": 0.6077208313445482,
+          "position_error_m": 224.03941087160027,
+          "velocity_error_m_s": 2.252553637150251,
+          "heldout_code_error_m": -5.35512300953269,
+          "heldout_rate_error_m_s": 0.17177776418816393
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983849.19907355,
+            2137891.00168282,
+            4030038.2251183544
+          ],
+          "velocity_m_s": [
+            -282.08723683031513,
+            2296.5936407323875,
+            497.4363450893588
+          ],
+          "local_position_radius95_m": 2264.9398243348865,
+          "local_velocity_radius95_m_s": 9.79203874441839,
+          "heldout_code_m": 22345874.439357106,
+          "heldout_rate_m_s": -382.8107436227622,
+          "heldout_code_band3sigma_m": 88.92315845638498,
+          "heldout_rate_band3sigma_m_s": 0.6898195158107557,
+          "position_error_m": 284.102635041468,
+          "velocity_error_m_s": 2.607908650101891,
+          "heldout_code_error_m": 0.26881804317235947,
+          "heldout_rate_error_m_s": 0.20300642392771806
+        }
+      ]
+    },
+    {
+      "seed": 20260914,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 154.49315374252677,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.2415320684040233,
+      "scaled_condition": 340001.38833305944,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999861.654914092,
+            2000008.6995271498,
+            3999982.278090737
+          ],
+          "velocity_m_s": [
+            -250.4363664639047,
+            2299.864993589262,
+            499.9327368442535
+          ],
+          "local_position_radius95_m": 996.9562052267972,
+          "local_velocity_radius95_m_s": 2.258159287160895,
+          "heldout_code_m": 22368353.67363207,
+          "heldout_rate_m_s": -366.6382783843393,
+          "heldout_code_band3sigma_m": 61.80974598453048,
+          "heldout_rate_band3sigma_m_s": 0.16183795216290123,
+          "position_error_m": 139.74659436057271,
+          "velocity_error_m_s": 0.46169985259037516,
+          "heldout_code_error_m": -10.655578382313251,
+          "heldout_rate_error_m_s": 0.027928487478902753
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992114.61151297,
+            2068986.33785554,
+            4014944.2154206717
+          ],
+          "velocity_m_s": [
+            -266.03319361082276,
+            2298.644228303423,
+            497.52975181805346
+          ],
+          "local_position_radius95_m": 1023.8134810979568,
+          "local_velocity_radius95_m_s": 2.2586596421200604,
+          "heldout_code_m": 22357232.093289766,
+          "heldout_rate_m_s": -374.8025014726915,
+          "heldout_code_band3sigma_m": 61.9881639194613,
+          "heldout_rate_band3sigma_m_s": 0.16497763195587795,
+          "position_error_m": 152.7374236232241,
+          "velocity_error_m_s": 0.46567835785977235,
+          "heldout_code_error_m": -9.764055289328098,
+          "heldout_rate_error_m_s": 0.03147607785257378
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983899.663297445,
+            2137927.353225355,
+            4029834.06319982
+          ],
+          "velocity_m_s": [
+            -281.6300207577408,
+            2297.423463017584,
+            495.12676679185336
+          ],
+          "local_position_radius95_m": 1054.350804769442,
+          "local_velocity_radius95_m_s": 2.259251781759815,
+          "heldout_code_m": 22345865.401705354,
+          "heldout_rate_m_s": -382.9789083789344,
+          "heldout_code_band3sigma_m": 62.252650785428365,
+          "heldout_rate_band3sigma_m_s": 0.16848321408495334,
+          "position_error_m": 165.79563723562416,
+          "velocity_error_m_s": 0.4705807699258553,
+          "heldout_code_error_m": -8.768833708018064,
+          "heldout_rate_error_m_s": 0.03484166775547237
+        }
+      ]
+    },
+    {
+      "seed": 20260915,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 59.2486421333732,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.7089699593464324,
+      "scaled_condition": 1472874.976009105,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000531.260619655,
+            1999969.9741069318,
+            4000177.8508774834
+          ],
+          "velocity_m_s": [
+            -248.12359064975115,
+            2298.9373998558353,
+            501.3675929865845
+          ],
+          "local_position_radius95_m": 1746.0503144638965,
+          "local_velocity_radius95_m_s": 9.785172354143592,
+          "heldout_code_m": 22368374.50057156,
+          "heldout_rate_m_s": -366.496730281196,
+          "heldout_code_band3sigma_m": 68.97528995597828,
+          "heldout_rate_band3sigma_m_s": 0.5252592684420223,
+          "position_error_m": 561.0439687516744,
+          "velocity_error_m_s": 2.5534959747442674,
+          "heldout_code_error_m": 10.171361107379198,
+          "heldout_rate_error_m_s": 0.169476590622196
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992853.01609137,
+            2068916.9763751687,
+            4015185.8704908895
+          ],
+          "velocity_m_s": [
+            -263.7593779026358,
+            2297.5294180266073,
+            499.16704790718256
+          ],
+          "local_position_radius95_m": 2000.8008551813084,
+          "local_velocity_radius95_m_s": 9.788409224960414,
+          "heldout_code_m": 22357257.554172497,
+          "heldout_rate_m_s": -374.6353390661942,
+          "heldout_code_band3sigma_m": 76.93395660600926,
+          "heldout_rate_band3sigma_m_s": 0.6077143159676525,
+          "position_error_m": 630.9060770352553,
+          "velocity_error_m_s": 2.730916952201508,
+          "heldout_code_error_m": 15.696827441453934,
+          "heldout_rate_error_m_s": 0.1986384843498854
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984705.697945498,
+            2137821.739188528,
+            4030127.8737519146
+          ],
+          "velocity_m_s": [
+            -279.3951651555204,
+            2296.12143619738,
+            496.96650282778063
+          ],
+          "local_position_radius95_m": 2265.0263263852526,
+          "local_velocity_radius95_m_s": 9.79226321036315,
+          "heldout_code_m": 22345896.24525807,
+          "heldout_rate_m_s": -382.7874447904147,
+          "heldout_code_band3sigma_m": 88.92278560204963,
+          "heldout_rate_band3sigma_m_s": 0.6898094068035542,
+          "position_error_m": 704.9701768805812,
+          "velocity_error_m_s": 2.9264504053243705,
+          "heldout_code_error_m": 22.07471900805831,
+          "heldout_rate_error_m_s": 0.22630525627516818
+        }
+      ]
+    },
+    {
+      "seed": 20260915,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 147.74266667026222,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.3757263608063546,
+      "scaled_condition": 340009.6552866578,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000050.850644715,
+            1999999.6048495336,
+            4000045.8662872417
+          ],
+          "velocity_m_s": [
+            -251.16271800800803,
+            2299.7983634004913,
+            499.8887218034005
+          ],
+          "local_position_radius95_m": 996.971797613287,
+          "local_velocity_radius95_m_s": 2.258212577871642,
+          "heldout_code_m": 22368368.60444628,
+          "heldout_rate_m_s": -366.6389306891299,
+          "heldout_code_band3sigma_m": 61.809743871803285,
+          "heldout_rate_band3sigma_m_s": 0.16183799861845657,
+          "position_error_m": 68.4810960570337,
+          "velocity_error_m_s": 1.1853072687898365,
+          "heldout_code_error_m": 4.275235828012228,
+          "heldout_rate_error_m_s": 0.027276182688297013
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992281.92983715,
+            2068975.1857491224,
+            4015006.8971469975
+          ],
+          "velocity_m_s": [
+            -266.7653358299147,
+            2298.5736965720985,
+            497.5133355136387
+          ],
+          "local_position_radius95_m": 1023.8283243987745,
+          "local_velocity_radius95_m_s": 2.2587130935203583,
+          "heldout_code_m": 22357247.010495618,
+          "heldout_rate_m_s": -374.8027481398972,
+          "heldout_code_band3sigma_m": 61.98816228928243,
+          "heldout_rate_band3sigma_m_s": 0.16497773657200315,
+          "position_error_m": 46.26401352164159,
+          "velocity_error_m_s": 1.1902653364520348,
+          "heldout_code_error_m": 5.15315056219697,
+          "heldout_rate_error_m_s": 0.031229410646915312
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984044.93049492,
+            2137914.026643859,
+            4029896.6664180597
+          ],
+          "velocity_m_s": [
+            -282.3679536518213,
+            2297.349029743706,
+            495.137949223877
+          ],
+          "local_position_radius95_m": 1054.3650965511522,
+          "local_velocity_radius95_m_s": 2.2593053916399928,
+          "heldout_code_m": 22345880.318216253,
+          "heldout_rate_m_s": -382.97869973624535,
+          "heldout_code_band3sigma_m": 62.25265055893304,
+          "heldout_rate_band3sigma_m_s": 0.1684834054211116,
+          "position_error_m": 47.03890159925031,
+          "velocity_error_m_s": 1.1962241015647754,
+          "heldout_code_error_m": 6.147677190601826,
+          "heldout_rate_error_m_s": 0.03505031044454654
+        }
+      ]
+    },
+    {
+      "seed": 20260916,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 54.38790459252056,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.8456504918411293,
+      "scaled_condition": 1472759.286220975,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000029.37346867,
+            2000017.7492007643,
+            3999976.675812577
+          ],
+          "velocity_m_s": [
+            -245.11533249039755,
+            2300.2854412153847,
+            500.5543373316016
+          ],
+          "local_position_radius95_m": 1745.9530056924043,
+          "local_velocity_radius95_m_s": 9.784423758372151,
+          "heldout_code_m": 22368356.109402098,
+          "heldout_rate_m_s": -366.6464857285583,
+          "heldout_code_band3sigma_m": 68.97522638583924,
+          "heldout_rate_band3sigma_m_s": 0.5252443482237069,
+          "position_error_m": 41.49521066926771,
+          "velocity_error_m_s": 4.924301295007574,
+          "heldout_code_error_m": -8.219808354973793,
+          "heldout_rate_error_m_s": 0.019721143259914697
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992442.201897323,
+            2069008.3888202696,
+            4014956.339944334
+          ],
+          "velocity_m_s": [
+            -260.6961055994077,
+            2299.0905334183067,
+            498.0899381188539
+          ],
+          "local_position_radius95_m": 2000.685708435459,
+          "local_velocity_radius95_m_s": 9.787658014742327,
+          "heldout_code_m": 22357234.33924978,
+          "heldout_rate_m_s": -374.80695892492383,
+          "heldout_code_band3sigma_m": 76.9334985446531,
+          "heldout_rate_band3sigma_m_s": 0.6076845190079219,
+          "position_error_m": 178.33158696176898,
+          "velocity_error_m_s": 4.936864320560135,
+          "heldout_code_error_m": -7.518095277249813,
+          "heldout_rate_error_m_s": 0.027018625620257808
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984387.607132707,
+            2137963.1812058627,
+            4029862.072099708
+          ],
+          "velocity_m_s": [
+            -276.2768787084178,
+            2297.895625621228,
+            495.62553890610627
+          ],
+          "local_position_radius95_m": 2264.8920014583905,
+          "local_velocity_radius95_m_s": 9.791509460090307,
+          "heldout_code_m": 22345867.569377437,
+          "heldout_rate_m_s": -382.9796810210827,
+          "heldout_code_band3sigma_m": 88.9213882381471,
+          "heldout_rate_band3sigma_m_s": 0.6897588093581909,
+          "position_error_m": 325.5705207470822,
+          "velocity_error_m_s": 4.950313234550554,
+          "heldout_code_error_m": -6.601161625236273,
+          "heldout_rate_error_m_s": 0.03406902560720937
+        }
+      ]
+    },
+    {
+      "seed": 20260916,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 173.86557131235597,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.04032082523750054,
+      "scaled_condition": 339983.20383437804,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999313.940498237,
+            1999966.5916291825,
+            3999871.2537383917
+          ],
+          "velocity_m_s": [
+            -249.9768503554722,
+            2300.012235215862,
+            500.1690918851158
+          ],
+          "local_position_radius95_m": 996.9100838448746,
+          "local_velocity_radius95_m_s": 2.2580430835508514,
+          "heldout_code_m": 22368357.207391437,
+          "heldout_rate_m_s": -366.65772488577863,
+          "heldout_code_band3sigma_m": 61.80974819430187,
+          "heldout_rate_band3sigma_m_s": 0.16183796095173777,
+          "position_error_m": 698.8342858494359,
+          "velocity_error_m_s": 0.17110719494212343,
+          "heldout_code_error_m": -7.121819015592337,
+          "heldout_rate_error_m_s": 0.008481986039555522
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991580.614688188,
+            2068949.2159379204,
+            4014840.7046274757
+          ],
+          "velocity_m_s": [
+            -265.57820364800165,
+            2298.8293853666614,
+            497.79430072048945
+          ],
+          "local_position_radius95_m": 1023.7669126809069,
+          "local_velocity_radius95_m_s": 2.258543306183951,
+          "heldout_code_m": 22357235.038640104,
+          "heldout_rate_m_s": -374.8222161747197,
+          "heldout_code_band3sigma_m": 61.988166637751064,
+          "heldout_rate_band3sigma_m_s": 0.16497762798104376,
+          "position_error_m": 697.1582096340837,
+          "velocity_error_m_s": 0.19771532747099238,
+          "heldout_code_error_m": -6.818704951554537,
+          "heldout_rate_error_m_s": 0.011761375824391962
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983379.248279355,
+            2137896.3547511823,
+            4029738.911781621
+          ],
+          "velocity_m_s": [
+            -281.1795569405311,
+            2297.6465355174605,
+            495.4195095558631
+          ],
+          "local_position_radius95_m": 1054.303527940055,
+          "local_velocity_radius95_m_s": 2.2591353106410548,
+          "heldout_code_m": 22345867.75654912,
+          "heldout_rate_m_s": -382.9984946279243,
+          "heldout_code_band3sigma_m": 62.25265409414091,
+          "heldout_rate_band3sigma_m_s": 0.16848318631763268,
+          "position_error_m": 695.410663983172,
+          "velocity_error_m_s": 0.22531737212428946,
+          "heldout_code_error_m": -6.413989942520857,
+          "heldout_rate_error_m_s": 0.0152554187656051
+        }
+      ]
+    },
+    {
+      "seed": 20260917,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 56.9519313689605,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.778740869410041,
+      "scaled_condition": 1472883.899640422,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000692.008884404,
+            2000027.1366608674,
+            4000110.630028563
+          ],
+          "velocity_m_s": [
+            -247.3000639672771,
+            2300.212000907819,
+            500.240231472353
+          ],
+          "local_position_radius95_m": 1746.0675633618066,
+          "local_velocity_radius95_m_s": 9.78522662024273,
+          "heldout_code_m": 22368366.441730954,
+          "heldout_rate_m_s": -366.6862643262254,
+          "heldout_code_band3sigma_m": 68.97524365716896,
+          "heldout_rate_band3sigma_m_s": 0.5252482759429628,
+          "position_error_m": 701.3213939961958,
+          "velocity_error_m_s": 2.7188803074097176,
+          "heldout_code_error_m": 2.1125205010175705,
+          "heldout_rate_error_m_s": -0.020057454407208297
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25993039.08713108,
+            2069015.9577542196,
+            4015081.408710642
+          ],
+          "velocity_m_s": [
+            -262.8947195876085,
+            2299.0427386490064,
+            497.8116806662415
+          ],
+          "local_position_radius95_m": 2000.819965159382,
+          "local_velocity_radius95_m_s": 9.788462889101377,
+          "heldout_code_m": 22357243.33204221,
+          "heldout_rate_m_s": -374.8564194778746,
+          "heldout_code_band3sigma_m": 76.9336145726821,
+          "heldout_rate_band3sigma_m_s": 0.6076908785808487,
+          "position_error_m": 782.6887290913359,
+          "velocity_error_m_s": 2.724384860083286,
+          "heldout_code_error_m": 1.4746971540153027,
+          "heldout_rate_error_m_s": -0.022441927330532963
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984918.32570915,
+            2137969.700979808,
+            4029979.3308685375
+          ],
+          "velocity_m_s": [
+            -278.4893752079399,
+            2297.873476390194,
+            495.38312986013005
+          ],
+          "local_position_radius95_m": 2265.047198476805,
+          "local_velocity_radius95_m_s": 9.792316281564405,
+          "heldout_code_m": 22345874.9378737,
+          "heldout_rate_m_s": -383.0384434695378,
+          "heldout_code_band3sigma_m": 88.9216995026125,
+          "heldout_rate_band3sigma_m_s": 0.6897680120667936,
+          "position_error_m": 864.1885744237278,
+          "velocity_error_m_s": 2.730533399355471,
+          "heldout_code_error_m": 0.7673346363008022,
+          "heldout_rate_error_m_s": -0.024693422847917645
+        }
+      ]
+    },
+    {
+      "seed": 20260917,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 126.49619183042111,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.8355561099338836,
+      "scaled_condition": 340012.2378221313,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000417.44754106,
+            2000032.8289563353,
+            4000079.04108933
+          ],
+          "velocity_m_s": [
+            -249.1914350485255,
+            2300.253786189312,
+            500.1612738979585
+          ],
+          "local_position_radius95_m": 997.0000720076694,
+          "local_velocity_radius95_m_s": 2.258226674139078,
+          "heldout_code_m": 22368366.3717051,
+          "heldout_rate_m_s": -366.68841502030796,
+          "heldout_code_band3sigma_m": 61.80974259119732,
+          "heldout_rate_band3sigma_m_s": 0.16183779909393198,
+          "position_error_m": 426.13106401088885,
+          "velocity_error_m_s": 0.8626667843386473,
+          "heldout_code_error_m": 2.042494647204876,
+          "heldout_rate_error_m_s": -0.022208148489767154
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992707.64929134,
+            2069022.8786899145,
+            4015048.0280087492
+          ],
+          "velocity_m_s": [
+            -264.7951149329819,
+            2299.082862715973,
+            497.7711873966698
+          ],
+          "local_position_radius95_m": 1023.8606151856998,
+          "local_velocity_radius95_m_s": 2.258726749333872,
+          "heldout_code_m": 22357243.19654628,
+          "heldout_rate_m_s": -374.85861181775937,
+          "heldout_code_band3sigma_m": 61.98815943586106,
+          "heldout_rate_band3sigma_m_s": 0.16497733314505408,
+          "position_error_m": 451.4264835882384,
+          "velocity_error_m_s": 0.8701473507256704,
+          "heldout_code_error_m": 1.3392012231051922,
+          "heldout_rate_error_m_s": -0.024634267215276395
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984529.74064508,
+            2137977.8007192938,
+            4029945.3123331303
+          ],
+          "velocity_m_s": [
+            -280.39879481743833,
+            2297.911939242634,
+            495.38110089538105
+          ],
+          "local_position_radius95_m": 1054.4011214781647,
+          "local_velocity_radius95_m_s": 2.259318613793656,
+          "heldout_code_m": 22345874.73760855,
+          "heldout_rate_m_s": -383.04054734447976,
+          "heldout_code_band3sigma_m": 62.25264314350137,
+          "heldout_rate_band3sigma_m_s": 0.16848270719443026,
+          "position_error_m": 476.83451319261104,
+          "velocity_error_m_s": 0.8786542949116658,
+          "heldout_code_error_m": 0.567069485783577,
+          "heldout_rate_error_m_s": -0.02679729778986939
+        }
+      ]
+    },
+    {
+      "seed": 20260918,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 50.87350976908122,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.9152734396157485,
+      "scaled_condition": 1472904.5304757801,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26001061.341362517,
+            2000195.3760471207,
+            4000213.2368104593
+          ],
+          "velocity_m_s": [
+            -245.99340389869064,
+            2301.7771529904676,
+            501.1585966322381
+          ],
+          "local_position_radius95_m": 1746.1128084910777,
+          "local_velocity_radius95_m_s": 9.785351675382973,
+          "heldout_code_m": 22368342.142914932,
+          "heldout_rate_m_s": -366.9225768229882,
+          "heldout_code_band3sigma_m": 68.97518349214346,
+          "heldout_rate_band3sigma_m_s": 0.5252378277373209,
+          "position_error_m": 1100.0396469734546,
+          "velocity_error_m_s": 4.5335892212229165,
+          "heldout_code_error_m": -22.18629552051425,
+          "heldout_rate_error_m_s": -0.25636995117002925
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25993446.95736791,
+            2069233.7238671852,
+            4015213.096458608
+          ],
+          "velocity_m_s": [
+            -261.6321957419194,
+            2300.779368347176,
+            498.83204657765407
+          ],
+          "local_position_radius95_m": 2000.8694871794464,
+          "local_velocity_radius95_m_s": 9.788587253610444,
+          "heldout_code_m": 22357211.550417252,
+          "heldout_rate_m_s": -375.11866920638084,
+          "heldout_code_band3sigma_m": 76.9332995052819,
+          "heldout_rate_band3sigma_m_s": 0.6076730790676688,
+          "position_error_m": 1232.9129149369414,
+          "velocity_error_m_s": 4.602098266416406,
+          "heldout_code_error_m": -30.306927803903818,
+          "heldout_rate_error_m_s": -0.2846916558367525
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25985363.409618,
+            2138242.138147951,
+            4030143.159605119
+          ],
+          "velocity_m_s": [
+            -277.2709875851482,
+            2299.7815837038847,
+            496.50549652307
+          ],
+          "local_position_radius95_m": 2265.100755266251,
+          "local_velocity_radius95_m_s": 9.792440164966429,
+          "heldout_code_m": 22345834.921596665,
+          "heldout_rate_m_s": -383.3248781536336,
+          "heldout_code_band3sigma_m": 88.92084438767816,
+          "heldout_rate_band3sigma_m_s": 0.6897410244117177,
+          "position_error_m": 1367.3363778400778,
+          "velocity_error_m_s": 4.6798255506870445,
+          "heldout_code_error_m": -39.24894239753485,
+          "heldout_rate_error_m_s": -0.31112810694372683
+        }
+      ]
+    },
+    {
+      "seed": 20260918,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 124.09433871992029,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.8710738739003887,
+      "scaled_condition": 340016.0424207905,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000253.119244043,
+            2000027.8962269707,
+            4000051.4449422467
+          ],
+          "velocity_m_s": [
+            -251.27269150848028,
+            2299.950635722136,
+            499.9127259587679
+          ],
+          "local_position_radius95_m": 996.9890733433639,
+          "local_velocity_radius95_m_s": 2.258253431366729,
+          "heldout_code_m": 22368360.71841617,
+          "heldout_rate_m_s": -366.68696656549207,
+          "heldout_code_band3sigma_m": 61.80974395898859,
+          "heldout_rate_band3sigma_m_s": 0.16183798059719617,
+          "position_error_m": 259.7963303565964,
+          "velocity_error_m_s": 1.2766351342336621,
+          "heldout_code_error_m": -3.61079428344965,
+          "heldout_rate_error_m_s": -0.020759693673880975
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992480.817451242,
+            2069008.2663728725,
+            4015013.174446952
+          ],
+          "velocity_m_s": [
+            -266.88076134484237,
+            2298.7407073379977,
+            497.5359076882676
+          ],
+          "local_position_radius95_m": 1023.845976245251,
+          "local_velocity_radius95_m_s": 2.2587539991312555,
+          "heldout_code_m": 22357237.588771783,
+          "heldout_rate_m_s": -374.857069799469,
+          "heldout_code_band3sigma_m": 61.9881625107023,
+          "heldout_rate_band3sigma_m_s": 0.1649776948104892,
+          "position_error_m": 221.93374221866765,
+          "velocity_error_m_s": 1.2837340326691185,
+          "heldout_code_error_m": -4.268573272973299,
+          "heldout_rate_error_m_s": -0.02309224892491102
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984240.27356335,
+            2137952.3386672502,
+            4029903.599403543
+          ],
+          "velocity_m_s": [
+            -282.48883118120443,
+            2297.5307789538588,
+            495.15908941776735
+          ],
+          "local_position_radius95_m": 1054.3832016349154,
+          "local_velocity_radius95_m_s": 2.2593463556654494,
+          "heldout_code_m": 22345869.174211364,
+          "heldout_rate_m_s": -383.0391746989109,
+          "heldout_code_band3sigma_m": 62.25265066326405,
+          "heldout_rate_band3sigma_m_s": 0.16848332661669302,
+          "position_error_m": 184.20217989423938,
+          "velocity_error_m_s": 1.291336920641677,
+          "heldout_code_error_m": -4.996327698230743,
+          "heldout_rate_error_m_s": -0.02542465222103374
+        }
+      ]
+    },
+    {
+      "seed": 20260919,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 65.842741312883,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.48230051304667304,
+      "scaled_condition": 1472860.0803935823,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000236.899683934,
+            1999964.8765883544,
+            4000048.595502267
+          ],
+          "velocity_m_s": [
+            -249.03703478825068,
+            2299.580395170615,
+            499.9186586105606
+          ],
+          "local_position_radius95_m": 1746.0178657659342,
+          "local_velocity_radius95_m_s": 9.785084449182067,
+          "heldout_code_m": 22368385.16549689,
+          "heldout_rate_m_s": -366.4950402892832,
+          "heldout_code_band3sigma_m": 68.97530384510834,
+          "heldout_rate_band3sigma_m_s": 0.5252562391459918,
+          "position_error_m": 244.36987771432305,
+          "velocity_error_m_s": 1.0535590318148922,
+          "heldout_code_error_m": 20.836286436766386,
+          "heldout_rate_error_m_s": 0.17116658253496553
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992532.06749243,
+            2068933.7082748816,
+            4015009.106327721
+          ],
+          "velocity_m_s": [
+            -264.6184446455333,
+            2298.3417172645436,
+            497.4487297530389
+          ],
+          "local_position_radius95_m": 2000.7655245015806,
+          "local_velocity_radius95_m_s": 9.788322427045355,
+          "heldout_code_m": 22357267.88192876,
+          "heldout_rate_m_s": -374.6593476526694,
+          "heldout_code_band3sigma_m": 76.93387190940284,
+          "heldout_rate_band3sigma_m_s": 0.6077039437717858,
+          "position_error_m": 274.15065574045946,
+          "velocity_error_m_s": 1.093780904530477,
+          "heldout_code_error_m": 26.02458370476961,
+          "heldout_rate_error_m_s": 0.17462989787469496
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984359.793005202,
+            2137865.379624227,
+            4029895.5192874493
+          ],
+          "velocity_m_s": [
+            -280.199854502816,
+            2297.1030393584724,
+            494.9788008955172
+          ],
+          "local_position_radius95_m": 2264.988276534142,
+          "local_velocity_radius95_m_s": 9.79217748899506,
+          "heldout_code_m": 22345905.479211975,
+          "heldout_rate_m_s": -382.83619757559325,
+          "heldout_code_band3sigma_m": 88.92235419772769,
+          "heldout_rate_band3sigma_m_s": 0.6897873063714492,
+          "position_error_m": 304.9206248663003,
+          "velocity_error_m_s": 1.1385033766260164,
+          "heldout_code_error_m": 31.308672912418842,
+          "heldout_rate_error_m_s": 0.1775524710966465
+        }
+      ]
+    },
+    {
+      "seed": 20260919,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 164.19553641742624,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.10837386467089216,
+      "scaled_condition": 340005.6759860824,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999897.16926875,
+            1999981.8009879957,
+            3999981.0157651915
+          ],
+          "velocity_m_s": [
+            -251.29385039244352,
+            2299.797349672265,
+            499.76341288074065
+          ],
+          "local_position_radius95_m": 996.9588617228795,
+          "local_velocity_radius95_m_s": 2.2581874977021297,
+          "heldout_code_m": 22368364.535086613,
+          "heldout_rate_m_s": -366.6473354173055,
+          "heldout_code_band3sigma_m": 61.80974479776296,
+          "heldout_rate_band3sigma_m_s": 0.1618380119081873,
+          "position_error_m": 106.14030572161124,
+          "velocity_error_m_s": 1.3308228501031583,
+          "heldout_code_error_m": 0.2058761604130268,
+          "heldout_rate_error_m_s": 0.018871454512691344
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992124.336438186,
+            2068957.5109725073,
+            4014938.0657025813
+          ],
+          "velocity_m_s": [
+            -266.8950049784618,
+            2298.583315961839,
+            497.3732496118989
+          ],
+          "local_position_radius95_m": 1023.8148008500958,
+          "local_velocity_radius95_m_s": 2.258688031735429,
+          "heldout_code_m": 22357242.63945608,
+          "heldout_rate_m_s": -374.8144443374038,
+          "heldout_code_band3sigma_m": 61.98816345791151,
+          "heldout_rate_band3sigma_m_s": 0.1649777447727418,
+          "position_error_m": 146.08512927685703,
+          "velocity_error_m_s": 1.3324434716484683,
+          "heldout_code_error_m": 0.7821110226213932,
+          "heldout_rate_error_m_s": 0.019533213140277894
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983883.468970045,
+            2137896.799945706,
+            4029823.4107419057
+          ],
+          "velocity_m_s": [
+            -282.4961595644801,
+            2297.369282251413,
+            494.9830863430572
+          ],
+          "local_position_radius95_m": 1054.3509687186347,
+          "local_velocity_radius95_m_s": 2.2592803449932957,
+          "heldout_code_m": 22345875.54774822,
+          "heldout_rate_m_s": -382.99362105472784,
+          "heldout_code_band3sigma_m": 62.25265198768449,
+          "heldout_rate_band3sigma_m_s": 0.1684833975007876,
+          "position_error_m": 186.0831961987325,
+          "velocity_error_m_s": 1.3342832647809384,
+          "heldout_code_error_m": 1.3772091567516327,
+          "heldout_rate_error_m_s": 0.020128991962053533
+        }
+      ]
+    },
+    {
+      "seed": 20260920,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 73.84307272670488,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.23734829919301434,
+      "scaled_condition": 1472797.8809356603,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000510.15740322,
+            1999987.0741976306,
+            4000093.9551302944
+          ],
+          "velocity_m_s": [
+            -244.04090381143178,
+            2299.7753774789544,
+            500.9245599963596
+          ],
+          "local_position_radius95_m": 1746.009399147084,
+          "local_velocity_radius95_m_s": 9.784662024866973,
+          "heldout_code_m": 22368378.953562092,
+          "heldout_rate_m_s": -366.48539005055756,
+          "heldout_code_band3sigma_m": 68.97520168592962,
+          "heldout_rate_band3sigma_m_s": 0.5252448848841904,
+          "position_error_m": 518.898081452601,
+          "velocity_error_m_s": 6.034574868906485,
+          "heldout_code_error_m": 14.624351639300585,
+          "heldout_rate_error_m_s": 0.1808168212606347
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992955.152545214,
+            2068960.9767247871,
+            4015085.453846081
+          ],
+          "velocity_m_s": [
+            -259.62608672225616,
+            2298.484790998141,
+            498.50868772275174
+          ],
+          "local_position_radius95_m": 2000.7488338441287,
+          "local_velocity_radius95_m_s": 9.78789491407568,
+          "heldout_code_m": 22357262.23675179,
+          "heldout_rate_m_s": -374.63129728675136,
+          "heldout_code_band3sigma_m": 76.93349063180104,
+          "heldout_rate_band3sigma_m_s": 0.6076875015682298,
+          "position_error_m": 700.0887410915143,
+          "velocity_error_m_s": 6.050843738053171,
+          "heldout_code_error_m": 20.379406735301018,
+          "heldout_rate_error_m_s": 0.20268026379272897
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984932.592199884,
+            2137896.161657519,
+            4030004.4763936596
+          ],
+          "velocity_m_s": [
+            -275.2112696330805,
+            2297.1942045173273,
+            496.0928154491438
+          ],
+          "local_position_radius95_m": 2264.961864044056,
+          "local_velocity_radius95_m_s": 9.791744952052712,
+          "heldout_code_m": 22345900.945306357,
+          "heldout_rate_m_s": -382.7902463622234,
+          "heldout_code_band3sigma_m": 88.92147814397876,
+          "heldout_rate_band3sigma_m_s": 0.6897657505171013,
+          "position_error_m": 881.7660286187204,
+          "velocity_error_m_s": 6.068499057234069,
+          "heldout_code_error_m": 26.7747672945261,
+          "heldout_rate_error_m_s": 0.22350368446649327
+        }
+      ]
+    },
+    {
+      "seed": 20260920,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 145.75100488829477,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.4203453668609897,
+      "scaled_condition": 339992.16835044045,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999745.43273539,
+            1999974.4638745904,
+            3999965.2020125673
+          ],
+          "velocity_m_s": [
+            -249.1307371512174,
+            2300.1009947936786,
+            500.0789487951144
+          ],
+          "local_position_radius95_m": 996.9440656365028,
+          "local_velocity_radius95_m_s": 2.258098949488792,
+          "heldout_code_m": 22368365.569649972,
+          "heldout_rate_m_s": -366.6758217753492,
+          "heldout_code_band3sigma_m": 61.80974504078769,
+          "heldout_rate_band3sigma_m_s": 0.16183784604872165,
+          "position_error_m": 258.20047606623626,
+          "velocity_error_m_s": 0.8786641911867367,
+          "heldout_code_error_m": 1.2404395192861557,
+          "heldout_rate_error_m_s": -0.00961490353103045
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992037.52594191,
+            2068959.7514630444,
+            4014931.313099266
+          ],
+          "velocity_m_s": [
+            -264.7297157477545,
+            2298.918177769931,
+            497.66179031814016
+          ],
+          "local_position_radius95_m": 1023.8031515006058,
+          "local_velocity_radius95_m_s": 2.258598985194844,
+          "heldout_code_m": 22357242.753937785,
+          "heldout_rate_m_s": -374.8472707890266,
+          "heldout_code_band3sigma_m": 61.988162101858826,
+          "heldout_rate_band3sigma_m_s": 0.16497740745776754,
+          "position_error_m": 231.87027859800807,
+          "velocity_error_m_s": 0.8804423367990912,
+          "heldout_code_error_m": 0.8965927287936211,
+          "heldout_rate_error_m_s": -0.013293238482503966
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983861.649790525,
+            2137909.554540786,
+            4029824.9094316554
+          ],
+          "velocity_m_s": [
+            -280.32869434429153,
+            2297.735360746183,
+            495.2446318411659
+          ],
+          "local_position_radius95_m": 1054.3419863819024,
+          "local_velocity_radius95_m_s": 2.2591908050667557,
+          "heldout_code_m": 22345874.614283167,
+          "heldout_rate_m_s": -383.0306317304862,
+          "heldout_code_band3sigma_m": 62.2526463994933,
+          "heldout_rate_band3sigma_m_s": 0.16848281393194908,
+          "position_error_m": 205.55404564251515,
+          "velocity_error_m_s": 0.8828862205984324,
+          "heldout_code_error_m": 0.44374410435557365,
+          "heldout_rate_error_m_s": -0.016881683796327707
+        }
+      ]
+    },
+    {
+      "seed": 20260921,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 59.23770902663269,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.709320320862364,
+      "scaled_condition": 1472866.30862946,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000576.207096327,
+            2000138.6723220707,
+            4000006.814814913
+          ],
+          "velocity_m_s": [
+            -247.20316488234306,
+            2302.2417244153467,
+            499.73837330600907
+          ],
+          "local_position_radius95_m": 1746.0523828228415,
+          "local_velocity_radius95_m_s": 9.785114228622756,
+          "heldout_code_m": 22368327.152577676,
+          "heldout_rate_m_s": -367.29011910484894,
+          "heldout_code_band3sigma_m": 68.9752145413822,
+          "heldout_rate_band3sigma_m_s": 0.5252370437069442,
+          "position_error_m": 592.6981292938934,
+          "velocity_error_m_s": 3.5938925355008915,
+          "heldout_code_error_m": -37.17663277685642,
+          "heldout_rate_error_m_s": -0.6239122330307509
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992925.33863131,
+            2069194.2948796055,
+            4014961.4669896173
+          ],
+          "velocity_m_s": [
+            -262.85473278552024,
+            2301.466446086974,
+            497.2384383409485
+          ],
+          "local_position_radius95_m": 2000.8021906059298,
+          "local_velocity_radius95_m_s": 9.788350147108387,
+          "heldout_code_m": 22357184.401790906,
+          "heldout_rate_m_s": -375.56140414072536,
+          "heldout_code_band3sigma_m": 76.93329110714413,
+          "heldout_rate_band3sigma_m_s": 0.6076665617513459,
+          "position_error_m": 692.6781090705119,
+          "velocity_error_m_s": 3.8441063521879193,
+          "heldout_code_error_m": -57.45555415004492,
+          "heldout_rate_error_m_s": -0.7274265901812669
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984804.923129197,
+            2138226.659087289,
+            4029841.1211153697
+          ],
+          "velocity_m_s": [
+            -278.5063006886975,
+            2300.6911677586018,
+            494.7385033758879
+          ],
+          "local_position_radius95_m": 2265.0266231470364,
+          "local_velocity_radius95_m_s": 9.792203191571048,
+          "heldout_code_m": 22345793.383695584,
+          "heldout_rate_m_s": -383.8411525107092,
+          "heldout_code_band3sigma_m": 88.92061100263001,
+          "heldout_rate_band3sigma_m_s": 0.6897248944928026,
+          "position_error_m": 798.9904348661502,
+          "velocity_error_m_s": 4.126052983857334,
+          "heldout_code_error_m": -80.78684347867966,
+          "heldout_rate_error_m_s": -0.8274024640193147
+        }
+      ]
+    },
+    {
+      "seed": 20260921,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 156.5544322317882,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.2070748301928539,
+      "scaled_condition": 340007.031956492,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000186.303644367,
+            2000019.901184198,
+            4000011.0832395353
+          ],
+          "velocity_m_s": [
+            -249.53306294372808,
+            2299.98826786834,
+            500.19019652243725
+          ],
+          "local_position_radius95_m": 996.9816605356807,
+          "local_velocity_radius95_m_s": 2.258194037722182,
+          "heldout_code_m": 22368361.82629646,
+          "heldout_rate_m_s": -366.6515701395803,
+          "heldout_code_band3sigma_m": 61.8097443590013,
+          "heldout_rate_band3sigma_m_s": 0.16183788620472175,
+          "position_error_m": 187.69108459205552,
+          "velocity_error_m_s": 0.5043238786537853,
+          "heldout_code_error_m": -2.5029139928519726,
+          "heldout_rate_error_m_s": 0.014636732237875094
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992466.28390776,
+            2069001.5652755324,
+            4014981.019647909
+          ],
+          "velocity_m_s": [
+            -265.1349194968941,
+            2298.789338220624,
+            497.8055640358178
+          ],
+          "local_position_radius95_m": 1023.8410734208295,
+          "local_velocity_radius95_m_s": 2.2586941587340976,
+          "heldout_code_m": 22357239.822475906,
+          "heldout_rate_m_s": -374.81740608989764,
+          "heldout_code_band3sigma_m": 61.988161636183776,
+          "heldout_rate_band3sigma_m_s": 0.16497751312424122,
+          "position_error_m": 201.95571823840848,
+          "velocity_error_m_s": 0.5085962256352401,
+          "heldout_code_error_m": -2.034869149327278,
+          "heldout_rate_error_m_s": 0.016571460646446212
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984278.20847455,
+            2137947.2614774355,
+            4029879.4170816843
+          ],
+          "velocity_m_s": [
+            -280.7367760500601,
+            2297.590408572908,
+            495.4209315491983
+          ],
+          "local_position_radius95_m": 1054.380452879079,
+          "local_velocity_radius95_m_s": 2.2592860627134446,
+          "heldout_code_m": 22345872.662225634,
+          "heldout_rate_m_s": -382.99521256455904,
+          "heldout_code_band3sigma_m": 62.25264705372352,
+          "heldout_rate_band3sigma_m_s": 0.16848302397618906,
+          "position_error_m": 216.3437884405652,
+          "velocity_error_m_s": 0.5133022235513464,
+          "heldout_code_error_m": -1.5083134286105633,
+          "heldout_rate_error_m_s": 0.018537482130852823
+        }
+      ]
+    },
+    {
+      "seed": 20260922,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 51.28015324991548,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.9085585835709742,
+      "scaled_condition": 1472824.6629450503,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000164.679001957,
+            2000002.6848504692,
+            4000050.1324245473
+          ],
+          "velocity_m_s": [
+            -247.8569322129741,
+            2299.390917375415,
+            501.3149947058731
+          ],
+          "local_position_radius95_m": 1745.9973114665588,
+          "local_velocity_radius95_m_s": 9.784852723465034,
+          "heldout_code_m": 22368371.74239454,
+          "heldout_rate_m_s": -366.4141350201791,
+          "heldout_code_band3sigma_m": 68.97527084190918,
+          "heldout_rate_band3sigma_m_s": 0.5252541735305551,
+          "position_error_m": 172.16167430252543,
+          "velocity_error_m_s": 2.5870702077511796,
+          "heldout_code_error_m": 7.413184087723494,
+          "heldout_rate_error_m_s": 0.252071851639073
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992494.60468283,
+            2068963.8900395294,
+            4015057.50760502
+          ],
+          "velocity_m_s": [
+            -263.4813557287446,
+            2298.022761895275,
+            499.1766839922942
+          ],
+          "local_position_radius95_m": 2000.739740276853,
+          "local_velocity_radius95_m_s": 9.78808971811845,
+          "heldout_code_m": 22357257.63300584,
+          "heldout_rate_m_s": -374.5287157346592,
+          "heldout_code_band3sigma_m": 76.93381837069634,
+          "heldout_rate_band3sigma_m_s": 0.6077059827085216,
+          "position_error_m": 247.65246592002185,
+          "velocity_error_m_s": 2.752941160126237,
+          "heldout_code_error_m": 15.775660783052444,
+          "heldout_rate_error_m_s": 0.3052618158848759
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984355.79765823,
+            2137884.0505641857,
+            4030000.733464085
+          ],
+          "velocity_m_s": [
+            -279.105779244515,
+            2296.654606415135,
+            497.03837327871526
+          ],
+          "local_position_radius95_m": 2264.956728314768,
+          "local_velocity_radius95_m_s": 9.791943873791926,
+          "heldout_code_m": 22345899.889553476,
+          "heldout_rate_m_s": -382.65628613251545,
+          "heldout_code_band3sigma_m": 88.92240101501238,
+          "heldout_rate_band3sigma_m_s": 0.6897972427385206,
+          "position_error_m": 328.6718757113334,
+          "velocity_error_m_s": 2.94264267536893,
+          "heldout_code_error_m": 25.719014413654804,
+          "heldout_rate_error_m_s": 0.35746391417444556
+        }
+      ]
+    },
+    {
+      "seed": 20260922,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 126.43485926243972,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.8365292461118141,
+      "scaled_condition": 339998.19161915395,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999841.547502756,
+            1999998.0353473213,
+            3999983.2893122537
+          ],
+          "velocity_m_s": [
+            -249.8336184125244,
+            2299.959887876989,
+            499.92651616392226
+          ],
+          "local_position_radius95_m": 996.9535041113164,
+          "local_velocity_radius95_m_s": 2.258138157618469,
+          "heldout_code_m": 22368363.544736285,
+          "heldout_rate_m_s": -366.66967465643,
+          "heldout_code_band3sigma_m": 61.80974547110766,
+          "heldout_rate_band3sigma_m_s": 0.16183789439035584,
+          "position_error_m": 159.34334259053384,
+          "velocity_error_m_s": 0.18625705148546517,
+          "heldout_code_error_m": -0.7844741679728031,
+          "heldout_rate_error_m_s": -0.003467784611814295
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992112.565146074,
+            2068978.8034027927,
+            4014944.894155316
+          ],
+          "velocity_m_s": [
+            -265.4318720330308,
+            2298.7579824877603,
+            497.51380670691395
+          ],
+          "local_position_radius95_m": 1023.811683091204,
+          "local_velocity_radius95_m_s": 2.2586383554696505,
+          "heldout_code_m": 22357240.949563798,
+          "heldout_rate_m_s": -374.838738892901,
+          "heldout_code_band3sigma_m": 61.988162932835294,
+          "heldout_rate_band3sigma_m_s": 0.1649775096518781,
+          "position_error_m": 154.65285621086446,
+          "velocity_error_m_s": 0.1935504285323492,
+          "heldout_code_error_m": -0.907781258225441,
+          "heldout_rate_error_m_s": -0.004761342356914611
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983915.635180775,
+            2137923.514296587,
+            4029834.1177146686
+          ],
+          "velocity_m_s": [
+            -281.03012565353714,
+            2297.556077098531,
+            495.1010972499057
+          ],
+          "local_position_radius95_m": 1054.34978386274,
+          "local_velocity_radius95_m_s": 2.2592303354238625,
+          "heldout_code_m": 22345873.099864442,
+          "heldout_rate_m_s": -383.0198569382709,
+          "heldout_code_band3sigma_m": 62.25264839705663,
+          "heldout_rate_band3sigma_m_s": 0.16848299564763097,
+          "position_error_m": 150.03691389147093,
+          "velocity_error_m_s": 0.20141566184341592,
+          "heldout_code_error_m": -1.0706746205687523,
+          "heldout_rate_error_m_s": -0.006106891580998308
+        }
+      ]
+    },
+    {
+      "seed": 20260923,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 70.47108396596491,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.33053015067255553,
+      "scaled_condition": 1472848.8970230892,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000196.18455033,
+            1999986.4347245889,
+            3999995.0908538424
+          ],
+          "velocity_m_s": [
+            -248.84535037075827,
+            2299.3421977942644,
+            500.1186833583887
+          ],
+          "local_position_radius95_m": 1746.010895999803,
+          "local_velocity_radius95_m_s": 9.785012829757468,
+          "heldout_code_m": 22368360.286183957,
+          "heldout_rate_m_s": -366.57884779202345,
+          "heldout_code_band3sigma_m": 68.9752802514976,
+          "heldout_rate_band3sigma_m_s": 0.5252539992596962,
+          "position_error_m": 196.71424503877947,
+          "velocity_error_m_s": 1.334168373083816,
+          "heldout_code_error_m": -4.0430264957249165,
+          "heldout_rate_error_m_s": 0.08735907979473723
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992496.794833243,
+            2068946.3728600617,
+            4014963.186884961
+          ],
+          "velocity_m_s": [
+            -264.4472974348777,
+            2297.9870112372505,
+            497.7543853828391
+          ],
+          "local_position_radius95_m": 2000.7568893925277,
+          "local_velocity_radius95_m_s": 9.7882509335069,
+          "heldout_code_m": 22357240.724337094,
+          "heldout_rate_m_s": -374.7275632411934,
+          "heldout_code_band3sigma_m": 76.93380884534285,
+          "heldout_rate_band3sigma_m_s": 0.607703153143288,
+          "position_error_m": 233.52988953850075,
+          "velocity_error_m_s": 1.4189815990460004,
+          "heldout_code_error_m": -1.13300796225667,
+          "heldout_rate_error_m_s": 0.10641430935066865
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984329.346704237,
+            2137865.655398824,
+            4029860.3539768127
+          ],
+          "velocity_m_s": [
+            -280.0492444989972,
+            2296.6318246802366,
+            495.39008740728946
+          ],
+          "local_position_radius95_m": 2264.9778345810914,
+          "local_velocity_radius95_m_s": 9.792106187529052,
+          "heldout_code_m": 22345876.498698525,
+          "heldout_rate_m_s": -382.88964777332797,
+          "heldout_code_band3sigma_m": 88.92228744469631,
+          "heldout_rate_band3sigma_m_s": 0.6897897626798158,
+          "position_error_m": 272.6071896693683,
+          "velocity_error_m_s": 1.5158281219508238,
+          "heldout_code_error_m": 2.328159462660551,
+          "heldout_rate_error_m_s": 0.12410227336192747
+        }
+      ]
+    },
+    {
+      "seed": 20260923,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 138.56473643086483,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.5891999633978083,
+      "scaled_condition": 340003.74323576817,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000058.13967003,
+            2000019.4028421058,
+            4000003.858385068
+          ],
+          "velocity_m_s": [
+            -249.67306607212947,
+            2300.128462184746,
+            500.08827433283176
+          ],
+          "local_position_radius95_m": 996.9713868438768,
+          "local_velocity_radius95_m_s": 2.2581733378146525,
+          "heldout_code_m": 22368357.047173396,
+          "heldout_rate_m_s": -366.67829253250284,
+          "heldout_code_band3sigma_m": 61.80974500980926,
+          "heldout_rate_band3sigma_m_s": 0.161837854195582,
+          "position_error_m": 61.413179759965914,
+          "velocity_error_m_s": 0.3621887407684062,
+          "heldout_code_error_m": -7.282037056982517,
+          "heldout_rate_error_m_s": -0.012085660684647337
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992333.93558622,
+            2069005.317894816,
+            4014970.591698663
+          ],
+          "velocity_m_s": [
+            -265.2738728484167,
+            2298.932541329251,
+            497.69394657349045
+          ],
+          "local_position_radius95_m": 1023.8303965964226,
+          "local_velocity_radius95_m_s": 2.2586735414587213,
+          "heldout_code_m": 22357234.22908181,
+          "heldout_rate_m_s": -374.8449668831943,
+          "heldout_code_band3sigma_m": 61.988162330703005,
+          "heldout_rate_band3sigma_m_s": 0.16497744033549583,
+          "position_error_m": 72.12779343061659,
+          "velocity_error_m_s": 0.3643515906785211,
+          "heldout_code_error_m": -7.628263246268034,
+          "heldout_rate_error_m_s": -0.010989332650183314
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984141.707299124,
+            2137955.355321861,
+            4029865.4951794776
+          ],
+          "velocity_m_s": [
+            -280.87467962470396,
+            2297.736620473756,
+            495.29961881414914
+          ],
+          "local_position_radius95_m": 1054.3693534107374,
+          "local_velocity_radius95_m_s": 2.25926553634886,
+          "heldout_code_m": 22345866.229547843,
+          "heldout_rate_m_s": -383.02360247169975,
+          "heldout_code_band3sigma_m": 62.25264723939996,
+          "heldout_rate_band3sigma_m_s": 0.16848289116627022,
+          "position_error_m": 82.92705472064392,
+          "velocity_error_m_s": 0.3666366165081584,
+          "heldout_code_error_m": -7.940991219133139,
+          "heldout_rate_error_m_s": -0.009852425009853505
+        }
+      ]
+    },
+    {
+      "seed": 20260924,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 80.46467333230504,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.108543404910989,
+      "scaled_condition": 1472815.9620616876,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25998199.515876066,
+            1999922.2145561553,
+            3999703.9517127355
+          ],
+          "velocity_m_s": [
+            -260.3262498296149,
+            2299.939953547674,
+            497.816456649297
+          ],
+          "local_position_radius95_m": 1745.8339296719298,
+          "local_velocity_radius95_m_s": 9.784866242401147,
+          "heldout_code_m": 22368350.402512923,
+          "heldout_rate_m_s": -366.89295318874605,
+          "heldout_code_band3sigma_m": 68.97551683334919,
+          "heldout_rate_band3sigma_m_s": 0.5252745505232896,
+          "position_error_m": 1826.3182209584916,
+          "velocity_error_m_s": 10.554757348440448,
+          "heldout_code_error_m": -13.92669752985239,
+          "heldout_rate_error_m_s": -0.22674631692785852
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25990155.719320156,
+            2068903.8045004983,
+            4014601.1946003255
+          ],
+          "velocity_m_s": [
+            -275.9268538977794,
+            2298.832709408523,
+            495.333069190034
+          ],
+          "local_position_radius95_m": 2000.5699307254783,
+          "local_velocity_radius95_m_s": 9.788116764351107,
+          "heldout_code_m": 22357220.58922862,
+          "heldout_rate_m_s": -375.0964988441473,
+          "heldout_code_band3sigma_m": 76.93455186013594,
+          "heldout_rate_band3sigma_m_s": 0.6077298528841641,
+          "position_error_m": 2142.66815953835,
+          "velocity_error_m_s": 10.57279322736711,
+          "heldout_code_error_m": -21.26811643689871,
+          "heldout_rate_error_m_s": -0.26252129360318577
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25981643.9046422,
+            2137852.177120667,
+            4029423.9358641375
+          ],
+          "velocity_m_s": [
+            -291.5274579659438,
+            2297.725465269372,
+            492.849681730771
+          ],
+          "local_position_radius95_m": 2264.7832091325627,
+          "local_velocity_radius95_m_s": 9.7919844418868,
+          "heldout_code_m": 22345844.502182607,
+          "heldout_rate_m_s": -383.3110844431241,
+          "heldout_code_band3sigma_m": 88.92382902938174,
+          "heldout_rate_band3sigma_m_s": 0.689820698255226,
+          "position_error_m": 2459.5304566893715,
+          "velocity_error_m_s": 10.592267252048867,
+          "heldout_code_error_m": -29.668356455862522,
+          "heldout_rate_error_m_s": -0.29733439643422344
+        }
+      ]
+    },
+    {
+      "seed": 20260924,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 180.9349830518077,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.017455354569740986,
+      "scaled_condition": 339996.33513031324,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999701.92457996,
+            1999980.4857573211,
+            3999982.337370608
+          ],
+          "velocity_m_s": [
+            -250.4057025160761,
+            2299.9077079634512,
+            499.90467508517884
+          ],
+          "local_position_radius95_m": 996.9422354784109,
+          "local_velocity_radius95_m_s": 2.258127004696214,
+          "heldout_code_m": 22368365.45469094,
+          "heldout_rate_m_s": -366.6548708766887,
+          "heldout_code_band3sigma_m": 61.8097454665591,
+          "heldout_rate_band3sigma_m_s": 0.16183795022510117,
+          "position_error_m": 299.235242203808,
+          "velocity_error_m_s": 0.42684797170241195,
+          "heldout_code_error_m": 1.1254804879426956,
+          "heldout_rate_error_m_s": 0.011335995129513776
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991955.786051244,
+            2068959.5756751585,
+            4014943.364692332
+          ],
+          "velocity_m_s": [
+            -266.003532731775,
+            2298.6982865590517,
+            497.4971463631156
+          ],
+          "local_position_radius95_m": 1023.7991969435891,
+          "local_velocity_radius95_m_s": 2.2586273471525975,
+          "heldout_code_m": 22357243.33245304,
+          "heldout_rate_m_s": -374.82202015248583,
+          "heldout_code_band3sigma_m": 61.98816346939195,
+          "heldout_rate_band3sigma_m_s": 0.16497761826016258,
+          "position_error_m": 311.7071707070804,
+          "velocity_error_m_s": 0.4286760552022107,
+          "heldout_code_error_m": 1.4751079827547073,
+          "heldout_rate_error_m_s": 0.01195739805825724
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983741.712616052,
+            2137902.3829508643,
+            4029832.166152395
+          ],
+          "velocity_m_s": [
+            -281.6013629474739,
+            2297.488865154652,
+            495.08961764105237
+          ],
+          "local_position_radius95_m": 1054.3361490954671,
+          "local_velocity_radius95_m_s": 2.2592194733466138,
+          "heldout_code_m": 22345876.01255606,
+          "heldout_rate_m_s": -383.0012619836331,
+          "heldout_code_band3sigma_m": 62.25265030306048,
+          "heldout_rate_band3sigma_m_s": 0.1684831785603086,
+          "position_error_m": 324.1811890746062,
+          "velocity_error_m_s": 0.43084502390332574,
+          "heldout_code_error_m": 1.8420169986784458,
+          "heldout_rate_error_m_s": 0.012488063056764531
+        }
+      ]
+    },
+    {
+      "seed": 20260925,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 60.778157214535796,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.6585895084160815,
+      "scaled_condition": 1472793.3230064956,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999084.76382105,
+            1999986.4287062127,
+            3999745.782030805
+          ],
+          "velocity_m_s": [
+            -253.07500775730142,
+            2299.555414786711,
+            498.87909341323405
+          ],
+          "local_position_radius95_m": 1745.8951546290762,
+          "local_velocity_radius95_m_s": 9.784685005681723,
+          "heldout_code_m": 22368351.871869117,
+          "heldout_rate_m_s": -366.56520226242793,
+          "heldout_code_band3sigma_m": 68.97536726187299,
+          "heldout_rate_band3sigma_m_s": 0.525259385184521,
+          "position_error_m": 949.9832730815426,
+          "velocity_error_m_s": 3.302992627238883,
+          "heldout_code_error_m": -12.457341335713863,
+          "heldout_rate_error_m_s": 0.10100460939025879
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991259.043413445,
+            2068953.7807644708,
+            4014675.700104156
+          ],
+          "velocity_m_s": [
+            -268.63968608302264,
+            2298.2680557638387,
+            496.4487781434732
+          ],
+          "local_position_radius95_m": 2000.6302948703071,
+          "local_velocity_radius95_m_s": 9.78792806232058,
+          "heldout_code_m": 22357232.901040617,
+          "heldout_rate_m_s": -374.70170634371493,
+          "heldout_code_band3sigma_m": 76.93403093626443,
+          "heldout_rate_band3sigma_m_s": 0.6077092983640946,
+          "position_error_m": 1047.7951719698242,
+          "velocity_error_m_s": 3.2936253455200255,
+          "heldout_code_error_m": -8.95630443841219,
+          "heldout_rate_error_m_s": 0.13227120682915938
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25982966.38265607,
+            2137882.512052043,
+            4029532.7087194133
+          ],
+          "velocity_m_s": [
+            -284.2043644087439,
+            2296.980696740967,
+            494.01846287371234
+          ],
+          "local_position_radius95_m": 2264.841006586966,
+          "local_velocity_radius95_m_s": 9.791788291510153,
+          "heldout_code_m": 22345869.64185803,
+          "heldout_rate_m_s": -382.85097345530414,
+          "heldout_code_band3sigma_m": 88.9226940152503,
+          "heldout_rate_band3sigma_m_s": 0.6897956177301123,
+          "position_error_m": 1145.142017046698,
+          "velocity_error_m_s": 3.2872134107739903,
+          "heldout_code_error_m": -4.5286810323596,
+          "heldout_rate_error_m_s": 0.16277659138575018
+        }
+      ]
+    },
+    {
+      "seed": 20260925,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 113.91134451033213,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.9650600207495399,
+      "scaled_condition": 339990.75443491334,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999376.726733617,
+            1999994.210844737,
+            3999858.1723886975
+          ],
+          "velocity_m_s": [
+            -251.27388053707406,
+            2299.8469009914756,
+            499.66332110348475
+          ],
+          "local_position_radius95_m": 996.9176022941907,
+          "local_velocity_radius95_m_s": 2.258092847208922,
+          "heldout_code_m": 22368352.420047,
+          "heldout_rate_m_s": -366.68503885024467,
+          "heldout_code_band3sigma_m": 61.809749543772845,
+          "heldout_rate_band3sigma_m_s": 0.16183801489427202,
+          "position_error_m": 639.2324696333561,
+          "velocity_error_m_s": 1.3264854347130888,
+          "heldout_code_error_m": -11.90916345268488,
+          "heldout_rate_error_m_s": -0.018831978426476326
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991604.544046,
+            2068971.3921269511,
+            4014811.801931967
+          ],
+          "velocity_m_s": [
+            -266.87163197074636,
+            2298.6318511561326,
+            497.2453151145031
+          ],
+          "local_position_radius95_m": 1023.7725401816558,
+          "local_velocity_radius95_m_s": 2.2585934036230593,
+          "heldout_code_m": 22357229.35321505,
+          "heldout_rate_m_s": -374.8548334160146,
+          "heldout_code_band3sigma_m": 61.9881685129839,
+          "heldout_rate_band3sigma_m_s": 0.16497772390085988,
+          "position_error_m": 678.8230682336218,
+          "velocity_error_m_s": 1.3308355535971317,
+          "heldout_code_error_m": -12.504130005836487,
+          "heldout_rate_error_m_s": -0.020855865470537083
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983364.428815372,
+            2137912.121914105,
+            4029692.8912955676
+          ],
+          "velocity_m_s": [
+            -282.46938340441864,
+            2297.416801320789,
+            494.8273091255215
+          ],
+          "local_position_radius95_m": 1054.3075436213246,
+          "local_velocity_radius95_m_s": 2.2591857439892715,
+          "heldout_code_m": 22345861.008617878,
+          "heldout_rate_m_s": -383.0367703802937,
+          "heldout_code_band3sigma_m": 62.25265705619667,
+          "heldout_rate_band3sigma_m_s": 0.16848333567911708,
+          "position_error_m": 718.5098506177334,
+          "velocity_error_m_s": 1.335587687648257,
+          "heldout_code_error_m": -13.161921184509993,
+          "heldout_rate_error_m_s": -0.023020333603824383
+        }
+      ]
+    },
+    {
+      "seed": 20260926,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 74.15148072834918,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.2297352097465089,
+      "scaled_condition": 1472813.97653988,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999906.020302936,
+            1999934.8285457941,
+            4000020.568103845
+          ],
+          "velocity_m_s": [
+            -249.00382091217972,
+            2299.5998361052402,
+            500.30001928665195
+          ],
+          "local_position_radius95_m": 1745.9681140892096,
+          "local_velocity_radius95_m_s": 9.78479074114108,
+          "heldout_code_m": 22368371.60919467,
+          "heldout_rate_m_s": -366.62768144502144,
+          "heldout_code_band3sigma_m": 68.97530628103979,
+          "heldout_rate_band3sigma_m_s": 0.525256713895553,
+          "position_error_m": 116.20046815420467,
+          "velocity_error_m_s": 1.1146817886925837,
+          "heldout_code_error_m": 7.279984217137098,
+          "heldout_rate_error_m_s": 0.03852542679675253
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992201.931044444,
+            2068903.7510360104,
+            4014993.300087781
+          ],
+          "velocity_m_s": [
+            -264.6021296539577,
+            2298.328329909174,
+            497.8821129757418
+          ],
+          "local_position_radius95_m": 2000.7082202271163,
+          "local_velocity_radius95_m_s": 9.788028919115806,
+          "heldout_code_m": 22357250.34548493,
+          "heldout_rate_m_s": -374.79208004900556,
+          "heldout_code_band3sigma_m": 76.93389236888005,
+          "heldout_rate_band3sigma_m_s": 0.6077057051112076,
+          "position_error_m": 105.29115145823769,
+          "velocity_error_m_s": 1.1392127251626016,
+          "heldout_code_error_m": 8.488139875233173,
+          "heldout_rate_error_m_s": 0.04189750153852856
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984029.8925237,
+            2137834.5283403443,
+            4029893.4948823894
+          ],
+          "velocity_m_s": [
+            -280.2004383957357,
+            2297.056823713108,
+            495.46420666483164
+          ],
+          "local_position_radius95_m": 2264.9231058269065,
+          "local_velocity_radius95_m_s": 9.791884253355885,
+          "heldout_code_m": 22345883.957124595,
+          "heldout_rate_m_s": -382.96920535109535,
+          "heldout_code_band3sigma_m": 88.92243564049275,
+          "heldout_rate_band3sigma_m_s": 0.6897911983074908,
+          "position_error_m": 106.33032165775819,
+          "velocity_error_m_s": 1.1678908515365043,
+          "heldout_code_error_m": 9.78658553212881,
+          "heldout_rate_error_m_s": 0.04454469559453855
+        }
+      ]
+    },
+    {
+      "seed": 20260926,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 147.17398616926144,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.38828535381921936,
+      "scaled_condition": 339995.9202152847,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999879.979769036,
+            1999956.6030610877,
+            3999993.9326574113
+          ],
+          "velocity_m_s": [
+            -249.16749441615312,
+            2300.06042427534,
+            500.23077400777885
+          ],
+          "local_position_radius95_m": 996.9542480059638,
+          "local_velocity_radius95_m_s": 2.2581227153276697,
+          "heldout_code_m": 22368370.27800874,
+          "heldout_rate_m_s": -366.6650690985844,
+          "heldout_code_band3sigma_m": 61.80974327670948,
+          "heldout_rate_band3sigma_m_s": 0.16183786719459042,
+          "position_error_m": 127.7691777920627,
+          "velocity_error_m_s": 0.866009978495016,
+          "heldout_code_error_m": 5.9487982876598835,
+          "heldout_rate_error_m_s": 0.0011377732337791713
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992170.895511765,
+            2068940.6793343644,
+            4014965.029500138
+          ],
+          "velocity_m_s": [
+            -264.7714560686824,
+            2298.8779939431092,
+            497.84234884067115
+          ],
+          "local_position_radius95_m": 1023.813531805187,
+          "local_velocity_radius95_m_s": 2.258622738901957,
+          "heldout_code_m": 22357247.810053438,
+          "heldout_rate_m_s": -374.83482791864805,
+          "heldout_code_band3sigma_m": 61.98816042407605,
+          "heldout_rate_band3sigma_m_s": 0.16497746514145337,
+          "position_error_m": 103.69822062861556,
+          "velocity_error_m_s": 0.8667762467093547,
+          "heldout_code_error_m": 5.9527083821594715,
+          "heldout_rate_error_m_s": -0.0008503681039542244
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983993.692404915,
+            2137889.2826976744,
+            4029864.4735878515
+          ],
+          "velocity_m_s": [
+            -280.3754177212117,
+            2297.695563610878,
+            495.45392367356345
+          ],
+          "local_position_radius95_m": 1054.3526095064342,
+          "local_velocity_radius95_m_s": 2.2592145439616247,
+          "heldout_code_m": 22345880.069921035,
+          "heldout_rate_m_s": -383.01642797855334,
+          "heldout_code_band3sigma_m": 62.252645352866665,
+          "heldout_rate_band3sigma_m_s": 0.1684829297098248,
+          "position_error_m": 80.70928767582245,
+          "velocity_error_m_s": 0.8680700260990842,
+          "heldout_code_error_m": 5.899381972849369,
+          "heldout_rate_error_m_s": -0.0026779318634453375
+        }
+      ]
+    },
+    {
+      "seed": 20260927,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 73.98036730027707,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.23393958086822336,
+      "scaled_condition": 1472794.9844400394,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            26000468.938596465,
+            2000038.224926178,
+            4000055.1384800007
+          ],
+          "velocity_m_s": [
+            -244.43683329355076,
+            2300.630871784567,
+            501.43798690437626
+          ],
+          "local_position_radius95_m": 1746.0068076335995,
+          "local_velocity_radius95_m_s": 9.784644753032959,
+          "heldout_code_m": 22368358.642275665,
+          "heldout_rate_m_s": -366.7927786595338,
+          "heldout_code_band3sigma_m": 68.97518836598113,
+          "heldout_rate_band3sigma_m_s": 0.5252412058971636,
+          "position_error_m": 473.7138421160841,
+          "velocity_error_m_s": 5.780538845943808,
+          "heldout_code_error_m": -5.6869347877800465,
+          "heldout_rate_error_m_s": -0.12657178771559074
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992900.99081127,
+            2069039.7900601332,
+            4015064.5546996924
+          ],
+          "velocity_m_s": [
+            -260.0930190526278,
+            2299.4734704790944,
+            499.1897610750682
+          ],
+          "local_position_radius95_m": 2000.7458289682086,
+          "local_velocity_radius95_m_s": 9.787877935118201,
+          "heldout_code_m": 22357232.127790917,
+          "heldout_rate_m_s": -374.9768212908037,
+          "heldout_code_band3sigma_m": 76.93339630492949,
+          "heldout_rate_band3sigma_m_s": 0.6076815185944948,
+          "position_error_m": 645.495367200587,
+          "velocity_error_m_s": 5.771285984660068,
+          "heldout_code_error_m": -9.729554139077663,
+          "heldout_rate_error_m_s": -0.14284374025959323
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984863.357453305,
+            2138006.633154924,
+            4030006.5241445047
+          ],
+          "velocity_m_s": [
+            -275.74920481170483,
+            2298.316069173622,
+            496.9415352457601
+          ],
+          "local_position_radius95_m": 2264.9584310124205,
+          "local_velocity_radius95_m_s": 9.791728297448689,
+          "heldout_code_m": 22345859.91854689,
+          "heldout_rate_m_s": -383.1723090350363,
+          "heldout_code_band3sigma_m": 88.92121157386123,
+          "heldout_rate_band3sigma_m_s": 0.6897571309161632,
+          "position_error_m": 817.1982802764988,
+          "velocity_error_m_s": 5.766876820114886,
+          "heldout_code_error_m": -14.251992173492908,
+          "heldout_rate_error_m_s": -0.15855898834638538
+        }
+      ]
+    },
+    {
+      "seed": 20260927,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 146.8345053349305,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.3958551652331637,
+      "scaled_condition": 339991.57295514946,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999698.610511567,
+            1999954.931173579,
+            3999922.069943123
+          ],
+          "velocity_m_s": [
+            -249.34131744543575,
+            2300.0108165315078,
+            500.0104020776291
+          ],
+          "local_position_radius95_m": 996.93980945264,
+          "local_velocity_radius95_m_s": 2.2580954251646546,
+          "heldout_code_m": 22368369.036752567,
+          "heldout_rate_m_s": -366.6645986349427,
+          "heldout_code_band3sigma_m": 61.80974518585714,
+          "heldout_rate_band3sigma_m_s": 0.1618378702208187,
+          "position_error_m": 314.5471611975629,
+          "velocity_error_m_s": 0.6588534801153809,
+          "heldout_code_error_m": 4.707542113959789,
+          "heldout_rate_error_m_s": 0.0016082368754837262
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991984.39703931,
+            2068937.4789696794,
+            4014886.289478932
+          ],
+          "velocity_m_s": [
+            -264.9395807052841,
+            2298.8257032085294,
+            497.60423364297884
+          ],
+          "local_position_radius95_m": 1023.7983831685929,
+          "local_velocity_radius95_m_s": 2.2585954863676996,
+          "heldout_code_m": 22357246.599094387,
+          "heldout_rate_m_s": -374.8332883932339,
+          "heldout_code_band3sigma_m": 61.988162461439885,
+          "heldout_rate_band3sigma_m_s": 0.16497745681402443,
+          "position_error_m": 295.5017338279303,
+          "velocity_error_m_s": 0.660932843407468,
+          "heldout_code_error_m": 4.741749331355095,
+          "heldout_rate_error_m_s": 0.0006891573102052462
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983802.23566925,
+            2137884.4733660906,
+            4029778.3239617017
+          ],
+          "velocity_m_s": [
+            -280.5378439651324,
+            2297.6405898855514,
+            495.19806520832856
+          ],
+          "local_position_radius95_m": 1054.336737422118,
+          "local_velocity_radius95_m_s": 2.2591873258274,
+          "heldout_code_m": 22345878.920445208,
+          "heldout_rate_m_s": -383.01387850982354,
+          "heldout_code_band3sigma_m": 62.252647368097016,
+          "heldout_rate_band3sigma_m_s": 0.16848289995320748,
+          "position_error_m": 276.49357973992335,
+          "velocity_error_m_s": 0.6634017611820403,
+          "heldout_code_error_m": 4.7499061450362206,
+          "heldout_rate_error_m_s": -0.00012846313364889284
+        }
+      ]
+    },
+    {
+      "seed": 20260928,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 54.63112584693703,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.8398647387394068,
+      "scaled_condition": 1472757.0946078175,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999627.44101679,
+            2000037.691563065,
+            3999936.7794777555
+          ],
+          "velocity_m_s": [
+            -247.79125445191377,
+            2300.6393362359076,
+            500.7308430944579
+          ],
+          "local_position_radius95_m": 1745.9212360193637,
+          "local_velocity_radius95_m_s": 9.784424298815331,
+          "heldout_code_m": 22368356.38932665,
+          "heldout_rate_m_s": -366.64219818254634,
+          "heldout_code_band3sigma_m": 68.97526733672929,
+          "heldout_rate_band3sigma_m_s": 0.5252478828277671,
+          "position_error_m": 379.760035193229,
+          "velocity_error_m_s": 2.4127659122782887,
+          "heldout_code_error_m": -7.939883802086115,
+          "heldout_rate_error_m_s": 0.02400868927185229
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991959.56999765,
+            2069039.6393155553,
+            4014924.0026338804
+          ],
+          "velocity_m_s": [
+            -263.4001468241619,
+            2299.490513930125,
+            498.41736731387215
+          ],
+          "local_position_radius95_m": 2000.652637499128,
+          "local_velocity_radius95_m_s": 9.787661657248245,
+          "heldout_code_m": 22357234.812982388,
+          "heldout_rate_m_s": -374.79818461693367,
+          "heldout_code_band3sigma_m": 76.93364137690699,
+          "heldout_rate_band3sigma_m_s": 0.6076907858872923,
+          "position_error_m": 314.35875418801083,
+          "velocity_error_m_s": 2.446273248990813,
+          "heldout_code_error_m": -7.044362667948008,
+          "heldout_rate_error_m_s": 0.03579293361042346
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983823.43220734,
+            2138007.1223988724,
+            4029841.821516588
+          ],
+          "velocity_m_s": [
+            -279.00903919640996,
+            2298.3416916243423,
+            496.1038915332864
+          ],
+          "local_position_radius95_m": 2264.858165631348,
+          "local_velocity_radius95_m_s": 9.79151626724021,
+          "heldout_code_m": 22345868.38424999,
+          "heldout_rate_m_s": -382.9655709953499,
+          "heldout_code_band3sigma_m": 88.92173623486752,
+          "heldout_rate_band3sigma_m_s": 0.6897688003207822,
+          "position_error_m": 253.6419647085457,
+          "velocity_error_m_s": 2.4834322242481974,
+          "heldout_code_error_m": -5.786289073526859,
+          "heldout_rate_error_m_s": 0.04817905134001421
+        }
+      ]
+    },
+    {
+      "seed": 20260928,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 159.4628341839323,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.1641597720758451,
+      "scaled_condition": 339982.513048776,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999266.509417128,
+            1999947.8942910184,
+            3999865.202413408
+          ],
+          "velocity_m_s": [
+            -250.188254834142,
+            2299.8086302818074,
+            499.93373523412134
+          ],
+          "local_position_radius95_m": 996.9060430987776,
+          "local_velocity_radius95_m_s": 2.2580388805960765,
+          "heldout_code_m": 22368358.67719531,
+          "heldout_rate_m_s": -366.6612304615265,
+          "heldout_code_band3sigma_m": 61.80974798299497,
+          "heldout_rate_band3sigma_m_s": 0.1618379682621031,
+          "position_error_m": 747.592020704914,
+          "velocity_error_m_s": 0.27650184595387794,
+          "heldout_code_error_m": -5.652015142142773,
+          "heldout_rate_error_m_s": 0.0049764102917038144
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25991526.85845276,
+            2068923.8714743485,
+            4014827.1376874843
+          ],
+          "velocity_m_s": [
+            -265.7884761237654,
+            2298.589848606865,
+            497.52861637097146
+          ],
+          "local_position_radius95_m": 1023.7623878434163,
+          "local_velocity_radius95_m_s": 2.258539146438516,
+          "heldout_code_m": 22357236.34755366,
+          "heldout_rate_m_s": -374.8295021082069,
+          "heldout_code_band3sigma_m": 61.988166095980574,
+          "heldout_rate_band3sigma_m_s": 0.16497765137695436,
+          "position_error_m": 753.9498955092331,
+          "velocity_error_m_s": 0.29117431164095675,
+          "heldout_code_error_m": -5.509791396558285,
+          "heldout_rate_error_m_s": 0.004475442337195545
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983319.2008497,
+            2137863.2852074304,
+            4029716.919395666
+          ],
+          "velocity_m_s": [
+            -281.38869741338885,
+            2297.3710669319225,
+            495.1234975078215
+          ],
+          "local_position_radius95_m": 1054.2985438939488,
+          "local_velocity_radius95_m_s": 2.259131191808842,
+          "heldout_code_m": 22345868.785266224,
+          "heldout_rate_m_s": -383.00995399636435,
+          "heldout_code_band3sigma_m": 62.2526532327112,
+          "heldout_rate_band3sigma_m_s": 0.16848323589580882,
+          "position_error_m": 760.432241008851,
+          "velocity_error_m_s": 0.3063816162704296,
+          "heldout_code_error_m": -5.385272838175297,
+          "heldout_rate_error_m_s": 0.0037960503255476397
+        }
+      ]
+    },
+    {
+      "seed": 20260929,
+      "variant": "code_only",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 53.230338415312325,
+      "residual_dof": 66,
+      "nominal_residual_p": 0.8714861926721008,
+      "scaled_condition": 1472827.945764461,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999927.83962812,
+            2000009.2300339523,
+            4000050.2846986325
+          ],
+          "velocity_m_s": [
+            -249.53720329894395,
+            2300.361057161088,
+            501.26731161227144
+          ],
+          "local_position_radius95_m": 1745.9790859834432,
+          "local_velocity_radius95_m_s": 9.784882414758338,
+          "heldout_code_m": 22368368.227855295,
+          "heldout_rate_m_s": -366.5890732940986,
+          "heldout_code_band3sigma_m": 68.97532918664407,
+          "heldout_rate_band3sigma_m_s": 0.5252579823512278,
+          "position_error_m": 88.4356472997582,
+          "velocity_error_m_s": 1.3966466205448314,
+          "heldout_code_error_m": 3.898644842207432,
+          "heldout_rate_error_m_s": 0.07713357771956453
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992207.324636534,
+            2069003.4459540157,
+            4015054.955636553
+          ],
+          "velocity_m_s": [
+            -265.16379614006524,
+            2299.253337509799,
+            499.04408424908723
+          ],
+          "local_position_radius95_m": 2000.7213955266927,
+          "local_velocity_radius95_m_s": 9.788120956635842,
+          "heldout_code_m": 22357248.21192906,
+          "heldout_rate_m_s": -374.74717578812795,
+          "heldout_code_band3sigma_m": 76.93395299660472,
+          "heldout_rate_band3sigma_m_s": 0.6077073273548352,
+          "position_error_m": 110.34335069359464,
+          "velocity_error_m_s": 1.5751723790349168,
+          "heldout_code_error_m": 6.354584004729986,
+          "heldout_rate_error_m_s": 0.0868017624161439
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25984018.011859715,
+            2137964.43028454,
+            4029992.929753578
+          ],
+          "velocity_m_s": [
+            -280.79038898118654,
+            2298.14561785851,
+            496.820856885903
+          ],
+          "local_position_radius95_m": 2264.9386544141403,
+          "local_velocity_radius95_m_s": 9.791976648508573,
+          "heldout_code_m": 22345883.289665736,
+          "heldout_rate_m_s": -382.9160424862434,
+          "heldout_code_band3sigma_m": 88.92255016280362,
+          "heldout_rate_band3sigma_m_s": 0.689793197434877,
+          "position_error_m": 148.969232036114,
+          "velocity_error_m_s": 1.7585952003908516,
+          "heldout_code_error_m": 9.119126673787832,
+          "heldout_rate_error_m_s": 0.09770756044650852
+        }
+      ]
+    },
+    {
+      "seed": 20260929,
+      "variant": "code_and_range_rate",
+      "quadratic": true,
+      "status": "NOMINAL_MODEL_ACCEPTED",
+      "weighted_residual_cost": 128.59629735865704,
+      "residual_dof": 143,
+      "nominal_residual_p": 0.8002004460195719,
+      "scaled_condition": 339998.7683152798,
+      "rank": 11,
+      "found_branches": 2,
+      "code_sigma_m": 20.0,
+      "rate_sigma_m_s": 0.05,
+      "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+      "forecasts": [
+        {
+          "seconds": 0.0,
+          "position_m": [
+            25999804.4828363,
+            2000000.9169769443,
+            3999950.1417746875
+          ],
+          "velocity_m_s": [
+            -250.25279501209624,
+            2300.0162501989025,
+            500.0098338871267
+          ],
+          "local_position_radius95_m": 996.9509922510528,
+          "local_velocity_radius95_m_s": 2.258142408680339,
+          "heldout_code_m": 22368357.275322434,
+          "heldout_rate_m_s": -366.6898440761265,
+          "heldout_code_band3sigma_m": 61.809746251620496,
+          "heldout_rate_band3sigma_m_s": 0.16183793505115063,
+          "position_error_m": 201.77622451581354,
+          "velocity_error_m_s": 0.2535075786660673,
+          "heldout_code_error_m": -7.053888019174337,
+          "heldout_rate_error_m_s": -0.023637204308329274
+        },
+        {
+          "seconds": 30.0,
+          "position_m": [
+            25992062.85721289,
+            2068983.5224607175,
+            4014914.5366313467
+          ],
+          "velocity_m_s": [
+            -265.85557988191255,
+            2298.8241153859767,
+            497.6164898901479
+          ],
+          "local_position_radius95_m": 1023.8084830838928,
+          "local_velocity_radius95_m_s": 2.2586427152618866,
+          "heldout_code_m": 22357234.065903217,
+          "heldout_rate_m_s": -374.85949494223087,
+          "heldout_code_band3sigma_m": 61.988164370415134,
+          "heldout_rate_band3sigma_m_s": 0.16497758540249954,
+          "position_error_m": 209.0835590858684,
+          "velocity_error_m_s": 0.257244133764611,
+          "heldout_code_error_m": -7.791441839188337,
+          "heldout_rate_error_m_s": -0.025517391686776136
+        },
+        {
+          "seconds": 60.0,
+          "position_m": [
+            25983853.148043383,
+            2137930.363900103,
+            4029807.1311680963
+          ],
+          "velocity_m_s": [
+            -281.4583647517289,
+            2297.6319805730514,
+            495.2231458931691
+          ],
+          "local_position_radius95_m": 1054.3459632387458,
+          "local_velocity_radius95_m_s": 2.259234806856096,
+          "heldout_code_m": 22345865.586548112,
+          "heldout_rate_m_s": -383.04105356834367,
+          "heldout_code_band3sigma_m": 62.25265116170273,
+          "heldout_rate_band3sigma_m_s": 0.16848312021684453,
+          "position_error_m": 216.45391741565027,
+          "velocity_error_m_s": 0.26136341434719873,
+          "heldout_code_error_m": -8.583990950137377,
+          "heldout_rate_error_m_s": -0.027303521653777807
+        }
+      ]
+    }
+  ],
+  "stress": {
+    "clustered_receivers": [
+      {
+        "seed": 20260910,
+        "variant": "code_only",
+        "quadratic": true,
+        "status": "AMBIGUOUS",
+        "weighted_residual_cost": 58.64998906644396,
+        "residual_dof": 66,
+        "nominal_residual_p": 0.7279197801909536,
+        "scaled_condition": 441607102.54132,
+        "rank": 11,
+        "found_branches": 5,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              26325617.758410484,
+              2032634.7690002501,
+              4067627.704321515
+            ],
+            "velocity_m_s": [
+              446.47574776821216,
+              2401.8347804880896,
+              650.7721400539476
+            ],
+            "local_position_radius95_m": 873057.057558234,
+            "local_velocity_radius95_m_s": 2813.5526767389533,
+            "heldout_code_m": 20201775.026705958,
+            "heldout_rate_m_s": 82.53665517651223,
+            "heldout_code_band3sigma_m": 68.66138391978407,
+            "heldout_rate_band3sigma_m_s": 0.7274038161917876,
+            "position_error_m": 334163.8208001668,
+            "velocity_error_m_s": 719.8479200239415,
+            "heldout_code_error_m": 9.200292956084013,
+            "heldout_rate_error_m_s": 0.05183360715984975
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              26338772.21138126,
+              2104709.908310478,
+              4087117.8445382346
+            ],
+            "velocity_m_s": [
+              430.4877836168853,
+              2403.1745068604387,
+              648.5705410606837
+            ],
+            "local_position_radius95_m": 918048.0124278521,
+            "local_velocity_radius95_m_s": 2813.855729587286,
+            "heldout_code_m": 20204139.36181767,
+            "heldout_rate_m_s": 75.08614966038658,
+            "heldout_code_band3sigma_m": 81.2402540236376,
+            "heldout_rate_band3sigma_m_s": 1.0211233632320162,
+            "position_error_m": 355737.56512306136,
+            "velocity_error_m_s": 719.8780066450031,
+            "heldout_code_error_m": 10.936999171972275,
+            "heldout_rate_error_m_s": 0.06399096788732095
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              26351447.025427498,
+              2176825.2394118765,
+              4106541.936785156
+            ],
+            "velocity_m_s": [
+              414.4998194655584,
+              2404.5142332327873,
+              646.3689420674199
+            ],
+            "local_position_radius95_m": 968323.8676503685,
+            "local_velocity_radius95_m_s": 2814.2127676962946,
+            "heldout_code_m": 20206280.228001997,
+            "heldout_rate_m_s": 67.63887562697448,
+            "heldout_code_band3sigma_m": 105.97572751169305,
+            "heldout_rate_band3sigma_m_s": 1.377483293190851,
+            "position_error_m": 377311.5629115325,
+            "velocity_error_m_s": 719.9173154730677,
+            "heldout_code_error_m": 13.042522195726633,
+            "heldout_rate_error_m_s": 0.07642528926693615
+          }
+        ]
+      },
+      {
+        "seed": 20260910,
+        "variant": "code_and_range_rate",
+        "quadratic": true,
+        "status": "AMBIGUOUS",
+        "weighted_residual_cost": 135.49961663951322,
+        "residual_dof": 143,
+        "nominal_residual_p": 0.6597930230115083,
+        "scaled_condition": 45304913.003589675,
+        "rank": 11,
+        "found_branches": 4,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              26235185.62037055,
+              2023514.894025886,
+              4048598.0503080436
+            ],
+            "velocity_m_s": [
+              -166.92860924238602,
+              2336.7498577262245,
+              521.5616538223952
+            ],
+            "local_position_radius95_m": 759766.6024448744,
+            "local_velocity_radius95_m_s": 288.6007784613805,
+            "heldout_code_m": 20201772.71229753,
+            "heldout_rate_m_s": 82.48853835104683,
+            "heldout_code_band3sigma_m": 61.57877978378109,
+            "heldout_rate_band3sigma_m_s": 0.16308067245295502,
+            "position_error_m": 241302.70774251872,
+            "velocity_error_m_s": 93.36119601236236,
+            "heldout_code_error_m": 6.885884527117014,
+            "heldout_rate_error_m_s": 0.003716781694450333
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              26229942.074178025,
+              2093604.475674004,
+              4064207.1817272394
+            ],
+            "velocity_m_s": [
+              -182.64113692580622,
+              2335.8889188149733,
+              519.0471074573187
+            ],
+            "local_position_radius95_m": 760615.855998769,
+            "local_velocity_radius95_m_s": 288.62779119565505,
+            "heldout_code_m": 20204135.458972007,
+            "heldout_rate_m_s": 75.0283393631716,
+            "heldout_code_band3sigma_m": 61.734274558187266,
+            "heldout_rate_band3sigma_m_s": 0.17114163620907194,
+            "position_error_m": 243969.41097526337,
+            "velocity_error_m_s": 93.36883462757945,
+            "heldout_code_error_m": 7.034153509885073,
+            "heldout_rate_error_m_s": 0.006180670672335964
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              26224227.152154997,
+              2163668.229154784,
+              4079740.876755483
+            ],
+            "velocity_m_s": [
+              -198.35366460922643,
+              2335.027979903722,
+              516.5325610922422
+            ],
+            "local_position_radius95_m": 761562.5912723726,
+            "local_velocity_radius95_m_s": 288.65936128285875,
+            "heldout_code_m": 20206274.44299177,
+            "heldout_rate_m_s": 67.57117359957203,
+            "heldout_code_band3sigma_m": 62.01918415583806,
+            "heldout_rate_band3sigma_m_s": 0.18334413071836686,
+            "position_error_m": 246636.1692430264,
+            "velocity_error_m_s": 93.37797989948282,
+            "heldout_code_error_m": 7.257511969655752,
+            "heldout_rate_error_m_s": 0.008723261864489018
+          }
+        ]
+      }
+    ],
+    "linear_model_on_accelerated_truth": [
+      {
+        "seed": 20260910,
+        "variant": "code_only",
+        "quadratic": false,
+        "status": "MODEL_REJECTED",
+        "weighted_residual_cost": 809723.4586309183,
+        "residual_dof": 69,
+        "nominal_residual_p": 0.0,
+        "scaled_condition": 1448409.9421446326,
+        "rank": 8,
+        "found_branches": 2,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              26011828.38919669,
+              1999501.1212757432,
+              4002138.1980495155
+            ],
+            "velocity_m_s": [
+              -107.43736277807905,
+              2301.1213388020765,
+              524.0182723738727
+            ],
+            "local_position_radius95_m": 1725.9803221776865,
+            "local_velocity_radius95_m_s": 9.616196962686752,
+            "heldout_code_m": 22372151.446544964,
+            "heldout_rate_m_s": -287.05867745479145,
+            "heldout_code_band3sigma_m": 65.34197883128236,
+            "heldout_rate_band3sigma_m_s": 0.21532638386727893,
+            "position_error_m": 12030.443128532077,
+            "velocity_error_m_s": 144.57607111899128,
+            "heldout_code_error_m": 3787.117334511131,
+            "heldout_rate_error_m_s": 79.60752941702674
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              26008605.26831335,
+              2068534.7614398056,
+              4017858.7462207316
+            ],
+            "velocity_m_s": [
+              -107.43736277807905,
+              2301.1213388020765,
+              524.0182723738727
+            ],
+            "local_position_radius95_m": 1975.366392347847,
+            "local_velocity_radius95_m_s": 9.616196962686752,
+            "heldout_code_m": 22363651.20408899,
+            "heldout_rate_m_s": -279.62299464094303,
+            "heldout_code_band3sigma_m": 67.0121330553527,
+            "heldout_rate_band3sigma_m_s": 0.2177547720707504,
+            "position_error_m": 16599.73695658315,
+            "velocity_error_m_s": 160.37061308745794,
+            "heldout_code_error_m": 6409.3467439338565,
+            "heldout_rate_error_m_s": 95.21098290960106
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              26005382.147430006,
+              2137568.4016038678,
+              4033579.294391948
+            ],
+            "velocity_m_s": [
+              -107.43736277807905,
+              2301.1213388020765,
+              524.0182723738727
+            ],
+            "local_position_radius95_m": 2234.184185830781,
+            "local_velocity_radius95_m_s": 9.616196962686752,
+            "heldout_code_m": 22355374.13529082,
+            "heldout_rate_m_s": -272.1804694297742,
+            "heldout_code_band3sigma_m": 68.98441916461346,
+            "heldout_rate_band3sigma_m_s": 0.2204158928140661,
+            "position_error_m": 21643.836119854077,
+            "velocity_error_m_s": 176.17135619586583,
+            "heldout_code_error_m": 9499.964751757681,
+            "heldout_rate_error_m_s": 110.83328061691572
+          }
+        ]
+      },
+      {
+        "seed": 20260910,
+        "variant": "code_and_range_rate",
+        "quadratic": false,
+        "status": "MODEL_REJECTED",
+        "weighted_residual_cost": 73370817.15729226,
+        "residual_dof": 146,
+        "nominal_residual_p": 0.0,
+        "scaled_condition": 311408.48730497534,
+        "rank": 8,
+        "found_branches": 2,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              25888346.480941996,
+              1985832.2815087736,
+              3979924.6595708276
+            ],
+            "velocity_m_s": [
+              41.51729077524001,
+              2263.1995946770535,
+              548.1055496244464
+            ],
+            "local_position_radius95_m": 976.9187507382372,
+            "local_velocity_radius95_m_s": 2.068650389090984,
+            "heldout_code_m": 22372684.89282022,
+            "heldout_rate_m_s": -280.60354597814705,
+            "heldout_code_band3sigma_m": 61.769081558513946,
+            "heldout_rate_band3sigma_m_s": 0.15405717803274277,
+            "position_error_m": 114325.20220244472,
+            "velocity_error_m_s": 297.7427489587934,
+            "heldout_code_error_m": 4320.563609767705,
+            "heldout_rate_error_m_s": 86.06266089367114
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              25889591.999665253,
+              2053728.2693490852,
+              3996367.826059561
+            ],
+            "velocity_m_s": [
+              41.51729077524001,
+              2263.1995946770535,
+              548.1055496244464
+            ],
+            "local_position_radius95_m": 1000.5097856120112,
+            "local_velocity_radius95_m_s": 2.068650389090984,
+            "heldout_code_m": 22364376.69270978,
+            "heldout_rate_m_s": -273.2760622496834,
+            "heldout_code_band3sigma_m": 61.86780591307857,
+            "heldout_rate_band3sigma_m_s": 0.15421513550953223,
+            "position_error_m": 105453.5173843593,
+            "velocity_error_m_s": 313.2718143962984,
+            "heldout_code_error_m": 7134.835364725441,
+            "heldout_rate_error_m_s": 101.55791530086071
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              25890837.51838851,
+              2121624.257189397,
+              4012810.9925482944
+            ],
+            "velocity_m_s": [
+              41.51729077524001,
+              2263.1995946770535,
+              548.1055496244464
+            ],
+            "local_position_radius95_m": 1027.3156180885635,
+            "local_velocity_radius95_m_s": 2.068650389090984,
+            "heldout_code_m": 22356288.351948734,
+            "heldout_rate_m_s": -265.94629218303163,
+            "heldout_code_band3sigma_m": 61.98641840378334,
+            "heldout_rate_band3sigma_m_s": 0.154391147215149,
+            "position_error_m": 96164.0326854096,
+            "velocity_error_m_s": 328.82949203615937,
+            "heldout_code_error_m": 10414.181409671903,
+            "heldout_rate_error_m_s": 117.06745786365826
+          }
+        ]
+      }
+    ],
+    "unmodelled_jerk": [
+      {
+        "seed": 20260910,
+        "variant": "code_only",
+        "quadratic": true,
+        "status": "NOMINAL_MODEL_ACCEPTED",
+        "weighted_residual_cost": 62.82226808710092,
+        "residual_dof": 66,
+        "nominal_residual_p": 0.5881742126719439,
+        "scaled_condition": 1472877.5157238317,
+        "rank": 11,
+        "found_branches": 2,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              26000388.737617496,
+              1999997.0673660492,
+              4000103.108877066
+            ],
+            "velocity_m_s": [
+              -248.55721623497215,
+              2298.981668042047,
+              499.9302994060064
+            ],
+            "local_position_radius95_m": 1746.0395686997551,
+            "local_velocity_radius95_m_s": 9.785202064793681,
+            "heldout_code_m": 22368382.53839031,
+            "heldout_rate_m_s": -366.16266942246375,
+            "heldout_code_band3sigma_m": 68.97522592962156,
+            "heldout_rate_band3sigma_m_s": 0.5252497623848315,
+            "position_error_m": 402.19022381019056,
+            "velocity_error_m_s": 1.7673378686654655,
+            "heldout_code_error_m": 18.20917985588312,
+            "heldout_rate_error_m_s": 0.5035374493544396
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              25992701.51340858,
+              2068940.585586179,
+              4015062.6196750584
+            ],
+            "velocity_m_s": [
+              -263.9243976928126,
+              2297.252879966605,
+              497.3704204601448
+            ],
+            "local_position_radius95_m": 2000.7903516097256,
+            "local_velocity_radius95_m_s": 9.7884435905085,
+            "heldout_code_m": 22357278.752788194,
+            "heldout_rate_m_s": -374.0926209430504,
+            "heldout_code_band3sigma_m": 76.93365663240647,
+            "heldout_rate_band3sigma_m_s": 0.6076993181122665,
+            "position_error_m": 448.68677390599663,
+            "velocity_error_m_s": 2.3404028091568714,
+            "heldout_code_error_m": 37.12989668548107,
+            "heldout_rate_error_m_s": 0.7647539091638578
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              25984553.273755927,
+              2137832.2401640457,
+              4029945.334104675
+            ],
+            "velocity_m_s": [
+              -279.29157915065304,
+              2295.5240918911627,
+              494.8105415142833
+            ],
+            "local_position_radius95_m": 2265.0163836636084,
+            "local_velocity_radius95_m_s": 9.792302823321911,
+            "heldout_code_m": 22345936.80963154,
+            "heldout_rate_m_s": -382.0397226821816,
+            "heldout_code_band3sigma_m": 88.92202929148097,
+            "heldout_rate_band3sigma_m_s": 0.6897877933035127,
+            "position_error_m": 508.7382408994425,
+            "velocity_error_m_s": 3.046221054876908,
+            "heldout_code_error_m": 64.50317797064781,
+            "heldout_rate_error_m_s": 1.06684653418597
+          }
+        ]
+      },
+      {
+        "seed": 20260910,
+        "variant": "code_and_range_rate",
+        "quadratic": true,
+        "status": "MODEL_REJECTED",
+        "weighted_residual_cost": 944.7695981441225,
+        "residual_dof": 143,
+        "nominal_residual_p": 2.82154285790551e-118,
+        "scaled_condition": 340010.1347865965,
+        "rank": 11,
+        "found_branches": 2,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              26000176.224655047,
+              2000005.7822421242,
+              4000056.4710307745
+            ],
+            "velocity_m_s": [
+              -249.9468859007922,
+              2299.192687331056,
+              499.69718702023505
+            ],
+            "local_position_radius95_m": 996.9803626716073,
+            "local_velocity_radius95_m_s": 2.2582159737887437,
+            "heldout_code_m": 22368367.164798032,
+            "heldout_rate_m_s": -366.2764940161236,
+            "heldout_code_band3sigma_m": 61.809745612734844,
+            "heldout_rate_band3sigma_m_s": 0.1618376790561329,
+            "position_error_m": 185.1419474002997,
+            "velocity_error_m_s": 0.8638695235315085,
+            "heldout_code_error_m": 2.835587579756975,
+            "heldout_rate_error_m_s": 0.38971285569459724
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              25992447.26805694,
+              2068956.243298054,
+              4015009.2853586655
+            ],
+            "velocity_m_s": [
+              -265.3168873062742,
+              2297.5047163976033,
+              497.1571015058094
+            ],
+            "local_position_radius95_m": 1023.8382732186757,
+            "local_velocity_radius95_m_s": 2.2587170430860355,
+            "heldout_code_m": 22357259.93521501,
+            "heldout_rate_m_s": -374.20831841692416,
+            "heldout_code_band3sigma_m": 61.988157291063565,
+            "heldout_rate_band3sigma_m_s": 0.16497730806870814,
+            "position_error_m": 188.85199451581425,
+            "velocity_error_m_s": 1.4484677555679553,
+            "heldout_code_error_m": 18.31232350319624,
+            "heldout_rate_error_m_s": 0.649056435290106
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              25984257.21141667,
+              2137856.0652259802,
+              4029885.897121123
+            ],
+            "velocity_m_s": [
+              -280.68688871175624,
+              2295.8167454641507,
+              494.61701599138377
+            ],
+            "local_position_radius95_m": 1054.3763014813105,
+            "local_velocity_radius95_m_s": 2.259310007193106,
+            "heldout_code_m": 22345914.49879089,
+            "heldout_rate_m_s": -382.15683302919433,
+            "heldout_code_band3sigma_m": 62.2526338999661,
+            "heldout_rate_band3sigma_m_s": 0.16848294436493813,
+            "position_error_m": 211.10514249458762,
+            "velocity_error_m_s": 2.1503163083071324,
+            "heldout_code_error_m": 42.192337319254875,
+            "heldout_rate_error_m_s": 0.9497361871732437
+          }
+        ]
+      }
+    ],
+    "persistent_station_biases": [
+      {
+        "seed": 20260910,
+        "variant": "code_only",
+        "quadratic": true,
+        "status": "NOMINAL_MODEL_ACCEPTED",
+        "weighted_residual_cost": 59.65992714412801,
+        "residual_dof": 66,
+        "nominal_residual_p": 0.6956811758632728,
+        "scaled_condition": 1472874.9514702281,
+        "rank": 11,
+        "found_branches": 2,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              26000335.863538083,
+              2000090.2916685098,
+              4000186.3238062714
+            ],
+            "velocity_m_s": [
+              -249.0328671590629,
+              2299.88842303859,
+              500.1786650202213
+            ],
+            "local_position_radius95_m": 1746.0382385376429,
+            "local_velocity_radius95_m_s": 9.785179716416808,
+            "heldout_code_m": 22368363.777883723,
+            "heldout_rate_m_s": -366.62426087419635,
+            "heldout_code_band3sigma_m": 68.975283669843,
+            "heldout_rate_band3sigma_m_s": 0.5252530642040156,
+            "position_error_m": 394.55476476552894,
+            "velocity_error_m_s": 0.9898063142793012,
+            "heldout_code_error_m": -0.5513267293572426,
+            "heldout_rate_error_m_s": 0.041945997621837705
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              25992630.972974047,
+              2069067.9223951276,
+              4015155.2987180823
+            ],
+            "velocity_m_s": [
+              -264.62650377671997,
+              2298.620292069264,
+              497.75299576715855
+            ],
+            "local_position_radius95_m": 2000.788518668295,
+            "local_velocity_radius95_m_s": 9.78841828312427,
+            "heldout_code_m": 22357242.673579957,
+            "heldout_rate_m_s": -374.7848708421367,
+            "heldout_code_band3sigma_m": 76.93378121994274,
+            "heldout_rate_band3sigma_m_s": 0.6076998311175918,
+            "position_error_m": 420.9312643521919,
+            "velocity_error_m_s": 1.0016973304738472,
+            "heldout_code_error_m": 0.816234901547432,
+            "heldout_rate_error_m_s": 0.049106708407407496
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              25984458.273311477,
+              2138007.5091926656,
+              4030051.503552301
+            ],
+            "velocity_m_s": [
+              -280.22014039437704,
+              2297.352161099938,
+              495.32732651409583
+            ],
+            "local_position_radius95_m": 2265.0139470665054,
+            "local_velocity_radius95_m_s": 9.792274073245897,
+            "heldout_code_m": 22345876.558527812,
+            "heldout_rate_m_s": -382.95819133270004,
+            "heldout_code_band3sigma_m": 88.92214747296148,
+            "heldout_rate_band3sigma_m_s": 0.6897826296828491,
+            "position_error_m": 447.2077758981231,
+            "velocity_error_m_s": 1.0187055552549782,
+            "heldout_code_error_m": 2.3879887498915195,
+            "heldout_rate_error_m_s": 0.05555871398985346
+          }
+        ]
+      },
+      {
+        "seed": 20260910,
+        "variant": "code_and_range_rate",
+        "quadratic": true,
+        "status": "NOMINAL_MODEL_ACCEPTED",
+        "weighted_residual_cost": 136.21387944300304,
+        "residual_dof": 143,
+        "nominal_residual_p": 0.643641279128342,
+        "scaled_condition": 340009.98974318465,
+        "rank": 11,
+        "found_branches": 2,
+        "code_sigma_m": 20.0,
+        "rate_sigma_m_s": 0.05,
+        "scope": "Synthetic ideal common-time model; local IID-noise covariance, no systematic/truncation envelope or global branch guarantee.",
+        "forecasts": [
+          {
+            "seconds": 0.0,
+            "position_m": [
+              26000172.363927223,
+              2000106.7233115253,
+              4000168.936627464
+            ],
+            "velocity_m_s": [
+              -250.16993882893559,
+              2300.2065791452774,
+              500.1263908913651
+            ],
+            "local_position_radius95_m": 996.9844134093038,
+            "local_velocity_radius95_m_s": 2.2582136864754183,
+            "heldout_code_m": 22368358.214342635,
+            "heldout_rate_m_s": -366.68658467734303,
+            "heldout_code_band3sigma_m": 61.8097455177456,
+            "heldout_rate_band3sigma_m_s": 0.16183787520553863,
+            "position_error_m": 263.8915927601093,
+            "velocity_error_m_s": 0.2958526766206231,
+            "heldout_code_error_m": -6.114867817610502,
+            "heldout_rate_error_m_s": -0.020377805524844916
+          },
+          {
+            "seconds": 30.0,
+            "position_m": [
+              25992433.280865572,
+              2069094.7701842056,
+              4015136.6309497324
+            ],
+            "velocity_m_s": [
+              -265.76893194780274,
+              2298.9965457000712,
+              497.7198972598527
+            ],
+            "local_position_radius95_m": 1023.8430954545516,
+            "local_velocity_radius95_m_s": 2.258714073853509,
+            "heldout_code_m": 22357235.159563057,
+            "heldout_rate_m_s": -374.85247742986564,
+            "heldout_code_band3sigma_m": 61.988163092693924,
+            "heldout_rate_band3sigma_m_s": 0.16497748245685534,
+            "position_error_m": 265.5210862397201,
+            "velocity_error_m_s": 0.28555834452003404,
+            "heldout_code_error_m": -6.697781998664141,
+            "heldout_rate_error_m_s": -0.018499879321552726
+          },
+          {
+            "seconds": 60.0,
+            "position_m": [
+              25984226.228010356,
+              2138046.5160535295,
+              4030032.1304630553
+            ],
+            "velocity_m_s": [
+              -281.3679250666699,
+              2297.7865122548656,
+              495.3134036283404
+            ],
+            "local_position_radius95_m": 1054.3818554494253,
+            "local_velocity_radius95_m_s": 2.259306266493296,
+            "heldout_code_m": 22345866.944674104,
+            "heldout_rate_m_s": -383.0304724384466,
+            "heldout_code_band3sigma_m": 62.25264854151221,
+            "heldout_rate_band3sigma_m_s": 0.16848296412992195,
+            "position_error_m": 267.181440793496,
+            "velocity_error_m_s": 0.2754015834230579,
+            "heldout_code_error_m": -7.2258649580180645,
+            "heldout_rate_error_m_s": -0.01672239175672985
+          }
+        ]
+      }
+    ]
+  }
+}

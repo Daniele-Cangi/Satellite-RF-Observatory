@@ -4,11 +4,16 @@ Reconstruct satellite positions from public RF observations obtained through
 the Internet, without supplying the target's orbit to the calculation. Declare
 uncertainty before testing an excluded receiver and opening an orbit reference.
 
-The active objective is a new real positioning event that passes both a
-prospective 10 km uncertainty criterion and an eventual 10 km position-error
-criterion. The project is research software, not yet a general verification
-service. The future website will publish positions with their measurements,
-uncertainties, withheld tests and reproducible evidence, including failures.
+The one-event milestone was reached by G14 DOY246. The active objective is now
+scientific software development: diagnose uncertainty, investigate position and
+velocity from code/range-rate observations, and design preregistered predictive
+validation. Website, API, Docker and hosting work are paused. The five-event
+private archive remains documentation, not a general verification service.
+
+The approved [scientific project](docs/SCIENTIFIC_ROADMAP.md) replaces the website
+roadmap as the current priority. Its first [S0/S1 report](research/kinematic/results/REPORT.md)
+finds a conditional gain from added range-rate observations in an idealized
+synthetic model. This is not yet real Doppler integration or new satellite proof.
 
 ## Current evidence
 
@@ -18,6 +23,8 @@ uncertainties, withheld tests and reproducible evidence, including failures.
 | G08 DOY249 inverse | 188.705 m orbit error; 1.849 m excluded-GOLD residual; 21.608 km prospective uncertainty radius | `UNCERTAINTY_TOO_LARGE`; closed |
 | G12 DOY250, seven fit roots | Eight sources individually contain G12, but only 18 consecutive common epochs against a required 41 | `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`; closed before fit/oracle |
 | G12 DOY248, eleven-epoch support | 15.139 m orbit error; -3.137 m excluded-GOLD residual; 10.121 km prospective uncertainty radius | `UNCERTAINTY_TOO_LARGE`; new position, primary criterion failed |
+| G13 DOY247, configured request | Zero eligible epochs common to the fixed network | `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`; closed before fit/oracle |
+| G14 DOY246, candidate network | 31.017 m orbit error; -0.846 m excluded-GOLD residual; 5.755 km prospective uncertainty radius | `INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED`; one conditional event |
 
 The small observed G08 and G12 DOY248 errors did not override their prospective
 uncertainty failures. After DOY250's structural failure, a separate plan used
@@ -79,11 +86,11 @@ Windows and Linux. Local test results and remote CI execution are distinct.
 
 ## Next physical work
 
-The separate DOY248 attempt established that eleven-epoch support can reach
-position estimation and held-out confirmation on a new event. Its numerical
-uncertainty is still dominated by weak radial-distance/clock separation.
-The next physical design must add useful independent geometry or independently
-justify calibration-error bounds before new confirmation data are examined.
+Read-only diagnosis of G12 and G14 finds a weak approximately radial direction.
+The S1 synthetic study supports investigating the information added by range
+rate, while rejecting concentrated-network ambiguities and inappropriate motion
+models. Next implement S2's receiver-time observation model, drift calibration,
+correlations and truncation treatment before any real v2 confirmation.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 
@@ -106,11 +113,14 @@ Licensed under [Apache 2.0](LICENSE).
 
 The user accepted moving ahead with the archive despite the 1.21% excess over
 the scientific uncertainty threshold. The first read-only interface is under
-[web/](web/README.md): three selectable historical events, inferred coordinates,
+[web/](web/README.md): five selectable historical events, inferred coordinates,
 observed errors, prospective uncertainty, excluded-receiver checks and JSON
 evidence downloads. Missing positions remain unavailable and failed criteria
 are never relabelled. The scientific 10 km milestone is distinct from delivering
 this experimental archive.
+
+Further website/service/hosting work is paused under the scientific project
+approved on 2026-09-10.
 
 Its data are exported deterministically from closed receipts by
 `scripts/export_positioning_archive.py`. CI checks their provenance and builds
