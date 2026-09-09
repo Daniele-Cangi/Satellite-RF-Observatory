@@ -1,5 +1,13 @@
 # Active inverse-positioning code
 
+The network-availability path has now completed a new preregistered G14 DOY246
+event with all declared criteria met: 31.017 m observed 3D error, 5755.157 m
+prospective conditional uncertainty radius and -0.846 m excluded-GOLD residual.
+The first eligible eleven-epoch window selected seven roots from the frozen
+ten-station pool; no later network/window was tried. See
+`experiments/positioning_g14_doy246_network/OUTCOME.md`. This is one conditional
+historical demonstration, not a general accuracy or coverage guarantee.
+
 This is the small active implementation for the independent-position mission
 in the root `AGENTS.md`. The original G08 implementation remains frozen under
 `experiments/gnss_inverse_positioning/`.

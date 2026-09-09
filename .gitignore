@@ -205,3 +205,6 @@ transfer/
 
 # Local raw payloads for the sealed configured request (receipts are versioned).
 /work/g13_doy247_request/
+
+# Raw payloads for the closed network-selection experiment.
+/work/g14_doy246_network/

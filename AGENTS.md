@@ -48,8 +48,20 @@ User instructions continue to take precedence over this file.
   eight fixed stations. No position or target-orbit access. Preserve
   `experiments/positioning_g13_doy247_request/`; do not retry it with a new
   station subset. The local worker is delivered; web job submission is pending.
+- G14 DOY246 reached `INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED` for one
+  conditional historical event: 31.017 m external 3D error, 5755.157 m prospective
+  uncertainty radius and -0.846 m excluded-GOLD residual. All eight calibrations
+  passed. Its declared pool selected ALGO, BOGT, DRAO, MKEA, PIE1, STJO and YELL
+  at the first qualifying 03:55–04:00 GPST window; AMC4's expected file was absent.
+  Preserve `experiments/positioning_g14_doy246_network/` and its original scope.
+  Do not rerun, tune or generalize this success into universal accuracy/coverage.
 
 ## Current delivery objective
+
+The availability-to-dossier path has now completed a new passing G14 event.
+The bounded scientific attempt is closed. The next product milestone is to
+connect this controlled worker to web requests; no further search for passing
+examples is implied. Broader repeatability needs a separate preregistered design.
 
 The next accepted step is explicit network availability before execution.
 The bounded candidate pool, fixed excluded receiver, structural subset/window
@@ -81,10 +93,11 @@ precedes any separately authorized public launch.
 
 ## Scientific objective and information value
 
-Execute a separately preregistered, previously unevaluated real event that
-addresses the weak radial-distance/transmitter-clock separation found in G08.
-Aim for BOTH prospective uncertainty radius <=10 km and subsequent 3D error
-<=10 km, plus the excluded-receiver test.
+The first one-event milestone was reached by preregistered G14 DOY246: BOTH
+prospective uncertainty radius <=10 km and subsequent 3D error <=10 km, plus
+the excluded-receiver test. Preserve the conditional claim. A new event is
+needed for additional physical evidence, and a validation design is needed
+before claiming repeatability or population uncertainty coverage.
 
 For scientific runs, consolidate the software required to execute and reproduce
 the declared event. The current read-only web archive is separate product work.

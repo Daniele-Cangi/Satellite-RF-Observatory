@@ -1,0 +1,65 @@
+{
+  "profile": "gps-code-network-v1",
+  "experiment": "G14_2026246_NETWORK_POSITION",
+  "target": "G14",
+  "date_gpst": "2026-09-03",
+  "fit_stations": null,
+  "withheld_station": "GOLD00USA",
+  "observation_base_url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/",
+  "observation_filename": "{station}_R_20262460000_01D_30S_MO.crx.gz",
+  "navigation_url": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/246/BRDM00DLR_S_20262460000_01D_MN.rnx.gz",
+  "oracle_url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2434/IGS0OPSRAP_20262460000_01D_15M_ORB.SP3.gz",
+  "selection": {
+    "rule": "At the earliest eleven-epoch window available at the fixed holdout, choose the first lexicographically sorted seven-station subset with continuous eligible fields, usable terrestrial header coordinates, >=2000 km maximum baseline and >=20 degrees geocentric latitude span. No fit-quality or target-orbit search. Stop at the first qualifying network/window.",
+    "support_epochs": 11,
+    "fit_epochs": 11,
+    "step_s": 30,
+    "minimum_reference_count": 4
+  },
+  "physical_change": "Replace mandatory overlap of a fixed network with a predeclared presence-only choice from a bounded terrestrial station pool. This may admit previously unsupported events; it adds no RF observable or guarantee of lower uncertainty.",
+  "prior_access": "One new bounded event: G14 is the next numbered PRN after the closed G13 attempt; DOY246 precedes the previously examined DOY247-250 cluster. No DOY246 RF observations or G14 state were accessed for this attempt. Synthetic tests alone were used to implement the new selection rule. The former seven fit stations are augmented with the predeclared AMC4, PIE1 and MKEA candidates; GOLD remains the fixed excluded receiver. First structural eleven-epoch window, first lexical seven-root subset satisfying the declared terrestrial aperture. No target-state or numeric fit-quality selection; no alternate event or post-calibration subset retry.",
+  "clock_calibration": "C1C/C2W IF; healthy non-target GPS only, nearest toc within 7200 s, elevation >=10 deg, equal-weight clock mean, >=4 references. Exclude receiver clock fields and target navigation before numerical parsing. Check fixed terrestrial coordinates with non-target SPP; never fit them to target measurements.",
+  "calibration_limits": {
+    "max_reference_absolute_residual_m": 50,
+    "max_reference_rms_m": 20,
+    "max_alternating_subset_clock_difference_m": 30,
+    "max_ground_coordinate_check_m": 30
+  },
+  "model": "Nominal troposphere, relativistic reference clocks, Earth rotation during light travel. u=t_tag-P_IF/c, central median u0; four-node cubic and six-node quintic interpolation with bracketing and <=2 m control. Solve xyz+B using all four-root algebraic branches, without target orbit, radius or dynamics. Fit elevations >=5 deg; residuals <=100 m; full rank, branch, infinity and nonlinear-axis checks.",
+  "uncertainty": {
+    "code_sigma_floor_m": 20,
+    "common_reference_sigma_m": 5,
+    "ground_coordinate_sigma_m": 5,
+    "per_root_systematic_envelope_m": 20,
+    "nonlinear_margin_factor": 1.05,
+    "rule": "Increase the statistical floor for reference RMS/subset differences; differentiate code/tag/median-event transform and include clock, shared-reference and ground-coordinate covariance. All 2^N bias corners plus 64 deterministic interior samples, seed 2026250. Conditional radius = 1.05*(maximum statistical95 extent + maximum sampled bias displacement). Finite probes are not certified global bounds or population coverage."
+  },
+  "confirmation": {
+    "uncertainty_radius_limit_m": 10000,
+    "position_error_limit_m": 10000,
+    "holdout_absolute_limit_m": 100,
+    "holdout_band": "3 sigma with shared-reference cross-covariance plus fit-bias envelope and independent +/-20 m excluded-root bias; <=2 m interpolation control.",
+    "oracle": "Only after solution freeze and excluded receiver reveal. Nine nearest SP3 nodes at solved emission time; eight-node control <=10 m. Rotate fixed-u0 axes to emission axes. Allow 10 m oracle/interpolation/reference-point comparison. No fitted time or pose alignment."
+  },
+  "stop": "Exactly this target/date/candidate pool/fixed holdout and the first declared network/window. No next subset/window after calibration, fit or uncertainty failure. The original uncertainty floors and confirmation criteria apply. Diagnostic reveal after excessive uncertainty is permitted, preserving failure. No automatic retry or replacement products.",
+  "claim": "One receiver-labelled historical GPS position under target-state exclusion and conditional uncertainty. No velocity, autonomous identity, population coverage, universal service reliability or statistically disjoint oracle-data claim.",
+  "network": {
+    "candidate_stations": [
+      "ALGO00CAN",
+      "AMC400USA",
+      "AREQ00PER",
+      "BOGT00COL",
+      "BRAZ00BRA",
+      "DRAO00CAN",
+      "MKEA00USA",
+      "PIE100USA",
+      "STJO00CAN",
+      "YELL00CAN"
+    ],
+    "fit_count": 7,
+    "minimum_baseline_m": 2000000,
+    "minimum_latitude_span_deg": 20,
+    "rule": "At the earliest eleven-epoch window available at the fixed holdout, choose the first lexicographically sorted seven-station subset with continuous eligible fields, usable terrestrial header coordinates, >=2000 km maximum baseline and >=20 degrees geocentric latitude span. No fit-quality or target-orbit search. Stop at the first qualifying network/window.",
+    "missing_sources": "HTTP 404 and unsupported structural headers make that candidate unavailable. Other transport failures close this request as source unavailable. The holdout cannot be replaced. No alternate source filenames or products."
+  }
+}

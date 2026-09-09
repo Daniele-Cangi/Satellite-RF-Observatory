@@ -1,0 +1,10 @@
+{
+  "url": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/246/BRDM00DLR_S_20262460000_01D_MN.rnx.gz",
+  "bytes": 1374432,
+  "sha256": "ff0007a3272a015b4f951677bb0b803e0352ec559792c8980b93506eb1ce729a",
+  "access_utc": "2026-09-09T08:14:06.975078+00:00",
+  "http_status": 200,
+  "reference_only_sha256": "835bd418584f4a1d9aeaae2d2a65acde734906dd45c5c27ab3e8a2ba920837ba",
+  "target_numerically_parsed": false,
+  "raw_navigation_persisted": false
+}
