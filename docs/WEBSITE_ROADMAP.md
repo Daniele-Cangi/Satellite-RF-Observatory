@@ -2,6 +2,13 @@
 
 Data: 9 settembre 2026. Stato: proposta operativa, fondata sul codice e sui risultati disponibili. Questo documento pianifica il lavoro: non avvia esperimenti, non modifica gli esiti congelati e non pubblica nuove versioni.
 
+### Avanzamento dopo approvazione
+
+- P0 completata: cinque eventi, schema v2, provenienza per evento, selezione della rete G14 e criteri corretti. I 13 test dell'archivio, TypeScript e build sono passati. Versione Sites 2 pubblicata con accesso invariato, privato al proprietario.
+- P1 avviata: archivio persistente delle richieste in `service/requests.py`, con idempotenza, proprietà, limiti e concessione esclusiva a un esecutore. Le concessioni scadute bloccano la coda per verifica; nessuna ripetizione automatica.
+- P1 resta incompleta: `service/README.md` distingue il codice disponibile dai contratti HTTP ancora da implementare. Mancano hosting dell'esecutore, collegamento autenticato reale, ponte con il motore e prova completa dal browser. Richiesti al proprietario servizio esistente o budget, senza attivare risorse a pagamento.
+- Nessun nuovo esperimento scientifico è stato avviato durante queste modifiche.
+
 ## 1. Il prodotto da costruire
 
 La promessa del sito sarà: **scegli un satellite GPS e un giorno storico; controlla se esistono osservazioni adatte; richiedi una ricostruzione indipendente della posizione; consulta il risultato e le prove che lo sostengono.**
