@@ -176,7 +176,7 @@ main {
 .event-picker {
   width: 100% !important;
   display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   height: auto !important;
   background: none !important;
   padding: 0 !important;
@@ -836,3 +836,6 @@ footer a {
     transition: none !important;
   }
 }
+
+.status.passed { background: #183d35; color: #a4e7cb; }
+.network-decisions { line-height: 1.9; }

@@ -58,6 +58,13 @@ User instructions continue to take precedence over this file.
 
 ## Current delivery objective
 
+The user approved the broad website plan in `docs/WEBSITE_ROADMAP.md` on
+2026-09-09. Implement its dependent product milestones: first the five-event
+archive, then a verified remote execution connection and private web requests.
+Private publication within the existing owner-only audience is part of this
+delivery. A public launch and new scientific experiments still require their
+separate decisions. Keep progress and unresolved hosting choices in that plan.
+
 The availability-to-dossier path has now completed a new passing G14 event.
 The bounded scientific attempt is closed. The next product milestone is to
 connect this controlled worker to web requests; no further search for passing

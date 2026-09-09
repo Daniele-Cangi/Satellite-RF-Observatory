@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "event": {
     "id": "g12-2026-09-07",
     "target": "G12",
@@ -64,7 +64,13 @@
         "label": "GOLD00USA · osservazioni RF",
         "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/GOLD00USA_R_20262500000_01D_30S_MO.crx.gz"
       }
-    ]
+    ],
+    "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+    "operationalStatus": "COMPLETED",
+    "profile": "frozen-legacy",
+    "errorThresholdM": 10000,
+    "heldoutThresholdM": 100,
+    "networkSelection": null
   },
   "scope": "Closed historical evidence dossier; original file bytes recoverable from UTF-8 strings. No raw RF payloads, current positions or new estimates are generated.",
   "files": [

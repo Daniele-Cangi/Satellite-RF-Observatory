@@ -179,7 +179,8 @@ and the complete acquisition-independent calibration/freeze/reveal chain using
 previously revealed G08 excerpts. The oracle is supplied from a local fixture
 in that regression; it is never counted as new scientific evidence.
 
-The 32 active/frozen tests passed locally and on GitHub Actions Windows and
-Linux at the preregistration commit `118c683`. The real new-event path has
-reached full confirmation, with its primary uncertainty criterion still failed.
-This is not yet a demonstrated general verification service.
+The initial 32 active/frozen tests passed locally and on GitHub Actions Windows
+and Linux at preregistration commit `118c683`. The suite has since expanded.
+G14 DOY246 subsequently satisfied all criteria for one conditional historical
+event; the earlier G08 and G12 uncertainty failures remain unchanged. This is
+not yet a demonstrated general verification service.

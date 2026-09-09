@@ -40,6 +40,9 @@ const utc = (value: string) =>
 function EventPanel({ event }: { event: Event }) {
   const available = event.errorM !== null && event.radiusM !== null;
   const radius = event.radiusM ?? 0;
+  const uncertaintyPass = available && radius <= event.thresholdM;
+  const orbitPass = event.errorM !== null && event.errorM <= event.errorThresholdM;
+  const holdoutPass = event.heldoutM !== null && event.heldoutConfirmed && Math.abs(event.heldoutM) <= event.heldoutThresholdM;
   return (
     <article
       className="event-panel"
@@ -60,9 +63,9 @@ function EventPanel({ event }: { event: Event }) {
               : 'Tentativo concluso prima del calcolo'}
           </p>
         </div>
-        <div className="status">
-          <TriangleAlert size={17} aria-hidden="true" />
-          {available
+        <div className={`status ${event.primaryPass ? 'passed' : ''}`}>
+          {event.primaryPass ? <ShieldCheck size={17} aria-hidden="true" /> : <TriangleAlert size={17} aria-hidden="true" />}
+          {event.primaryPass ? 'Criteri dell’evento soddisfatti' : available
             ? 'Soglia d’incertezza superata'
             : 'Copertura comune insufficiente'}
         </div>
@@ -83,9 +86,9 @@ function EventPanel({ event }: { event: Event }) {
                 Scarto 3D rispetto all’orbita aperta <strong>dopo</strong> il
                 congelamento della soluzione.
               </p>
-              <div className="success-line">
-                <Check size={17} aria-hidden="true" /> Confronto orbitale entro
-                il limite
+              <div className={orbitPass ? 'success-line' : 'warning'}>
+                {orbitPass ? <Check size={17} aria-hidden="true" /> : <TriangleAlert size={17} aria-hidden="true" />}
+                {orbitPass ? 'Confronto orbitale entro il limite' : 'Confronto orbitale oltre il limite'}
               </div>
             </section>
             <section className="metric uncertainty">
@@ -96,9 +99,10 @@ function EventPanel({ event }: { event: Event }) {
                 <span>km</span>
               </p>
               <p>
-                Soglia del piano: <strong>10 km</strong>. Superamento:{' '}
-                <strong>{number(radius - event.thresholdM)} m</strong> (
-                {number((radius / event.thresholdM - 1) * 100)}%).
+                Soglia del piano: <strong>{number(event.thresholdM / 1000, 0)} km</strong>.{' '}
+                {uncertaintyPass ? 'Margine entro la soglia: ' : 'Superamento: '}
+                <strong>{number(Math.abs(radius - event.thresholdM))} m</strong> (
+                {number(Math.abs(radius / event.thresholdM - 1) * 100)}%).
               </p>
               <div className="ruler" aria-hidden="true">
                 <div
@@ -117,9 +121,9 @@ function EventPanel({ event }: { event: Event }) {
           <div className="interpretation">
             <ShieldCheck size={22} aria-hidden="true" />
             <p>
-              <strong>Il risultato e il suo limite, insieme.</strong> Il
-              confronto è positivo, ma il criterio completo dell’esperimento non
-              è superato. L’errore osservato non sostituisce l’incertezza
+              <strong>{event.primaryPass ? 'Un evento storico soddisfa tutti i criteri.' : 'Il risultato e il suo limite, insieme.'}</strong>{' '}
+              {event.primaryPass ? 'Questo successo vale per il singolo evento e per le assunzioni dichiarate. ' : 'Il criterio completo dell’esperimento non è superato. '}
+              L’errore osservato non sostituisce l’incertezza
               prospettica, che resta condizionata al modello dichiarato.
             </p>
           </div>
@@ -145,7 +149,7 @@ function EventPanel({ event }: { event: Event }) {
             <section className="surface">
               <div className="section-heading">
                 <h3>Ricevitore escluso</h3>
-                <span className="pill">GOLD</span>
+                <span className="pill">{event.withheldStation.slice(0, 4)}</span>
               </div>
               <p className="holdout-value">
                 {event.heldoutM! > 0 ? '+' : ''}
@@ -155,9 +159,9 @@ function EventPanel({ event }: { event: Event }) {
                 Scarto fra misura e previsione, senza usare i codici di{' '}
                 {event.target} ricevuti da GOLD nella stima.
               </p>
-              <p className="success-line">
-                <Check size={16} aria-hidden="true" />{' '}
-                {event.heldoutConfirmed
+              <p className={holdoutPass ? 'success-line' : 'warning'}>
+                {holdoutPass ? <Check size={16} aria-hidden="true" /> : <TriangleAlert size={16} aria-hidden="true" />}{' '}
+                {holdoutPass
                   ? 'Confermato entro la banda prevista'
                   : 'Non confermato'}
               </p>
@@ -180,17 +184,17 @@ function EventPanel({ event }: { event: Event }) {
                 <TableRow>
                   <TableCell>Errore 3D ≤ 10 km</TableCell>
                   <TableCell>{number(event.errorM!)} m</TableCell>
-                  <TableCell className="positive">Superato</TableCell>
+                  <TableCell className={orbitPass ? 'positive' : 'warning'}>{orbitPass ? 'Superato' : 'Non superato'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>GOLD ≤ 100 m e nella banda prevista</TableCell>
                   <TableCell>{number(Math.abs(event.heldoutM!))} m</TableCell>
-                  <TableCell className="positive">Superato</TableCell>
+                  <TableCell className={holdoutPass ? 'positive' : 'warning'}>{holdoutPass ? 'Superato' : 'Non superato'}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Incertezza prospettica ≤ 10 km</TableCell>
                   <TableCell>{number(radius / 1000, 3)} km</TableCell>
-                  <TableCell className="warning">Non superato</TableCell>
+                  <TableCell className={uncertaintyPass ? 'positive' : 'warning'}>{uncertaintyPass ? 'Superato' : 'Non superato'}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -201,9 +205,9 @@ function EventPanel({ event }: { event: Event }) {
           <TriangleAlert size={32} aria-hidden="true" />
           <h3>Nessuna posizione stimata</h3>
           <p>
-            Le otto stazioni contengono osservazioni di G12, ma soltanto{' '}
-            <strong>{event.supportAvailable} epoche consecutive</strong> sono
-            comuni. Il piano ne richiedeva{' '}
+            Nella rete dichiarata per {event.target} sono disponibili{' '}
+            <strong>{event.supportAvailable} epoche consecutive idonee comuni</strong>.
+            {' '}Il piano ne richiedeva{' '}
             <strong>{event.supportRequired}</strong>.
           </p>
           <div className="absence-grid">
@@ -221,8 +225,8 @@ function EventPanel({ event }: { event: Event }) {
             </div>
           </div>
           <p className="small muted">
-            La regola non è stata accorciata dopo l’esito. Questo tentativo
-            resta distinto da quello del 5 settembre.
+            Il tentativo è concluso. La rete e la regola non sono state cambiate
+            dopo l’esito; nessuna posizione o conferma orbitale è stata calcolata.
           </p>
         </section>
       )}
@@ -240,6 +244,21 @@ function EventPanel({ event }: { event: Event }) {
             GOLD <small>verifica esclusa dal calcolo</small>
           </span>
         </div>
+        {event.networkSelection && (
+          <details className="audit">
+            <summary>Selezione della rete: {event.networkSelection.candidateStations.length} candidate, {event.fitStations.length} selezionate</summary>
+            <div className="audit-content">
+              <p className="small muted">Prima finestra idonea e primo sottoinsieme previsto dal piano, senza usare l’orbita del bersaglio. GOLD resta esclusa dalla stima.</p>
+              <ul className="network-decisions">
+                {event.networkSelection.stations.map((station) => (
+                  <li key={station.station}>
+                    <strong>{station.station}</strong> · {station.station === event.withheldStation ? 'Ricevitore escluso' : event.fitStations.includes(station.station) ? 'Selezionata' : station.source_status === 'SOURCE_MISSING' ? 'File assente (HTTP 404)' : 'Non selezionata dal piano'}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        )}
       </section>
       <section className="evidence">
         <div>
@@ -290,6 +309,10 @@ function EventPanel({ event }: { event: Event }) {
             finestra delle misure sono GPST.
           </p>
           <dl className="hashes">
+            <dt>Stato operativo</dt>
+            <dd>Concluso · {event.operationalStatus}</dd>
+            <dt>Versione scientifica dell’archivio</dt>
+            <dd>{event.sourceRevision}</dd>
             <dt>Esito scientifico originale</dt>
             <dd>{event.status}</dd>
             {event.solutionHash && (
@@ -351,14 +374,14 @@ export default function Home() {
             <h1>Verifiche di posizione</h1>
           </div>
           <p>
-            3 tentativi documentati
+            {archive.events.length} tentativi documentati · {archive.events.filter((event) => event.primaryPass).length} con criteri soddisfatti
             <br />
             <span className="muted">
               Dati storici · nessuna posizione in tempo reale
             </span>
           </p>
         </div>
-        <Tabs defaultValue={archive.events[0].id} className="event-tabs">
+        <Tabs defaultValue="g14-2026-09-03" className="event-tabs">
           <TabsList aria-label="Scegli un esperimento" className="event-picker">
             {archive.events.map((event, index) => (
               <TabsTrigger
@@ -372,7 +395,7 @@ export default function Home() {
                   <small>{date(event.date)}</small>
                 </span>
                 <span className="choice-state">
-                  {event.errorM === null
+                  {event.primaryPass ? 'Criteri soddisfatti' : event.errorM === null
                     ? 'Dati insufficienti'
                     : 'Posizione calcolata'}
                 </span>

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "event": {
     "id": "g12-2026-09-05",
     "target": "G12",
@@ -72,7 +72,13 @@
         "label": "Orbita di confronto IGS",
         "url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2434/IGS0OPSRAP_20262480000_01D_15M_ORB.SP3.gz"
       }
-    ]
+    ],
+    "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+    "operationalStatus": "COMPLETED",
+    "profile": "frozen-legacy",
+    "errorThresholdM": 10000,
+    "heldoutThresholdM": 100,
+    "networkSelection": null
   },
   "scope": "Closed historical evidence dossier; original file bytes recoverable from UTF-8 strings. No raw RF payloads, current positions or new estimates are generated.",
   "files": [

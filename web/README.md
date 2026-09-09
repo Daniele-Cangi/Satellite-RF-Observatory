@@ -1,9 +1,11 @@
 # Experimental position archive
 
-A read-only Italian interface for the three closed inverse-position attempts.
-The first screen opens G12 DOY248; tabs select G08 and the G12 DOY250 structural
-failure. Every event retains its scientific outcome. A product archive can ship
-while the scientific uncertainty milestone remains unmet.
+A read-only Italian interface for five closed inverse-position attempts.
+The first screen opens the passing G14 DOY246 event. Tabs retain both uncertainty
+failures (G08 and G12 DOY248) and both structural failures (G12 DOY250 and G13
+DOY247). G14's success is conditional on one historical event and does not
+establish general accuracy or coverage. Operational completion is distinct from
+the scientific outcome. The G14 network report explains candidate selection.
 
 The public data files are generated from the repository's frozen receipts:
 
@@ -28,10 +30,18 @@ upload or real-time claim. Evidence links download JSON dossiers, with original
 UTF-8 artifact text and SHA-256 checks; full RF payloads remain at linked public
 sources. No new uncertainty thresholds are introduced by the interface.
 
-Evidence is pinned to scientific repository revision
-`7fcd71f9428c20202f98079955e8fac76aa0f6ad`. Website publication is separate from
-scientific event timing. Generated files are checked for drift in CI, and a
-changed frozen G12 solution prevents export.
+Schema version 2 pins evidence to a repository revision per event: the original
+three use `7fcd71f9428c20202f98079955e8fac76aa0f6ad`, G13 uses
+`6e9bfadb96224d73e51b6a940b9343895ef3b820`, and G14 uses
+`2ee7d0ab060f21e24d182968d4d94ea3ddcd17ca`. These are archive references;
+executed sources and their hashes remain in the original experimental records.
+Website publication is separate from scientific event timing. Generated files
+are checked for drift in CI; frozen solution and terminal receipt checks reject
+changed evidence. The exporter rejects contradictory success/failure metrics.
+
+The implementation roadmap is in `docs/WEBSITE_ROADMAP.md` at the repository
+root. P0 provides the five-event archive. P1 must validate the remote executor's
+authenticated connection and durable job contract before web submission ships.
 
 The first Sites edition is owner-private. Public access requires a separate
 release decision. The parent GitHub repository remains the source of truth;
