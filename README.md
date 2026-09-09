@@ -101,3 +101,17 @@ Their former roadmap is archived in
 override the current independent-position mission in `AGENTS.md`.
 
 Licensed under [Apache 2.0](LICENSE).
+
+## Experimental web archive
+
+The user accepted moving ahead with the archive despite the 1.21% excess over
+the scientific uncertainty threshold. The first read-only interface is under
+[web/](web/README.md): three selectable historical events, inferred coordinates,
+observed errors, prospective uncertainty, excluded-receiver checks and JSON
+evidence downloads. Missing positions remain unavailable and failed criteria
+are never relabelled. The scientific 10 km milestone is distinct from delivering
+this experimental archive.
+
+Its data are exported deterministically from closed receipts by
+`scripts/export_positioning_archive.py`. CI checks their provenance and builds
+the site. No position solver or target-orbit request runs in the web interface.

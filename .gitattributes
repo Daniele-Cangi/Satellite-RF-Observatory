@@ -51,3 +51,7 @@ positioning/tests/fixtures/*.sp3 -text whitespace=-blank-at-eol
 
 experiments/positioning_g12_doy248/*.json -text whitespace=cr-at-eol
 experiments/positioning_g12_doy248/sources/** -text whitespace=cr-at-eol
+
+# Downloaded dossiers and their catalog hashes must survive Windows checkouts.
+web/app/results.json -text
+web/public/evidence/*.json -text

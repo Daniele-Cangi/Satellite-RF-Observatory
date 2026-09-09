@@ -59,6 +59,9 @@ eggs/
 .eggs/
 lib/
 lib64/
+!web/lib/
+!web/lib/**
+web/tsconfig.tsbuildinfo
 parts/
 sdist/
 var/

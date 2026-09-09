@@ -44,14 +44,31 @@ User instructions continue to take precedence over this file.
 - Historical forward and measurement-integrity experiments are reference
   material. Their gate sequence is not the roadmap for new work.
 
-## Immediate objective and information value
+## Current delivery objective
+
+The user accepted continuing product work despite G12 DOY248 exceeding the
+uncertainty criterion by 121.469 m (about 1.21%). This authorizes a first usable
+web archive of the closed results. The 10 km scientific criterion is not a
+blocking release gate for that archive. Preserve the original failed outcomes;
+do not relabel them or equate 15 m observed error with 15 m prospective accuracy.
+
+The web slice must let users select a documented event, see its inferred
+position, observed error, prospective uncertainty and excluded-receiver check,
+and download its evidence dossier. Missing positions stay missing. Consume
+frozen receipts through a deterministic export with provenance checks; never
+run the estimator or read a target oracle from an interactive page request.
+Keep this archive visibly historical and experimental. A private review edition
+precedes any separately authorized public launch.
+
+## Scientific objective and information value
 
 Execute a separately preregistered, previously unevaluated real event that
 addresses the weak radial-distance/transmitter-clock separation found in G08.
 Aim for BOTH prospective uncertainty radius <=10 km and subsequent 3D error
 <=10 km, plus the excluded-receiver test.
 
-Consolidate only the software required to execute and reproduce that new event.
+For scientific runs, consolidate the software required to execute and reproduce
+the declared event. The current read-only web archive is separate product work.
 Packaging G08 alone is insufficient scientific progress. Complete the bounded
 event through its declared terminal; failure does not authorize indefinite
 search for a passing example.
@@ -161,7 +178,7 @@ Preserve frozen outputs before improving active code. Never overwrite an event
 to make a regression green. Historical experiments stay immutable except for
 separately identified user-authorized maintenance.
 
-## Future website
+## Experimental website
 
 Build a public archive/service of reproducible verifications for supported
 satellites and epochs with qualified Internet measurements. Every result must
@@ -174,8 +191,9 @@ prediction. GPS support is not support for all satellites. Worldwide uniqueness
 is an unproven product claim.
 
 The web layer consumes sealed results and must not substitute an oracle-derived
-position or hide uncertainty. A thin archive is sufficient initially. Dashboards,
-APIs, monitoring and deployment are not the immediate scientific milestone.
+position or hide uncertainty. The thin archive is the current product milestone.
+On-demand positioning, monitoring and a public launch remain separate work;
+they are not implied by publishing historical verification dossiers privately.
 
 ## Working agreement
 
