@@ -24,6 +24,42 @@ request path; it is not a new numerical positioning result.
 
 ## Portable execution
 
+### Availability and predeclared station pools
+
+`gps-code-network-v1` accepts 7–12 candidate fit stations and a fixed excluded
+receiver. It selects exactly seven fit stations at the first eleven-epoch
+30-second window available across those roots and the excluded receiver.
+At that time it chooses the first lexical subset meeting >=2000 km maximum
+terrestrial baseline and >=20 degrees geocentric latitude span. Header positions
+must have finite terrestrial radii (6000–6500 km). These are ground-distribution
+requirements, not an assurance of target observability or position accuracy.
+
+```powershell
+python -m positioning plan G14 2026-09-03 work/network-plan.json --pool ALGO00CAN DRAO00CAN STJO00CAN YELL00CAN BOGT00COL BRAZ00BRA AREQ00PER AMC400USA PIE100USA MKEA00USA --prior-access "Declare actual exposure; this command alone does not certify blinding."
+python -m positioning availability work/network-plan.json work/network-run
+python -m positioning run work/network-plan.json work/network-run
+```
+
+The optional availability stage freezes the plan and source implementation,
+downloads only observation files, scans field presence and terrestrial header
+coordinates, and writes `availability.json` with per-station reasons and the
+selected network/time. It never parses numerical target observations or accesses
+navigation/orbit files. A valid availability check can be promoted to a job
+without changing the frozen plan or implementation. Acquisition verifies cached
+raw bytes and reproduces the selected network before admitting target values.
+Running a job directly performs the same selection automatically.
+
+An HTTP 404 or unsupported structural header makes that candidate unavailable;
+other transport failures stop the request. The excluded receiver cannot be
+replaced. A malformed compressed payload stops as an engineering/source-decoding
+error for inspection. No second subset/window is tried after calibration or fit
+failure. The estimator re-derives the selected roles from the frozen structural
+record; the uncertainty floors and confirmation thresholds are unchanged.
+
+Availability means only that this declared network/window can proceed to
+calibration. It does not mean a satellite position has been verified. The closed
+G13 DOY247 request must not be reopened under this new selection rule.
+
 ### Configurable request (current product slice)
 
 The `gps-code-snapshot-v1` profile fixes the physical model, eleven-epoch

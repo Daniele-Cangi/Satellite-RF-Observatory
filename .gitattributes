@@ -58,3 +58,6 @@ web/public/evidence/*.json -text
 
 # Configured-request evidence is sealed byte-for-byte across platforms.
 experiments/positioning_g13_doy247_request/** -text whitespace=cr-at-eol
+
+# Frozen candidate-network evidence.
+experiments/positioning_g14_doy246_network/** -text whitespace=cr-at-eol

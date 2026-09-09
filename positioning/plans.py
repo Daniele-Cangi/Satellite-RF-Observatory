@@ -6,6 +6,7 @@ import re
 from .context import Context
 
 PROFILE = 'gps-code-snapshot-v1'
+POOL_PROFILE = 'gps-code-network-v1'
 DEFAULT_FIT = ['ALGO00CAN', 'DRAO00CAN', 'STJO00CAN', 'YELL00CAN',
                'BOGT00COL', 'BRAZ00BRA', 'AREQ00PER']
 
@@ -66,11 +67,38 @@ def make_plan(target, date_gpst, fit_stations=None, withheld_station='GOLD00USA'
 
 def validate_plan(plan):
     """Reject ignored settings and URL/path injection before acquisition."""
-    expected = make_plan(plan['target'], plan['date_gpst'], plan['fit_stations'],
-                         plan['withheld_station'], plan['prior_access'])
+    if plan.get('profile') == POOL_PROFILE:
+        expected = make_network_plan(plan['target'], plan['date_gpst'],
+                                     plan['network']['candidate_stations'],
+                                     plan['withheld_station'], plan['prior_access'])
+    else:
+        expected = make_plan(plan['target'], plan['date_gpst'], plan['fit_stations'],
+                             plan['withheld_station'], plan['prior_access'])
     candidate = deepcopy(plan)
     if candidate != expected:
         changed = sorted(k for k in candidate.keys() | expected.keys()
                          if candidate.get(k) != expected.get(k))
         raise ValueError('unsupported or changed request profile fields: ' + ', '.join(changed))
     return expected
+
+
+def make_network_plan(target, date_gpst, candidates, withheld_station='GOLD00USA',
+                      prior_access='User-selected event; prior exposure must be declared.'):
+    names = sorted(candidates)
+    if not 7 <= len(names) <= 12 or len(set(names)) != len(names) or withheld_station in names:
+        raise ValueError('need 7..12 distinct candidate stations and a separate fixed holdout')
+    if any(not isinstance(n, str) or not re.fullmatch(r'[A-Z0-9]{9}', n) for n in names):
+        raise ValueError('invalid candidate station ID')
+    plan = make_plan(target, date_gpst, names[:7], withheld_station, prior_access)
+    plan.update(profile=POOL_PROFILE, fit_stations=None,
+                experiment=f"{target}_{date.fromisoformat(date_gpst).strftime('%Y%j')}_NETWORK_POSITION")
+    plan['network'] = {
+        'candidate_stations': names, 'fit_count': 7,
+        'minimum_baseline_m': 2_000_000, 'minimum_latitude_span_deg': 20,
+        'rule': 'At the earliest eleven-epoch window available at the fixed holdout, choose the first lexicographically sorted seven-station subset with continuous eligible fields, usable terrestrial header coordinates, >=2000 km maximum baseline and >=20 degrees geocentric latitude span. No fit-quality or target-orbit search. Stop at the first qualifying network/window.',
+        'missing_sources': 'HTTP 404 and unsupported structural headers make that candidate unavailable. Other transport failures close this request as source unavailable. The holdout cannot be replaced. No alternate source filenames or products.',
+    }
+    plan['selection']['rule'] = plan['network']['rule']
+    plan['physical_change'] = 'Replace mandatory overlap of a fixed network with a predeclared presence-only choice from a bounded terrestrial station pool. This may admit previously unsupported events; it adds no RF observable or guarantee of lower uncertainty.'
+    plan['stop'] = 'Exactly this target/date/candidate pool/fixed holdout and the first declared network/window. No next subset/window after calibration, fit or uncertainty failure. The original uncertainty floors and confirmation criteria apply. Diagnostic reveal after excessive uncertainty is permitted, preserving failure. No automatic retry or replacement products.'
+    return plan

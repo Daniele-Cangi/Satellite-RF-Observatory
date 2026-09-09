@@ -51,6 +51,12 @@ User instructions continue to take precedence over this file.
 
 ## Current delivery objective
 
+The next accepted step is explicit network availability before execution.
+The bounded candidate pool, fixed excluded receiver, structural subset/window
+rule and terrestrial distribution requirements must be frozen before new data.
+An availability report is permission to attempt calibration, not a verified
+position. Never reopen G13 with the newly implemented subset rule.
+
 The private three-event web archive is delivered. The user has now authorized
 the next milestone: a configurable historical GPS request that can eventually
 be launched from the site. First validate the reusable local request-to-dossier

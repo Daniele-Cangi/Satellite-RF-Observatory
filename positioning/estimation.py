@@ -6,6 +6,7 @@ import numpy as np
 
 from .context import Context
 from .errors import ScientificRejection
+from .network import effective_plan
 from .acquisition import digest, write_json, source_hashes, snapshot_sources, utc_now
 from .calibration import C, OMEGA, rotate_z, parse_reference_navigation, calibrate_station, reference_model
 from .solver import interpolate_event, measurement_model, model_jacobian, solve, uncertainty_box, heldout_prediction, far_field_cost, CHI95
@@ -56,6 +57,10 @@ def estimate(run_path):
     if context.target!=plan['target'] or context.date_gpst!=plan['date_gpst']:
         raise ValueError('admitted context does not match frozen target/date')
     structure=json.loads((run/'structure.json').read_text())
+    if 'network' in plan:
+        if digest(run/'structure.json') != json.loads((run/'availability.json').read_text())['structure_sha256']:
+            raise ValueError('network structure changed after availability')
+        plan=effective_plan(plan,structure)
     support=structure['selection']['selected_seconds_gpst']
     if support is None or len(support)!=plan['selection']['support_epochs']:
         raise ValueError('no support block matching frozen selection')
@@ -147,6 +152,8 @@ def estimate(run_path):
     gold_systematic=bias+max(abs(heldout_prediction(best['q']+np.array(probe['delta_q']),gold_station,best['covariance'])[0]-predicted) for probe in uncertainty['bias_probes'])
     status='PRE_ORACLE_CRITERIA_MET' if uncertainty['total_95_outer_radius_m']<=plan['confirmation']['uncertainty_radius_limit_m'] else 'UNCERTAINTY_TOO_LARGE'
     inputs=[run/'plan.json',run/'plan_freeze.json',run/'structure.json',run/'admission_receipt.json',admitted_path,nav_path,run/'calibration.json']
+    if (run/'availability.json').exists():
+        inputs.append(run/'availability.json')
     solution=native({'experiment':plan['experiment'],'target':context.target,'date_gpst':context.date_gpst,'context':context.__dict__,'status_before_reveal':status,'xyz_m':best['q'][:3],'B_m':best['q'][3],'u0_relative_s':event['u0'],'emission_seconds_since_gpst_midnight':context.central_s+event['u0']+best['q'][3]/C,'frame':'terrestrial axes fixed at u0; rotate to emission axes for comparison','fit':best,'covariance_z':covariance_z,'uncertainty':uncertainty,'uncertainty_scope':'conditional numerical envelope; finite probes do not certify global bounds or population coverage','interpolation_control_m':interpolation_difference,'far_field_chi_squared':far_cost,'effective_code_sigma_m':floor,'gold_prediction':{'corrected_range_like_m':predicted,'predictive_sigma_m':gold_sigma,'systematic_envelope_m':gold_systematic,'band_3sigma_plus_systematic_m':3*gold_sigma+gold_systematic},'source_hashes':source_hashes(),'input_hashes':{p.relative_to(run).as_posix():digest(p) for p in inputs},'target_orbit_accessed':False,'heldout_target_accessed':False,'environment':{'python':sys.version,'numpy':np.__version__}})
     write_json(run/'solution.json',solution,exclusive=True)
     write_json(run/'solution_freeze.json',{'solution_sha256':digest(run/'solution.json'),'freeze_utc':utc_now(),'target_orbit_accessed':False,'heldout_target_accessed':False},exclusive=True)

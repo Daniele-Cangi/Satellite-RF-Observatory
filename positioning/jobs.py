@@ -18,10 +18,17 @@ def status(run_path):
             path = run / name
             if path.resolve().is_relative_to(run.resolve()) is False or digest(path) != expected:
                 raise ValueError('terminal artifact changed: ' + name)
+    job = json.loads((run / 'job.json').read_text()) if (run / 'job.json').exists() else None
+    if job and job['state'] == 'FAILED':
+        return job
     if (run / 'outcome.json').exists():
         return {'state': 'COMPLETED', 'outcome': json.loads((run / 'outcome.json').read_text())}
-    if (run / 'job.json').exists():
-        return json.loads((run / 'job.json').read_text())
+    if job:
+        return job
+    if (run / 'availability.json').exists():
+        report = json.loads((run / 'availability.json').read_text())
+        return {'state': 'AVAILABLE_FOR_CALIBRATION' if report['ready_for_calibration'] else 'UNAVAILABLE',
+                'availability': report}
     return {'state': 'NOT_STARTED'}
 
 
@@ -39,6 +46,7 @@ def dossier(run_path):
         return json.loads(destination.read_text())
     plan = json.loads((run / 'request.json').read_text())
     outcome = current.get('outcome', {})
+    availability = json.loads((run / 'availability.json').read_text()) if (run / 'availability.json').exists() else None
     comparison = outcome.get('comparison', {})
     solution = {}
     if (run / 'solution_freeze.json').exists():
@@ -73,7 +81,8 @@ def dossier(run_path):
         'prospective_uncertainty_radius_m': outcome.get('prospective_uncertainty_radius_m',
                                   solution.get('uncertainty', {}).get('total_95_outer_radius_m')),
         'heldout': outcome.get('heldout'),
-        'fit_stations': plan['fit_stations'], 'withheld_station': plan['withheld_station'],
+        'fit_stations': (availability['selected_fit_stations'] if availability else plan['fit_stations']),
+        'withheld_station': plan['withheld_station'], 'availability': availability,
         'claim': plan['claim'], 'prior_access': plan['prior_access'],
         'raw_data_note': 'Raw observations and oracle remain in the run directory; source URLs and hashes are in included receipts. This dossier embeds admission, code and result evidence.',
         'artifacts': artifacts,
@@ -95,7 +104,17 @@ def execute(plan_path, run_path):
             return current
         raise ValueError('job already attempted; inspect its failure without automatic retry')
     if run.exists() and any(run.iterdir()):
-        raise ValueError('new job requires an empty directory')
+        # A standalone availability check may be promoted without changing the
+        # frozen declaration or source implementation; no estimator has run yet.
+        if not (run / 'availability.json').exists() or not (run / 'plan_freeze.json').exists():
+            raise ValueError('new job requires an empty directory or a frozen availability check')
+        freeze = json.loads((run / 'plan_freeze.json').read_text())
+        report = json.loads((run / 'availability.json').read_text())
+        if ((run / 'plan.json').read_bytes() != plan_bytes or freeze['sources'] != source_hashes()
+                or freeze['plan_sha256'] != digest(plan_path) or report['plan_sha256'] != digest(plan_path)
+                or report['structure_sha256'] != digest(run / 'structure.json')
+                or (run / 'admission_receipt.json').exists() or (run / 'solution_freeze.json').exists()):
+            raise ValueError('prepared availability changed or estimation already started')
     run.mkdir(parents=True, exist_ok=True)
     with (run / 'request.json').open('xb') as handle:
         handle.write(plan_bytes)

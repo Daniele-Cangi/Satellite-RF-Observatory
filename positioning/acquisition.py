@@ -5,11 +5,13 @@ import json
 from pathlib import Path
 from datetime import datetime, timezone
 import urllib.request
+from urllib.error import HTTPError
 
 import hatanaka
 
 from .context import Context
-from .qualification import scan_structure, select_window
+from .qualification import scan_structure, QualificationError
+from .network import select_network, availability_report, effective_plan
 from .calibration import observation_window, antenna_position, strip_target_navigation
 
 
@@ -61,7 +63,7 @@ def download(url, limit=50_000_000):
     return data, receipt
 
 
-def acquire(plan_path, run_path):
+def acquire(plan_path, run_path, *, availability_only=False):
     run = Path(run_path)
     run.mkdir(parents=True, exist_ok=True)
     if (run/'solution_freeze.json').exists():
@@ -80,8 +82,9 @@ def acquire(plan_path, run_path):
         raise ValueError('support and fit must be odd, with support >= fit >= 7')
     if plan['selection']['minimum_reference_count'] != 4:
         raise ValueError('this structural scanner implements four reference codes')
-    names = plan['fit_stations'] + [plan['withheld_station']]
-    if len(set(names)) != len(names) or not 5 <= len(plan['fit_stations']) <= 8:
+    candidates = plan['network']['candidate_stations'] if 'network' in plan else plan['fit_stations']
+    names = candidates + [plan['withheld_station']]
+    if len(set(names)) != len(names) or ('network' not in plan and not 5 <= len(candidates) <= 8):
         raise ValueError('need 5..8 distinct fit roots and one distinct held-out root')
     freeze = run/'plan_freeze.json'
     plan_sha = hashlib.sha256(plan_bytes).hexdigest()
@@ -104,27 +107,58 @@ def acquire(plan_path, run_path):
         filename = plan['observation_filename'].format(station=name)
         path = raw_dir/filename
         receipt_path = raw_dir/(filename+'.json')
+        if 'network' in plan and receipt_path.exists():
+            cached = json.loads(receipt_path.read_text())
+            if cached.get('http_status') == 404:
+                receipts.append({'station':name, **cached})
+                structures[name] = {'epochs':[], 'source_status':'SOURCE_MISSING', 'source_reason':'HTTP_404'}
+                continue
         if path.exists():
             receipt = json.loads(receipt_path.read_text())
             if digest(path) != receipt['sha256']:
                 raise ValueError('cached observation hash mismatch')
             raw = path.read_bytes()
         else:
-            raw, receipt = download(plan['observation_base_url']+filename)
+            try:
+                raw, receipt = download(plan['observation_base_url']+filename)
+            except HTTPError as error:
+                if 'network' not in plan or error.code != 404:
+                    raise
+                receipt = {'url':plan['observation_base_url']+filename, 'http_status':404, 'access_utc':utc_now()}
+                write_json(receipt_path, receipt, exclusive=True)
+                receipts.append({'station':name, **receipt})
+                structures[name] = {'epochs':[], 'source_status':'SOURCE_MISSING', 'source_reason':'HTTP_404'}
+                print(json.dumps({'station':name,'status':'SOURCE_MISSING'}),flush=True)
+                continue
             path.write_bytes(raw)
             write_json(receipt_path,receipt,exclusive=True)
         # Full compressed receipt exists before the decoder sees the payload.
         decoded = hatanaka.decompress(raw,strict=True)
-        structure = scan_structure(decoded.decode('ascii'),plan['target'],plan['date_gpst'])
         receipts.append({'station':name,**receipt,'decoded_sha256':hashlib.sha256(decoded).hexdigest()})
+        try:
+            structure = scan_structure(decoded.decode('ascii'),plan['target'],plan['date_gpst'])
+        except QualificationError as error:
+            if 'network' not in plan:
+                raise
+            structures[name] = {'epochs':[], 'source_status':'STRUCTURE_UNSUPPORTED', 'source_reason':str(error)}
+            continue
         structures[name] = structure
         print(json.dumps({'station':name,'epochs':structure['epoch_count'],'target_code_epochs':structure['target_code_epoch_count']}),flush=True)
-    selection = select_window(structures,plan['selection']['support_epochs'],plan['selection']['step_s'])
-    write_json(run/'structure.json',{'selection':selection,'structures':structures,'receipts':receipts,'sources':source_hashes()})
+    selection = select_network(plan, structures)
+    structure_record = {'selection':selection,'structures':structures,'receipts':receipts,'sources':source_hashes()}
+    write_json(run/'structure.json',structure_record)
+    report = availability_report(plan, structure_record)
+    report.update(plan_sha256=plan_sha, structure_sha256=digest(run/'structure.json'),
+                  sources=source_hashes())
+    write_json(run/'availability.json',report)
     if selection['selected_seconds_gpst'] is None:
-        result={'experiment':plan['experiment'],'status':'SOURCE_OR_MEASUREMENT_NOT_QUALIFIED','reason':'NO_COMMON_STRUCTURAL_WINDOW','primary_pass':False,'plan_sha256':plan_sha,'oracle_accessed':False}
+        result={'experiment':plan['experiment'],'status':'SOURCE_OR_MEASUREMENT_NOT_QUALIFIED','reason':selection['status'],'primary_pass':False,'plan_sha256':plan_sha,'oracle_accessed':False}
         write_json(run/'outcome.json',result)
         return result
+    if availability_only:
+        return report
+    plan = effective_plan(plan, structure_record)
+    names = plan['fit_stations'] + [plan['withheld_station']]
     support = [int(float(v)) for v in selection['selected_seconds_gpst']]
     count = plan['selection']['fit_epochs']
     offset = (len(support)-count)//2
