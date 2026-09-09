@@ -15,6 +15,13 @@ residual. Its 10.121 km prospective uncertainty exceeded the fixed 10 km limit;
 the primary outcome remains `UNCERTAINTY_TOO_LARGE`. See
 `experiments/positioning_g12_doy248/OUTCOME.md`.
 
+The configurable G13 DOY247 request completed without manual stage transitions.
+All eight source files arrived, but no eligible epoch was common to all roots;
+the terminal is `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`. No position or oracle
+access followed. Its immutable dossier and source snapshots are under
+`experiments/positioning_g13_doy247_request/`. This verifies a real negative
+request path; it is not a new numerical positioning result.
+
 ## Portable execution
 
 ### Configurable request (current product slice)

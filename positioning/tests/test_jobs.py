@@ -1,5 +1,6 @@
 import hashlib
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -9,6 +10,17 @@ from positioning.jobs import execute, status, dossier
 from positioning.plans import make_plan, validate_plan
 from positioning.__main__ import run_stage
 from positioning.errors import ScientificRejection
+
+
+def test_published_g13_dossier_remains_readable_after_exporter_upgrade():
+    run = Path(__file__).resolve().parents[2] / 'experiments/positioning_g13_doy247_request'
+    # Byte-addressed frozen evidence must survive both Windows and Linux checkout.
+    assert status(run)['state'] == 'COMPLETED'
+    document = dossier(run)
+    assert document['status'] == 'SOURCE_OR_MEASUREMENT_NOT_QUALIFIED'
+    assert document['observed_error_m'] is None
+    assert document['inferred_position'] is None
+    assert document['primary_pass'] is False
 
 
 def test_calendar_week_and_profile_are_explicit_and_reject_ignored_options():
@@ -49,6 +61,7 @@ def test_closed_job_stops_before_estimate_or_oracle_and_seals_download(tmp_path,
         called.append(command[3])
         assert command[3] == 'acquire'
         assert (run / 'request.json').exists()
+        write_json(run / 'raw_observations' / 'source.crx.gz.json', {'url': 'https://example.test/observation', 'sha256': 'transport-receipt'})
         write_json(run / 'outcome.json', {'status': 'SOURCE_OR_MEASUREMENT_NOT_QUALIFIED',
                    'primary_pass': False, 'oracle_accessed': False})
         return SimpleNamespace(returncode=0)
@@ -58,6 +71,8 @@ def test_closed_job_stops_before_estimate_or_oracle_and_seals_download(tmp_path,
     assert execute(path, run) == result
     assert called == ['acquire']
     document = dossier(run)
+    assert 'raw_observations/source.crx.gz.json' in document['artifacts']
+    assert 'logs/acquire.log' in document['artifacts']
     assert document['estimated_ecef_at_emission_m'] is None
     assert document['observed_error_m'] is None
     for value in document['artifacts'].values():

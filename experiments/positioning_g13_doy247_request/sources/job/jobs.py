@@ -30,13 +30,6 @@ def dossier(run_path):
     current = status(run)
     if current['state'] not in ('COMPLETED', 'FAILED'):
         raise ValueError('dossier requires a completed or failed job')
-    destination = run / 'dossier.json'
-    if destination.exists():
-        if not (run / 'terminal_receipt.json').exists():
-            raise ValueError('existing dossier has no terminal seal; inspect interrupted publication')
-        # Read the sealed schema as published, even after exporter upgrades.
-        # status() above verifies its bytes and every included frozen artifact.
-        return json.loads(destination.read_text())
     plan = json.loads((run / 'request.json').read_text())
     outcome = current.get('outcome', {})
     comparison = outcome.get('comparison', {})
@@ -50,8 +43,6 @@ def dossier(run_path):
                    if p.name not in ('dossier.json', 'terminal_receipt.json'))
     files += sorted((run / 'sources').rglob('*.py'))
     files += sorted((run / 'estimation').glob('*'))
-    files += sorted((run / 'raw_observations').glob('*.json'))
-    files += sorted((run / 'logs').glob('*.log'))
     artifacts = {}
     for path in files:
         if not path.is_file() or path.is_symlink() or not path.resolve().is_relative_to(run.resolve()):
@@ -78,7 +69,14 @@ def dossier(run_path):
         'raw_data_note': 'Raw observations and oracle remain in the run directory; source URLs and hashes are in included receipts. This dossier embeds admission, code and result evidence.',
         'artifacts': artifacts,
     }
-    write_json(destination, document, exclusive=True)
+    # Exclusive first publication; later reads cannot silently regenerate changed evidence.
+    destination = run / 'dossier.json'
+    if destination.exists():
+        existing = json.loads(destination.read_text())
+        if existing != document:
+            raise ValueError('dossier differs from terminal evidence')
+    else:
+        write_json(destination, document, exclusive=True)
     return document
 
 

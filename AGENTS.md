@@ -43,6 +43,11 @@ User instructions continue to take precedence over this file.
   `experiments/positioning_g12_doy248/`.
 - Historical forward and measurement-integrity experiments are reference
   material. Their gate sequence is not the roadmap for new work.
+- G13 DOY247 through the configurable request worker closed
+  `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`: zero eligible epochs common to the
+  eight fixed stations. No position or target-orbit access. Preserve
+  `experiments/positioning_g13_doy247_request/`; do not retry it with a new
+  station subset. The local worker is delivered; web job submission is pending.
 
 ## Current delivery objective
 

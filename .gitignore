@@ -202,3 +202,6 @@ exports/
 transfer/
 *.tar.gz.gpg
 *.zip.enc
+
+# Local raw payloads for the sealed configured request (receipts are versioned).
+/work/g13_doy247_request/
