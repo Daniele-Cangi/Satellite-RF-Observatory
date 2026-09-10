@@ -132,3 +132,8 @@ riferimenti/antenne/propagazione e loro correlazioni stimate o motivate,
 un fit e un test dei residui coerenti con tali errori, controllo della
 non linearità e del troncamento generale, infine manifest esatti congelati.
 Il sito e le acquisizioni di nuovi bersagli restano sospesi.
+
+Il successivo [fit congiunto](S2_JOINT_FIT.md) implementa un estimatore
+separato che usa un'unica covarianza anche nell'ottimizzazione e nel test
+locale dei residui. Questa estensione non modifica i risultati qui descritti
+e non risolve ancora la qualifica fisica o la copertura non lineare totale.

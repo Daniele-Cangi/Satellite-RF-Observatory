@@ -113,6 +113,19 @@ transport. Preserve this study and prior source hashes. Real receiver and
 propagation qualification, full correlated fitting/testing and general
 truncation bounds remain open; no S3 acquisition or website work follows yet.
 
+The subsequent `research/kinematic/joint_fit.py` adds a separate joint Gaussian
+estimator for RF, reference-clock and terrestrial-coordinate data, with one
+fixed covariance for optimization, local uncertainty and residual testing.
+See `research/kinematic/S2_JOINT_FIT.md` and its results report. Preserve the
+earlier estimators/reports; the joint fit does not retroactively qualify them.
+Its chi-square test is exact only in the local linear Gaussian problem and
+approximate for the nonlinear solver. Synthetic compressed calibrations are
+assumed admitted; they are not newly qualified real reference data. Excluded
+predictions require accepted fit/calibration and retain cross correlations
+without reading excluded target values. Physical covariance qualification,
+nonlinear/selection calibration and total systematic/truncation coverage
+remain open before S3; no website development or acquisition is implied.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

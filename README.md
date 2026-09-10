@@ -108,6 +108,10 @@ The [local inverse uncertainty study](research/kinematic/S2_INVERSE_UNCERTAINTY.
 now propagates shared errors, uncertain station coordinates and excluded clocks,
 and tests how constant jerk distorts the fit and future predictions. Its local
 Gaussian and affine bounds do not establish total nonlinear coverage.
+The subsequent [joint fit](research/kinematic/S2_JOINT_FIT.md) uses one fixed
+covariance across RF, reference clocks and terrestrial coordinates for both
+optimization and the local residual test. Its paired synthetic study measures
+test calibration effects; it does not establish real-data accuracy or coverage.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 

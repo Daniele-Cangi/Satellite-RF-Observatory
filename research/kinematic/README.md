@@ -52,6 +52,7 @@ python -m research.kinematic.synthetic PATH_TO_NEW_STUDY.json
 python -m research.kinematic.s2_validation PATH_TO_NEW_S2_STUDY.json
 python -m research.kinematic.s2b_validation PATH_TO_NEW_REFERENCE_STUDY.json
 python -m research.kinematic.uncertainty_study PATH_TO_NEW_UNCERTAINTY_STUDY.json
+python -m research.kinematic.joint_study PATH_TO_NEW_JOINT_STUDY.json
 ```
 
 Report writers refuse to overwrite an existing output. Compare numerical
@@ -85,6 +86,13 @@ systematic modes including fit distortion under constant jerk. See
 [S2_INVERSE_UNCERTAINTY.md](S2_INVERSE_UNCERTAINTY.md) and
 [its synthetic report](results/S2_UNCERTAINTY_REPORT.md). This does not supply
 a total nonlinear envelope or recalibrate the old residual test for new errors.
+
+The separate [joint estimator](S2_JOINT_FIT.md) now fits RF, clock and ground
+coordinate observations with one declared covariance, including cross blocks.
+Its residual test and local uncertainty use the same weights. The
+[paired synthetic report](results/S2_JOINT_REPORT.md) retains all sixteen
+noise pairs and both mismatch stresses. Real covariance qualification,
+nonlinear/selection calibration and total error bounds remain open.
 
 Do not edit the five frozen experiments, lower their floors, use the target
 orbit to initialize, or present the synthetic error reduction as measured RF
