@@ -137,6 +137,17 @@ Unflagged slips remain undetected by the adapter; no receiver is qualified.
 Keep old experiments/sources intact and qualify the reference-side phase
 observable and continuity before integrating a new inverse measurement model.
 
+The subsequent phase-reference bridge is documented in
+`research/kinematic/S2_PHASE_REFERENCE_BRIDGE.md`. Its new RINEX importer
+requires C1C/C2W/L1C/L2W without Doppler, fits reference clocks to codes only,
+then tests unused phase increments on identical endpoints with full rectangular
+code/rate covariance. The synthetic one-cycle unflagged slip is rejected;
+a small common phase drift remains compatible. Neither is universal slip
+qualification. `REFERENCE_PHASE_MODEL_ACCEPTED` is not real RF admission or
+an automatic input to old instantaneous-rate inverse models. Preserve all
+old sources/results; a dedicated interval inverse model and physical error
+qualification still precede any S3 target acquisition or website work.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

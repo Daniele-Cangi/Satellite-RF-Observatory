@@ -116,6 +116,10 @@ The [physical-source audit](research/kinematic/S2_PHYSICAL_SOURCES.md) identifie
 missing Doppler declarations in the historical network and adds a separate
 reference-only phase-increment diagnostic. Mean phase rates require their own
 time model, continuity checks and covariance before inverse integration.
+The [phase-reference bridge](research/kinematic/S2_PHASE_REFERENCE_BRIDGE.md)
+now performs full RINEX code/phase import and checks unused phase increments
+against code-fitted reference clocks. Its synthetic slip detection does not
+establish universal continuity or real receiver qualification.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 

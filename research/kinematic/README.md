@@ -54,6 +54,7 @@ python -m research.kinematic.s2b_validation PATH_TO_NEW_REFERENCE_STUDY.json
 python -m research.kinematic.uncertainty_study PATH_TO_NEW_UNCERTAINTY_STUDY.json
 python -m research.kinematic.joint_study PATH_TO_NEW_JOINT_STUDY.json
 python -m research.kinematic.physical_source_study PATH_TO_NEW_PHYSICAL_STUDY.json
+python -m research.kinematic.phase_bridge_study PATH_TO_NEW_PHASE_BRIDGE_STUDY.json
 ```
 
 Report writers refuse to overwrite an existing output. Compare numerical
@@ -100,6 +101,13 @@ declarations in the archived G14 pool, with none for GOLD. The separate
 reference phase-increment adapter explores interval-mean rates and their
 correlations; it does not substitute them into the instantaneous-rate fit.
 See the [audit and synthetic report](results/S2_PHYSICAL_REPORT.md).
+
+The [phase-reference bridge](S2_PHASE_REFERENCE_BRIDGE.md) now imports full
+code/phase RINEX fixtures, fits clocks from codes and checks unused phase
+increments with the same endpoint model and complete residual covariance.
+Its nine-case study detects the injected unflagged slip but retains a small
+undetected common drift. It is not yet an inverse phase estimator or RF
+qualification; see [the report](results/S2_PHASE_BRIDGE_REPORT.md).
 
 Do not edit the five frozen experiments, lower their floors, use the target
 orbit to initialize, or present the synthetic error reduction as measured RF
