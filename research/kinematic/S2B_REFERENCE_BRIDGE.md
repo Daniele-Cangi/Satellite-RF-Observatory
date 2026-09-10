@@ -149,3 +149,8 @@ inverso del bersaglio, includendo clock incerto della stazione esclusa e
 previsioni fuori arco. Non basta sommare il resto di Taylor a una covarianza.
 L'API numerica non certifica questi limiti: prima di una campagna servono
 bilancio verificato, regole di qualifica e manifest S3 esatti congelati.
+
+Il successivo [modulo di propagazione locale](S2_INVERSE_UNCERTAINTY.md)
+implementa il trasporto di covarianze condivise, coordinate e clock del
+holdout incerti, con diagnostica del troncamento sul fit e sulla previsione.
+Non completa il bilancio totale né la qualifica fisica elencata qui sopra.

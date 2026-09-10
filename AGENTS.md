@@ -101,6 +101,18 @@ that package. The six-case study uses invented full-file fixtures only.
 error budget remain open before S3. Never relax failed source/calibration gates
 or consume target/future measurements to obtain a passing calibration.
 
+S2 now also delivers local inverse-error transport in
+`research/kinematic/inverse_uncertainty.py`, documented in
+`research/kinematic/S2_INVERSE_UNCERTAINTY.md`. It includes uncertain ground
+coordinates and excluded clocks, shared input covariance and separate affine
+systematic/truncation responses. These are conditional synthetic diagnostics,
+not a total nonlinear 95% envelope. The S2a optimizer and its nominal residual
+test are unchanged; a sandwich covariance does not recalibrate that test for
+additional errors. All fit and excluded calibrations must pass before local
+transport. Preserve this study and prior source hashes. Real receiver and
+propagation qualification, full correlated fitting/testing and general
+truncation bounds remain open; no S3 acquisition or website work follows yet.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

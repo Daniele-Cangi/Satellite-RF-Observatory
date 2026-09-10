@@ -104,6 +104,10 @@ models. S2a validates receiver-time vacuum geometry, drift nuisance and
 correlated fitting; S2b connects RINEX reference files to clock fitting and
 unused Doppler. Next qualify receiver conventions and complete propagation
 and inverse model-error bounds before any real v2 confirmation.
+The [local inverse uncertainty study](research/kinematic/S2_INVERSE_UNCERTAINTY.md)
+now propagates shared errors, uncertain station coordinates and excluded clocks,
+and tests how constant jerk distorts the fit and future predictions. Its local
+Gaussian and affine bounds do not establish total nonlinear coverage.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 

@@ -51,6 +51,7 @@ python -m research.kinematic.diagnose PATH_TO_NEW_DIAGNOSIS.json
 python -m research.kinematic.synthetic PATH_TO_NEW_STUDY.json
 python -m research.kinematic.s2_validation PATH_TO_NEW_S2_STUDY.json
 python -m research.kinematic.s2b_validation PATH_TO_NEW_REFERENCE_STUDY.json
+python -m research.kinematic.uncertainty_study PATH_TO_NEW_UNCERTAINTY_STUDY.json
 ```
 
 Report writers refuse to overwrite an existing output. Compare numerical
@@ -76,6 +77,14 @@ S2a delivers the vacuum geometry and synthetic clock/correlation checks in
 items 1–3. Real headers and receiver conventions, reference-residual generation,
 propagation and a total inverse-error envelope are still required. The exact
 boundary and the remaining S2b tasks are updated in `S2B_REFERENCE_BRIDGE.md`.
+
+The subsequent local inverse-error module transports a full input covariance
+through the fixed S2a estimator to position, velocity and excluded predictions.
+It adds uncertain ground coordinates/holdout clocks and separate affine
+systematic modes including fit distortion under constant jerk. See
+[S2_INVERSE_UNCERTAINTY.md](S2_INVERSE_UNCERTAINTY.md) and
+[its synthetic report](results/S2_UNCERTAINTY_REPORT.md). This does not supply
+a total nonlinear envelope or recalibrate the old residual test for new errors.
 
 Do not edit the five frozen experiments, lower their floors, use the target
 orbit to initialize, or present the synthetic error reduction as measured RF
