@@ -154,3 +154,8 @@ approved on 2026-09-10.
 Its data are exported deterministically from closed receipts by
 `scripts/export_positioning_archive.py`. CI checks their provenance and builds
 the site. No position solver or target-orbit request runs in the web interface.
+## Synthetic interval inverse model
+
+The [interval study](research/kinematic/results/S2_INTERVAL_REPORT.md) now
+compares code-only and code/phase inverse estimates with full covariance.
+These local synthetic diagnostics do not establish real satellite accuracy.

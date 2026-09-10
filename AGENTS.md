@@ -148,6 +148,18 @@ an automatic input to old instantaneous-rate inverse models. Preserve all
 old sources/results; a dedicated interval inverse model and physical error
 qualification still precede any S3 target acquisition or website work.
 
+The dedicated interval inverse prototype is now in
+`research/kinematic/interval_fit.py`, documented in `S2_INTERVAL_INVERSE.md`
+in that package. It fits endpoint codes and interval-mean phase paths with
+one full covariance, compares identical synthetic codes with/without phase,
+and predicts an excluded interval. Reference calibrations in its study are
+invented compressed Gaussian inputs, not an integrated real target RINEX
+pipeline. Preserve its evidence and all earlier sources. Local uncertainty
+gains and four fixed paired noise trials do not establish real RF accuracy,
+global branch uniqueness or total coverage. Physical source/phase continuity,
+reference/target cross covariance and systematic error qualification remain
+open before S3; do not acquire target data or resume website development.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

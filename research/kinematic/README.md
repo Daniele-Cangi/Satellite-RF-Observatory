@@ -113,3 +113,13 @@ Do not edit the five frozen experiments, lower their floors, use the target
 orbit to initialize, or present the synthetic error reduction as measured RF
 improvement. Updates to research results must retain the previous report and
 identify what changed in the design or implementation.
+## Interval inverse prototype
+
+The separate [interval estimator](S2_INTERVAL_INVERSE.md) compares endpoint
+codes with/without interval-mean phase observations, retaining full covariance
+and an excluded-interval prediction. Its [report](results/S2_INTERVAL_REPORT.md)
+is synthetic and does not qualify real receivers or authorize S3.
+
+```text
+python -m research.kinematic.interval_study NEW_REPORT.json
+```
