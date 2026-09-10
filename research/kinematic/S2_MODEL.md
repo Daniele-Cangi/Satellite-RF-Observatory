@@ -187,3 +187,7 @@ Il report S2a corrente è `results/receiver_time_study_v2.json`. La revisione
 corregge la precedenza del rifiuto di calibrazione; non cambia il disegno.
 `receiver_time_study_v1.json` resta una diagnostica storica, con i sorgenti al
 commit `5f2a922`. Leggere l'audit in `results/S2_REPORT.md` prima di usarlo.
+
+Aggiornamento S2b: l'importazione delimitata e il collegamento dei riferimenti
+sono ora verificati con fixture sintetiche. Stato e requisiti ancora aperti
+sono aggiornati in [S2B_REFERENCE_BRIDGE.md](S2B_REFERENCE_BRIDGE.md).

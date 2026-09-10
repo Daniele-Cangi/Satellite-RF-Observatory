@@ -21,6 +21,11 @@ noise against an independent inertial generator. The
 [remaining S2 requirements](research/kinematic/S2_MODEL.md) precede any real
 campaign: RF qualification and the total model-error envelope are still open.
 
+The [S2b reference bridge](research/kinematic/results/S2B_REPORT.md) adds bounded
+RINEX import, reference-only clock calibration and an unused-Doppler check.
+All six synthetic cases and failure outcomes are retained. Real receiver
+qualification and the inverse model-error envelope remain prerequisites for S3.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |
@@ -95,9 +100,10 @@ Windows and Linux. Local test results and remote CI execution are distinct.
 Read-only diagnosis of G12 and G14 finds a weak approximately radial direction.
 The S1 synthetic study supports investigating the information added by range
 rate, while rejecting concentrated-network ambiguities and inappropriate motion
-models. S2a now validates receiver-time vacuum geometry, drift nuisance and
-correlated fitting. Next qualify the real RF adapter and calibration, and
-complete propagation and inverse model-error bounds before any v2 confirmation.
+models. S2a validates receiver-time vacuum geometry, drift nuisance and
+correlated fitting; S2b connects RINEX reference files to clock fitting and
+unused Doppler. Next qualify receiver conventions and complete propagation
+and inverse model-error bounds before any real v2 confirmation.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 

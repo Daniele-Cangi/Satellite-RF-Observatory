@@ -92,6 +92,15 @@ at a rejected reference calibration; no fit/holdout prediction is admissible.
 The first S2a report and commit `5f2a922` retain the diagnosed runner defect.
 Never cite that superseded noisy fit as an accepted performance result.
 
+S2b now delivers the bounded RINEX 3.04/3.05 GPS reference importer and
+broadcast-reference code-to-clock fit, with an unused-Doppler consistency check.
+See `research/kinematic/S2B_REFERENCE_BRIDGE.md` and `results/S2B_REPORT.md` in
+that package. The six-case study uses invented full-file fixtures only.
+`REFERENCE_MODEL_ACCEPTED` is not receiver/RF qualification; all results retain
+`real_rf_qualified=false`. Actual receiver conventions and the total inverse
+error budget remain open before S3. Never relax failed source/calibration gates
+or consume target/future measurements to obtain a passing calibration.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
