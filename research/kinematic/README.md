@@ -53,6 +53,7 @@ python -m research.kinematic.s2_validation PATH_TO_NEW_S2_STUDY.json
 python -m research.kinematic.s2b_validation PATH_TO_NEW_REFERENCE_STUDY.json
 python -m research.kinematic.uncertainty_study PATH_TO_NEW_UNCERTAINTY_STUDY.json
 python -m research.kinematic.joint_study PATH_TO_NEW_JOINT_STUDY.json
+python -m research.kinematic.physical_source_study PATH_TO_NEW_PHYSICAL_STUDY.json
 ```
 
 Report writers refuse to overwrite an existing output. Compare numerical
@@ -93,6 +94,12 @@ Its residual test and local uncertainty use the same weights. The
 [paired synthetic report](results/S2_JOINT_REPORT.md) retains all sixteen
 noise pairs and both mismatch stresses. Real covariance qualification,
 nonlinear/selection calibration and total error bounds remain open.
+
+The [physical-source audit](S2_PHYSICAL_SOURCES.md) finds only four Doppler
+declarations in the archived G14 pool, with none for GOLD. The separate
+reference phase-increment adapter explores interval-mean rates and their
+correlations; it does not substitute them into the instantaneous-rate fit.
+See the [audit and synthetic report](results/S2_PHYSICAL_REPORT.md).
 
 Do not edit the five frozen experiments, lower their floors, use the target
 orbit to initialize, or present the synthetic error reduction as measured RF

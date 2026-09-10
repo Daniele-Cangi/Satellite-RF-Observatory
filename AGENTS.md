@@ -126,6 +126,17 @@ without reading excluded target values. Physical covariance qualification,
 nonlinear/selection calibration and total systematic/truncation coverage
 remain open before S3; no website development or acquisition is implied.
 
+The physical-source audit in `research/kinematic/S2_PHYSICAL_SOURCES.md`
+finds only four required-Doppler declarations among the eleven archived G14
+station entries (ten headers available); GOLD lacks the required Doppler.
+Do not assume that network can feed the kinematic Doppler estimator. A separate
+reference-only phase-increment adapter now models interval-mean phase rates,
+shared-endpoint covariance and declared neutral-delay sensitivity. It is NOT
+an automatic Doppler replacement, full RINEX phase importer or inverse fit.
+Unflagged slips remain undetected by the adapter; no receiver is qualified.
+Keep old experiments/sources intact and qualify the reference-side phase
+observable and continuity before integrating a new inverse measurement model.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

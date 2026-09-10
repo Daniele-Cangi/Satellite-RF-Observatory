@@ -112,6 +112,10 @@ The subsequent [joint fit](research/kinematic/S2_JOINT_FIT.md) uses one fixed
 covariance across RF, reference clocks and terrestrial coordinates for both
 optimization and the local residual test. Its paired synthetic study measures
 test calibration effects; it does not establish real-data accuracy or coverage.
+The [physical-source audit](research/kinematic/S2_PHYSICAL_SOURCES.md) identifies
+missing Doppler declarations in the historical network and adds a separate
+reference-only phase-increment diagnostic. Mean phase rates require their own
+time model, continuity checks and covariance before inverse integration.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 
