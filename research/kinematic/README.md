@@ -143,3 +143,12 @@ an accepted but biased curvature case; the reference-phase gate remains separate
 ```text
 python -m research.kinematic.shared_calibration_study NEW_REPORT.json
 ```
+## Reference phase gate before shared target fitting
+
+The [shared phase gate](S2_SHARED_PHASE_GATE.md) tests unused reference phase
+increments before target loading. Its [eight-case report](results/S2_SHARED_PHASE_REPORT.md)
+retains the smaller curvature that still passes despite a biased position.
+
+```text
+python -m research.kinematic.shared_phase_study NEW_REPORT.json
+```

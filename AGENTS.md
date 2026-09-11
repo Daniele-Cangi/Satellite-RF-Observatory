@@ -179,6 +179,16 @@ qualified RINEX target chain. Integrate and test that gate before advancing
 physical qualification. Keep historical sources/results immutable; S3 and website
 remain paused, and no new real target acquisition is implied.
 
+`shared_phase_gate.py` now checks unused reference-phase increments before
+loading target observations for the shared fit. See
+`research/kinematic/S2_SHARED_PHASE_GATE.md`. The synthetic 0.5 m reference
+phase slip and 1 m curvature stop before target loading; 0.1 m curvature still
+passes and biases position by about 100 m. Preserve this failed sensitivity
+boundary; do not tune thresholds on the revealed case. This is a synthetic
+geometry-subtracted residual chain, not real RINEX qualification. A separate
+design for persistent shared/differential errors, selection effects and
+excluded prediction remains necessary before S3; website stays paused.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
