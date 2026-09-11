@@ -160,6 +160,16 @@ global branch uniqueness or total coverage. Physical source/phase continuity,
 reference/target cross covariance and systematic error qualification remain
 open before S3; do not acquire target data or resume website development.
 
+The subsequent `interval_systematics.py` and `systematics_study.py` quantify
+six fixed phenomenological bias templates with signed refits and local
+noncentral residual diagnostics. See `research/kinematic/S2_INTERVAL_SYSTEMATICS.md`.
+Small temporal path errors can bias position while leaving residual tests
+accepted. Their declared amplitudes are sensitivity examples, not measured
+receiver/atmosphere limits. The affine bias box is separate from Gaussian
+uncertainty and is not a total nonlinear 95% envelope. Preserve these sources
+and reports. Qualify common reference/target calibration and physically
+justified residual amplitudes before S3; website and target acquisition stay paused.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

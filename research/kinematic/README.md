@@ -123,3 +123,13 @@ is synthetic and does not qualify real receivers or authorize S3.
 ```text
 python -m research.kinematic.interval_study NEW_REPORT.json
 ```
+## Interval systematic sensitivity
+
+The [systematic sensitivity study](S2_INTERVAL_SYSTEMATICS.md) distinguishes
+deterministic state bias from residual detection power for six fixed temporal
+templates. Its [report](results/S2_SYSTEMATICS_REPORT.md) retains both signs;
+the amplitudes are synthetic assumptions, not qualified physical limits.
+
+```text
+python -m research.kinematic.systematics_study NEW_REPORT.json
+```
