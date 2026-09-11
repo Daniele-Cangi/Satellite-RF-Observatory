@@ -1,0 +1,78 @@
+{
+  "schema": "s2-phase-transform-header-audit-v3",
+  "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026243",
+  "date_gpst": "2026-08-31",
+  "day_of_year": 243,
+  "reserved_target": "G14",
+  "scope": "Final bounded header-only prequalification of the fixed eight-root reference capability set after two execution-invalid attempts. No observation record, navigation product, target value, residual, inverse fit, orbit or S3 claim.",
+  "source": {
+    "base_url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/",
+    "filename": "{station}_R_20262430000_01D_30S_MO.crx.gz",
+    "maximum_compressed_bytes_per_station": 50000000,
+    "maximum_header_lines": 2000,
+    "minimum_archive_age_after_last_epoch_s": 172800,
+    "required_rinex_versions": ["3.04", "3.05"],
+    "required_time_system": "GPS",
+    "required_interval_s": 30.0,
+    "required_first_epoch": [2026, 8, 31, 0, 0, 0.0],
+    "required_last_epoch": [2026, 8, 31, 23, 59, 30.0],
+    "required_gps_observables": ["C1C", "C2W", "L1C", "L2W"]
+  },
+  "stations": [
+    "ALGO00CAN",
+    "BOGT00COL",
+    "DRAO00CAN",
+    "MKEA00USA",
+    "PIE100USA",
+    "STJO00CAN",
+    "YELL00CAN",
+    "GOLD00USA"
+  ],
+  "phase_transform_policy": {
+    "stored_phase_unit": "carrier_cycles",
+    "rinex3_scale_factor": "Divide stored observations by the declared SYS / SCALE FACTOR before use; missing means one.",
+    "rinex3_phase_shift": "Retain each declared additive cycle shift and satellite scope; a system-only blank declaration is unknown.",
+    "legacy_wavelength_factor": "Retain the L1/L2 ambiguity-wavelength divisor and satellite overrides. It does not rescale stored carrier cycles. Factor zero on a required band is fatal.",
+    "lli": "Every nonblank, nonzero LLI on either required phase field breaks a future contiguous segment; no opposite-factor or half-cycle state is admitted.",
+    "applied_external_corrections": "Nonblank GPS SYS / DCBS APPLIED or SYS / PCVS APPLIED remains unqualified without its independently frozen correction product.",
+    "receiver_clock": "RCV CLOCK OFFS APPL must be zero or absent."
+  },
+  "execution": {
+    "one_attempt_per_station": true,
+    "continue_through_all_predeclared_stations": true,
+    "no_retry": true,
+    "no_station_or_date_substitution": true,
+    "compressed_artifact_materialized_and_hashed_before_header_parse": true,
+    "gzip_stream_stops_after_end_of_header": true,
+    "hatanaka_body_decoder_forbidden": true
+  },
+  "outcomes": [
+    "PHASE_TRANSFORM_HEADERS_QUALIFIED",
+    "PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED",
+    "HEADER_AUDIT_EXECUTION_INVALID"
+  ],
+  "persistence": {
+    "compressed_payload": false,
+    "decompressed_payload": false,
+    "header_text": false,
+    "observation_values": false,
+    "header_receipts_and_transform_ledger_only": true,
+    "raw_payload_bytes": 0
+  },
+  "references": {
+    "rinex_2_11": "https://files.igs.org/pub/data/format/rinex211.txt",
+    "rinex_3_05": "https://files.igs.org/pub/data/format/rinex305.pdf",
+    "bkg_public_archive": "https://igs.bkg.bund.de/root_ftp/IGS/"
+  },
+  "terminal_execution_policy": "This is the final header-only attempt in this bounded task. Stop after its one outcome; do not search another date or station set.",
+  "supersedes_execution_only": [
+    {
+      "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026251",
+      "reason": "Incorrect CRINEX label in the parser; no RINEX header entered."
+    },
+    {
+      "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026254",
+      "reason": "The plan attempted a full-day product before the required day had ended."
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "s2-phase-transform-header-audit-execution-audit-v1",
+  "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026254",
+  "authoritative_status": "HEADER_AUDIT_EXECUTION_INVALID",
+  "generated_result_path": "research/kinematic/results/phase_transform_header_audit_2026254_v1.json",
+  "generated_result_sha256": "fe0df13ca828283e210407b13346d2d3c9d43de826da4eb1010783b0d3f9c1b5",
+  "frozen_source_commit": "1462385f72c2096a943da6a8c8ed3eb38bf5aec8",
+  "defect": {
+    "classification": "PLAN_VALIDITY_ERROR",
+    "required_last_epoch_gpst": "2026-09-11T23:59:30 GPST",
+    "access_utc": "2026-09-11T23:19:49.211845+00:00",
+    "effect": "The requested full-day products could not yet be complete. Eight HTTP 404 responses cannot reject the receiver roots or their phase transforms.",
+    "physical_rejection_authorized": false
+  },
+  "access": {
+    "http_404_responses": 8,
+    "artifacts_materialized": 0,
+    "rinex_headers_entered": 0,
+    "observation_values_accessed": 0,
+    "navigation_accessed": false,
+    "payload_bytes_persisted": 0,
+    "doy254_reuse_forbidden": true
+  },
+  "repair": {
+    "scope": "Require a conservative 48-hour interval after the frozen last epoch before any network access and retain unavailable-product receipts separately from capability rejection.",
+    "scientific_parameters_changed": false,
+    "distinct_evidence_required": true
+  }
+}

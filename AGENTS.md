@@ -231,6 +231,24 @@ No observation value, navigation product, target fit or phase residual was
 used, and all payloads were ephemeral. A future distinct attempt requires
 header-only prequalification of every phase-scale transform before values.
 
+That bounded header-only prequalification is now closed. DOY251 is
+`HEADER_AUDIT_EXECUTION_INVALID` because the frozen parser misspelled the exact
+CRINEX preamble label; all eight artifact hashes were retained, but no RINEX
+header or observation row was entered. DOY254 is also execution-invalid because
+the full-day product was requested before its declared final epoch; its HTTP 404
+responses do not reject the roots. Both dates are forbidden for retry.
+
+The final, mature DOY243 attempt retained eight complete source receipts and
+stopped `PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED`. ALGO, BOGT, MKEA, PIE1 and GOLD
+provided explicit ledgers: unit RINEX scale factors, zero required phase shifts,
+no legacy wavelength record and no applied GPS DCB/PCV product. DRAO, STJO and
+YELL failed the frozen composite RINEX format check before a transform ledger.
+The receipt did not retain which of version/file-type/system caused that check,
+so do not infer a specific alternate version or transform. No observation body,
+navigation, target value, residual or fit was accessed; all payloads remained
+ephemeral. Do not search another date to make this fixed eight-root set pass.
+S3 remains unauthorized.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

@@ -1,0 +1,147 @@
+{
+  "schema": "s2-phase-transform-header-audit-result-v1",
+  "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026251",
+  "status": "PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED",
+  "scope": "Header-only prequalification of the fixed eight-root reference capability set. No observation record, navigation product, target value, residual, inverse fit, orbit or S3 claim.",
+  "freeze": {
+    "freeze_utc": "2026-09-11T23:14:22.349388+00:00",
+    "source_commit": "21dc215bcd380c92a3d19692171fd0605af46352",
+    "plan_sha256": "fbee5a1e576b4dfa519741b8846ad3b2240994ecd47a762cc4c4ff34b131f140",
+    "implementation_sha256": "44b8c46ddc73d663fe55950896e9b8d4de6885a13483c45d7727ace0254346d7",
+    "observation_record_access": false
+  },
+  "source_receipts": [
+    {
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/ALGO00CAN_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 4178312,
+      "sha256": "8921793e8dd2cbb7bd7aaf0f532a42df682a5f0ce985ab6b91b63d67c20ccf2c",
+      "access_utc": "2026-09-11T23:14:29.603855+00:00"
+    },
+    {
+      "station": "BOGT00COL",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/BOGT00COL_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3194776,
+      "sha256": "4f6ac6761b03f9ca4b2e6c2465566260d15c335058f61340a0725af428dc3fc8",
+      "access_utc": "2026-09-11T23:14:34.881187+00:00"
+    },
+    {
+      "station": "DRAO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/DRAO00CAN_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2773434,
+      "sha256": "c3f1ea6b6aa2e348274937b20237501f061a2786937865a96c37d8a6f11e5e10",
+      "access_utc": "2026-09-11T23:14:39.636687+00:00"
+    },
+    {
+      "station": "MKEA00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/MKEA00USA_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3642906,
+      "sha256": "807275a427f94ea63bb614f154a5896d9521f7513e7933fae9d3c30ac8fc7c61",
+      "access_utc": "2026-09-11T23:14:45.724979+00:00"
+    },
+    {
+      "station": "PIE100USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/PIE100USA_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3226810,
+      "sha256": "c872edd01ab6e3e997ae8058ed84ed042546d7db653bf9c71925f47ddeed102e",
+      "access_utc": "2026-09-11T23:14:51.053411+00:00"
+    },
+    {
+      "station": "STJO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/STJO00CAN_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2783628,
+      "sha256": "30b03b795f9b243c7ef8dc88671dab3dc70daa9cb2a1ae3a5e7258e6c4f90bfc",
+      "access_utc": "2026-09-11T23:14:55.540539+00:00"
+    },
+    {
+      "station": "YELL00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/YELL00CAN_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3207079,
+      "sha256": "72d0ea4fa375647d6f40f3cfd1a1ffb33b322b49f3d551875a2665628798fde7",
+      "access_utc": "2026-09-11T23:15:00.837338+00:00"
+    },
+    {
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/251/GOLD00USA_R_20262510000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2170379,
+      "sha256": "87397758946530f255ab0343437d5c29440ab76cae6584dd4cc794a729a8ad3c",
+      "access_utc": "2026-09-11T23:15:04.334316+00:00"
+    }
+  ],
+  "station_results": {},
+  "failures": [
+    {
+      "station": "ALGO00CAN",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    },
+    {
+      "station": "BOGT00COL",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    },
+    {
+      "station": "DRAO00CAN",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    },
+    {
+      "station": "MKEA00USA",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    },
+    {
+      "station": "PIE100USA",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    },
+    {
+      "station": "STJO00CAN",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    },
+    {
+      "station": "YELL00CAN",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    },
+    {
+      "station": "GOLD00USA",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_CRINEX_PREAMBLE"
+    }
+  ],
+  "physical_interpretation": {
+    "observation_measurements_qualified": false,
+    "phase_error_envelope_qualified": false,
+    "inverse_experiment_authorized": false,
+    "next_possible_step_if_admitted": "A separately frozen, distinct-date reference-only value qualification using exactly these transform semantics."
+  },
+  "persistence": {
+    "compressed_payload": false,
+    "decompressed_payload": false,
+    "header_text": false,
+    "observation_values": false,
+    "header_receipts_and_transform_ledger_only": true,
+    "raw_payload_bytes": 0
+  },
+  "environment": {
+    "python": "3.13.5"
+  }
+}

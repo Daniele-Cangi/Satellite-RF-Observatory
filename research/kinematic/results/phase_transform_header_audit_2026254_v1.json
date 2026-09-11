@@ -1,0 +1,82 @@
+{
+  "schema": "s2-phase-transform-header-audit-result-v1",
+  "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026254",
+  "status": "PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED",
+  "scope": "Header-only prequalification of the fixed eight-root reference capability set on evidence distinct from invalid DOY251. No observation record, navigation product, target value, residual, inverse fit, orbit or S3 claim.",
+  "freeze": {
+    "freeze_utc": "2026-09-11T23:19:49.211845+00:00",
+    "source_commit": "1462385f72c2096a943da6a8c8ed3eb38bf5aec8",
+    "plan_sha256": "647cae5822d08d8af032c5fb6ebe3d002634008daebb439eff5fee86c23c2333",
+    "implementation_sha256": "7218b62a0af1ef84e2f07c46d916eef4a0527ce6dbab6436a17e9ade6eceeec6",
+    "observation_record_access": false
+  },
+  "source_receipts": [],
+  "station_results": {},
+  "failures": [
+    {
+      "station": "ALGO00CAN",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    },
+    {
+      "station": "BOGT00COL",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    },
+    {
+      "station": "DRAO00CAN",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    },
+    {
+      "station": "MKEA00USA",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    },
+    {
+      "station": "PIE100USA",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    },
+    {
+      "station": "STJO00CAN",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    },
+    {
+      "station": "YELL00CAN",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    },
+    {
+      "station": "GOLD00USA",
+      "stage": "SOURCE_MATERIALIZATION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "SOURCE_HTTP_404"
+    }
+  ],
+  "physical_interpretation": {
+    "observation_measurements_qualified": false,
+    "phase_error_envelope_qualified": false,
+    "inverse_experiment_authorized": false,
+    "next_possible_step_if_admitted": "A separately frozen, distinct-date reference-only value qualification using exactly these transform semantics."
+  },
+  "persistence": {
+    "compressed_payload": false,
+    "decompressed_payload": false,
+    "header_text": false,
+    "observation_values": false,
+    "header_receipts_and_transform_ledger_only": true,
+    "raw_payload_bytes": 0
+  },
+  "environment": {
+    "python": "3.13.5"
+  }
+}

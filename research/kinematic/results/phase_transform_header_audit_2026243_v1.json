@@ -1,0 +1,729 @@
+{
+  "schema": "s2-phase-transform-header-audit-result-v1",
+  "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026243",
+  "status": "PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED",
+  "scope": "Final bounded header-only prequalification of the fixed eight-root reference capability set after two execution-invalid attempts. No observation record, navigation product, target value, residual, inverse fit, orbit or S3 claim.",
+  "freeze": {
+    "freeze_utc": "2026-09-11T23:23:38.825854+00:00",
+    "source_commit": "8551d7172f27cb6f75f8af189c30fa70e1be407e",
+    "plan_sha256": "68f3eb440bc3eee95b0ce09ca35caebf51b7577e0e62efc68e930b4f668c3758",
+    "implementation_sha256": "d8c54a8abd72039630b4ee6bbeb3f8ebcb0b98b9c1c23305ff38710e9ef7001d",
+    "observation_record_access": false
+  },
+  "source_receipts": [
+    {
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/ALGO00CAN_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 4298792,
+      "sha256": "10fc216bec6333e0e1fc2a3980a7c7a3710b9d9d34b9bc0522d2b58ffab9fe1a",
+      "access_utc": "2026-09-11T23:23:45.914457+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 358,
+      "decompressed_header_bytes": 27120,
+      "decompressed_header_sha256": "3baa987f90be89ff469059a2cdf48876b53b1500a5438e8865b4fcb6080fd9a0",
+      "observation_body_lines_exposed": 0
+    },
+    {
+      "station": "BOGT00COL",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/BOGT00COL_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3229535,
+      "sha256": "9c77f1deccfbf517908979b494d90848af2fcf691d10901a0282b0c5fb2a8317",
+      "access_utc": "2026-09-11T23:23:50.533499+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 363,
+      "decompressed_header_bytes": 27645,
+      "decompressed_header_sha256": "0d978902f1c112394482c3022f1ecc229adb3af29bc47d74eebcbfd15c98b6df",
+      "observation_body_lines_exposed": 0
+    },
+    {
+      "station": "DRAO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/DRAO00CAN_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2883010,
+      "sha256": "23fa320186c3af04789b355de62c813f574b759e454e8163a4424952fcb2eb41",
+      "access_utc": "2026-09-11T23:23:54.593802+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 276,
+      "decompressed_header_bytes": 20981,
+      "decompressed_header_sha256": "cb0ca3d614b4c3a71c1ce7cb182540fea0858bd78c19213e62d3715e3d8732d5",
+      "observation_body_lines_exposed": 0
+    },
+    {
+      "station": "MKEA00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/MKEA00USA_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3695031,
+      "sha256": "4161572a06c9920afb0bae424649e4bdc93a4d849d0e7de5c259bb60933834c7",
+      "access_utc": "2026-09-11T23:23:59.761130+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 61,
+      "decompressed_header_bytes": 4868,
+      "decompressed_header_sha256": "5becb72d2e89f87ccad1b4562a707a5a4ce926dbc2a4cbe9aeeb015c5b8cc715",
+      "observation_body_lines_exposed": 0
+    },
+    {
+      "station": "PIE100USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/PIE100USA_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3301898,
+      "sha256": "1af8f9a8282e2154a42247f5acd6c50591f3824397adbc933baa3f9438c26cbe",
+      "access_utc": "2026-09-11T23:24:04.486548+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 53,
+      "decompressed_header_bytes": 4240,
+      "decompressed_header_sha256": "3e6501e2447a66b1a12266fc4b7e62b7d1793e761840350cb54c9451de3b7ea5",
+      "observation_body_lines_exposed": 0
+    },
+    {
+      "station": "STJO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/STJO00CAN_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2862149,
+      "sha256": "3a19e2a79cfd363965a25b6a71dac39cf80def42eaf87cf4ea91424ebe333c49",
+      "access_utc": "2026-09-11T23:24:08.619827+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 276,
+      "decompressed_header_bytes": 20981,
+      "decompressed_header_sha256": "5e9de1b819b790fe49eb41f4d6a386aec600df2c9ef1afc07b25918da8e9eb76",
+      "observation_body_lines_exposed": 0
+    },
+    {
+      "station": "YELL00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/YELL00CAN_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3290517,
+      "sha256": "c1acde54462f65a5b793c8e231291d434d0366c3ccdbdda7dbbab4243aa1ac13",
+      "access_utc": "2026-09-11T23:24:13.353921+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 276,
+      "decompressed_header_bytes": 20981,
+      "decompressed_header_sha256": "c399afb8e2a023109a46e93c2a231aefd48695b23c0eb5f24c5fb4113a470aaf",
+      "observation_body_lines_exposed": 0
+    },
+    {
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/243/GOLD00USA_R_20262430000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2216448,
+      "sha256": "273232118a75668e5dcf8a45dfd2aa0a95baef610d4cdd74b4d48e345ff01ebf",
+      "access_utc": "2026-09-11T23:24:17.970863+00:00",
+      "crinex_preamble": [
+        "CRINEX VERS   / TYPE",
+        "CRINEX PROG / DATE"
+      ],
+      "header_line_count": 213,
+      "decompressed_header_bytes": 16294,
+      "decompressed_header_sha256": "91a08438e9275e5e508299642f6696eba481d48e66534107b820165519d0d122",
+      "observation_body_lines_exposed": 0
+    }
+  ],
+  "station_results": {
+    "ALGO00CAN": {
+      "station": "ALGO00CAN",
+      "status": "HEADER_PHASE_TRANSFORMS_QUALIFIED",
+      "rinex_version": "3.05",
+      "marker_name": "ALGO",
+      "marker_type": "Geodetic",
+      "receiver_identity": [
+        "3015995",
+        "SEPT POLARX5",
+        "5.3.2"
+      ],
+      "interval_s": 30.0,
+      "first_observation_gpst": [
+        2026,
+        8,
+        31,
+        0,
+        0,
+        0.0
+      ],
+      "last_observation_gpst": [
+        2026,
+        8,
+        31,
+        23,
+        59,
+        30.0
+      ],
+      "gps_observation_types": [
+        "C1C",
+        "C1L",
+        "C1W",
+        "C2L",
+        "C2W",
+        "C5Q",
+        "D1C",
+        "D1L",
+        "D2L",
+        "D2W",
+        "D5Q",
+        "L1C",
+        "L1L",
+        "L2L",
+        "L2W",
+        "L5Q",
+        "S1C",
+        "S1L",
+        "S1W",
+        "S2L",
+        "S2W",
+        "S5Q"
+      ],
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      }
+    },
+    "BOGT00COL": {
+      "station": "BOGT00COL",
+      "status": "HEADER_PHASE_TRANSFORMS_QUALIFIED",
+      "rinex_version": "3.04",
+      "marker_name": "BOGT",
+      "marker_type": null,
+      "receiver_identity": [
+        "01972",
+        "JAVAD TRE_3 DELTA",
+        "4.6.00"
+      ],
+      "interval_s": 30.0,
+      "first_observation_gpst": [
+        2026,
+        8,
+        31,
+        0,
+        0,
+        0.0
+      ],
+      "last_observation_gpst": [
+        2026,
+        8,
+        31,
+        23,
+        59,
+        30.0
+      ],
+      "gps_observation_types": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "L1W",
+        "S1W",
+        "C2X",
+        "L2X",
+        "S2X",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C5X",
+        "L5X",
+        "S5X",
+        "C1X",
+        "L1X",
+        "S1X"
+      ],
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G13": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G13": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      }
+    },
+    "MKEA00USA": {
+      "station": "MKEA00USA",
+      "status": "HEADER_PHASE_TRANSFORMS_QUALIFIED",
+      "rinex_version": "3.04",
+      "marker_name": "MKEA",
+      "marker_type": null,
+      "receiver_identity": [
+        "3013571",
+        "SEPT POLARX5",
+        "5.7.0"
+      ],
+      "interval_s": 30.0,
+      "first_observation_gpst": [
+        2026,
+        8,
+        31,
+        0,
+        0,
+        0.0
+      ],
+      "last_observation_gpst": [
+        2026,
+        8,
+        31,
+        23,
+        59,
+        30.0
+      ],
+      "gps_observation_types": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "S1W",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C2L",
+        "L2L",
+        "S2L",
+        "C5Q",
+        "L5Q",
+        "S5Q",
+        "C1L",
+        "L1L",
+        "S1L"
+      ],
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      }
+    },
+    "PIE100USA": {
+      "station": "PIE100USA",
+      "status": "HEADER_PHASE_TRANSFORMS_QUALIFIED",
+      "rinex_version": "3.04",
+      "marker_name": "PIE1",
+      "marker_type": null,
+      "receiver_identity": [
+        "4100427",
+        "SEPT POLARX5TR",
+        "5.7.0"
+      ],
+      "interval_s": 30.0,
+      "first_observation_gpst": [
+        2026,
+        8,
+        31,
+        0,
+        0,
+        0.0
+      ],
+      "last_observation_gpst": [
+        2026,
+        8,
+        31,
+        23,
+        59,
+        30.0
+      ],
+      "gps_observation_types": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "S1W",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C2L",
+        "L2L",
+        "S2L",
+        "C5Q",
+        "L5Q",
+        "S5Q",
+        "C1L",
+        "L1L",
+        "S1L"
+      ],
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      }
+    },
+    "GOLD00USA": {
+      "station": "GOLD00USA",
+      "status": "HEADER_PHASE_TRANSFORMS_QUALIFIED",
+      "rinex_version": "3.04",
+      "marker_name": "GOLD",
+      "marker_type": null,
+      "receiver_identity": [
+        "01538",
+        "JAVAD TRE_G3TH DELTA",
+        "4.2.03"
+      ],
+      "interval_s": 30.0,
+      "first_observation_gpst": [
+        2026,
+        8,
+        31,
+        0,
+        0,
+        0.0
+      ],
+      "last_observation_gpst": [
+        2026,
+        8,
+        31,
+        23,
+        59,
+        30.0
+      ],
+      "gps_observation_types": [
+        "C1C",
+        "L1C",
+        "S1C",
+        "C1W",
+        "L1W",
+        "S1W",
+        "C2X",
+        "L2X",
+        "S2X",
+        "C2W",
+        "L2W",
+        "S2W",
+        "C5X",
+        "L5X",
+        "S5X",
+        "C1X",
+        "L1X",
+        "S1X"
+      ],
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      }
+    }
+  },
+  "failures": [
+    {
+      "station": "DRAO00CAN",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_OBSERVATION_FORMAT"
+    },
+    {
+      "station": "STJO00CAN",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_OBSERVATION_FORMAT"
+    },
+    {
+      "station": "YELL00CAN",
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_OBSERVATION_FORMAT"
+    }
+  ],
+  "physical_interpretation": {
+    "observation_measurements_qualified": false,
+    "phase_error_envelope_qualified": false,
+    "inverse_experiment_authorized": false,
+    "next_possible_step_if_admitted": "A separately frozen, distinct-date reference-only value qualification using exactly these transform semantics."
+  },
+  "persistence": {
+    "compressed_payload": false,
+    "decompressed_payload": false,
+    "header_text": false,
+    "observation_values": false,
+    "header_receipts_and_transform_ledger_only": true,
+    "raw_payload_bytes": 0
+  },
+  "environment": {
+    "python": "3.13.5"
+  }
+}

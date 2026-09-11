@@ -1,0 +1,29 @@
+{
+  "schema": "s2-phase-transform-header-audit-execution-audit-v1",
+  "audit_id": "S2_PHASE_TRANSFORM_HEADERS_2026251",
+  "authoritative_status": "HEADER_AUDIT_EXECUTION_INVALID",
+  "generated_result_path": "research/kinematic/results/phase_transform_header_audit_2026251_v1.json",
+  "generated_result_sha256": "03acbc69ac74ee6576a0b91fbed72085f6532be848fc32e8c1e91077678904b3",
+  "frozen_source_commit": "21dc215bcd380c92a3d19692171fd0605af46352",
+  "defect": {
+    "classification": "DESCRIPTION_ERROR",
+    "component": "CRINEX preamble whitelist",
+    "implemented_label": "CRINEX VERS / TYPE",
+    "specified_label": "CRINEX VERS   / TYPE",
+    "effect": "All eight valid CRINEX preambles were rejected before any RINEX header was entered.",
+    "physical_rejection_authorized": false
+  },
+  "access": {
+    "source_receipts_retained": 8,
+    "observation_body_lines_exposed": 0,
+    "observation_values_accessed": 0,
+    "navigation_accessed": false,
+    "payload_bytes_persisted": 0,
+    "doy251_reuse_forbidden": true
+  },
+  "repair": {
+    "scope": "Accept only the exact standard CRINEX label and correct the synthetic fixture.",
+    "scientific_parameters_changed": false,
+    "distinct_evidence_required": true
+  }
+}
