@@ -3,6 +3,7 @@ from copy import deepcopy
 import gzip
 import hashlib
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
@@ -10,6 +11,7 @@ import pytest
 from research.kinematic.phase_transform_header_audit import (
     HeaderRejected,
     _strict_json,
+    admit_archive_age,
     audit_header,
     extract_crinex_header,
     validate_plan,
@@ -19,6 +21,7 @@ from research.kinematic.phase_transform_header_audit import (
 ROOT = Path(__file__).resolve().parents[3]
 PLAN = json.loads((ROOT / "research/kinematic/phase_transform_header_audit_plan.json").read_text())
 PLAN_V2 = json.loads((ROOT / "research/kinematic/phase_transform_header_audit_plan_v2.json").read_text())
+PLAN_V3 = json.loads((ROOT / "research/kinematic/phase_transform_header_audit_plan_v3.json").read_text())
 
 
 def _h(value: str, label: str) -> str:
@@ -94,9 +97,11 @@ def _crx(lines: list[str]) -> bytes:
 def test_frozen_plan_is_header_only_and_exact():
     validate_plan(PLAN)
     validate_plan(PLAN_V2)
+    validate_plan(PLAN_V3)
     assert len(PLAN["stations"]) == 8
     assert PLAN_V2["stations"] == PLAN["stations"]
     assert PLAN_V2["reserved_target"] == PLAN["reserved_target"]
+    assert PLAN_V3["stations"] == PLAN["stations"]
     assert PLAN["execution"]["hatanaka_body_decoder_forbidden"]
     assert PLAN["persistence"]["observation_values"] is False
 
@@ -196,3 +201,21 @@ def test_doy251_execution_error_cannot_become_a_capability_rejection():
     assert audit["defect"]["physical_rejection_authorized"] is False
     assert audit["access"]["observation_values_accessed"] == 0
     assert audit["access"]["doy251_reuse_forbidden"] is True
+
+
+def test_full_day_archive_age_is_admitted_before_network_access():
+    with pytest.raises(ValueError, match="FROZEN_FULL_DAY_PRODUCT_NOT_MATURE"):
+        admit_archive_age(PLAN_V3, now_utc=datetime(2026, 9, 1, tzinfo=timezone.utc))
+    admit_archive_age(PLAN_V3, now_utc=datetime(2026, 9, 3, 23, 59, 31, tzinfo=timezone.utc))
+
+
+def test_doy254_early_access_cannot_reject_the_roots():
+    raw_path = ROOT / "research/kinematic/results/phase_transform_header_audit_2026254_v1.json"
+    audit_path = ROOT / "research/kinematic/results/phase_transform_header_audit_2026254_execution_audit_v1.json"
+    raw = json.loads(raw_path.read_text())
+    audit = json.loads(audit_path.read_text())
+    assert hashlib.sha256(raw_path.read_bytes()).hexdigest() == audit["generated_result_sha256"]
+    assert raw["source_receipts"] == []
+    assert audit["authoritative_status"] == "HEADER_AUDIT_EXECUTION_INVALID"
+    assert audit["defect"]["physical_rejection_authorized"] is False
+    assert audit["access"]["artifacts_materialized"] == 0

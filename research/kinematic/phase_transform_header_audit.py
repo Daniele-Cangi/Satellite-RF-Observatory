@@ -7,7 +7,7 @@ absent, and neither observation records nor their values are represented.
 from __future__ import annotations
 
 import argparse
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 import gzip
 import hashlib
 import io
@@ -65,7 +65,8 @@ def _strict_json(value) -> str:
 def validate_plan(plan: dict) -> None:
     if plan.get("schema") not in {
             "s2-phase-transform-header-audit-v1",
-            "s2-phase-transform-header-audit-v2"}:
+            "s2-phase-transform-header-audit-v2",
+            "s2-phase-transform-header-audit-v3"}:
         raise ValueError("unsupported audit plan")
     if plan.get("reserved_target") != "G14":
         raise ValueError("reserved target differs")
@@ -76,6 +77,9 @@ def validate_plan(plan: dict) -> None:
             or source["required_interval_s"] != 30.0
             or source["required_time_system"] != "GPS"):
         raise ValueError("required coordinate differs")
+    if ("minimum_archive_age_after_last_epoch_s" in source
+            and source["minimum_archive_age_after_last_epoch_s"] < 86400):
+        raise ValueError("full-day archive maturity bound is too short")
     stations = plan.get("stations", [])
     if len(stations) != 8 or len(set(stations)) != 8:
         raise ValueError("exact fixed eight-root set required")
@@ -88,6 +92,20 @@ def validate_plan(plan: dict) -> None:
         raise ValueError("bounded header-only execution required")
     if set(plan.get("outcomes", [])) != TERMINALS:
         raise ValueError("terminal set differs")
+
+
+def admit_archive_age(plan: dict, *, now_utc: datetime | None = None) -> None:
+    """Refuse access until the frozen full-day product has had time to exist."""
+    minimum_age = plan["source"].get("minimum_archive_age_after_last_epoch_s")
+    if minimum_age is None:
+        return  # Historical v1/v2 plans predate this execution repair.
+    fields = plan["source"]["required_last_epoch"]
+    whole = int(fields[5])
+    fractional = fields[5] - whole
+    last = datetime(*fields[:5], whole, tzinfo=timezone.utc) + timedelta(seconds=fractional)
+    now = now_utc or datetime.now(timezone.utc)
+    if now < last + timedelta(seconds=minimum_age):
+        raise ValueError("FROZEN_FULL_DAY_PRODUCT_NOT_MATURE")
 
 
 def _download(url: str, maximum_bytes: int) -> tuple[bytes, dict]:
@@ -438,6 +456,7 @@ def _git_freeze(root: Path, plan_path: Path, source_path: Path) -> dict:
 def run(plan_path: Path) -> dict:
     plan = json.loads(plan_path.read_bytes())
     validate_plan(plan)
+    admit_archive_age(plan)
     source_path = Path(__file__)
     root = source_path.resolve().parents[2]
     freeze = _git_freeze(root, plan_path, source_path)
@@ -449,8 +468,10 @@ def run(plan_path: Path) -> dict:
             compressed, receipt = _download(url, plan["source"]["maximum_compressed_bytes_per_station"])
             receipts.append({"station": station, **receipt})
         except urllib.error.HTTPError as error:
+            receipts.append({"station": station, "url": url, "http_status": error.code,
+                             "access_utc": _utc_now(), "artifact_materialized": False})
             failures.append({"station": station, "stage": "SOURCE_MATERIALIZATION",
-                             "classification": "CAPABILITY_REJECTED",
+                             "classification": "SOURCE_PRODUCT_UNAVAILABLE",
                              "reason": f"SOURCE_HTTP_{error.code}"})
             continue
         except Exception as error:

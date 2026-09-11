@@ -72,3 +72,13 @@ be reused.
 The bounded repair changes only that label and the synthetic fixture.  Plan v2
 freezes distinct DOY254 evidence with the same roots, fields, transform rules,
 limits and stopping policy.  It does not weaken a scientific parameter.
+
+Plan v2 was itself invalid: it requested complete DOY254 daily files at
+23:19:49 UTC, before the declared final 23:59:30 GPST epoch.  No artifact was
+materialized and the eight HTTP 404 responses cannot reject the roots.  Its
+authoritative terminal is also `HEADER_AUDIT_EXECUTION_INVALID`.
+
+The final v3 repair adds a conservative 48-hour maturity check before network
+access and freezes DOY243.  HTTP absence is now reported as
+`SOURCE_PRODUCT_UNAVAILABLE`, not `CAPABILITY_REJECTED`.  V3 is the last attempt
+in this bounded task regardless of outcome; there is no date search.
