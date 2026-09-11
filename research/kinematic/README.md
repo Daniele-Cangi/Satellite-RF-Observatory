@@ -152,3 +152,13 @@ retains the smaller curvature that still passes despite a biased position.
 ```text
 python -m research.kinematic.shared_phase_study NEW_REPORT.json
 ```
+## Slow shared-path calibration
+
+The [quadratic calibration prototype](S2_SLOW_CALIBRATION.md) estimates slow
+shared path terms from reference codes, retains correction uncertainty, and
+compares affine/quadratic fits and excluded predictions in a fixed development
+study. [Results](results/S2_SLOW_CALIBRATION_REPORT.md) are not independent RF confirmation.
+
+```text
+python -m research.kinematic.slow_calibration_study NEW_REPORT.json
+```

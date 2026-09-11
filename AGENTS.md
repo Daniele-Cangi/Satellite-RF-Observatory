@@ -189,6 +189,16 @@ geometry-subtracted residual chain, not real RINEX qualification. A separate
 design for persistent shared/differential errors, selection effects and
 excluded prediction remains necessary before S3; website stays paused.
 
+`slow_calibration.py` adds a reference-code-only quadratic shared-path nuisance
+with complete correction/clock/target covariance and an unused reference-phase
+gate. See `research/kinematic/S2_SLOW_CALIBRATION.md`. It removes the known
+synthetic shared quadratic bias while increasing local uncertainty. The
+differential-case improvement also reflects changed covariance weights, not
+measurement of a target-only delay. These are development cases used to build
+the model, not independent confirmation. Preserve all old results and require
+a separate validation design and physically justified amplitudes before real
+RF qualification or S3. Website and new target acquisition remain paused.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
