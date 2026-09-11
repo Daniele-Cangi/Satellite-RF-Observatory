@@ -1,0 +1,111 @@
+{
+  "schema": "s2-real-reference-phase-qualification-v1",
+  "qualification_id": "S2_REFERENCE_PHASE_2026252",
+  "date_gpst": "2026-09-09",
+  "day_of_year": 252,
+  "reserved_target": "G14",
+  "scope": "Reference-only physical qualification. No target measurement, inverse position, held-out receiver, orbit comparison or S3 claim.",
+  "observation": {
+    "base_url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/252/",
+    "filename": "{station}_R_20262520000_01D_30S_MO.crx.gz",
+    "maximum_compressed_bytes_per_station": 50000000,
+    "required_rinex_versions": [
+      "3.04",
+      "3.05"
+    ],
+    "required_time_system": "GPS",
+    "required_interval_s": 30.0,
+    "required_first_epoch_s": 0.0,
+    "required_last_epoch_s": 86370.0,
+    "required_fields": [
+      "C1C",
+      "C2W",
+      "L1C",
+      "L2W"
+    ]
+  },
+  "navigation": {
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/252/BRDM00DLR_S_20262520000_01D_MN.rnx.gz",
+    "maximum_compressed_bytes": 20000000,
+    "target_blocks_removed_before_numeric_parse": true,
+    "maximum_record_age_s": 7200.0
+  },
+  "stations": [
+    {
+      "id": "ALGO00CAN",
+      "expected_receiver": ["3015995", "SEPT POLARX5", "5.3.2"]
+    },
+    {
+      "id": "BOGT00COL",
+      "expected_receiver": ["01972", "JAVAD TRE_3 DELTA", "4.6.00"]
+    },
+    {
+      "id": "DRAO00CAN",
+      "expected_receiver": ["3022792", "SEPT POLARX5", "5.2.0"]
+    },
+    {
+      "id": "MKEA00USA",
+      "expected_receiver": ["3013571", "SEPT POLARX5", "5.7.0"]
+    },
+    {
+      "id": "PIE100USA",
+      "expected_receiver": ["4100427", "SEPT POLARX5TR", "5.7.0"]
+    },
+    {
+      "id": "STJO00CAN",
+      "expected_receiver": ["3015938", "SEPT POLARX5", "5.3.2"]
+    },
+    {
+      "id": "YELL00CAN",
+      "expected_receiver": ["4100652", "SEPT POLARX5", "5.5.0"]
+    },
+    {
+      "id": "GOLD00USA",
+      "expected_receiver": ["01538", "JAVAD TRE_G3TH DELTA", "4.2.03"]
+    }
+  ],
+  "selection": {
+    "endpoint_count": 11,
+    "references_per_station": 4,
+    "minimum_reference_elevation_deg": 15.0,
+    "rule": "Choose the earliest common 11-endpoint 30 s window for which every fixed station has at least four lexicographically selected non-target GPS references with C1C/C2W/L1C/L2W present, blank-or-zero phase LLI and reference-only broadcast elevation at least 15 degrees at every endpoint. Measurement magnitudes and residuals cannot affect selection.",
+    "no_reselection_after_numeric_access": true
+  },
+  "design_covariance": {
+    "code_sigma_per_band_m": 20.0,
+    "phase_sigma_per_band_cycles": 0.02,
+    "interpretation": "Fixed weighting convention inherited from S2 development; not a calibrated receiver probability model. Admission also uses deterministic residual limits."
+  },
+  "admission": {
+    "maximum_code_absolute_residual_m": 50.0,
+    "maximum_code_rms_residual_m": 20.0,
+    "maximum_alternating_reference_clock_difference_m": 30.0,
+    "maximum_phase_rate_absolute_residual_m_s": 0.05,
+    "maximum_phase_rate_rms_residual_m_s": 0.02,
+    "future_envelope_multiplier": 2.0,
+    "require_complete_station_set": true,
+    "require_unchanged_receiver_identity": true,
+    "require_zero_reported_phase_lli": true,
+    "require_no_gap_in_selected_window": true
+  },
+  "threshold_basis": {
+    "code": "Unchanged G14 reference-calibration limits; reused without looking at DOY252 observations.",
+    "phase_rate": "The 0.05 m/s S1 design scale is treated as a deterministic capability requirement, not an empirical 95 percent claim.",
+    "envelope": "A later distinct primary may use at least twice the largest admitted qualification residual; this qualification cannot establish population coverage."
+  },
+  "outcomes": [
+    "REFERENCE_PHASE_PATH_QUALIFIED",
+    "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED"
+  ],
+  "stop": "One fixed date, eight fixed roots, first structure-and-reference-geometry-selected common window, one outcome. Missing source, changed receiver, structural failure, unavailable reference model or threshold failure closes the qualification without station/window substitution.",
+  "persistence": {
+    "compressed_observation_payload": false,
+    "decoded_observation_payload": false,
+    "individual_observation_values": false,
+    "aggregate_residual_metrics_only": true
+  },
+  "references": {
+    "rinex_3_05": "https://files.igs.org/pub/data/format/rinex305.pdf",
+    "bkg_public_archive": "https://igs.bkg.bund.de/root_ftp/IGS/"
+  }
+}

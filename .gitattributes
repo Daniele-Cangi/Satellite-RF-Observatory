@@ -66,6 +66,8 @@ experiments/positioning_g14_doy246_network/estimation/reference_only.rnx -text w
 # Preserve the source/report bytes recorded by the synthetic development study.
 research/kinematic/*.py -text
 research/kinematic/results/*.json -text
+# Prospective plans are hashed before data access and must retain repository bytes.
+research/kinematic/*_plan*.json -text
 
 # Synthetic fixed-width RINEX fixtures retain padding and exact receipt bytes.
 research/kinematic/tests/fixtures/*.rnx -text whitespace=-blank-at-eol

@@ -171,3 +171,17 @@ excluded-band misses. [Report](results/S2_SLOW_VALIDATION_REPORT.md).
 ```text
 python -m research.kinematic.slow_validation NEW_REPORT.json
 ```
+
+## First real reference-only qualification attempt
+
+The frozen DOY252 attempt stopped on an undeclared descriptive `MARKER TYPE`
+condition before any observation number was parsed. Its generated physical
+terminal is not scientifically authorized; the audited outcome is
+`QUALIFICATION_EXECUTION_INVALID`. No capability was rejected, no target field
+was inspected and no payload was persisted. See
+[S2_REAL_REFERENCE_QUALIFICATION.md](S2_REAL_REFERENCE_QUALIFICATION.md).
+The hardened distinct DOY253 attempt retained complete source receipts and
+qualified ALGO/BOGT structure, then closed `PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED`
+at DRAO because its legacy `WAVELENGTH FACT L1/2` phase-scale transform was not
+part of the frozen RINEX-3 ledger. This is a bounded set-level refusal, not a
+claim that DRAO or carrier phase is generally unusable.
