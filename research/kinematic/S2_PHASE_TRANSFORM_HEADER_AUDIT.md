@@ -1,0 +1,60 @@
+# S2 phase-transform header audit
+
+## Physical information sought
+
+The closed DOY253 qualification showed that a fixed root can expose a phase
+convention which the measurement parser has not frozen.  The smallest next
+question is therefore not whether the phase residual passes.  It is whether the
+headers of the exact eight-root capability set describe a reversible and
+unambiguous coordinate for `C1C/C2W/L1C/L2W` before any observation value is read.
+
+The distinct, predeclared artifact is DOY251 (2026-09-08).  It is not a retry of
+DOY252 or DOY253 and it cannot qualify the measurement values.  The target remains
+reserved as `G14`; no navigation product is needed or allowed.
+
+## Frozen access boundary
+
+`phase_transform_header_audit_plan.json` fixes the date, eight station roots,
+filenames, byte and line limits, fields and terminals.  Each complete `.crx.gz`
+artifact is materialized in RAM and SHA-256 hashed before parsing.  A streaming
+gzip reader exposes only the CRINEX preamble and RINEX header and stops at `END OF
+HEADER`.  The Hatanaka body decoder is not imported.  Neither an observation row
+nor a numeric measurement has a representation in this program.
+
+Receipts precede admission.  The program attempts every predeclared root once so
+that one rejected header cannot hide the topology of later roots.  It never
+retries, substitutes a station/date, downloads navigation or persists payloads.
+
+## Frozen transform semantics
+
+The two similarly named scale mechanisms are kept separate:
+
+- RINEX 3 `SYS / SCALE FACTOR` is a numeric storage transform.  The stored
+  observable is divided by the declared factor before use; missing means one.
+- RINEX 2 `WAVELENGTH FACT L1/2` defines the ambiguity-wavelength divisor for
+  GPS L1/L2.  RINEX still stores carrier phase in carrier cycles.  The legacy
+  record therefore does not authorize rescaling the stored phase number.
+  Factor zero on required L2 is fatal; satellite overrides are retained.
+- `SYS / PHASE SHIFT` is an additive cycle transform with an explicit satellite
+  scope.  Both required phase observables must have a known declaration.
+- Every nonblank/nonzero future LLI breaks the segment.  No half-cycle or
+  opposite-factor epoch is repaired or interpolated.
+- Applied GPS DCB/PCV corrections remain unqualified unless their independent
+  correction products are separately frozen.  Receiver clock correction must
+  remain zero or absent.
+
+This interpretation follows the official RINEX 2.11 and 3.05 specifications.
+It narrows an overstatement in the closed DOY253 report: a wavelength factor can
+change the ambiguity lattice and LLI interpretation without itself multiplying
+the stored carrier-cycle coordinate.  The old terminal remains immutable because
+that distinction was not in its frozen ledger.
+
+## Outcomes
+
+`PHASE_TRANSFORM_HEADERS_QUALIFIED` means only that all eight frozen headers have
+an explicit transform ledger.  It does not qualify receiver continuity, phase
+values, atmosphere, navigation, residuals, an inverse solution or S3.
+
+`PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED` is an exact source/header refusal.
+`HEADER_AUDIT_EXECUTION_INVALID` separates transport/software failure from a
+capability rejection.
