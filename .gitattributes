@@ -70,3 +70,11 @@ research/kinematic/results/*.json -text
 # Synthetic fixed-width RINEX fixtures retain padding and exact receipt bytes.
 research/kinematic/tests/fixtures/*.rnx -text whitespace=-blank-at-eol
 research/kinematic/slow_validation_plan.json -text
+# Kinematic source manifests bind these exact historical bytes (including
+# mixed LF/CRLF in solver.py). Never normalize them during checkout or add.
+positioning/calibration.py -text whitespace=cr-at-eol
+positioning/context.py -text whitespace=cr-at-eol
+positioning/errors.py -text whitespace=cr-at-eol
+positioning/navigation.py -text whitespace=cr-at-eol
+positioning/solver.py -text whitespace=cr-at-eol
+docs/SCIENTIFIC_ROADMAP.md -text

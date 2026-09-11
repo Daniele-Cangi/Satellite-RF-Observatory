@@ -25,6 +25,14 @@ The user authorized ordinary integration for the agreed project work on
 to branch protections, new scientific campaigns without their required plans,
 or relaxing a failed scientific criterion.
 
+Source manifests bind bytes, including historical line endings. Files named
+in those manifests must retain their recorded checkout bytes on Windows and
+Linux. The provenance regression checks every current study and the fixed
+validation plan; the explicitly superseded S2a v1 remains bound to its old
+checkpoint. Do not normalize frozen sources or update expected hashes to hide
+a checkout conversion. Preserve the original byte stream and pin its Git
+attributes instead.
+
 The active scientific objective remains in [SCIENTIFIC_ROADMAP.md](SCIENTIFIC_ROADMAP.md)
 and root AGENTS.md. Website development, target acquisition for S3 and physical
 qualification remain separate from Git integration.
