@@ -17,6 +17,7 @@ from research.kinematic.real_reference_qualification import (
 
 ROOT = Path(__file__).resolve().parents[3]
 PLAN = json.loads((ROOT / "research/kinematic/real_reference_qualification_plan.json").read_text())
+PLAN_V2 = json.loads((ROOT / "research/kinematic/real_reference_qualification_plan_v2.json").read_text())
 
 
 def _fixture_with_last():
@@ -50,6 +51,16 @@ def test_frozen_plan_is_valid_and_has_two_exact_terminals():
     assert PLAN["selection"]["no_reselection_after_numeric_access"]
 
 
+def test_repaired_plan_has_typed_execution_terminal_and_no_marker_gate():
+    validate_plan(PLAN_V2)
+    assert set(PLAN_V2["outcomes"]) == {
+        "REFERENCE_PHASE_PATH_QUALIFIED",
+        "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED",
+        "QUALIFICATION_EXECUTION_INVALID",
+    }
+    assert "descriptive metadata" in PLAN_V2["observation"]["marker_type_policy"]
+
+
 def test_structure_scan_reads_presence_but_never_target_fields():
     content = _fixture_with_last()
     plan = _fixture_plan()
@@ -60,6 +71,14 @@ def test_structure_scan_reads_presence_but_never_target_fields():
     poisoned = content.replace("TARGET PAYLOAD MUST NEVER BE DECODED", "nan inf 1e999 SECRET")
     changed = scan_reference_structure(poisoned, plan=plan, station_plan=plan["stations"][0])
     assert changed["eligible"] == structure["eligible"]
+
+
+def test_marker_type_is_descriptive_not_an_epistemic_gate():
+    content = _fixture_with_last().replace("GEODETIC                                                    MARKER TYPE", "NON_GEODETIC                                                MARKER TYPE")
+    plan = _fixture_plan()
+    structure = scan_reference_structure(content, plan=plan, station_plan=plan["stations"][0])
+    assert structure["reported_marker_type"] == "NON_GEODETIC"
+    assert structure["epoch_count"] == 13
 
 
 def test_target_rows_are_removed_before_numeric_parser_boundary():

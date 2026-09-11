@@ -13,6 +13,7 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import re
 import subprocess
 import urllib.request
 
@@ -21,14 +22,19 @@ import numpy as np
 import scipy
 from scipy.optimize import least_squares
 
-from positioning.calibration import parse_reference_navigation, reference_model, strip_target_navigation
+from positioning.calibration import antenna_position, parse_reference_navigation, reference_model, strip_target_navigation
 from positioning.context import Context
 from .phase_rates import interval_matrix
 from .reference_bridge import admit_navigation, reference_code
-from .rinex_phase_observations import GPS, REQUIRED, RinexRejected, _phase_header, _time, parse_reference_phase_file
+from .rinex_observations import METADATA
+from .rinex_phase_observations import GPS, REQUIRED, RinexRejected, _time, parse_reference_phase_file
 
 
-TERMINALS = {"REFERENCE_PHASE_PATH_QUALIFIED", "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED"}
+TERMINALS = {
+    "REFERENCE_PHASE_PATH_QUALIFIED",
+    "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED",
+    "QUALIFICATION_EXECUTION_INVALID",
+}
 
 
 def _sha256(data: bytes) -> str:
@@ -71,7 +77,9 @@ def _download(url: str, maximum_bytes: int) -> tuple[bytes, dict]:
 
 
 def validate_plan(plan: dict) -> None:
-    if plan.get("schema") != "s2-real-reference-phase-qualification-v1":
+    if plan.get("schema") not in {
+            "s2-real-reference-phase-qualification-v1",
+            "s2-real-reference-phase-qualification-v2"}:
         raise ValueError("unsupported qualification plan")
     if plan.get("reserved_target") != "G14" or not GPS.fullmatch(plan["reserved_target"]):
         raise ValueError("frozen reserved target differs")
@@ -90,10 +98,10 @@ def validate_plan(plan: dict) -> None:
     stations = plan.get("stations", [])
     if len(stations) != 8 or len({item["id"] for item in stations}) != 8:
         raise ValueError("exact fixed eight-root set required")
-    if plan.get("outcomes") != sorted(TERMINALS):
-        # JSON order is intentionally semantic-free, but both terminals are exact.
-        if set(plan.get("outcomes", [])) != TERMINALS:
-            raise ValueError("terminal set differs")
+    expected_terminals = (TERMINALS if plan["schema"].endswith("-v2")
+                          else TERMINALS - {"QUALIFICATION_EXECUTION_INVALID"})
+    if set(plan.get("outcomes", [])) != expected_terminals:
+        raise ValueError("terminal set differs")
 
 
 def _field_is_structurally_usable(record: str, types: list[str]) -> bool:
@@ -106,18 +114,99 @@ def _field_is_structurally_usable(record: str, types: list[str]) -> bool:
     return all(fields[name][14] in (" ", "0") for name in ("L1C", "L2W"))
 
 
+def _qualification_header(lines: list[str], plan: dict):
+    """Parse only admission-relevant header fields; marker type is descriptive.
+
+    This is intentionally separate from the synthetic bridge parser. The first
+    execution demonstrated that importing its GEODETIC equality check would add
+    an undeclared capability gate.
+    """
+    headers, systems, pending = {}, {}, None
+    if not lines or lines[0][60:80].strip() != "RINEX VERSION / TYPE":
+        raise RinexRejected("MISSING_RINEX_VERSION")
+    for index, line in enumerate(lines):
+        label, value = line[60:80].strip(), line[:60]
+        declared_transforms = set(plan["observation"].get("disallowed_header_transforms", []))
+        if label not in METADATA and label not in declared_transforms:
+            raise RinexRejected("UNQUALIFIED_HEADER:" + label)
+        headers.setdefault(label, []).append(value)
+        if label == "SYS / # / OBS TYPES":
+            system = value[:1]
+            if system.strip():
+                if pending is not None and len(systems[pending]["types"]) != systems[pending]["count"]:
+                    raise RinexRejected("INCOMPLETE_OBSERVATION_TYPES")
+                if system not in "GRECSJI" or system in systems:
+                    raise RinexRejected("DUPLICATE_OR_UNKNOWN_SYSTEM")
+                try:
+                    count = int(value[3:6])
+                except ValueError as error:
+                    raise RinexRejected("INVALID_OBSERVATION_COUNT") from error
+                systems[system] = {"count": count, "types": []}
+                pending = system
+            elif pending is None or value[:7].strip():
+                raise RinexRejected("ORPHAN_OBSERVATION_CONTINUATION")
+            types = value[7:60].split()
+            if any(not re.fullmatch(r"[CLDS][1-9][A-Z]", name) for name in types):
+                raise RinexRejected("INVALID_OBSERVATION_TYPE")
+            systems[pending]["types"].extend(types)
+        if label == "END OF HEADER":
+            break
+    else:
+        raise RinexRejected("MISSING_END_OF_HEADER")
+    for system in systems.values():
+        if len(system["types"]) != system["count"] or len(set(system["types"])) != system["count"]:
+            raise RinexRejected("INCOMPLETE_OR_DUPLICATE_OBSERVATION_TYPES")
+    mandatory = (
+        "RINEX VERSION / TYPE", "MARKER NAME", "REC # / TYPE / VERS",
+        "ANT # / TYPE", "APPROX POSITION XYZ", "ANTENNA: DELTA H/E/N",
+        "INTERVAL", "TIME OF FIRST OBS", "TIME OF LAST OBS",
+    )
+    for label in mandatory:
+        if len(headers.get(label, [])) != 1:
+            raise RinexRejected("MISSING_OR_DUPLICATE_HEADER:" + label)
+    if len(headers.get("MARKER TYPE", [])) > 1:
+        raise RinexRejected("DUPLICATE_HEADER:MARKER TYPE")
+    version = headers["RINEX VERSION / TYPE"][0]
+    if (version[:9].strip() not in plan["observation"]["required_rinex_versions"]
+            or version[20:21] != "O" or version[40:41] not in ("G", "M")):
+        raise RinexRejected("UNSUPPORTED_OBSERVATION_FORMAT")
+    for label in plan["observation"].get("disallowed_header_transforms", []):
+        if label in headers:
+            raise RinexRejected("UNQUALIFIED_APPLIED_TRANSFORM:" + label)
+    try:
+        interval = float(headers["INTERVAL"][0])
+    except ValueError as error:
+        raise RinexRejected("INVALID_INTERVAL") from error
+    if not np.isfinite(interval) or abs(interval - plan["observation"]["required_interval_s"]) > 1e-7:
+        raise RinexRejected("INTERVAL_DIFFERS_FROM_PLAN")
+    if headers["TIME OF FIRST OBS"][0][48:51] != plan["observation"]["required_time_system"]:
+        raise RinexRejected("NON_GPST_TIME_SYSTEM")
+    if headers["TIME OF LAST OBS"][0][48:51] != plan["observation"]["required_time_system"]:
+        raise RinexRejected("NON_GPST_TIME_SYSTEM")
+    if headers.get("RCV CLOCK OFFS APPL", ["0"])[0].strip() != "0":
+        raise RinexRejected("APPLIED_RECEIVER_CLOCK_CORRECTION")
+    identity_row = headers["REC # / TYPE / VERS"][0].ljust(60)
+    identity = [identity_row[offset:offset + 20].strip() for offset in (0, 20, 40)]
+    if not all(identity):
+        raise RinexRejected("INCOMPLETE_RECEIVER_IDENTITY")
+    try:
+        station = antenna_position(headers)
+    except (ValueError, ZeroDivisionError) as error:
+        raise RinexRejected("INVALID_STATION_COORDINATES") from error
+    if not np.isfinite(station).all():
+        raise RinexRejected("INVALID_STATION_COORDINATES")
+    first = _time(headers["TIME OF FIRST OBS"][0][:43].split(), plan["date_gpst"], 0)
+    last = _time(headers["TIME OF LAST OBS"][0][:43].split(), plan["date_gpst"], 0)
+    return index + 1, headers, systems, first, last, identity, station
+
+
 def scan_reference_structure(content: str, *, plan: dict, station_plan: dict) -> dict:
     """Read headers, epoch topology and field presence, never measurement numbers."""
     obs = plan["observation"]
     lines = content.splitlines()
-    start, headers, systems, first, identity, station = _phase_header(
-        lines, plan["date_gpst"], 0, obs["required_interval_s"]
-    )
+    start, headers, systems, first, last_header, identity, station = _qualification_header(lines, plan)
     if identity != station_plan["expected_receiver"]:
         raise RinexRejected("RECEIVER_IDENTITY_CHANGED")
-    if len(headers.get("TIME OF LAST OBS", [])) != 1:
-        raise RinexRejected("MISSING_OR_DUPLICATE_TIME_OF_LAST_OBS")
-    last_header = _time(headers["TIME OF LAST OBS"][0][:43].split(), plan["date_gpst"], 0)
     if (abs(first - obs["required_first_epoch_s"]) > 1e-7
             or abs(last_header - obs["required_last_epoch_s"]) > 1e-7):
         raise RinexRejected("HEADER_DOES_NOT_COVER_FROZEN_DAY")
@@ -175,6 +264,7 @@ def scan_reference_structure(content: str, *, plan: dict, station_plan: dict) ->
     return {
         "station": station_plan["id"],
         "receiver_identity": identity,
+        "reported_marker_type": headers.get("MARKER TYPE", [""])[0].strip() or None,
         "station_m": station,
         "epoch_count": len(epoch_times),
         "first_epoch_s": epoch_times[0],
@@ -383,18 +473,26 @@ def run(plan_path: Path) -> dict:
         url = plan["observation"]["base_url"] + plan["observation"]["filename"].format(station=station)
         try:
             compressed, receipt = _download(url, plan["observation"]["maximum_compressed_bytes_per_station"])
+            receipts.append({"station": station, **receipt})
             plain = hatanaka.decompress(compressed, strict=True)
             content = plain.decode("ascii")
-            receipt.update(decoded_bytes=len(plain), decoded_sha256=_sha256(plain))
+            receipts[-1].update(decoded_bytes=len(plain), decoded_sha256=_sha256(plain))
+            # Materialization identity is retained before any descriptive or
+            # epistemic admission can fail. Receipt failure is never a veto.
             structure = scan_reference_structure(content, plan=plan, station_plan=station_plan)
             sanitized, removed = strip_target_observations(content, plan["reserved_target"])
             if removed != structure["target_rows_discarded_without_field_access"]:
                 raise ValueError("target-removal count differs from structural scan")
             structures[station] = structure
             decoded[station] = sanitized
-            receipts.append({"station": station, **receipt})
-        except Exception as error:  # typed below; one fixed set, no retries/substitution.
-            failures.append({"station": station, "stage": "SOURCE_OR_STRUCTURE", "reason": type(error).__name__ + ":" + str(error)})
+        except RinexRejected as error:
+            failures.append({"station": station, "stage": "STRUCTURAL_ADMISSION",
+                             "classification": "CAPABILITY_REJECTED", "reason": error.reason})
+            break
+        except Exception as error:  # one fixed set, no retries/substitution.
+            failures.append({"station": station, "stage": "SOURCE_OR_EXECUTION",
+                             "classification": "QUALIFICATION_ERROR",
+                             "reason": type(error).__name__ + ":" + str(error)})
             break
 
     navigation_text = None
@@ -416,7 +514,9 @@ def run(plan_path: Path) -> dict:
                 failures.append({"stage": "SELECTION", "reason": "NO_COMMON_REFERENCE_ONLY_WINDOW"})
         except Exception as error:
             navigation_receipt = None
-            failures.append({"stage": "NAVIGATION_OR_SELECTION", "reason": type(error).__name__ + ":" + str(error)})
+            failures.append({"stage": "NAVIGATION_OR_SELECTION",
+                             "classification": "QUALIFICATION_ERROR",
+                             "reason": type(error).__name__ + ":" + str(error)})
     else:
         navigation_receipt = None
 
@@ -433,7 +533,9 @@ def run(plan_path: Path) -> dict:
                 station_results[station] = {"status": "REFERENCE_MODEL_UNAVAILABLE", "reason": type(error).__name__ + ":" + str(error)}
         for station, result in station_results.items():
             if not result.get("admitted", False):
-                failures.append({"station": station, "stage": "PHYSICAL_ADMISSION", "reason": result.get("status", "THRESHOLD_NOT_MET")})
+                failures.append({"station": station, "stage": "PHYSICAL_ADMISSION",
+                                 "classification": "CAPABILITY_REJECTED",
+                                 "reason": result.get("status", "THRESHOLD_NOT_MET")})
 
     admitted = not failures and len(station_results) == len(plan["stations"])
     maxima = [result["phase_rate_absolute_max_m_s"] for result in station_results.values()
@@ -443,10 +545,14 @@ def run(plan_path: Path) -> dict:
             key: _native(value) for key, value in structure.items() if key != "eligible" and key != "station_m"
         } for station, structure in structures.items()
     }
+    execution_invalid = any(item.get("classification") == "QUALIFICATION_ERROR" for item in failures)
+    status = ("QUALIFICATION_EXECUTION_INVALID" if execution_invalid
+              else "REFERENCE_PHASE_PATH_QUALIFIED" if admitted
+              else "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED")
     report = {
         "schema": "s2-real-reference-phase-qualification-result-v1",
         "qualification_id": plan["qualification_id"],
-        "status": "REFERENCE_PHASE_PATH_QUALIFIED" if admitted else "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED",
+        "status": status,
         "scope": plan["scope"],
         "freeze": freeze,
         "selection": selection,
