@@ -162,3 +162,12 @@ study. [Results](results/S2_SLOW_CALIBRATION_REPORT.md) are not independent RF c
 ```text
 python -m research.kinematic.slow_calibration_study NEW_REPORT.json
 ```
+## Frozen-model validation outside the quadratic basis
+
+The [separate synthetic validation](S2_SLOW_VALIDATION.md) retains six fixed
+shape comparisons and eight paired noise trials, including rejections and
+excluded-band misses. [Report](results/S2_SLOW_VALIDATION_REPORT.md).
+
+```text
+python -m research.kinematic.slow_validation NEW_REPORT.json
+```

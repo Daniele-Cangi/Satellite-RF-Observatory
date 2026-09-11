@@ -199,6 +199,16 @@ the model, not independent confirmation. Preserve all old results and require
 a separate validation design and physically justified amplitudes before real
 RF qualification or S3. Website and new target acquisition remain paused.
 
+`slow_validation.py` now evaluates frozen affine/quadratic estimators on six
+fixed out-of-basis cases and eight paired raw-noise trials, under the local
+hash-bound `slow_validation_plan.json`. See `research/kinematic/S2_SLOW_VALIDATION.md`.
+Retain rejected trials, the quadratic nominal worsening and its excluded-rate
+band miss; do not relabel eight accepted quadratic positions as 95% coverage.
+This is separate synthetic temporal-shape validation on the existing geometry,
+not independent RF confirmation. Selection, broader geometry/directional errors
+and physically justified amplitudes remain open before S3. Preserve the plan,
+source hashes and results; do not tune on these outcomes or resume the website.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

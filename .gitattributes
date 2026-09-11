@@ -69,3 +69,4 @@ research/kinematic/results/*.json -text
 
 # Synthetic fixed-width RINEX fixtures retain padding and exact receipt bytes.
 research/kinematic/tests/fixtures/*.rnx -text whitespace=-blank-at-eol
+research/kinematic/slow_validation_plan.json -text
