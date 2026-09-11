@@ -120,6 +120,10 @@ The [phase-reference bridge](research/kinematic/S2_PHASE_REFERENCE_BRIDGE.md)
 now performs full RINEX code/phase import and checks unused phase increments
 against code-fitted reference clocks. Its synthetic slip detection does not
 establish universal continuity or real receiver qualification.
+The first [real reference-only qualification attempt](research/kinematic/S2_REAL_REFERENCE_QUALIFICATION.md)
+stopped before measurement parsing because an undeclared descriptive header
+condition was inherited by the runner. It is an invalid execution, not evidence
+against the receiver or phase observable; DOY252 will not be retried.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 

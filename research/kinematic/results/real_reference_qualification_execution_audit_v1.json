@@ -1,0 +1,43 @@
+{
+  "schema": "s2-real-reference-phase-qualification-execution-audit-v1",
+  "qualification_id": "S2_REFERENCE_PHASE_2026252",
+  "status": "QUALIFICATION_EXECUTION_INVALID",
+  "generated_result_path": "research/kinematic/results/real_reference_qualification_study_v1.json",
+  "generated_result_sha256": "9066fd05f474e1cbd2df0251c15b8330a6345c3e5de2fe29d5ad9313d44cff2a",
+  "generated_terminal": "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED",
+  "generated_terminal_authorized_as_physical_result": false,
+  "source_commit": "0af9ab63e6c50410c6d04638eaebce0d55440bd9",
+  "failure_topology": [
+    {
+      "type": "UNDECLARED_ADMISSION_CONDITION",
+      "detail": "The reused header parser required MARKER TYPE to equal GEODETIC although the frozen plan did not declare marker type as an admission condition."
+    },
+    {
+      "type": "RECEIPT_SERIALIZATION_ORDER_ERROR",
+      "detail": "The complete-source receipt was appended only after structural admission. The ALGO source hash and byte count were computed in memory but were not retained when the undeclared header check raised."
+    }
+  ],
+  "access_scope": {
+    "attempted_station": "ALGO00CAN",
+    "attempted_url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/252/ALGO00CAN_R_20262520000_01D_30S_MO.crx.gz",
+    "other_station_sources_accessed": false,
+    "navigation_source_accessed": false,
+    "observation_numbers_parsed": false,
+    "reserved_target_fields_inspected": false,
+    "raw_payload_bytes_persisted": 0,
+    "complete_source_hash_recoverable_without_reaccess": false
+  },
+  "scientific_attribution": {
+    "receiver_capability_rejected": false,
+    "phase_path_rejected": false,
+    "physical_error_envelope_evaluated": false,
+    "reason": "A descriptive/header-policy failure occurred before the declared physical clauses were evaluated."
+  },
+  "frozen_consequences": [
+    "DOY252 must not be retried or silently re-downloaded.",
+    "The generated JSON remains immutable evidence of the executed code path.",
+    "Future runners must retain the source receipt immediately after materialization, before descriptive or epistemic admission.",
+    "Future plans must not inherit an undeclared MARKER TYPE equality gate.",
+    "A future physical qualification requires a distinct predeclared artifact and a newly frozen implementation."
+  ]
+}

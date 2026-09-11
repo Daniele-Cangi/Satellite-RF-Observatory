@@ -1,0 +1,45 @@
+{
+  "schema": "s2-real-reference-phase-qualification-result-v1",
+  "qualification_id": "S2_REFERENCE_PHASE_2026252",
+  "status": "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED",
+  "scope": "Reference-only physical qualification. No target measurement, inverse position, held-out receiver, orbit comparison or S3 claim.",
+  "freeze": {
+    "freeze_utc": "2026-09-11T22:13:03.521948+00:00",
+    "source_commit": "0af9ab63e6c50410c6d04638eaebce0d55440bd9",
+    "plan_sha256": "721bcabdb3bf360a70dcf1183e61092e03b6fd25effc872d127bc83018415ab7",
+    "implementation_sha256": "7e8ef2fcf08b7138e3336cbec778046afda58e21d1815650052f295d733efaaf",
+    "target_measurement_numeric_access": false
+  },
+  "selection": null,
+  "source_receipts": [],
+  "navigation_receipt": null,
+  "structural_receipts": {},
+  "station_results": {},
+  "failures": [
+    {
+      "station": "ALGO00CAN",
+      "stage": "SOURCE_OR_STRUCTURE",
+      "reason": "RinexRejected:NON_GEODETIC_RECEIVER"
+    }
+  ],
+  "future_phase_rate_envelope_m_s": null,
+  "unresolved": [
+    "The empirical bound is conditional on this date, fixed roots, receiver configurations and selected reference geometry.",
+    "Unflagged sub-threshold cycle slips, target-specific multipath/antenna response and future atmosphere are not converted to zero.",
+    "No population coverage, target RF qualification, kinematic fit or S3 readiness is established."
+  ],
+  "persistence": {
+    "compressed_observation_payload": false,
+    "decoded_observation_payload": false,
+    "individual_observation_values": false,
+    "aggregate_residual_metrics_only": true,
+    "target_rows_removed_before_observation_numeric_parse": true,
+    "raw_payload_bytes_persisted": 0
+  },
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.3",
+    "scipy": "1.17.1",
+    "hatanaka": "2.8.1"
+  }
+}

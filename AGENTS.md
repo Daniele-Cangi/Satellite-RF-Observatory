@@ -209,6 +209,16 @@ not independent RF confirmation. Selection, broader geometry/directional errors
 and physically justified amplitudes remain open before S3. Preserve the plan,
 source hashes and results; do not tune on these outcomes or resume the website.
 
+The first bounded real reference-only qualification on DOY252 stopped at ALGO
+before any observation number was parsed. The runner inherited an undeclared
+`MARKER TYPE == GEODETIC` gate and retained the source receipt only after that
+gate. Therefore its generated `PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED` terminal
+is not an authorized physical conclusion. Preserve the raw result and the
+typed audit under `research/kinematic/results/`; the valid outcome is
+`QUALIFICATION_EXECUTION_INVALID`. Do not retry or redownload DOY252. Repair
+receipt ordering and plan/parser agreement offline, then use a distinct frozen
+artifact if physical qualification continues. S3 remains unauthorized.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

@@ -171,3 +171,12 @@ excluded-band misses. [Report](results/S2_SLOW_VALIDATION_REPORT.md).
 ```text
 python -m research.kinematic.slow_validation NEW_REPORT.json
 ```
+
+## First real reference-only qualification attempt
+
+The frozen DOY252 attempt stopped on an undeclared descriptive `MARKER TYPE`
+condition before any observation number was parsed. Its generated physical
+terminal is not scientifically authorized; the audited outcome is
+`QUALIFICATION_EXECUTION_INVALID`. No capability was rejected, no target field
+was inspected and no payload was persisted. See
+[S2_REAL_REFERENCE_QUALIFICATION.md](S2_REAL_REFERENCE_QUALIFICATION.md).
