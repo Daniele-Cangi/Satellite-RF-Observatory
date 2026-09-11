@@ -1,0 +1,108 @@
+{
+  "schema": "s2-real-reference-phase-qualification-result-v1",
+  "qualification_id": "S2_REFERENCE_PHASE_2026253",
+  "status": "PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED",
+  "scope": "Reference-only physical qualification. No target measurement, inverse position, held-out receiver, orbit comparison or S3 claim.",
+  "freeze": {
+    "freeze_utc": "2026-09-11T22:19:50.360030+00:00",
+    "source_commit": "52f2e03bb5bcb17a6e1c0ef6e61f3d00df10ea78",
+    "plan_sha256": "a9accf3e5927136e1ec50488a3be90dc280c7d27cd5a284c404252e2e42b2528",
+    "implementation_sha256": "5116ca15527ef267b789a0f1d483dced89224ec7b3a18bfc13319d75121a5426",
+    "target_measurement_numeric_access": false
+  },
+  "selection": null,
+  "source_receipts": [
+    {
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/253/ALGO00CAN_R_20262530000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 4187571,
+      "sha256": "97329d9ac68993e99fc534a6d5ee7a7a64c5e356033c0ca30e23e315384c143e",
+      "access_utc": "2026-09-11T22:19:56.778114+00:00",
+      "decoded_bytes": 30584785,
+      "decoded_sha256": "c75939d1c18d20183b5bf03272aa58da1e306d3329a415e38d778d1d6aa8e67f"
+    },
+    {
+      "station": "BOGT00COL",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/253/BOGT00COL_R_20262530000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3153503,
+      "sha256": "e7b402dfe8fb4059c28c83a616a87d8f42eb95fe2520b8e79e80079aa03c25a1",
+      "access_utc": "2026-09-11T22:20:02.701533+00:00",
+      "decoded_bytes": 25338788,
+      "decoded_sha256": "fa6e1686fdd363cce6d03a89f20e64c86f39d1fcf991d2b06ae723b3ab3bee21"
+    },
+    {
+      "station": "DRAO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/253/DRAO00CAN_R_20262530000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2836525,
+      "sha256": "97d5be00ba4a9c2a9c73c26a8908fa53b2738e56855b6d19bc1cfffbe3af51af",
+      "access_utc": "2026-09-11T22:20:08.281253+00:00",
+      "decoded_bytes": 23447715,
+      "decoded_sha256": "ea9d11ec89bf62d76f3acfc137d0ea61db8d93544eac1a736a59a6b7f90515af"
+    }
+  ],
+  "navigation_receipt": null,
+  "structural_receipts": {
+    "ALGO00CAN": {
+      "station": "ALGO00CAN",
+      "receiver_identity": [
+        "3015995",
+        "SEPT POLARX5",
+        "5.3.2"
+      ],
+      "reported_marker_type": "Geodetic",
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "target_rows_discarded_without_field_access": 791
+    },
+    "BOGT00COL": {
+      "station": "BOGT00COL",
+      "receiver_identity": [
+        "01972",
+        "JAVAD TRE_3 DELTA",
+        "4.6.00"
+      ],
+      "reported_marker_type": null,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "target_rows_discarded_without_field_access": 764
+    }
+  },
+  "station_results": {},
+  "failures": [
+    {
+      "station": "DRAO00CAN",
+      "stage": "STRUCTURAL_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNQUALIFIED_HEADER:WAVELENGTH FACT L1/2"
+    }
+  ],
+  "future_phase_rate_envelope_m_s": null,
+  "unresolved": [
+    "The empirical bound is conditional on this date, fixed roots, receiver configurations and selected reference geometry.",
+    "Unflagged sub-threshold cycle slips, target-specific multipath/antenna response and future atmosphere are not converted to zero.",
+    "No population coverage, target RF qualification, kinematic fit or S3 readiness is established."
+  ],
+  "persistence": {
+    "compressed_observation_payload": false,
+    "decoded_observation_payload": false,
+    "individual_observation_values": false,
+    "aggregate_residual_metrics_only": true,
+    "target_rows_removed_before_observation_numeric_parse": true,
+    "raw_payload_bytes_persisted": 0
+  },
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.3",
+    "scipy": "1.17.1",
+    "hatanaka": "2.8.1"
+  }
+}

@@ -38,3 +38,37 @@ secondo accesso vietato dal piano.
 
 La capability resta `UNRESOLVED`, non `REJECTED`. Il prossimo tentativo deve
 usare un artifact distinto dopo una riparazione offline e un nuovo freeze.
+
+## Esecuzione v2 su DOY253
+
+Il receipt boundary corretto ha conservato identità complete per ALGO, BOGT e
+DRAO. ALGO e BOGT hanno 2.880 epoche continue e identità ricevitore immutate.
+La differenza fra `Geodetic` e il letterale maiuscolo imposto dal primo parser
+conferma che il primo stop era descrittivo.
+
+DRAO si è invece fermato su `WAVELENGTH FACT L1/2`. La specifica RINEX 2.11
+definisce questo campo come trasformazione della lunghezza d'onda della fase,
+con possibile override nel LLI. Poiché non appartiene al sottoinsieme RINEX 3
+congelato e non era implementato nel transform ledger, accettarlo come metadata
+avrebbe potuto alterare la coordinata fisica usata dal qualificatore.
+
+| Clausa v2 | Stato |
+| --- | --- |
+| Receipt prima dell'ammissione | `PASSED` |
+| ALGO: identità, giorno completo, continuità | `PASSED` |
+| BOGT: identità, giorno completo, continuità | `PASSED` |
+| DRAO: trasformazione fase interamente nota | `REJECTED` |
+| Restanti cinque root | `NOT_EVALUATED` |
+| Navigazione e selezione finestra | `NOT_EVALUATED` |
+| Residui code/phase | `NOT_EVALUATED` |
+| Envelope fisico completo | `NOT_SUPPORTED` |
+
+Terminale congelato:
+
+```text
+PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED
+```
+
+Il claim è limitato al set completo di otto root e al parser/ledger v2. Nessun
+valore osservativo, residuo target, fit cinematico o orbit product target è
+stato usato. Tutti i payload sono rimasti effimeri.

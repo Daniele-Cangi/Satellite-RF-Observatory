@@ -219,6 +219,18 @@ typed audit under `research/kinematic/results/`; the valid outcome is
 receipt ordering and plan/parser agreement offline, then use a distinct frozen
 artifact if physical qualification continues. S3 remains unauthorized.
 
+The repaired runner and a distinct DOY253 plan were frozen at `52f2e03` before
+access. Receipts were retained first. ALGO and BOGT each passed full-day
+structural continuity with unchanged receiver identity. DRAO then exposed the
+legacy `WAVELENGTH FACT L1/2` header, whose RINEX-2 semantics can rescale carrier
+phase and interact with LLI; it is absent from the frozen RINEX-3 transform
+ledger. The exact complete-root plan therefore closed
+`PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED`. Preserve the v2 result; do not retry
+DOY253, assume factor one, drop DRAO or continue to later roots in that run.
+No observation value, navigation product, target fit or phase residual was
+used, and all payloads were ephemeral. A future distinct attempt requires
+header-only prequalification of every phase-scale transform before values.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

@@ -124,6 +124,11 @@ The first [real reference-only qualification attempt](research/kinematic/S2_REAL
 stopped before measurement parsing because an undeclared descriptive header
 condition was inherited by the runner. It is an invalid execution, not evidence
 against the receiver or phase observable; DOY252 will not be retried.
+The repaired, distinct DOY253 qualification retained its receipts and verified
+full-day ALGO/BOGT structure, but the exact eight-root set closed
+`PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED` when DRAO exposed an unmodelled legacy
+phase wavelength-factor transform. No phase residual, target fit or S3 claim
+was produced.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 
