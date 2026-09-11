@@ -1,6 +1,7 @@
 """Offline boundaries for the frozen header-only phase-transform audit."""
 from copy import deepcopy
 import gzip
+import hashlib
 import json
 from pathlib import Path
 
@@ -17,6 +18,7 @@ from research.kinematic.phase_transform_header_audit import (
 
 ROOT = Path(__file__).resolve().parents[3]
 PLAN = json.loads((ROOT / "research/kinematic/phase_transform_header_audit_plan.json").read_text())
+PLAN_V2 = json.loads((ROOT / "research/kinematic/phase_transform_header_audit_plan_v2.json").read_text())
 
 
 def _h(value: str, label: str) -> str:
@@ -81,7 +83,7 @@ def _header(extra=(), phase=True) -> list[str]:
 
 def _crx(lines: list[str]) -> bytes:
     text = "\n".join([
-        _h("3.0", "CRINEX VERS / TYPE"),
+        _h("3.0                 COMPACT RINEX FORMAT", "CRINEX VERS   / TYPE"),
         _h("TEST", "CRINEX PROG / DATE"),
         *lines,
         "> POISONED OBSERVATION BODY nan inf SECRET",
@@ -91,7 +93,10 @@ def _crx(lines: list[str]) -> bytes:
 
 def test_frozen_plan_is_header_only_and_exact():
     validate_plan(PLAN)
+    validate_plan(PLAN_V2)
     assert len(PLAN["stations"]) == 8
+    assert PLAN_V2["stations"] == PLAN["stations"]
+    assert PLAN_V2["reserved_target"] == PLAN["reserved_target"]
     assert PLAN["execution"]["hatanaka_body_decoder_forbidden"]
     assert PLAN["persistence"]["observation_values"] is False
 
@@ -101,7 +106,7 @@ def test_gzip_reader_stops_before_first_observation_record():
     assert lines[-1][60:80].strip() == "END OF HEADER"
     assert all("POISONED" not in line for line in lines)
     assert receipt["observation_body_lines_exposed"] == 0
-    assert receipt["crinex_preamble"] == ["CRINEX VERS / TYPE", "CRINEX PROG / DATE"]
+    assert receipt["crinex_preamble"] == ["CRINEX VERS   / TYPE", "CRINEX PROG / DATE"]
 
 
 def test_standard_rinex_phase_coordinate_is_explicit():
@@ -178,3 +183,16 @@ def test_time_and_plan_scope_cannot_be_shifted_post_hoc():
     lines[index] = _h("  2026     9     8    23    59    0.0000000     GPS", "TIME OF LAST OBS")
     with pytest.raises(HeaderRejected, match="HEADER_DOES_NOT_COVER_FROZEN_DAY"):
         audit_header(lines, PLAN, "TEST00XXX")
+
+
+def test_doy251_execution_error_cannot_become_a_capability_rejection():
+    raw_path = ROOT / "research/kinematic/results/phase_transform_header_audit_2026251_v1.json"
+    audit_path = ROOT / "research/kinematic/results/phase_transform_header_audit_2026251_execution_audit_v1.json"
+    raw = json.loads(raw_path.read_text())
+    audit = json.loads(audit_path.read_text())
+    assert hashlib.sha256(raw_path.read_bytes()).hexdigest() == audit["generated_result_sha256"]
+    assert len(raw["source_receipts"]) == 8
+    assert audit["authoritative_status"] == "HEADER_AUDIT_EXECUTION_INVALID"
+    assert audit["defect"]["physical_rejection_authorized"] is False
+    assert audit["access"]["observation_values_accessed"] == 0
+    assert audit["access"]["doy251_reuse_forbidden"] is True

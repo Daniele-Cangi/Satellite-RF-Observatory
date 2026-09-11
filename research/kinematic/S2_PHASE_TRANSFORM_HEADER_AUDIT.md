@@ -58,3 +58,17 @@ values, atmosphere, navigation, residuals, an inverse solution or S3.
 `PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED` is an exact source/header refusal.
 `HEADER_AUDIT_EXECUTION_INVALID` separates transport/software failure from a
 capability rejection.
+
+## First execution audit and repair
+
+The frozen v1 runner materialized and hashed all eight DOY251 products, then
+rejected every one before entering its RINEX header.  The cause was an exact
+whitelist typo: the standard label is `CRINEX VERS   / TYPE`, while the runner
+and its synthetic fixture used `CRINEX VERS / TYPE`.  This is a description
+error, not eight capability failures.  The generated result is preserved, but
+the authoritative terminal is `HEADER_AUDIT_EXECUTION_INVALID`; DOY251 cannot
+be reused.
+
+The bounded repair changes only that label and the synthetic fixture.  Plan v2
+freezes distinct DOY254 evidence with the same roots, fields, transform rules,
+limits and stopping policy.  It does not weaken a scientific parameter.

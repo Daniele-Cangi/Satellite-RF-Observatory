@@ -63,7 +63,9 @@ def _strict_json(value) -> str:
 
 
 def validate_plan(plan: dict) -> None:
-    if plan.get("schema") != "s2-phase-transform-header-audit-v1":
+    if plan.get("schema") not in {
+            "s2-phase-transform-header-audit-v1",
+            "s2-phase-transform-header-audit-v2"}:
         raise ValueError("unsupported audit plan")
     if plan.get("reserved_target") != "G14":
         raise ValueError("reserved target differs")
@@ -134,7 +136,7 @@ def extract_crinex_header(compressed: bytes, *, maximum_lines: int) -> tuple[lis
                 break
         else:
             raise HeaderRejected("HEADER_LINE_BOUND_EXCEEDED")
-    if preamble != ["CRINEX VERS / TYPE", "CRINEX PROG / DATE"]:
+    if preamble != ["CRINEX VERS   / TYPE", "CRINEX PROG / DATE"]:
         raise HeaderRejected("UNSUPPORTED_CRINEX_PREAMBLE")
     return rinex, {
         "crinex_preamble": preamble,
