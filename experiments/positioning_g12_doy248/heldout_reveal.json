@@ -1,0 +1,7 @@
+{
+  "status": "HELD_OUT_RECEIVER_CONFIRMED",
+  "residual_m": -3.136704571545124,
+  "interpolation_control_m": 6.315484642982483e-05,
+  "reveal_utc": "2026-09-08T23:31:52.424993+00:00",
+  "solution_sha256": "59db724da7f701682f1c7ea82a697cfbab6fc396538a02f64c7be3e7e2b9d1e0"
+}

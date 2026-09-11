@@ -1,0 +1,65 @@
+{
+  "artifact_disposition": {
+    "complete_file_bytes": 2852212,
+    "complete_file_sha256": "1e1e77bac8661abba2cc54b85f1deee2ba470729b1dbf9000b0cdc4d50c81cc4",
+    "reopen": false,
+    "rescore": false,
+    "retry": false,
+    "role": "CONSUMED_DESCRIPTION_FAILURE_NEVER_PHYSICAL_EVIDENCE"
+  },
+  "attribution": {
+    "confirmed_executor_gap": "BLANK_NUMERIC_PHASE_CORRECTION_WAS_NOT_A_REPRESENTABLE_TYPED_STATE",
+    "exact_target_header_record": "NOT_RETAINED",
+    "exact_target_record_state": "UNRESOLVED",
+    "most_specific_authorized_cause": "PHASE_SHIFT_TRANSFORM_DESCRIPTION_ERROR",
+    "not_authorized": [
+      "TARGET_RECORD_WAS_DEFINITELY_A_REFERENCE_SIGNAL_BLANK",
+      "MEASUREMENT_PATH_REJECTED",
+      "ORBITAL_MODEL_REJECTED",
+      "NULL_PREFERRED"
+    ],
+    "outcome_independent_evidence": [
+      "RINEX_3_04_SECTION_5_2_12_PERMITS_AN_OBSERVATION_CODE_WITH_THE_REMAINING_PHASE_SHIFT_FIELDS_BLANK_FOR_UNCORRECTED_REFERENCE_SIGNALS",
+      "PREEXISTING_REPOSITORY_RECEIPTS_FROM_REAL_GNSS_HEADERS_RETAIN_G_L1C_AND_G_L2W_REFERENCE_RECORDS_WITH_BLANK_NUMERIC_CORRECTIONS",
+      "THE_FROZEN_EXECUTOR_ATTEMPTED_FLOAT_CONVERSION_FOR_EVERY_NONEMPTY_OBSERVATION_CODE"
+    ]
+  },
+  "clause_audit": {
+    "artifact_complete_hash": "SATISFIED",
+    "composite_identity_before_phase_ledger": "SATISFIED_BY_DETERMINISTIC_CONTROL_FLOW_NOT_RETAINED_AS_FULL_RECEIPT",
+    "complete_six_prn_record_topology": "NOT_EVALUATED",
+    "decompression": "SATISFIED_BY_DETERMINISTIC_CONTROL_FLOW",
+    "gps_required_observable_declaration": "SATISFIED_BY_DETERMINISTIC_CONTROL_FLOW",
+    "model_blind_witnesses": "NOT_EVALUATED",
+    "orbital_versus_null_score": "NOT_EVALUATED",
+    "scale_factor_ledger_before_phase_ledger": "PASSED_WITHOUT_TYPED_FAILURE_BUT_EXACT_STATE_NOT_RETAINED",
+    "typed_phase_shift_ledger": "DESCRIPTION_ERROR",
+    "observation_values_accessed": 0,
+    "observation_values_persisted": 0
+  },
+  "immutable_runtime_outcome": {
+    "outcome": "PRIMARY_NOT_EVALUATED",
+    "reason": "PHASE_SHIFT_MALFORMED",
+    "reason_class": "DESCRIPTION_ERROR"
+  },
+  "next_physical_path": {
+    "candidate": "PREDECLARED_RANK3_DOY234_GEOMETRY_IF_EXACT_PHYSICAL_MARGIN_REMAINS_POSITIVE",
+    "do_not_reuse_doy238": true,
+    "parser_repair_before_new_artifact_selection": [
+      "REFERENCE_SIGNAL_BLANK_CORRECTION",
+      "EXPLICIT_NUMERIC_CORRECTION",
+      "SYSTEM_ALIGNMENT_UNKNOWN_BLANK_RECORD",
+      "MALFORMED_OR_CONFLICTING_RECORD"
+    ],
+    "same_thresholds_prns_nulls_and_decision_logic_where_GEOMETRY_ALLOWS": true
+  },
+  "outcome": "DRAO_DOY238_DESCRIPTION_ERROR_FROZEN_NO_PHYSICAL_OUTCOME",
+  "physical_claims_authorized": [],
+  "schema": "gnss-drao-labelled-forward-doy238-outcome-audit-v1",
+  "source": {
+    "rinex_3_04": "https://files.igs.org/pub/data/format/rinex304.pdf",
+    "runner_source_commit": "8daa5727c0e0defbb0ef0fdccbe4f972fcbb1fa1",
+    "runner_seal_sha256": "7d2b5db0cae2a4f4a500b95fcbf8107baf315d76a962ef62038429c4c057a4bf"
+  },
+  "state": "DRAO_DOY238_CLOSED_DESCRIPTION_ERROR"
+}

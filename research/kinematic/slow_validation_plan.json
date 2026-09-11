@@ -1,0 +1,46 @@
+{
+  "schema": "fixed-slow-validation-plan-v1",
+  "cases": [
+    "nominal",
+    "shared_cubic",
+    "target_cubic",
+    "shared_exponential",
+    "shared_triangle",
+    "target_oscillation"
+  ],
+  "seed": 20260914,
+  "noisy_cases": [
+    "nominal",
+    "shared_cubic"
+  ],
+  "draws_per_case": 4,
+  "threshold_p": 0.01,
+  "policy": "No retries, case replacement, estimator edits or threshold tuning. Retain all paired outcomes. Eight noise pairs do not establish population coverage.",
+  "heldout": "receiver 7 at 30 and 60 s, no systematic disturbance; independent clock/ground/measurement Gaussian block",
+  "frozen_sources_sha256": {
+    "research/kinematic/interval_fit.py": "2410a1f2f487809edd753fa811ce2ef0ed171248d8401c5abd558ca0b5d7fdeb",
+    "research/kinematic/interval_study.py": "f6caa6c269099281f8d0961f9448c5bf491bad175733d01eb2c473ee489b36b5",
+    "research/kinematic/joint_fit.py": "89f288614ac93b2803d88031e2521df2402d642e4b992e51a43a90ce7a1d9581",
+    "research/kinematic/joint_study.py": "858c5cd56b748f6022a20c95a009bfa81377690d00ba6d871a03a76a752bbaa6",
+    "research/kinematic/phase_rates.py": "c2c9e89306b2dd4b9d3ce67cd56c4ca93fff29c8cf77ebd3cf41640212a57a62",
+    "research/kinematic/receiver_time.py": "1228526c60d61fecb7576c0adc7ad6a0c6eda81a580dee455a8b4ad92da1b3c5",
+    "research/kinematic/inverse_uncertainty.py": "19a57a5d83a50e551329787e5e75b3dc0ed16e9511722355ca26a068ebc1a26f",
+    "research/kinematic/s2_validation.py": "a9e3231cbe9ac475a9cd8a13e0a7d8750a068a19cd78d975569719b51650a788",
+    "research/kinematic/synthetic.py": "cf2d0af7a65488b2bd4de166fe93c9a11cffad9d64bd201dc900692cfbcd9844",
+    "research/kinematic/model.py": "f5e630a7c8e88feb9828a657e2ecf41518f0db54603c9554d0a49e47e4510bb5",
+    "research/kinematic/clock_drift.py": "32f6c3740247ec6ccdad8d1e6465261377604c8fd6077e4970bef30b6f27e13b",
+    "research/kinematic/doppler.py": "c2901fffacd3305308f2605b38d114ccf9dd231b0c279f9c4a10b452210e4519",
+    "research/kinematic/rinex_observations.py": "414d4c8004140ca4af02775e2442c49180de59012f366e091ce6c2faa3410c71",
+    "positioning/solver.py": "87f6a564e4a42c7e21cdb33d0dfa0f9f46d97b4e03debfab8eb0e3957c0b9318",
+    "positioning/calibration.py": "112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491",
+    "positioning/navigation.py": "bb8fb719ea370489e9c2126e49d4359634aedac9d2f243f17cb1fc7771946501",
+    "positioning/context.py": "26aea7f720f7f03c06b6b3ddcf0deebb7bda9ea2909b1823a2f1ca331214bafb",
+    "positioning/errors.py": "49ee71ad1458232342fcb9383fe41ff3ec2f218bf9482cbe9030ae0f443414df",
+    "research/kinematic/shared_calibration.py": "bff8a80519677287e0bb08dc77646a525315d1ccc1dc857e990430be460e9005",
+    "research/kinematic/shared_calibration_study.py": "bbc7622172aacb67ccfeb5d0f15c025bf67b81d4b088f3e4fa0c7f087445fad1",
+    "research/kinematic/shared_phase_gate.py": "a7203e71ea01fb98c5e932f6cf2ff9c9f40425d531142580b1c97510e63153d8",
+    "research/kinematic/shared_phase_study.py": "0360ad54dd5e9c2d5809767790606aede4f5da206ae3678c9ac721552fbc21db",
+    "research/kinematic/slow_calibration.py": "4f8764d30ae4f9a224c7df4e062c6921f96736cf2d051c89019fecbca8e2bc64",
+    "research/kinematic/slow_calibration_study.py": "92aa3688fde18b45b45de1c3fb30eeb700026ad1a2bebccf9a51f105b662f15d"
+  }
+}

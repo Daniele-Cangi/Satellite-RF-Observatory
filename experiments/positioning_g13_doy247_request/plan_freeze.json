@@ -1,0 +1,19 @@
+{
+  "plan_sha256": "f1f039bbb3f11dd0a8dd5c735f0044465e87b64f9d8c6a77fd3a2e9866f0fa58",
+  "freeze_utc": "2026-09-09T07:45:53.380520+00:00",
+  "sources": {
+    "__init__.py": "943bbc3f4bc6c407e5f86985595fdc073bfcdfd1a89b21c385523a17f4354e89",
+    "__main__.py": "ea6e1e431a3aa4d971c7b8e1b63d41016f656cba1a4fee467366249912c1edf6",
+    "acquisition.py": "c92355689b3dabc184820b799d9c61f3cc0c244b329a317284344eb156fad4b2",
+    "calibration.py": "112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491",
+    "context.py": "26aea7f720f7f03c06b6b3ddcf0deebb7bda9ea2909b1823a2f1ca331214bafb",
+    "errors.py": "49ee71ad1458232342fcb9383fe41ff3ec2f218bf9482cbe9030ae0f443414df",
+    "estimation.py": "f56d737a85322df16c97ed59c3603ad58a27a0925deb57346ca4351eac955372",
+    "jobs.py": "b758ad4858ed93c36cdb430972a3b31426cf09f73f0876b395ed7c3eb46650a3",
+    "navigation.py": "bb8fb719ea370489e9c2126e49d4359634aedac9d2f243f17cb1fc7771946501",
+    "plans.py": "72ca73d5fdbbb398594b3e2d08a1162c79798f09abc5f4ca1d577f2dba59cac5",
+    "qualification.py": "2c34727f0d51e9cee5f0afc12d07098df13be6b9c92cbecee26334dde8817f2c",
+    "solver.py": "87f6a564e4a42c7e21cdb33d0dfa0f9f46d97b4e03debfab8eb0e3957c0b9318",
+    "verification.py": "aea8a51de0acf955ddf9384ba5442549cd8efae3553001a61a4d0b8b00c9e04b"
+  }
+}

@@ -1,0 +1,18 @@
+{"station": "ALGO00CAN", "epochs": 2880, "target_code_epochs": 773}
+{"station": "AREQ00PER", "epochs": 2880, "target_code_epochs": 759}
+{"station": "BOGT00COL", "epochs": 2880, "target_code_epochs": 686}
+{"station": "BRAZ00BRA", "epochs": 2880, "target_code_epochs": 837}
+{"station": "DRAO00CAN", "epochs": 2880, "target_code_epochs": 796}
+{"station": "MKEA00USA", "epochs": 2880, "target_code_epochs": 818}
+{"station": "PIE100USA", "epochs": 2880, "target_code_epochs": 915}
+{"station": "STJO00CAN", "epochs": 2880, "target_code_epochs": 881}
+{"station": "YELL00CAN", "epochs": 2880, "target_code_epochs": 978}
+{"station": "GOLD00USA", "epochs": 2880, "target_code_epochs": 944}
+{"status": "INPUTS_ADMITTED", "support_start_s": 14100, "window_start_s": 14100, "central_s": 14250, "fit_roots": 7}
+{
+  "status": "INPUTS_ADMITTED",
+  "support_start_s": 14100,
+  "window_start_s": 14100,
+  "central_s": 14250,
+  "fit_roots": 7
+}

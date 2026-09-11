@@ -1,0 +1,25 @@
+name: independent positioning tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  positioning:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.5'
+          cache: pip
+          cache-dependency-path: requirements-positioning.txt
+      - run: python -m pip install -r requirements-positioning.txt
+      - run: python -m pytest positioning/tests experiments/gnss_inverse_positioning/tests service/tests research/kinematic/tests -q

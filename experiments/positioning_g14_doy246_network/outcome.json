@@ -1,0 +1,77 @@
+{
+  "experiment": "G14_2026246_NETWORK_POSITION",
+  "status": "INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED",
+  "primary_pass": true,
+  "comparison": {
+    "estimated_ecef_at_emission_m": [
+      -5576672.269816278,
+      -14732618.65743286,
+      21508680.23801228
+    ],
+    "oracle_ecef_at_emission_m": [
+      -5576667.134147309,
+      -14732603.290321022,
+      21508653.789402373
+    ],
+    "error_xyz_m": [
+      -5.135668968781829,
+      -15.367111837491393,
+      26.44860990718007
+    ],
+    "error_3d_m": 31.016966131539373,
+    "oracle_interpolation_control_m": 0.00609025963192458,
+    "oracle_nodes_gpst_s": [
+      10800.0,
+      11700.0,
+      12600.0,
+      13500.0,
+      14400.0,
+      15300.0,
+      16200.0,
+      17100.0,
+      18000.0
+    ],
+    "oracle_header": [
+      "#cP2026  9  3  0  0  0.00000000      96 ORBIT IGc20 HLM  IGS",
+      "## 2434 345600.00000000   900.00000000 61286 0.0000000000000",
+      "+   32   G01G02G03G04G05G06G07G08G09G10G11G12G13G14G15G16G17",
+      "+        G18G19G20G21G22G23G24G25G26G27G28G29G30G31G32  0  0",
+      "+          0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
+      "+          0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
+      "+          0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
+      "++         2  2  2  2  2  2  2  1  1  2  2  2  3  2  1  2  1",
+      "++         2  2  2  2  1  2  2  0  1  2  2  1  2  2  1  0  0",
+      "++         0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
+      "++         0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
+      "++         0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0",
+      "%c G  cc GPS ccc cccc cccc cccc cccc ccccc ccccc ccccc ccccc",
+      "%c cc cc ccc ccc cccc cccc cccc cccc ccccc ccccc ccccc ccccc",
+      "%f  1.2500000  1.025000000  0.00000000000  0.000000000000000",
+      "%f  0.0000000  0.000000000  0.00000000000  0.000000000000000",
+      "%i    0    0    0    0      0      0      0      0         0",
+      "%i    0    0    0    0      0      0      0      0         0",
+      "/* RAPID ORBIT COMBINATION FROM WEIGHTED AVERAGE OF:",
+      "/* cod emr esa gfz grg jgx jpl ngs sio usn whu              ",
+      "/* REFERENCED TO IGS TIME (IGST) AND TO WEIGHTED MEAN POLE:       ",
+      "/* PCV:IGS20_2425 OL/AL:FES2014b NONE     YN ORB:CMB CLK:CMB "
+    ]
+  },
+  "heldout": {
+    "status": "HELD_OUT_RECEIVER_CONFIRMED",
+    "residual_m": -0.8455900251865387,
+    "interpolation_control_m": 2.8051435947418213e-06,
+    "reveal_utc": "2026-09-09T08:14:28.274729+00:00",
+    "solution_sha256": "ed0e06d1ce7dadca42672f7a0c0699b0e1cea14c60fb7e4a9fc6a72489c94eb9"
+  },
+  "prospective_uncertainty_radius_m": 5755.157155537385,
+  "solution_sha256": "ed0e06d1ce7dadca42672f7a0c0699b0e1cea14c60fb7e4a9fc6a72489c94eb9",
+  "freeze_utc": "2026-09-09T08:14:24.411590+00:00",
+  "oracle_access": {
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2434/IGS0OPSRAP_20262460000_01D_15M_ORB.SP3.gz",
+    "bytes": 101435,
+    "sha256": "4070544ff1087cea12dca91a0c168404bd434c11989faa4e7febd1bc8b070fea",
+    "access_utc": "2026-09-09T08:14:28.955617+00:00",
+    "http_status": 200
+  },
+  "claim": "One receiver-labelled historical GPS position under target-state exclusion and conditional uncertainty. No velocity, autonomous identity, population coverage, universal service reliability or statistically disjoint oracle-data claim."
+}

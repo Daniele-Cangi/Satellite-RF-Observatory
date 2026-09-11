@@ -1,0 +1,11 @@
+{
+  "repository": "Daniele-Cangi/Satellite-RF-Observatory",
+  "branch": "research/drao-labelled-forward-doy238-selection-runner",
+  "preregistration_commit": "118c683c8a826343212649b1b54036d7dbc7afda",
+  "preregistration_ci_created_at": "2026-09-08T23:29:08Z",
+  "preregistration_ci_run": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/runs/34290849245",
+  "solution_commit": "622ea88d8f13071ace56e584b13b2f91f7e559c7",
+  "solution_ci_created_at": "2026-09-08T23:31:35Z",
+  "solution_ci_run": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/runs/34291033892",
+  "scope": "GitHub API run metadata supports publication order; not formal independent timestamp certification."
+}

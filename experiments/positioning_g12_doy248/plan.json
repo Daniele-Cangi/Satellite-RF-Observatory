@@ -1,0 +1,55 @@
+{
+  "experiment": "G12_DOY248_ELEVEN_EPOCH_INVERSE_POSITION",
+  "target": "G12",
+  "date_gpst": "2026-09-05",
+  "fit_stations": [
+    "ALGO00CAN",
+    "DRAO00CAN",
+    "STJO00CAN",
+    "YELL00CAN",
+    "BOGT00COL",
+    "BRAZ00BRA",
+    "AREQ00PER"
+  ],
+  "withheld_station": "GOLD00USA",
+  "observation_base_url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/",
+  "observation_filename": "{station}_R_20262480000_01D_30S_MO.crx.gz",
+  "navigation_url": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/248/BRDM00DLR_S_20262480000_01D_MN.rnx.gz",
+  "oracle_url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2434/IGS0OPSRAP_20262480000_01D_15M_ORB.SP3.gz",
+  "selection": {
+    "rule": "First chronological block of eleven consecutive normal 30-second epochs with C1C/C2W for G12 and at least four non-target GPS codes at all eight stations. Use all eleven for calibration; solve the central emitted event. Field presence only. No target orbit, target numeric quality or fit-quality selection.",
+    "support_epochs": 11,
+    "fit_epochs": 11,
+    "step_s": 30,
+    "minimum_reference_count": 4,
+    "reason": "The four-node cubic and six-node quintic stencils are local. Eleven samples span 300 seconds and retain two extra edge samples relative to the smallest odd seven-sample array. Non-target receiver clocks are independently calibrated per epoch. Outer samples of the former 41-epoch block were never numerical inputs. Preserve real bracketing, <=2 m interpolation control and all previous uncertainty floors."
+  },
+  "physical_change": "Test the same expanded north-south seven-root geometry with a physically justified 11-epoch support instead of the unused 41-epoch structural lead-in. Seek a new real position with uncertainty <=10 km; no reduction of noise, bias or confirmation thresholds.",
+  "prior_access": "DOY249 G08 and DOY250 G12 are closed. Only DOY250 field-presence information and previously known terrestrial coordinates informed the support/network design. No DOY248 observations or G12 target state examined. DOY248 is the latest completed calendar day not previously examined in this series, because DOY251 is ongoing at planning time. Eighteen wholly synthetic range-curve cases test stencil locality; they are not orbital prior inputs.",
+  "clock_calibration": "C1C/C2W IF, effective receiver clock from healthy non-G12 GPS references only; scalar equal-weight mean per epoch; no target terms. Nearest reference toc within 7200 s, elevation >=10 deg, at least four references. Exclude optional receiver-computed clock fields. Verify fixed ground coordinates with independent non-target SPP; do not adjust coordinates with those SPP offsets.",
+  "calibration_limits": {
+    "max_reference_absolute_residual_m": 50,
+    "max_reference_rms_m": 20,
+    "max_alternating_subset_clock_difference_m": 30,
+    "max_ground_coordinate_check_m": 30
+  },
+  "model": "Nominal troposphere, reference relativistic clocks and Earth rotation over light time as documented in G08; generalize GPST calendar/week and target exclusion. Target u=t_tag-P_IF/c, u0=median of seven central tags; interpolate z=P_IF-clock with four nearest bracketing tags. Compare degree 3 and degree 5, difference <=2 m. Solve xyz and B with scaled algebraic initialization and all four-root algebraic branches, no target orbit/radius/dynamics. Fit elevations >=5 deg; each residual <=100 m; investigate full rank, branches, infinity alternative and nonlinear axes.",
+  "uncertainty": {
+    "code_sigma_floor_m": 20,
+    "common_reference_sigma_m": 5,
+    "ground_coordinate_sigma_m": 5,
+    "per_root_systematic_envelope_m": 20,
+    "nonlinear_margin_factor": 1.05,
+    "rule": "Increase statistical floor if non-target RMS or subset differences demand it. Differentiate the full code/tag/median-event transform. Include local clock uncertainty, shared reference covariance and ground-coordinate effects on calibration and inference. Evaluate all 128 +/-20 m root-bias corners and 64 deterministic interior samples (seed 2026250); investigate covariance-axis profiles and semiaxes at perturbed solutions. Report 1.05*(maximum statistical95 extent + maximum sampled bias displacement) as a conditional numerical uncertainty envelope, not a certified global bound or population coverage proof. Do not shrink any term after reveal."
+  },
+  "confirmation": {
+    "uncertainty_radius_limit_m": 10000,
+    "position_error_limit_m": 10000,
+    "holdout_absolute_limit_m": 100,
+    "holdout_band": "3 sigma with shared-reference cross-covariance plus fit-bias prediction envelope and independent +/-20 m GOLD bias",
+    "oracle": "Open only after frozen solution and GOLD prediction. Nine nearest SP3 nodes at solved emission time; eight-node control <=10 m. Correct fixed-u0 axes to emission axes. Allow 10 m for oracle/interpolation/reference-point comparison. No fitted time shift or pose alignment."
+  },
+  "stop": "Exactly G12 DOY248, this network and the first structural 11-epoch block. Source, calibration or identifiability failure closes the attempt without oracle access. No alternate target/day/station/window and no relaxed thresholds. Excessive uncertainty may receive the same predeclared diagnostic receiver/oracle reveal, retaining failed primary status. Transport unavailability is recorded; do not replace products. Every required criterion must pass for the conditional one-event demonstration label.",
+  "claim": "One receiver-labelled GPS position from public RF data, with target-state exclusion and conditional uncertainty. No velocity, autonomous identity, general service reliability or statistically disjoint oracle-data claim.",
+  "implementation_evidence": "Commit and push this plan and implementation before acquisition; retain byte-exact source snapshots for acquisition, estimation and verification. Record SHA-256 for plan, raw files, admitted inputs, solution and code. No frozen outcome is overwritten by acquisition replay."
+}

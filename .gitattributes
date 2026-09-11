@@ -40,3 +40,33 @@ experiments/orbital_discriminability/GNSS_OBSERVER_TRANSFER_GEOMETRY_RECEIPT.jso
 
 # The LuGRE metadata audit receipt is frozen from its exact LF byte stream.
 experiments/orbital_discriminability/LUGRE_PROSPECTIVE_METADATA_AUDIT_RECEIPT.json -text
+
+# Independent-position evidence retains its frozen bytes across platforms.
+experiments/gnss_inverse_positioning/*.py -text
+experiments/gnss_inverse_positioning/event_2026249/*.json -text whitespace=cr-at-eol
+experiments/positioning_g12_doy250/*.json -text whitespace=cr-at-eol
+
+# Fixed-width SP3 source excerpts include meaningful record padding.
+positioning/tests/fixtures/*.sp3 -text whitespace=-blank-at-eol
+
+experiments/positioning_g12_doy248/*.json -text whitespace=cr-at-eol
+experiments/positioning_g12_doy248/sources/** -text whitespace=cr-at-eol
+
+# Downloaded dossiers and their catalog hashes must survive Windows checkouts.
+web/app/results.json -text
+web/public/evidence/*.json -text
+
+# Configured-request evidence is sealed byte-for-byte across platforms.
+experiments/positioning_g13_doy247_request/** -text whitespace=cr-at-eol
+
+# Frozen candidate-network evidence.
+experiments/positioning_g14_doy246_network/** -text whitespace=cr-at-eol
+experiments/positioning_g14_doy246_network/estimation/reference_only.rnx -text whitespace=-blank-at-eol,cr-at-eol
+
+# Preserve the source/report bytes recorded by the synthetic development study.
+research/kinematic/*.py -text
+research/kinematic/results/*.json -text
+
+# Synthetic fixed-width RINEX fixtures retain padding and exact receipt bytes.
+research/kinematic/tests/fixtures/*.rnx -text whitespace=-blank-at-eol
+research/kinematic/slow_validation_plan.json -text

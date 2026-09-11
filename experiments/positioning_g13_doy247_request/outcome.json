@@ -1,0 +1,8 @@
+{
+  "experiment": "G13_2026247_CONFIGURED_POSITION",
+  "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+  "reason": "NO_COMMON_STRUCTURAL_WINDOW",
+  "primary_pass": false,
+  "plan_sha256": "f1f039bbb3f11dd0a8dd5c735f0044465e87b64f9d8c6a77fd3a2e9866f0fa58",
+  "oracle_accessed": false
+}

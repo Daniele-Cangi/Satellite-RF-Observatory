@@ -1,0 +1,24 @@
+{
+  "access_at_seal": {
+    "body_bytes": 0,
+    "network_requests": 0,
+    "observation_values": 0,
+    "rinex_headers": 0,
+    "scores": 0
+  },
+  "dependencies": {
+    "hatanaka": "2.8.1",
+    "numpy": "2.3.3",
+    "python": "3.13"
+  },
+  "executor_seal_canonical_sha256": "42f8fb271bdb0d6d437cfa459578cd6c624832e61becfd58c9af2a04c094853d",
+  "live_authority_granted": false,
+  "new_gate": false,
+  "runner_manifest_sha256": "8889c01816c3367033f04236fd7cbd9e1ae0a40cbbc2982cf44eaf301ec6d2e6",
+  "runner_source_canonical_sha256": "16550f863e2db77a89574b51a41d5ed4768e36a87a35634c3f64a86e36c68eba",
+  "runner_source_commit": "a26f2e7f2442f713e5a4c6e57789f1937388b7fa",
+  "schema": "gnss-drao-labelled-forward-doy234-runner-seal-v1",
+  "selection_canonical_sha256": "ee0c34c788f24e518396d735235c2528de314015c3f319d193d43c1bfb297fde",
+  "state": "DRAO_DOY234_RUNNER_FROZEN_UNEXECUTED",
+  "stop": "SEPARATE_ONE_USE_AUTHORITY_REQUIRED_BEFORE_NETWORK"
+}

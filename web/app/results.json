@@ -1,0 +1,515 @@
+{
+  "schemaVersion": 2,
+  "events": [
+    {
+      "id": "g12-2026-09-05",
+      "target": "G12",
+      "date": "2026-09-05",
+      "status": "UNCERTAINTY_TOO_LARGE",
+      "primaryPass": false,
+      "sourceUrl": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/tree/7fcd71f9428c20202f98079955e8fac76aa0f6ad/experiments/positioning_g12_doy248",
+      "fitStations": [
+        "ALGO00CAN",
+        "DRAO00CAN",
+        "STJO00CAN",
+        "YELL00CAN",
+        "BOGT00COL",
+        "BRAZ00BRA",
+        "AREQ00PER"
+      ],
+      "withheldStation": "GOLD00USA",
+      "errorM": 15.139240687998601,
+      "radiusM": 10121.468778324916,
+      "heldoutM": -3.136704571545124,
+      "heldoutConfirmed": true,
+      "ecefM": [
+        -9784123.26287933,
+        -24686516.3765085,
+        -103977.30517087923
+      ],
+      "emissionS": 37949.92176914985,
+      "freezeUtc": "2026-09-08T23:30:50.972190+00:00",
+      "heldoutUtc": "2026-09-08T23:31:52.424993+00:00",
+      "oracleUtc": "2026-09-08T23:31:53.138407+00:00",
+      "solutionHash": "59db724da7f701682f1c7ea82a697cfbab6fc396538a02f64c7be3e7e2b9d1e0",
+      "window": "10:30–10:35 GPST",
+      "supportAvailable": null,
+      "supportRequired": null,
+      "thresholdM": 10000,
+      "sources": [
+        {
+          "label": "ALGO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/ALGO00CAN_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "DRAO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/DRAO00CAN_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "STJO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/STJO00CAN_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "YELL00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/YELL00CAN_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BOGT00COL · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/BOGT00COL_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BRAZ00BRA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/BRAZ00BRA_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "AREQ00PER · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/AREQ00PER_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "GOLD00USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/GOLD00USA_R_20262480000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "Orbita di confronto IGS",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2434/IGS0OPSRAP_20262480000_01D_15M_ORB.SP3.gz"
+        }
+      ],
+      "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+      "operationalStatus": "COMPLETED",
+      "profile": "frozen-legacy",
+      "errorThresholdM": 10000,
+      "heldoutThresholdM": 100,
+      "networkSelection": null,
+      "dossierUrl": "/evidence/g12-2026-09-05.json",
+      "dossierHash": "fe1a17ad958f8edd493f15afb34fc6b4339d1811cf3be37be2cb87c55d80c6e8"
+    },
+    {
+      "id": "g08-2026-09-06",
+      "target": "G08",
+      "date": "2026-09-06",
+      "status": "UNCERTAINTY_TOO_LARGE",
+      "primaryPass": false,
+      "sourceUrl": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/tree/7fcd71f9428c20202f98079955e8fac76aa0f6ad/experiments/gnss_inverse_positioning/event_2026249",
+      "fitStations": [
+        "ALGO00CAN",
+        "DRAO00CAN",
+        "STJO00CAN",
+        "YELL00CAN",
+        "BOGT00COL"
+      ],
+      "withheldStation": "GOLD00USA",
+      "errorM": 188.70503921046887,
+      "radiusM": 21607.66024134075,
+      "heldoutM": 1.8492384143173695,
+      "heldoutConfirmed": true,
+      "ecefM": [
+        5108535.953617398,
+        -25703109.54023204,
+        1963414.01644314
+      ],
+      "emissionS": 149.92469053630683,
+      "freezeUtc": "2026-09-08T20:24:40.028281+00:00",
+      "heldoutUtc": "2026-09-08T20:26:23.821795+00:00",
+      "oracleUtc": "2026-09-08T20:26:25.649730+00:00",
+      "solutionHash": "213da6154cbb8c3c7dc278b2e81cd82f60da6d5852cdc89da3d03d57a55c8462",
+      "window": "00:00–00:05 GPST",
+      "supportAvailable": null,
+      "supportRequired": null,
+      "thresholdM": 10000,
+      "sources": [
+        {
+          "label": "ALGO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/249/ALGO00CAN_R_20262490000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "DRAO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/249/DRAO00CAN_R_20262490000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "STJO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/249/STJO00CAN_R_20262490000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "YELL00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/249/YELL00CAN_R_20262490000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BOGT00COL · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/249/BOGT00COL_R_20262490000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "GOLD00USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/249/GOLD00USA_R_20262490000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "Orbita di confronto IGS",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2435/IGS0OPSRAP_20262490000_01D_15M_ORB.SP3.gz"
+        }
+      ],
+      "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+      "operationalStatus": "COMPLETED",
+      "profile": "frozen-legacy",
+      "errorThresholdM": 10000,
+      "heldoutThresholdM": 100,
+      "networkSelection": null,
+      "dossierUrl": "/evidence/g08-2026-09-06.json",
+      "dossierHash": "f51b6283009a9759c205fffc596f5c61813c018e27a9da42b54bf370abdd6e9d"
+    },
+    {
+      "id": "g12-2026-09-07",
+      "target": "G12",
+      "date": "2026-09-07",
+      "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+      "primaryPass": false,
+      "sourceUrl": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/tree/7fcd71f9428c20202f98079955e8fac76aa0f6ad/experiments/positioning_g12_doy250",
+      "fitStations": [
+        "ALGO00CAN",
+        "DRAO00CAN",
+        "STJO00CAN",
+        "YELL00CAN",
+        "BOGT00COL",
+        "BRAZ00BRA",
+        "AREQ00PER"
+      ],
+      "withheldStation": "GOLD00USA",
+      "errorM": null,
+      "radiusM": null,
+      "heldoutM": null,
+      "heldoutConfirmed": false,
+      "ecefM": null,
+      "emissionS": null,
+      "freezeUtc": null,
+      "heldoutUtc": null,
+      "oracleUtc": null,
+      "solutionHash": null,
+      "window": null,
+      "supportAvailable": 18,
+      "supportRequired": 41,
+      "thresholdM": 10000,
+      "sources": [
+        {
+          "label": "ALGO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/ALGO00CAN_R_20262500000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "DRAO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/DRAO00CAN_R_20262500000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "STJO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/STJO00CAN_R_20262500000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "YELL00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/YELL00CAN_R_20262500000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BOGT00COL · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/BOGT00COL_R_20262500000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BRAZ00BRA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/BRAZ00BRA_R_20262500000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "AREQ00PER · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/AREQ00PER_R_20262500000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "GOLD00USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/GOLD00USA_R_20262500000_01D_30S_MO.crx.gz"
+        }
+      ],
+      "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+      "operationalStatus": "COMPLETED",
+      "profile": "frozen-legacy",
+      "errorThresholdM": 10000,
+      "heldoutThresholdM": 100,
+      "networkSelection": null,
+      "dossierUrl": "/evidence/g12-2026-09-07.json",
+      "dossierHash": "a205af039bea00bb9ffb80d4f413aee5310a362f1bed86d6ba92b751aefeab47"
+    },
+    {
+      "id": "g13-2026-09-04",
+      "target": "G13",
+      "date": "2026-09-04",
+      "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+      "primaryPass": false,
+      "sourceRevision": "6e9bfadb96224d73e51b6a940b9343895ef3b820",
+      "sourceUrl": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/tree/6e9bfadb96224d73e51b6a940b9343895ef3b820/experiments/positioning_g13_doy247_request",
+      "operationalStatus": "COMPLETED",
+      "profile": "gps-code-snapshot-v1",
+      "fitStations": [
+        "ALGO00CAN",
+        "DRAO00CAN",
+        "STJO00CAN",
+        "YELL00CAN",
+        "BOGT00COL",
+        "BRAZ00BRA",
+        "AREQ00PER"
+      ],
+      "withheldStation": "GOLD00USA",
+      "errorM": null,
+      "radiusM": null,
+      "heldoutM": null,
+      "heldoutConfirmed": false,
+      "ecefM": null,
+      "emissionS": null,
+      "freezeUtc": null,
+      "heldoutUtc": null,
+      "oracleUtc": null,
+      "solutionHash": null,
+      "window": null,
+      "supportAvailable": 0,
+      "supportRequired": 11,
+      "thresholdM": 10000,
+      "errorThresholdM": 10000,
+      "heldoutThresholdM": 100,
+      "networkSelection": null,
+      "sources": [
+        {
+          "label": "ALGO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/ALGO00CAN_R_20262470000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "DRAO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/DRAO00CAN_R_20262470000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "STJO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/STJO00CAN_R_20262470000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "YELL00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/YELL00CAN_R_20262470000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BOGT00COL · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/BOGT00COL_R_20262470000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BRAZ00BRA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/BRAZ00BRA_R_20262470000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "AREQ00PER · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/AREQ00PER_R_20262470000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "GOLD00USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/247/GOLD00USA_R_20262470000_01D_30S_MO.crx.gz"
+        }
+      ],
+      "dossierUrl": "/evidence/g13-2026-09-04.json",
+      "dossierHash": "0cce3e2ebf7750d6a5e55dad37b93592866c0ee20aa751f945c02d16ea380162"
+    },
+    {
+      "id": "g14-2026-09-03",
+      "target": "G14",
+      "date": "2026-09-03",
+      "status": "INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED",
+      "primaryPass": true,
+      "sourceRevision": "2ee7d0ab060f21e24d182968d4d94ea3ddcd17ca",
+      "sourceUrl": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/tree/2ee7d0ab060f21e24d182968d4d94ea3ddcd17ca/experiments/positioning_g14_doy246_network",
+      "operationalStatus": "COMPLETED",
+      "profile": "gps-code-network-v1",
+      "fitStations": [
+        "ALGO00CAN",
+        "BOGT00COL",
+        "DRAO00CAN",
+        "MKEA00USA",
+        "PIE100USA",
+        "STJO00CAN",
+        "YELL00CAN"
+      ],
+      "withheldStation": "GOLD00USA",
+      "errorM": 31.016966131539373,
+      "radiusM": 5755.157155537385,
+      "heldoutM": -0.8455900251865387,
+      "heldoutConfirmed": true,
+      "ecefM": [
+        -5576672.269816278,
+        -14732618.65743286,
+        21508680.23801228
+      ],
+      "emissionS": 14249.930249677862,
+      "freezeUtc": "2026-09-09T08:14:24.411590+00:00",
+      "heldoutUtc": "2026-09-09T08:14:28.274729+00:00",
+      "oracleUtc": "2026-09-09T08:14:28.955617+00:00",
+      "solutionHash": "ed0e06d1ce7dadca42672f7a0c0699b0e1cea14c60fb7e4a9fc6a72489c94eb9",
+      "window": "03:55–04:00 GPST",
+      "supportAvailable": 11,
+      "supportRequired": 11,
+      "thresholdM": 10000,
+      "errorThresholdM": 10000,
+      "heldoutThresholdM": 100,
+      "networkSelection": {
+        "candidateStations": [
+          "ALGO00CAN",
+          "AMC400USA",
+          "AREQ00PER",
+          "BOGT00COL",
+          "BRAZ00BRA",
+          "DRAO00CAN",
+          "MKEA00USA",
+          "PIE100USA",
+          "STJO00CAN",
+          "YELL00CAN"
+        ],
+        "stations": [
+          {
+            "station": "ALGO00CAN",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 773,
+            "longest_consecutive_epochs": 773,
+            "ground_header_usable": true
+          },
+          {
+            "station": "AMC400USA",
+            "role": "candidate",
+            "source_status": "SOURCE_MISSING",
+            "source_reason": "HTTP_404",
+            "eligible_epochs": 0,
+            "longest_consecutive_epochs": 0,
+            "ground_header_usable": false
+          },
+          {
+            "station": "AREQ00PER",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 759,
+            "longest_consecutive_epochs": 736,
+            "ground_header_usable": true
+          },
+          {
+            "station": "BOGT00COL",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 686,
+            "longest_consecutive_epochs": 677,
+            "ground_header_usable": true
+          },
+          {
+            "station": "BRAZ00BRA",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 837,
+            "longest_consecutive_epochs": 818,
+            "ground_header_usable": true
+          },
+          {
+            "station": "DRAO00CAN",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 796,
+            "longest_consecutive_epochs": 796,
+            "ground_header_usable": true
+          },
+          {
+            "station": "GOLD00USA",
+            "role": "withheld",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 944,
+            "longest_consecutive_epochs": 883,
+            "ground_header_usable": true
+          },
+          {
+            "station": "MKEA00USA",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 818,
+            "longest_consecutive_epochs": 671,
+            "ground_header_usable": true
+          },
+          {
+            "station": "PIE100USA",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 915,
+            "longest_consecutive_epochs": 911,
+            "ground_header_usable": true
+          },
+          {
+            "station": "STJO00CAN",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 881,
+            "longest_consecutive_epochs": 655,
+            "ground_header_usable": true
+          },
+          {
+            "station": "YELL00CAN",
+            "role": "candidate",
+            "source_status": "OBSERVATIONS_SCANNED",
+            "source_reason": null,
+            "eligible_epochs": 978,
+            "longest_consecutive_epochs": 722,
+            "ground_header_usable": true
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "ALGO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/ALGO00CAN_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "AMC400USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/AMC400USA_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "AREQ00PER · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/AREQ00PER_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BOGT00COL · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/BOGT00COL_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "BRAZ00BRA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/BRAZ00BRA_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "DRAO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/DRAO00CAN_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "MKEA00USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/MKEA00USA_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "PIE100USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/PIE100USA_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "STJO00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/STJO00CAN_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "YELL00CAN · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/YELL00CAN_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "GOLD00USA · osservazioni RF",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/GOLD00USA_R_20262460000_01D_30S_MO.crx.gz"
+        },
+        {
+          "label": "Orbita di confronto IGS",
+          "url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2434/IGS0OPSRAP_20262460000_01D_15M_ORB.SP3.gz"
+        }
+      ],
+      "dossierUrl": "/evidence/g14-2026-09-03.json",
+      "dossierHash": "5069d1de2a298e4c8b5beed0aab00bc29e3437cbd08e820ca846e52b9cbf4467"
+    }
+  ]
+}

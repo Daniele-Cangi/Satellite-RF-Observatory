@@ -1,866 +1,380 @@
-# Satellite-RF-Observatory — Agent Operating Instructions
+# Satellite-RF-Observatory — Independent Position Verification
 
-## 1. Project North Star
+## Mission and causal order
 
-Satellite-RF-Observatory is a **satellite-first physical inference project**.
+Use public RF observations acquired through the Internet to reconstruct a
+satellite's position independently of that satellite's orbit products. Declare
+uncertainty before revealing an excluded receiver and an external orbit solution.
 
-Its central scientific question is:
+The scientific question is:
+> Can Internet observations determine a new satellite position with defensible
+> uncertainty, predict an excluded receiver, and agree with an unopened orbit?
 
-> Can a candidate orbital geometry predict observer-coupled RF structure in a future held-out interval better than predeclared non-orbital alternatives?
-
-The causal order is:
-
-```text
-candidate orbit + observer geometry + event time
-    ↓
-distributed orbital prediction
-    ↓
-pass-specific detectability requirement
-    ↓
-minimum qualified measurement capability
-    ↓
-prospective observation
-    ↓
-held-out orbital-versus-null comparison
-    ↓
-physical inference
+```
+predeclared target, stations, selection rule and error model
+  -> public RF observations + allowed non-target calibration
+  -> independent xyz and emission time, with uncertainty
+  -> freeze solution, predictions, inputs and implementation
+  -> reveal excluded receiver, then external orbit
+  -> report error, uncertainty, all criteria and reproducible evidence
 ```
 
-The **orbit is the causal center**.
-
-Receivers, APIs, inventories, search engines, SDR protocols, receipts, metadata, storage and orchestration are subordinate tools.
-
-They must never become the scientific target by themselves.
-
----
-
-# 2. Priority hierarchy
-
-When goals conflict, use this order:
-
-1. **Scientific North Star**
-2. **Physical information gain**
-3. **SHOCK: alternative physical routes**
-4. **Minimum viable experiment**
-5. **Measurement integrity**
-6. **Evidence provenance**
-7. **Infrastructure quality**
-8. **Documentation completeness**
-
-Lower levels must not block higher levels unless they are genuinely required to make the physical result interpretable.
-
-In particular:
-
-> Provenance is not the experiment.
-
-> Infrastructure is not the scientific result.
-
-> A perfectly receipted path that never reaches the satellite question is a failure of direction.
-
----
-
-# 3. Information-gain test
-
-Before creating any substantial new work item, successor gate, subsystem or abstraction, explicitly answer:
-
-```text
-What new information about the satellite/orbital hypothesis can this work produce?
-```
-
-Valid answers include:
-
-* whether the orbital signature is detectable;
-* whether observer geometry is discriminative;
-* whether a real measurement path preserves the predicted structure;
-* whether a held-out observation agrees with the orbital prediction;
-* whether a frozen non-orbital null explains the data better;
-* whether one orbit is distinguishable from alternative orbital hypotheses.
-
-Invalid answers, by themselves, include:
-
-* improving a search result format;
-* formalizing API discovery;
-* creating a better endpoint inventory;
-* improving serialization;
-* strengthening metadata receipts;
-* designing a generic adapter;
-* proving that a web directory is complete;
-* reproducing browser selection behavior;
-* expanding orchestration infrastructure.
-
-If the answer is:
-
-> “No new physical information; this only improves plumbing.”
-
-then **do not create a research gate for it** unless that plumbing is strictly necessary for the next physical observation.
-
----
-
-# 4. A failure does not automatically justify a successor gate
-
-This is a hard rule.
-
-```text
-FAILURE ≠ NEW GATE
-```
-
-A failure should first trigger a change-of-abstraction review.
-
-Ask:
-
-1. Is the failed mechanism actually necessary?
-2. Can the claim scope be narrowed instead?
-3. Can a different physical route bypass the failure?
-4. Can the experiment use a fixed, predeclared capability instead of global discovery?
-5. Can published observations or another sensor family answer the same physical question?
-6. Is the project learning about satellites, or merely learning about its own tooling?
-
-Only create a successor gate when it closes or tests a **physically meaningful edge** of the satellite-first causal chain.
-
----
-
-# 5. Prefer narrower claims over larger infrastructure
-
-Do not build global infrastructure merely to support a stronger claim than the experiment needs.
-
-For example:
-
-Bad requirement:
-
-> prove that no suitable Internet RF receiver exists.
-
-Often sufficient:
-
-> these two predeclared independent receivers were or were not qualified for this frozen pass.
-
-Bad requirement:
-
-> establish a complete neutral inventory of public SDR receivers.
-
-Often sufficient:
-
-> freeze a bounded, explicit receiver set before observing RF and restrict the claim to that set.
-
-Bad requirement:
-
-> discover the globally optimal station pair.
-
-Often sufficient:
-
-> show that one predeclared independent pair has positive predicted discriminability margin.
-
-Use:
-
-```text
-narrow claim + real experiment
-```
-
-before:
-
-```text
-broad claim + large infrastructure
-```
-
----
-
-# 6. Shock → Spike → Proof → Harden
-
-This project follows four distinct phases.
-
-They must not be collapsed.
-
-## SHOCK
-
-Purpose:
-
-> Find surprising physical routes to the satellite question.
-
-During SHOCK:
-
-* generate causally different approaches;
-* allow unconventional sensor combinations;
-* question current abstractions;
-* discard failed mechanisms freely;
-* search for shortcuts to physical information;
-* compare forward and inverse formulations;
-* consider SatNOGS, KiwiSDR, WebSDR, published measurements, fixed stations or mixed roots;
-* maximize information gain.
-
-Do **not** during SHOCK:
-
-* freeze implementation details prematurely;
-* create a gate for every uncertainty;
-* insist on complete infrastructure;
-* generalize abstractions;
-* optimize provenance machinery;
-* preserve failed mechanisms merely because work was invested in them.
-
-A SHOCK failure should usually produce **alternative mechanisms**, not a more detailed version of the failed mechanism.
-
----
-
-## SPIKE
-
-Purpose:
-
-> Build the smallest vertical path that can physically answer something.
-
-Spike rules:
-
-* use bounded pragmatic choices;
-* fixed receiver lists are acceptable;
-* manual or operator-selected scope is acceptable if declared before observation;
-* no need for global discovery;
-* no need for reusable adapters;
-* no need for product architecture;
-* no need for complete automation.
-
-A spike should minimize:
-
-```text
-orbit prediction
-→ instrument
-→ observation
-→ held-out comparison
-```
-
-Everything not required by that path is deferred.
-
----
-
-## PROOF
-
-Purpose:
-
-> Freeze the scientific test before seeing the confirmation outcome.
-
-Only here freeze:
-
-* candidate orbit;
-* observer set;
-* carrier or carrier interval;
-* calibration interval;
-* confirmation interval;
-* nuisance parameters;
-* null families;
-* detectability criteria;
-* missing-data budget;
-* transform rules;
-* physical outcome semantics.
-
-Proof protects against post-hoc adaptation.
-
-Proof does not require turning every descriptive dependency into a research gate.
-
----
-
-## HARDEN
-
-Purpose:
-
-> Prevent a valid experiment from producing an invalid claim.
-
-Only here emphasize:
-
-* immutable evidence;
-* receipts;
-* hashing;
-* lineage;
-* exact environment where necessary;
-* zero-retry confirmation;
-* frozen outcomes;
-* strict serialization;
-* cleanup guarantees;
-* reproducibility.
-
-HARDEN must not leak backwards and dominate SHOCK or SPIKE.
-
----
-
-# 7. Historical F2.5 rule
-
-`experiments/live_instrument/` is a **historical measurement-integrity layer**.
-
-Its results are valuable.
-
-Its sequencing style is **not a template for new orbital work**.
-
-Do not imitate the historical pattern:
-
-```text
-failure
-→ frozen failure artifact
-→ exact successor
-→ new gate
-→ new execution
-→ next failure
-→ next gate
-```
-
-unless the sequence is still producing physical information about the satellite question.
-
-F2.5 demonstrated useful controls:
-
-* same-path witnesses;
-* event-time reasoning;
-* capability qualification;
-* transform lineage;
-* distinction between descriptive and physical failures;
-* bounded RF persistence;
-* causal receipts.
-
-Reuse these primitives only when justified by the current orbital experiment.
-
-Do not recreate the F2.5 gate treadmill in another subsystem.
-
----
-
-# 8. Orbital-first requirement
-
-Before selecting a receiver for a physical experiment:
-
-1. freeze or declare the candidate orbital hypothesis;
-2. propagate observer-specific trajectories;
-3. compute pass-specific differential structure;
-4. determine minimum time/frequency resolution;
-5. determine the required joint visibility;
-6. determine the acceptable timing uncertainty;
-7. determine whether the planned sensor geometry has positive discriminability margin.
-
-Only then evaluate whether a candidate instrument can preserve that structure.
-
-Receiver convenience must not choose the satellite.
-
-Band convenience must not choose the scientific question.
-
----
-
-# 9. Current orbital observables
-
-The preferred geometric primitive is:
-
-```text
-y_i(t) = -range_rate_i(t) / c
-```
-
-For independent observers:
-
-```text
-Δy_ij(t) = y_i(t) - y_j(t)
-```
-
-Important observables include:
-
-* fractional Doppler;
-* differential Doppler;
-* Doppler slope;
-* Doppler curvature;
-* visibility interval;
-* closest-approach timing;
-* range-rate zero crossing;
-* observer-dependent event ordering;
-* held-out differential residual.
-
-Carrier scaling should remain downstream of fractional orbital geometry whenever possible.
-
----
-
-# 10. Nuisance discipline
-
-Allowed nuisance parameters must be declared before confirmation.
-
-Typical allowed nuisance:
-
-* station-local constant frequency offset;
-* bounded affine oscillator drift;
-* bounded event-time error;
-* carrier uncertainty;
-* explicit orbital prediction envelope;
-* declared dropout/quantization/noise behavior.
-
-Do not allow nuisance terms to absorb the orbital signal.
-
-Do not introduce:
-
-* unconstrained splines;
-* arbitrary time warps;
-* per-sample corrections;
-* post-outcome threshold changes;
-* holdout-informed calibration;
-* flexible models whose complexity is chosen after seeing the result.
-
----
-
-# 11. Held-out evidence rule
-
-A physical orbital claim requires genuinely independent evidence.
-
-Calibration and confirmation must be disjoint.
-
-The confirmation interval must not:
-
-* fit nuisance parameters;
-* choose a receiver;
-* select a target feature;
-* change the carrier;
-* modify the null set;
-* alter thresholds;
-* redefine missing-data rules.
-
-For inverse work, prefer a held-out observer where practical:
-
-```text
-A + B
-→ infer candidate orbital family
-→ freeze prediction for C
-→ observe C
-→ compare
-```
-
-For early forward work, a temporal held-out interval with two independent hardware roots is sufficient if declared in advance.
-
----
-
-# 12. Null-model discipline
-
-Nulls must be meaningful alternatives, not caricatures.
-
-They must:
-
-* be frozen before confirmation;
-* use the same calibration data;
-* use the same holdout;
-* have declared complexity;
-* avoid post-result tuning.
-
-Separate two questions:
-
-## Orbitality
-
-Does orbital geometry outperform non-orbital explanations?
-
-## Specific orbit identity
-
-Does one specific orbit outperform alternative physical orbital hypotheses?
-
-Alternative orbits are not generic nulls.
-
-Do not jump from:
-
-```text
-orbital model preferred
-```
-
-to:
-
-```text
-satellite identity established
-```
-
----
-
-# 13. Claim ladder
-
-Use progressively stronger claims.
-
-```text
-MEASUREMENT_VALID
-        ↓
-ORBITAL_SIGNATURE_DETECTABLE
-        ↓
-ORBITAL_MODEL_PREDICTIVELY_PREFERRED
-        ↓
-SPECIFIC_ORBIT_PREFERRED
-        ↓
-HELD_OUT_STATION_CONFIRMED
-        ↓
-REPEATED_PASS_CONSISTENCY
-        ↓
-IDENTITY_CANDIDATE_SUPPORTED
-```
-
-Never skip levels.
-
-A receiver observation is not satellite identity.
-
-A model-conditioned SatNOGS artifact is not independent confirmation of the same identity.
-
-A good calibration fit is not a held-out prediction.
-
----
-
-# 14. Capability discovery rules
-
-Capability discovery is a supporting task, not a research program.
-
-Permitted approaches for the first forward vertical include:
-
-* a fixed predeclared pair of public receivers;
-* a small operator-declared receiver set;
-* known SatNOGS stations;
-* published observation artifacts;
-* a manually scoped instrument set frozen before RF inspection.
-
-A global neutral inventory is **not required** unless the claim explicitly depends on global coverage.
-
-Do not create additional research gates merely because:
-
-* a search provider merges results;
-* an API lacks a perfect schema;
-* an inventory lacks global completeness;
-* a directory requires interactive browsing;
-* machine-readable discovery is inconvenient.
-
-If discovery infrastructure becomes more complex than the physical experiment, reduce scope or change route.
-
----
-
-# 15. Search-engine rule
-
-General web search is reconnaissance only.
-
-Search-engine ranking, query grouping, result partitioning and search-provider transport semantics are **not part of the physical measurement chain**.
-
-Do not turn search-engine behavior into a sequence of research gates.
-
-If web search cannot produce a clean machine-readable inventory:
-
-* use another source;
-* use a fixed receiver set;
-* use operator-known stations;
-* use SatNOGS;
-* narrow the claim.
-
-Never build an “epistemology of search” unless search itself is the scientific object, which it is not here.
-
----
-
-# 16. SatNOGS role
-
-SatNOGS may be used in two different ways.
-
-## Model-conditioned forward validation
-
-Acceptable:
-
-```text
-known candidate orbit
-→ predicted station-specific Doppler
-→ existing/published SatNOGS observations
-→ held-out comparison
-```
-
-But selection by NORAD/transmitter means these observations are not targetless evidence of identity.
-
-## Independent/inverse work
-
-SatNOGS identity labels must not be treated as ground truth if the task is to infer identity from RF.
-
-Whenever raster waterfalls are used, account for:
-
-* time resolution;
-* frequency-bin resolution;
-* lossy rasterization;
-* ridge extraction uncertainty.
-
----
-
-# 17. Kiwi/WebSDR role
-
-A KiwiSDR, WebSDR or similar receiver is a remote telescope.
-
-It is not the project.
-
-Use F2.5-derived integrity controls where necessary, but do not revisit DDC internals unless a concrete orbital observation is invalidated by receiver ambiguity.
-
-Two channels from the same Kiwi are useful for receiver diagnostics.
-
-They are **not equivalent to independent observer geometry**.
-
-Distributed orbital evidence requires independent physical measurement roots when the claim depends on geography.
-
----
-
-# 18. Gate creation criteria
-
-A new gate is justified only if all are true:
-
-1. it has a distinct physical question;
-2. it can produce a new physical outcome;
-3. the result changes what can be claimed about orbital geometry or measurement validity;
-4. it cannot be handled as a normal implementation repair;
-5. it does not merely formalize infrastructure.
-
-Before creating one, write:
-
-```text
-Physical question:
-New information produced:
-Why existing gate cannot answer it:
-Minimum experiment:
-Stop condition:
-```
-
-If `New information produced` is empty or infrastructural, do not create the gate.
-
----
-
-# 19. Repair versus new gate
-
-Use a normal implementation repair for:
-
-* test bugs;
-* incorrect visibility masks;
-* numerical-envelope implementation errors;
-* parser corrections;
-* CI environment fixes;
-* duplicated logic;
-* deterministic search-tool incompatibility;
-* code organization;
-* documentation errors.
-
-A correction becomes a new scientific gate only when it changes the physical hypothesis, observational contract, frozen proof design or interpretable outcome set.
-
-Not every code change needs a new gate number.
-
----
-
-# 20. Anti-bureaucracy rule
-
-Stop immediately if the project begins producing more machinery about:
-
-* selection;
-* authority;
-* inventory;
-* schema;
-* search;
-* orchestration;
-* receipts;
-
-than about:
-
-* orbit;
-* pass;
-* observer geometry;
-* Doppler;
-* physical measurement;
-* held-out prediction;
-* null discrimination.
-
-That imbalance is a signal of conceptual drift.
-
----
-
-# 21. Anti-drift question
-
-At every checkpoint ask:
-
-> If the receiver implementation disappeared tomorrow, would this work still tell us something new about the satellite hypothesis?
-
-If yes, it is likely central research.
-
-If no, ask whether it is truly necessary for the next physical observation.
-
----
-
-# 22. Current state
-
-The current research state is:
-
-## F2.5
-
-Concluded.
-
-Treat as:
-
-```text
-RF Measurement Integrity Layer
-```
-
-Do not continue F2.5 except for genuine maintenance defects.
-
-## G0
-
-Orbital discriminability mechanism established offline.
-
-Useful results already exist:
-
-* deterministic multi-observer trajectories;
-* fractional and differential Doppler;
-* held-out nuisance separation;
-* null comparison;
-* detectable and undetectable synthetic regions.
-
-G0 may receive **one bounded hardening pass**, not a new gate family.
-
-Required hardening:
-
-* apply joint visibility consistently in G0 scoring;
-* use direct time-shift trajectory envelopes for large clock uncertainty;
-* remove/rework null redundancy;
-* add at least one model-mismatch synthetic stress case.
-
-Do not create G0.1, G0.2, etc. for these.
-
-## G1
-
-Pass-specific capability admission is conceptually valid offline.
-
-Keep:
-
-```text
-orbit/pass
-→ receiver geometry
-→ detectability margin
-→ fixed capability set
-```
-
-## G1.1–G1.3
-
-Treat as a concluded side investigation into capability discovery.
-
-Do not continue the inventory/search chain.
-
-No G1.4 should be created merely to repair search-provider result partitioning.
-
----
-
-# 23. Immediate next objective
-
-The next meaningful objective is the first **forward satellite observation vertical**.
-
-Preferred shape:
-
-```text
-known candidate orbit
-        ↓
-frozen pass + carrier
-        ↓
-2+ independent predeclared receiver roots
-        ↓
-pass-specific G1 detectability check
-        ↓
-measurement-path qualification
-        ↓
-calibration prefix
-        ↓
-held-out confirmation suffix
-        ↓
-orbital prediction versus frozen nulls
-```
-
-The receiver set may be small and explicitly scoped.
-
-Do not require a global capability inventory.
-
----
-
-# 24. Forward before inverse
-
-Do not attempt unconstrained orbit reconstruction first.
-
-First demonstrate:
-
-```text
-known orbit
-→ predicts independent distributed RF dynamics
-```
-
-Then move to:
-
-```text
-targetless tracks A+B
-→ infer candidate orbital family
-→ freeze prediction for C
-→ held-out confirmation
-```
-
-The inverse challenge should initially rank:
-
-* candidate orbital families;
-* catalog objects;
-* controlled alternative orbits;
-
-rather than claim full six-element orbit reconstruction from one sparse pass.
-
----
-
-# 25. No premature productization
-
-Until a genuine physical held-out result exists, do not prioritize:
-
-* frontend;
-* dashboard;
-* database;
-* scheduler;
-* persistent receiver catalog;
-* microservices;
-* generic experiment DSL;
-* source marketplace;
-* universal adapter SDK;
-* ML/LLM phenomenon selection;
-* production deployment.
-
-The project currently needs an experiment, not a platform.
-
----
-
-# 26. Working style for agents
-
-When asked to “continue”, do not blindly implement the next roadmap bullet.
-
-First:
-
-1. inspect the current physical question;
-2. inspect the latest actual outcome;
-3. identify whether the next planned step increases orbital information;
-4. generate alternatives if blocked;
-5. choose the shortest physically meaningful path;
-6. only then implement.
-
-If a roadmap instruction conflicts with the North Star, **the North Star wins**.
-
-If old F2.5 patterns conflict with the current satellite-first direction, **the current satellite-first direction wins**.
-
----
-
-# 27. Default response to a block
-
-When blocked, produce this analysis before coding:
-
-```text
-BLOCK:
-What physically failed?
-
-INFORMATION VALUE:
-What did we learn about the orbital hypothesis?
-
-CURRENT ABSTRACTION:
-Is the blocked mechanism actually necessary?
-
-ALTERNATIVES:
-A.
-B.
-C.
-D.
-
-BEST PHYSICAL PATH:
-Which route reaches a held-out satellite observation fastest?
-
-ACTION:
-Implement, repair, bypass or abandon?
-```
-
-Do not automatically choose “repair”.
-
----
-
-# 28. Final rule
-
-The project exists to learn something about satellites through distributed RF observations.
-
-It does not exist to prove that every intermediate software system is perfectly formalized.
-
-Use rigor to protect physical claims.
-
-Use freedom to reach them.
+This replaces the old forward-orbit-first roadmap. A target orbit is an
+evaluation reference after the freeze, not an input to inverse reconstruction.
+User instructions continue to take precedence over this file.
+
+## Acquired results: preserve scope and evidence
+
+- DRAO labelled-forward DOY234 reached
+  `ORBITAL_MODEL_PREDICTIVELY_PREFERRED`. It is closed. Do not reopen, improve,
+  replicate or relabel it during independent-positioning work.
+- G08 DOY249 gave 188.705 m orbit-comparison error and 1.849 m held-out GOLD
+  residual. Its prospective uncertainty radius was 21,607.660 m; the terminal
+  remains `UNCERTAINTY_TOO_LARGE`. It did not pass the 10 km uncertainty limit.
+- Preserve G08's frozen implementation, inputs and outcome under
+  `experiments/gnss_inverse_positioning/`. Replay is a regression, not new proof.
+- G12 DOY250 with seven fit roots closed `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`:
+  eighteen consecutive common epochs did not meet its frozen 41-epoch rule.
+- A separate G12 DOY248 eleven-epoch attempt reconstructed a new position:
+  15.139 m external orbit error, -3.137 m excluded-GOLD residual, but prospective
+  uncertainty radius 10,121.469 m. It remains `UNCERTAINTY_TOO_LARGE` and is
+  closed. Its 5% margin and uncertainty floors must not be lowered after reveal.
+  Preserve its plan, solution, receipts and executed sources under
+  `experiments/positioning_g12_doy248/`.
+- Historical forward and measurement-integrity experiments are reference
+  material. Their gate sequence is not the roadmap for new work.
+- G13 DOY247 through the configurable request worker closed
+  `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`: zero eligible epochs common to the
+  eight fixed stations. No position or target-orbit access. Preserve
+  `experiments/positioning_g13_doy247_request/`; do not retry it with a new
+  station subset. The local worker is delivered; web job submission is pending.
+- G14 DOY246 reached `INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED` for one
+  conditional historical event: 31.017 m external 3D error, 5755.157 m prospective
+  uncertainty radius and -0.846 m excluded-GOLD residual. All eight calibrations
+  passed. Its declared pool selected ALGO, BOGT, DRAO, MKEA, PIE1, STJO and YELL
+  at the first qualifying 03:55–04:00 GPST window; AMC4's expected file was absent.
+  Preserve `experiments/positioning_g14_doy246_network/` and its original scope.
+  Do not rerun, tune or generalize this success into universal accuracy/coverage.
+
+## Current delivery objective — scientific software first
+
+On 2026-09-10 the user postponed website, API, Docker and hosting development
+and approved the scientific project in `docs/SCIENTIFIC_ROADMAP.md`.
+That plan supersedes the website roadmap. Keep the five-event private archive
+and service queue as delivered; do not extend or deploy them during this work.
+
+Deliver S0: read-only diagnosis of the frozen events, with provenance and local
+uncertainty geometry; never re-estimate or relabel a closed event.
+Deliver S1: an isolated synthetic code/range-rate kinematic prototype, comparing
+identical data with and without the new observable and predicting excluded
+times/receivers. Report failed and mismodelled cases alongside nominal gains.
+The first physical information is whether time/range-rate observations can
+separate position, velocity and clock nuisance under explicit assumptions.
+Synthetic results are not real satellite confirmation or a full Doppler pipeline.
+
+Proceed to S2 only with explicit emission/reception, rotation, clock-drift,
+correlation and model-truncation treatment. Real campaigns in S3 require exact
+frozen manifests before acquisition; the symbolic 24-case blueprint is not a
+ready-to-run experiment. No search for passing targets or post-reveal tuning.
+Keep the current real-data estimator unchanged as the v1 reference. Use
+`research/kinematic/` for the new prototype and report progress in its results.
+
+S0/S1 are delivered. S2a now supplies a synthetic receiver-time vacuum model,
+independent inertial generator, narrow GPS Doppler field conversion, non-target
+reference-residual clock fitting and joint correlated covariance. Read
+`research/kinematic/S2_MODEL.md` and `results/S2_REPORT.md` in that package.
+S2 is not complete: S2b still requires real RINEX/header/receiver qualification,
+reference-residual generation, propagation and a total inverse-error envelope.
+Taylor remainder checks are not fitted-state uncertainty bounds. No S3 data
+acquisition is authorized by the S2a synthetic result. Keep S1 evidence intact.
+The current S2a report is `receiver_time_study_v2.json`. Its noisy case stops
+at a rejected reference calibration; no fit/holdout prediction is admissible.
+The first S2a report and commit `5f2a922` retain the diagnosed runner defect.
+Never cite that superseded noisy fit as an accepted performance result.
+
+S2b now delivers the bounded RINEX 3.04/3.05 GPS reference importer and
+broadcast-reference code-to-clock fit, with an unused-Doppler consistency check.
+See `research/kinematic/S2B_REFERENCE_BRIDGE.md` and `results/S2B_REPORT.md` in
+that package. The six-case study uses invented full-file fixtures only.
+`REFERENCE_MODEL_ACCEPTED` is not receiver/RF qualification; all results retain
+`real_rf_qualified=false`. Actual receiver conventions and the total inverse
+error budget remain open before S3. Never relax failed source/calibration gates
+or consume target/future measurements to obtain a passing calibration.
+
+S2 now also delivers local inverse-error transport in
+`research/kinematic/inverse_uncertainty.py`, documented in
+`research/kinematic/S2_INVERSE_UNCERTAINTY.md`. It includes uncertain ground
+coordinates and excluded clocks, shared input covariance and separate affine
+systematic/truncation responses. These are conditional synthetic diagnostics,
+not a total nonlinear 95% envelope. The S2a optimizer and its nominal residual
+test are unchanged; a sandwich covariance does not recalibrate that test for
+additional errors. All fit and excluded calibrations must pass before local
+transport. Preserve this study and prior source hashes. Real receiver and
+propagation qualification, full correlated fitting/testing and general
+truncation bounds remain open; no S3 acquisition or website work follows yet.
+
+The subsequent `research/kinematic/joint_fit.py` adds a separate joint Gaussian
+estimator for RF, reference-clock and terrestrial-coordinate data, with one
+fixed covariance for optimization, local uncertainty and residual testing.
+See `research/kinematic/S2_JOINT_FIT.md` and its results report. Preserve the
+earlier estimators/reports; the joint fit does not retroactively qualify them.
+Its chi-square test is exact only in the local linear Gaussian problem and
+approximate for the nonlinear solver. Synthetic compressed calibrations are
+assumed admitted; they are not newly qualified real reference data. Excluded
+predictions require accepted fit/calibration and retain cross correlations
+without reading excluded target values. Physical covariance qualification,
+nonlinear/selection calibration and total systematic/truncation coverage
+remain open before S3; no website development or acquisition is implied.
+
+The physical-source audit in `research/kinematic/S2_PHYSICAL_SOURCES.md`
+finds only four required-Doppler declarations among the eleven archived G14
+station entries (ten headers available); GOLD lacks the required Doppler.
+Do not assume that network can feed the kinematic Doppler estimator. A separate
+reference-only phase-increment adapter now models interval-mean phase rates,
+shared-endpoint covariance and declared neutral-delay sensitivity. It is NOT
+an automatic Doppler replacement, full RINEX phase importer or inverse fit.
+Unflagged slips remain undetected by the adapter; no receiver is qualified.
+Keep old experiments/sources intact and qualify the reference-side phase
+observable and continuity before integrating a new inverse measurement model.
+
+The subsequent phase-reference bridge is documented in
+`research/kinematic/S2_PHASE_REFERENCE_BRIDGE.md`. Its new RINEX importer
+requires C1C/C2W/L1C/L2W without Doppler, fits reference clocks to codes only,
+then tests unused phase increments on identical endpoints with full rectangular
+code/rate covariance. The synthetic one-cycle unflagged slip is rejected;
+a small common phase drift remains compatible. Neither is universal slip
+qualification. `REFERENCE_PHASE_MODEL_ACCEPTED` is not real RF admission or
+an automatic input to old instantaneous-rate inverse models. Preserve all
+old sources/results; a dedicated interval inverse model and physical error
+qualification still precede any S3 target acquisition or website work.
+
+The dedicated interval inverse prototype is now in
+`research/kinematic/interval_fit.py`, documented in `S2_INTERVAL_INVERSE.md`
+in that package. It fits endpoint codes and interval-mean phase paths with
+one full covariance, compares identical synthetic codes with/without phase,
+and predicts an excluded interval. Reference calibrations in its study are
+invented compressed Gaussian inputs, not an integrated real target RINEX
+pipeline. Preserve its evidence and all earlier sources. Local uncertainty
+gains and four fixed paired noise trials do not establish real RF accuracy,
+global branch uniqueness or total coverage. Physical source/phase continuity,
+reference/target cross covariance and systematic error qualification remain
+open before S3; do not acquire target data or resume website development.
+
+The subsequent `interval_systematics.py` and `systematics_study.py` quantify
+six fixed phenomenological bias templates with signed refits and local
+noncentral residual diagnostics. See `research/kinematic/S2_INTERVAL_SYSTEMATICS.md`.
+Small temporal path errors can bias position while leaving residual tests
+accepted. Their declared amplitudes are sensitivity examples, not measured
+receiver/atmosphere limits. The affine bias box is separate from Gaussian
+uncertainty and is not a total nonlinear 95% envelope. Preserve these sources
+and reports. Qualify common reference/target calibration and physically
+justified residual amplitudes before S3; website and target acquisition stay paused.
+
+`shared_calibration.py` now derives compressed clocks from explicit synthetic
+reference-code residual rows and retains cross covariance with target phase/code.
+See `research/kinematic/S2_SHARED_CALIBRATION.md`. A shared affine path drift
+is largely absorbed; shared curvature still biases position with accepted code
+gates. This study does not run the unused reference-phase gate and is not a
+qualified RINEX target chain. Integrate and test that gate before advancing
+physical qualification. Keep historical sources/results immutable; S3 and website
+remain paused, and no new real target acquisition is implied.
+
+`shared_phase_gate.py` now checks unused reference-phase increments before
+loading target observations for the shared fit. See
+`research/kinematic/S2_SHARED_PHASE_GATE.md`. The synthetic 0.5 m reference
+phase slip and 1 m curvature stop before target loading; 0.1 m curvature still
+passes and biases position by about 100 m. Preserve this failed sensitivity
+boundary; do not tune thresholds on the revealed case. This is a synthetic
+geometry-subtracted residual chain, not real RINEX qualification. A separate
+design for persistent shared/differential errors, selection effects and
+excluded prediction remains necessary before S3; website stays paused.
+
+`slow_calibration.py` adds a reference-code-only quadratic shared-path nuisance
+with complete correction/clock/target covariance and an unused reference-phase
+gate. See `research/kinematic/S2_SLOW_CALIBRATION.md`. It removes the known
+synthetic shared quadratic bias while increasing local uncertainty. The
+differential-case improvement also reflects changed covariance weights, not
+measurement of a target-only delay. These are development cases used to build
+the model, not independent confirmation. Preserve all old results and require
+a separate validation design and physically justified amplitudes before real
+RF qualification or S3. Website and new target acquisition remain paused.
+
+`slow_validation.py` now evaluates frozen affine/quadratic estimators on six
+fixed out-of-basis cases and eight paired raw-noise trials, under the local
+hash-bound `slow_validation_plan.json`. See `research/kinematic/S2_SLOW_VALIDATION.md`.
+Retain rejected trials, the quadratic nominal worsening and its excluded-rate
+band miss; do not relabel eight accepted quadratic positions as 95% coverage.
+This is separate synthetic temporal-shape validation on the existing geometry,
+not independent RF confirmation. Selection, broader geometry/directional errors
+and physically justified amplitudes remain open before S3. Preserve the plan,
+source hashes and results; do not tune on these outcomes or resume the website.
+
+## Scientific objective and information value
+
+The first one-event milestone was reached by preregistered G14 DOY246: BOTH
+prospective uncertainty radius <=10 km and subsequent 3D error <=10 km, plus
+the excluded-receiver test. Preserve the conditional claim. A new event is
+needed for additional physical evidence, and a validation design is needed
+before claiming repeatability or population uncertainty coverage.
+
+For scientific runs, consolidate the software required to execute and reproduce
+the declared event. The current read-only web archive is separate product work.
+Packaging G08 alone is insufficient scientific progress. Complete the bounded
+event through its declared terminal; failure does not authorize indefinite
+search for a passing example.
+
+Before substantial work, state the new physical information it can produce.
+Fix ordinary parser/runtime problems as engineering repairs, not new numbered
+gates. When a physical route fails, identify the failed assumption, what was
+learned, alternative physical mechanisms and the smallest worthwhile new test.
+Infrastructure is not the default answer to poor geometry or missing observables.
+
+## Target-state exclusion
+
+The target's TLE, OMM, SP3, broadcast orbit/clock, orbit-derived corrections,
+catalogue state, propagated previous solution, radius constraint or trajectory
+must not inform event selection, preprocessing, calibration, initialization,
+regularization, optimization or uncertainty tuning.
+
+Allowed: terrestrial coordinates, declared physical constants and states/clocks
+of explicitly identified NON-target reference satellites. Record this boundary.
+Target-state independence does not mean absence of all reference ephemerides.
+
+Discard target blocks from mixed navigation downloads as text BEFORE numerical
+parsing; hash and retain the admitted reference-only input. Reject target
+records again at the numerical calibration boundary. Removing or poisoning
+excluded target blocks must leave admitted inputs unchanged.
+
+Run estimation offline with only admitted inputs. Put held-out target and
+oracle evaluation in a separate stage that verifies the solution freeze first.
+Hashes and process separation support the audit; neither alone proves physical
+independence or provides a trusted public timestamp.
+
+## Selection, blinding and stopping
+
+Before target measurement values are read, fix target/date, bounded station set,
+excluded receiver, observable, structural window-selection rule, calibration,
+transformations, nuisance model, uncertainty assumptions, thresholds, oracle
+product rule, frame/time conventions, stopping rules and outcome labels.
+
+Ground-coordinate-only or explicitly synthetic geometry design is allowed.
+Do not use the real target orbit to choose the network or interval.
+If selection uses fit-side numerical data, preregister the exact rule, account
+for selection in the claim and keep confirmation independent. Prefer a simple
+structure-only chronological rule for the next event.
+
+Implementation defects may be repaired before confirmation if changes/accesses
+are recorded and selection/outcome rules remain fixed. After confirmation, do
+not tune thresholds, swap stations/targets, shift time, refit offsets or silently
+rerun. A defect affecting a revealed result invalidates that attempt; a new proof
+requires new unexposed confirmation evidence.
+
+## Physical and numerical obligations
+
+- Solve at least xyz and relevant emission-time/clock nuisance. A snapshot is
+  not velocity, an orbit or independently discovered satellite identity.
+- Check rank after nuisance removal, alternative branches, far-field degeneracy
+  and geometric amplification. Receiver count alone is not observability.
+- Common reception epochs and common emitted events differ. Interpolation must
+  bracket the event; do not silently extrapolate.
+- Make GPST/UTC, week rollover, date boundaries and frame epoch explicit. Use
+  integer/base epochs plus small local floating-point offsets for fine time.
+- Include Earth rotation over light time, reference clock conventions and
+  relevant propagation/receiver terms. Never correct the fit with target oracle.
+- Propagate correlations from code tags, reference clocks and ground coordinates
+  through the complete estimation chain.
+- Justify uncertainty floors/envelopes or explicitly label them conditional
+  design assumptions before reveal. Do not lower them after an accurate result.
+- Finite branch searches, axis profiles, Monte Carlo and box corners are
+  diagnostics, not certified global bounds or proofs of 95% coverage. Report
+  numerical search limits and model assumptions.
+- Small residuals are not position accuracy. Oracle error is not prospective
+  uncertainty. Report both without substituting one for the other.
+
+## Quantitative evaluation and claims
+
+For the current milestone require all of:
+1. Qualified measurements/calibration with no target-state contamination.
+2. Numerically identifiable finite solution with branches investigated.
+3. Declared total prospective 95% uncertainty radius <=10,000 m.
+4. Excluded receiver absolute range-equivalent residual <=100 m AND within its
+   predeclared predictive band, without holdout-fitted offsets.
+5. Subsequent 3D orbit error <=10,000 m and consistency with frozen uncertainty,
+   under the declared oracle error treatment.
+
+Reserve `INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED` for all required criteria
+passing within the explicitly limited, conditional claim. Distinguish missing
+or invalid data, calibration failure, non-identifiability, excessive uncertainty,
+holdout rejection, oracle rejection and contamination. Report every attempt.
+
+An independently produced orbit may reuse the same ground measurements. Do not
+claim statistically disjoint oracle evidence without establishing it. Repeated
+events support repeatability; coverage claims need an appropriate validation
+design and sample size.
+
+## Engineering for the next physical result
+
+Keep a small active positioning package separate from frozen experiments.
+Make target/date/stations/window explicit inputs, without machine paths or
+hidden date constants. Prefer portable stage commands and bounded files over
+a framework, database, service mesh or global receiver inventory.
+
+Maintain reproducible dependencies and meaningful tests for units/signs,
+emitted-event alignment, independent receiver-clock gauge shifts, target
+exclusion, rollover, branches/degeneracy and data-to-result replay. Run active
+tests in CI. Automated tests do not replace a new real event.
+
+Preserve frozen outputs before improving active code. Never overwrite an event
+to make a regression green. Historical experiments stay immutable except for
+separately identified user-authorized maintenance.
+
+## Experimental website
+
+Build a public archive/service of reproducible verifications for supported
+satellites and epochs with qualified Internet measurements. Every result must
+show event time, stations, inferred position, uncertainty, withheld checks,
+oracle error, versions and downloadable evidence. Show failed/inconclusive
+outcomes plainly.
+
+A verified historical position is not a live position. Propagation is a labelled
+prediction. GPS support is not support for all satellites. Worldwide uniqueness
+is an unproven product claim.
+
+The web layer consumes sealed results and must not substitute an oracle-derived
+position or hide uncertainty. The five-event archive is delivered; further product work is paused.
+On-demand positioning, monitoring and a public launch remain separate work;
+they are not implied by publishing historical verification dossiers privately.
+
+## Working agreement
+
+The user authorized this change of direction and immediate implementation of
+the next bounded inverse experiment. Proceed with necessary local edits, tests
+and public-data acquisition without repeated confirmation. Honor the freeze/
+reveal order and the experiment's stopping rules.
+
+Do not message other people or publish/deploy externally without authorization.
+The user has authorized ordinary Git commits and pushes when needed for this
+work. Review the exact outgoing changes and push without forcing history.
+On 2026-09-11 the user also authorized merging this completed work into main
+and treating reviewed integration as part of the ongoing workflow. For work
+within the agreed scope, use a pull request, inspect its full comparison and
+require the relevant CI checks to pass before ordinary merge. Preserve the
+scientific commit ancestry with merge commits; do not squash/rebase sealed
+research history. Follow repository protections without bypass. This does
+not authorize deployment, force pushes or changing branch protections.
+
+### GitHub CLI on Windows
+
+- GitHub CLI is authenticated as `Daniele-Cangi` through the Windows keyring.
+- Always run `gh` commands requiring network or authentication outside the
+  Windows sandbox. Verify authentication with `gh auth status` outside it.
+- Socket, DNS and `api.github.com` access errors inside the sandbox are network
+  failures, not evidence of expired credentials. Never run or request
+  `gh auth login` based only on an error from inside the sandbox.
+- Prefer `gh` over the browser or GitHub connector for forks and pull requests.
+
+Do not spawn sub-agents merely because this file is named AGENTS.md; use them
+only when separately requested or instructed.
+
+Communicate concrete physical findings and remaining uncertainty. Finish with
+what changed, what was measured, what passed/failed and where evidence is stored.

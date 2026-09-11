@@ -1,0 +1,18 @@
+{"station": "ALGO00CAN", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{"station": "BOGT00COL", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{"station": "DRAO00CAN", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{"station": "MKEA00USA", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{"station": "PIE100USA", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{"station": "STJO00CAN", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{"station": "YELL00CAN", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{"station": "GOLD00USA", "status": "CALIBRATION_QUALIFIED", "failures": []}
+{
+  "status": "PRE_ORACLE_CRITERIA_MET",
+  "xyz_m": [
+    -5576673.075711907,
+    -14732618.352380764,
+    21508680.23801228
+  ],
+  "total_95_outer_radius_m": 5755.157155537385,
+  "solution_sha256": "ed0e06d1ce7dadca42672f7a0c0699b0e1cea14c60fb7e4a9fc6a72489c94eb9"
+}

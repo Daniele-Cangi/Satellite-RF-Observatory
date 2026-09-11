@@ -1,0 +1,9 @@
+{
+  "body_bytes_before_authority_receipt": 0,
+  "network_requests_before_authority_receipt": 0,
+  "observation_values_before_authority_receipt": 0,
+  "runner_seal_sha256": "cd083939e6d5e3f855521747f0d71f2661d0931a72cfab60fa55523dd2b467ca",
+  "runner_source_commit": "a26f2e7f2442f713e5a4c6e57789f1937388b7fa",
+  "schema": "gnss-drao-labelled-forward-doy234-authority-consumed-v1",
+  "state": "DRAO_DOY234_ONE_USE_AUTHORITY_CONSUMED_BEFORE_NETWORK"
+}

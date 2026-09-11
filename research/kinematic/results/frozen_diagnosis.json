@@ -1,0 +1,78 @@
+{
+  "schema": "frozen-position-diagnosis-v1",
+  "scope": "Read-only development diagnosis of already revealed events; heterogeneous protocols, no success-rate or causal error-source attribution.",
+  "events": [
+    {
+      "id": "g12-2026-09-05",
+      "status": "UNCERTAINTY_TOO_LARGE",
+      "errorM": 15.139240687998601,
+      "radiusM": 10121.468778324916,
+      "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+      "solutionHash": "59db724da7f701682f1c7ea82a697cfbab6fc396538a02f64c7be3e7e2b9d1e0",
+      "local_uncertainty_diagnosis": {
+        "statistical_extent_m": 5589.161579793267,
+        "sampled_bias_displacement_m": 4050.332494801891,
+        "margin": 1.05,
+        "local_principal_1sigma_m": [
+          52.51211922201235,
+          175.58638271874062,
+          1998.8126336914609
+        ],
+        "weakest_axis_geocentric_alignment": 0.9992901155910713,
+        "local_axis_ratio": 38.06383485002423,
+        "effective_code_sigma_m": 20.0
+      }
+    },
+    {
+      "id": "g08-2026-09-06",
+      "status": "UNCERTAINTY_TOO_LARGE",
+      "errorM": 188.70503921046887,
+      "radiusM": 21607.66024134075,
+      "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+      "solutionHash": "213da6154cbb8c3c7dc278b2e81cd82f60da6d5852cdc89da3d03d57a55c8462",
+      "local_uncertainty_diagnosis": null,
+      "diagnostic_note": "Frozen web evidence contains no full solution covariance; no reconstruction or invented decomposition."
+    },
+    {
+      "id": "g12-2026-09-07",
+      "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+      "errorM": null,
+      "radiusM": null,
+      "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+      "solutionHash": null,
+      "local_uncertainty_diagnosis": null,
+      "diagnostic_note": "No position was estimated; no numerical position covariance exists."
+    },
+    {
+      "id": "g13-2026-09-04",
+      "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+      "errorM": null,
+      "radiusM": null,
+      "sourceRevision": "6e9bfadb96224d73e51b6a940b9343895ef3b820",
+      "solutionHash": null,
+      "local_uncertainty_diagnosis": null,
+      "diagnostic_note": "No position was estimated; no numerical position covariance exists."
+    },
+    {
+      "id": "g14-2026-09-03",
+      "status": "INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED",
+      "errorM": 31.016966131539373,
+      "radiusM": 5755.157155537385,
+      "sourceRevision": "2ee7d0ab060f21e24d182968d4d94ea3ddcd17ca",
+      "solutionHash": "ed0e06d1ce7dadca42672f7a0c0699b0e1cea14c60fb7e4a9fc6a72489c94eb9",
+      "local_uncertainty_diagnosis": {
+        "statistical_extent_m": 2991.964916631659,
+        "sampled_bias_displacement_m": 2489.137136261089,
+        "margin": 1.05,
+        "local_principal_1sigma_m": [
+          66.58855809036383,
+          107.73907297401136,
+          1070.055271686987
+        ],
+        "weakest_axis_geocentric_alignment": 0.9966977151020806,
+        "local_axis_ratio": 16.06965674545575,
+        "effective_code_sigma_m": 20.0
+      }
+    }
+  ]
+}

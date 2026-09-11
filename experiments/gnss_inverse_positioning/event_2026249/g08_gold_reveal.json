@@ -1,0 +1,10 @@
+{
+  "reveal_utc": "2026-09-08T20:26:23.821795+00:00",
+  "solution_sha256": "213da6154cbb8c3c7dc278b2e81cd82f60da6d5852cdc89da3d03d57a55c8462",
+  "observed_corrected_range_like_m": 22304098.733571116,
+  "predicted_corrected_range_like_m": 22304096.8843327,
+  "residual_m": 1.8492384143173695,
+  "interpolation_control_m": 6.3925981521606445e-06,
+  "status": "HELD_OUT_RECEIVER_CONFIRMED",
+  "source_sha256": "5fb60c2321cfff0dee4f9245306fdb54dccffa19178b1d3d24e09695232ce25a"
+}

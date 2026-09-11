@@ -1,0 +1,370 @@
+{
+  "admission_receipt": {
+    "geometry_free": [
+      {
+        "maximum_absolute_second_difference_m": 0.008201655000448227,
+        "satellite": "G14",
+        "state": "SATISFIED"
+      },
+      {
+        "maximum_absolute_second_difference_m": 0.029194224625825882,
+        "satellite": "G15",
+        "state": "SATISFIED"
+      },
+      {
+        "maximum_absolute_second_difference_m": 0.006609532982110977,
+        "satellite": "G17",
+        "state": "SATISFIED"
+      },
+      {
+        "maximum_absolute_second_difference_m": 0.01496976986527443,
+        "satellite": "G20",
+        "state": "SATISFIED"
+      },
+      {
+        "maximum_absolute_second_difference_m": 0.04029785469174385,
+        "satellite": "G24",
+        "state": "SATISFIED"
+      },
+      {
+        "maximum_absolute_second_difference_m": 0.011509593576192856,
+        "satellite": "G30",
+        "state": "SATISFIED"
+      }
+    ],
+    "observation_values_persisted": 0,
+    "prediction_bundle_available_during_admission": false,
+    "required_prns": [
+      "G14",
+      "G15",
+      "G17",
+      "G20",
+      "G24",
+      "G30"
+    ],
+    "same_path_witness": [
+      {
+        "heldout_peak_to_peak_m": 1.797745643578698,
+        "satellite": "G14",
+        "state": "SATISFIED"
+      },
+      {
+        "heldout_peak_to_peak_m": 8.514774204001494,
+        "satellite": "G15",
+        "state": "SATISFIED"
+      },
+      {
+        "heldout_peak_to_peak_m": 1.7925707961859458,
+        "satellite": "G17",
+        "state": "SATISFIED"
+      },
+      {
+        "heldout_peak_to_peak_m": 4.824907282619147,
+        "satellite": "G20",
+        "state": "SATISFIED"
+      },
+      {
+        "heldout_peak_to_peak_m": 3.2687677224987985,
+        "satellite": "G24",
+        "state": "SATISFIED"
+      },
+      {
+        "heldout_peak_to_peak_m": 5.612940287939492,
+        "satellite": "G30",
+        "state": "SATISFIED"
+      }
+    ],
+    "schema": "gnss-drao-labelled-forward-doy234-admission-v1",
+    "state": "DRAO_DOY234_MEASUREMENT_ADMITTED_FOR_FROZEN_SCORE",
+    "structural_counts": {
+      "PRESENT": 3336
+    }
+  },
+  "artifact": {
+    "artifact": "DRAO00CAN_R_20262340000_01D_30S_MO.crx.gz",
+    "attempts": 1,
+    "body_persisted": false,
+    "complete_file_bytes": 2850623,
+    "complete_file_sha256": "5eb4c7f8b2fa3a0b2f3b4fe40de1f69a85a9150bd5eafd61667fc84bcf9e5335",
+    "frozen_http_identity_matched": true,
+    "hash_persisted_before_decompression": true,
+    "retry_after_complete_hash": 0,
+    "schema": "gnss-drao-labelled-forward-doy234-materialization-v1",
+    "state": "DRAO_DOY234_COMPLETE_HASH_RECORDED_BEFORE_DECODE",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/234/DRAO00CAN_R_20262340000_01D_30S_MO.crx.gz"
+  },
+  "artifact_receipt": {
+    "canonical_sha256": "d4b1d69458a332f385a0237c886e8f01d0f952eddeed5b4f4483d80b3621040e",
+    "name": "GNSS_DRAO_LABELLED_FORWARD_DOY234_MATERIALIZATION.json"
+  },
+  "claim_scope": {
+    "distributed_multi_root": false,
+    "maximum_positive": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+    "orbit_determination": false,
+    "specific_satellite_identity": "NOT_ESTABLISHED_INDEPENDENTLY"
+  },
+  "identity_and_transform_receipt": {
+    "antenna_radome": "SCIS",
+    "antenna_type": "TWIVC6050",
+    "archive_site_id": "DRAO00CAN",
+    "event_time": {
+      "frozen_error_bound_s": [
+        -15.0,
+        15.0
+      ],
+      "mapped_epochs": 139,
+      "maximum_absolute_grid_deviation_s": 0.0,
+      "receiver_clock_correction_epochs": 0,
+      "state": "STRUCTURALLY_MAPPED"
+    },
+    "extra_gps_tracks": [
+      "G01",
+      "G02",
+      "G06",
+      "G07",
+      "G19",
+      "G22"
+    ],
+    "gps_observables": [
+      "C1C",
+      "C1W",
+      "C2L",
+      "C2W",
+      "C5Q",
+      "D1C",
+      "D1W",
+      "D2L",
+      "D2W",
+      "D5Q",
+      "L1C",
+      "L1W",
+      "L2L",
+      "L2W",
+      "L5Q",
+      "S1C",
+      "S1W",
+      "S2L",
+      "S2W",
+      "S5Q"
+    ],
+    "marker_name": "DRAO CACS-GSD 887006 Penticton BC Canada",
+    "marker_name_role": "DESCRIPTIVE_NOT_LITERAL_BINDING",
+    "marker_number": "40105M002",
+    "receiver_type": "SEPT POLARX5",
+    "receiver_version": "5.2.0",
+    "time_of_first_observation": {
+      "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+      "time_system": "GPS",
+      "utc_like_epoch": "2026-08-22T00:00:00.000000Z"
+    },
+    "time_of_last_observation": {
+      "semantics": "RINEX_DECLARED_TIME_SYSTEM_NOT_YET_CONVERTED_TO_UTC",
+      "time_system": "GPS",
+      "utc_like_epoch": "2026-08-22T23:59:30.000000Z"
+    },
+    "transforms": {
+      "phase_shift": {
+        "numerical_rule": "VALIDATE_ONLY_NEVER_APPLY_DECLARED_CORRECTION_AGAIN",
+        "other_system_records_ignored": 9,
+        "required_observables": {
+          "L1C": {
+            "affected_satellites": [],
+            "declared_correction_cycles": null,
+            "state": "REFERENCE_SIGNAL_BLANK_CORRECTION",
+            "stored_phase_numerically_modified_again": false
+          },
+          "L2W": {
+            "affected_satellites": [],
+            "declared_correction_cycles": null,
+            "state": "REFERENCE_SIGNAL_BLANK_CORRECTION",
+            "stored_phase_numerically_modified_again": false
+          }
+        },
+        "source": "RINEX_3_04_SECTION_5_2_12",
+        "state": "TYPED_PHASE_SHIFT_LEDGER_COMPLETE"
+      },
+      "receiver_clock": {
+        "applied_flag": 0,
+        "correction_count": "EXACTLY_ONCE",
+        "state": "SPEC_DEFINED_DEFAULT_ZERO"
+      },
+      "scale_factor": {
+        "factors": {
+          "C1C": 1,
+          "C1W": 1,
+          "C2L": 1,
+          "C2W": 1,
+          "C5Q": 1,
+          "D1C": 1,
+          "D1W": 1,
+          "D2L": 1,
+          "D2W": 1,
+          "D5Q": 1,
+          "L1C": 1,
+          "L1W": 1,
+          "L2L": 1,
+          "L2W": 1,
+          "L5Q": 1,
+          "S1C": 1,
+          "S1W": 1,
+          "S2L": 1,
+          "S2W": 1,
+          "S5Q": 1
+        },
+        "numerical_rule": "DIVIDE_STORED_VALUE_BY_FACTOR",
+        "state": "SPEC_DEFINED_ABSENCE_UNITY"
+      }
+    }
+  },
+  "outcome": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+  "persistence": {
+    "compressed_artifact": 0,
+    "decoded_rinex": 0,
+    "derived_series": 0,
+    "observation_values": 0
+  },
+  "retry_after_complete_hash": 0,
+  "runner_seal_sha256": "cd083939e6d5e3f855521747f0d71f2661d0931a72cfab60fa55523dd2b467ca",
+  "schema": "gnss-drao-labelled-forward-doy234-outcome-v1",
+  "score_receipt": {
+    "best_family": "ORBITAL",
+    "family_metrics": {
+      "ORBITAL": {
+        "controlling_heldout_peak_to_peak_m": 1.6511114595923573,
+        "controlling_prefix_peak_to_peak_m": 0.6445485150907189,
+        "noncontrolling_heldout_rms_m": 0.8387742918916711,
+        "tracks": [
+          {
+            "heldout_peak_to_peak_m": 0.48466028535040095,
+            "heldout_rms_m": 0.3131718706448156,
+            "prefix_peak_to_peak_m": 0.12460517737781629,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 0.5054771401846665,
+            "heldout_rms_m": 0.3558179736296941,
+            "prefix_peak_to_peak_m": 0.25497990411531646,
+            "satellite": "G15"
+          },
+          {
+            "heldout_peak_to_peak_m": 1.6511114595923573,
+            "heldout_rms_m": 0.8387742918916711,
+            "prefix_peak_to_peak_m": 0.3953820839524269,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 0.7417607679672074,
+            "heldout_rms_m": 0.3962314783784073,
+            "prefix_peak_to_peak_m": 0.11123063538252609,
+            "satellite": "G20"
+          },
+          {
+            "heldout_peak_to_peak_m": 0.48540561748086475,
+            "heldout_rms_m": 0.6401377455526043,
+            "prefix_peak_to_peak_m": 0.6445485150907189,
+            "satellite": "G24"
+          },
+          {
+            "heldout_peak_to_peak_m": 1.3051514034123102,
+            "heldout_rms_m": 0.5279655981789817,
+            "prefix_peak_to_peak_m": 0.06912291322987585,
+            "satellite": "G30"
+          }
+        ]
+      },
+      "PREFIX_AFFINE_ONLY": {
+        "controlling_heldout_peak_to_peak_m": 103857.52491429029,
+        "controlling_prefix_peak_to_peak_m": 27445.220832282736,
+        "noncontrolling_heldout_rms_m": 72557.25195915134,
+        "tracks": [
+          {
+            "heldout_peak_to_peak_m": 70213.51634438825,
+            "heldout_rms_m": 46119.66342275851,
+            "prefix_peak_to_peak_m": 14417.45134034101,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 103857.52491429029,
+            "heldout_rms_m": 72557.25195915134,
+            "prefix_peak_to_peak_m": 27445.220832282736,
+            "satellite": "G15"
+          },
+          {
+            "heldout_peak_to_peak_m": 101971.41571720713,
+            "heldout_rms_m": 63731.23029554979,
+            "prefix_peak_to_peak_m": 17546.91210366739,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 29250.560749378987,
+            "heldout_rms_m": 11626.311953195442,
+            "prefix_peak_to_peak_m": 5632.006720228179,
+            "satellite": "G20"
+          },
+          {
+            "heldout_peak_to_peak_m": 18538.574904973502,
+            "heldout_rms_m": 25086.818461535608,
+            "prefix_peak_to_peak_m": 22581.22155595338,
+            "satellite": "G24"
+          },
+          {
+            "heldout_peak_to_peak_m": 92181.38409620617,
+            "heldout_rms_m": 55556.60300172138,
+            "prefix_peak_to_peak_m": 13905.910718649044,
+            "satellite": "G30"
+          }
+        ]
+      },
+      "TIME_REVERSED_GEOMETRY": {
+        "controlling_heldout_peak_to_peak_m": 36208.777701140614,
+        "controlling_prefix_peak_to_peak_m": 36208.045878158184,
+        "noncontrolling_heldout_rms_m": 20645.615259251368,
+        "tracks": [
+          {
+            "heldout_peak_to_peak_m": 3257.377425875922,
+            "heldout_rms_m": 1872.9671072636665,
+            "prefix_peak_to_peak_m": 3257.757653769455,
+            "satellite": "G14"
+          },
+          {
+            "heldout_peak_to_peak_m": 15572.713959365385,
+            "heldout_rms_m": 8900.166792265258,
+            "prefix_peak_to_peak_m": 15572.164290870714,
+            "satellite": "G15"
+          },
+          {
+            "heldout_peak_to_peak_m": 3117.7470430541434,
+            "heldout_rms_m": 1760.5045375984005,
+            "prefix_peak_to_peak_m": 3119.143707457697,
+            "satellite": "G17"
+          },
+          {
+            "heldout_peak_to_peak_m": 19366.233086772147,
+            "heldout_rms_m": 11038.81633135037,
+            "prefix_peak_to_peak_m": 19366.677667014068,
+            "satellite": "G20"
+          },
+          {
+            "heldout_peak_to_peak_m": 36208.777701140614,
+            "heldout_rms_m": 20645.615259251368,
+            "prefix_peak_to_peak_m": 36208.045878158184,
+            "satellite": "G24"
+          },
+          {
+            "heldout_peak_to_peak_m": 7644.9551239600405,
+            "heldout_rms_m": 4340.081453088109,
+            "prefix_peak_to_peak_m": 7646.105281489785,
+            "satellite": "G30"
+          }
+        ]
+      }
+    },
+    "free_time_phase": false,
+    "guard_b_m": 3964.157666752234,
+    "heldout_refit": false,
+    "orbital_positive_absolute_bound_satisfied": true,
+    "outcome": "ORBITAL_MODEL_PREDICTIVELY_PREFERRED",
+    "preference_margin_m": 36207.12658968102,
+    "schema": "gnss-drao-labelled-forward-doy234-score-v1"
+  }
+}

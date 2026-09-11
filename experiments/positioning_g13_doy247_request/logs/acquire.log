@@ -1,0 +1,16 @@
+{"station": "ALGO00CAN", "epochs": 2880, "target_code_epochs": 993}
+{"station": "DRAO00CAN", "epochs": 2880, "target_code_epochs": 786}
+{"station": "STJO00CAN", "epochs": 2880, "target_code_epochs": 976}
+{"station": "YELL00CAN", "epochs": 2880, "target_code_epochs": 1001}
+{"station": "BOGT00COL", "epochs": 2880, "target_code_epochs": 1148}
+{"station": "BRAZ00BRA", "epochs": 1950, "target_code_epochs": 686}
+{"station": "AREQ00PER", "epochs": 2880, "target_code_epochs": 1096}
+{"station": "GOLD00USA", "epochs": 2880, "target_code_epochs": 792}
+{
+  "experiment": "G13_2026247_CONFIGURED_POSITION",
+  "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+  "reason": "NO_COMMON_STRUCTURAL_WINDOW",
+  "primary_pass": false,
+  "plan_sha256": "f1f039bbb3f11dd0a8dd5c735f0044465e87b64f9d8c6a77fd3a2e9866f0fa58",
+  "oracle_accessed": false
+}

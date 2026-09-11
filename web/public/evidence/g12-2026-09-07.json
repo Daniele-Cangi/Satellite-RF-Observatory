@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 2,
+  "event": {
+    "id": "g12-2026-09-07",
+    "target": "G12",
+    "date": "2026-09-07",
+    "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+    "primaryPass": false,
+    "sourceUrl": "https://github.com/Daniele-Cangi/Satellite-RF-Observatory/tree/7fcd71f9428c20202f98079955e8fac76aa0f6ad/experiments/positioning_g12_doy250",
+    "fitStations": [
+      "ALGO00CAN",
+      "DRAO00CAN",
+      "STJO00CAN",
+      "YELL00CAN",
+      "BOGT00COL",
+      "BRAZ00BRA",
+      "AREQ00PER"
+    ],
+    "withheldStation": "GOLD00USA",
+    "errorM": null,
+    "radiusM": null,
+    "heldoutM": null,
+    "heldoutConfirmed": false,
+    "ecefM": null,
+    "emissionS": null,
+    "freezeUtc": null,
+    "heldoutUtc": null,
+    "oracleUtc": null,
+    "solutionHash": null,
+    "window": null,
+    "supportAvailable": 18,
+    "supportRequired": 41,
+    "thresholdM": 10000,
+    "sources": [
+      {
+        "label": "ALGO00CAN · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/ALGO00CAN_R_20262500000_01D_30S_MO.crx.gz"
+      },
+      {
+        "label": "DRAO00CAN · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/DRAO00CAN_R_20262500000_01D_30S_MO.crx.gz"
+      },
+      {
+        "label": "STJO00CAN · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/STJO00CAN_R_20262500000_01D_30S_MO.crx.gz"
+      },
+      {
+        "label": "YELL00CAN · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/YELL00CAN_R_20262500000_01D_30S_MO.crx.gz"
+      },
+      {
+        "label": "BOGT00COL · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/BOGT00COL_R_20262500000_01D_30S_MO.crx.gz"
+      },
+      {
+        "label": "BRAZ00BRA · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/BRAZ00BRA_R_20262500000_01D_30S_MO.crx.gz"
+      },
+      {
+        "label": "AREQ00PER · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/AREQ00PER_R_20262500000_01D_30S_MO.crx.gz"
+      },
+      {
+        "label": "GOLD00USA · osservazioni RF",
+        "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/GOLD00USA_R_20262500000_01D_30S_MO.crx.gz"
+      }
+    ],
+    "sourceRevision": "7fcd71f9428c20202f98079955e8fac76aa0f6ad",
+    "operationalStatus": "COMPLETED",
+    "profile": "frozen-legacy",
+    "errorThresholdM": 10000,
+    "heldoutThresholdM": 100,
+    "networkSelection": null
+  },
+  "scope": "Closed historical evidence dossier; original file bytes recoverable from UTF-8 strings. No raw RF payloads, current positions or new estimates are generated.",
+  "files": [
+    {
+      "path": "experiments/positioning_g12_doy250/plan.json",
+      "sha256": "fcbacd7201cd37470621cc387d12379bd62906b9620896329d7493668ea60816",
+      "original_utf8": "{\n  \"experiment\": \"G12_DOY250_SEVEN_ROOT_INVERSE_POSITION\",\n  \"target\": \"G12\",\n  \"date_gpst\": \"2026-09-07\",\n  \"fit_stations\": [\"ALGO00CAN\", \"DRAO00CAN\", \"STJO00CAN\", \"YELL00CAN\", \"BOGT00COL\", \"BRAZ00BRA\", \"AREQ00PER\"],\n  \"withheld_station\": \"GOLD00USA\",\n  \"observation_base_url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/\",\n  \"observation_filename\": \"{station}_R_20262500000_01D_30S_MO.crx.gz\",\n  \"navigation_url\": \"https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/250/BRDM00DLR_S_20262500000_01D_MN.rnx.gz\",\n  \"oracle_url\": \"https://igs.bkg.bund.de/root_ftp/IGS/products/2435/IGS0OPSRAP_20262500000_01D_15M_ORB.SP3.gz\",\n  \"selection\": {\n    \"rule\": \"First chronological block of 41 consecutive normal 30-second epochs with C1C and C2W present for G12 and at least four other GPS at each of the eight stations. Use only the central 11 epochs (indices 15 through 25) for calibration and inference; the central emitted event derives from index 20. Selection uses field presence only, never target code values, target orbit or fit quality.\",\n    \"support_epochs\": 41,\n    \"fit_epochs\": 11,\n    \"step_s\": 30,\n    \"minimum_reference_count\": 4,\n    \"reason\": \"The fixed ten-minute structural lead-in separates the central event from a station's first recorded target appearance; it is not an orbit-based elevation cut.\"\n  },\n  \"physical_change\": \"Add two southern roots BRAZ and AREQ to the five-root terrestrial network. Test whether the expanded north-south geometry reduces radial/clock uncertainty on a new target and day without reducing the G08 error floors.\",\n  \"prior_access\": \"Only DOY250 directory conventions and the eight file headers inspected before protocol freeze. Ground-coordinate-only synthetic design compared five vs seven roots on 80 invented jointly visible points at multiple radii; no G12 state was used. The earlier G08 DOY249 oracle is known and is not an input to this event.\",\n  \"clock_calibration\": \"C1C/C2W IF, effective receiver clock from healthy non-G12 GPS references only; scalar equal-weight mean per epoch; no target terms. Nearest reference toc within 7200 s, elevation >=10 deg, at least four references. Exclude optional receiver-computed clock fields. Verify fixed ground coordinates with independent non-target SPP; do not adjust coordinates with those SPP offsets.\",\n  \"calibration_limits\": {\"max_reference_absolute_residual_m\": 50, \"max_reference_rms_m\": 20, \"max_alternating_subset_clock_difference_m\": 30, \"max_ground_coordinate_check_m\": 30},\n  \"model\": \"Nominal troposphere, reference relativistic clocks and Earth rotation over light time as documented in G08; generalize GPST calendar/week and target exclusion. Target u=t_tag-P_IF/c, u0=median of seven central tags; interpolate z=P_IF-clock with four nearest bracketing tags. Compare degree 3 and degree 5, difference <=2 m. Solve xyz and B with scaled algebraic initialization and all four-root algebraic branches, no target orbit/radius/dynamics. Fit elevations >=5 deg; each residual <=100 m; investigate full rank, branches, infinity alternative and nonlinear axes.\",\n  \"uncertainty\": {\n    \"code_sigma_floor_m\": 20,\n    \"common_reference_sigma_m\": 5,\n    \"ground_coordinate_sigma_m\": 5,\n    \"per_root_systematic_envelope_m\": 20,\n    \"nonlinear_margin_factor\": 1.05,\n    \"rule\": \"Increase statistical floor if non-target RMS or subset differences demand it. Differentiate the full code/tag/median-event transform. Include local clock uncertainty, shared reference covariance and ground-coordinate effects on calibration and inference. Evaluate all 128 +/-20 m root-bias corners and 64 deterministic interior samples (seed 2026250); investigate covariance-axis profiles and semiaxes at perturbed solutions. Report 1.05*(maximum statistical95 extent + maximum sampled bias displacement) as a conditional numerical uncertainty envelope, not a certified global bound or population coverage proof. Do not shrink any term after reveal.\"\n  },\n  \"confirmation\": {\n    \"uncertainty_radius_limit_m\": 10000,\n    \"position_error_limit_m\": 10000,\n    \"holdout_absolute_limit_m\": 100,\n    \"holdout_band\": \"3 sigma with shared-reference cross-covariance plus fit-bias prediction envelope and independent +/-20 m GOLD bias\",\n    \"oracle\": \"Open only after frozen solution and GOLD prediction. Nine nearest SP3 nodes at solved emission time; eight-node control <=10 m. Correct fixed-u0 axes to emission axes. Allow 10 m for oracle/interpolation/reference-point comparison. No fitted time shift or pose alignment.\"\n  },\n  \"stop\": \"Exactly this target, day, network and first support block. No alternate targets, days, stations or later windows after a failed check. Close source/calibration/identifiability failures without opening oracle. A numerical solution with excessive uncertainty may still receive the predeclared diagnostic reveal, while retaining failed primary status. Every required criterion must pass for the conditional one-event position-demonstration label.\",\n  \"claim\": \"One receiver-labelled GPS position from public RF data, with target-state exclusion and conditional uncertainty. No velocity, autonomous identity, general service reliability or statistically disjoint oracle-data claim.\"\n}\n"
+    },
+    {
+      "path": "experiments/positioning_g12_doy250/plan_freeze.json",
+      "sha256": "f37530c823f80de0ee2ba68a51acc353790a3ea9d3718e31579cf0174c040640",
+      "original_utf8": "{\r\n  \"plan_sha256\": \"fcbacd7201cd37470621cc387d12379bd62906b9620896329d7493668ea60816\",\r\n  \"freeze_utc\": \"2026-09-08T22:48:28.933485+00:00\",\r\n  \"sources\": {\r\n    \"__init__.py\": \"943bbc3f4bc6c407e5f86985595fdc073bfcdfd1a89b21c385523a17f4354e89\",\r\n    \"__main__.py\": \"0e791f1f8bc12768c5ef988b8ec47c30e2783a192d89ca19ff88a04d9c7f2117\",\r\n    \"acquisition.py\": \"c6be46763392f20d91ad8e28343298150f794c66a3d49b7dc4cb6f3c879776f9\",\r\n    \"calibration.py\": \"112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491\",\r\n    \"context.py\": \"26aea7f720f7f03c06b6b3ddcf0deebb7bda9ea2909b1823a2f1ca331214bafb\",\r\n    \"navigation.py\": \"bb8fb719ea370489e9c2126e49d4359634aedac9d2f243f17cb1fc7771946501\",\r\n    \"qualification.py\": \"2c34727f0d51e9cee5f0afc12d07098df13be6b9c92cbecee26334dde8817f2c\",\r\n    \"solver.py\": \"ca5c775b98a605fe383ebf6025e5456944d0501a867d17f10fa6e27ccc75a4e4\"\r\n  }\r\n}"
+    },
+    {
+      "path": "experiments/positioning_g12_doy250/outcome.json",
+      "sha256": "9b82cdc12e0b04ee74edd76a985812f6f06140601bfc545275ce406c5a75e581",
+      "original_utf8": "{\r\n  \"experiment\": \"G12_DOY250_SEVEN_ROOT_INVERSE_POSITION\",\r\n  \"status\": \"SOURCE_OR_MEASUREMENT_NOT_QUALIFIED\",\r\n  \"reason\": \"NO_COMMON_STRUCTURAL_WINDOW\",\r\n  \"primary_pass\": false,\r\n  \"target\": \"G12\",\r\n  \"date_gpst\": \"2026-09-07\",\r\n  \"required_common_support_epochs\": 41,\r\n  \"available_common_epochs\": 19,\r\n  \"longest_consecutive_support_epochs\": 18,\r\n  \"common_runs\": [\r\n    {\r\n      \"start_s\": 37140.0,\r\n      \"stop_s\": 37650.0,\r\n      \"epochs\": 18\r\n    },\r\n    {\r\n      \"start_s\": 37710.0,\r\n      \"stop_s\": 37710.0,\r\n      \"epochs\": 1\r\n    }\r\n  ],\r\n  \"observation_receipts\": [\r\n    {\r\n      \"station\": \"ALGO00CAN\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/ALGO00CAN_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 4232955,\r\n      \"sha256\": \"16fbe2451e60e9c61fd17e87853d068d6bffff163438af80aa525a36824587db\",\r\n      \"access_utc\": \"2026-09-08T22:48:35.703830+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"7168357ada5254b23f7120f0a1fc737b4df76ebae699ae3e9bdbe3a321aa74a1\"\r\n    },\r\n    {\r\n      \"station\": \"DRAO00CAN\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/DRAO00CAN_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 2846935,\r\n      \"sha256\": \"0d9422079d19b7e296186894e11912dfab21ca106e752d9cc9219f98de455d6a\",\r\n      \"access_utc\": \"2026-09-08T22:48:41.847511+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"cb7cc75c1fb895a5623a2c4f7c9118e8ff6c95606f827737043fef68e029f45c\"\r\n    },\r\n    {\r\n      \"station\": \"STJO00CAN\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/STJO00CAN_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 2811057,\r\n      \"sha256\": \"97b6d9729df10b9b514136d6fe56975bb5d55ecd0acf42938ad6874542acfd07\",\r\n      \"access_utc\": \"2026-09-08T22:48:47.427608+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"29776b4cfc075201b726b2ad58c7b668976927438e41c1c866c455134bb4c21b\"\r\n    },\r\n    {\r\n      \"station\": \"YELL00CAN\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/YELL00CAN_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 3238946,\r\n      \"sha256\": \"1287ba350fdaf8a8dbe7709311d4ba4b24d33b1ca7d96dc1d6b7d74b7410fe9a\",\r\n      \"access_utc\": \"2026-09-08T22:48:53.404620+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"0e965273725975019040b67da59e9facf7271b353c4666eadbcd126ad345c26f\"\r\n    },\r\n    {\r\n      \"station\": \"BOGT00COL\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/BOGT00COL_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 3173774,\r\n      \"sha256\": \"1256a8aa3005bee9b1630610adfa81dc2e7e4908928ed1f82ea87e096bf536cf\",\r\n      \"access_utc\": \"2026-09-08T22:49:00.423026+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"e0358b16ba1953507e4c325ee39fe8d186c695c4e987e1fabcca5ae53f187e44\"\r\n    },\r\n    {\r\n      \"station\": \"BRAZ00BRA\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/BRAZ00BRA_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 2459402,\r\n      \"sha256\": \"f21bf86dae316fbf45337ebfc05129157969069f5a80856d836f012dc8976235\",\r\n      \"access_utc\": \"2026-09-08T22:49:06.025553+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"36c3702777f3a641f7dcea2383185da40a04ee60e408fd66ba2b249a9a41fd45\"\r\n    },\r\n    {\r\n      \"station\": \"AREQ00PER\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/AREQ00PER_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 3368024,\r\n      \"sha256\": \"c44507ebe9ac84e6dcae7918bead965de40193064d830047ca6f5d9bede5db7f\",\r\n      \"access_utc\": \"2026-09-08T22:49:12.205180+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"f765c81354c00e8d2261190ff3c1dab94d2032562a88ee53710263542ec36d7b\"\r\n    },\r\n    {\r\n      \"station\": \"GOLD00USA\",\r\n      \"url\": \"https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/250/GOLD00USA_R_20262500000_01D_30S_MO.crx.gz\",\r\n      \"bytes\": 2191350,\r\n      \"sha256\": \"f3ed3520e432984bcc89e8d26f5bdbee91e7da8c67cf5efd2653eae29f139b9e\",\r\n      \"access_utc\": \"2026-09-08T22:49:17.013761+00:00\",\r\n      \"http_status\": 200,\r\n      \"decoded_sha256\": \"3b43fa6fd0be15bc1d3b36fdc687d0e67e9cddeacfe4f9888d019ebf9fb74123\"\r\n    }\r\n  ],\r\n  \"station_counts\": {\r\n    \"ALGO00CAN\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 991,\r\n      \"eligible_epochs\": 991\r\n    },\r\n    \"DRAO00CAN\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 706,\r\n      \"eligible_epochs\": 706\r\n    },\r\n    \"STJO00CAN\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 996,\r\n      \"eligible_epochs\": 996\r\n    },\r\n    \"YELL00CAN\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 1000,\r\n      \"eligible_epochs\": 1000\r\n    },\r\n    \"BOGT00COL\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 1147,\r\n      \"eligible_epochs\": 1147\r\n    },\r\n    \"BRAZ00BRA\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 987,\r\n      \"eligible_epochs\": 987\r\n    },\r\n    \"AREQ00PER\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 1098,\r\n      \"eligible_epochs\": 1098\r\n    },\r\n    \"GOLD00USA\": {\r\n      \"epochs\": 2880,\r\n      \"target_code_epochs\": 810,\r\n      \"eligible_epochs\": 810\r\n    }\r\n  },\r\n  \"plan_sha256\": \"fcbacd7201cd37470621cc387d12379bd62906b9620896329d7493668ea60816\",\r\n  \"structure_sha256\": \"5c3ad5786dfcd0fe1a0eb70ef59b1fe3ef7592656035f6240e0324cf3a04a92f\",\r\n  \"acquisition_source_hashes\": {\r\n    \"__init__.py\": \"943bbc3f4bc6c407e5f86985595fdc073bfcdfd1a89b21c385523a17f4354e89\",\r\n    \"__main__.py\": \"0e791f1f8bc12768c5ef988b8ec47c30e2783a192d89ca19ff88a04d9c7f2117\",\r\n    \"acquisition.py\": \"c6be46763392f20d91ad8e28343298150f794c66a3d49b7dc4cb6f3c879776f9\",\r\n    \"calibration.py\": \"112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491\",\r\n    \"context.py\": \"26aea7f720f7f03c06b6b3ddcf0deebb7bda9ea2909b1823a2f1ca331214bafb\",\r\n    \"navigation.py\": \"bb8fb719ea370489e9c2126e49d4359634aedac9d2f243f17cb1fc7771946501\",\r\n    \"qualification.py\": \"2c34727f0d51e9cee5f0afc12d07098df13be6b9c92cbecee26334dde8817f2c\",\r\n    \"solver.py\": \"ca5c775b98a605fe383ebf6025e5456944d0501a867d17f10fa6e27ccc75a4e4\"\r\n  },\r\n  \"navigation_accessed\": false,\r\n  \"target_values_numerically_accessed\": false,\r\n  \"heldout_target_accessed\": false,\r\n  \"oracle_accessed\": false\r\n}"
+    }
+  ]
+}

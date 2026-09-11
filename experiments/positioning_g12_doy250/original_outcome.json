@@ -1,0 +1,6 @@
+{
+  "status": "SOURCE_OR_MEASUREMENT_NOT_QUALIFIED",
+  "reason": "NO_COMMON_STRUCTURAL_WINDOW",
+  "plan_sha256": "fcbacd7201cd37470621cc387d12379bd62906b9620896329d7493668ea60816",
+  "oracle_accessed": false
+}
