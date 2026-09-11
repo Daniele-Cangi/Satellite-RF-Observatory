@@ -355,7 +355,13 @@ reveal order and the experiment's stopping rules.
 Do not message other people or publish/deploy externally without authorization.
 The user has authorized ordinary Git commits and pushes when needed for this
 work. Review the exact outgoing changes and push without forcing history.
-This does not authorize deployment or merging protected/default branches.
+On 2026-09-11 the user also authorized merging this completed work into main
+and treating reviewed integration as part of the ongoing workflow. For work
+within the agreed scope, use a pull request, inspect its full comparison and
+require the relevant CI checks to pass before ordinary merge. Preserve the
+scientific commit ancestry with merge commits; do not squash/rebase sealed
+research history. Follow repository protections without bypass. This does
+not authorize deployment, force pushes or changing branch protections.
 
 ### GitHub CLI on Windows
 
