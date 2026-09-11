@@ -82,3 +82,30 @@ The final v3 repair adds a conservative 48-hour maturity check before network
 access and freezes DOY243.  HTTP absence is now reported as
 `SOURCE_PRODUCT_UNAVAILABLE`, not `CAPABILITY_REJECTED`.  V3 is the last attempt
 in this bounded task regardless of outcome; there is no date search.
+
+## Final outcome
+
+The mature DOY243 run reached:
+
+```text
+PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED
+```
+
+All eight complete compressed artifacts were materialized and SHA-256 hashed in
+RAM.  Five roots—ALGO, BOGT, MKEA, PIE1 and GOLD—passed the frozen header audit.
+Their required `C1C/C2W/L1C/L2W` coordinates use divisor one, zero declared
+required phase shifts, no legacy wavelength-factor record and no applied GPS
+DCB/PCV correction product.
+
+DRAO, STJO and YELL failed `UNSUPPORTED_OBSERVATION_FORMAT`, which is the frozen
+composite of allowed version (3.04/3.05), observation-file type and GPS/mixed
+system declaration.  The v3 failure receipt did not retain the offending raw
+descriptor component, so it does not authorize a more specific claim about
+their RINEX version or transform.  Their transform ledgers remain unknown; they
+must not be filled from another date after this outcome.
+
+No observation body line, Hatanaka value, navigation product, target value,
+residual or fit was exposed.  Result evidence is
+`results/phase_transform_header_audit_2026243_v1.json`, SHA-256
+`1d8a0bd32cf22106070b74ae73ec83afd1e910cc0b4ac14e51e4d70161078a5b`.
+The fixed eight-root path is closed for this attempt and S3 remains blocked.

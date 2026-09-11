@@ -185,3 +185,14 @@ qualified ALGO/BOGT structure, then closed `PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTE
 at DRAO because its legacy `WAVELENGTH FACT L1/2` phase-scale transform was not
 part of the frozen RINEX-3 ledger. This is a bounded set-level refusal, not a
 claim that DRAO or carrier phase is generally unusable.
+
+The follow-up [header-only transform audit](S2_PHASE_TRANSFORM_HEADER_AUDIT.md)
+preserved two execution-invalid attempts, then closed on mature DOY243 evidence
+with `PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED`. ALGO, BOGT, MKEA, PIE1 and GOLD
+had complete identity/coverage and exact identity scale/phase-shift ledgers.
+DRAO, STJO and YELL failed the frozen composite RINEX format admission before
+their transform ledger was produced. The exact offending descriptor component
+was not retained, so no narrower format claim is authorized. Eight source
+artifacts were hashed in RAM; zero observation/body lines, navigation products
+or measurement values were exposed or persisted. Do not search another date to
+make this exact set pass; S3 remains unauthorized.

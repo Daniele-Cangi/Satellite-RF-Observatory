@@ -26,6 +26,13 @@ RINEX import, reference-only clock calibration and an unused-Doppler check.
 All six synthetic cases and failure outcomes are retained. Real receiver
 qualification and the inverse model-error envelope remain prerequisites for S3.
 
+The subsequent bounded [phase-transform header audit](research/kinematic/S2_PHASE_TRANSFORM_HEADER_AUDIT.md)
+closed `PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED` on its final DOY243 artifact.
+Five of eight fixed roots supplied an explicit RINEX coordinate ledger; DRAO,
+STJO and YELL failed the frozen composite format admission before their
+transforms could be qualified. No observation record or value was exposed, and
+this is not a receiver-performance or orbital result. S3 remains blocked.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |

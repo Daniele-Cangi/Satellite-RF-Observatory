@@ -219,3 +219,15 @@ def test_doy254_early_access_cannot_reject_the_roots():
     assert audit["authoritative_status"] == "HEADER_AUDIT_EXECUTION_INVALID"
     assert audit["defect"]["physical_rejection_authorized"] is False
     assert audit["access"]["artifacts_materialized"] == 0
+
+
+def test_final_doy243_receipt_is_hash_bound_and_value_blind():
+    path = ROOT / "research/kinematic/results/phase_transform_header_audit_2026243_v1.json"
+    result = json.loads(path.read_text())
+    assert result["status"] == "PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED"
+    assert result["freeze"]["source_commit"] == "8551d7172f27cb6f75f8af189c30fa70e1be407e"
+    assert hashlib.sha256((ROOT / "research/kinematic/phase_transform_header_audit_plan_v3.json").read_bytes()).hexdigest() == result["freeze"]["plan_sha256"]
+    assert len(result["source_receipts"]) == 8
+    assert len(result["station_results"]) == 5
+    assert result["persistence"]["observation_values"] is False
+    assert result["persistence"]["raw_payload_bytes"] == 0
