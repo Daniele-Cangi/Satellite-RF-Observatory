@@ -133,3 +133,13 @@ the amplitudes are synthetic assumptions, not qualified physical limits.
 ```text
 python -m research.kinematic.systematics_study NEW_REPORT.json
 ```
+## Shared reference/target calibration
+
+The [shared calibration study](S2_SHARED_CALIBRATION.md) derives compressed
+clocks from explicit synthetic reference-code residuals and preserves target
+cross covariance. Its [report](results/S2_SHARED_CALIBRATION_REPORT.md) includes
+an accepted but biased curvature case; the reference-phase gate remains separate.
+
+```text
+python -m research.kinematic.shared_calibration_study NEW_REPORT.json
+```

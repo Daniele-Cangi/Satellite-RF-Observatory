@@ -170,6 +170,15 @@ uncertainty and is not a total nonlinear 95% envelope. Preserve these sources
 and reports. Qualify common reference/target calibration and physically
 justified residual amplitudes before S3; website and target acquisition stay paused.
 
+`shared_calibration.py` now derives compressed clocks from explicit synthetic
+reference-code residual rows and retains cross covariance with target phase/code.
+See `research/kinematic/S2_SHARED_CALIBRATION.md`. A shared affine path drift
+is largely absorbed; shared curvature still biases position with accepted code
+gates. This study does not run the unused reference-phase gate and is not a
+qualified RINEX target chain. Integrate and test that gate before advancing
+physical qualification. Keep historical sources/results immutable; S3 and website
+remain paused, and no new real target acquisition is implied.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
