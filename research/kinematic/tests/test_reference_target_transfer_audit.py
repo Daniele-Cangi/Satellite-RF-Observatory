@@ -209,3 +209,35 @@ def test_hardened_v2_result_matches_current_frozen_inputs_and_code():
     assert result["inputs"]["target_state_or_orbit_accessed"] is False
     assert result["composition"]["total_future_target_physical_envelope"] is None
     assert result["claim_boundary"]["s3_authorized"] is False
+
+
+def test_authoritative_v3_result_resolves_source_commit_and_exact_inputs():
+    path = ROOT / "research/kinematic/results/s2_reference_target_transfer_audit_v3.json"
+    result = load_strict_json(path)
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "e209a9d00b70e360be6ba1330574a830ca331a5e2b3690c33d8b53c96f04170b"
+    )
+    assert result["schema"] == "s2-reference-to-target-transfer-audit-result-v3"
+    assert result["supersedes"]["sha256"] == (
+        "9a4e2c859a9eb1e096f62f8cf09accc6743ab91a76428f6d684c85419673142b"
+    )
+    source_commit = result["inputs"]["source_commit"]
+    assert source_commit == "fc20392d44922c0d5e4daa917012b1f3c85801dc"
+    implementation_at_freeze = subprocess.check_output(
+        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
+        cwd=ROOT,
+    )
+    assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
+        implementation_at_freeze
+    ).hexdigest()
+    assert result["inputs"]["plan_sha256"] == hashlib.sha256(
+        PLAN_PATH.read_bytes()
+    ).hexdigest()
+    assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
+        RECEIPT_PATH.read_bytes()
+    ).hexdigest()
+    assert result["status"] == (
+        "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
+    )
+    assert result["composition"]["total_future_target_physical_envelope"] is None
+    assert result["claim_boundary"]["s3_authorized"] is False

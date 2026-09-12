@@ -1,0 +1,199 @@
+{
+  "schema": "s2-reference-to-target-transfer-audit-result-v3",
+  "audit_id": "S2_REFERENCE_TO_TARGET_TRANSFER_AUDIT_DOY240",
+  "status": "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT",
+  "scope": "Offline causal audit of whether the frozen DOY240 aggregate reference receipt can support a total physical envelope for a later, still-unselected target. No source access, target selection, orbit access, new numerical observations or external correction products are allowed.",
+  "supersedes": {
+    "path": "research/kinematic/results/s2_reference_target_transfer_audit_v2.json",
+    "sha256": "9a4e2c859a9eb1e096f62f8cf09accc6743ab91a76428f6d684c85419673142b",
+    "reason": "Second post-merge integrity repair: single-read hash/parse coupling and commit-resolved implementation provenance in full-history CI."
+  },
+  "inputs": {
+    "source_commit": "fc20392d44922c0d5e4daa917012b1f3c85801dc",
+    "plan_sha256": "afcd036c429f8ea45f293d233fa0d6f8be5f50bbc01fe036ab10b9784118ad01",
+    "implementation_sha256": "ce9f9813b4b05ecbe840818f08ef20e36600e9d6a67d285a6e77ecf806df6965",
+    "reference_receipt": "research/kinematic/results/s2_five_root_reference_envelope_2026240_v1.json",
+    "reference_receipt_sha256": "3a0f2f0225feded686787484fcc3809062371a0a0358d6018b062e6c92e1dc2f",
+    "source_or_network_access": false,
+    "new_numeric_measurements": false,
+    "target_selected": false,
+    "target_state_or_orbit_accessed": false
+  },
+  "preserved_reference_path_evidence": {
+    "status": "FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED",
+    "conditional_reference_envelopes": {
+      "fit_phase_rate_m_s": 0.037339025487426625,
+      "gold_code_m": 15.121046550571918,
+      "multiplier": 2.0,
+      "population_coverage_claim": false
+    },
+    "interpretation": "These values remain conditional bounds on the observed reference path and are not target-direction bounds."
+  },
+  "term_assessments": [
+    {
+      "term": "future target-direction antenna phase-center variation",
+      "causal_class": "DIRECTION_SPECIFIC_RECEIVER_TRANSFORM",
+      "receipt_evidence": "Receiver identities and aggregate reference residual limits for one selected window.",
+      "evidence_role": "DIAGNOSTIC_ONLY",
+      "required_for_transfer": [
+        "station antenna/radome calibration and orientation",
+        "frequency-specific PCO/PCV convention",
+        "future target line-of-sight coordinates over the frozen window",
+        "uncertainty of the applied correction"
+      ],
+      "missing_from_receipt": [
+        "direction-resolved antenna response",
+        "future target direction",
+        "correction uncertainty"
+      ],
+      "assessment": "NOT_IDENTIFIABLE_FROM_RECEIPT",
+      "physical_state": "UNRESOLVED",
+      "numeric_bound_from_receipt": null,
+      "may_be_assigned_zero": false
+    },
+    {
+      "term": "future target-direction multipath",
+      "causal_class": "DIRECTION_AND_ENVIRONMENT_SPECIFIC_PATH",
+      "receipt_evidence": "Aggregate reference residual limits from four reference directions per station over five minutes.",
+      "evidence_role": "DIAGNOSTIC_ONLY",
+      "required_for_transfer": [
+        "direction/time-resolved multipath bound or independently frozen site model",
+        "future target line of sight",
+        "evidence that the bound covers the future target geometry"
+      ],
+      "missing_from_receipt": [
+        "direction/time-resolved residuals",
+        "site multipath model",
+        "future target direction and coverage rule"
+      ],
+      "assessment": "NOT_IDENTIFIABLE_FROM_RECEIPT",
+      "physical_state": "UNRESOLVED",
+      "numeric_bound_from_receipt": null,
+      "may_be_assigned_zero": false
+    },
+    {
+      "term": "unflagged sub-threshold cycle slips",
+      "causal_class": "MEASUREMENT_CONTINUITY",
+      "receipt_evidence": "Zero reported LLI in the selected reference window, aggregate phase-rate maxima/RMS and admitted-grid hashes.",
+      "evidence_role": "DIAGNOSTIC_ONLY",
+      "required_for_transfer": [
+        "frozen target-side slip detector with a quantified missed-slip limit",
+        "individual target interval continuity evidence",
+        "rule linking detector sensitivity to the inverse observable"
+      ],
+      "missing_from_receipt": [
+        "individual interval residuals",
+        "target-side continuity evidence",
+        "missed-slip detectability bound"
+      ],
+      "assessment": "NOT_IDENTIFIABLE_FROM_RECEIPT",
+      "physical_state": "UNRESOLVED",
+      "numeric_bound_from_receipt": null,
+      "may_be_assigned_zero": false
+    },
+    {
+      "term": "future atmosphere outside the selected reference rays",
+      "causal_class": "FUTURE_PROPAGATION_PATH",
+      "receipt_evidence": "Ionosphere-free dual-frequency combinations and a nominal neutral-delay model on the selected reference rays.",
+      "evidence_role": "DIAGNOSTIC_ONLY",
+      "required_for_transfer": [
+        "future target ray geometry",
+        "frozen neutral-atmosphere residual model with uncertainty",
+        "higher-order ionosphere and temporal/spatial decorrelation envelope"
+      ],
+      "missing_from_receipt": [
+        "future target ray geometry",
+        "out-of-ray atmosphere uncertainty",
+        "temporal transfer bound"
+      ],
+      "assessment": "NOT_IDENTIFIABLE_FROM_RECEIPT",
+      "physical_state": "UNRESOLVED",
+      "numeric_bound_from_receipt": null,
+      "may_be_assigned_zero": false
+    },
+    {
+      "term": "broadcast-reference orbit and clock error transfer",
+      "causal_class": "REFERENCE_STATE_TRANSFER",
+      "receipt_evidence": "Target-excluded broadcast reference navigation hashes and aggregate residuals after an affine receiver-clock fit.",
+      "evidence_role": "DIAGNOSTIC_ONLY",
+      "required_for_transfer": [
+        "outcome-independent reference orbit/clock uncertainty with cross-satellite covariance",
+        "projection through the exact clock calibration and inverse model",
+        "correlation with the held-out prediction"
+      ],
+      "missing_from_receipt": [
+        "per-reference error decomposition",
+        "cross-satellite orbit/clock covariance",
+        "projection into a future target solution"
+      ],
+      "assessment": "NOT_IDENTIFIABLE_FROM_RECEIPT",
+      "physical_state": "UNRESOLVED",
+      "numeric_bound_from_receipt": null,
+      "may_be_assigned_zero": false
+    },
+    {
+      "term": "reference-to-target receiver correlation",
+      "causal_class": "SHARED_RECEIVER_AND_TRANSFORM_COVARIANCE",
+      "receipt_evidence": "Reference-only aggregate residuals; target rows were removed before numerical parsing.",
+      "evidence_role": "DIAGNOSTIC_ONLY",
+      "required_for_transfer": [
+        "predeclared shared/differential receiver error model",
+        "reference-target covariance propagated through calibration and prediction",
+        "target-side observable timing and transform convention"
+      ],
+      "missing_from_receipt": [
+        "joint reference-target coordinate",
+        "cross-covariance",
+        "future target transform convention"
+      ],
+      "assessment": "NOT_IDENTIFIABLE_FROM_RECEIPT",
+      "physical_state": "UNRESOLVED",
+      "numeric_bound_from_receipt": null,
+      "may_be_assigned_zero": false
+    }
+  ],
+  "composition": {
+    "bounded_future_target_terms": [],
+    "unresolved_future_target_terms": [
+      "future target-direction antenna phase-center variation",
+      "future target-direction multipath",
+      "unflagged sub-threshold cycle slips",
+      "future atmosphere outside the selected reference rays",
+      "broadcast-reference orbit and clock error transfer",
+      "reference-to-target receiver correlation"
+    ],
+    "fit_phase_rate_reference_envelope_m_s": 0.037339025487426625,
+    "gold_code_reference_envelope_m": 15.121046550571918,
+    "total_future_target_physical_envelope": null,
+    "composition_performed": false,
+    "reason": "Every future-target transfer term lacks at least one required causal quantity; the two reference envelopes also have different coordinates and are not added."
+  },
+  "clauses": {
+    "REFERENCE_RECEIPT_INTEGRITY": "SATISFIED",
+    "CONDITIONAL_REFERENCE_PATH_ENVELOPE": "SATISFIED",
+    "DIRECTIONAL_TARGET_TRANSFER": "UNRESOLVED",
+    "TEMPORAL_TARGET_TRANSFER": "UNRESOLVED",
+    "REFERENCE_TARGET_COVARIANCE": "UNRESOLVED",
+    "TOTAL_FUTURE_TARGET_PHYSICAL_ENVELOPE": "UNRESOLVED"
+  },
+  "claim_boundary": {
+    "authorized": [
+      "DOY240 reference-path aggregate residuals met their frozen deterministic limits",
+      "the frozen aggregate receipt cannot identify a total future-target physical envelope"
+    ],
+    "not_authorized": [
+      "any unresolved term is negligible or zero",
+      "the conditional reference envelopes cover a future target",
+      "a primary, target or S3 campaign is admissible",
+      "population coverage or a calibrated probability statement"
+    ],
+    "s3_authorized": false
+  },
+  "minimum_new_evidence_classes": [
+    "direction-resolved antenna/site response with uncertainty",
+    "target-side continuity detection with a missed-slip bound",
+    "future-path atmosphere uncertainty",
+    "reference orbit/clock covariance projected through calibration",
+    "predeclared reference-target shared/differential covariance"
+  ]
+}

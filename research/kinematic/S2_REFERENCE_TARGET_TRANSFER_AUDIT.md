@@ -57,14 +57,28 @@ its execution-integrity claim is superseded: post-merge review found incomplete
 whole-plan validation, an optional programmatic freeze path, insufficient
 object/byte coupling and incomplete finite-number parsing.
 
-The authoritative repaired artifact is
+The first repaired artifact is
 `results/s2_reference_target_transfer_audit_v2.json`, SHA-256
 `9a4e2c859a9eb1e096f62f8cf09accc6743ab91a76428f6d684c85419673142b`.
-It reproduces the same causal outcome after binding the complete plan, requiring
+It reproduced the same causal outcome after binding the complete plan, requiring
 source commit `4993d37aaeb20a24390acc682f04730ebc1a865a`, loading the receipt only from
-its verified bytes and rejecting every non-finite JSON number. The frozen audit
+its verified path and rejecting every non-finite JSON number. Its frozen audit
 implementation SHA-256 is
 `83a0a9511afe6878c2ff9c244874517c4ee6d189f65fff2bf7c5daf59bfefeca`.
+
+A second completed review found that v2 still hashed and parsed the receipt in
+separate reads, and that its commit-provenance tests were incompatible with
+shallow CI and checked one implementation against the working tree. Preserve
+v2 unchanged as superseded evidence.
+
+The authoritative artifact is now
+`results/s2_reference_target_transfer_audit_v3.json`, SHA-256
+`e209a9d00b70e360be6ba1330574a830ca331a5e2b3690c33d8b53c96f04170b`.
+It hashes and parses each frozen buffer from one read, binds source commit
+`fc20392d44922c0d5e4daa917012b1f3c85801dc`, and resolves the implementation
+at that commit under full-history CI. Its implementation SHA-256 is
+`ce9f9813b4b05ecbe840818f08ef20e36600e9d6a67d285a6e77ecf806df6965`.
+It reproduces the same causal outcome without source, target or orbit access.
 
 ## Consequence
 

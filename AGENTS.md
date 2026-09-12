@@ -351,7 +351,11 @@ incomplete whole-plan validation, an optional programmatic source-freeze path,
 weak receipt object/byte coupling and incomplete non-finite JSON rejection.
 Preserve v1 unchanged as superseded evidence. The repaired v2, frozen at
 `4993d37`, closes all four defects and reproduces the same causal outcome with
-no source, target or orbit access; use v2 as the authoritative receipt.
+no source, target or orbit access. A later completed review found a receipt
+hash/parse race and two commit-provenance test defects in v2. Preserve v2
+unchanged as superseded evidence. V3, frozen at `fc20392`, uses single-read
+buffers and commit-resolved provenance under full-history CI, and reproduces
+the same causal outcome; use v3 as the authoritative receipt.
 
 ## Scientific objective and information value
 
