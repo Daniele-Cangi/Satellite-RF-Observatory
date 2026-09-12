@@ -196,3 +196,12 @@ was not retained, so no narrower format claim is authorized. Eight source
 artifacts were hashed in RAM; zero observation/body lines, navigation products
 or measurement values were exposed or persisted. Do not search another date to
 make this exact set pass; S3 remains unauthorized.
+
+The subsequent [five-root feasibility audit](S2_FIVE_ROOT_FEASIBILITY.md) uses
+only the qualified ALGO/BOGT/MKEA/PIE1/GOLD coordinates and an explicitly
+synthetic, target-free geometry family. All 181 jointly visible cases have full
+local rank, but the conditional code+phase envelope at +60 s spans 0.501–83.332
+km and only 65 cases meet 10 km. Exactly five fit roots also leave no independent
+held-out root, while the total physical error envelope remains unresolved. Its
+terminal is `FIVE_ROOT_PROSPECTIVE_VERTICAL_INCOMPLETE`; this result does not
+authorize S3 or select a target/date.

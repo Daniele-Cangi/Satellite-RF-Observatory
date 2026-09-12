@@ -33,6 +33,14 @@ STJO and YELL failed the frozen composite format admission before their
 transforms could be qualified. No observation record or value was exposed, and
 this is not a receiver-performance or orbital result. S3 remains blocked.
 
+An offline [five-root local-feasibility audit](research/kinematic/S2_FIVE_ROOT_FEASIBILITY.md)
+then tested only the five successful root coordinates over a frozen, target-free
+synthetic family. Local rank is complete in all 181 jointly visible cases, but
+the +60 s conditional envelope ranges from 0.501 km to 83.332 km and is <=10 km
+in only 65 cases. Five fit roots also cannot supply the required independent
+held-out root. The terminal is `FIVE_ROOT_PROSPECTIVE_VERTICAL_INCOMPLETE`, not
+a measurement or orbital result.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |
@@ -136,6 +144,11 @@ full-day ALGO/BOGT structure, but the exact eight-root set closed
 `PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED` when DRAO exposed an unmodelled legacy
 phase wavelength-factor transform. No phase residual, target fit or S3 claim
 was produced.
+The later header-only audit qualified five phase-coordinate roots. Their offline
+target-free geometry is locally identifiable, but not uniformly below 10 km at
+high synthetic shells; those five roots also leave no independent held-out root
+and still lack a total physical error envelope. A next physical design must
+address all three facts without using a target orbit to choose a favorable case.
 Removing the 5% margin or reducing a floor to pass the revealed event is not an
 acceptable continuation. An accurate single event does not establish coverage.
 
