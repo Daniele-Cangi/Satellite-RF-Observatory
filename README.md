@@ -92,6 +92,15 @@ navigation were removed before numeric parsing. This admits the real reference
 path, not a future target or total physical envelope; directional and transfer
 terms remain unresolved.
 
+An [offline causal transfer audit](research/kinematic/S2_REFERENCE_TARGET_TRANSFER_AUDIT.md)
+then tested whether that aggregate receipt can close the future-target envelope.
+It cannot: all six directional, continuity, propagation, reference-state and
+cross-covariance terms are `NOT_IDENTIFIABLE_FROM_RECEIPT`. The reference-path
+bounds remain valid in their original coordinates, but were not combined or
+silently transferred to a target. The terminal is
+`FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT`; this is an
+evidence-sufficiency limit, not a new measurement failure.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |

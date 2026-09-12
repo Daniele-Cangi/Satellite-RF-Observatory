@@ -108,3 +108,29 @@ def test_reference_bounds_are_preserved_in_their_original_coordinates():
     assert result["preserved_reference_path_evidence"][
         "conditional_reference_envelopes"
     ]["population_coverage_claim"] is False
+
+
+def test_frozen_audit_result_is_hash_bound_and_authorizes_no_primary():
+    path = ROOT / "research/kinematic/results/s2_reference_target_transfer_audit_v1.json"
+    result = load_strict_json(path)
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "20113de41579269e10d0260abb97aa739499069afffc14adb4063ecaf7f1c99c"
+    )
+    assert result["status"] == (
+        "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
+    )
+    assert result["inputs"]["source_commit"] == (
+        "32955325987ca92dadf91d83b1a5185d8d5ca5e9"
+    )
+    assert result["inputs"]["implementation_sha256"] == (
+        "f18051a39a7ed3d1e21ce7beb0da0b4bfc8ee45fac91b7790309f1cf43faa0d5"
+    )
+    assert result["inputs"]["source_or_network_access"] is False
+    assert result["inputs"]["new_numeric_measurements"] is False
+    assert result["inputs"]["target_selected"] is False
+    assert result["inputs"]["target_state_or_orbit_accessed"] is False
+    assert result["composition"]["total_future_target_physical_envelope"] is None
+    assert result["clauses"]["TOTAL_FUTURE_TARGET_PHYSICAL_ENVELOPE"] == (
+        "UNRESOLVED"
+    )
+    assert result["claim_boundary"]["s3_authorized"] is False
