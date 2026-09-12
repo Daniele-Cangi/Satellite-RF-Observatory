@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -48,6 +49,27 @@ def load_strict_json(path: Path) -> dict:
     if not isinstance(value, dict):
         raise ValueError("top-level JSON value must be an object")
     return value
+
+
+def admit_git_freeze(plan_path: Path, source_commit: str) -> None:
+    if subprocess.check_output(
+        ["git", "status", "--porcelain", "--untracked-files=all"],
+        cwd=ROOT,
+        text=True,
+    ).strip():
+        raise ValueError("working tree must be clean before audit execution")
+    actual = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+    ).strip()
+    if actual != source_commit:
+        raise ValueError("source commit differs from HEAD")
+    for path in (plan_path, Path(__file__)):
+        relative = path.resolve().relative_to(ROOT).as_posix()
+        committed = subprocess.check_output(
+            ["git", "show", f"HEAD:{relative}"], cwd=ROOT
+        )
+        if committed != path.read_bytes():
+            raise ValueError("frozen file differs from committed bytes:" + relative)
 
 
 def validate_plan(plan: dict) -> None:
@@ -116,9 +138,11 @@ def validate_receipt(plan: dict, receipt: dict, receipt_path: Path) -> None:
         raise ValueError("unexpected population-coverage claim")
 
 
-def run(plan_path: Path) -> dict:
+def run(plan_path: Path, source_commit: str | None = None) -> dict:
     plan = load_strict_json(plan_path)
     validate_plan(plan)
+    if source_commit is not None:
+        admit_git_freeze(plan_path, source_commit)
     receipt_path = ROOT / plan["frozen_input"]["path"]
     receipt = load_strict_json(receipt_path)
     validate_receipt(plan, receipt, receipt_path)
@@ -152,7 +176,9 @@ def run(plan_path: Path) -> dict:
         "status": status,
         "scope": plan["scope"],
         "inputs": {
+            "source_commit": source_commit,
             "plan_sha256": sha256_path(plan_path),
+            "implementation_sha256": sha256_path(Path(__file__)),
             "reference_receipt": plan["frozen_input"]["path"],
             "reference_receipt_sha256": sha256_path(receipt_path),
             "source_or_network_access": False,
@@ -216,10 +242,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("plan", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--source-commit", required=True)
     args = parser.parse_args()
     if args.output.exists():
         parser.error("refusing to overwrite an existing result")
-    result = run(args.plan)
+    result = run(args.plan, args.source_commit)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("x", encoding="utf-8", newline="\n") as handle:
         json.dump(result, handle, indent=2, allow_nan=False)
