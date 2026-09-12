@@ -58,6 +58,14 @@ User instructions continue to take precedence over this file.
 
 ## Current delivery objective — general verification workflow
 
+The G3 candidate and offline cohort accounting are documented in
+`docs/VALIDATION_COHORT_PROTOCOL.md`. Preserve its explicit
+`CANDIDATE_NOT_ADMITTED` status: the 24 exact future plans are a design proposal,
+not acquisition admission or completed preregistration. `service/validation.py`
+keeps missing bindings, cancellations, quarantine and invalid evidence visible;
+it never dispatches. Distinct days reduce same-product cross-target exposure,
+but do not establish statistical independence or qualify the S2 error budget.
+
 On 2026-09-12 the user made the general verification flow the product objective:
 supported satellite/day request -> source availability -> qualified estimation
 -> frozen prediction -> withheld checks -> understandable result or explicit

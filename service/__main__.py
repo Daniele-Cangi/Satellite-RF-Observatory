@@ -19,6 +19,12 @@ def main(argv=None):
     prepare.add_argument('--plan-output', type=Path)
     result = commands.add_parser('result')
     result.add_argument('run_path', type=Path)
+    cohort = commands.add_parser('validation-report')
+    cohort.add_argument('manifest', type=Path)
+    cohort.add_argument('--bindings', type=Path, required=True)
+    cohort.add_argument('--queue', type=Path, required=True)
+    cohort.add_argument('--runs', type=Path, required=True)
+    cohort.add_argument('--owner', required=True)
     submit = commands.add_parser('submit')
     submit.add_argument('target')
     submit.add_argument('date_gpst')
@@ -48,6 +54,12 @@ def main(argv=None):
                 handle.write('\n')
     elif args.command == 'result':
         response = read_result(args.run_path)
+    elif args.command == 'validation-report':
+        from .requests import RequestStore
+        from .validation import report
+        from .workflow import _json
+        response = report(args.manifest, RequestStore(args.queue), args.owner,
+                          _json(args.bindings.read_bytes()), args.runs)
     else:
         from .requests import RequestStore
         from .worker import reconcile, request_status, run_once, submit_request
