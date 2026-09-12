@@ -307,6 +307,19 @@ clause-level failure attribution, keep cross-root capacity and physical envelope
 `NOT_EVALUATED`, and never retry or rescore DOY242. A future distinct artifact
 requires role-specific transform semantics frozen offline first.
 
+The distinct DOY241 role-specific follow-up is closed
+`FIVE_ROOT_ROLE_STRUCTURE_QUALIFIED`. All five artifacts were hash-bound and all
+roots supplied 2,880 gap-free epochs; 2,834 eleven-endpoint windows met the
+unchanged target-free structural rule. BOGT's prior obstruction was a header
+shape distinction: it declared zero-cycle overrides for all 32 GPS identities,
+which are static, retained and reversible. GOLD passed only its C1C/C2W path;
+phase semantics were not interpreted. Exactly zero observation numbers and no
+target state were accessed. This is structural capacity, not measurement or
+physical-envelope admission. Preserve DOY241 as qualification evidence and do
+not reuse it as a primary. The smallest next step is a separately frozen,
+distinct-artifact reference-only physical-envelope qualification; S3 remains
+unauthorized.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

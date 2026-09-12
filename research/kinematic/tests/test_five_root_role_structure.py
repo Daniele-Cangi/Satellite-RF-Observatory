@@ -1,6 +1,7 @@
 """Offline boundaries for role-specific five-root structural qualification."""
 from copy import deepcopy
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 
@@ -129,3 +130,36 @@ def test_role_or_day_cannot_change_after_freeze():
     changed["transform_admission"]["heldout_code"]["phase_transform_in_causal_path"] = True
     with pytest.raises(ValueError, match="heldout code transform semantics differ"):
         validate_plan(changed)
+
+
+def test_frozen_role_specific_result_is_hash_bound_and_structural_only():
+    path = ROOT / "research/kinematic/results/s2_five_root_role_structure_2026241_v1.json"
+    result = json.loads(path.read_text())
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "3dc57bb1011e05e3b7f046083f4c2f089d1b33682720d408c8339cce118f7e67"
+    )
+    assert result["status"] == "FIVE_ROOT_ROLE_STRUCTURE_QUALIFIED"
+    assert result["failures"] == []
+    assert len(result["source_receipts"]) == 5
+    assert all("sha256" in row and "decoded_sha256" in row
+               for row in result["source_receipts"])
+    assert set(result["station_structures"]) == {
+        "ALGO00CAN", "BOGT00COL", "MKEA00USA", "PIE100USA", "GOLD00USA"
+    }
+    assert all(row["epoch_count"] == 2880 and row["non_nominal_gap_count"] == 0
+               for row in result["station_structures"].values())
+    assert all(row["observation_numbers_converted"] == 0
+               for row in result["station_structures"].values())
+    bogt = result["station_structures"]["BOGT00COL"]["transform_ledger"]["phase_shift"]
+    assert set(bogt["L1C"]["satellite_overrides_cycles"]) == {
+        f"G{number:02d}" for number in range(1, 33)
+    }
+    assert set(bogt["L1C"]["satellite_overrides_cycles"].values()) == {0.0}
+    gold = result["station_structures"]["GOLD00USA"]["transform_ledger"]
+    assert gold["phase_transform"] == "NOT_INTERPRETED_OUTSIDE_CAUSAL_PATH"
+    assert "phase_shift" not in gold
+    assert result["cross_root_capacity"]["capable_window_count"] == 2834
+    assert result["cross_root_capacity"]["candidate_identity_persisted"] is False
+    assert result["clauses"]["OBSERVATION_NUMERIC_ADMISSION"] == "NOT_EVALUATED"
+    assert result["clauses"]["TOTAL_PHYSICAL_ERROR_ENVELOPE"] == "NOT_EVALUATED"
+    assert result["interpretation"]["closed_doy242_retried_or_rescored"] is False
