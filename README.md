@@ -102,7 +102,10 @@ silently transferred to a target. The terminal is
 evidence-sufficiency limit, not a new measurement failure.
 The original v1 audit receipt remains historical: a review completed after its
 merge found four execution-integrity defects. The repaired, whole-plan-bound v2
-receipt reproduces the outcome and is authoritative.
+receipt reproduced the outcome but was subsequently superseded.
+The completed review of that v2 found a remaining hash/parse race and
+commit-provenance test defects. V3 closes them, reproduces the same outcome and
+is now authoritative; v1 and v2 remain immutable superseded receipts.
 
 ## Current evidence
 

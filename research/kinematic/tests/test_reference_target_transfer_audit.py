@@ -28,7 +28,7 @@ RECEIPT_PATH = (
 
 def test_plan_is_exactly_bounded_to_frozen_aggregate_receipt():
     plan = load_strict_json(PLAN_PATH)
-    validate_plan(plan, PLAN_PATH)
+    validate_plan(plan, PLAN_PATH.read_bytes())
     assert hashlib.sha256(PLAN_PATH.read_bytes()).hexdigest() == EXPECTED_PLAN_SHA256
     assert plan["frozen_input"]["sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
@@ -51,11 +51,11 @@ def test_changed_input_hash_or_term_is_rejected():
     changed = deepcopy(plan)
     changed["frozen_input"]["sha256"] = "0" * 64
     with pytest.raises(ValueError, match="supplied plan object differs"):
-        validate_plan(changed, PLAN_PATH)
+        validate_plan(changed, PLAN_PATH.read_bytes())
     changed = deepcopy(plan)
     changed["composition_rule"] = "silently add every term"
     with pytest.raises(ValueError, match="supplied plan object differs"):
-        validate_plan(changed, PLAN_PATH)
+        validate_plan(changed, PLAN_PATH.read_bytes())
 
 
 def test_target_or_individual_value_contamination_is_rejected():
@@ -69,7 +69,29 @@ def test_target_or_individual_value_contamination_is_rejected():
     changed["persistence"]["individual_observation_values"] = True
     with pytest.raises(ValueError, match="individual observation"):
         validate_receipt_fields(plan, changed)
-    assert validate_receipt(plan, RECEIPT_PATH) == receipt
+    validated, receipt_hash = validate_receipt(plan, RECEIPT_PATH)
+    assert validated == receipt
+    assert receipt_hash == hashlib.sha256(RECEIPT_PATH.read_bytes()).hexdigest()
+
+
+def test_receipt_hash_and_parse_use_exactly_one_file_read():
+    plan = load_strict_json(PLAN_PATH)
+    content = RECEIPT_PATH.read_bytes()
+
+    class CountingReceipt:
+        def __init__(self, value: bytes):
+            self.value = value
+            self.read_count = 0
+
+        def read_bytes(self) -> bytes:
+            self.read_count += 1
+            return self.value
+
+    source = CountingReceipt(content)
+    validated, receipt_hash = validate_receipt(plan, source)
+    assert source.read_count == 1
+    assert validated == load_strict_json(RECEIPT_PATH)
+    assert receipt_hash == hashlib.sha256(content).hexdigest()
 
 
 def test_strict_json_rejects_nan_and_duplicate_keys(tmp_path: Path):
@@ -87,15 +109,71 @@ def test_strict_json_rejects_nan_and_duplicate_keys(tmp_path: Path):
         load_strict_json(duplicate)
 
 
+@pytest.mark.parametrize(
+    ("change_plan", "change_implementation", "expected_relative_path"),
+    (
+        (True, False, "research/kinematic/reference_target_transfer_audit_plan.json"),
+        (False, True, "research/kinematic/reference_target_transfer_audit.py"),
+    ),
+)
+def test_git_freeze_rejects_exact_byte_mismatch(
+    monkeypatch: pytest.MonkeyPatch,
+    change_plan: bool,
+    change_implementation: bool,
+    expected_relative_path: str,
+):
+    source_commit = "1" * 40
+    implementation_path = Path(audit.__file__).resolve()
+    committed = {
+        PLAN_PATH.resolve().relative_to(ROOT).as_posix(): PLAN_PATH.read_bytes(),
+        implementation_path.relative_to(ROOT).as_posix(): implementation_path.read_bytes(),
+    }
+
+    def fake_check_output(args, **kwargs):
+        if args[1:3] == ["status", "--porcelain"]:
+            return ""
+        if args[1:3] == ["rev-parse", "HEAD"]:
+            return source_commit + "\n"
+        if args[1] == "show":
+            return committed[args[2].removeprefix("HEAD:")]
+        raise AssertionError(f"unexpected git invocation: {args}")
+
+    monkeypatch.setattr(audit.subprocess, "check_output", fake_check_output)
+    plan_bytes = committed[PLAN_PATH.resolve().relative_to(ROOT).as_posix()]
+    implementation_bytes = committed[implementation_path.relative_to(ROOT).as_posix()]
+    if change_plan:
+        plan_bytes += b"\n"
+    if change_implementation:
+        implementation_bytes += b"\n"
+
+    with pytest.raises(
+        ValueError,
+        match=f"frozen file differs from committed bytes:{expected_relative_path}",
+    ):
+        audit.admit_git_freeze(
+            PLAN_PATH,
+            source_commit,
+            plan_bytes,
+            implementation_bytes,
+        )
+
+
 def _unit_run(monkeypatch: pytest.MonkeyPatch) -> dict:
     observed = []
     monkeypatch.setattr(
         audit,
         "admit_git_freeze",
-        lambda plan_path, source_commit: observed.append((plan_path, source_commit)),
+        lambda plan_path, source_commit, plan_bytes, implementation_bytes: observed.append(
+            (plan_path, source_commit, plan_bytes, implementation_bytes)
+        ),
     )
     result = run(PLAN_PATH, "unit-test-source-commit")
-    assert observed == [(PLAN_PATH, "unit-test-source-commit")]
+    assert len(observed) == 1
+    assert observed[0][:2] == (PLAN_PATH, "unit-test-source-commit")
+    assert observed[0][2] == PLAN_PATH.read_bytes()
+    assert hashlib.sha256(observed[0][3]).hexdigest() == result["inputs"][
+        "implementation_sha256"
+    ]
     assert result["inputs"]["source_commit"] == "unit-test-source-commit"
     return result
 
@@ -157,17 +235,17 @@ def test_superseded_v1_result_retains_historical_bytes_and_commit_lookup():
         "UNRESOLVED"
     )
     assert result["claim_boundary"]["s3_authorized"] is False
-    source_commit = result["inputs"]["source_commit"]
-    implementation_at_freeze = subprocess.check_output(
-        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
-        cwd=ROOT,
-    )
     assert result["inputs"]["plan_sha256"] == hashlib.sha256(
         PLAN_PATH.read_bytes()
     ).hexdigest()
     assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
     ).hexdigest()
+    source_commit = result["inputs"]["source_commit"]
+    implementation_at_freeze = subprocess.check_output(
+        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
+        cwd=ROOT,
+    )
     assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
         implementation_at_freeze
     ).hexdigest()
@@ -192,14 +270,56 @@ def test_hardened_v2_result_matches_current_frozen_inputs_and_code():
     assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
     ).hexdigest()
-    current_code = ROOT / "research/kinematic/reference_target_transfer_audit.py"
+    source_commit = result["inputs"]["source_commit"]
+    implementation_at_freeze = subprocess.check_output(
+        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
+        cwd=ROOT,
+    )
     assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
-        current_code.read_bytes()
+        implementation_at_freeze
     ).hexdigest()
     assert result["status"] == (
         "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
     )
     assert result["inputs"]["source_or_network_access"] is False
+    assert result["inputs"]["new_numeric_measurements"] is False
+    assert result["inputs"]["target_selected"] is False
+    assert result["inputs"]["target_state_or_orbit_accessed"] is False
+    assert result["composition"]["total_future_target_physical_envelope"] is None
+    assert result["claim_boundary"]["s3_authorized"] is False
+
+
+def test_authoritative_v3_result_resolves_source_commit_and_exact_inputs():
+    path = ROOT / "research/kinematic/results/s2_reference_target_transfer_audit_v3.json"
+    result = load_strict_json(path)
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "e209a9d00b70e360be6ba1330574a830ca331a5e2b3690c33d8b53c96f04170b"
+    )
+    assert result["schema"] == "s2-reference-to-target-transfer-audit-result-v3"
+    assert result["supersedes"]["sha256"] == (
+        "9a4e2c859a9eb1e096f62f8cf09accc6743ab91a76428f6d684c85419673142b"
+    )
+    source_commit = result["inputs"]["source_commit"]
+    assert source_commit == "fc20392d44922c0d5e4daa917012b1f3c85801dc"
+    implementation_at_freeze = subprocess.check_output(
+        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
+        cwd=ROOT,
+    )
+    assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
+        implementation_at_freeze
+    ).hexdigest()
+    assert result["inputs"]["plan_sha256"] == hashlib.sha256(
+        PLAN_PATH.read_bytes()
+    ).hexdigest()
+    assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
+        RECEIPT_PATH.read_bytes()
+    ).hexdigest()
+    assert result["status"] == (
+        "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
+    )
+    assert result["inputs"]["source_or_network_access"] is False
+    assert result["inputs"]["new_numeric_measurements"] is False
+    assert result["inputs"]["target_selected"] is False
     assert result["inputs"]["target_state_or_orbit_accessed"] is False
     assert result["composition"]["total_future_target_physical_envelope"] is None
     assert result["claim_boundary"]["s3_authorized"] is False
