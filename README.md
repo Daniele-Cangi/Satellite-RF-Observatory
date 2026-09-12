@@ -5,13 +5,17 @@ the Internet, without supplying the target's orbit to the calculation. Declare
 uncertainty before testing an excluded receiver and opening an orbit reference.
 
 The one-event milestone was reached by G14 DOY246. The active objective is now
-scientific software development: diagnose uncertainty, investigate position and
-velocity from code/range-rate observations, and design preregistered predictive
-validation. Website, API, Docker and hosting work are paused. The five-event
-private archive remains documentation, not a general verification service.
+a [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md): request
+a supported satellite/day, assess available observations, estimate with declared
+uncertainty, and return verified evidence or a precise reason for an inconclusive
+result. Development starts locally with the historical GPS code profile.
+Scientific validation continues as part of that objective. The five-event
+archive remains documentation; automatic request execution and public deployment
+are not delivered. The first local slice prepares requests and reads sealed
+results through `python -m service`; see [the service commands](service/README.md).
 
-The approved [scientific project](docs/SCIENTIFIC_ROADMAP.md) replaces the website
-roadmap as the current priority. Its first [S0/S1 report](research/kinematic/results/REPORT.md)
+The preserved [scientific project](docs/SCIENTIFIC_ROADMAP.md) supplies the research
+and validation work for this objective. Its first [S0/S1 report](research/kinematic/results/REPORT.md)
 finds a conditional gain from added range-rate observations in an idealized
 synthetic model. This is not yet real Doppler integration or new satellite proof.
 

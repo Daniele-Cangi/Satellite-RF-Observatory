@@ -1,4 +1,45 @@
-# Remote request foundation (P1, not deployed)
+# General verification workflow (local, experimental)
+
+The user approved the general request-to-result objective on 2026-09-12.
+See [the delivery plan](../docs/GENERAL_VERIFICATION_WORKFLOW.md). The new
+`workflow.py` layer prepares requests for the existing GPS network profile and
+reads already sealed worker results. Neither command downloads observations,
+starts an estimator, submits a queue job or publishes anything.
+
+```powershell
+python -m service capabilities
+python -m service prepare G15 2026-09-01 --prior-access "Planning example only; exposure not established." --plan-output request-plan.json
+python -m service result experiments/positioning_g14_doy246_network
+python -m service result experiments/positioning_g13_doy247_request
+```
+
+The example date/target is only an offline planning example, not an approved
+campaign. `prepare` accepts a completed historical GPST day and GPS G01..G32.
+It freezes the existing ten-candidate/seven-fit station policy with GOLD held
+out into a standard `positioning` plan. It does not freeze the implementation
+or establish source availability. Unknown request fields and unsupported
+profiles are rejected. A known closed event returns `ARCHIVED_EVENT` and its
+original evidence directory instead of creating another plan. The first three
+older archive events use legacy formats; this reader currently supports the
+sealed worker dossiers used by G13/G14, not those legacy dossiers.
+
+Programmatic input to `prepare_request` contains exactly `target`, `date_gpst`,
+`profile` and `prior_access`. `PLAN_PREPARED` means only that the request can be
+represented by the existing profile. Its returned `plan` passes
+`positioning.plans.validate_plan` and can be consumed by the existing local
+worker once the run declaration and access history are settled. The optional
+plan file is created exclusively: an existing declaration is never overwritten.
+
+`result` verifies every artifact listed by `terminal_receipt.json` and parses
+the dossier from the same bytes it hashed. It retains the original frame,
+emission time, conditional uncertainty, comparison error and scientific status.
+Missing values stay null. `COMPLETED` does not imply scientific success;
+`UNCERTAINTY_TOO_LARGE` stays inconclusive even if orbit agreement is good.
+Unknown outcomes, contradictory labels, changed or unsealed results are rejected.
+Local seals detect modifications relative to a receipt, not malicious rewriting
+of the receipt itself or scientific correctness. Read operations never reseal.
+
+## Existing remote request foundation (P1, not deployed)
 
 `requests.py` is a standard-library SQLite reference implementation for a
 single-host persistent Python gateway. It does not expose HTTP routes, execute

@@ -56,7 +56,27 @@ User instructions continue to take precedence over this file.
   Preserve `experiments/positioning_g14_doy246_network/` and its original scope.
   Do not rerun, tune or generalize this success into universal accuracy/coverage.
 
-## Current delivery objective — scientific software first
+## Current delivery objective — general verification workflow
+
+On 2026-09-12 the user made the general verification flow the product objective:
+supported satellite/day request -> source availability -> qualified estimation
+-> frozen prediction -> withheld checks -> understandable result or explicit
+reason verification is unavailable. Follow `docs/GENERAL_VERIFICATION_WORKFLOW.md`.
+This supersedes earlier blanket pauses on service/workflow development below.
+Start locally with the existing historical GPS code profile; preserve frozen
+positioning sources and research results. Do not advertise arbitrary satellites,
+live positions, population coverage or the experimental kinematic path as ready.
+
+Scientific work now supplies measurable capabilities and validation to this
+flow. Service integration may proceed alongside that work; public deployment
+and new S3 acquisition still require their separately specified prerequisites.
+Request preparation alone never establishes source availability, prior-access
+independence or physical qualification. Closed events remain archive results.
+Use the existing worker and queue rather than creating a second execution
+system. The first delivery is offline request preparation and sealed-result
+presentation in `service/workflow.py`; worker/queue dispatch is still pending.
+
+## Scientific development history and preserved constraints
 
 On 2026-09-10 the user postponed website, API, Docker and hosting development
 and approved the scientific project in `docs/SCIENTIFIC_ROADMAP.md`.
