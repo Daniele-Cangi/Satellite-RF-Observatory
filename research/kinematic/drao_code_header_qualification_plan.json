@@ -1,0 +1,56 @@
+{
+  "schema": "s2-drao-code-header-qualification-v1",
+  "qualification_id": "S2_DRAO_CODE_HEADERS_2026242",
+  "date_gpst": "2026-08-30",
+  "day_of_year": 242,
+  "scope": "One bounded DRAO code-coordinate header qualification on an independently frozen complete day. No target identity, target values, observation records, navigation product, orbit, residual or orbital score is accessed.",
+  "source": {
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/DRAO00CAN_R_20262420000_01D_30S_MO.crx.gz",
+    "filename": "DRAO00CAN_R_20262420000_01D_30S_MO.crx.gz",
+    "maximum_compressed_bytes": 50000000,
+    "maximum_header_lines": 2000,
+    "minimum_archive_age_after_last_epoch_s": 172800,
+    "required_rinex_versions": ["3.04", "3.05"],
+    "required_time_system": "GPS",
+    "required_interval_s": 30.0,
+    "required_first_epoch": [2026, 8, 30, 0, 0, 0.0],
+    "required_last_epoch": [2026, 8, 30, 23, 59, 30.0],
+    "required_gps_code_observables": ["C1C", "C2W"]
+  },
+  "station": {
+    "id": "DRAO00CAN",
+    "allowed_marker_names": ["DRAO", "DRAO00CAN"]
+  },
+  "coordinate_policy": {
+    "code_coordinate": "P_IF = a*C1C + b*C2W, where a=f1^2/(f1^2-f2^2), b=-f2^2/(f1^2-f2^2), f1=1575.42 MHz and f2=1227.60 MHz.",
+    "rinex3_scale_factor": "Divide each stored code value by its declared SYS / SCALE FACTOR; missing means one.",
+    "applied_external_corrections": "Any nonblank GPS SYS / DCBS APPLIED or SYS / PCVS APPLIED entry is fatal without its independently frozen product.",
+    "receiver_clock": "RCV CLOCK OFFS APPL must be zero or absent.",
+    "phase_headers": "SYS / PHASE SHIFT and WAVELENGTH FACT L1/2 are outside this code-only contract and cannot admit or reject it.",
+    "coverage": "TIME OF FIRST OBS and TIME OF LAST OBS must declare the exact full day. This header audit does not establish body-record continuity."
+  },
+  "execution": {
+    "one_attempt": true,
+    "no_retry": true,
+    "no_date_station_or_field_substitution": true,
+    "complete_compressed_artifact_hashed_before_header_parse": true,
+    "gzip_stream_stops_after_end_of_header": true,
+    "hatanaka_body_decoder_forbidden": true,
+    "target_identity_and_values_forbidden": true
+  },
+  "outcomes": [
+    "DRAO_CODE_HEADERS_QUALIFIED",
+    "DRAO_CODE_HEADERS_NOT_QUALIFIED",
+    "DRAO_CODE_HEADER_EXECUTION_INVALID"
+  ],
+  "persistence": {
+    "compressed_payload": false,
+    "decompressed_payload": false,
+    "header_text": false,
+    "observation_records": false,
+    "observation_values": false,
+    "header_receipt_and_code_transform_ledger_only": true,
+    "raw_payload_bytes": 0
+  },
+  "terminal_policy": "This artifact is closed after one outcome. Do not select another date or relax C1C/C2W if it fails. Passing qualifies header coordinate semantics only; structural continuity and the physical error envelope remain separate blockers."
+}
