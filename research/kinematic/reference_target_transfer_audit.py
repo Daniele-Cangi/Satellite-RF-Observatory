@@ -41,7 +41,7 @@ def _finite_float(value: str) -> float:
     return parsed
 
 
-def load_strict_json(path: Path) -> dict:
+def load_strict_json_bytes(content: bytes) -> dict:
     def unique_object(pairs: list[tuple[str, object]]) -> dict:
         result = {}
         for key, value in pairs:
@@ -51,7 +51,7 @@ def load_strict_json(path: Path) -> dict:
         return result
 
     value = json.loads(
-        path.read_text(encoding="utf-8"),
+        content.decode("utf-8"),
         parse_constant=_reject_constant,
         parse_float=_finite_float,
         object_pairs_hook=unique_object,
@@ -61,7 +61,16 @@ def load_strict_json(path: Path) -> dict:
     return value
 
 
-def admit_git_freeze(plan_path: Path, source_commit: str) -> None:
+def load_strict_json(path: Path) -> dict:
+    return load_strict_json_bytes(path.read_bytes())
+
+
+def admit_git_freeze(
+    plan_path: Path,
+    source_commit: str,
+    plan_bytes: bytes,
+    implementation_bytes: bytes,
+) -> None:
     if subprocess.check_output(
         ["git", "status", "--porcelain", "--untracked-files=all"],
         cwd=ROOT,
@@ -73,19 +82,22 @@ def admit_git_freeze(plan_path: Path, source_commit: str) -> None:
     ).strip()
     if actual != source_commit:
         raise ValueError("source commit differs from HEAD")
-    for path in (plan_path, Path(__file__)):
+    for path, frozen_bytes in (
+        (plan_path, plan_bytes),
+        (Path(__file__), implementation_bytes),
+    ):
         relative = path.resolve().relative_to(ROOT).as_posix()
         committed = subprocess.check_output(
             ["git", "show", f"HEAD:{relative}"], cwd=ROOT
         )
-        if committed != path.read_bytes():
+        if committed != frozen_bytes:
             raise ValueError("frozen file differs from committed bytes:" + relative)
 
 
-def validate_plan(plan: dict, plan_path: Path) -> None:
-    if sha256_path(plan_path) != EXPECTED_PLAN_SHA256:
+def validate_plan(plan: dict, plan_bytes: bytes) -> None:
+    if hashlib.sha256(plan_bytes).hexdigest() != EXPECTED_PLAN_SHA256:
         raise ValueError("complete frozen plan hash mismatch")
-    if plan != load_strict_json(plan_path):
+    if plan != load_strict_json_bytes(plan_bytes):
         raise ValueError("supplied plan object differs from frozen plan bytes")
     if plan.get("schema") != "s2-reference-to-target-transfer-audit-plan-v1":
         raise ValueError("unexpected transfer-audit plan")
@@ -150,23 +162,27 @@ def validate_receipt_fields(plan: dict, receipt: dict) -> None:
         raise ValueError("unexpected population-coverage claim")
 
 
-def validate_receipt(plan: dict, receipt_path: Path) -> dict:
+def validate_receipt(plan: dict, receipt_path: Path) -> tuple[dict, str]:
     frozen = plan["frozen_input"]
-    if sha256_path(receipt_path) != frozen["sha256"]:
+    receipt_bytes = receipt_path.read_bytes()
+    receipt_sha256 = hashlib.sha256(receipt_bytes).hexdigest()
+    if receipt_sha256 != frozen["sha256"]:
         raise ValueError("frozen receipt hash mismatch")
-    receipt = load_strict_json(receipt_path)
+    receipt = load_strict_json_bytes(receipt_bytes)
     validate_receipt_fields(plan, receipt)
-    return receipt
+    return receipt, receipt_sha256
 
 
 def run(plan_path: Path, source_commit: str) -> dict:
     if not source_commit:
         raise ValueError("source commit is required")
-    plan = load_strict_json(plan_path)
-    validate_plan(plan, plan_path)
-    admit_git_freeze(plan_path, source_commit)
+    plan_bytes = plan_path.read_bytes()
+    implementation_bytes = Path(__file__).read_bytes()
+    plan = load_strict_json_bytes(plan_bytes)
+    validate_plan(plan, plan_bytes)
+    admit_git_freeze(plan_path, source_commit, plan_bytes, implementation_bytes)
     receipt_path = ROOT / plan["frozen_input"]["path"]
-    receipt = validate_receipt(plan, receipt_path)
+    receipt, receipt_sha256 = validate_receipt(plan, receipt_path)
 
     assessments = []
     for row in plan["terms"]:
@@ -192,21 +208,21 @@ def run(plan_path: Path, source_commit: str) -> dict:
         else "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
     )
     result = {
-        "schema": "s2-reference-to-target-transfer-audit-result-v2",
+        "schema": "s2-reference-to-target-transfer-audit-result-v3",
         "audit_id": plan["audit_id"],
         "status": status,
         "scope": plan["scope"],
         "supersedes": {
-            "path": "research/kinematic/results/s2_reference_target_transfer_audit_v1.json",
-            "sha256": "20113de41579269e10d0260abb97aa739499069afffc14adb4063ecaf7f1c99c",
-            "reason": "Post-merge integrity repair: complete plan binding, mandatory source freeze, strict finite JSON and receipt object/byte identity.",
+            "path": "research/kinematic/results/s2_reference_target_transfer_audit_v2.json",
+            "sha256": "9a4e2c859a9eb1e096f62f8cf09accc6743ab91a76428f6d684c85419673142b",
+            "reason": "Second post-merge integrity repair: single-read hash/parse coupling and commit-resolved implementation provenance in full-history CI.",
         },
         "inputs": {
             "source_commit": source_commit,
-            "plan_sha256": sha256_path(plan_path),
-            "implementation_sha256": sha256_path(Path(__file__)),
+            "plan_sha256": hashlib.sha256(plan_bytes).hexdigest(),
+            "implementation_sha256": hashlib.sha256(implementation_bytes).hexdigest(),
             "reference_receipt": plan["frozen_input"]["path"],
-            "reference_receipt_sha256": sha256_path(receipt_path),
+            "reference_receipt_sha256": receipt_sha256,
             "source_or_network_access": False,
             "new_numeric_measurements": False,
             "target_selected": False,

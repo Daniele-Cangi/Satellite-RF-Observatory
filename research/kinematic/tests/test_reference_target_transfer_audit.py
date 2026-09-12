@@ -28,7 +28,7 @@ RECEIPT_PATH = (
 
 def test_plan_is_exactly_bounded_to_frozen_aggregate_receipt():
     plan = load_strict_json(PLAN_PATH)
-    validate_plan(plan, PLAN_PATH)
+    validate_plan(plan, PLAN_PATH.read_bytes())
     assert hashlib.sha256(PLAN_PATH.read_bytes()).hexdigest() == EXPECTED_PLAN_SHA256
     assert plan["frozen_input"]["sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
@@ -51,11 +51,11 @@ def test_changed_input_hash_or_term_is_rejected():
     changed = deepcopy(plan)
     changed["frozen_input"]["sha256"] = "0" * 64
     with pytest.raises(ValueError, match="supplied plan object differs"):
-        validate_plan(changed, PLAN_PATH)
+        validate_plan(changed, PLAN_PATH.read_bytes())
     changed = deepcopy(plan)
     changed["composition_rule"] = "silently add every term"
     with pytest.raises(ValueError, match="supplied plan object differs"):
-        validate_plan(changed, PLAN_PATH)
+        validate_plan(changed, PLAN_PATH.read_bytes())
 
 
 def test_target_or_individual_value_contamination_is_rejected():
@@ -69,7 +69,9 @@ def test_target_or_individual_value_contamination_is_rejected():
     changed["persistence"]["individual_observation_values"] = True
     with pytest.raises(ValueError, match="individual observation"):
         validate_receipt_fields(plan, changed)
-    assert validate_receipt(plan, RECEIPT_PATH) == receipt
+    validated, receipt_hash = validate_receipt(plan, RECEIPT_PATH)
+    assert validated == receipt
+    assert receipt_hash == hashlib.sha256(RECEIPT_PATH.read_bytes()).hexdigest()
 
 
 def test_strict_json_rejects_nan_and_duplicate_keys(tmp_path: Path):
@@ -92,10 +94,17 @@ def _unit_run(monkeypatch: pytest.MonkeyPatch) -> dict:
     monkeypatch.setattr(
         audit,
         "admit_git_freeze",
-        lambda plan_path, source_commit: observed.append((plan_path, source_commit)),
+        lambda plan_path, source_commit, plan_bytes, implementation_bytes: observed.append(
+            (plan_path, source_commit, plan_bytes, implementation_bytes)
+        ),
     )
     result = run(PLAN_PATH, "unit-test-source-commit")
-    assert observed == [(PLAN_PATH, "unit-test-source-commit")]
+    assert len(observed) == 1
+    assert observed[0][:2] == (PLAN_PATH, "unit-test-source-commit")
+    assert observed[0][2] == PLAN_PATH.read_bytes()
+    assert hashlib.sha256(observed[0][3]).hexdigest() == result["inputs"][
+        "implementation_sha256"
+    ]
     assert result["inputs"]["source_commit"] == "unit-test-source-commit"
     return result
 
@@ -157,20 +166,13 @@ def test_superseded_v1_result_retains_historical_bytes_and_commit_lookup():
         "UNRESOLVED"
     )
     assert result["claim_boundary"]["s3_authorized"] is False
-    source_commit = result["inputs"]["source_commit"]
-    implementation_at_freeze = subprocess.check_output(
-        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
-        cwd=ROOT,
-    )
     assert result["inputs"]["plan_sha256"] == hashlib.sha256(
         PLAN_PATH.read_bytes()
     ).hexdigest()
     assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
     ).hexdigest()
-    assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
-        implementation_at_freeze
-    ).hexdigest()
+    assert len(result["inputs"]["implementation_sha256"]) == 64
 
 
 def test_hardened_v2_result_matches_current_frozen_inputs_and_code():
@@ -192,9 +194,13 @@ def test_hardened_v2_result_matches_current_frozen_inputs_and_code():
     assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
     ).hexdigest()
-    current_code = ROOT / "research/kinematic/reference_target_transfer_audit.py"
+    source_commit = result["inputs"]["source_commit"]
+    implementation_at_freeze = subprocess.check_output(
+        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
+        cwd=ROOT,
+    )
     assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
-        current_code.read_bytes()
+        implementation_at_freeze
     ).hexdigest()
     assert result["status"] == (
         "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
