@@ -1,4 +1,5 @@
 """Frozen boundaries for the four-fit/one-heldout topology audit."""
+import hashlib
 import json
 from pathlib import Path
 
@@ -85,3 +86,22 @@ def test_four_root_temporal_design_and_local_response_are_finite():
     metric = position_envelope(response, 60.0)
     assert np.isfinite(list(metric.values())).all()
     assert metric["conditional_local_position_envelope_m"] > 0
+
+
+def test_frozen_result_retains_every_partition_and_unresolved_physics():
+    path = ROOT / "research/kinematic/results/s2_four_fit_one_heldout_v1.json"
+    result = json.loads(path.read_text())
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "e1998956c673af44b7580b5ce15929c512cb101a65494841b2c1815f4cea3aec"
+    )
+    assert result["status"] == "FOUR_FIT_ONE_HELDOUT_CONDITIONALLY_AVAILABLE"
+    assert result["freeze"]["source_commit"] == "b8c0a1f1d56dc42aa2280be60a2cf907b9d2cacc"
+    assert result["partition_ranking"] == [
+        "GOLD00USA", "PIE100USA", "MKEA00USA", "BOGT00COL", "ALGO00CAN"
+    ]
+    assert len(result["partitions"]) == 5
+    assert [row["conditionally_usable_cases"] for row in result["partitions"]] == [62, 60, 0, 0, 0]
+    assert all(row["rank_failures"] == 0 for row in result["partitions"])
+    assert result["clauses"]["REAL_MEASUREMENT_ADMISSION"] == "UNRESOLVED"
+    assert result["clauses"]["TOTAL_PHYSICAL_ERROR_ENVELOPE"] == "UNRESOLVED"
+    assert result["interpretation"]["s3_authorized"] is False

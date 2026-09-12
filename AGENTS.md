@@ -281,6 +281,20 @@ on another date, alias a legacy field to C1C/C2W, or reopen this product. The
 conditional geometric advantage therefore does not materialize into an admitted
 sixth root; S3 remains unauthorized.
 
+The subsequent target-free four-fit/one-heldout topology audit is closed
+`FOUR_FIT_ONE_HELDOUT_CONDITIONALLY_AVAILABLE`. Over the same 181 frozen
+synthetic cases, every leave-one-out partition retained full local rank. GOLD
+held out gave 62 cases satisfying both the 10 km fit envelope and positive
+100 m held-out slack; PIE1 gave 60; MKEA, BOGT and ALGO gave zero. GOLD's usable
+cases cover the 12,000 and 20,000 km shells and 30 of 44 cases at 30,000 km,
+with none at 45,000 or 60,000 km. This is conditional topology evidence, not
+real measurement admission or an S3 authorization. Preserve the invalid first
+invocation receipt: it used a wrong declared commit suffix and its numeric
+outcome is unauthorized. The corrected result is bound to commit `b8c0a1f`.
+Do not use a target orbit to select a favorable synthetic analogue. The smallest
+physical follow-up is a distinct target-free qualification of ALGO/BOGT/MKEA/PIE1
+as fit roots and GOLD as code-only heldout, including total physical envelopes.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
