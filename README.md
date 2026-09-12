@@ -100,6 +100,9 @@ bounds remain valid in their original coordinates, but were not combined or
 silently transferred to a target. The terminal is
 `FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT`; this is an
 evidence-sufficiency limit, not a new measurement failure.
+The original v1 audit receipt remains historical: a review completed after its
+merge found four execution-integrity defects. The repaired, whole-plan-bound v2
+receipt reproduces the outcome and is authoritative.
 
 ## Current evidence
 

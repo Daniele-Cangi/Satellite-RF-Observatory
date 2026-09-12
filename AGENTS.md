@@ -346,6 +346,12 @@ envelopes remain valid only in their distinct reference coordinates and were
 not combined. Preserve this as a causal sufficiency result, not evidence that
 the terms are large or that the reference path failed. Do not authorize a
 primary or S3 from DOY240 alone.
+Post-merge review found execution-integrity defects in the v1 audit receipt:
+incomplete whole-plan validation, an optional programmatic source-freeze path,
+weak receipt object/byte coupling and incomplete non-finite JSON rejection.
+Preserve v1 unchanged as superseded evidence. The repaired v2, frozen at
+`4993d37`, closes all four defects and reproduces the same causal outcome with
+no source, target or orbit access; use v2 as the authoritative receipt.
 
 ## Scientific objective and information value
 
