@@ -1,0 +1,16 @@
+{
+  "schema": "s2-four-fit-one-heldout-execution-audit-v1",
+  "classification": "AUDIT_EXECUTION_INVALID",
+  "generated_result_sha256": "04c9d312078a665356597453272978dd176f8b9dea311674740f0f5e09915c0c",
+  "generated_result_bytes": 1484078,
+  "declared_source_commit": "4534538f6ea72d3ad4929b4bfc89fc975a16ce7e",
+  "actual_source_commit": "4534538ac14cc409075197f84ac243996c008749",
+  "defect": "The invocation supplied a syntactically valid but incorrect source commit suffix; the runner did not compare it with HEAD.",
+  "scientific_parameters_changed": false,
+  "numerical_outcome_authorized": false,
+  "network_access": false,
+  "target_or_orbit_access": false,
+  "observation_value_access": false,
+  "invalid_generated_result_retained": false,
+  "repair": "Require clean-tree, exact HEAD equality and committed-byte equality before deterministic re-execution."
+}

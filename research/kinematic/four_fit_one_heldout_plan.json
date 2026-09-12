@@ -1,0 +1,57 @@
+{
+  "schema": "s2-four-fit-one-heldout-topology-plan-v1",
+  "audit_id": "S2_FOUR_FIT_ONE_HELDOUT_TOPOLOGY",
+  "scope": "Offline target-free leave-one-root-out audit over the five already header-qualified roots. It tests whether temporal code plus interval-phase structure can retain local fit information while reserving one root for held-out code prediction. No source access, target, date, orbit, navigation or observation value.",
+  "frozen_inputs": {
+    "five_root_plan": "research/kinematic/five_root_feasibility_plan.json",
+    "five_root_plan_sha256": "8c988f24ed5b3f19906f1a196863dddf210912deed8fc5fbab44938dd2074132",
+    "five_root_result": "research/kinematic/results/s2_five_root_feasibility_v1.json",
+    "five_root_result_sha256": "58df177228f5fb5afdac91c92eed7925a932b3b59e37fca214126a9449503c7b",
+    "heldout_topology_plan": "research/kinematic/heldout_code_topology_plan.json",
+    "heldout_topology_plan_sha256": "2c4f01292ffd036090b641f1adb31b86a62eca817c6aa8703fe0a4a2d61fca57",
+    "heldout_topology_result": "research/kinematic/results/s2_heldout_code_topology_v1.json",
+    "heldout_topology_result_sha256": "d70bd0d8f81217fb2cb1fd4899d18b14d035a86113a72798fc5a7f7224f4cafa"
+  },
+  "root_allocation": {
+    "policy": "Evaluate all five deterministic leave-one-root-out partitions; four roots enter the fit and the omitted fifth root enters held-out prediction only.",
+    "partition_count": 5,
+    "fit_root_count": 4,
+    "heldout_root_count": 1,
+    "root_ids": ["ALGO00CAN", "BOGT00COL", "MKEA00USA", "PIE100USA", "GOLD00USA"],
+    "selection_from_real_target_state": false
+  },
+  "measurement_design": {
+    "reuse_five_root_endpoint_tags_and_error_assumptions": true,
+    "fit_observable": "endpoint C1C/C2W ionosphere-free code plus interval-mean L1C/L2W phase path",
+    "heldout_observable": "endpoint C1C/C2W ionosphere-free code only",
+    "heldout_receive_tags_s": [30.0, 60.0],
+    "minimum_elevation_deg": 5.0,
+    "absolute_heldout_range_equivalent_limit_m": 100.0,
+    "maximum_fit_position_envelope_m": 10000.0,
+    "minimum_conditionally_usable_synthetic_cases": 20,
+    "holdout_fitted_offset_allowed": false
+  },
+  "selection_boundary": {
+    "target_identifier": null,
+    "target_date": null,
+    "target_orbit_or_radius_constraint": false,
+    "real_observation_values": false,
+    "new_network_access": false,
+    "rank_by": [
+      "count of cases with full fit rank, <=10 km fit envelope, held-out visibility and positive <=100 m residual slack",
+      "count of held-out-visible cases",
+      "median held-out physical slack"
+    ]
+  },
+  "physical_envelope_policy": {
+    "state": "CONDITIONAL_ONLY",
+    "reuse_frozen_gaussian_and_affine_design": true,
+    "unresolved_terms_remain_unresolved": true,
+    "positive_slack_is_not_physical_admission": true
+  },
+  "outcomes": [
+    "FOUR_FIT_ONE_HELDOUT_CONDITIONALLY_AVAILABLE",
+    "FOUR_FIT_ONE_HELDOUT_NOT_SUPPORTED"
+  ],
+  "stop_rule": "Stop after the five fixed partitions. Do not add roots, change the synthetic family or thresholds, use a target orbit to choose a case, or access observations."
+}

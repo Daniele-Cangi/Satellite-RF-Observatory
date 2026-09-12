@@ -55,6 +55,16 @@ the header did not expose the frozen named C1C/C2W format. No legacy label was
 reinterpreted post-access. The promising geometry therefore remains unavailable
 as a measurement root, and S3 is still blocked.
 
+A further offline [four-fit/one-heldout audit](research/kinematic/S2_FOUR_FIT_ONE_HELDOUT.md)
+shows that a sixth root is not topologically mandatory when the temporal
+code/interval-phase structure is retained. All five four-root fits have local
+rank across the 181 frozen synthetic cases. Reserving GOLD produces 62 cases
+that also meet the conditional 10 km fit and 100 m held-out criteria; reserving
+PIE1 produces 60. The other three allocations produce none, and no 45,000 or
+60,000 km case passes. This result is synthetic and conditional: actual
+five-root measurement admission and the physical envelope remain unresolved,
+so S3 is not yet authorized.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |
