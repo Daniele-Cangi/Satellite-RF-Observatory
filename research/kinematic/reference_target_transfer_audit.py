@@ -4,11 +4,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[2]
+EXPECTED_PLAN_SHA256 = "afcd036c429f8ea45f293d233fa0d6f8be5f50bbc01fe036ab10b9784118ad01"
 TERMINALS = {
     "FUTURE_TARGET_ENVELOPE_IDENTIFIED",
     "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT",
@@ -32,6 +34,13 @@ def _reject_constant(value: str) -> None:
     raise ValueError("non-finite JSON constant:" + value)
 
 
+def _finite_float(value: str) -> float:
+    parsed = float(value)
+    if not math.isfinite(parsed):
+        raise ValueError("non-finite JSON number:" + value)
+    return parsed
+
+
 def load_strict_json(path: Path) -> dict:
     def unique_object(pairs: list[tuple[str, object]]) -> dict:
         result = {}
@@ -44,6 +53,7 @@ def load_strict_json(path: Path) -> dict:
     value = json.loads(
         path.read_text(encoding="utf-8"),
         parse_constant=_reject_constant,
+        parse_float=_finite_float,
         object_pairs_hook=unique_object,
     )
     if not isinstance(value, dict):
@@ -72,7 +82,11 @@ def admit_git_freeze(plan_path: Path, source_commit: str) -> None:
             raise ValueError("frozen file differs from committed bytes:" + relative)
 
 
-def validate_plan(plan: dict) -> None:
+def validate_plan(plan: dict, plan_path: Path) -> None:
+    if sha256_path(plan_path) != EXPECTED_PLAN_SHA256:
+        raise ValueError("complete frozen plan hash mismatch")
+    if plan != load_strict_json(plan_path):
+        raise ValueError("supplied plan object differs from frozen plan bytes")
     if plan.get("schema") != "s2-reference-to-target-transfer-audit-plan-v1":
         raise ValueError("unexpected transfer-audit plan")
     if plan.get("audit_id") != "S2_REFERENCE_TO_TARGET_TRANSFER_AUDIT_DOY240":
@@ -107,10 +121,8 @@ def validate_plan(plan: dict) -> None:
         raise ValueError("causal boundary weakened")
 
 
-def validate_receipt(plan: dict, receipt: dict, receipt_path: Path) -> None:
+def validate_receipt_fields(plan: dict, receipt: dict) -> None:
     frozen = plan["frozen_input"]
-    if sha256_path(receipt_path) != frozen["sha256"]:
-        raise ValueError("frozen receipt hash mismatch")
     if receipt.get("status") != frozen["required_status"]:
         raise ValueError("frozen receipt status differs")
     if receipt.get("clauses", {}).get("TOTAL_FUTURE_TARGET_PHYSICAL_ENVELOPE") != (
@@ -138,14 +150,23 @@ def validate_receipt(plan: dict, receipt: dict, receipt_path: Path) -> None:
         raise ValueError("unexpected population-coverage claim")
 
 
-def run(plan_path: Path, source_commit: str | None = None) -> dict:
-    plan = load_strict_json(plan_path)
-    validate_plan(plan)
-    if source_commit is not None:
-        admit_git_freeze(plan_path, source_commit)
-    receipt_path = ROOT / plan["frozen_input"]["path"]
+def validate_receipt(plan: dict, receipt_path: Path) -> dict:
+    frozen = plan["frozen_input"]
+    if sha256_path(receipt_path) != frozen["sha256"]:
+        raise ValueError("frozen receipt hash mismatch")
     receipt = load_strict_json(receipt_path)
-    validate_receipt(plan, receipt, receipt_path)
+    validate_receipt_fields(plan, receipt)
+    return receipt
+
+
+def run(plan_path: Path, source_commit: str) -> dict:
+    if not source_commit:
+        raise ValueError("source commit is required")
+    plan = load_strict_json(plan_path)
+    validate_plan(plan, plan_path)
+    admit_git_freeze(plan_path, source_commit)
+    receipt_path = ROOT / plan["frozen_input"]["path"]
+    receipt = validate_receipt(plan, receipt_path)
 
     assessments = []
     for row in plan["terms"]:
@@ -171,10 +192,15 @@ def run(plan_path: Path, source_commit: str | None = None) -> dict:
         else "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
     )
     result = {
-        "schema": "s2-reference-to-target-transfer-audit-result-v1",
+        "schema": "s2-reference-to-target-transfer-audit-result-v2",
         "audit_id": plan["audit_id"],
         "status": status,
         "scope": plan["scope"],
+        "supersedes": {
+            "path": "research/kinematic/results/s2_reference_target_transfer_audit_v1.json",
+            "sha256": "20113de41579269e10d0260abb97aa739499069afffc14adb4063ecaf7f1c99c",
+            "reason": "Post-merge integrity repair: complete plan binding, mandatory source freeze, strict finite JSON and receipt object/byte identity.",
+        },
         "inputs": {
             "source_commit": source_commit,
             "plan_sha256": sha256_path(plan_path),

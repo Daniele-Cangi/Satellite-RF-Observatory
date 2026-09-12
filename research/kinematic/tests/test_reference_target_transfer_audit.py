@@ -3,15 +3,19 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 import pytest
 
+from research.kinematic import reference_target_transfer_audit as audit
 from research.kinematic.reference_target_transfer_audit import (
+    EXPECTED_PLAN_SHA256,
     EXPECTED_TERMS,
     load_strict_json,
     run,
     validate_plan,
     validate_receipt,
+    validate_receipt_fields,
 )
 
 
@@ -24,7 +28,8 @@ RECEIPT_PATH = (
 
 def test_plan_is_exactly_bounded_to_frozen_aggregate_receipt():
     plan = load_strict_json(PLAN_PATH)
-    validate_plan(plan)
+    validate_plan(plan, PLAN_PATH)
+    assert hashlib.sha256(PLAN_PATH.read_bytes()).hexdigest() == EXPECTED_PLAN_SHA256
     assert plan["frozen_input"]["sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
     ).hexdigest()
@@ -45,12 +50,12 @@ def test_changed_input_hash_or_term_is_rejected():
     plan = load_strict_json(PLAN_PATH)
     changed = deepcopy(plan)
     changed["frozen_input"]["sha256"] = "0" * 64
-    with pytest.raises(ValueError, match="frozen input differs"):
-        validate_plan(changed)
+    with pytest.raises(ValueError, match="supplied plan object differs"):
+        validate_plan(changed, PLAN_PATH)
     changed = deepcopy(plan)
-    changed["terms"][0]["term"] = "generic antenna error"
-    with pytest.raises(ValueError, match="unresolved-term"):
-        validate_plan(changed)
+    changed["composition_rule"] = "silently add every term"
+    with pytest.raises(ValueError, match="supplied plan object differs"):
+        validate_plan(changed, PLAN_PATH)
 
 
 def test_target_or_individual_value_contamination_is_rejected():
@@ -59,11 +64,12 @@ def test_target_or_individual_value_contamination_is_rejected():
     changed = deepcopy(receipt)
     changed["interpretation"]["target_orbit_accessed"] = True
     with pytest.raises(ValueError, match="target orbit"):
-        validate_receipt(plan, changed, RECEIPT_PATH)
+        validate_receipt_fields(plan, changed)
     changed = deepcopy(receipt)
     changed["persistence"]["individual_observation_values"] = True
     with pytest.raises(ValueError, match="individual observation"):
-        validate_receipt(plan, changed, RECEIPT_PATH)
+        validate_receipt_fields(plan, changed)
+    assert validate_receipt(plan, RECEIPT_PATH) == receipt
 
 
 def test_strict_json_rejects_nan_and_duplicate_keys(tmp_path: Path):
@@ -71,14 +77,31 @@ def test_strict_json_rejects_nan_and_duplicate_keys(tmp_path: Path):
     nonfinite.write_text('{"value": NaN}', encoding="utf-8")
     with pytest.raises(ValueError, match="non-finite"):
         load_strict_json(nonfinite)
+    overflow = tmp_path / "overflow.json"
+    overflow.write_text('{"value": 1e309}', encoding="utf-8")
+    with pytest.raises(ValueError, match="non-finite JSON number"):
+        load_strict_json(overflow)
     duplicate = tmp_path / "duplicate.json"
     duplicate.write_text('{"value": 1, "value": 2}', encoding="utf-8")
     with pytest.raises(ValueError, match="duplicate JSON key"):
         load_strict_json(duplicate)
 
 
-def test_audit_never_composes_or_zeroes_unresolved_terms():
-    result = run(PLAN_PATH)
+def _unit_run(monkeypatch: pytest.MonkeyPatch) -> dict:
+    observed = []
+    monkeypatch.setattr(
+        audit,
+        "admit_git_freeze",
+        lambda plan_path, source_commit: observed.append((plan_path, source_commit)),
+    )
+    result = run(PLAN_PATH, "unit-test-source-commit")
+    assert observed == [(PLAN_PATH, "unit-test-source-commit")]
+    assert result["inputs"]["source_commit"] == "unit-test-source-commit"
+    return result
+
+
+def test_audit_never_composes_or_zeroes_unresolved_terms(monkeypatch):
+    result = _unit_run(monkeypatch)
     assert result["status"] == (
         "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
     )
@@ -97,8 +120,8 @@ def test_audit_never_composes_or_zeroes_unresolved_terms():
     assert result["claim_boundary"]["s3_authorized"] is False
 
 
-def test_reference_bounds_are_preserved_in_their_original_coordinates():
-    result = run(PLAN_PATH)
+def test_reference_bounds_are_preserved_in_their_original_coordinates(monkeypatch):
+    result = _unit_run(monkeypatch)
     assert result["composition"]["fit_phase_rate_reference_envelope_m_s"] == (
         0.037339025487426625
     )
@@ -134,3 +157,17 @@ def test_frozen_audit_result_is_hash_bound_and_authorizes_no_primary():
         "UNRESOLVED"
     )
     assert result["claim_boundary"]["s3_authorized"] is False
+    source_commit = result["inputs"]["source_commit"]
+    implementation_at_freeze = subprocess.check_output(
+        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
+        cwd=ROOT,
+    )
+    assert result["inputs"]["plan_sha256"] == hashlib.sha256(
+        PLAN_PATH.read_bytes()
+    ).hexdigest()
+    assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
+        RECEIPT_PATH.read_bytes()
+    ).hexdigest()
+    assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
+        implementation_at_freeze
+    ).hexdigest()
