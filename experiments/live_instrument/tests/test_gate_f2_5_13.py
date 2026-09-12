@@ -177,11 +177,17 @@ def test_empty_close_omits_the_legacy_local_1005_from_integrated_json() -> None:
     result, _ = _open(_Socket([_full_msg(), _close()]))
     receipt = result.receipt
     encoded = json.dumps(strict_json_value(receipt), allow_nan=False, sort_keys=True)
+    decoded = json.loads(encoded)
 
     assert receipt.close_payload_state is f2512.ClosePayloadState.EMPTY_NO_STATUS
     assert receipt.peer_close_status_code is None
-    assert "1005" not in encoded
-    assert "EMPTY_NO_STATUS" in encoded
+    # Hashes and timestamps are opaque strings and may coincidentally contain
+    # "1005". Check the semantic fields, not an unrelated JSON substring.
+    assert decoded["peer_close_status_code"] is None
+    close = next(item for item in decoded["semantic_frame_receipts"]
+                 if item["frame_class"] == "CLOSE")
+    assert close["peer_close_status_code"] is None
+    assert close["close_payload_state"] == "EMPTY_NO_STATUS"
     assert receipt.error_type == "_ObservedWebSocketClose"
 
 
