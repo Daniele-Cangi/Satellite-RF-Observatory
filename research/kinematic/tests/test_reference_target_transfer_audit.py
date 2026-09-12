@@ -233,6 +233,8 @@ def test_hardened_v2_result_matches_current_frozen_inputs_and_code():
         "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
     )
     assert result["inputs"]["source_or_network_access"] is False
+    assert result["inputs"]["new_numeric_measurements"] is False
+    assert result["inputs"]["target_selected"] is False
     assert result["inputs"]["target_state_or_orbit_accessed"] is False
     assert result["composition"]["total_future_target_physical_envelope"] is None
     assert result["claim_boundary"]["s3_authorized"] is False
@@ -266,5 +268,9 @@ def test_authoritative_v3_result_resolves_source_commit_and_exact_inputs():
     assert result["status"] == (
         "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
     )
+    assert result["inputs"]["source_or_network_access"] is False
+    assert result["inputs"]["new_numeric_measurements"] is False
+    assert result["inputs"]["target_selected"] is False
+    assert result["inputs"]["target_state_or_orbit_accessed"] is False
     assert result["composition"]["total_future_target_physical_envelope"] is None
     assert result["claim_boundary"]["s3_authorized"] is False
