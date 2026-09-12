@@ -1,0 +1,71 @@
+{
+  "schema": "s2-five-root-local-feasibility-plan-v1",
+  "audit_id": "S2_FIVE_PHASE_ROOT_LOCAL_FEASIBILITY",
+  "scope": "Offline synthetic local-information audit of the five phase-transform-header-qualified roots. No target, date selection, observation value, navigation product, orbit, fit, held-out reveal, receiver qualification or S3 claim.",
+  "station_coordinate_provenance": {
+    "artifact": "experiments/positioning_g14_doy246_network/structure.json",
+    "artifact_sha256": "f9ff6db885f250112cf33a307ebde753be1e40847d4460904ece28fec15c24c6",
+    "allowed_fields": [
+      "APPROX POSITION XYZ",
+      "ANTENNA: DELTA H/E/N"
+    ],
+    "observation_values_read": false
+  },
+  "fit_roots": [
+    {"station": "ALGO00CAN", "ecef_m": [918129.1819695743, -4346071.385020053, 4561977.977980372]},
+    {"station": "BOGT00COL", "ecef_m": [1744399.0563761927, -6116037.616168399, 512731.7581346596]},
+    {"station": "MKEA00USA", "ecef_m": [-5464105.317, -2495165.842, 2148291.476]},
+    {"station": "PIE100USA", "ecef_m": [-1640916.9436711466, -5014781.234892352, 3575447.1113764136]},
+    {"station": "GOLD00USA", "ecef_m": [-2353614.3253609324, -4641385.370759989, 3676976.4487228305]}
+  ],
+  "target_state_exclusion": {
+    "target_identifier": null,
+    "target_date": null,
+    "target_orbit_or_radius_constraint": false,
+    "real_target_measurements": false,
+    "geometry_family": "Explicitly synthetic broad geocentric shells and deterministic directions; shells are design probes, not a target prior."
+  },
+  "synthetic_family": {
+    "endpoint_tags_s": [-300.0, -270.0, -240.0, -210.0, -180.0, -150.0, -120.0, -90.0, -60.0, -30.0, 0.0],
+    "geocentric_radii_m": [8000000.0, 12000000.0, 20000000.0, 30000000.0, 45000000.0, 60000000.0],
+    "fibonacci_direction_count": 96,
+    "minimum_joint_elevation_deg": 5.0,
+    "motion_templates": [
+      {"name": "stationary", "tangent_1_speed_m_s": 0.0, "tangent_2_speed_m_s": 0.0, "inward_acceleration_m_s2": 0.0},
+      {"name": "tangent_1_4kms", "tangent_1_speed_m_s": 4000.0, "tangent_2_speed_m_s": 0.0, "inward_acceleration_m_s2": 0.0},
+      {"name": "negative_tangent_1_4kms_inward_1", "tangent_1_speed_m_s": -4000.0, "tangent_2_speed_m_s": 0.0, "inward_acceleration_m_s2": 1.0},
+      {"name": "tangent_2_8kms_inward_10", "tangent_1_speed_m_s": 0.0, "tangent_2_speed_m_s": 8000.0, "inward_acceleration_m_s2": 10.0}
+    ]
+  },
+  "conditional_measurement_design": {
+    "endpoint_code_sigma_m": 20.0,
+    "endpoint_phase_path_sigma_m": 0.01,
+    "code_phase_correlation": 0.1,
+    "receiver_clock_offset_sigma_m": 2.0,
+    "receiver_clock_drift_sigma_m_s": 0.01,
+    "ground_coordinate_sigma_m": 0.5,
+    "persistent_code_bias_box_m_per_root": 20.0,
+    "persistent_interval_rate_bias_box_m_s_per_root": 0.05,
+    "future_position_offsets_s": [0.0, 60.0]
+  },
+  "frozen_clauses": {
+    "minimum_joint_visible_synthetic_cases": 20,
+    "all_joint_visible_cases_require_full_local_rank": true,
+    "maximum_scaled_condition": 10000000000.0,
+    "maximum_conditional_local_position_envelope_m": 10000.0,
+    "independent_heldout_root_required_for_forward_vertical": true,
+    "total_physical_error_envelope_required_for_forward_vertical": true
+  },
+  "interpretation": {
+    "local_geometry_pass": "Only local linear identifiability and a conditional Gaussian plus declared affine sensitivity box over the frozen synthetic family.",
+    "not_proven": [
+      "global branch uniqueness",
+      "real measurement admission",
+      "receiver or propagation error bounds",
+      "nonlinear 95 percent coverage",
+      "availability of an independent held-out root",
+      "a complete S3 experiment"
+    ],
+    "terminal": "FIVE_ROOT_PROSPECTIVE_VERTICAL_INCOMPLETE"
+  }
+}
