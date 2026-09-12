@@ -249,6 +249,16 @@ navigation, target value, residual or fit was accessed; all payloads remained
 ephemeral. Do not search another date to make this fixed eight-root set pass.
 S3 remains unauthorized.
 
+The subsequent target-free five-root local-feasibility audit is closed
+`FIVE_ROOT_PROSPECTIVE_VERTICAL_INCOMPLETE`. It used only terrestrial coordinates
+for ALGO, BOGT, MKEA, PIE1 and GOLD and a frozen synthetic family: 181 cases were
+jointly visible and all had full local rank, but only 65 met the conditional
+10 km envelope at +60 seconds (range 0.501--83.332 km). This is a local Gaussian
+plus affine sensitivity result, not global uniqueness or physical coverage.
+Exactly five fit roots leave no independent held-out root, and the total physical
+error envelope remains unresolved. Preserve its plan/result and do not use a
+target orbit to select a favorable case. S3 remains unauthorized.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
