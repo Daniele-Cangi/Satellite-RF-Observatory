@@ -1,0 +1,128 @@
+{
+  "schema": "s2-five-root-reference-residual-envelope-plan-v1",
+  "qualification_id": "S2_FIVE_ROOT_REFERENCE_ENVELOPE_2026240",
+  "date_gpst": "2026-08-28",
+  "day_of_year": 240,
+  "scope": "One bounded reference-only characterization of the exact four-fit/one-code-heldout measurement path. G14 is an exclusion sentinel only, not a selected primary: its observation rows and navigation blocks are discarded as text before numeric conversion. Selection uses only structure and non-target broadcast geometry. Only aggregate residual metrics and hashes persist.",
+  "frozen_inputs": {
+    "role_structure_result": "research/kinematic/results/s2_five_root_role_structure_2026241_v1.json",
+    "role_structure_result_sha256": "3dc57bb1011e05e3b7f046083f4c2f089d1b33682720d408c8339cce118f7e67",
+    "inherited_threshold_plan": "research/kinematic/real_reference_qualification_plan_v2.json",
+    "inherited_threshold_plan_sha256": "a9accf3e5927136e1ec50488a3be90dc280c7d27cd5a284c404252e2e42b2528"
+  },
+  "artifact_selection": {
+    "rule": "Use DOY240, the nearest earlier complete day to the qualified DOY241 structure, fixed before access.",
+    "not_a_date_search": true,
+    "previously_accessed_for_this_qualification": false,
+    "forbidden_days": [241, 242],
+    "no_retry": true,
+    "no_date_station_field_or_reference_substitution": true,
+    "base_url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/240/",
+    "filename": "{station}_R_20262400000_01D_30S_MO.crx.gz",
+    "maximum_compressed_bytes_per_station": 50000000,
+    "maximum_decoded_bytes_per_station": 500000000,
+    "minimum_archive_age_after_last_epoch_s": 172800
+  },
+  "navigation": {
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/240/BRDM00DLR_S_20262400000_01D_MN.rnx.gz",
+    "maximum_compressed_bytes": 20000000,
+    "maximum_record_age_s": 7200.0,
+    "target_blocks_removed_before_numeric_parse": true
+  },
+  "excluded_identity": "G14",
+  "reference_candidate_pool": [
+    "G01", "G02", "G03", "G04", "G05", "G06", "G07", "G08",
+    "G09", "G10", "G11", "G12", "G13", "G15", "G16", "G17",
+    "G18", "G19", "G20", "G21", "G22", "G23", "G24", "G25",
+    "G26", "G27", "G28", "G29", "G30", "G31", "G32"
+  ],
+  "observation": {
+    "required_rinex_versions": ["3.04", "3.05"],
+    "required_time_system": "GPS",
+    "required_interval_s": 30.0,
+    "required_first_epoch": [2026, 8, 28, 0, 0, 0.0],
+    "required_last_epoch": [2026, 8, 28, 23, 59, 30.0],
+    "fit_fields": ["C1C", "C2W", "L1C", "L2W"],
+    "heldout_fields": ["C1C", "C2W"],
+    "fit_transform_semantics": "Use the frozen role-specific admission. Unit storage scales; declared static phase shifts cancel in same-satellite increments; no legacy wavelength or applied GPS DCB/PCV/receiver-clock correction.",
+    "heldout_transform_semantics": "C1C/C2W unit storage scales only; phase transformations are outside the causal path.",
+    "no_interpolation": true,
+    "no_gap_bridging": true
+  },
+  "fit_roots": [
+    {"id": "ALGO00CAN", "marker": "ALGO", "expected_receiver": ["3015995", "SEPT POLARX5", "5.3.2"]},
+    {"id": "BOGT00COL", "marker": "BOGT", "expected_receiver": ["01972", "JAVAD TRE_3 DELTA", "4.6.00"]},
+    {"id": "MKEA00USA", "marker": "MKEA", "expected_receiver": ["3013571", "SEPT POLARX5", "5.7.0"]},
+    {"id": "PIE100USA", "marker": "PIE1", "expected_receiver": ["4100427", "SEPT POLARX5TR", "5.7.0"]}
+  ],
+  "heldout_root": {
+    "id": "GOLD00USA",
+    "marker": "GOLD",
+    "expected_receiver": ["01538", "JAVAD TRE_G3TH DELTA", "4.2.03"]
+  },
+  "transform_admission": {
+    "fit": {
+      "stored_value_scale_divisor": {"C1C": 1, "C2W": 1, "L1C": 1, "L2W": 1},
+      "phase_shift_semantics": "DECLARED_STATIC_OFFSETS_RETAINED_AND_REVERSIBLE",
+      "same_satellite_interval_difference_cancels_stable_offset": true,
+      "satellite_phase_overrides_allowed_if_declared": true,
+      "legacy_wavelength_header_allowed": false,
+      "applied_gps_dcb_or_pcv_allowed": false,
+      "receiver_clock_offset_applied": false
+    },
+    "heldout_code": {
+      "stored_value_scale_divisor": {"C1C": 1, "C2W": 1},
+      "phase_transform_in_causal_path": false,
+      "phase_transform_headers_interpreted": false,
+      "applied_gps_dcb_or_pcv_allowed": false,
+      "receiver_clock_offset_applied": false
+    }
+  },
+  "selection": {
+    "endpoint_count": 11,
+    "references_per_station": 4,
+    "minimum_reference_elevation_deg": 15.0,
+    "rule": "Choose the earliest 11-endpoint common window for which each fit root has four lexicographically selected candidate-pool references with stable C1C/C2W/L1C/L2W and zero-or-blank phase LLI, GOLD has four C1C/C2W references, and every selected reference remains at least 15 degrees above the station horizon under target-excluded broadcast geometry. Observation magnitudes and residuals cannot affect selection.",
+    "no_reselection_after_numeric_access": true
+  },
+  "admission": {
+    "maximum_code_absolute_residual_m": 50.0,
+    "maximum_code_rms_residual_m": 20.0,
+    "maximum_alternating_reference_clock_difference_m": 30.0,
+    "maximum_fit_phase_rate_absolute_residual_m_s": 0.05,
+    "maximum_fit_phase_rate_rms_residual_m_s": 0.02,
+    "future_envelope_multiplier": 2.0,
+    "require_complete_station_set": true,
+    "require_unchanged_receiver_identity": true,
+    "require_zero_reported_phase_lli": true,
+    "require_no_gap_in_selected_window": true
+  },
+  "threshold_basis": {
+    "source": "Numerically unchanged from the frozen S2 DOY253 qualification plan; not fitted to DOY240.",
+    "probability_claim": false,
+    "interpretation": "Deterministic capability limits. A two-times empirical residual envelope is conditional on this qualification session and is not population coverage or a total future-target envelope."
+  },
+  "unresolved_terms": [
+    "future target-direction antenna phase-center variation",
+    "future target-direction multipath",
+    "unflagged sub-threshold cycle slips",
+    "future atmosphere outside the selected reference rays",
+    "broadcast-reference orbit and clock error transfer",
+    "reference-to-target receiver correlation"
+  ],
+  "outcomes": [
+    "FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED",
+    "FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_NOT_SUPPORTED",
+    "FIVE_ROOT_REFERENCE_ENVELOPE_EXECUTION_INVALID"
+  ],
+  "persistence": {
+    "compressed_observation_payload": false,
+    "decoded_observation_payload": false,
+    "raw_navigation_payload": false,
+    "individual_observation_values": false,
+    "individual_residuals": false,
+    "aggregate_metrics_and_hashes_only": true,
+    "raw_payload_bytes": 0
+  },
+  "stop_rule": "Stop after one fixed-date result. A qualified reference residual envelope does not resolve the listed directional and transfer terms, select a target, authorize a primary or authorize S3."
+}
