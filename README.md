@@ -41,6 +41,13 @@ in only 65 cases. Five fit roots also cannot supply the required independent
 held-out root. The terminal is `FIVE_ROOT_PROSPECTIVE_VERTICAL_INCOMPLETE`, not
 a measurement or orbital result.
 
+A second offline [code-only held-out audit](research/kinematic/S2_HELDOUT_CODE_TOPOLOGY.md)
+finds DRAO to be the strongest sixth-root geometry without using a target orbit:
+it is visible in all 181 predecessor cases and retains positive conditional
+slack in 180. The median residual physical budget is nevertheless only 12.530 m,
+and one case already exceeds the 100 m held-out envelope before unresolved
+physics. DRAO was not accessed or admitted; S3 remains blocked.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |

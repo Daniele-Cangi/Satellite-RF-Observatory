@@ -205,3 +205,11 @@ km and only 65 cases meet 10 km. Exactly five fit roots also leave no independen
 held-out root, while the total physical error envelope remains unresolved. Its
 terminal is `FIVE_ROOT_PROSPECTIVE_VERTICAL_INCOMPLETE`; this result does not
 authorize S3 or select a target/date.
+
+The next [code-only held-out topology audit](S2_HELDOUT_CODE_TOPOLOGY.md)
+compares DRAO/STJO/YELL using terrestrial coordinates only. DRAO covers all 181
+predecessor geometries and retains positive residual physical slack at both
+endpoints in 180, but its median slack under the 100 m criterion is only 12.530
+m. DRAO remains unaccessed and unqualified; YELL and STJO are weaker. The result
+`HELDOUT_CODE_TOPOLOGY_CONDITIONALLY_AVAILABLE` identifies a possible topology,
+not a capability or S3 authorization.

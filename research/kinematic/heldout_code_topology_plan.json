@@ -1,0 +1,79 @@
+{
+  "schema": "s2-heldout-code-topology-plan-v1",
+  "audit_id": "S2_HELDOUT_CODE_TOPOLOGY",
+  "scope": "Offline target-free design audit for adding one code-only held-out root to the five phase-capable fit roots. No source access, observation values, target, date, orbit, navigation, fit, receiver admission or S3 claim.",
+  "frozen_inputs": {
+    "five_root_plan": "research/kinematic/five_root_feasibility_plan.json",
+    "five_root_plan_sha256": "8c988f24ed5b3f19906f1a196863dddf210912deed8fc5fbab44938dd2074132",
+    "five_root_result": "research/kinematic/results/s2_five_root_feasibility_v1.json",
+    "five_root_result_sha256": "58df177228f5fb5afdac91c92eed7925a932b3b59e37fca214126a9449503c7b",
+    "coordinate_source_sha256": "f9ff6db885f250112cf33a307ebde753be1e40847d4460904ece28fec15c24c6"
+  },
+  "candidate_roots": [
+    {"station": "DRAO00CAN", "ecef_m": [-2059164.7222197906, -3621108.406659554, 4814432.465839172], "code_capability_status": "UNKNOWN_NOT_ACCESSED"},
+    {"station": "STJO00CAN", "ecef_m": [2612631.220443246, -3426807.0268139862, 4686757.836919965], "code_capability_status": "UNKNOWN_NOT_ACCESSED"},
+    {"station": "YELL00CAN", "ecef_m": [-1224452.419146502, -2689216.042050699, 5633638.288685682], "code_capability_status": "UNKNOWN_NOT_ACCESSED"}
+  ],
+  "selection_boundary": {
+    "target_identifier": null,
+    "target_date": null,
+    "target_orbit_or_radius_constraint": false,
+    "candidate_artifact_access": false,
+    "rank_by": [
+      "synthetic joint-visibility coverage",
+      "count of cases retaining positive physical-error slack",
+      "median physical-error slack"
+    ],
+    "ranking_is_not_receiver_admission": true
+  },
+  "heldout_prediction": {
+    "receive_tags_s": [30.0, 60.0],
+    "minimum_elevation_deg": 5.0,
+    "absolute_range_equivalent_limit_m": 100.0,
+    "gaussian_two_sided_probability": 0.95,
+    "independent_code_sigma_m": 20.0,
+    "independent_receiver_clock_offset_sigma_m": 2.0,
+    "independent_receiver_clock_drift_sigma_m_s": 0.01,
+    "independent_ground_coordinate_sigma_m": 0.5,
+    "holdout_fitted_offset_allowed": false,
+    "retry_or_alternate_case_selection": false
+  },
+  "code_coordinate_contract": {
+    "core": ["C1C", "C2W"],
+    "transform": "GPS ionosphere-free code alpha*C1C + beta*C2W with frozen L1/L2 frequencies",
+    "required_header_semantics": [
+      "RINEX version/file-type/system",
+      "TIME OF FIRST OBS and TIME OF LAST OBS in GPS time",
+      "INTERVAL and complete intended-window coverage",
+      "APPROX POSITION XYZ and antenna delta",
+      "receiver and antenna identity",
+      "SYS / SCALE FACTOR for C1C and C2W",
+      "RCV CLOCK OFFS APPL",
+      "SYS / DCBS APPLIED and SYS / PCVS APPLIED provenance"
+    ],
+    "not_required_for_code_only_holdout": [
+      "carrier-phase scale or phase-shift qualification",
+      "L1C or L2W",
+      "LLI",
+      "S1C or S2W"
+    ],
+    "same_path_witness": "Both C1C and C2W must be present at every frozen held-out endpoint; neither is replaceable or interpolated.",
+    "clock_calibration": "Non-target references only, frozen before target values; no held-out-target offset fit."
+  },
+  "physical_envelope_ledger": [
+    {"term": "fit_root_code_and_phase_random_error", "state": "MODELED_CONDITIONAL"},
+    {"term": "fit_root_persistent_code_and_interval_rate_bias", "state": "MODELED_CONDITIONAL"},
+    {"term": "heldout_code_random_error", "state": "MODELED_CONDITIONAL"},
+    {"term": "heldout_reference_clock_calibration", "state": "UNRESOLVED"},
+    {"term": "heldout_code_multipath_and_receiver_bias", "state": "UNRESOLVED"},
+    {"term": "troposphere_residual", "state": "UNRESOLVED"},
+    {"term": "higher_order_ionosphere_after_dual_frequency_combination", "state": "UNRESOLVED"},
+    {"term": "applied_DCB_or_PCV_product_uncertainty", "state": "UNRESOLVED"},
+    {"term": "receiver_time_tag_binding", "state": "UNRESOLVED"},
+    {"term": "kinematic_truncation_and_global_branch_error", "state": "UNRESOLVED"}
+  ],
+  "outcomes": [
+    "HELDOUT_CODE_TOPOLOGY_CONDITIONALLY_AVAILABLE",
+    "HELDOUT_CODE_TOPOLOGY_NOT_SUPPORTED"
+  ]
+}
