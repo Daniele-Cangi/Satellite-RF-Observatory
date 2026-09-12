@@ -1,0 +1,86 @@
+{
+  "schema": "s2-five-root-structure-qualification-plan-v1",
+  "qualification_id": "S2_FIVE_ROOT_STRUCTURE_2026242",
+  "date_gpst": "2026-08-30",
+  "day_of_year": 242,
+  "scope": "One target-free structural qualification of the exact four-fit/one-heldout topology on a distinct complete day. Complete compressed files are hash-bound before Hatanaka decoding; only headers, epoch topology, field presence and phase LLI are interpreted. No observation number, navigation product, target identity, orbit, residual or fit is permitted.",
+  "frozen_inputs": {
+    "phase_header_result": "research/kinematic/results/phase_transform_header_audit_2026243_v1.json",
+    "phase_header_result_sha256": "1d8a0bd32cf22106070b74ae73ec83afd1e910cc0b4ac14e51e4d70161078a5b",
+    "four_fit_one_heldout_result": "research/kinematic/results/s2_four_fit_one_heldout_v1.json",
+    "four_fit_one_heldout_result_sha256": "e1998956c673af44b7580b5ce15929c512cb101a65494841b2c1815f4cea3aec"
+  },
+  "artifact_selection": {
+    "rule": "Use DOY242, the nearest earlier complete day to the already qualified DOY243 headers, fixed before access to these five products.",
+    "not_a_date_search": true,
+    "no_retry": true,
+    "no_date_station_or_field_substitution": true,
+    "base_url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/",
+    "filename": "{station}_R_20262420000_01D_30S_MO.crx.gz",
+    "maximum_compressed_bytes_per_station": 50000000,
+    "maximum_decoded_bytes_per_station": 500000000,
+    "minimum_archive_age_after_last_epoch_s": 172800
+  },
+  "observation": {
+    "required_rinex_versions": ["3.04", "3.05"],
+    "required_time_system": "GPS",
+    "required_interval_s": 30.0,
+    "required_first_epoch": [2026, 8, 30, 0, 0, 0.0],
+    "required_last_epoch": [2026, 8, 30, 23, 59, 30.0],
+    "fit_fields": ["C1C", "C2W", "L1C", "L2W"],
+    "heldout_fields": ["C1C", "C2W"],
+    "phase_lli_policy": "Blank or zero on L1C and L2W is required; nonzero LLI breaks structural continuity.",
+    "no_interpolation": true,
+    "no_gap_bridging": true,
+    "observation_numeric_conversion": false
+  },
+  "fit_roots": [
+    {"id": "ALGO00CAN", "marker": "ALGO", "expected_receiver": ["3015995", "SEPT POLARX5", "5.3.2"]},
+    {"id": "BOGT00COL", "marker": "BOGT", "expected_receiver": ["01972", "JAVAD TRE_3 DELTA", "4.6.00"]},
+    {"id": "MKEA00USA", "marker": "MKEA", "expected_receiver": ["3013571", "SEPT POLARX5", "5.7.0"]},
+    {"id": "PIE100USA", "marker": "PIE1", "expected_receiver": ["4100427", "SEPT POLARX5TR", "5.7.0"]}
+  ],
+  "heldout_root": {
+    "id": "GOLD00USA",
+    "marker": "GOLD",
+    "expected_receiver": ["01538", "JAVAD TRE_G3TH DELTA", "4.2.03"]
+  },
+  "transform_admission": {
+    "stored_value_scale_divisor": {"C1C": 1, "C2W": 1, "L1C": 1, "L2W": 1},
+    "required_phase_default_cycles": {"L1C": 0.0, "L2W": 0.0},
+    "satellite_phase_overrides_allowed": false,
+    "legacy_wavelength_header_allowed": false,
+    "applied_gps_dcb_or_pcv_allowed": false,
+    "receiver_clock_offset_applied": false
+  },
+  "structural_capacity": {
+    "endpoint_count": 11,
+    "minimum_non_target_reference_count_per_root": 4,
+    "candidate_identity_persisted": false,
+    "rule": "Across 11 consecutive 30-second epochs, each fit root must retain at least five stable code-plus-phase/zero-LLI GPS rows, GOLD must retain at least five stable code rows, and at least one satellite identity must be common to all roots. The common identity is counted but neither selected nor persisted; removing it must leave at least four structural reference identities at every root.",
+    "qualification_is_not_target_selection": true
+  },
+  "execution": {
+    "attempt_all_five_predeclared_artifacts": true,
+    "complete_artifact_hashed_before_decode": true,
+    "scan_complete_decoded_day": true,
+    "continue_after_individual_capability_rejection": true,
+    "working_tree_and_commit_must_be_frozen": true
+  },
+  "outcomes": [
+    "FIVE_ROOT_STRUCTURE_QUALIFIED",
+    "FIVE_ROOT_STRUCTURE_NOT_QUALIFIED",
+    "FIVE_ROOT_STRUCTURE_EXECUTION_INVALID"
+  ],
+  "persistence": {
+    "compressed_payload": false,
+    "decoded_payload": false,
+    "header_text": false,
+    "observation_rows": false,
+    "observation_values": false,
+    "satellite_candidate_identities": false,
+    "artifact_hashes_and_aggregate_structure_only": true,
+    "raw_payload_bytes": 0
+  },
+  "stop_rule": "Stop after one structural outcome. A pass authorizes only a separately frozen reference-only physical-envelope qualification on a distinct artifact; it does not authorize target selection, target access or S3."
+}
