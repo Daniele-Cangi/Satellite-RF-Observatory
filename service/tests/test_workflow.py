@@ -3,6 +3,8 @@ from datetime import date
 import hashlib
 import json
 from pathlib import Path
+import subprocess
+import sys
 from types import SimpleNamespace
 
 import pytest
@@ -158,3 +160,13 @@ def test_cli_writes_consumable_plan_once_and_never_overwrites(tmp_path, capsys):
     with pytest.raises(FileExistsError):
         main(args)
     assert output.read_bytes() == original
+
+
+def test_module_cli_emits_utf8_json_on_windows_and_linux():
+    result = subprocess.run([
+        sys.executable, '-m', 'service', 'prepare', 'G14', '2026-09-03',
+        '--prior-access', 'Archived event',
+    ], cwd=ROOT, capture_output=True, check=True)
+    response = json.loads(result.stdout.decode('utf-8'))
+    assert response['status'] == 'ARCHIVED_EVENT'
+    assert 'già concluso' in response['message']

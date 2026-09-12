@@ -2,6 +2,7 @@
 import argparse
 import json
 from pathlib import Path
+import sys
 
 from .workflow import capabilities, prepare_request, read_result
 
@@ -36,4 +37,5 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
+    sys.stdout.reconfigure(encoding='utf-8')
     raise SystemExit(main())
