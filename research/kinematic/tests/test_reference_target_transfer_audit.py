@@ -109,6 +109,55 @@ def test_strict_json_rejects_nan_and_duplicate_keys(tmp_path: Path):
         load_strict_json(duplicate)
 
 
+@pytest.mark.parametrize(
+    ("change_plan", "change_implementation", "expected_relative_path"),
+    (
+        (True, False, "research/kinematic/reference_target_transfer_audit_plan.json"),
+        (False, True, "research/kinematic/reference_target_transfer_audit.py"),
+    ),
+)
+def test_git_freeze_rejects_exact_byte_mismatch(
+    monkeypatch: pytest.MonkeyPatch,
+    change_plan: bool,
+    change_implementation: bool,
+    expected_relative_path: str,
+):
+    source_commit = "1" * 40
+    implementation_path = Path(audit.__file__).resolve()
+    committed = {
+        PLAN_PATH.resolve().relative_to(ROOT).as_posix(): PLAN_PATH.read_bytes(),
+        implementation_path.relative_to(ROOT).as_posix(): implementation_path.read_bytes(),
+    }
+
+    def fake_check_output(args, **kwargs):
+        if args[1:3] == ["status", "--porcelain"]:
+            return ""
+        if args[1:3] == ["rev-parse", "HEAD"]:
+            return source_commit + "\n"
+        if args[1] == "show":
+            return committed[args[2].removeprefix("HEAD:")]
+        raise AssertionError(f"unexpected git invocation: {args}")
+
+    monkeypatch.setattr(audit.subprocess, "check_output", fake_check_output)
+    plan_bytes = committed[PLAN_PATH.resolve().relative_to(ROOT).as_posix()]
+    implementation_bytes = committed[implementation_path.relative_to(ROOT).as_posix()]
+    if change_plan:
+        plan_bytes += b"\n"
+    if change_implementation:
+        implementation_bytes += b"\n"
+
+    with pytest.raises(
+        ValueError,
+        match=f"frozen file differs from committed bytes:{expected_relative_path}",
+    ):
+        audit.admit_git_freeze(
+            PLAN_PATH,
+            source_commit,
+            plan_bytes,
+            implementation_bytes,
+        )
+
+
 def _unit_run(monkeypatch: pytest.MonkeyPatch) -> dict:
     observed = []
     monkeypatch.setattr(
