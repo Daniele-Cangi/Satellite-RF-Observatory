@@ -259,6 +259,17 @@ Exactly five fit roots leave no independent held-out root, and the total physica
 error envelope remains unresolved. Preserve its plan/result and do not use a
 target orbit to select a favorable case. S3 remains unauthorized.
 
+The following target-free code-only held-out topology audit is closed
+`HELDOUT_CODE_TOPOLOGY_CONDITIONALLY_AVAILABLE`. DRAO ranks above YELL and STJO
+using terrestrial coordinates only: it is held-out-visible in all 181 predecessor
+cases and has positive conditional physical slack at both +30/+60 s in 180, but
+the median slack under the 100 m criterion is only 12.530 m and one case is
+already negative. No candidate artifact or observation was accessed; this is
+not DRAO admission. Carrier-phase transform failures are irrelevant to a future
+code-only heldout, but C1C/C2W transform/coverage/clock and the total physical
+envelope remain unresolved. Do not use a target orbit to choose a favorable
+case. S3 remains unauthorized.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
