@@ -57,7 +57,9 @@ def capabilities():
         'population_coverage_established': False,
         'kinematic_profile_available': False,
         'live_position_available': False,
-        'automatic_execution_available': False,
+        'automatic_execution_available': True,
+        'execution_mode': 'OPERATOR_STARTED_SINGLE_HOST_QUEUE_WORKER',
+        'http_submission_available': False,
     }
 
 
@@ -208,5 +210,6 @@ def read_result(run_path):
         'uncertainty_scope': 'CONDITIONAL_EVENT_ONLY',
         'population_coverage_established': False,
         'evidence': {'dossier_sha256': hashlib.sha256(dossier_bytes).hexdigest(),
+                     'request_sha256': artifacts.get('request.json'),
                      'sealed_artifact_count': len(artifacts)},
     }

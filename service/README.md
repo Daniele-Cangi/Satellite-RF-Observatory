@@ -41,6 +41,75 @@ of the receipt itself or scientific correctness. Read operations never reseal.
 
 ## Existing remote request foundation (P1, not deployed)
 
+### Local queue and worker bridge
+
+`worker.py` now connects the existing store to `python -m positioning run`.
+Only a trusted local operator may use these commands: `--owner` is a local
+namespace, not authentication. A future HTTP adapter must derive identity on
+the server and must not expose worker/reconciliation operations to browsers.
+
+Use one authoritative queue and an external private runtime directory. The
+worker needs a dedicated clean checkout at the exact 40-character commit in
+the declaration. It checks the checkout before starting, during renewals and
+before publication; it never silently switches versions. Each scientific stage
+retains the existing source snapshots, isolation and freeze/reveal rules.
+
+```powershell
+$verificationRuntime = Join-Path $env:LOCALAPPDATA 'SatelliteRF'
+$verificationQueue = Join-Path $verificationRuntime 'queue.sqlite'
+$verificationRuns = Join-Path $verificationRuntime 'runs'
+$verificationCommit = git rev-parse HEAD
+# Replace the example event and access declaration with the actual frozen plan.
+python -m service submit G15 2026-09-01 --prior-access "Declare actual prior access before submitting a new attempt." --implementation $verificationCommit --owner local --key example-one --queue $verificationQueue
+# This command REALLY starts acquisition for the next queued declaration.
+python -m service work-once --queue $verificationQueue --runs $verificationRuns
+# Use the request UUID returned by submit:
+python -m service request-status REQUEST_UUID --owner local --queue $verificationQueue --runs $verificationRuns
+python -m service cancel REQUEST_UUID --owner local --queue $verificationQueue
+python -m service reconcile REQUEST_UUID --owner local --queue $verificationQueue --runs $verificationRuns
+```
+
+The example is not a preregistered campaign and was not executed on real RF
+data during development. `submit` queues only the current general network
+profile and records the purpose as `prospective_attempt`; that label does not
+certify unexposed evidence. Known closed events return their archive location;
+known consumed qualification days are rejected. This built-in history is not
+a complete record of human/external access, which the operator must declare.
+Legacy `availability`/`historical_replay` queue entries are not dispatched as
+positioning attempts by this executor.
+
+`work-once` claims at most one request, launches the existing staged worker,
+renews the lease, and publishes only after an exited worker has produced a
+valid sealed dossier matching the queued plan. Defaults are a 60-second lease,
+10-second renewal interval and 5,500-second total runtime bound, in addition
+to the original stage bounds. Scientific rejections complete operationally;
+sealed engineering failures produce `FAILED`. The owner view retains actual
+failure reasons and reports the running stage when readable.
+
+Each request UUID has an exclusively created directory. The database reserves
+each target/day once across all owners and idempotency keys. Repeated submission
+of the original key returns the same request; another key cannot execute that
+event again, even after failure. Reservations are conservative and not cleared
+automatically if a launch fails. Do not create another database to bypass them.
+
+On detected lease loss, checkout change, timeout or interruption the supervisor
+stops the child process tree and quarantines the request. A hard supervisor
+crash may leave children alive: an expired claim blocks replacement dispatch,
+and an operator must inspect/stop remaining processes. This pilot is not an OS
+containment boundary or a multi-host worker service. Renewals and progress files
+are operational diagnostics, not scientific evidence.
+
+`reconcile` never starts a process or requeues work. It adopts only an already
+exited, sealed result with the same declaration and plan. This repairs a crash
+between artifact publication and the SQLite terminal update. Partial runs,
+missing exit receipts or changed results remain under review; there is no
+automatic retry or general-purpose reset. Source-integrity errors fail closed.
+
+The queue's result hash binds `result.json`, which in turn identifies the
+request, implementation and validated scientific dossier. Result retrieval
+rechecks the scientific artifacts and the queued declaration. Claim tokens
+are never written to the runtime directory or returned in owner views.
+
 `requests.py` is a standard-library SQLite reference implementation for a
 single-host persistent Python gateway. It does not expose HTTP routes, execute
 the solver, access observations, provide authentication or establish remote
@@ -95,8 +164,8 @@ headers are available to a headless worker. Do not create two authoritative
 queues. This SQLite implementation supports the gateway option; a D1 option
 would need its own atomic repository adapter and concurrency tests.
 
-Before a private request can ship, implement and verify the HTTP adapter,
-durable artifact storage, worker bridge, phase receipts and recovery, actual
+Before a private web request can ship, implement and verify the HTTP adapter,
+deployment-grade artifact storage and process containment, actual
 network isolation, Sites server-backed build and the browser request UI.
 No external executor or paid resource has been provisioned. Hosting and budget
 are awaiting the owner's input.

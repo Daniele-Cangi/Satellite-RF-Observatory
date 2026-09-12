@@ -10,9 +10,10 @@ a supported satellite/day, assess available observations, estimate with declared
 uncertainty, and return verified evidence or a precise reason for an inconclusive
 result. Development starts locally with the historical GPS code profile.
 Scientific validation continues as part of that objective. The five-event
-archive remains documentation; automatic request execution and public deployment
-are not delivered. The first local slice prepares requests and reads sealed
-results through `python -m service`; see [the service commands](service/README.md).
+archive remains documentation. A trusted local operator can now submit requests,
+run one queued job and read its sealed result through `python -m service`;
+see [the service commands](service/README.md). HTTP/browser submission and public
+deployment are not delivered; scientific validation of a broader domain remains open.
 
 The preserved [scientific project](docs/SCIENTIFIC_ROADMAP.md) supplies the research
 and validation work for this objective. Its first [S0/S1 report](research/kinematic/results/REPORT.md)

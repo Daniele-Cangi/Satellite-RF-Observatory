@@ -36,7 +36,8 @@ def test_minimal_request_builds_the_existing_fixed_profile_without_availability_
     assert result['availability'] == 'NOT_CHECKED'
     assert result['scientific_admission'] == 'NOT_EVALUATED'
     assert not result['observations_accessed'] and not result['target_orbit_accessed']
-    assert capabilities()['automatic_execution_available'] is False
+    assert capabilities()['automatic_execution_available'] is True
+    assert capabilities()['http_submission_available'] is False
 
 
 @pytest.mark.parametrize('changes,reason', [
