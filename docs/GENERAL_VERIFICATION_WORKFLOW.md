@@ -1,5 +1,11 @@
 # Flusso generale di verifica satellitare
 
+Il [protocollo candidato G3](VALIDATION_COHORT_PROTOCOL.md) dichiara 24 casi
+futuri su giorni distinti e il comando locale `validation-report`, che mantiene
+tutti i casi nel denominatore e verifica i risultati sigillati della coda.
+È preparazione della validazione: nessuna nuova acquisizione o qualificazione
+fisica è implicata; il campione resta `CANDIDATE_NOT_ADMITTED`.
+
 Obiettivo richiesto il 12 settembre 2026: permettere una richiesta su satellite
 e giorno, stabilire se le misure consentono una verifica e restituire posizione,
 incertezza e controlli oppure il motivo preciso per cui non si può concludere.
