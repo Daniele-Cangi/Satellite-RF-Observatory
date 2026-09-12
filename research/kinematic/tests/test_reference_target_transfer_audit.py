@@ -74,6 +74,26 @@ def test_target_or_individual_value_contamination_is_rejected():
     assert receipt_hash == hashlib.sha256(RECEIPT_PATH.read_bytes()).hexdigest()
 
 
+def test_receipt_hash_and_parse_use_exactly_one_file_read():
+    plan = load_strict_json(PLAN_PATH)
+    content = RECEIPT_PATH.read_bytes()
+
+    class CountingReceipt:
+        def __init__(self, value: bytes):
+            self.value = value
+            self.read_count = 0
+
+        def read_bytes(self) -> bytes:
+            self.read_count += 1
+            return self.value
+
+    source = CountingReceipt(content)
+    validated, receipt_hash = validate_receipt(plan, source)
+    assert source.read_count == 1
+    assert validated == load_strict_json(RECEIPT_PATH)
+    assert receipt_hash == hashlib.sha256(content).hexdigest()
+
+
 def test_strict_json_rejects_nan_and_duplicate_keys(tmp_path: Path):
     nonfinite = tmp_path / "nonfinite.json"
     nonfinite.write_text('{"value": NaN}', encoding="utf-8")
@@ -172,7 +192,14 @@ def test_superseded_v1_result_retains_historical_bytes_and_commit_lookup():
     assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
         RECEIPT_PATH.read_bytes()
     ).hexdigest()
-    assert len(result["inputs"]["implementation_sha256"]) == 64
+    source_commit = result["inputs"]["source_commit"]
+    implementation_at_freeze = subprocess.check_output(
+        ["git", "show", f"{source_commit}:research/kinematic/reference_target_transfer_audit.py"],
+        cwd=ROOT,
+    )
+    assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
+        implementation_at_freeze
+    ).hexdigest()
 
 
 def test_hardened_v2_result_matches_current_frozen_inputs_and_code():
