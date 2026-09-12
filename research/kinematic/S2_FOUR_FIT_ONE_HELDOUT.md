@@ -34,3 +34,16 @@ The run must stop after the five partitions with exactly one terminal:
 
 No new root, source, date, target, orbit or observation value may enter, and the
 synthetic family and thresholds cannot be changed after execution.
+
+## Execution provenance repair
+
+The first local invocation supplied a syntactically valid but incorrect source
+commit suffix. Its generated JSON had SHA-256
+`04c9d312078a665356597453272978dd176f8b9dea311674740f0f5e09915c0c` and is
+classified execution-invalid: no numerical outcome from it is authoritative.
+It accessed no network, target, orbit or observation value. A compact receipt is
+retained while the non-authoritative generated JSON is discarded.
+
+The runner now requires a clean tree, exact equality between the declared
+40-character commit and `HEAD`, and byte equality of the committed plan and
+implementation before calculation. No scientific parameter was changed.

@@ -7,6 +7,7 @@ import pytest
 
 from research.kinematic.five_root_feasibility import fibonacci_directions, state_for
 from research.kinematic.four_fit_one_heldout import (
+    admit_git_freeze,
     fit_response,
     load_plan,
     measurement_design,
@@ -49,6 +50,22 @@ def test_inherited_threshold_cannot_be_relaxed(tmp_path):
     changed.write_text(json.dumps(plan))
     with pytest.raises(ValueError, match="inherited measurement design differs"):
         load_plan(changed)
+
+
+def test_git_freeze_rejects_a_well_formed_but_wrong_commit(monkeypatch):
+    def fake_check_output(args, **kwargs):
+        if args[1:3] == ["status", "--porcelain"]:
+            return ""
+        if args[1:3] == ["rev-parse", "HEAD"]:
+            return "1" * 40 + "\n"
+        raise AssertionError("git show must not be reached after a commit mismatch")
+
+    monkeypatch.setattr(
+        "research.kinematic.four_fit_one_heldout.subprocess.check_output",
+        fake_check_output,
+    )
+    with pytest.raises(ValueError, match="source commit differs from current HEAD"):
+        admit_git_freeze(ROOT, PLAN, "2" * 40)
 
 
 def test_four_root_temporal_design_and_local_response_are_finite():

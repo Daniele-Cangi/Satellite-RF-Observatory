@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import platform
+import subprocess
 
 import numpy as np
 import scipy
@@ -33,6 +34,22 @@ TERMINALS = {
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def admit_git_freeze(root: Path, plan_path: Path, source_commit: str) -> None:
+    status = subprocess.check_output(
+        ["git", "status", "--porcelain", "--untracked-files=all"], cwd=root, text=True
+    )
+    if status.strip():
+        raise ValueError("working tree must be clean before execution")
+    actual = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+    if actual != source_commit:
+        raise ValueError("source commit differs from current HEAD")
+    for path in (plan_path, Path(__file__)):
+        relative = path.resolve().relative_to(root.resolve()).as_posix()
+        committed = subprocess.check_output(["git", "show", f"HEAD:{relative}"], cwd=root)
+        if committed != path.read_bytes():
+            raise ValueError("frozen file differs from committed bytes:" + relative)
 
 
 def load_plan(path: Path) -> tuple[dict, str, dict, dict, dict]:
@@ -202,6 +219,7 @@ def summarize(values: list[float]) -> dict | None:
 def run(plan_path: Path, source_commit: str) -> dict:
     if len(source_commit) != 40 or any(c not in "0123456789abcdef" for c in source_commit):
         raise ValueError("exact lowercase source commit required")
+    admit_git_freeze(ROOT, plan_path, source_commit)
     plan, plan_hash, five_plan, five_result, heldout_plan = load_plan(plan_path)
     roots = five_plan["fit_roots"]
     directions = fibonacci_directions(five_plan["synthetic_family"]["fibonacci_direction_count"])
