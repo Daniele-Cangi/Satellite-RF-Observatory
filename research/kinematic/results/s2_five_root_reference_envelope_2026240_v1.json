@@ -1,0 +1,702 @@
+{
+  "schema": "s2-five-root-reference-residual-envelope-result-v1",
+  "qualification_id": "S2_FIVE_ROOT_REFERENCE_ENVELOPE_2026240",
+  "status": "FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED",
+  "scope": "One bounded reference-only characterization of the exact four-fit/one-code-heldout measurement path. G14 is an exclusion sentinel only, not a selected primary: its observation rows and navigation blocks are discarded as text before numeric conversion. Selection uses only structure and non-target broadcast geometry. Only aggregate residual metrics and hashes persist.",
+  "freeze": {
+    "source_commit": "c47d7f13b98c343b0f1fe7975e032d5f589af577",
+    "plan_sha256": "e16007e7246bdc33db37ffedc4fc2c682c1b4655d6ea6cb35e1aa97cbc385f16",
+    "implementation_sha256": "59d5730bd14b6b898572b19c285e947f1bfe0b47cb3a90514b5ebe9caa9e7846"
+  },
+  "source_receipts": [
+    {
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/240/ALGO00CAN_R_20262400000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 4271177,
+      "sha256": "f48cfe72ac33f01811fa18789fe199ca18262b349c1968b85432faca53cd2d30",
+      "access_utc": "2026-09-12T13:12:12.398749+00:00",
+      "decoded_bytes": 31084446,
+      "decoded_sha256": "606b2b6f55c825061176c855631235e6dc2d5010ae38f4dd3f1156225990e0c2",
+      "target_rows_removed_before_numeric_parse": 791,
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "BOGT00COL",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/240/BOGT00COL_R_20262400000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3271291,
+      "sha256": "03f8b523b62619f3e843b5d5cd776dd1fd30c02cf646bd15452cc0b093e7b5ef",
+      "access_utc": "2026-09-12T13:12:19.365191+00:00",
+      "decoded_bytes": 26154445,
+      "decoded_sha256": "c5d31e7fcfb5c5b419d38b3b9fbb80e39b42e0626e5ab6c70282915beffd1e6b",
+      "target_rows_removed_before_numeric_parse": 736,
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "MKEA00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/240/MKEA00USA_R_20262400000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3780826,
+      "sha256": "0b9821ea139884aafb5f904a400fd8f00b4d0f7c9b04da16d15d19e1fb205136",
+      "access_utc": "2026-09-12T13:12:26.488418+00:00",
+      "decoded_bytes": 27324501,
+      "decoded_sha256": "963ce96fb368f31b813d347c3c91651c6cf6436ce6665de96651b9f141c5c588",
+      "target_rows_removed_before_numeric_parse": 826,
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "PIE100USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/240/PIE100USA_R_20262400000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3251038,
+      "sha256": "11c7b64fbe4905e2a62d69c10eaed7458bf22712baf8c919fb423ef10d40c4e6",
+      "access_utc": "2026-09-12T13:12:32.525019+00:00",
+      "decoded_bytes": 23799563,
+      "decoded_sha256": "66f4b8d5fef760e26bb16a66970e602341c952901048451d04abb735c8268cb2",
+      "target_rows_removed_before_numeric_parse": 931,
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/240/GOLD00USA_R_20262400000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2203471,
+      "sha256": "836b92addb22dc0cb7ccf50e0761d58087bdf36b37f381bf1d69db9beb7e59cf",
+      "access_utc": "2026-09-12T13:12:37.305115+00:00",
+      "decoded_bytes": 15910002,
+      "decoded_sha256": "24919ef51f279397c23addf90bbef54e4a4e59bf2a8dfe8fdd31599ef43a62cc",
+      "target_rows_removed_before_numeric_parse": 949,
+      "complete_artifact_hashed_before_decode": true
+    }
+  ],
+  "navigation_receipt": {
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/BRDC/2026/240/BRDM00DLR_S_20262400000_01D_MN.rnx.gz",
+    "http_status": 200,
+    "bytes": 1363631,
+    "sha256": "755c5f3848053bdd0949908b1d45269efc8ceea27e46dc9c4594337e60c9e9a0",
+    "access_utc": "2026-09-12T13:12:40.501656+00:00",
+    "target_blocks_removed_before_numeric_parse": 13,
+    "admitted_reference_only_sha256": "008ba3713e50ee3c8f4458f40a5124a4e3a59104342ed62df1bdc214479a4fcb",
+    "raw_navigation_persisted": false
+  },
+  "structural_receipts": {
+    "ALGO00CAN": {
+      "station": "ALGO00CAN",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "3015995",
+        "SEPT POLARX5",
+        "5.3.2"
+      ],
+      "marker_name": "ALGO",
+      "rinex_version": "3.05",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 27103,
+        "usable_rows": 26435,
+        "blank_required_field_rows": 603,
+        "nonzero_phase_lli_rows": 65,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 31,
+        "maximum_contiguous_endpoints": 844,
+        "satellites_with_at_least_11_contiguous_endpoints": 31,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "BOGT00COL": {
+      "station": "BOGT00COL",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "01972",
+        "JAVAD TRE_3 DELTA",
+        "4.6.00"
+      ],
+      "marker_name": "BOGT",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 26318,
+        "usable_rows": 25868,
+        "blank_required_field_rows": 369,
+        "nonzero_phase_lli_rows": 81,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 31,
+        "maximum_contiguous_endpoints": 1134,
+        "satellites_with_at_least_11_contiguous_endpoints": 31,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G13": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G13": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "MKEA00USA": {
+      "station": "MKEA00USA",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "3013571",
+        "SEPT POLARX5",
+        "5.7.0"
+      ],
+      "marker_name": "MKEA",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 29656,
+        "usable_rows": 28472,
+        "blank_required_field_rows": 948,
+        "nonzero_phase_lli_rows": 236,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 31,
+        "maximum_contiguous_endpoints": 1038,
+        "satellites_with_at_least_11_contiguous_endpoints": 31,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "PIE100USA": {
+      "station": "PIE100USA",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "4100427",
+        "SEPT POLARX5TR",
+        "5.7.0"
+      ],
+      "marker_name": "PIE1",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 29505,
+        "usable_rows": 28070,
+        "blank_required_field_rows": 1283,
+        "nonzero_phase_lli_rows": 152,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 31,
+        "maximum_contiguous_endpoints": 918,
+        "satellites_with_at_least_11_contiguous_endpoints": 31,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "GOLD00USA": {
+      "station": "GOLD00USA",
+      "role": "HELDOUT_CODE",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "01538",
+        "JAVAD TRE_G3TH DELTA",
+        "4.2.03"
+      ],
+      "marker_name": "GOLD",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 29451,
+        "usable_rows": 29101,
+        "blank_required_field_rows": 350,
+        "nonzero_phase_lli_rows": 0,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 30,
+        "maximum_contiguous_endpoints": 955,
+        "satellites_with_at_least_11_contiguous_endpoints": 30,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false,
+        "phase_transform": "NOT_INTERPRETED_OUTSIDE_CAUSAL_PATH"
+      },
+      "observation_numbers_converted": 0
+    }
+  },
+  "selection": {
+    "start_s": 0.0,
+    "tags_s": [
+      0.0,
+      30.0,
+      60.0,
+      90.0,
+      120.0,
+      150.0,
+      180.0,
+      210.0,
+      240.0,
+      270.0,
+      300.0
+    ],
+    "references": {
+      "ALGO00CAN": [
+        "G04",
+        "G07",
+        "G08",
+        "G09"
+      ],
+      "BOGT00COL": [
+        "G02",
+        "G04",
+        "G08",
+        "G16"
+      ],
+      "MKEA00USA": [
+        "G04",
+        "G06",
+        "G07",
+        "G09"
+      ],
+      "PIE100USA": [
+        "G04",
+        "G07",
+        "G08",
+        "G09"
+      ],
+      "GOLD00USA": [
+        "G04",
+        "G07",
+        "G08",
+        "G09"
+      ]
+    },
+    "selection_uses_observation_magnitudes": false
+  },
+  "station_results": {
+    "ALGO00CAN": {
+      "station": "ALGO00CAN",
+      "role": "FIT",
+      "status": "REFERENCE_PATH_EVALUATED",
+      "references": [
+        "G04",
+        "G07",
+        "G08",
+        "G09"
+      ],
+      "admitted_observations_sha256": "4d40564e200cba3a0daa92a706ab65e7dd1e46a891aa9fa08f71e39a133e7634",
+      "admitted_navigation_sha256": "f6bfc5fe4d65e1ce9a730a516d123b2ea7697e9f398aac54f60acbe01017f3c1",
+      "code_absolute_max_m": 2.7500117607414722,
+      "code_rms_m": 0.8075918006274705,
+      "alternating_reference_clock_difference_max_m": 1.674313085153699,
+      "clock_fit_rank": 2,
+      "individual_observations_persisted": false,
+      "individual_residuals_persisted": false,
+      "phase_rate_absolute_max_m_s": 0.018669512743713312,
+      "phase_rate_rms_m_s": 0.012776768105832722,
+      "phase_rate_interval_count": 40,
+      "checks": {
+        "code_absolute": true,
+        "code_rms": true,
+        "alternating_reference_clock": true,
+        "clock_rank": true,
+        "phase_rate_absolute": true,
+        "phase_rate_rms": true
+      },
+      "admitted": true
+    },
+    "BOGT00COL": {
+      "station": "BOGT00COL",
+      "role": "FIT",
+      "status": "REFERENCE_PATH_EVALUATED",
+      "references": [
+        "G02",
+        "G04",
+        "G08",
+        "G16"
+      ],
+      "admitted_observations_sha256": "0d679599ef5463a8332b079499829e25d125692f731a4d50080cc91f89d98305",
+      "admitted_navigation_sha256": "b3668a67f8390ac7dd48916583d5f51217b7deed343c741ed8e0b4f2a94d3bb3",
+      "code_absolute_max_m": 3.1085482016205788,
+      "code_rms_m": 1.281313915330177,
+      "alternating_reference_clock_difference_max_m": 0.9663340542465448,
+      "clock_fit_rank": 2,
+      "individual_observations_persisted": false,
+      "individual_residuals_persisted": false,
+      "phase_rate_absolute_max_m_s": 0.008685918773210233,
+      "phase_rate_rms_m_s": 0.003933397669785622,
+      "phase_rate_interval_count": 40,
+      "checks": {
+        "code_absolute": true,
+        "code_rms": true,
+        "alternating_reference_clock": true,
+        "clock_rank": true,
+        "phase_rate_absolute": true,
+        "phase_rate_rms": true
+      },
+      "admitted": true
+    },
+    "MKEA00USA": {
+      "station": "MKEA00USA",
+      "role": "FIT",
+      "status": "REFERENCE_PATH_EVALUATED",
+      "references": [
+        "G04",
+        "G06",
+        "G07",
+        "G09"
+      ],
+      "admitted_observations_sha256": "bf44fc683750b1e4e53af1eeff1bdae95524372e258d04400304f8c2de146de8",
+      "admitted_navigation_sha256": "a6e4760677ea2634b85a6a3df2a49982e6eedbeedf424f77924db97f2ea3d640",
+      "code_absolute_max_m": 1.7726893052458763,
+      "code_rms_m": 0.6104676870620968,
+      "alternating_reference_clock_difference_max_m": 0.7387946993112564,
+      "clock_fit_rank": 2,
+      "individual_observations_persisted": false,
+      "individual_residuals_persisted": false,
+      "phase_rate_absolute_max_m_s": 0.002090776587522214,
+      "phase_rate_rms_m_s": 0.0007502662624990884,
+      "phase_rate_interval_count": 40,
+      "checks": {
+        "code_absolute": true,
+        "code_rms": true,
+        "alternating_reference_clock": true,
+        "clock_rank": true,
+        "phase_rate_absolute": true,
+        "phase_rate_rms": true
+      },
+      "admitted": true
+    },
+    "PIE100USA": {
+      "station": "PIE100USA",
+      "role": "FIT",
+      "status": "REFERENCE_PATH_EVALUATED",
+      "references": [
+        "G04",
+        "G07",
+        "G08",
+        "G09"
+      ],
+      "admitted_observations_sha256": "88060e7ba47b0ac61288b29b059567dac45f409875968f7c437d2e5c8183fa8f",
+      "admitted_navigation_sha256": "f6bfc5fe4d65e1ce9a730a516d123b2ea7697e9f398aac54f60acbe01017f3c1",
+      "code_absolute_max_m": 1.4190445020794868,
+      "code_rms_m": 0.5813013720514013,
+      "alternating_reference_clock_difference_max_m": 1.0868136417120695,
+      "clock_fit_rank": 2,
+      "individual_observations_persisted": false,
+      "individual_residuals_persisted": false,
+      "phase_rate_absolute_max_m_s": 0.003456785778212179,
+      "phase_rate_rms_m_s": 0.0008602953634827503,
+      "phase_rate_interval_count": 40,
+      "checks": {
+        "code_absolute": true,
+        "code_rms": true,
+        "alternating_reference_clock": true,
+        "clock_rank": true,
+        "phase_rate_absolute": true,
+        "phase_rate_rms": true
+      },
+      "admitted": true
+    },
+    "GOLD00USA": {
+      "station": "GOLD00USA",
+      "role": "HELDOUT_CODE",
+      "status": "REFERENCE_PATH_EVALUATED",
+      "references": [
+        "G04",
+        "G07",
+        "G08",
+        "G09"
+      ],
+      "admitted_observations_sha256": "11233f92325321db2781df5e6d3f2572c344664a3f8f1aec996dbea7c67543ef",
+      "admitted_navigation_sha256": "f6bfc5fe4d65e1ce9a730a516d123b2ea7697e9f398aac54f60acbe01017f3c1",
+      "code_absolute_max_m": 7.560523275285959,
+      "code_rms_m": 1.8770818887596703,
+      "alternating_reference_clock_difference_max_m": 4.00265645980835,
+      "clock_fit_rank": 2,
+      "individual_observations_persisted": false,
+      "individual_residuals_persisted": false,
+      "checks": {
+        "code_absolute": true,
+        "code_rms": true,
+        "alternating_reference_clock": true,
+        "clock_rank": true
+      },
+      "admitted": true
+    }
+  },
+  "failures": [],
+  "conditional_reference_envelopes": {
+    "fit_phase_rate_m_s": 0.037339025487426625,
+    "gold_code_m": 15.121046550571918,
+    "multiplier": 2.0,
+    "population_coverage_claim": false
+  },
+  "clauses": {
+    "COMPLETE_ROLE_SPECIFIC_STRUCTURE": "SATISFIED",
+    "TARGET_EXCLUSION_BEFORE_NUMERIC_PARSE": "SATISFIED",
+    "REFERENCE_RESIDUAL_ENVELOPE": "SATISFIED",
+    "TOTAL_FUTURE_TARGET_PHYSICAL_ENVELOPE": "UNRESOLVED"
+  },
+  "unresolved_terms": [
+    "future target-direction antenna phase-center variation",
+    "future target-direction multipath",
+    "unflagged sub-threshold cycle slips",
+    "future atmosphere outside the selected reference rays",
+    "broadcast-reference orbit and clock error transfer",
+    "reference-to-target receiver correlation"
+  ],
+  "interpretation": {
+    "target_selected": false,
+    "target_orbit_accessed": false,
+    "excluded_identity_used_only_as_text_filter": true,
+    "s3_authorized": false
+  },
+  "persistence": {
+    "compressed_observation_payload": false,
+    "decoded_observation_payload": false,
+    "raw_navigation_payload": false,
+    "individual_observation_values": false,
+    "individual_residuals": false,
+    "aggregate_metrics_and_hashes_only": true,
+    "raw_payload_bytes": 0
+  },
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.3",
+    "scipy": "1.17.1",
+    "hatanaka": "2.8.1"
+  }
+}

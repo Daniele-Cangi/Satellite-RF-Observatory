@@ -1,6 +1,7 @@
 """Offline boundaries for the five-root reference residual envelope."""
 from copy import deepcopy
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 
@@ -100,3 +101,38 @@ def test_threshold_date_or_exclusion_cannot_change():
     changed["excluded_identity"] = "G15"
     with pytest.raises(ValueError, match="excluded identity differs"):
         validate_plan(changed)
+
+
+def test_frozen_result_is_hash_bound_target_excluded_and_aggregate_only():
+    path = ROOT / "research/kinematic/results/s2_five_root_reference_envelope_2026240_v1.json"
+    result = json.loads(path.read_text())
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "3a0f2f0225feded686787484fcc3809062371a0a0358d6018b062e6c92e1dc2f"
+    )
+    assert result["status"] == "FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED"
+    assert result["failures"] == []
+    assert result["selection"]["start_s"] == 0.0
+    assert result["selection"]["selection_uses_observation_magnitudes"] is False
+    assert set(result["station_results"]) == {
+        "ALGO00CAN", "BOGT00COL", "MKEA00USA", "PIE100USA", "GOLD00USA"
+    }
+    assert all(row["admitted"] for row in result["station_results"].values())
+    assert result["station_results"]["ALGO00CAN"]["phase_rate_absolute_max_m_s"] == (
+        0.018669512743713312
+    )
+    assert result["station_results"]["GOLD00USA"]["code_absolute_max_m"] == (
+        7.560523275285959
+    )
+    assert result["conditional_reference_envelopes"]["fit_phase_rate_m_s"] == (
+        0.037339025487426625
+    )
+    assert result["conditional_reference_envelopes"]["gold_code_m"] == (
+        15.121046550571918
+    )
+    assert all(row["target_rows_removed_before_numeric_parse"] > 0
+               for row in result["source_receipts"])
+    assert result["navigation_receipt"]["target_blocks_removed_before_numeric_parse"] == 13
+    assert result["clauses"]["TOTAL_FUTURE_TARGET_PHYSICAL_ENVELOPE"] == "UNRESOLVED"
+    assert result["interpretation"]["target_selected"] is False
+    assert result["persistence"]["individual_observation_values"] is False
+    assert result["persistence"]["individual_residuals"] is False

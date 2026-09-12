@@ -59,5 +59,34 @@ The one execution terminates with exactly one of:
 
 ## Outcome
 
-Not executed. Plan and implementation must first be committed with a clean
-working tree.
+The single execution terminated
+`FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED`. All five complete observation
+products and the mixed-navigation product were materialized and hash-bound.
+Between 736 and 949 G14 rows per station were removed by identity before numeric
+conversion; thirteen G14 navigation blocks were removed before numerical
+navigation parsing.
+
+The frozen selection chose the first possible window, 00:00:00--00:05:00 GPST.
+ALGO, PIE1 and GOLD use G04/G07/G08/G09; BOGT uses G02/G04/G08/G16; MKEA uses
+G04/G06/G07/G09. This choice used only structure and non-target broadcast
+elevation.
+
+All roots passed every predeclared deterministic residual limit. The controlling
+fit-root phase result is ALGO: 0.018669513 m/s maximum and 0.012776768 m/s RMS.
+The other maximum phase residuals are 0.008685919 m/s at BOGT, 0.002090777 m/s
+at MKEA and 0.003456786 m/s at PIE1. GOLD's code-only result is 7.560523 m
+maximum and 1.877082 m RMS. The two-times conditional reference envelopes are
+therefore:
+
+- fit phase rate: 0.037339025 m/s;
+- GOLD code: 15.121047 m.
+
+Individual observations and residuals were not persisted. Their admitted grids
+are represented only by SHA-256 hashes. The complete result is
+`results/s2_five_root_reference_envelope_2026240_v1.json`, SHA-256
+`3a0f2f0225feded686787484fcc3809062371a0a0358d6018b062e6c92e1dc2f`.
+
+This is the first real numerical admission of the exact four-fit/one-heldout
+path, but it remains conditional on one five-minute reference window. The total
+future-target physical envelope remains `UNRESOLVED`; no target was selected,
+no target orbit was accessed and S3 remains unauthorized.

@@ -320,6 +320,21 @@ not reuse it as a primary. The smallest next step is a separately frozen,
 distinct-artifact reference-only physical-envelope qualification; S3 remains
 unauthorized.
 
+The distinct DOY240 reference-only numerical qualification is closed
+`FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED`. The first structure/geometry
+selected 00:00--00:05 GPST window passed all frozen S2 limits at ALGO, BOGT,
+MKEA and PIE1 for phase increments and at GOLD for code only. The controlling
+fit-root phase residual was ALGO at 0.018669513 m/s maximum; GOLD's code maximum
+was 7.560523 m. The frozen two-times conditional envelopes are 0.037339025 m/s
+and 15.121047 m respectively. G14 was only an exclusion sentinel: 736--949 rows
+per station and thirteen navigation blocks were removed as text before numeric
+parsing; no target value, state or orbit was accessed. Individual observations,
+residuals and payloads were not persisted. This is a real reference-path
+admission, not population coverage or a total future-target envelope. Preserve
+DOY240 as qualification evidence and never use it as a primary. Directional
+PCV/multipath, unflagged slips, future atmosphere, broadcast-reference transfer
+and reference/target correlations remain `UNRESOLVED`; S3 remains unauthorized.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
