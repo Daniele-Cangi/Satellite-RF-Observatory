@@ -58,9 +58,20 @@ qui consegnati non producono questa evidenza: rendono esplicito dove raccoglierl
 | G5 — Servizio pubblicabile | Dominio qualificato e limiti documentati, gestione operativa e decisione di hosting | Evidenza a sostegno delle promesse, recupero verificato e autorizzazione al deployment |
 
 G1 è la prima consegna implementata in `service/workflow.py` e `service/__main__.py`.
-G2 è il prossimo passo ingegneristico: riutilizzare `service/requests.py` e
-`positioning/jobs.py`. Non introdurre una seconda coda o riscrivere lo stimatore.
-Il flusso automatico completo, l'HTTP e l'invio dal browser non sono consegnati.
+G2 collega ora `service/requests.py` e `positioning/jobs.py` attraverso
+`service/worker.py`: invio locale, esecuzione di una richiesta, rinnovo del lease,
+stato e risultato, blocco dei duplicati e riconciliazione dei risultati già
+sigillati. I test usano sorgenti e risultati scientifici inventati; nessuna
+nuova campagna è stata eseguita per questa consegna. L'operatore avvia il worker
+su un checkout dedicato e pulito della versione dichiarata. HTTP, invio dal
+browser e un worker continuamente in servizio restano da consegnare.
+
+La perdita rilevata del lease arresta l'albero dei processi. Un arresto brutale
+del supervisore può lasciare processi figli vivi: alla scadenza il registro
+blocca ogni nuovo dispatch e richiede ispezione. Non è un sistema di isolamento
+del sistema operativo. La riconciliazione adotta soltanto un risultato già
+sigillato con ricevuta di uscita del processo; non riparte da stime o conferme
+parziali e non rimette tentativi in coda.
 
 G3 comprende il lavoro scientifico ancora aperto. Per la cinematica servono
 continuità di fase, errori direzionali/atmosferici, trasferimento degli errori

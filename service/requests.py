@@ -48,6 +48,11 @@ class RequestStore:
                     request_id TEXT NOT NULL REFERENCES requests(id),
                     state TEXT NOT NULL, recorded_at REAL NOT NULL
                 );
+                CREATE TABLE IF NOT EXISTS attempted_events (
+                    target TEXT NOT NULL, date_gpst TEXT NOT NULL,
+                    request_id TEXT NOT NULL REFERENCES requests(id),
+                    PRIMARY KEY(target, date_gpst)
+                );
             ''')
 
     @contextmanager
@@ -101,6 +106,10 @@ class RequestStore:
                 if existing['declaration_hash'] != digest:
                     raise Conflict('idempotency key already binds a different declaration')
                 return self._view(existing)
+            if purpose == 'prospective_attempt' and db.execute(
+                    'SELECT 1 FROM attempted_events WHERE target=? AND date_gpst=?',
+                    (plan['target'], plan['date_gpst'])).fetchone():
+                raise Conflict('target/day already reserved by an attempted request')
             active = "state IN ('QUEUED','RUNNING','NEEDS_REVIEW')"
             if db.execute('SELECT count(*) FROM requests WHERE '+active).fetchone()[0] >= self.capacity:
                 raise QueueFull('pilot queue limit reached')
@@ -115,6 +124,7 @@ class RequestStore:
     def get(self, owner, request_id):
         self._identity(owner)
         with self._transaction() as db:
+            self._expire_claims(db)
             row = db.execute('SELECT * FROM requests WHERE id=? AND owner=?', (request_id, owner)).fetchone()
             if row is None:
                 raise KeyError('request not found')
@@ -145,10 +155,7 @@ class RequestStore:
         self._lease_seconds(lease_seconds)
         with self._transaction() as db:
             now = self.clock()
-            expired = db.execute("SELECT id FROM requests WHERE state='RUNNING' AND lease_until<=?", (now,)).fetchall()
-            for row in expired:
-                db.execute("UPDATE requests SET state='NEEDS_REVIEW',updated_at=?,lease_hash=NULL,lease_until=NULL WHERE id=?", (now, row['id']))
-                self._record(db, row['id'], 'NEEDS_REVIEW')
+            self._expire_claims(db)
             # An expired worker may still be alive. Stop dispatch until an
             # operator has inspected and stopped it; no concurrent replacement.
             if db.execute("SELECT 1 FROM requests WHERE state IN ('RUNNING','NEEDS_REVIEW') LIMIT 1").fetchone():
@@ -162,6 +169,14 @@ class RequestStore:
             self._record(db, row['id'], 'RUNNING')
             return {'id': row['id'], 'declaration': json.loads(row['declaration']),
                     'declaration_hash': row['declaration_hash'], 'lease_token': token}
+
+    def _expire_claims(self, db):
+        now = self.clock()
+        expired = db.execute("SELECT id FROM requests WHERE state='RUNNING' AND lease_until<=?", (now,)).fetchall()
+        for row in expired:
+            db.execute("UPDATE requests SET state='NEEDS_REVIEW',updated_at=?,lease_hash=NULL,lease_until=NULL WHERE id=?",
+                       (now, row['id']))
+            self._record(db, row['id'], 'NEEDS_REVIEW')
 
     def _owned_claim(self, db, request_id, token):
         row = db.execute('SELECT * FROM requests WHERE id=?', (request_id,)).fetchone()
@@ -183,5 +198,42 @@ class RequestStore:
         with self._transaction() as db:
             self._owned_claim(db, request_id, token)
             db.execute('UPDATE requests SET state=?,result_hash=?,updated_at=?,lease_hash=NULL,lease_until=NULL WHERE id=?',
+                       (state, result_hash, self.clock(), request_id))
+            self._record(db, request_id, state)
+
+    def quarantine(self, request_id, token):
+        """Revoke an owned claim, including an expired one; never requeue it."""
+        with self._transaction() as db:
+            row = db.execute('SELECT * FROM requests WHERE id=?', (request_id,)).fetchone()
+            if row is not None and row['state'] == 'NEEDS_REVIEW':
+                return
+            if (row is None or row['state'] != 'RUNNING' or row['lease_hash'] is None
+                    or not secrets.compare_digest(row['lease_hash'], self._hash(token))):
+                raise Conflict('cannot quarantine an unowned claim')
+            db.execute("UPDATE requests SET state='NEEDS_REVIEW',updated_at=?,lease_hash=NULL,lease_until=NULL WHERE id=?",
+                       (self.clock(), request_id))
+            self._record(db, request_id, 'NEEDS_REVIEW')
+
+    def reserve_event(self, request_id, token):
+        """One attempted target/day across owners and idempotency keys."""
+        with self._transaction() as db:
+            row = self._owned_claim(db, request_id, token)
+            plan = json.loads(row['declaration'])['plan']
+            previous = db.execute('SELECT request_id FROM attempted_events WHERE target=? AND date_gpst=?',
+                                  (plan['target'], plan['date_gpst'])).fetchone()
+            if previous is not None:
+                raise Conflict('target/day already reserved by an attempted request')
+            db.execute('INSERT INTO attempted_events(target,date_gpst,request_id) VALUES(?,?,?)',
+                       (plan['target'], plan['date_gpst'], request_id))
+
+    def reconcile_result(self, request_id, declaration_hash, *, state, result_hash):
+        """Trusted adapter only: adopt validated finished evidence, never rerun."""
+        if state not in ('COMPLETED', 'FAILED') or not re.fullmatch(r'[0-9a-f]{64}', result_hash):
+            raise ValueError('terminal state and sealed result digest required')
+        with self._transaction() as db:
+            row = db.execute('SELECT * FROM requests WHERE id=?', (request_id,)).fetchone()
+            if row is None or row['state'] != 'NEEDS_REVIEW' or row['declaration_hash'] != declaration_hash:
+                raise Conflict('reconciliation requires the quarantined declaration')
+            db.execute('UPDATE requests SET state=?,result_hash=?,updated_at=? WHERE id=?',
                        (state, result_hash, self.clock(), request_id))
             self._record(db, request_id, state)

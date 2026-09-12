@@ -73,8 +73,15 @@ and new S3 acquisition still require their separately specified prerequisites.
 Request preparation alone never establishes source availability, prior-access
 independence or physical qualification. Closed events remain archive results.
 Use the existing worker and queue rather than creating a second execution
-system. The first delivery is offline request preparation and sealed-result
-presentation in `service/workflow.py`; worker/queue dispatch is still pending.
+system. Request preparation and sealed-result presentation live in
+`service/workflow.py`. `service/worker.py` now connects RequestStore to the
+unchanged staged worker with pinned checkout checks, lease renewal, one attempt
+per target/day and terminal reconciliation without re-execution. Use external
+private runtime directories and a dedicated clean checkout. This is a trusted
+local operator workflow, not an HTTP service or a new scientific qualification.
+A hard supervisor crash can leave a child alive; the expired claim blocks all
+replacement dispatch. Inspect remaining processes rather than clearing or
+requeuing the request. Only an exited and sealed result can be reconciled.
 
 ## Scientific development history and preserved constraints
 
