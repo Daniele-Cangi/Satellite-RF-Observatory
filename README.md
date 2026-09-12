@@ -83,6 +83,15 @@ GOLD was evaluated only on its C1C/C2W held-out path. This validates structural
 capacity only: numerical measurements and the total physical envelope remain
 unevaluated, no target was selected and DOY241 cannot become the primary.
 
+A distinct DOY240 reference-only run then reached
+`FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED` on the first frozen five-minute
+window. The controlling fit-root phase residual was 0.018670 m/s maximum at
+ALGO; GOLD's code-only maximum was 7.561 m. The corresponding two-times
+conditional envelopes are 0.037339 m/s and 15.121 m. G14 measurements and
+navigation were removed before numeric parsing. This admits the real reference
+path, not a future target or total physical envelope; directional and transfer
+terms remain unresolved.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |
