@@ -1,6 +1,7 @@
 """Offline boundaries for the target-free five-root structural qualification."""
 from copy import deepcopy
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 
@@ -108,3 +109,27 @@ def test_threshold_or_root_allocation_cannot_change():
     changed["fit_roots"][0]["id"] = "DRAO00CAN"
     with pytest.raises(ValueError, match="root topology differs"):
         validate_plan(changed)
+
+
+def test_frozen_failure_is_hash_bound_and_clause_attributed():
+    result_path = ROOT / "research/kinematic/results/s2_five_root_structure_2026242_v1.json"
+    result = json.loads(result_path.read_text())
+    assert hashlib.sha256(result_path.read_bytes()).hexdigest() == (
+        "af13370e6d2537c6497e70ef842662f768f4e2de37f29d8643fda6b1789893d0"
+    )
+    assert result["status"] == "FIVE_ROOT_STRUCTURE_NOT_QUALIFIED"
+    assert len(result["source_receipts"]) == 5
+    assert all("sha256" in receipt for receipt in result["source_receipts"])
+    assert set(result["station_structures"]) == {"ALGO00CAN", "MKEA00USA", "PIE100USA"}
+    assert all(row["epoch_count"] == 2880 for row in result["station_structures"].values())
+    assert all(row["observation_numbers_converted"] == 0
+               for row in result["station_structures"].values())
+    assert result["clauses"]["STRUCTURAL_COMMON_WINDOW"] == "NOT_EVALUATED"
+    attribution = json.loads((
+        ROOT / "research/kinematic/results/s2_five_root_structure_failure_attribution_v1.json"
+    ).read_text())
+    assert attribution["source_result_sha256"] == hashlib.sha256(result_path.read_bytes()).hexdigest()
+    assert attribution["station_attribution"]["GOLD00USA"] == (
+        "ROLE_IRRELEVANT_PHASE_CLAUSE_APPLIED_TO_CODE_ONLY_ROOT"
+    )
+    assert attribution["retry_same_artifacts_authorized"] is False

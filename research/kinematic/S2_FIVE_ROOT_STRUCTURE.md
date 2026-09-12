@@ -42,3 +42,44 @@ The run stops at one of:
 
 A pass authorizes only a separately frozen, distinct-artifact reference-only
 numerical qualification. It does not authorize a primary target or S3.
+
+## Frozen outcome
+
+The one execution terminated `FIVE_ROOT_STRUCTURE_NOT_QUALIFIED`. All five
+artifacts were available, fully materialized and hash-bound before decoding.
+ALGO, MKEA and PIE1 passed their header/transform clauses and complete-day
+structural scans: each contained 2,880 consecutive 30-second epochs with no
+non-nominal gap, and every GPS identity had at least one 11-endpoint usable
+segment. No observation substring was converted to a number.
+
+BOGT and GOLD stopped at `PHASE_SHIFT_DIFFERS_FROM_PLAN:L1C`, before either
+body entered the structural scanner. The frozen contract required zero default
+phase shift and no satellite overrides. The receipt does not distinguish which
+part of that composite check differed, so its exact transform remains unknown.
+
+This failure needs clause-level attribution:
+
+- BOGT is a fit root, but a static declared phase offset (default or
+  satellite-scoped) can be represented explicitly and cancels from a
+  same-satellite endpoint difference when its scope is unchanged. Requiring it
+  to be exactly zero was stricter than the physical interval observable. The
+  result therefore does not demonstrate that BOGT lacks usable phase structure.
+- GOLD is code-only in this topology. Applying any phase-shift clause to GOLD
+  was outside the causal path of C1C/C2W and cannot establish failure of its
+  required held-out coordinate.
+
+The frozen outcome remains valid under its frozen contract and DOY242 must not
+be retried or rescored. Scientifically, however, it is not evidence that the
+five-root measurement path is structurally insufficient. The cross-root window
+and all numerical/physical clauses remain `NOT_EVALUATED`, not rejected.
+
+The exact result is
+[`results/s2_five_root_structure_2026242_v1.json`](results/s2_five_root_structure_2026242_v1.json),
+SHA-256 `af13370e6d2537c6497e70ef842662f768f4e2de37f29d8643fda6b1789893d0`.
+The separate failure-attribution receipt binds this result and prevents the
+descriptive contract error from becoming a physical refusal.
+
+The smallest next step is offline only: freeze role-specific transform
+semantics in which fit-root phase offsets are retained as reversible static
+metadata and held-out GOLD is evaluated only on code transforms. A later
+qualification must use a distinct unopened artifact; it cannot reopen DOY242.

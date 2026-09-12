@@ -65,6 +65,16 @@ PIE1 produces 60. The other three allocations produce none, and no 45,000 or
 five-root measurement admission and the physical envelope remain unresolved,
 so S3 is not yet authorized.
 
+The first real target-free qualification of that topology then closed
+`FIVE_ROOT_STRUCTURE_NOT_QUALIFIED` on DOY242. All five artifacts were available
+and hashed, and ALGO/MKEA/PIE1 each supplied a complete 2,880-epoch structural
+scan. BOGT and GOLD stopped at an exact-zero L1C phase-shift clause before body
+scanning. This does not establish missing measurements: static declared phase
+offsets are representable in interval differences, and GOLD is code-only. The
+[failure attribution](research/kinematic/S2_FIVE_ROOT_STRUCTURE.md) therefore
+keeps common-window and physical-envelope clauses `NOT_EVALUATED`. No
+observation number was converted and DOY242 cannot be retried.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |
