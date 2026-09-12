@@ -335,6 +335,18 @@ DOY240 as qualification evidence and never use it as a primary. Directional
 PCV/multipath, unflagged slips, future atmosphere, broadcast-reference transfer
 and reference/target correlations remain `UNRESOLVED`; S3 remains unauthorized.
 
+The subsequent offline reference-to-target causal audit is closed
+`FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT`. It read only
+the hash-bound aggregate DOY240 JSON receipt: no source, observation, target or
+orbit was accessed. All six open terms remain `UNRESOLVED`; the receipt has no
+direction-resolved response, target continuity series, future-path atmosphere,
+reference-state covariance projection or joint reference-target covariance.
+The conditional `0.037339025 m/s` fit phase-rate and `15.121047 m` GOLD code
+envelopes remain valid only in their distinct reference coordinates and were
+not combined. Preserve this as a causal sufficiency result, not evidence that
+the terms are large or that the reference path failed. Do not authorize a
+primary or S3 from DOY240 alone.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
