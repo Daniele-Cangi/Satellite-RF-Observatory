@@ -75,6 +75,14 @@ offsets are representable in interval differences, and GOLD is code-only. The
 keeps common-window and physical-envelope clauses `NOT_EVALUATED`. No
 observation number was converted and DOY242 cannot be retried.
 
+The bounded role-specific repair then used distinct DOY241 and reached
+`FIVE_ROOT_ROLE_STRUCTURE_QUALIFIED`. All five roots supplied complete gap-free
+days and 2,834 eleven-epoch windows met the unchanged structural rule. BOGT's
+declared per-satellite phase overrides were all static zero-cycle metadata;
+GOLD was evaluated only on its C1C/C2W held-out path. This validates structural
+capacity only: numerical measurements and the total physical envelope remain
+unevaluated, no target was selected and DOY241 cannot become the primary.
+
 ## Current evidence
 
 | Experiment | What was measured | Frozen outcome |

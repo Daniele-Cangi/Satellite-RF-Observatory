@@ -1,0 +1,482 @@
+{
+  "schema": "s2-five-root-role-structure-qualification-result-v1",
+  "qualification_id": "S2_FIVE_ROOT_ROLE_STRUCTURE_2026241",
+  "status": "FIVE_ROOT_ROLE_STRUCTURE_QUALIFIED",
+  "scope": "One target-free structural qualification of the exact four-fit/one-heldout topology on a distinct unopened complete day. Transform admission follows the observable role: declared static phase offsets are retained as reversible metadata for same-satellite fit-root increments, while the GOLD held-out branch is qualified only on code coordinates and does not parse phase-transform semantics. Complete compressed files are hash-bound before Hatanaka decoding; only headers, epoch topology, field presence and fit-root phase LLI are interpreted. No observation number, navigation product, target identity, orbit, residual or fit is permitted.",
+  "freeze": {
+    "source_commit": "b521d98575259ef0cb7daaa4b26c9e8673294590",
+    "plan_sha256": "66777883f262ee4dd7741557fea1d96abb4c4a523d86894b149117fd9f16d106",
+    "implementation_sha256": "800c8d656797fb597c6416674805ded09bb29e23e3bad8557cf95e99c772327d"
+  },
+  "source_receipts": [
+    {
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/241/ALGO00CAN_R_20262410000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 4276804,
+      "sha256": "b25e37a241a73aa291fad6bf9d740402f6cfaa86362e48c53f580ad8bfb07b83",
+      "access_utc": "2026-09-12T12:44:10.818721+00:00",
+      "decoded_bytes": 31080896,
+      "decoded_sha256": "9d88a8ed2905d9903f266eba6ebbda7e7eb32b9c1db700546e22ea98a677c666",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "BOGT00COL",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/241/BOGT00COL_R_20262410000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3209512,
+      "sha256": "a13efb3004133bd702e003323ebfab7a70bd8f848750f502761d50e31aad8b74",
+      "access_utc": "2026-09-12T12:44:17.230332+00:00",
+      "decoded_bytes": 25634802,
+      "decoded_sha256": "17f5d3e049f02a2dbbc37d408e88251e939dde5493e5d12b5e0f9e7bfa1a0a35",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "MKEA00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/241/MKEA00USA_R_20262410000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3650278,
+      "sha256": "ec4ac99943d146f57f367cd5641d1c7059ca612ff8ad507ae87eae817abb48b1",
+      "access_utc": "2026-09-12T12:44:23.911849+00:00",
+      "decoded_bytes": 26745046,
+      "decoded_sha256": "65ef37713e9e149d80d4b75b808ef5674a70c216b74bb195ae79b301be421316",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "PIE100USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/241/PIE100USA_R_20262410000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3278182,
+      "sha256": "3d23467905cb8e0242dd62a320a21dc0201881d367b6fff3f908e7769c06583d",
+      "access_utc": "2026-09-12T12:44:30.194926+00:00",
+      "decoded_bytes": 23921120,
+      "decoded_sha256": "fb76d88cb1b6c4c1fd964b402c7ec59bfca8e7a54f20150a5088f5122874b46b",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/241/GOLD00USA_R_20262410000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2193299,
+      "sha256": "4d10c441130da243c8e3f94fe086c36330cd0345b6b3709781b95505d87ab663",
+      "access_utc": "2026-09-12T12:44:34.909263+00:00",
+      "decoded_bytes": 15810705,
+      "decoded_sha256": "9b300933fde190a73365334f592dee8f7cbaf9d7e4d5a4d3fa65b07add57fdb0",
+      "complete_artifact_hashed_before_decode": true
+    }
+  ],
+  "station_structures": {
+    "ALGO00CAN": {
+      "station": "ALGO00CAN",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "3015995",
+        "SEPT POLARX5",
+        "5.3.2"
+      ],
+      "marker_name": "ALGO",
+      "rinex_version": "3.05",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 27952,
+        "usable_rows": 27252,
+        "blank_required_field_rows": 635,
+        "nonzero_phase_lli_rows": 65,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 32,
+        "maximum_contiguous_endpoints": 843,
+        "satellites_with_at_least_11_contiguous_endpoints": 32,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "BOGT00COL": {
+      "station": "BOGT00COL",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "01972",
+        "JAVAD TRE_3 DELTA",
+        "4.6.00"
+      ],
+      "marker_name": "BOGT",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 27157,
+        "usable_rows": 26619,
+        "blank_required_field_rows": 461,
+        "nonzero_phase_lli_rows": 77,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 32,
+        "maximum_contiguous_endpoints": 1133,
+        "satellites_with_at_least_11_contiguous_endpoints": 32,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G13": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {
+              "G01": 0.0,
+              "G02": 0.0,
+              "G03": 0.0,
+              "G04": 0.0,
+              "G05": 0.0,
+              "G06": 0.0,
+              "G07": 0.0,
+              "G08": 0.0,
+              "G09": 0.0,
+              "G10": 0.0,
+              "G11": 0.0,
+              "G12": 0.0,
+              "G13": 0.0,
+              "G14": 0.0,
+              "G15": 0.0,
+              "G16": 0.0,
+              "G17": 0.0,
+              "G18": 0.0,
+              "G19": 0.0,
+              "G20": 0.0,
+              "G21": 0.0,
+              "G22": 0.0,
+              "G23": 0.0,
+              "G24": 0.0,
+              "G25": 0.0,
+              "G26": 0.0,
+              "G27": 0.0,
+              "G28": 0.0,
+              "G29": 0.0,
+              "G30": 0.0,
+              "G31": 0.0,
+              "G32": 0.0
+            }
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "MKEA00USA": {
+      "station": "MKEA00USA",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "3013571",
+        "SEPT POLARX5",
+        "5.7.0"
+      ],
+      "marker_name": "MKEA",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 30432,
+        "usable_rows": 29400,
+        "blank_required_field_rows": 905,
+        "nonzero_phase_lli_rows": 127,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 32,
+        "maximum_contiguous_endpoints": 1042,
+        "satellites_with_at_least_11_contiguous_endpoints": 32,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "PIE100USA": {
+      "station": "PIE100USA",
+      "role": "FIT",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "4100427",
+        "SEPT POLARX5TR",
+        "5.7.0"
+      ],
+      "marker_name": "PIE1",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 30634,
+        "usable_rows": 29228,
+        "blank_required_field_rows": 1234,
+        "nonzero_phase_lli_rows": 172,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 32,
+        "maximum_contiguous_endpoints": 925,
+        "satellites_with_at_least_11_contiguous_endpoints": 32,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "GOLD00USA": {
+      "station": "GOLD00USA",
+      "role": "HELDOUT_CODE",
+      "status": "STATION_ROLE_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "01538",
+        "JAVAD TRE_G3TH DELTA",
+        "4.2.03"
+      ],
+      "marker_name": "GOLD",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 30385,
+        "usable_rows": 29983,
+        "blank_required_field_rows": 402,
+        "nonzero_phase_lli_rows": 0,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 31,
+        "maximum_contiguous_endpoints": 929,
+        "satellites_with_at_least_11_contiguous_endpoints": 31,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false,
+        "phase_transform": "NOT_INTERPRETED_OUTSIDE_CAUSAL_PATH"
+      },
+      "observation_numbers_converted": 0
+    }
+  },
+  "cross_root_capacity": {
+    "endpoint_count": 11,
+    "capable_window_count": 2834,
+    "earliest_capable_window_start_s": 0.0,
+    "maximum_unselected_common_candidate_count": 5,
+    "candidate_identity_persisted": false,
+    "qualified": true
+  },
+  "failures": [],
+  "clauses": {
+    "COMPLETE_FIVE_ARTIFACT_SET": "SATISFIED",
+    "ROLE_SPECIFIC_HEADER_AND_TRANSFORM_ADMISSION": "SATISFIED",
+    "STRUCTURAL_COMMON_WINDOW": "SATISFIED",
+    "OBSERVATION_NUMERIC_ADMISSION": "NOT_EVALUATED",
+    "TOTAL_PHYSICAL_ERROR_ENVELOPE": "NOT_EVALUATED"
+  },
+  "interpretation": {
+    "target_selected": false,
+    "target_identity_persisted": false,
+    "observation_numbers_converted": 0,
+    "s3_authorized": false,
+    "closed_doy242_retried_or_rescored": false,
+    "next_step_if_qualified": "Freeze a distinct target-free reference-only physical-envelope qualification; do not reuse this artifact as a primary."
+  },
+  "persistence": {
+    "compressed_payload": false,
+    "decoded_payload": false,
+    "header_text": false,
+    "observation_rows": false,
+    "observation_values": false,
+    "satellite_candidate_identities": false,
+    "artifact_hashes_and_aggregate_structure_only": true,
+    "raw_payload_bytes": 0
+  },
+  "environment": {
+    "python": "3.13.5",
+    "hatanaka": "2.8.1"
+  }
+}
