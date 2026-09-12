@@ -270,6 +270,17 @@ code-only heldout, but C1C/C2W transform/coverage/clock and the total physical
 envelope remain unresolved. Do not use a target orbit to choose a favorable
 case. S3 remains unauthorized.
 
+The following bounded DRAO code-only header qualification is closed
+`DRAO_CODE_HEADERS_NOT_QUALIFIED`. Its independently frozen DOY242 product was
+available and fully hash-bound, but admission stopped at
+`UNSUPPORTED_NAMED_CODE_FORMAT`: it did not expose the RINEX 3.04/3.05 named
+C1C/C2W coordinate required by the frozen contract. This is a capability
+rejection, not a software error or claim about observation values. Exactly zero
+observation-body lines and zero target values were accessed. Do not retry DRAO
+on another date, alias a legacy field to C1C/C2W, or reopen this product. The
+conditional geometric advantage therefore does not materialize into an admitted
+sixth root; S3 remains unauthorized.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
