@@ -1,0 +1,33 @@
+{
+  "schema": "s2-five-root-structure-failure-attribution-v1",
+  "source_result": "research/kinematic/results/s2_five_root_structure_2026242_v1.json",
+  "source_result_sha256": "af13370e6d2537c6497e70ef842662f768f4e2de37f29d8643fda6b1789893d0",
+  "authoritative_terminal": "FIVE_ROOT_STRUCTURE_NOT_QUALIFIED",
+  "source_artifacts_materialized_and_hashed": 5,
+  "observation_numbers_converted": 0,
+  "station_attribution": {
+    "ALGO00CAN": "STRUCTURE_SCANNED_COMPLETE_DAY",
+    "BOGT00COL": "ROLE_RELEVANT_TRANSFORM_CLAUSE_OVERCONSTRAINED",
+    "MKEA00USA": "STRUCTURE_SCANNED_COMPLETE_DAY",
+    "PIE100USA": "STRUCTURE_SCANNED_COMPLETE_DAY",
+    "GOLD00USA": "ROLE_IRRELEVANT_PHASE_CLAUSE_APPLIED_TO_CODE_ONLY_ROOT"
+  },
+  "bogt_transform_detail": {
+    "known": "The parsed L1C phase-shift ledger differed from the frozen zero/no-override requirement.",
+    "unknown": "The receipt does not distinguish nonzero default from a satellite-scoped override and retains no exact value.",
+    "authorized_claim": "BOGT failed the frozen transform clause.",
+    "unauthorized_claim": "BOGT lacks usable phase observations or structural continuity."
+  },
+  "gold_transform_detail": {
+    "required_role": "HELDOUT_CODE",
+    "required_fields": ["C1C", "C2W"],
+    "failed_clause": "L1C phase shift",
+    "authorized_claim": "The frozen implementation applied a phase clause outside GOLD's required coordinate.",
+    "unauthorized_claim": "GOLD lacks the required held-out code coordinate or structural continuity."
+  },
+  "cross_root_capacity": "NOT_EVALUATED",
+  "observation_numeric_admission": "NOT_EVALUATED",
+  "total_physical_error_envelope": "NOT_EVALUATED",
+  "retry_same_artifacts_authorized": false,
+  "scientific_conclusion": "The frozen qualification failed, but the receipt cannot attribute that failure to insufficiency of the required five-root physical measurement path."
+}

@@ -1,0 +1,311 @@
+{
+  "schema": "s2-five-root-structure-qualification-result-v1",
+  "qualification_id": "S2_FIVE_ROOT_STRUCTURE_2026242",
+  "status": "FIVE_ROOT_STRUCTURE_NOT_QUALIFIED",
+  "scope": "One target-free structural qualification of the exact four-fit/one-heldout topology on a distinct complete day. Complete compressed files are hash-bound before Hatanaka decoding; only headers, epoch topology, field presence and phase LLI are interpreted. No observation number, navigation product, target identity, orbit, residual or fit is permitted.",
+  "freeze": {
+    "source_commit": "cf7958508e3abee7e35eb9e09ba14e940402776e",
+    "plan_sha256": "f15c91fcf55f72531ae1c26f6a3ca92b996cbce56e0af292d3fbcaa3ffbb9a81",
+    "implementation_sha256": "4babdd333176e7e449306f456333b1c5b4d8392708cde8c3352492b0b88bbe31"
+  },
+  "source_receipts": [
+    {
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/ALGO00CAN_R_20262420000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 4337463,
+      "sha256": "edf5bad7c2a9f14a36f1d87f080e6e4d5eda5fe78ff2ff8be71443bde0b7a5f4",
+      "access_utc": "2026-09-12T12:25:19.725463+00:00",
+      "decoded_bytes": 31468674,
+      "decoded_sha256": "508154d6939212f35e0330889188938a5f5e7fe780b266c36ad0944ca3f422da",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "BOGT00COL",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/BOGT00COL_R_20262420000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3149565,
+      "sha256": "58269552502b962a7927bccdc93c857b103cedaf36fc9929fa4cbe3e649e44c6",
+      "access_utc": "2026-09-12T12:25:26.541887+00:00",
+      "decoded_bytes": 25152988,
+      "decoded_sha256": "e0e05817f263dfa2bddf8ecbf4d5df29ba3036b9adff1b25587af55ad8151137",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "MKEA00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/MKEA00USA_R_20262420000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3680761,
+      "sha256": "3eb09b23cd51b3b108a4db8bde3c91bfaec2c41ad56d0e8ed1037b007d8c9810",
+      "access_utc": "2026-09-12T12:25:33.939363+00:00",
+      "decoded_bytes": 26867334,
+      "decoded_sha256": "e36fd4de6b44158c7c1a32a01a072be6c04019c43ed92981fb856df691e8b2df",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "PIE100USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/PIE100USA_R_20262420000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 3318447,
+      "sha256": "55a90f587b52e2176684b99333fe4bb0efd0531300f9b7a55877ddccd7d06b2a",
+      "access_utc": "2026-09-12T12:25:41.409811+00:00",
+      "decoded_bytes": 24327276,
+      "decoded_sha256": "f5aa698b9ea6ae806043e433284695aa000637ba1bf013217c050cc7e1deaf1f",
+      "complete_artifact_hashed_before_decode": true
+    },
+    {
+      "station": "GOLD00USA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/GOLD00USA_R_20262420000_01D_30S_MO.crx.gz",
+      "http_status": 200,
+      "bytes": 2214967,
+      "sha256": "08f5077a96014db93099c74b2ccc997b76fd545392b9dc5078c0962a31c40628",
+      "access_utc": "2026-09-12T12:25:48.610453+00:00",
+      "decoded_bytes": 15989058,
+      "decoded_sha256": "24c2ce629e68729f686aaac91a0c8bf5b5a84c48810fb579705186a41b8f1611",
+      "complete_artifact_hashed_before_decode": true
+    }
+  ],
+  "station_structures": {
+    "ALGO00CAN": {
+      "station": "ALGO00CAN",
+      "role": "FIT",
+      "status": "STATION_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "3015995",
+        "SEPT POLARX5",
+        "5.3.2"
+      ],
+      "marker_name": "ALGO",
+      "rinex_version": "3.05",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 27915,
+        "usable_rows": 27224,
+        "blank_required_field_rows": 630,
+        "nonzero_phase_lli_rows": 61,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 32,
+        "maximum_contiguous_endpoints": 842,
+        "satellites_with_at_least_11_contiguous_endpoints": 32,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "MKEA00USA": {
+      "station": "MKEA00USA",
+      "role": "FIT",
+      "status": "STATION_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "3013571",
+        "SEPT POLARX5",
+        "5.7.0"
+      ],
+      "marker_name": "MKEA",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 30509,
+        "usable_rows": 29340,
+        "blank_required_field_rows": 976,
+        "nonzero_phase_lli_rows": 193,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 32,
+        "maximum_contiguous_endpoints": 1042,
+        "satellites_with_at_least_11_contiguous_endpoints": 32,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    },
+    "PIE100USA": {
+      "station": "PIE100USA",
+      "role": "FIT",
+      "status": "STATION_STRUCTURE_SCANNED",
+      "receiver_identity": [
+        "4100427",
+        "SEPT POLARX5TR",
+        "5.7.0"
+      ],
+      "marker_name": "PIE1",
+      "rinex_version": "3.04",
+      "interval_s": 30.0,
+      "epoch_count": 2880,
+      "first_epoch_s": 0.0,
+      "last_epoch_s": 86370.0,
+      "non_nominal_gap_count": 0,
+      "maximum_gap_s": 30.0,
+      "structural_counts": {
+        "gps_rows": 30632,
+        "usable_rows": 29158,
+        "blank_required_field_rows": 1305,
+        "nonzero_phase_lli_rows": 169,
+        "event_epoch_count": 0
+      },
+      "segment_summary": {
+        "gps_satellites_with_any_usable_row": 32,
+        "maximum_contiguous_endpoints": 922,
+        "satellites_with_at_least_11_contiguous_endpoints": 32,
+        "per_satellite_identity_persisted": false
+      },
+      "transform_ledger": {
+        "stored_value_scale_divisor": {
+          "C1C": 1,
+          "C2W": 1,
+          "L1C": 1,
+          "L2W": 1
+        },
+        "phase_shift": {
+          "L1C": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          },
+          "L2W": {
+            "default_cycles": 0.0,
+            "satellite_overrides_cycles": {}
+          }
+        },
+        "legacy_wavelength_factor": {
+          "present": false,
+          "numeric_phase_unit": "carrier_cycles",
+          "default_ambiguity_wavelength_divisor": {
+            "L1": 1,
+            "L2": 1
+          },
+          "satellite_overrides": {},
+          "numeric_phase_rescaling_authorized": false,
+          "future_nonzero_lli_breaks_segment": true
+        },
+        "external_corrections": {
+          "SYS / DCBS APPLIED": [],
+          "SYS / PCVS APPLIED": []
+        },
+        "receiver_clock_offset_applied": false
+      },
+      "observation_numbers_converted": 0
+    }
+  },
+  "cross_root_capacity": null,
+  "failures": [
+    {
+      "station": "BOGT00COL",
+      "stage": "STRUCTURAL_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "PHASE_SHIFT_DIFFERS_FROM_PLAN:L1C"
+    },
+    {
+      "station": "GOLD00USA",
+      "stage": "STRUCTURAL_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "PHASE_SHIFT_DIFFERS_FROM_PLAN:L1C"
+    }
+  ],
+  "clauses": {
+    "COMPLETE_FIVE_ARTIFACT_SET": "SATISFIED",
+    "HEADER_AND_TRANSFORM_ADMISSION": "NOT_SATISFIED",
+    "STRUCTURAL_COMMON_WINDOW": "NOT_EVALUATED",
+    "OBSERVATION_NUMERIC_ADMISSION": "NOT_EVALUATED",
+    "TOTAL_PHYSICAL_ERROR_ENVELOPE": "NOT_EVALUATED"
+  },
+  "interpretation": {
+    "target_selected": false,
+    "target_identity_persisted": false,
+    "observation_numbers_converted": 0,
+    "s3_authorized": false,
+    "next_step_if_qualified": "Freeze a distinct target-free reference-only numerical qualification; do not reuse this artifact as a primary."
+  },
+  "persistence": {
+    "compressed_payload": false,
+    "decoded_payload": false,
+    "header_text": false,
+    "observation_rows": false,
+    "observation_values": false,
+    "satellite_candidate_identities": false,
+    "artifact_hashes_and_aggregate_structure_only": true,
+    "raw_payload_bytes": 0
+  },
+  "environment": {
+    "python": "3.13.5",
+    "hatanaka": "2.8.1"
+  }
+}

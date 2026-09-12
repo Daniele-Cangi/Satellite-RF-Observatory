@@ -295,6 +295,18 @@ Do not use a target orbit to select a favorable synthetic analogue. The smallest
 physical follow-up is a distinct target-free qualification of ALGO/BOGT/MKEA/PIE1
 as fit roots and GOLD as code-only heldout, including total physical envelopes.
 
+That DOY242 target-free structural qualification is closed
+`FIVE_ROOT_STRUCTURE_NOT_QUALIFIED`. All five artifacts were materialized and
+hash-bound; zero observation numbers were converted. ALGO, MKEA and PIE1 each
+passed a complete 2,880-epoch structural scan. BOGT and GOLD stopped before
+body scanning at the frozen composite `PHASE_SHIFT_DIFFERS_FROM_PLAN:L1C`
+clause. Do not infer that either lacks required measurements: a declared static
+phase offset is reversible and cancels from stable same-satellite increments,
+while phase is outside GOLD's code-only causal path entirely. Preserve the
+clause-level failure attribution, keep cross-root capacity and physical envelope
+`NOT_EVALUATED`, and never retry or rescore DOY242. A future distinct artifact
+requires role-specific transform semantics frozen offline first.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH
