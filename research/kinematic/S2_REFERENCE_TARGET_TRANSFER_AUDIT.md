@@ -51,12 +51,20 @@ total future-target physical envelope remain `UNRESOLVED`. No composition was
 performed and the total bound is represented as `null`, not as an arbitrary
 number.
 
-The result artifact is
-`results/s2_reference_target_transfer_audit_v1.json`, SHA-256
-`20113de41579269e10d0260abb97aa739499069afffc14adb4063ecaf7f1c99c`.
-It is bound to source commit
-`32955325987ca92dadf91d83b1a5185d8d5ca5e9` and audit implementation SHA-256
-`f18051a39a7ed3d1e21ce7beb0da0b4bfc8ee45fac91b7790309f1cf43faa0d5`.
+The first result artifact,
+`results/s2_reference_target_transfer_audit_v1.json`, is retained unchanged but
+its execution-integrity claim is superseded: post-merge review found incomplete
+whole-plan validation, an optional programmatic freeze path, insufficient
+object/byte coupling and incomplete finite-number parsing.
+
+The authoritative repaired artifact is
+`results/s2_reference_target_transfer_audit_v2.json`, SHA-256
+`9a4e2c859a9eb1e096f62f8cf09accc6743ab91a76428f6d684c85419673142b`.
+It reproduces the same causal outcome after binding the complete plan, requiring
+source commit `4993d37aaeb20a24390acc682f04730ebc1a865a`, loading the receipt only from
+its verified bytes and rejecting every non-finite JSON number. The frozen audit
+implementation SHA-256 is
+`83a0a9511afe6878c2ff9c244874517c4ee6d189f65fff2bf7c5daf59bfefeca`.
 
 ## Consequence
 

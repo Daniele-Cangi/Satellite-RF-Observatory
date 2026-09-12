@@ -133,7 +133,7 @@ def test_reference_bounds_are_preserved_in_their_original_coordinates(monkeypatc
     ]["population_coverage_claim"] is False
 
 
-def test_frozen_audit_result_is_hash_bound_and_authorizes_no_primary():
+def test_superseded_v1_result_retains_historical_bytes_and_commit_lookup():
     path = ROOT / "research/kinematic/results/s2_reference_target_transfer_audit_v1.json"
     result = load_strict_json(path)
     assert hashlib.sha256(path.read_bytes()).hexdigest() == (
@@ -171,3 +171,35 @@ def test_frozen_audit_result_is_hash_bound_and_authorizes_no_primary():
     assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
         implementation_at_freeze
     ).hexdigest()
+
+
+def test_hardened_v2_result_matches_current_frozen_inputs_and_code():
+    path = ROOT / "research/kinematic/results/s2_reference_target_transfer_audit_v2.json"
+    result = load_strict_json(path)
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "9a4e2c859a9eb1e096f62f8cf09accc6743ab91a76428f6d684c85419673142b"
+    )
+    assert result["schema"] == "s2-reference-to-target-transfer-audit-result-v2"
+    assert result["supersedes"]["sha256"] == (
+        "20113de41579269e10d0260abb97aa739499069afffc14adb4063ecaf7f1c99c"
+    )
+    assert result["inputs"]["source_commit"] == (
+        "4993d37aaeb20a24390acc682f04730ebc1a865a"
+    )
+    assert result["inputs"]["plan_sha256"] == hashlib.sha256(
+        PLAN_PATH.read_bytes()
+    ).hexdigest()
+    assert result["inputs"]["reference_receipt_sha256"] == hashlib.sha256(
+        RECEIPT_PATH.read_bytes()
+    ).hexdigest()
+    current_code = ROOT / "research/kinematic/reference_target_transfer_audit.py"
+    assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
+        current_code.read_bytes()
+    ).hexdigest()
+    assert result["status"] == (
+        "FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT"
+    )
+    assert result["inputs"]["source_or_network_access"] is False
+    assert result["inputs"]["target_state_or_orbit_accessed"] is False
+    assert result["composition"]["total_future_target_physical_envelope"] is None
+    assert result["claim_boundary"]["s3_authorized"] is False
