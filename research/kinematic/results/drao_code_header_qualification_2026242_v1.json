@@ -1,0 +1,57 @@
+{
+  "schema": "s2-drao-code-header-qualification-result-v1",
+  "qualification_id": "S2_DRAO_CODE_HEADERS_2026242",
+  "status": "DRAO_CODE_HEADERS_NOT_QUALIFIED",
+  "scope": "One bounded DRAO code-coordinate header qualification on an independently frozen complete day. No target identity, target values, observation records, navigation product, orbit, residual or orbital score is accessed.",
+  "freeze": {
+    "freeze_utc": "2026-09-12T10:56:18.962887+00:00",
+    "source_commit": "0bc2dfed888a165da3bcbe7745f6e639862828bb",
+    "plan_sha256": "7d0e2c0f9270142a960374d24466d4b3079fd9abf2a97f4c319c0fb947f77c8a",
+    "implementation_sha256": "4877e85def5a9c6612950b9bdef5558be8df13f61e90918ce6d8f7a2f4f0b5fa",
+    "observation_record_access": false,
+    "target_identity_or_value_access": false
+  },
+  "source_receipt": {
+    "station": "DRAO00CAN",
+    "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/242/DRAO00CAN_R_20262420000_01D_30S_MO.crx.gz",
+    "http_status": 200,
+    "bytes": 2891896,
+    "sha256": "5064142f469f2adba4d5b2e561007794fa59f4a50f1b12549830ebb0bb321de1",
+    "access_utc": "2026-09-12T10:56:24.084060+00:00",
+    "crinex_preamble": [
+      "CRINEX VERS   / TYPE",
+      "CRINEX PROG / DATE"
+    ],
+    "header_line_count": 276,
+    "decompressed_header_bytes": 20981,
+    "decompressed_header_sha256": "cb9bf361193c4d1c5e763c8056201bfea7d34f2e2adb4dd733976e262c94be09",
+    "observation_body_lines_exposed": 0
+  },
+  "header_result": null,
+  "failures": [
+    {
+      "stage": "HEADER_ADMISSION",
+      "classification": "CAPABILITY_REJECTED",
+      "reason": "UNSUPPORTED_NAMED_CODE_FORMAT"
+    }
+  ],
+  "physical_interpretation": {
+    "code_header_coordinate_qualified": false,
+    "observation_structure_qualified": false,
+    "observation_measurements_qualified": false,
+    "physical_error_envelope_qualified": false,
+    "s3_authorized": false
+  },
+  "persistence": {
+    "compressed_payload": false,
+    "decompressed_payload": false,
+    "header_text": false,
+    "observation_records": false,
+    "observation_values": false,
+    "header_receipt_and_code_transform_ledger_only": true,
+    "raw_payload_bytes": 0
+  },
+  "environment": {
+    "python": "3.13.5"
+  }
+}

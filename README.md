@@ -46,7 +46,14 @@ finds DRAO to be the strongest sixth-root geometry without using a target orbit:
 it is visible in all 181 predecessor cases and retains positive conditional
 slack in 180. The median residual physical budget is nevertheless only 12.530 m,
 and one case already exceeds the 100 m held-out envelope before unresolved
-physics. DRAO was not accessed or admitted; S3 remains blocked.
+physics. DRAO was not accessed or admitted by that topology audit.
+
+The subsequent bounded [DRAO code-header qualification](research/kinematic/S2_DRAO_CODE_HEADER_QUALIFICATION.md)
+materialized and hash-bound one independent full-day product without opening
+any observation record. It stopped `DRAO_CODE_HEADERS_NOT_QUALIFIED` because
+the header did not expose the frozen named C1C/C2W format. No legacy label was
+reinterpreted post-access. The promising geometry therefore remains unavailable
+as a measurement root, and S3 is still blocked.
 
 ## Current evidence
 

@@ -2,6 +2,7 @@
 from copy import deepcopy
 from datetime import datetime, timezone
 import gzip
+import hashlib
 import json
 from pathlib import Path
 
@@ -128,3 +129,25 @@ def test_header_coverage_cannot_be_substituted():
     shifted["date_gpst"] = "2026-08-31"
     with pytest.raises(ValueError, match="date/day-of-year"):
         validate_plan(shifted)
+
+
+def test_frozen_outcome_is_hash_bound_value_blind_rejection():
+    path = ROOT / "research/kinematic/results/drao_code_header_qualification_2026242_v1.json"
+    result = json.loads(path.read_text())
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == (
+        "214cbc3c19f059d933b381a33aa003dcda3952ad32f8b8e8e955ec94c371c242"
+    )
+    assert result["status"] == "DRAO_CODE_HEADERS_NOT_QUALIFIED"
+    assert result["failures"] == [{
+        "stage": "HEADER_ADMISSION",
+        "classification": "CAPABILITY_REJECTED",
+        "reason": "UNSUPPORTED_NAMED_CODE_FORMAT",
+    }]
+    assert result["source_receipt"]["bytes"] == 2_891_896
+    assert result["source_receipt"]["sha256"] == (
+        "5064142f469f2adba4d5b2e561007794fa59f4a50f1b12549830ebb0bb321de1"
+    )
+    assert result["source_receipt"]["observation_body_lines_exposed"] == 0
+    assert result["freeze"]["observation_record_access"] is False
+    assert result["freeze"]["target_identity_or_value_access"] is False
+    assert result["persistence"]["raw_payload_bytes"] == 0
