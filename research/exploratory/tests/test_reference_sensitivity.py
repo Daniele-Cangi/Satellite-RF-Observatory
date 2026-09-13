@@ -70,12 +70,16 @@ def test_failed_variants_are_kept_and_inputs_unchanged(monkeypatch):
     assert admitted == original
 
 
-def test_saved_real_development_result_preserves_sources_and_denominator():
-    result = json.loads((ROOT/'research/exploratory/results/g14_reference_sensitivity_v1.json').read_bytes())
+@pytest.mark.parametrize('target,inputs', [
+    ('g14', 'experiments/positioning_g14_doy246_network'),
+    ('g12', 'research/exploratory/inputs/g12_doy248'),
+])
+def test_saved_real_development_result_preserves_sources_and_denominator(target, inputs):
+    result = json.loads((ROOT/f'research/exploratory/results/{target}_reference_sensitivity_v1.json').read_bytes())
     for name, expected in result['sources_sha256'].items():
         assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest() == expected
     for name, expected in result['input_sha256'].items():
-        assert hashlib.sha256((ARCHIVE/'estimation'/name).read_bytes()).hexdigest() == expected
+        assert hashlib.sha256((ROOT/inputs/'estimation'/name).read_bytes()).hexdigest() == expected
     assert result['case_count'] == len(result['cases']) == sum(result['status_counts'].values())
     assert result['cases'][0]['excluded_reference'] is None
     assert len({row['excluded_reference'] for row in result['cases']}) == result['case_count']
@@ -83,3 +87,12 @@ def test_saved_real_development_result_preserves_sources_and_denominator():
                   for epoch in cal['epochs'] for sv in epoch['references']}
     assert {row['excluded_reference'] for row in result['cases'][1:]} == references
     assert not result['target_orbit_accessed'] and not result['new_confirmation']
+
+
+def test_restored_g12_inputs_match_historical_admission_and_exclude_target():
+    root = ROOT/'research/exploratory/inputs/g12_doy248'
+    original = (ROOT/'experiments/positioning_g12_doy248/admission_receipt.json').read_bytes()
+    assert (root/'admission_receipt.json').read_bytes() == original
+    admitted, context, navigation, _ = study.load_inputs(root)
+    assert context.target == 'G12' and 'G12' not in navigation
+    assert admitted['stations'][admitted['withheld_station']]['target_if_codes_m'] is None

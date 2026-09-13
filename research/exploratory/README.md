@@ -60,8 +60,55 @@ Per riprodurre in un nuovo file di sviluppo, senza modificare l'archivio:
 python -m research.exploratory.reference_sensitivity experiments/positioning_g14_doy246_network NUOVO_OUTPUT.json
 ```
 
-Il prossimo confronto utile è la stessa prova su un altro evento già esposto,
-per vedere se la sensibilità cambia con geometria e calibrazione. Non occorre
-una nuova campagna di conferma per fare questo sviluppo; servirà invece un
-campione nuovo quando il metodo sarà abbastanza stabile da valutarne le
-prestazioni fuori dai dati usati per migliorarlo.
+Il confronto è stato esteso a G12, come descritto sotto. Non occorre una nuova
+campagna di conferma per fare questo sviluppo; servirà invece un campione nuovo
+quando il metodo sarà abbastanza stabile da valutarne le prestazioni fuori
+dai dati usati per migliorarlo.
+
+## Secondo evento reale: G12, 5 settembre 2026
+
+Eseguito lo stesso runner, senza modifiche, sui dati originali dell'evento
+G12 DOY248. Gli input sono stati recuperati dal runtime locale e confrontati
+con gli hash della ricevuta già pubblicata in
+`experiments/positioning_g12_doy248/admission_receipt.json`: entrambi coincidono.
+La copia in [inputs/g12_doy248](inputs/g12_doy248) rende il confronto riproducibile
+anche senza quel runtime. L'archivio storico non è stato modificato.
+
+Sette ricevitori (ALGO, DRAO, STJO, YELL, BOGT, BRAZ, AREQ), undici endpoint
+10:30–10:35 GPST, stessi pesi e controlli del primo confronto. Esclusi a turno
+tutti i 22 riferimenti effettivamente usati: **23 stime su 23 casi**, baseline
+inclusa, nessuna variante respinta, circa **79,5 secondi**. Nessun nuovo download,
+accesso all'orbita o lettura della soluzione storica. L'esito storico di G12
+resta `UNCERTAINTY_TOO_LARGE`: qui non abbiamo ricalcolato quel criterio.
+
+| Evento già esposto | Esclusioni con stima / provate | Minimo | Mediana | Massimo | Esclusione con maggior effetto |
+| --- | ---: | ---: | ---: | ---: | --- |
+| G14, 3 settembre | 21 / 21 | 0,340 m | 2,762 m | 11,057 m | G15 |
+| G12, 5 settembre | 22 / 22 | 0,312 m | 3,915 m | 26,505 m | G11 |
+
+Le statistiche escludono le baseline, che per costruzione hanno spostamento
+zero. Il massimo G12 è circa 2,4 volte quello G14. Senza G11 le correzioni
+di calibrazione cambiano al massimo di **0,338 m**, ma la stima xyz cambia di
+**26,505 m**, insieme a una variazione di B di **26,040 m**. Le successive
+esclusioni per effetto sono G18 (12,460 m), G15 (11,830 m), G19 (8,649 m) e
+G04 (5,535 m). Nessuna di queste classifiche dimostra che un riferimento sia
+errato o che eliminarlo migliori l'accuratezza.
+
+Il risultato di sviluppo è che la sensibilità non è una costante del servizio:
+questi due eventi hanno reti, riferimenti, orari e geometrie differenti.
+Il confronto non isola causalmente uno di questi fattori, non misura errori
+comuni a tutti i riferimenti e non produce una distribuzione di accuratezza
+GPS. Restano due eventi scelti perché i dati erano già disponibili.
+
+La [registrazione G12 completa](results/g12_reference_sensitivity_v1.json)
+conserva tutte le varianti e le diagnostiche per stazione/epoca. Riproduzione:
+
+```text
+python -m research.exploratory.reference_sensitivity research/exploratory/inputs/g12_doy248 NUOVO_OUTPUT.json
+```
+
+Il prossimo passo utile è rendere questa sensibilità una diagnostica per
+richiesta, separata dall'esito di conferma: mostrare quali esclusioni cambiano
+di più la stima e quante fanno fallire la calibrazione. Per attribuire la
+variazione alla geometria occorre invece un confronto che tenga fisse le
+perturbazioni di calibrazione, evitando di dedurlo dal solo massimo osservato.
