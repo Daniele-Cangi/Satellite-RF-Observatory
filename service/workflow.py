@@ -60,6 +60,8 @@ def capabilities():
         'automatic_execution_available': True,
         'execution_mode': 'OPERATOR_STARTED_SINGLE_HOST_QUEUE_WORKER',
         'http_submission_available': False,
+        'reference_sensitivity_diagnostic_available': True,
+        'reference_sensitivity_automatic': False,
     }
 
 
