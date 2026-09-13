@@ -23,6 +23,18 @@ This replaces the old forward-orbit-first roadmap. A target orbit is an
 evaluation reference after the freeze, not an input to inverse reconstruction.
 User instructions continue to take precedence over this file.
 
+## Exploratory development authorized on 2026-09-13
+
+The user approved rapid exploratory tests on public/previously exposed data,
+with changeable development hypotheses and clearly labelled results. Reusing
+archived admitted measurements in a separate development directory is allowed
+for reference-calibration sensitivity, without rewriting or relabelling the
+closed event. This supersedes blanket no-rerun/no-acquisition development pauses
+below, not the independence requirements for a new confirmation. Keep target
+orbits out of calibration and fitting; record all tested variants and failures.
+Reserve preregistration/new unexposed data for confirmatory performance claims.
+Do not make every exploratory iteration another numbered admission gate.
+
 ## Acquired results: preserve scope and evidence
 
 - DRAO labelled-forward DOY234 reached
