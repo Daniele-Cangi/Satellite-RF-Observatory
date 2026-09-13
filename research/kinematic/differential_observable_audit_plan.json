@@ -1,0 +1,149 @@
+{
+  "schema": "s2-differential-observable-audit-plan-v1",
+  "audit_id": "S2_TARGET_REFERENCE_DIFFERENTIAL_OBSERVABLE_AUDIT",
+  "scope": "Offline causal audit of a prospective same-station target-minus-reference observable. It uses only frozen aggregate receipts and normalized algebra. It does not select or access a target, observation, orbit, navigation product or source.",
+  "frozen_inputs": [
+    {
+      "role": "authoritative reference-to-target insufficiency receipt",
+      "path": "research/kinematic/results/s2_reference_target_transfer_audit_v3.json",
+      "sha256": "e209a9d00b70e360be6ba1330574a830ca331a5e2b3690c33d8b53c96f04170b"
+    },
+    {
+      "role": "normalized calibration-transfer algebra witness",
+      "path": "research/kinematic/results/calibration_transfer_study_v1.json",
+      "sha256": "526db8c0d03861879753769037491e2573e0fe84e3082980ee8d280e2f44935b"
+    }
+  ],
+  "declared_topology": {
+    "fit_roots": [
+      "ALGO",
+      "BOGT",
+      "MKEA",
+      "PIE1"
+    ],
+    "code_only_heldout_root": "GOLD",
+    "reference_coordinate": "same-station non-target GPS C1C/C2W code and L1C/L2W interval phase",
+    "prospective_target_coordinate": "same-station target C1C/C2W code and L1C/L2W interval phase",
+    "calibration_map": "e_target - B K e_reference",
+    "target_measurements_available": false,
+    "target_identity_selected": false,
+    "target_orbit_available": false
+  },
+  "epistemic_states": {
+    "OBSERVABLE": "A same-path witness can measure the component in the future primary, but it closes the present audit only if current evidence and a frozen detectability rule are both available.",
+    "MODELED": "An outcome-independent model with an explicit uncertainty family bounds the component. Exact zero is allowed only for a proved transform invariant within its declared subspace.",
+    "UNRESOLVED": "A required physical component has neither a current same-path measurement nor an outcome-independent finite uncertainty bound. It is never assigned zero."
+  },
+  "terms": [
+    {
+      "term": "future target-direction antenna phase-center variation",
+      "components": [
+        {
+          "component": "direction-dependent target/reference PCO-PCV response",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL",
+          "missing_quantity": "direction-resolved antenna response and uncertainty in the prospective target coordinate",
+          "can_absorb_any_finite_margin": true
+        }
+      ]
+    },
+    {
+      "term": "future target-direction multipath",
+      "components": [
+        {
+          "component": "target-direction site multipath relative to the selected reference rays",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL",
+          "missing_quantity": "outcome-independent target-direction site response or conservative directional envelope",
+          "can_absorb_any_finite_margin": true
+        }
+      ]
+    },
+    {
+      "term": "unflagged sub-threshold cycle slips",
+      "components": [
+        {
+          "component": "declared LLI plus geometry-free phase continuity",
+          "classification": "OBSERVABLE",
+          "availability": "FUTURE_PRIMARY_ONLY",
+          "transform_response": "SAME_PATH_WITNESS",
+          "required_witness": "LLI on L1C/L2W and geometry-free phase continuity on the exact target samples"
+        },
+        {
+          "component": "slip below the witness detection boundary",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL_DISCONTINUITY",
+          "missing_quantity": "predeclared missed-slip magnitude bound mapped through the inverse observable",
+          "can_absorb_any_finite_margin": true
+        }
+      ]
+    },
+    {
+      "term": "future atmosphere outside the selected reference rays",
+      "components": [
+        {
+          "component": "first-order dispersive ionosphere in the same-satellite L1C/L2W combination",
+          "classification": "MODELED",
+          "transform_response": "EXACTLY_CANCELLED_IN_DECLARED_IDEAL_DUAL_FREQUENCY_SUBSPACE",
+          "finite_bound": 0.0,
+          "bound_coordinate": "normalized first-order ionosphere-free observable",
+          "assumptions": "both frequencies are present on the same ray and the frozen frequency coefficients and transforms are exact"
+        },
+        {
+          "component": "neutral atmosphere, higher-order ionosphere and mapping mismatch between target and references",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL",
+          "missing_quantity": "future-ray media uncertainty family in the target coordinate",
+          "can_absorb_any_finite_margin": true
+        }
+      ]
+    },
+    {
+      "term": "broadcast-reference orbit and clock error transfer",
+      "components": [
+        {
+          "component": "non-target reference product errors transported through -B K",
+          "classification": "UNRESOLVED",
+          "transform_response": "REFERENCE_TO_TARGET_TRANSFER",
+          "missing_quantity": "reference orbit/clock covariance or conservative product-disagreement family projected through calibration and the inverse fit",
+          "can_absorb_any_finite_margin": true
+        }
+      ]
+    },
+    {
+      "term": "reference-to-target receiver correlation",
+      "components": [
+        {
+          "component": "same-station affine receiver clock mode represented by A and B",
+          "classification": "MODELED",
+          "transform_response": "EXACTLY_CANCELLED_BY_CALIBRATION_INVARIANT",
+          "finite_bound": 0.0,
+          "bound_coordinate": "normalized common affine nuisance subspace",
+          "assumptions": "the identical affine mode enters reference and target rows through the declared A and B designs"
+        },
+        {
+          "component": "satellite-, frequency-, channel- or direction-dependent receiver hardware error and residual cross-covariance",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL_OR_CORRELATED",
+          "missing_quantity": "predeclared shared/differential hardware uncertainty and reference-target cross covariance",
+          "can_absorb_any_finite_margin": true
+        }
+      ]
+    }
+  ],
+  "closure_rule": "A term is closed only when every component is either MODELED with a finite outcome-independent bound or OBSERVABLE with current evidence and a frozen detectability rule. A prospective-only witness does not close the present audit. Any UNRESOLVED component capable of absorbing a finite margin blocks composition.",
+  "forbidden_actions": [
+    "network or source access",
+    "new observation or navigation decoding",
+    "target identity, target state or target orbit access",
+    "using a normalized algebraic response as a physical amplitude",
+    "assigning zero to an unresolved contribution",
+    "authorizing S3 from a partial cancellation"
+  ],
+  "outcomes": [
+    "DIFFERENTIAL_OBSERVABLE_ENVELOPE_CLOSED",
+    "DIFFERENTIAL_OBSERVABLE_HAS_ABSORBING_UNRESOLVED_TERM",
+    "DIFFERENTIAL_OBSERVABLE_AUDIT_EXECUTION_INVALID"
+  ],
+  "stop_rule": "Stop after one offline causal outcome. If any absorbing unresolved component remains, retain a null total envelope and do not select a target or authorize S3."
+}
