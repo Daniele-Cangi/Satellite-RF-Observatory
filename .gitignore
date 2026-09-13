@@ -213,3 +213,8 @@ transfer/
 !research/kinematic/results/
 !research/kinematic/results/*.json
 !research/kinematic/results/*.md
+
+# Bounded exploratory reuse of already public archived measurements.
+!research/exploratory/results/
+research/exploratory/results/*
+!research/exploratory/results/g14_reference_sensitivity_v1.json
