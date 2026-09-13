@@ -1,0 +1,5 @@
+# Narrow CodeQL coverage away from vendored/generated frontend assets that
+# materially increase JavaScript analysis footprint on hosted runners.
+paths-ignore:
+  - web/components/ui/**
+  - web/public/evidence/**
