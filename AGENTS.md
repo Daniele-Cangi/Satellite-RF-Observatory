@@ -421,6 +421,20 @@ unchanged as superseded evidence. V3, frozen at `fc20392`, uses single-read
 buffers and commit-resolved provenance under full-history CI, and reproduces
 the same causal outcome; use v3 as the authoritative receipt.
 
+The bounded, target-free differential-observable audit then tested whether a
+same-station target-minus-reference construction could close those six terms.
+It proved exact cancellation only for an identical affine receiver-clock mode
+and for the ideal first-order same-ray L1C/L2W ionosphere subspace. Those are
+transform invariants, not measured physical amplitudes. Directional antenna
+response, directional multipath, missed-slip sensitivity, residual media,
+reference orbit/clock transfer, and differential receiver/covariance terms all
+remain `UNRESOLVED`. The frozen terminal is
+`DIFFERENTIAL_OBSERVABLE_HAS_ABSORBING_UNRESOLVED_TERM`; the total envelope is
+null and S3 remains unauthorized. No source, target, orbit, observation or
+navigation data was accessed. Do not repeat aggregate residual measurements to
+address this boundary: further work must measure or independently bound a named
+differential component.
+
 ## Scientific objective and information value
 
 The first one-event milestone was reached by preregistered G14 DOY246: BOTH

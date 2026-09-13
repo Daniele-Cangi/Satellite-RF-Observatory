@@ -213,3 +213,14 @@ endpoints in 180, but its median slack under the 100 m criterion is only 12.530
 m. DRAO remains unaccessed and unqualified; YELL and STJO are weaker. The result
 `HELDOUT_CODE_TOPOLOGY_CONDITIONALLY_AVAILABLE` identifies a possible topology,
 not a capability or S3 authorization.
+
+Later DOY241 structural qualification and the DOY240 reference-only residual
+run established that the five-root measurement path can operate in its frozen
+reference coordinates. The authoritative v3 transfer audit nevertheless showed
+that its aggregate receipt cannot identify six future-target terms. The
+follow-up [differential-observable audit](S2_DIFFERENTIAL_OBSERVABLE_AUDIT.md)
+then evaluated the narrower same-station target-minus-reference mechanism. It
+proves exact cancellation only for common affine receiver clock and ideal
+first-order same-ray ionosphere. Each of the six parent terms still contains an
+`UNRESOLVED` differential component, so the total envelope remains null and S3
+is not authorized. No new measurement, target, orbit or source was accessed.

@@ -1,0 +1,216 @@
+{
+  "schema": "s2-differential-observable-audit-result-v1",
+  "audit_id": "S2_TARGET_REFERENCE_DIFFERENTIAL_OBSERVABLE_AUDIT",
+  "status": "DIFFERENTIAL_OBSERVABLE_HAS_ABSORBING_UNRESOLVED_TERM",
+  "scope": "Offline causal audit of a prospective same-station target-minus-reference observable. It uses only frozen aggregate receipts and normalized algebra. It does not select or access a target, observation, orbit, navigation product or source.",
+  "inputs": {
+    "source_commit": "1b7baa3ffae99f6167b2814cecc9b244e4acfdee",
+    "plan_sha256": "c9049569df361b3cdc9ae4d868c44d3147de7281df997db95048f40d455ba261",
+    "implementation_sha256": "443280301efa3628550afefb89603695e9d40e869dbc426411f792eaee2edde0",
+    "calibration_transfer_sha256": "11d868b5e1aec2b1aa1098fd581cdb177678daa19caeee5f727ff26cf131b519",
+    "receipts_sha256": {
+      "research/kinematic/results/s2_reference_target_transfer_audit_v3.json": "e209a9d00b70e360be6ba1330574a830ca331a5e2b3690c33d8b53c96f04170b",
+      "research/kinematic/results/calibration_transfer_study_v1.json": "526db8c0d03861879753769037491e2573e0fe84e3082980ee8d280e2f44935b"
+    },
+    "source_or_network_access": false,
+    "new_observation_or_navigation_decoding": false,
+    "target_selected": false,
+    "target_state_or_orbit_accessed": false
+  },
+  "declared_topology": {
+    "fit_roots": [
+      "ALGO",
+      "BOGT",
+      "MKEA",
+      "PIE1"
+    ],
+    "code_only_heldout_root": "GOLD",
+    "reference_coordinate": "same-station non-target GPS C1C/C2W code and L1C/L2W interval phase",
+    "prospective_target_coordinate": "same-station target C1C/C2W code and L1C/L2W interval phase",
+    "calibration_map": "e_target - B K e_reference",
+    "target_measurements_available": false,
+    "target_identity_selected": false,
+    "target_orbit_available": false
+  },
+  "normalized_algebra_witness": {
+    "coordinate": "normalized algebraic basis; no physical amplitude or unit",
+    "common_affine_response": [
+      [
+        5.551115123125783e-16,
+        2.6506574712925612e-15
+      ],
+      [
+        3.2526065174565133e-19,
+        1.1102230246251565e-16
+      ]
+    ],
+    "common_affine_max_abs": 2.6506574712925612e-15,
+    "reference_only_response": [
+      [
+        -0.9999999999999994,
+        2.6506574712925612e-15
+      ],
+      [
+        3.2526065174565133e-19,
+        -0.9999999999999999
+      ]
+    ],
+    "target_only_response": [
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    "interpretation": "Only the identical A/B affine receiver mode cancels. Reference-only and target-only modes remain fully visible and require physical bounds."
+  },
+  "term_assessments": [
+    {
+      "term": "future target-direction antenna phase-center variation",
+      "state": "UNRESOLVED",
+      "components": [
+        {
+          "component": "direction-dependent target/reference PCO-PCV response",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL",
+          "missing_quantity": "direction-resolved antenna response and uncertainty in the prospective target coordinate",
+          "can_absorb_any_finite_margin": true,
+          "currently_closes_component": false
+        }
+      ]
+    },
+    {
+      "term": "future target-direction multipath",
+      "state": "UNRESOLVED",
+      "components": [
+        {
+          "component": "target-direction site multipath relative to the selected reference rays",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL",
+          "missing_quantity": "outcome-independent target-direction site response or conservative directional envelope",
+          "can_absorb_any_finite_margin": true,
+          "currently_closes_component": false
+        }
+      ]
+    },
+    {
+      "term": "unflagged sub-threshold cycle slips",
+      "state": "UNRESOLVED",
+      "components": [
+        {
+          "component": "declared LLI plus geometry-free phase continuity",
+          "classification": "OBSERVABLE",
+          "availability": "FUTURE_PRIMARY_ONLY",
+          "transform_response": "SAME_PATH_WITNESS",
+          "required_witness": "LLI on L1C/L2W and geometry-free phase continuity on the exact target samples",
+          "currently_closes_component": false
+        },
+        {
+          "component": "slip below the witness detection boundary",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL_DISCONTINUITY",
+          "missing_quantity": "predeclared missed-slip magnitude bound mapped through the inverse observable",
+          "can_absorb_any_finite_margin": true,
+          "currently_closes_component": false
+        }
+      ]
+    },
+    {
+      "term": "future atmosphere outside the selected reference rays",
+      "state": "UNRESOLVED",
+      "components": [
+        {
+          "component": "first-order dispersive ionosphere in the same-satellite L1C/L2W combination",
+          "classification": "MODELED",
+          "transform_response": "EXACTLY_CANCELLED_IN_DECLARED_IDEAL_DUAL_FREQUENCY_SUBSPACE",
+          "finite_bound": 0.0,
+          "bound_coordinate": "normalized first-order ionosphere-free observable",
+          "assumptions": "both frequencies are present on the same ray and the frozen frequency coefficients and transforms are exact",
+          "currently_closes_component": true
+        },
+        {
+          "component": "neutral atmosphere, higher-order ionosphere and mapping mismatch between target and references",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL",
+          "missing_quantity": "future-ray media uncertainty family in the target coordinate",
+          "can_absorb_any_finite_margin": true,
+          "currently_closes_component": false
+        }
+      ]
+    },
+    {
+      "term": "broadcast-reference orbit and clock error transfer",
+      "state": "UNRESOLVED",
+      "components": [
+        {
+          "component": "non-target reference product errors transported through -B K",
+          "classification": "UNRESOLVED",
+          "transform_response": "REFERENCE_TO_TARGET_TRANSFER",
+          "missing_quantity": "reference orbit/clock covariance or conservative product-disagreement family projected through calibration and the inverse fit",
+          "can_absorb_any_finite_margin": true,
+          "currently_closes_component": false
+        }
+      ]
+    },
+    {
+      "term": "reference-to-target receiver correlation",
+      "state": "UNRESOLVED",
+      "components": [
+        {
+          "component": "same-station affine receiver clock mode represented by A and B",
+          "classification": "MODELED",
+          "transform_response": "EXACTLY_CANCELLED_BY_CALIBRATION_INVARIANT",
+          "finite_bound": 0.0,
+          "bound_coordinate": "normalized common affine nuisance subspace",
+          "assumptions": "the identical affine mode enters reference and target rows through the declared A and B designs",
+          "currently_closes_component": true
+        },
+        {
+          "component": "satellite-, frequency-, channel- or direction-dependent receiver hardware error and residual cross-covariance",
+          "classification": "UNRESOLVED",
+          "transform_response": "DIFFERENTIAL_OR_CORRELATED",
+          "missing_quantity": "predeclared shared/differential hardware uncertainty and reference-target cross covariance",
+          "can_absorb_any_finite_margin": true,
+          "currently_closes_component": false
+        }
+      ]
+    }
+  ],
+  "absorbing_unresolved_components": [
+    "future target-direction antenna phase-center variation :: direction-dependent target/reference PCO-PCV response",
+    "future target-direction multipath :: target-direction site multipath relative to the selected reference rays",
+    "unflagged sub-threshold cycle slips :: slip below the witness detection boundary",
+    "future atmosphere outside the selected reference rays :: neutral atmosphere, higher-order ionosphere and mapping mismatch between target and references",
+    "broadcast-reference orbit and clock error transfer :: non-target reference product errors transported through -B K",
+    "reference-to-target receiver correlation :: satellite-, frequency-, channel- or direction-dependent receiver hardware error and residual cross-covariance"
+  ],
+  "composition": {
+    "performed": false,
+    "total_future_target_physical_envelope": null,
+    "reason": "At least one unbounded differential component can absorb every finite prospective margin. Exact common-mode cancellations do not bound the remaining components."
+  },
+  "claim_boundary": {
+    "authorized": [
+      "the identical same-station affine receiver clock mode cancels in the declared linear calibration subspace",
+      "the ideal first-order same-ray dual-frequency ionosphere term cancels under its explicit assumptions",
+      "the prospective differential topology exposes same-path continuity witnesses but has not observed them"
+    ],
+    "not_authorized": [
+      "a physical amplitude for any normalized algebraic response",
+      "zero antenna, multipath, missed-slip, media, reference-product or differential receiver error",
+      "a finite total future-target envelope",
+      "target selection, a primary or S3 acquisition"
+    ],
+    "s3_authorized": false
+  },
+  "minimum_next_evidence": [
+    "direction-resolved antenna/site response or a conservative directional bound",
+    "target-side continuity witness with a frozen missed-slip sensitivity",
+    "neutral and higher-order media uncertainty in the target coordinate",
+    "non-target reference-product covariance projected through calibration and the inverse fit",
+    "differential receiver hardware uncertainty and reference-target cross covariance"
+  ]
+}

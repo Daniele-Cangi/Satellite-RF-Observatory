@@ -3,6 +3,7 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 import numpy as np
 import pytest
@@ -145,3 +146,46 @@ def test_git_freeze_rejects_each_changed_buffer(monkeypatch, changed_index: int)
     changed[changed_index] = (changed[changed_index][0], changed[changed_index][1] + b"\n")
     with pytest.raises(ValueError, match="frozen file differs from committed bytes"):
         audit.admit_git_freeze(source_commit, changed)
+
+
+def test_saved_result_is_source_bound_and_preserves_the_stop():
+    path = (
+        ROOT
+        / "research/kinematic/results/s2_differential_observable_audit_v1.json"
+    )
+    content = path.read_bytes()
+    result = load_strict_json_bytes(content)
+    assert hashlib.sha256(content).hexdigest() == (
+        "47d74243631357d61cfb6a63be67e7635152d67d70242ccf442b64e929c1ceb0"
+    )
+    assert result["status"] == (
+        "DIFFERENTIAL_OBSERVABLE_HAS_ABSORBING_UNRESOLVED_TERM"
+    )
+    source_commit = result["inputs"]["source_commit"]
+    implementation_at_freeze = subprocess.check_output(
+        [
+            "git",
+            "show",
+            f"{source_commit}:research/kinematic/differential_observable_audit.py",
+        ],
+        cwd=ROOT,
+    )
+    assert result["inputs"]["implementation_sha256"] == hashlib.sha256(
+        implementation_at_freeze
+    ).hexdigest()
+    assert result["inputs"]["plan_sha256"] == hashlib.sha256(
+        PLAN_PATH.read_bytes()
+    ).hexdigest()
+    for key in (
+        "source_or_network_access",
+        "new_observation_or_navigation_decoding",
+        "target_selected",
+        "target_state_or_orbit_accessed",
+    ):
+        assert result["inputs"][key] is False
+    assert len(result["term_assessments"]) == 6
+    assert all(row["state"] == "UNRESOLVED" for row in result["term_assessments"])
+    assert len(result["absorbing_unresolved_components"]) == 6
+    assert result["composition"]["performed"] is False
+    assert result["composition"]["total_future_target_physical_envelope"] is None
+    assert result["claim_boundary"]["s3_authorized"] is False
