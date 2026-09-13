@@ -1,5 +1,10 @@
 # Flusso generale di verifica satellitare
 
+La [diagnostica di sensibilità ai riferimenti](REFERENCE_SENSITIVITY_DIAGNOSTIC.md)
+è integrata nella lettura locale dei risultati e dello stato delle richieste.
+È opzionale, collegata agli input esatti e distinta dal verdetto scientifico.
+Il calcolo post-terminale è esplicito (`service diagnose`); non completa G3.
+
 Il [protocollo candidato G3](VALIDATION_COHORT_PROTOCOL.md) dichiara 24 casi
 futuri su giorni distinti e il comando locale `validation-report`, che mantiene
 tutti i casi nel denominatore e verifica i risultati sigillati della coda.

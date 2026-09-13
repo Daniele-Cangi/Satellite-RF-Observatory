@@ -19,6 +19,13 @@ def main(argv=None):
     prepare.add_argument('--plan-output', type=Path)
     result = commands.add_parser('result')
     result.add_argument('run_path', type=Path)
+    result.add_argument('--diagnostic', type=Path)
+    diag = commands.add_parser('diagnostic')
+    diag.add_argument('report', type=Path)
+    diag.add_argument('--inputs', type=Path, required=True)
+    compute = commands.add_parser('diagnose')
+    compute.add_argument('run_path', type=Path)
+    compute.add_argument('output', type=Path)
     cohort = commands.add_parser('validation-report')
     cohort.add_argument('manifest', type=Path)
     cohort.add_argument('--bindings', type=Path, required=True)
@@ -39,6 +46,8 @@ def main(argv=None):
         if name != 'work-once':
             command.add_argument('request_id')
             command.add_argument('--owner', required=True)
+        if name == 'request-status':
+            command.add_argument('--diagnostic', type=Path)
     submit.add_argument('--queue', type=Path, required=True)
     submit.add_argument('--owner', required=True)
     args = parser.parse_args(argv)
@@ -53,7 +62,14 @@ def main(argv=None):
                 json.dump(response['plan'], handle, indent=2, ensure_ascii=False, allow_nan=False)
                 handle.write('\n')
     elif args.command == 'result':
-        response = read_result(args.run_path)
+        from .diagnostics import attach
+        response = attach(read_result(args.run_path), args.run_path, args.diagnostic)
+    elif args.command == 'diagnostic':
+        from .diagnostics import diagnostic
+        response = diagnostic(args.report, args.inputs)
+    elif args.command == 'diagnose':
+        from .diagnostics import compute
+        response = compute(args.run_path, args.output)
     elif args.command == 'validation-report':
         from .requests import RequestStore
         from .validation import report
@@ -73,6 +89,12 @@ def main(argv=None):
             response = run_once(store, args.runs)
         elif args.command == 'request-status':
             response = request_status(store, args.owner, args.request_id, args.runs)
+            if 'result' in response:
+                from .diagnostics import attach
+                response['result'] = attach(response['result'], args.runs/args.request_id/'run', args.diagnostic)
+            elif args.diagnostic is not None:
+                response['diagnostics'] = {'reference_sensitivity': {'status': 'NOT_READY',
+                    'message': 'La richiesta non dispone ancora di un risultato terminale.'}}
         elif args.command == 'reconcile':
             response = reconcile(store, args.owner, args.request_id, args.runs)
         else:
@@ -80,6 +102,8 @@ def main(argv=None):
             response = store.get(args.owner, args.request_id)
     print(json.dumps(response, indent=2, ensure_ascii=False, allow_nan=False))
     if response.get('state') in ('FAILED', 'NEEDS_REVIEW'):
+        return 1
+    if args.command in ('diagnostic', 'diagnose') and response.get('status') in ('INVALID', 'UNAVAILABLE'):
         return 1
     return 2 if response.get('status') in ('INVALID_REQUEST', 'UNSUPPORTED_REQUEST', 'DAY_NOT_COMPLETE',
                                          'PREVIOUSLY_ACCESSED_EVENT') else 0

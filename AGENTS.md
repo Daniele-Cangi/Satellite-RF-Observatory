@@ -70,6 +70,13 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+Optional reference-sensitivity diagnostics now accompany local CLI result/status
+reads via `service/diagnostics.py`; see `docs/REFERENCE_SENSITIVITY_DIAGNOSTIC.md`.
+They are input-bound presentation additions, never persisted into the sealed
+queue result. `service diagnose` explicitly runs post-terminal development in a
+separate process; reads do not recalculate. Missing/invalid/partial diagnostics
+must not promote or overwrite the scientific verdict or uncertainty.
+
 The G3 candidate and offline cohort accounting are documented in
 `docs/VALIDATION_COHORT_PROTOCOL.md`. Preserve its explicit
 `CANDIDATE_NOT_ADMITTED` status: the 24 exact future plans are a design proposal,
