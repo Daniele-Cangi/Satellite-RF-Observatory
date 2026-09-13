@@ -1,6 +1,7 @@
 # Receipt artifacts are byte-addressed evidence; never normalize line endings.
 research/exploratory/*.py -text
 research/exploratory/results/*.json -text
+research/exploratory/inputs/** -text -whitespace
 experiments/live_instrument/session_receipts/*.jsonl -text
 
 # Machine-readable experiment evidence is frequently bound by byte count and
