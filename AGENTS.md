@@ -93,6 +93,16 @@ requeuing the request. Only an exited and sealed result can be reconciled.
 
 ## Scientific development history and preserved constraints
 
+The local synthetic calibration-transfer operator is documented in
+`research/kinematic/CALIBRATION_TRANSFER.md`. It computes GLS reference residual
+and corrected-target mappings with full supplied cross covariance, and exposes
+clock-like reference errors invisible to fitted residuals. The 100 m / 0.1 m/s
+injections and covariance examples are invented observable errors, not measured
+target errors or position bounds. Do not turn their amplitudes into physical
+floors, alter DOY240 receipts, or admit S3 from these algebraic tests. Actual
+reference-product errors, shared/differential receiver coupling and propagation
+through the final inverse fit remain to be qualified.
+
 On 2026-09-10 the user postponed website, API, Docker and hosting development
 and approved the scientific project in `docs/SCIENTIFIC_ROADMAP.md`.
 That plan supersedes the website roadmap. Keep the five-event private archive
