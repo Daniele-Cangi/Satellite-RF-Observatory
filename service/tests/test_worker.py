@@ -1,5 +1,7 @@
 """Queue/legacy-worker integration with invented stage outputs, no RF access."""
 import json
+from io import StringIO
+from contextlib import redirect_stdout
 import os
 from pathlib import Path
 import subprocess
@@ -52,6 +54,12 @@ def install_stages(monkeypatch, *, kind='unavailable'):
             write_json(run / 'outcome.json', {'status': 'SOURCE_UNAVAILABLE',
                        'primary_pass': False, 'reason': 'SIMULATED_SOURCE_UNAVAILABLE', 'stage': name})
         elif name == 'estimate':
+            if kind == 'inconclusive':
+                write_json(run / 'outcome.json', {
+                    'status': 'UNCERTAINTY_TOO_LARGE', 'primary_pass': False,
+                    'prospective_uncertainty_radius_m': 12000.,
+                })
+                return SimpleNamespace(returncode=0)
             write_json(run / 'solution.json', {
                 'xyz_m': [1., 2., 3.], 'frame': 'INVENTED_TEST_FRAME',
                 'emission_seconds_since_gpst_midnight': 1.,
@@ -69,7 +77,10 @@ def install_stages(monkeypatch, *, kind='unavailable'):
         return SimpleNamespace(returncode=0)
 
     def start(plan, run, log):
-        result = execute(plan, run)
+        output = StringIO()
+        with redirect_stdout(output):
+            result = execute(plan, run)
+        log.write(output.getvalue().encode('utf-8'))
         return Finished(1 if result['state'] == 'FAILED' else 0)
 
     monkeypatch.setattr('positioning.jobs.subprocess.run', stage)
