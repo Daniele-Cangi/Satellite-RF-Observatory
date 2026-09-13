@@ -1,0 +1,85 @@
+{
+  "schema": "calibration-transfer-synthetic-study-v1",
+  "sources_sha256": {
+    "research/kinematic/calibration_transfer.py": "11d868b5e1aec2b1aa1098fd581cdb177678daa19caeee5f727ff26cf131b519",
+    "research/kinematic/calibration_transfer_study.py": "f42d700545f9401304785c6836f020b0cfa3bc0cae946b9c97697a18161ea1ac"
+  },
+  "scope": "Invented local linear observable errors; not real target errors, position errors or physical uncertainty bounds.",
+  "real_rf_qualified": false,
+  "target_orbit_accessed": false,
+  "design": {
+    "references": 4,
+    "tags_s": [
+      -150.0,
+      -120.0,
+      -90.0,
+      -60.0,
+      -30.0,
+      0.0,
+      30.0,
+      60.0,
+      90.0,
+      120.0,
+      150.0
+    ],
+    "weight_covariance": "identity in code coordinates",
+    "stochastic_assumptions": "1 m independent noise per observation plus 3 m common reference/target marginal mode; correlation -1, 0, +1. Invented amplitudes."
+  },
+  "deterministic_examples": [
+    {
+      "case": "reference_only_offset",
+      "reference_residual_max_m": 2.1316282072803006e-14,
+      "corrected_target_code_error_m": -100.00000000000003,
+      "corrected_target_phase_rate_error_m_s": 2.7755575615628914e-17
+    },
+    {
+      "case": "reference_only_drift",
+      "reference_residual_max_m": 4.440892098500626e-15,
+      "corrected_target_code_error_m": 4.440892098500626e-16,
+      "corrected_target_phase_rate_error_m_s": -0.09999999999999995
+    },
+    {
+      "case": "shared_receiver_offset_and_drift",
+      "reference_residual_max_m": 2.1316282072803006e-14,
+      "corrected_target_code_error_m": 0.0,
+      "corrected_target_phase_rate_error_m_s": 5.551115123125783e-17
+    }
+  ],
+  "blind_subspace_dimension": 2,
+  "blind_residual_max": 8.476847922687517e-17,
+  "stochastic_examples": [
+    {
+      "shared_mode_correlation": -1.0,
+      "corrected_target_variance_m2": 37.25,
+      "reference_residual_variance_m2": [
+        0.75,
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    {
+      "shared_mode_correlation": 0.0,
+      "corrected_target_variance_m2": 19.25,
+      "reference_residual_variance_m2": [
+        0.75,
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    {
+      "shared_mode_correlation": 1.0,
+      "corrected_target_variance_m2": 1.25,
+      "reference_residual_variance_m2": [
+        0.75,
+        0.75,
+        0.75,
+        0.75
+      ]
+    }
+  ],
+  "conclusion": "Reference residuals alone cannot bound clock-like reference errors; their target effect depends on shared/differential coupling.",
+  "physical_amplitudes_established": false,
+  "population_coverage_established": false
+}
