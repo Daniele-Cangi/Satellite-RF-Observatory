@@ -177,8 +177,6 @@ def test_failed_variant_and_all_paths_are_retained(monkeypatch):
 @pytest.mark.parametrize('tag', ['g14', 'g12'])
 def test_saved_full_replay_and_unchanged_radial_baseline(tag):
     path = ROOT/f'research/exploratory/results/{tag}_reference_attitude_v1.json'
-    if not path.exists():
-        pytest.skip('report not yet executed')
     saved = json.loads(path.read_bytes())
     actual = study.run(ARCHIVES[tag], INPUTS/f'timed_reference_products/{tag}', INPUTS/f'reference_biases/{tag}',
                        INPUTS/f'reference_antennas/{tag}', INPUTS/f'reference_attitudes/{tag}')
@@ -196,6 +194,17 @@ def test_saved_full_replay_and_unchanged_radial_baseline(tag):
         else:
             assert a == b
     compare(saved, actual)
+    # Geometric controls have stricter tolerances than the nonlinear fit replay.
+    for old, new in zip(saved['paths'], actual['paths']):
+        if new['status'] == 'EVALUATED':
+            for key in ('full_minus_radial_range_m', 'body_z_minus_radial_range_m',
+                        'transverse_range_m', 'pco_30_minus_60_norm_m', 'pco_ecef_m'):
+                assert old[key] == pytest.approx(new[key], abs=2e-8, rel=0.)
+            assert old['body_z_nadir_angle_rad'] == pytest.approx(new['body_z_nadir_angle_rad'], abs=1e-13, rel=0.)
+    for old, new in zip(saved['withheld_attitude_nodes'], actual['withheld_attitude_nodes']):
+        assert old['status'] == new['status'] == 'COMPARED'
+        for key in ('rotation_difference_rad', 'pco_difference_m'):
+            assert old[key] == pytest.approx(new[key], abs=1e-13, rel=0.)
     for path, digest in saved['sources_sha256'].items():
         assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest() == digest
     prior = json.loads((ROOT/f'research/exploratory/results/{tag}_reference_time_alignment_v1.json').read_bytes())
