@@ -1,5 +1,8 @@
 from pathlib import Path
+import hashlib
+import json
 
+import numpy as np
 import pytest
 
 from research.exploratory import reference_product_discrepancy as study
@@ -54,3 +57,50 @@ def test_product_flags_are_not_silently_admitted(index):
 def test_wrong_timescale_day_truncation_and_duplicates_rejected(transform):
     with pytest.raises(ValueError):
         parse(transform(fixture()))
+
+
+ROOT = Path(__file__).resolve().parents[3]
+
+
+@pytest.mark.parametrize('tag,archive', [
+    ('g14', 'experiments/positioning_g14_doy246_network'),
+    ('g12', 'research/exploratory/inputs/g12_doy248'),
+])
+def test_saved_real_product_comparison_replays_and_preserves_denominator(tag, archive):
+    inputs = ROOT / 'research/exploratory/inputs/reference_products' / tag
+    saved = json.loads((ROOT / f'research/exploratory/results/{tag}_reference_product_discrepancy_v1.json').read_bytes())
+    actual = study.run(ROOT / archive, inputs / 'reference_extract.txt', inputs / 'receipt.json')
+    assert actual['input_sha256'] == saved['input_sha256']
+    assert actual['sources_sha256'] == saved['sources_sha256']
+    assert actual['case_count'] == actual['epoch_count'] * len(actual['references'])
+    assert actual['status_counts'] == saved['status_counts']
+    assert len(actual['rows']) == len(saved['rows']) == actual['case_count']
+    for row, old in zip(actual['rows'], saved['rows']):
+        assert row.keys() == old.keys()
+        for key, value in row.items():
+            assert old[key] == (pytest.approx(value, rel=1e-10, abs=1e-8)
+                                if isinstance(value, (float, list)) else value)
+    covariance = np.array(actual['centered_clock_sample_covariance_m2'])
+    np.testing.assert_allclose(covariance, saved['centered_clock_sample_covariance_m2'], rtol=1e-10, atol=1e-10)
+    np.testing.assert_allclose(covariance.sum(axis=0), 0., atol=1e-12)
+    assert np.linalg.eigvalsh(covariance).min() >= -1e-12
+    assert not actual['target_state_parsed'] and not actual['qualified_error_budget']
+
+
+def test_missing_sample_stays_in_denominator_and_cannot_change_centering_set(tmp_path):
+    inputs = ROOT / 'research/exploratory/inputs/reference_products/g14'
+    text = (inputs / 'reference_extract.txt').read_text()
+    first = next(line for line in text.splitlines() if line.startswith('P'))
+    content = text.replace(first + '\n', '', 1).encode('ascii')
+    path = tmp_path / 'extract.txt'; path.write_bytes(content)
+    receipt = json.loads((inputs / 'receipt.json').read_bytes())
+    receipt_path = tmp_path / 'receipt.json'; receipt_path.write_text(json.dumps(receipt))
+    with pytest.raises(ValueError, match='receipt'):
+        study.run(ROOT / 'experiments/positioning_g14_doy246_network', path, receipt_path)
+    receipt['extract_sha256'] = hashlib.sha256(content).hexdigest()
+    receipt_path.write_text(json.dumps(receipt))
+    result = study.run(ROOT / 'experiments/positioning_g14_doy246_network', path, receipt_path)
+    assert result['case_count'] == 2016 and result['complete_epoch_count'] == 95
+    assert result['status_counts']['MISSING_SP3_RECORD'] == 1
+    assert all('ensemble_centered_clock_discrepancy_m' not in row for row in result['rows']
+               if row['time_gpst_s'] == 0.)

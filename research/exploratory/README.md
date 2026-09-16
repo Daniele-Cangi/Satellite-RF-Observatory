@@ -1,5 +1,11 @@
 # Esperimenti di sviluppo su dati reali
 
+Il [confronto dei prodotti reali](REFERENCE_PRODUCT_DISCREPANCY.md) aggiunge
+4128 coppie satellite-epoca broadcast/IGS rapido, senza conversione numerica
+degli stati del bersaglio. Conserva scarti orbitali, clock grezzi e centrati,
+componente comune e covarianza descrittiva; non fornisce ancora un budget
+d'errore qualificato.
+
 Il [trasferimento degli errori di orologio](REFERENCE_CLOCK_RESPONSE.md) è ora
 misurato con perturbazioni controllate sui due eventi: 92 varianti complessive,
 incluse due baseline, senza accesso all'orbita bersaglio. Risposte massime
