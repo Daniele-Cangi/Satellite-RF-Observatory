@@ -93,6 +93,13 @@ def test_saved_response_binds_inputs_sources_and_all_signed_variants(event, inpu
         assert minus['mode'] == plus['mode'] == mode
         assert (minus['clock_step_m'], plus['clock_step_m']) == (-1., 1.)
         expected = {'mode': mode, **study.paired_response(report['cases'][0], minus, plus, 1.)}
-        assert report['paired_responses'][index] == expected
+        actual = report['paired_responses'][index]
+        assert actual.keys() == expected.keys()
+        for key, value in expected.items():
+            if isinstance(value, (float, list)):
+                # BLAS norm reductions can differ by a last bit across runners.
+                assert actual[key] == pytest.approx(value, rel=1e-12, abs=1e-15)
+            else:
+                assert actual[key] == value
     assert not any(report[key] for key in ('target_orbit_accessed', 'new_confirmation',
                                           'measured_product_error', 'is_accuracy_bound'))
