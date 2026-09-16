@@ -70,6 +70,22 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The local ocean/pole study in `research/exploratory/OCEAN_POLE_LOADING.md`
+uses original IERS HARDISP with FES2014b coefficients for all nine fit sites,
+plus solid-Earth pole models for 2018 and an explicit 2010 control. All 48
+published HARDISP benchmark samples match at printed precision; all 924 new
+station/epoch calibrations pass. Ocean/pole combined displacement reaches
+22.56 mm but changes reference RMS only +0.01636%/-0.03713% (G14/G12), with
+four/three stations worsening. Preserve every variant and failure denominator.
+BLQ geographic separation is 1.03-7.08 m; do not invent DOMES identity in BLQ.
+CMC:NO is explicit. The 19.13 mm phase-free header-model envelope is not an
+error budget and is not applied. Next resolve CMC and pole/EOP pairing for the
+actual terrestrial orbit products, then investigate larger residual terms over
+broader geometry. Avoid duplicate CMC application or model selection by RMS.
+Ocean pole loading, atmospheric/seasonal motion, receiver code response and
+covariance remain open; no target fit or new confirmation occurred, S2/G3 remain
+incomplete and production is unchanged.
+
 The lunisolar station study in `research/exploratory/SOLID_EARTH_DISPLACEMENT.md`
 adds IERS-derived step-1/step-2 displacement with permanent tide retained to
 regularized ARPs. All 924 station/epoch calibrations pass; primary reference RMS
