@@ -70,6 +70,27 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The terrestrial audit in `research/exploratory/STATION_COORDINATES.md` compares
+all fourteen fit-station/day ARPs with the daily middle solution of CODE final
+three-day SINEX products. Marker identity, DOMES, antenna type/radome and
+H/E/N versus UNE eccentricities agree; archived ARP reconstruction is exact.
+ARP differences are 0.114-0.933 m. Fixed-reference geometric projections after
+clock-mode removal have pooled RMS 0.307/0.251 m for G14/G12. They are not code
+corrections, measured coordinate errors or improved target accuracy. The daily
+coordinate epochs differ from the observation windows; final/rapid frame
+alignment, site displacement, code antenna response and physical covariance
+remain unqualified. Phase IF PCO norms 0.039-0.111 m are descriptive only.
+Use `verified_station_replay.py` as the active replay boundary for these two
+exposed events. It strictly parses the same archive bytes it hashes, pins the
+complete prior/calibration/geometry reports, and reproduces all numerical
+results. This addresses PR143's permissive archive JSON and partial provenance/
+unit-vector substitution findings. Lower-level v1/v2 runners and their reports
+remain immutable execution history, including the first marker-parser failures.
+The reference v2 also preserves the PR142 date/causal-flag and length repairs.
+Next qualify one coherent terrestrial frame/epoch/site-motion convention before
+reference-only recalibration over broader geometry. No target fit, new confirmation
+or production estimator change was made; G3/S2 remain incomplete.
+
 The reference-contrast study in `research/exploratory/REFERENCE_RESIDUAL_STRUCTURE.md`
 compares zero, shared-satellite, station-direction and station/satellite models
 across disjoint five/six-epoch blocks of the exposed G14/G12 windows. All 16

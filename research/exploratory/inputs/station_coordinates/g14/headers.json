@@ -1,0 +1,156 @@
+{
+  "schema": "station-header-extract-v1",
+  "fit_stations": [
+    "ALGO00CAN",
+    "BOGT00COL",
+    "DRAO00CAN",
+    "MKEA00USA",
+    "PIE100USA",
+    "STJO00CAN",
+    "YELL00CAN"
+  ],
+  "source_structure_sha256": "f9ff6db885f250112cf33a307ebde753be1e40847d4460904ece28fec15c24c6",
+  "headers": {
+    "ALGO00CAN": {
+      "MARKER NAME": [
+        "ALGO"
+      ],
+      "MARKER NUMBER": [
+        "40104M002"
+      ],
+      "REC # / TYPE / VERS": [
+        "3015995             SEPT POLARX5        5.3.2"
+      ],
+      "ANT # / TYPE": [
+        "303                 AOAD/M_T        NONE"
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.1000        0.0000        0.0000"
+      ],
+      "APPROX POSITION XYZ": [
+        "   918129.1676 -4346071.3170  4561977.9061"
+      ]
+    },
+    "BOGT00COL": {
+      "MARKER NAME": [
+        "BOGT"
+      ],
+      "MARKER NUMBER": [
+        "41901M001"
+      ],
+      "REC # / TYPE / VERS": [
+        "01972               JAVAD TRE_3 DELTA   4.6.00"
+      ],
+      "APPROX POSITION XYZ": [
+        "  1744399.0397 -6116037.5577   512731.7532"
+      ],
+      "ANT # / TYPE": [
+        "00989               JAVRINGANT_DM   NONE"
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0610        0.0000        0.0000"
+      ]
+    },
+    "DRAO00CAN": {
+      "APPROX POSITION XYZ": [
+        " -2059164.6900 -3621108.3500  4814432.3900"
+      ],
+      "REC # / TYPE / VERS": [
+        "3022792             SEPT POLARX5        5.2.0"
+      ],
+      "MARKER NAME": [
+        "DRAO CACS-GSD 887006 Penticton BC Canada"
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.1000        0.0000        0.0000"
+      ],
+      "MARKER NUMBER": [
+        "40105M002"
+      ],
+      "ANT # / TYPE": [
+        "710152202004170097  TWIVC6050       SCIS"
+      ]
+    },
+    "MKEA00USA": {
+      "MARKER NAME": [
+        "MKEA"
+      ],
+      "MARKER NUMBER": [
+        "40477M001"
+      ],
+      "REC # / TYPE / VERS": [
+        "3013571             SEPT POLARX5        5.7.0"
+      ],
+      "ANT # / TYPE": [
+        "00983               JAVRINGANT_DM   SCIS"
+      ],
+      "APPROX POSITION XYZ": [
+        " -5464105.3170 -2495165.8420  2148291.4760"
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0000        0.0000        0.0000"
+      ]
+    },
+    "PIE100USA": {
+      "MARKER NAME": [
+        "PIE1"
+      ],
+      "MARKER NUMBER": [
+        "40456M001"
+      ],
+      "REC # / TYPE / VERS": [
+        "4100427             SEPT POLARX5TR      5.7.0"
+      ],
+      "ANT # / TYPE": [
+        "CR520022114         ASH701945E_M    NONE"
+      ],
+      "APPROX POSITION XYZ": [
+        " -1640916.9280 -5014781.1870  3575447.0770"
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0610        0.0000        0.0000"
+      ]
+    },
+    "STJO00CAN": {
+      "APPROX POSITION XYZ": [
+        "  2612631.2000 -3426807.0000  4686757.8000"
+      ],
+      "REC # / TYPE / VERS": [
+        "3015938             SEPT POLARX5        5.3.2"
+      ],
+      "MARKER NAME": [
+        "STJO CACS-GSD 920000 St. John's NL Canada"
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0500        0.0000        0.0000"
+      ],
+      "MARKER NUMBER": [
+        "40101M001"
+      ],
+      "ANT # / TYPE": [
+        "VC6150202206240024  TWIVC6150       NONE"
+      ]
+    },
+    "YELL00CAN": {
+      "APPROX POSITION XYZ": [
+        " -1224452.4000 -2689216.0000  5633638.2000"
+      ],
+      "REC # / TYPE / VERS": [
+        "4100652             SEPT POLARX5        5.5.0"
+      ],
+      "MARKER NAME": [
+        "YELL CACS-GSD 889201 Yellowknife NT Canada"
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.1000        0.0000        0.0000"
+      ],
+      "MARKER NUMBER": [
+        "40127M003"
+      ],
+      "ANT # / TYPE": [
+        "527                 AOAD/M_T        NONE"
+      ]
+    }
+  },
+  "observation_numbers_parsed": false
+}
