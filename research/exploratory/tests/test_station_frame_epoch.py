@@ -1,4 +1,3 @@
-from copy import deepcopy
 from datetime import datetime, timedelta
 import json
 
@@ -64,6 +63,27 @@ def test_final_transport_anchors_exact_daily_coordinate_without_adding_psd_twice
     with pytest.raises(ValueError): model('unknown', seconds)
 
 
+def test_frame_input_tampering_rejected(monkeypatch, tmp_path):
+    for path in study.FRAME.iterdir():
+        (tmp_path/path.name).write_bytes(path.read_bytes())
+    with (tmp_path/'IGC20.VEL').open('ab') as handle: handle.write(b'\n')
+    monkeypatch.setattr(study, 'FRAME', tmp_path)
+    with pytest.raises(ValueError, match='pinned input differs'): study.read_frame()
+
+
+def test_failed_calibrations_remain_in_every_variant(monkeypatch):
+    def fail(*args, **kwargs): raise ValueError('injected calibration failure')
+    monkeypatch.setattr(study, 'calibrate_fixed', fail)
+    result = study.run('g14')
+    assert result['case_count'] == 5
+    assert result['status_counts'] == {'CALIBRATION_NOT_QUALIFIED': 5}
+    assert result['observed_path_count'] == 734
+    for case in result['cases']:
+        assert case['pooled_reference_rms_m'] is None and case['evaluated_path_count'] == 0
+        assert len(case['calibrations']) == 7
+        assert all(c['status'] == 'ENGINEERING_FAILURE' for c in case['calibrations'].values())
+
+
 @pytest.mark.parametrize('tag', ['g14','g12'])
 def test_report_replay_and_all_variants_accounting(tag):
     result = study.run(tag)
@@ -78,15 +98,15 @@ def test_report_replay_and_all_variants_accounting(tag):
     for case,old in zip(result['cases'],saved['cases'],strict=True):
         assert case['mode'] == old['mode'] and case['status'] == old['status']
         assert case['evaluated_path_count']+len(result['omitted_paths']) == result['observed_path_count']
-        assert case['pooled_reference_rms_m'] == pytest.approx(old['pooled_reference_rms_m'],abs=1e-7)
+        assert case['pooled_reference_rms_m'] == pytest.approx(old['pooled_reference_rms_m'],abs=1e-7,rel=0)
         for name,cal in case['calibrations'].items():
             previous=old['calibrations'][name]
             assert cal['status']==previous['status'] and len(cal['epochs'])==11
             assert cal['failures']==previous['failures']
             for e,p in zip(cal['epochs'],previous['epochs'],strict=True):
                 assert e['time_s']==p['time_s'] and e['references']==p['references']
-                assert e['residuals_m']==pytest.approx(p['residuals_m'],abs=1e-7)
+                assert e['residuals_m']==pytest.approx(p['residuals_m'],abs=1e-7,rel=0)
                 assert e['clock_m']==pytest.approx(p['clock_m'],abs=1e-7,rel=0)
                 assert e['ground_fit_rank']==p['ground_fit_rank']==4
-                assert e['ground_offset_xyz_m']==pytest.approx(p['ground_offset_xyz_m'],abs=.003)
+                assert e['ground_offset_xyz_m']==pytest.approx(p['ground_offset_xyz_m'],abs=.003,rel=0)
     assert not result['target_fit_performed'] and not result['instantaneous_site_position_qualified']
