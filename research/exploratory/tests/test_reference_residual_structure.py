@@ -132,8 +132,6 @@ def test_failed_case_is_retained(monkeypatch):
 @pytest.mark.parametrize('tag', ['g14','g12'])
 def test_bound_reports_replay_all_cases_rows_and_denominators(tag):
     path = ROOT/f'research/exploratory/results/{tag}_reference_residual_structure_v1.json'
-    if not path.exists():
-        pytest.skip('scientific report not executed yet')
     saved = json.loads(path.read_bytes())
     actual = study.run(ARCHIVES[tag], INPUTS/f'timed_reference_products/{tag}', INPUTS/f'reference_biases/{tag}',
                        INPUTS/f'reference_antennas/{tag}', INPUTS/f'reference_attitudes/{tag}',
