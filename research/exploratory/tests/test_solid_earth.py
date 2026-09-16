@@ -44,7 +44,8 @@ def test_celestial_time_grid_and_controls():
     positions,offsets=study.station_variants(xyz,times,samples)
     assert np.array_equal(positions['regularized'],xyz)
     assert positions['solid_earth']-positions['permanent_removed_control']==pytest.approx(np.array([tide.permanent_displacement(x) for x in xyz]),abs=1e-9,rel=0)
-    assert offsets['midpoint_control'][0]==offsets['solid_earth'][5]==offsets['midpoint_control'][-1]
+    assert np.array_equal(offsets['midpoint_control'][0],offsets['solid_earth'][5])
+    assert np.array_equal(offsets['midpoint_control'][-1],offsets['solid_earth'][5])
     assert not np.allclose(offsets['gpst_as_utc_control'],offsets['solid_earth'],atol=1e-7,rtol=0)
     a,_=tide.arguments(datetime(2026,9,3,23,59,59),37)
     b,_=tide.arguments(datetime(2026,9,4),37)
@@ -89,3 +90,11 @@ def test_all_engineering_failures_are_retained(monkeypatch):
         assert case['pooled_reference_rms_m'] is None and case['evaluated_path_count']==0
         assert len(case['calibrations'])==7
         assert all(c['status']=='ENGINEERING_FAILURE' for c in case['calibrations'].values())
+
+
+def test_manifest_repository_blob_matches_frozen_execution_bytes():
+    import hashlib
+    import subprocess
+    path='research/exploratory/iers_reference/sources.json'
+    blob=subprocess.check_output(['git','show','HEAD:'+path],cwd=study.frame.ROOT)
+    assert hashlib.sha256(blob).hexdigest()=='4d3408119d0e34b809fafb2da2a37f963b2d9ecdc464034354729cc3f9359203'

@@ -133,6 +133,11 @@ files each; all 44 bindings were verified against execution commit `f715138`.
 The prior frame reports are hash-pinned, their entire numerical structure is
 replayed before the new study, and their source files are checked before use.
 Original experiments and executed sources/results remain unchanged.
+The first Linux CI run exposed Git normalization of the IERS source manifest:
+its committed LF bytes differed from the CRLF manifest used and pinned at
+execution. The packaging repair restores those exact captured CRLF bytes under
+`-text`; it does not rewrite an output or relax a hash. A repository-blob test
+guards against repeating this checkout defect.
 
 ```powershell
 python -m research.exploratory.solid_earth_study g14 g14-tide-replay.json
