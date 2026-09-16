@@ -1,0 +1,41 @@
+{
+  "schema": "reference-attitude-extract-v1",
+  "target_excluded": "G12",
+  "references": [
+    "G04",
+    "G05",
+    "G06",
+    "G07",
+    "G09",
+    "G11",
+    "G13",
+    "G14",
+    "G15",
+    "G17",
+    "G18",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G24",
+    "G25",
+    "G26",
+    "G28",
+    "G29",
+    "G30",
+    "G31"
+  ],
+  "date_gpst": "2026-09-05",
+  "window_gpst_s": [
+    37680,
+    38220
+  ],
+  "product_family": "COD0OPSRAP",
+  "frame": "IGC20",
+  "mapping": "ECEF_TO_BODY",
+  "source_url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262480000_01D_30S_ATT.OBX.gz",
+  "source_compressed_bytes": 9383082,
+  "source_compressed_sha256": "a01c884aef57bb5bedf35fe69a0b0ecdb921d34f9e0d113e1be987c930889279",
+  "extract_sha256": "92fba5ecf0a5dd78fd2271b8c46654c35e98f6b7546c80bfab340138f88c8438",
+  "note": "Restricted derivative: target/unselected IDs removed before quaternion parsing; epoch counts and start/end metadata rewritten for this extract."
+}

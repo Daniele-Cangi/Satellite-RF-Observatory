@@ -70,6 +70,17 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The paired CODE attitude trial in `research/exploratory/REFERENCE_ATTITUDE.md`
+orients the complete IGS20_2425 IF PCO at emission times using restricted 30 s
+ORBEX products. All eight baseline/primary/control cases estimate. The full PCO
+moves G14/G12 by 0.818/0.283 m from radial; reference residual RMS slightly rises.
+The body-Z-only control reproduces radial, and 60 s attitude thinning changes
+the fits by under 0.4 mm. These are model/numerical sensitivities, not physical
+accuracy or uncertainty. CODE processing attitude is not independently measured
+true attitude. Directional code response, station/media, receiver biases and
+physical covariance remain open. New guarded loading checks CODE.BIA, strict
+JSON and all ANTEX validity boundaries; preserve earlier frozen sources/results.
+
 The observation-time trial in `research/exploratory/REFERENCE_TIME_ALIGNMENT.md`
 evaluates paired CODE rapid 5-minute orbits, 30-second clocks and daily biases.
 It solves emission offsets, applies periodic relativity and conditional radial
