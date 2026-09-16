@@ -161,6 +161,24 @@ def test_control_failure_is_retained_without_mutating_target_inputs(monkeypatch)
 @pytest.mark.parametrize('tag', ['g14', 'g12'])
 def test_reports_bind_inputs_sources_all_variants_and_all_observed_paths(tag):
     saved = json.loads((ROOT/f'research/exploratory/results/{tag}_reference_time_alignment_v1.json').read_bytes())
+    replay = study.run(ROOT/ARCHIVES[tag], ROOT/f'research/exploratory/inputs/timed_reference_products/{tag}',
+                       ROOT/f'research/exploratory/inputs/reference_biases/{tag}',
+                       ROOT/f'research/exploratory/inputs/reference_antennas/{tag}')
+    def compare(old, new):
+        if isinstance(new, dict):
+            assert old.keys() == new.keys()
+            for key in new:
+                compare(old[key], new[key])
+        elif isinstance(new, list):
+            assert len(old) == len(new)
+            for a, b in zip(old, new):
+                compare(a, b)
+        elif isinstance(new, float):
+            # Millimetre tolerance for nonlinear fit replay, not a physical bound.
+            assert old == pytest.approx(new, rel=1e-12, abs=.001)
+        else:
+            assert old == new
+    compare(saved, replay)
     for path, digest in saved['sources_sha256'].items():
         assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest() == digest
     admitted, context, _, hashes = study.load_inputs(ROOT/ARCHIVES[tag])
