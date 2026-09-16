@@ -70,6 +70,18 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The reference-product discrepancy study in
+`research/exploratory/REFERENCE_PRODUCT_DISCREPANCY.md` compares 4128 non-target
+broadcast/IGS rapid satellite-epoch pairs on the two exposed days. Target state
+records are discarded as text before numeric conversion. Preserve the admitted
+extracts, receipts and reports. Orbital RMS discrepancies are 1.71/1.80 m and
+ensemble-centered clock RMS discrepancies 0.33/0.19 m, but reference-point,
+frame, signal-bias and clock-datum conventions remain incompletely aligned.
+The centered sample covariance is descriptive, with centering-induced dependence;
+do not treat it as physical error covariance or multiply daily RMS by the prior
+constant-perturbation gains to claim an uncertainty bound. Next work aligns
+conventions and projects joint orbit/clock differences onto receiver paths.
+
 The 2026-09-16 exploratory reference-clock response study is documented in
 `research/exploratory/REFERENCE_CLOCK_RESPONSE.md`. On exposed G14/G12 fit data,
 92 variants (including two baselines) propagate invented +/-1 m non-target af0
