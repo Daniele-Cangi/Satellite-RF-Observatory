@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from research.exploratory import station_coordinates as audit
+from research.exploratory import station_coordinates_v2 as audit
 from research.exploratory import reference_residual_structure_v2 as guarded
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -54,6 +54,10 @@ def compare_station(header, blocks, times=None):
 def test_marker_arp_axis_units_daily_selection_and_phase_separation():
     h, b = sample()
     r = compare_station(h, b)
+    h['MARKER NAME'] = ['ALGO CACS station description']
+    extended = compare_station(h, b)
+    assert extended['arp_delta_enu_m'] == r['arp_delta_enu_m']
+    assert extended['rinex_marker_name'] == 'ALGO CACS station description'
     assert r['solution_id'] == '2'
     assert r['coordinate_epoch'] == '26:246:43185'
     assert r['header_eccentricity_enu_m'] == [.2, .3, .1]
@@ -155,7 +159,7 @@ def test_v2_report_replay_preserves_all_v1_results(tag):
 def test_station_report_replays_and_accounts_for_every_fit_station(tag):
     result = audit.run(INPUTS/f'station_coordinates/{tag}', ARCHIVES[tag]/'estimation/admitted.json',
                        ROOT/f'research/exploratory/results/{tag}_reference_residual_structure_v2.json')
-    saved = json.loads((ROOT/f'research/exploratory/results/{tag}_station_coordinates_v1.json').read_bytes())
+    saved = json.loads((ROOT/f'research/exploratory/results/{tag}_station_coordinates_v2.json').read_bytes())
     compare(result, saved)
     assert result['station_count'] == len(result['stations']) == len(result['fit_stations']) == 7
     assert sum(result['status_counts'].values()) == 7
