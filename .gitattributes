@@ -90,3 +90,6 @@ research/exploratory/iers_reference/* -text -whitespace
 # New executed Python sources retain their native CRLF bytes.
 research/exploratory/solid_earth*.py -text whitespace=cr-at-eol
 research/exploratory/prepare_solid_earth_inputs.py -text whitespace=cr-at-eol
+
+# Byte-exact original HARDISP sources and receipts.
+research/exploratory/loading_reference/* -text -whitespace
