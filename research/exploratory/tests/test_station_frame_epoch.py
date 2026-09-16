@@ -45,8 +45,9 @@ def test_psd_pairing_rejects_invalid_models(defect):
 def test_catalog_matches_domes_not_first_station_row():
     frame, _ = study.read_frame()
     a, flag = study.catalog(frame['IGC20.CRD'], 'AREQ00PER', '42202M005')
-    b, _ = study.catalog(frame['IGC20.CRD'], 'AREQ00PER', '42202M004')
-    assert np.linalg.norm(a-b) > 1 and flag == 'IGC20'
+    assert a[0] > 1942800 and flag == 'IGC20'
+    with pytest.raises(ValueError, match='provenance'):
+        study.catalog(frame['IGC20.CRD'], 'AREQ00PER', '42202M004')
     with pytest.raises(ValueError): study.catalog(frame['IGC20.CRD'], 'AREQ00PER', '99999M999')
     with pytest.raises(ValueError): study.catalog(frame['IGC20.CRD'].replace('IGc20_0','IGS20_0'), 'AREQ00PER', '42202M005')
 
