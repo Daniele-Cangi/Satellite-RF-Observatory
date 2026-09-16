@@ -1,0 +1,26 @@
+{
+  "schema": "solid-earth-inputs-v1",
+  "target_states_accessed": false,
+  "producer_sha256": "a175933c3bbfd73681e5f9b94ead96598ae6da5cf4a7b0126828934bff528ce3",
+  "raw_sources": {
+    "de440s.bsp": {
+      "sha256": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp"
+    },
+    "finals2000A.all": {
+      "sha256": "d7adc96fca77e27746586e8b7dd75376eebbc82ba5f65ced13379cf0ebd62327",
+      "url": "https://maia.usno.navy.mil/ser7/finals2000A.all"
+    }
+  },
+  "versions": {
+    "skyfield": "1.53",
+    "jplephem": "2.23",
+    "numpy": "2.3.3",
+    "sgp4": "2.25"
+  },
+  "conventions": "GPST-UTC=18 s; TAI-UTC=37 s; TT-UTC=69.184 s; observed Bulletin A UT1/xp/yp linearly interpolated; IAU2000A; dX/dY not applied; geometric simultaneous Sun/Moon DE440s -> ITRS",
+  "files": {
+    "eop.txt": "5c36833e3fde2298808b84862baee8f47fe6de993f1722d5cb7aa2fad700a6e4",
+    "sun_moon.json": "8e0c8f978d2c48e278bdc2cb099f0be3bb215a346c764c225b75da38b4b5e173"
+  }
+}

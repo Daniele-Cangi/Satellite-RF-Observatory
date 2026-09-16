@@ -83,3 +83,6 @@ positioning/errors.py -text whitespace=cr-at-eol
 positioning/navigation.py -text whitespace=cr-at-eol
 positioning/solver.py -text whitespace=cr-at-eol
 docs/SCIENTIFIC_ROADMAP.md -text
+
+# Preserve downloaded IERS source bytes and license notices.
+research/exploratory/iers_reference/* -text -whitespace
