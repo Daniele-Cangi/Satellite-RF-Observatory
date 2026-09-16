@@ -1,0 +1,3160 @@
+{
+  "schema": "reference-ray-projection-v1",
+  "target": "G12",
+  "date_gpst": "2026-09-05",
+  "fit_stations": [
+    "ALGO00CAN",
+    "DRAO00CAN",
+    "STJO00CAN",
+    "YELL00CAN",
+    "BOGT00COL",
+    "BRAZ00BRA",
+    "AREQ00PER"
+  ],
+  "references": [
+    "G04",
+    "G05",
+    "G06",
+    "G07",
+    "G09",
+    "G11",
+    "G13",
+    "G14",
+    "G15",
+    "G17",
+    "G18",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G24",
+    "G25",
+    "G26",
+    "G28",
+    "G29",
+    "G30",
+    "G31"
+  ],
+  "emission_nodes_gpst_s": [
+    37800.0,
+    38700.0
+  ],
+  "input_sha256": {
+    "admitted.json": "788fa50d4653ff13bcc842b2c9069cffc9423a7f8246a9a168c041bcd8d2e559",
+    "reference_only.rnx": "7419827eb29ff118f4b62e616887181cb027098aaefcc954abc6378a622b0ebd",
+    "reference_extract": "05ef8de0b10d1dfb7c4d2c48cc2eba42bd526d8ba2c13ff09663a35c905a3e95",
+    "product_receipt": "0f75e4d059a681472f572b23036df96694f7594365e003f818a81e65c9e16356"
+  },
+  "sources_sha256": {
+    "research/exploratory/reference_ray_projection.py": "3cef125d6df456dd147e1b3727cf5e69e7e039cf3681ba6d5c7a4b17bec67c14",
+    "research/exploratory/reference_product_discrepancy.py": "d66693c813938bde4630ca1f4cf85424ca3b60a04f7045ca1fca357c319976c4",
+    "research/exploratory/reference_sensitivity.py": "406720e80e01e5839e47c44679abe4797da0500f0af0dac1cdabee11e0f5adb0",
+    "positioning/calibration.py": "112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491",
+    "positioning/navigation.py": "bb8fb719ea370489e9c2126e49d4359634aedac9d2f243f17cb1fc7771946501",
+    "positioning/context.py": "26aea7f720f7f03c06b6b3ddcf0deebb7bda9ea2909b1823a2f1ca331214bafb",
+    "positioning/solver.py": "87f6a564e4a42c7e21cdb33d0dfa0f9f46d97b4e03debfab8eb0e3957c0b9318",
+    "positioning/errors.py": "49ee71ad1458232342fcb9383fe41ff3ec2f218bf9482cbe9030ae0f443414df"
+  },
+  "scope": "Raw-product geometric ray diagnostic at bracketing SP3 emission nodes, not RF measurements or estimator corrections.",
+  "conventions": {
+    "time": "GPST; same emission node and frozen baseline reception axes",
+    "rotation": "Rz(-OMEGA*tau), broadcast vacuum tau solved then shared",
+    "clock": "Broadcast polynomial minus SP3 field; periodic relativity NOT included on either side",
+    "sign": "model_broadcast - model_precise = range_b - range_p - c*(clock_b-clock_p)",
+    "unresolved": [
+      "orbital reference points/antenna attitude",
+      "frame alignment",
+      "signal biases and clock datum",
+      "differential periodic relativity",
+      "media, observation-time interpolation and nonlinear recalibration"
+    ]
+  },
+  "target_state_parsed": false,
+  "new_confirmation": false,
+  "qualified_error_budget": false,
+  "applied_to_estimator": false,
+  "case_count": 308,
+  "status_counts": {
+    "NOT_OBSERVED_IN_ARCHIVED_WINDOW": 150,
+    "PROJECTED": 132,
+    "BELOW_MASK": 26
+  },
+  "rms_m": {
+    "orbital_range_difference_m": 1.4579592890215731,
+    "clock_range_difference_m": 0.4331658474526506,
+    "joint_range_difference_m": 1.109146297678392,
+    "linear_projection_residual_m": 4.339825613613032e-08
+  },
+  "station_epoch_projections": [
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "references": [
+        "G05",
+        "G06",
+        "G09",
+        "G11",
+        "G13",
+        "G20",
+        "G21",
+        "G25",
+        "G29"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.5134779463211696,
+      "mean_clock_range_difference_m": 0.40498268234863016,
+      "mean_joint_range_difference_m": -1.1084952639725394
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "references": [
+        "G05",
+        "G11",
+        "G13",
+        "G18",
+        "G21",
+        "G25",
+        "G26",
+        "G28",
+        "G29",
+        "G31"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.3826870296150446,
+      "mean_clock_range_difference_m": 0.4284214717435836,
+      "mean_joint_range_difference_m": -0.9542655578714608
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "references": [
+        "G05",
+        "G06",
+        "G07",
+        "G09",
+        "G11",
+        "G19",
+        "G20",
+        "G21",
+        "G29"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.394587857855691,
+      "mean_clock_range_difference_m": 0.3524606828606959,
+      "mean_joint_range_difference_m": -1.042127174994995
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "references": [
+        "G04",
+        "G05",
+        "G09",
+        "G11",
+        "G18",
+        "G21",
+        "G25",
+        "G26",
+        "G28",
+        "G29",
+        "G31"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.410104651004076,
+      "mean_clock_range_difference_m": 0.3688083949167939,
+      "mean_joint_range_difference_m": -1.041296256087282
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "references": [
+        "G05",
+        "G06",
+        "G11",
+        "G13",
+        "G15",
+        "G19",
+        "G20",
+        "G21"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.3775040325708687,
+      "mean_clock_range_difference_m": 0.3927470969915491,
+      "mean_joint_range_difference_m": -0.9847569355793196
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "references": [
+        "G05",
+        "G06",
+        "G11",
+        "G13",
+        "G14",
+        "G15",
+        "G17",
+        "G19",
+        "G20",
+        "G22",
+        "G24",
+        "G30"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.2820586034407218,
+      "mean_clock_range_difference_m": 0.41336793767225694,
+      "mean_joint_range_difference_m": -0.8686906657684649
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "references": [
+        "G05",
+        "G13",
+        "G15",
+        "G17",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G24",
+        "G30"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.1280543472617865,
+      "mean_clock_range_difference_m": 0.4419718518423103,
+      "mean_joint_range_difference_m": -0.6860824954194762
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "references": [
+        "G05",
+        "G06",
+        "G09",
+        "G11",
+        "G13",
+        "G20",
+        "G21",
+        "G25",
+        "G29"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.5244769718911912,
+      "mean_clock_range_difference_m": 0.41503500461645676,
+      "mean_joint_range_difference_m": -1.1094419672747344
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "references": [
+        "G05",
+        "G11",
+        "G13",
+        "G18",
+        "G21",
+        "G25",
+        "G26",
+        "G29",
+        "G31"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.33850096207526,
+      "mean_clock_range_difference_m": 0.44679930278110763,
+      "mean_joint_range_difference_m": -0.8917016592941521
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "references": [
+        "G05",
+        "G06",
+        "G07",
+        "G09",
+        "G11",
+        "G20",
+        "G21",
+        "G29"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.4594516912475228,
+      "mean_clock_range_difference_m": 0.34589352850582356,
+      "mean_joint_range_difference_m": -1.1135581627416993
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "references": [
+        "G05",
+        "G09",
+        "G11",
+        "G18",
+        "G21",
+        "G25",
+        "G26",
+        "G29",
+        "G31"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.312388462324937,
+      "mean_clock_range_difference_m": 0.40126344938660957,
+      "mean_joint_range_difference_m": -0.9111250129383275
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "references": [
+        "G05",
+        "G06",
+        "G11",
+        "G13",
+        "G15",
+        "G19",
+        "G20",
+        "G21"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.3710887311026454,
+      "mean_clock_range_difference_m": 0.39336741263829256,
+      "mean_joint_range_difference_m": -0.9777213184643528
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "references": [
+        "G06",
+        "G11",
+        "G13",
+        "G14",
+        "G15",
+        "G17",
+        "G19",
+        "G20",
+        "G22",
+        "G24",
+        "G30"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.3446214195679536,
+      "mean_clock_range_difference_m": 0.40839001451309026,
+      "mean_joint_range_difference_m": -0.9362314050548632
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "references": [
+        "G05",
+        "G13",
+        "G15",
+        "G17",
+        "G19",
+        "G20",
+        "G21",
+        "G22",
+        "G24"
+      ],
+      "status": "PROJECTED",
+      "mean_orbital_range_difference_m": -1.0992639536658924,
+      "mean_clock_range_difference_m": 0.41885338013498574,
+      "mean_joint_range_difference_m": -0.6804105735309065
+    }
+  ],
+  "rows": [
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0701701642058418,
+      "broadcast_elevation_deg": 54.34766262304805,
+      "orbital_range_difference_m": -0.4845956936478615,
+      "clock_range_difference_m": 0.3845292830247328,
+      "joint_range_difference_m": -0.10006641062312865,
+      "linear_projection_residual_m": 9.76846137312748e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07769458557309476,
+      "broadcast_elevation_deg": 25.52583580008129,
+      "orbital_range_difference_m": -1.4109402745962143,
+      "clock_range_difference_m": 0.41605495366737344,
+      "joint_range_difference_m": -0.9948853209288409,
+      "linear_projection_residual_m": 1.1020724977051088e-07
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G09",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07875133346875005,
+      "broadcast_elevation_deg": 20.214848497385844,
+      "orbital_range_difference_m": -1.5754576995968819,
+      "clock_range_difference_m": 0.26125168407331806,
+      "joint_range_difference_m": -1.3142060155235638,
+      "linear_projection_residual_m": 1.5260546160078547e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06947199669906078,
+      "broadcast_elevation_deg": 61.354217614626336,
+      "orbital_range_difference_m": -1.8522462584078312,
+      "clock_range_difference_m": 0.2429189695101285,
+      "joint_range_difference_m": -1.6093272888977026,
+      "linear_projection_residual_m": 4.501426520420182e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08005942537351428,
+      "broadcast_elevation_deg": 16.672511598739643,
+      "orbital_range_difference_m": -1.7441233545541763,
+      "clock_range_difference_m": 0.6793176462762806,
+      "joint_range_difference_m": -1.0648057082778957,
+      "linear_projection_residual_m": 6.650592299095592e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G19",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08221418790540913,
+      "broadcast_elevation_deg": 7.529529878840188,
+      "orbital_range_difference_m": -0.8849470466375351,
+      "clock_range_difference_m": 0.4229323276566169,
+      "joint_range_difference_m": -0.46201471898091817,
+      "linear_projection_residual_m": 1.507179825388505e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08123865974336925,
+      "broadcast_elevation_deg": 13.074944371293254,
+      "orbital_range_difference_m": -2.4146405272185802,
+      "clock_range_difference_m": 0.35448589731523383,
+      "joint_range_difference_m": -2.060154629903346,
+      "linear_projection_residual_m": 4.415942767010961e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0674532577195241,
+      "broadcast_elevation_deg": 82.81445152033895,
+      "orbital_range_difference_m": -1.7579383477568626,
+      "clock_range_difference_m": 0.43735281282485466,
+      "joint_range_difference_m": -1.320585534932008,
+      "linear_projection_residual_m": 5.713557627018417e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G25",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07696825047969665,
+      "broadcast_elevation_deg": 27.07314578306578,
+      "orbital_range_difference_m": -1.3155200257897377,
+      "clock_range_difference_m": 0.6248309619864527,
+      "joint_range_difference_m": -0.690689063803285,
+      "linear_projection_residual_m": 5.630430011116516e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07521410632796179,
+      "broadcast_elevation_deg": 32.96488455555616,
+      "orbital_range_difference_m": -1.06583933532238,
+      "clock_range_difference_m": 0.24410193245929682,
+      "joint_range_difference_m": -0.8217374028630833,
+      "linear_projection_residual_m": 1.239301061772835e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "ALGO00CAN",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07050407810909531,
+      "broadcast_elevation_deg": 52.462568403514396,
+      "orbital_range_difference_m": -0.40489859879016876,
+      "clock_range_difference_m": 0.3845292830247328,
+      "joint_range_difference_m": -0.020369315765435936,
+      "linear_projection_residual_m": 1.04430453173876e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G06",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07568038873786744,
+      "broadcast_elevation_deg": 31.755036432692606,
+      "orbital_range_difference_m": -1.691724207252264,
+      "clock_range_difference_m": 0.2429189695101285,
+      "joint_range_difference_m": -1.4488052377421354,
+      "linear_projection_residual_m": 5.451900420005984e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07813175028973668,
+      "broadcast_elevation_deg": 22.665585200690202,
+      "orbital_range_difference_m": -1.7647374421358109,
+      "clock_range_difference_m": 0.6793176462762806,
+      "joint_range_difference_m": -1.0854197958595302,
+      "linear_projection_residual_m": 2.33617347689119e-10
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G18",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07851830605995454,
+      "broadcast_elevation_deg": 23.50997264232251,
+      "orbital_range_difference_m": -1.6172375530004501,
+      "clock_range_difference_m": 0.35996865405625633,
+      "joint_range_difference_m": -1.2572688989441938,
+      "linear_projection_residual_m": 1.6471699115783167e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G19",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G20",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07175020036797455,
+      "broadcast_elevation_deg": 47.487174010986216,
+      "orbital_range_difference_m": -1.8036710657179356,
+      "clock_range_difference_m": 0.43735281282485466,
+      "joint_range_difference_m": -1.3663182528930808,
+      "linear_projection_residual_m": 1.4924916857950166e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G25",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07093612885718066,
+      "broadcast_elevation_deg": 52.06840288930132,
+      "orbital_range_difference_m": -1.3820756115019321,
+      "clock_range_difference_m": 0.6248309619864527,
+      "joint_range_difference_m": -0.7572446495154794,
+      "linear_projection_residual_m": 5.470989816735994e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G26",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0808081789717799,
+      "broadcast_elevation_deg": 12.295898066518765,
+      "orbital_range_difference_m": -1.3072091937065125,
+      "clock_range_difference_m": 0.17493596465618957,
+      "joint_range_difference_m": -1.1322732290503228,
+      "linear_projection_residual_m": 2.369034013405269e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G28",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08116049557613633,
+      "broadcast_elevation_deg": 13.748893412286339,
+      "orbital_range_difference_m": -1.9627192616462708,
+      "clock_range_difference_m": 0.3001015313014981,
+      "joint_range_difference_m": -1.6626177303447727,
+      "linear_projection_residual_m": 4.756895766178104e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06899294617334747,
+      "broadcast_elevation_deg": 63.92574371693368,
+      "orbital_range_difference_m": -0.996075700968504,
+      "clock_range_difference_m": 0.24410193245929682,
+      "joint_range_difference_m": -0.7519737685092072,
+      "linear_projection_residual_m": 2.440833457573177e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "DRAO00CAN",
+      "reference": "G31",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08025949812941088,
+      "broadcast_elevation_deg": 15.319171770826951,
+      "orbital_range_difference_m": -0.8965216614305973,
+      "clock_range_difference_m": 0.8361569613401454,
+      "joint_range_difference_m": -0.06036470009045192,
+      "linear_projection_residual_m": 2.08285623193305e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G04",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08299620666594257,
+      "broadcast_elevation_deg": 8.380982338097546,
+      "orbital_range_difference_m": -1.8584364652633667,
+      "clock_range_difference_m": 0.1907435888518596,
+      "joint_range_difference_m": -1.667692876411507,
+      "linear_projection_residual_m": -2.0008128487347676e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0743918969944014,
+      "broadcast_elevation_deg": 35.02825519708026,
+      "orbital_range_difference_m": -0.507941760122776,
+      "clock_range_difference_m": 0.3845292830247328,
+      "joint_range_difference_m": -0.1234124770980432,
+      "linear_projection_residual_m": 9.026666525357996e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07257043999230509,
+      "broadcast_elevation_deg": 45.255077164481314,
+      "orbital_range_difference_m": -1.5253900811076164,
+      "clock_range_difference_m": 0.41605495366737344,
+      "joint_range_difference_m": -1.109335127440243,
+      "linear_projection_residual_m": 1.0570482666949488e-07
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G07",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08281378167797038,
+      "broadcast_elevation_deg": 12.466114190978189,
+      "orbital_range_difference_m": -0.8196046464145184,
+      "clock_range_difference_m": 0.40851828521470723,
+      "joint_range_difference_m": -0.4110863611998111,
+      "linear_projection_residual_m": 1.358922785410499e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G09",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07410965297688435,
+      "broadcast_elevation_deg": 36.287888129681825,
+      "orbital_range_difference_m": -1.6206367500126362,
+      "clock_range_difference_m": 0.26125168407331806,
+      "joint_range_difference_m": -1.359385065939318,
+      "linear_projection_residual_m": 1.526979409582907e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06755696215698434,
+      "broadcast_elevation_deg": 83.52423542346745,
+      "orbital_range_difference_m": -1.9521116018295288,
+      "clock_range_difference_m": 0.2429189695101285,
+      "joint_range_difference_m": -1.7091926323194002,
+      "linear_projection_residual_m": 3.6388704272027894e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G13",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G19",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07981986679853807,
+      "broadcast_elevation_deg": 14.41338897443501,
+      "orbital_range_difference_m": -0.8718997053802013,
+      "clock_range_difference_m": 0.4229323276566169,
+      "joint_range_difference_m": -0.4489673777235844,
+      "linear_projection_residual_m": 1.0078862189288884e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08219645035017538,
+      "broadcast_elevation_deg": 10.301706153665876,
+      "orbital_range_difference_m": -2.4949730932712555,
+      "clock_range_difference_m": 0.35448589731523383,
+      "joint_range_difference_m": -2.1404871959560214,
+      "linear_projection_residual_m": 3.480627652763246e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06798977053571366,
+      "broadcast_elevation_deg": 73.58741087550442,
+      "orbital_range_difference_m": -1.704972304403782,
+      "clock_range_difference_m": 0.43735281282485466,
+      "joint_range_difference_m": -1.2676194915789272,
+      "linear_projection_residual_m": 1.2253653425275957e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G25",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08308099474111706,
+      "broadcast_elevation_deg": 8.360316686545065,
+      "orbital_range_difference_m": -1.3366794884204865,
+      "clock_range_difference_m": 0.6248309619864527,
+      "joint_range_difference_m": -0.7118485264340337,
+      "linear_projection_residual_m": 5.3027278568151814e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07910752772851759,
+      "broadcast_elevation_deg": 19.82973554268185,
+      "orbital_range_difference_m": -1.0537607781589031,
+      "clock_range_difference_m": 0.24410193245929682,
+      "joint_range_difference_m": -0.8096588456996063,
+      "linear_projection_residual_m": 1.8466122408966612e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "STJO00CAN",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G04",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08217477649704748,
+      "broadcast_elevation_deg": 10.744337102681579,
+      "orbital_range_difference_m": -1.7962175495922565,
+      "clock_range_difference_m": 0.1907435888518596,
+      "joint_range_difference_m": -1.605473960740397,
+      "linear_projection_residual_m": 5.936662050842756e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07306092013788151,
+      "broadcast_elevation_deg": 40.32989209959246,
+      "orbital_range_difference_m": -0.40686891227960587,
+      "clock_range_difference_m": 0.3845292830247328,
+      "joint_range_difference_m": -0.02233962925487304,
+      "linear_projection_residual_m": 6.778904659832108e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G06",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08386080995525932,
+      "broadcast_elevation_deg": 6.937217721697042,
+      "orbital_range_difference_m": -1.4621408395469189,
+      "clock_range_difference_m": 0.41605495366737344,
+      "joint_range_difference_m": -1.0460858858795454,
+      "linear_projection_residual_m": 9.610936846371487e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G09",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07892028776839552,
+      "broadcast_elevation_deg": 19.716229407913232,
+      "orbital_range_difference_m": -1.4774878583848476,
+      "clock_range_difference_m": 0.26125168407331806,
+      "joint_range_difference_m": -1.2162361743115295,
+      "linear_projection_residual_m": 2.0833925251650953e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07343890675225362,
+      "broadcast_elevation_deg": 40.486837933083294,
+      "orbital_range_difference_m": -1.717095173895359,
+      "clock_range_difference_m": 0.2429189695101285,
+      "joint_range_difference_m": -1.4741762043852304,
+      "linear_projection_residual_m": 5.389286350521161e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G13",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08274333092371264,
+      "broadcast_elevation_deg": 8.814259707984542,
+      "orbital_range_difference_m": -1.7662872858345509,
+      "clock_range_difference_m": 0.6793176462762806,
+      "joint_range_difference_m": -1.0869696395582702,
+      "linear_projection_residual_m": 4.068582581950864e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G18",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08167925741854046,
+      "broadcast_elevation_deg": 13.764103591027972,
+      "orbital_range_difference_m": -1.607258703559637,
+      "clock_range_difference_m": 0.35996865405625633,
+      "joint_range_difference_m": -1.2472900495033807,
+      "linear_projection_residual_m": 1.6815346226550787e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G19",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G20",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07110667019000076,
+      "broadcast_elevation_deg": 50.73067269121982,
+      "orbital_range_difference_m": -1.7827192395925522,
+      "clock_range_difference_m": 0.43735281282485466,
+      "joint_range_difference_m": -1.3453664267676975,
+      "linear_projection_residual_m": 2.6555997401089826e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G25",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07440651587112057,
+      "broadcast_elevation_deg": 36.35408701910043,
+      "orbital_range_difference_m": -1.450969211757183,
+      "clock_range_difference_m": 0.6248309619864527,
+      "joint_range_difference_m": -0.8261382497707304,
+      "linear_projection_residual_m": 4.3859682330449345e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G26",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07794600688148914,
+      "broadcast_elevation_deg": 20.96842359180732,
+      "orbital_range_difference_m": -1.3629907965660095,
+      "clock_range_difference_m": 0.17493596465618957,
+      "joint_range_difference_m": -1.1880548319098199,
+      "linear_projection_residual_m": 2.2334486926567365e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G28",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08209467759307375,
+      "broadcast_elevation_deg": 11.03705903240943,
+      "orbital_range_difference_m": -1.980029370635748,
+      "clock_range_difference_m": 0.3001015313014981,
+      "joint_range_difference_m": -1.6799278393342498,
+      "linear_projection_residual_m": 3.198692200001574e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0690637773298203,
+      "broadcast_elevation_deg": 63.39301528807567,
+      "orbital_range_difference_m": -0.9776229821145535,
+      "clock_range_difference_m": 0.24410193245929682,
+      "joint_range_difference_m": -0.7335210496552567,
+      "linear_projection_residual_m": 1.950842287712362e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "YELL00CAN",
+      "reference": "G31",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0789501074461222,
+      "broadcast_elevation_deg": 19.313945360361338,
+      "orbital_range_difference_m": -0.9518913626670837,
+      "clock_range_difference_m": 0.8361569613401454,
+      "joint_range_difference_m": -0.11573440132693835,
+      "linear_projection_residual_m": 2.1788063131467084e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0711352565198317,
+      "broadcast_elevation_deg": 49.09270424416974,
+      "orbital_range_difference_m": -0.560340691357851,
+      "clock_range_difference_m": 0.3845292830247328,
+      "joint_range_difference_m": -0.1758114083331182,
+      "linear_projection_residual_m": 4.526309216323909e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08082126092840859,
+      "broadcast_elevation_deg": 15.595963051833477,
+      "orbital_range_difference_m": -1.397210530936718,
+      "clock_range_difference_m": 0.41605495366737344,
+      "joint_range_difference_m": -0.9811555772693445,
+      "linear_projection_residual_m": 1.0445844855766495e-07
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07690499191669375,
+      "broadcast_elevation_deg": 27.26754446997994,
+      "orbital_range_difference_m": -1.958033088594675,
+      "clock_range_difference_m": 0.2429189695101285,
+      "joint_range_difference_m": -1.7151141190845465,
+      "linear_projection_residual_m": 3.4715656349604274e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07379608832119525,
+      "broadcast_elevation_deg": 38.26203210959925,
+      "orbital_range_difference_m": -1.6685089133679867,
+      "clock_range_difference_m": 0.6793176462762806,
+      "joint_range_difference_m": -0.9891912670917061,
+      "linear_projection_residual_m": 1.1317029313673288e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G15",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07583462863965319,
+      "broadcast_elevation_deg": 34.543959037863964,
+      "orbital_range_difference_m": -0.5498865731060505,
+      "clock_range_difference_m": 0.20438488565717197,
+      "joint_range_difference_m": -0.34550168744887855,
+      "linear_projection_residual_m": 1.958944451097011e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G19",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07216904357369998,
+      "broadcast_elevation_deg": 40.985277894538896,
+      "orbital_range_difference_m": -0.8923930786550045,
+      "clock_range_difference_m": 0.4229323276566169,
+      "joint_range_difference_m": -0.4694607509983876,
+      "linear_projection_residual_m": 2.2819734990520146e-10
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06931423191896628,
+      "broadcast_elevation_deg": 61.15552589251255,
+      "orbital_range_difference_m": -2.2851053327322006,
+      "clock_range_difference_m": 0.35448589731523383,
+      "joint_range_difference_m": -1.9306194354169668,
+      "linear_projection_residual_m": 6.657492335193638e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0736652926128706,
+      "broadcast_elevation_deg": 38.8215448032986,
+      "orbital_range_difference_m": -1.7085540518164635,
+      "clock_range_difference_m": 0.43735281282485466,
+      "joint_range_difference_m": -1.2712012389916088,
+      "linear_projection_residual_m": 1.0749478196458995e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G25",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G29",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BOGT00COL",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0815886005880545,
+      "broadcast_elevation_deg": 11.43163597953125,
+      "orbital_range_difference_m": -0.5978749357163906,
+      "clock_range_difference_m": 0.3845292830247328,
+      "joint_range_difference_m": -0.21334565269165778,
+      "linear_projection_residual_m": 3.4952225558271266e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07859603685837134,
+      "broadcast_elevation_deg": 22.408634052039247,
+      "orbital_range_difference_m": -1.6193150728940964,
+      "clock_range_difference_m": 0.41605495366737344,
+      "joint_range_difference_m": -1.203260119226723,
+      "linear_projection_residual_m": 9.33836981076297e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G07",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08562087133600796,
+      "broadcast_elevation_deg": 4.45445275808938,
+      "orbital_range_difference_m": -0.9097639508545399,
+      "clock_range_difference_m": 0.40851828521470723,
+      "joint_range_difference_m": -0.5012456656398326,
+      "linear_projection_residual_m": 1.0182015897086671e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08189253829269777,
+      "broadcast_elevation_deg": 11.601778002925128,
+      "orbital_range_difference_m": -2.1082669869065285,
+      "clock_range_difference_m": 0.2429189695101285,
+      "joint_range_difference_m": -1.8653480173963999,
+      "linear_projection_residual_m": 1.4283363825029483e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08207148024849378,
+      "broadcast_elevation_deg": 10.826806363879893,
+      "orbital_range_difference_m": -1.5927748940885067,
+      "clock_range_difference_m": 0.6793176462762806,
+      "joint_range_difference_m": -0.9134572478122261,
+      "linear_projection_residual_m": 1.557091988679815e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G14",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07810344189623024,
+      "broadcast_elevation_deg": 22.70694606314827,
+      "orbital_range_difference_m": -1.8186297565698624,
+      "clock_range_difference_m": 0.3190756232913324,
+      "joint_range_difference_m": -1.49955413327853,
+      "linear_projection_residual_m": 2.8477630031886747e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G15",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07652138200209081,
+      "broadcast_elevation_deg": 32.10134208599273,
+      "orbital_range_difference_m": -0.5706800222396851,
+      "clock_range_difference_m": 0.20438488565717197,
+      "joint_range_difference_m": -0.3662951365825131,
+      "linear_projection_residual_m": 2.919244734833626e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G17",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07062349422471327,
+      "broadcast_elevation_deg": 51.48770720860603,
+      "orbital_range_difference_m": -0.582453578710556,
+      "clock_range_difference_m": 0.3624046572635481,
+      "joint_range_difference_m": -0.22004892144700794,
+      "linear_projection_residual_m": 9.76685099463026e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G19",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06662670812597049,
+      "broadcast_elevation_deg": 79.22634966704305,
+      "orbital_range_difference_m": -0.8671988099813461,
+      "clock_range_difference_m": 0.4229323276566169,
+      "joint_range_difference_m": -0.4442664823247292,
+      "linear_projection_residual_m": 3.0644912163424465e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06894400962190707,
+      "broadcast_elevation_deg": 64.02244195802935,
+      "orbital_range_difference_m": -2.2647493444383144,
+      "clock_range_difference_m": 0.35448589731523383,
+      "joint_range_difference_m": -1.9102634471230806,
+      "linear_projection_residual_m": 7.071256113988511e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G21",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G22",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0734206008005881,
+      "broadcast_elevation_deg": 36.66861263731254,
+      "orbital_range_difference_m": -0.6516701281070709,
+      "clock_range_difference_m": 0.5667944605270339,
+      "joint_range_difference_m": -0.08487566758003706,
+      "linear_projection_residual_m": 4.0581146221185804e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G24",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08350528888492247,
+      "broadcast_elevation_deg": 11.742105051572763,
+      "orbital_range_difference_m": -1.2297060191631317,
+      "clock_range_difference_m": 0.388845420916546,
+      "joint_range_difference_m": -0.8408605982465858,
+      "linear_projection_residual_m": 2.9051427929971396e-10
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G25",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G29",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G30",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.074749385879941,
+      "broadcast_elevation_deg": 35.891699028640346,
+      "orbital_range_difference_m": -1.4813836924731731,
+      "clock_range_difference_m": 0.6186711269610843,
+      "joint_range_difference_m": -0.8627125655120889,
+      "linear_projection_residual_m": 1.0178009413053246e-07
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "BRAZ00BRA",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07621803789290615,
+      "broadcast_elevation_deg": 28.240692273930687,
+      "orbital_range_difference_m": -0.5736822113394737,
+      "clock_range_difference_m": 0.3845292830247328,
+      "joint_range_difference_m": -0.1891529283147409,
+      "linear_projection_residual_m": 3.759885069953839e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G06",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08441002797480548,
+      "broadcast_elevation_deg": 5.226406729627512,
+      "orbital_range_difference_m": -1.4796379059553146,
+      "clock_range_difference_m": 0.41605495366737344,
+      "joint_range_difference_m": -1.0635829522879412,
+      "linear_projection_residual_m": 9.455933058788446e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G11",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08351909654405346,
+      "broadcast_elevation_deg": 6.9718082873952,
+      "orbital_range_difference_m": -2.0063934065401554,
+      "clock_range_difference_m": 0.2429189695101285,
+      "joint_range_difference_m": -1.7634744370300268,
+      "linear_projection_residual_m": 2.663314235817893e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07444139397734732,
+      "broadcast_elevation_deg": 35.71507371152243,
+      "orbital_range_difference_m": -1.6101878359913826,
+      "clock_range_difference_m": 0.6793176462762806,
+      "joint_range_difference_m": -0.930870189715102,
+      "linear_projection_residual_m": 1.2418352568488444e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G14",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.0832981588396889,
+      "broadcast_elevation_deg": 7.206719776036359,
+      "orbital_range_difference_m": -1.807168509811163,
+      "clock_range_difference_m": 0.3190756232913324,
+      "joint_range_difference_m": -1.4880928865198306,
+      "linear_projection_residual_m": 3.098727785477706e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G15",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07158762973507674,
+      "broadcast_elevation_deg": 53.86387955590222,
+      "orbital_range_difference_m": -0.5692327208817005,
+      "clock_range_difference_m": 0.20438488565717197,
+      "joint_range_difference_m": -0.36484783522452857,
+      "linear_projection_residual_m": 1.7685661823918508e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G17",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0755537927593528,
+      "broadcast_elevation_deg": 30.47659058050663,
+      "orbital_range_difference_m": -0.5631414316594601,
+      "clock_range_difference_m": 0.3624046572635481,
+      "joint_range_difference_m": -0.20073677439591198,
+      "linear_projection_residual_m": 1.2001584837051382e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G19",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.070166105308081,
+      "broadcast_elevation_deg": 50.39775091927477,
+      "orbital_range_difference_m": -0.8815142698585987,
+      "clock_range_difference_m": 0.4229323276566169,
+      "joint_range_difference_m": -0.4585819422019818,
+      "linear_projection_residual_m": 2.1247287262937675e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06731358046014026,
+      "broadcast_elevation_deg": 86.36333174536936,
+      "orbital_range_difference_m": -2.1532422602176666,
+      "clock_range_difference_m": 0.35448589731523383,
+      "joint_range_difference_m": -1.7987563629024328,
+      "linear_projection_residual_m": 8.630317971380919e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08052769348276903,
+      "broadcast_elevation_deg": 15.235044147046453,
+      "orbital_range_difference_m": -1.6814285591244698,
+      "clock_range_difference_m": 0.43735281282485466,
+      "joint_range_difference_m": -1.244075746299615,
+      "linear_projection_residual_m": 7.3558543700613654e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G22",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07637837921992317,
+      "broadcast_elevation_deg": 25.95546280320353,
+      "orbital_range_difference_m": -0.6350053958594799,
+      "clock_range_difference_m": 0.5667944605270339,
+      "joint_range_difference_m": -0.06821093533244604,
+      "linear_projection_residual_m": 4.104043860309048e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G24",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07835819993986055,
+      "broadcast_elevation_deg": 27.808835347062207,
+      "orbital_range_difference_m": -1.2221310622990131,
+      "clock_range_difference_m": 0.388845420916546,
+      "joint_range_difference_m": -0.8332856413824672,
+      "linear_projection_residual_m": 1.2250453984563592e-09
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G25",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08449087560387608,
+      "broadcast_elevation_deg": 4.305960385940634,
+      "orbital_range_difference_m": -0.8854057677090168,
+      "clock_range_difference_m": 0.6248309619864527,
+      "joint_range_difference_m": -0.2605748057225641,
+      "linear_projection_residual_m": 6.975560751243393e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G29",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G30",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08242062441200586,
+      "broadcast_elevation_deg": 10.833274809713263,
+      "orbital_range_difference_m": -1.3909777253866196,
+      "clock_range_difference_m": 0.6186711269610843,
+      "joint_range_difference_m": -0.7723065984255353,
+      "linear_projection_residual_m": 9.596214778362366e-08
+    },
+    {
+      "time_gpst_s": 37800.0,
+      "station": "AREQ00PER",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06902737127520958,
+      "broadcast_elevation_deg": 61.35947692079115,
+      "orbital_range_difference_m": -0.46525297686457634,
+      "clock_range_difference_m": 0.43308200922937434,
+      "joint_range_difference_m": -0.032170967635202,
+      "linear_projection_residual_m": 5.007752212904393e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07928228149510658,
+      "broadcast_elevation_deg": 20.363934044221462,
+      "orbital_range_difference_m": -1.3845144920051098,
+      "clock_range_difference_m": 0.4119949306345314,
+      "joint_range_difference_m": -0.9725195613705784,
+      "linear_projection_residual_m": 1.1894325413486229e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G09",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08001427993643188,
+      "broadcast_elevation_deg": 16.265303297929314,
+      "orbital_range_difference_m": -1.5480711050331593,
+      "clock_range_difference_m": 0.2731882229856789,
+      "joint_range_difference_m": -1.2748828820474802,
+      "linear_projection_residual_m": 1.3648941532551362e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07029326206066248,
+      "broadcast_elevation_deg": 55.794237607764586,
+      "orbital_range_difference_m": -1.8787001594901085,
+      "clock_range_difference_m": 0.2322090882172636,
+      "joint_range_difference_m": -1.6464910712728449,
+      "linear_projection_residual_m": 4.2323942350819266e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08193960347402905,
+      "broadcast_elevation_deg": 11.181961070363212,
+      "orbital_range_difference_m": -1.7757143788039684,
+      "clock_range_difference_m": 0.6830109035361618,
+      "joint_range_difference_m": -1.0927034752678066,
+      "linear_projection_residual_m": 5.541532788200243e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G19",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.0844556783789765,
+      "broadcast_elevation_deg": 1.4960828179096863,
+      "orbital_range_difference_m": -0.8156585656106472,
+      "clock_range_difference_m": 0.38626226765004584,
+      "joint_range_difference_m": -0.42939629796060136,
+      "linear_projection_residual_m": 7.028975512746172e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07915701137019956,
+      "broadcast_elevation_deg": 19.438429582575946,
+      "orbital_range_difference_m": -2.441592164337635,
+      "clock_range_difference_m": 0.37962824302964415,
+      "joint_range_difference_m": -2.0619639213079908,
+      "linear_projection_residual_m": 6.892136950042982e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.067714319503846,
+      "broadcast_elevation_deg": 77.6751138778679,
+      "orbital_range_difference_m": -1.8004821948707104,
+      "clock_range_difference_m": 0.4263416686139783,
+      "joint_range_difference_m": -1.374140526256732,
+      "linear_projection_residual_m": 5.480791376299976e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G25",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07820293351099195,
+      "broadcast_elevation_deg": 23.394970199923844,
+      "orbital_range_difference_m": -1.411042045801878,
+      "clock_range_difference_m": 0.632584426103079,
+      "joint_range_difference_m": -0.778457619698799,
+      "linear_projection_residual_m": 5.2929079563668324e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07360330241802297,
+      "broadcast_elevation_deg": 39.05775912646896,
+      "orbital_range_difference_m": -1.0149232298135757,
+      "clock_range_difference_m": 0.2632755491983988,
+      "joint_range_difference_m": -0.751647680615177,
+      "linear_projection_residual_m": 1.0592712262891268e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "ALGO00CAN",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06953944964805739,
+      "broadcast_elevation_deg": 57.900488232468426,
+      "orbital_range_difference_m": -0.3994370587170124,
+      "clock_range_difference_m": 0.43308200922937434,
+      "joint_range_difference_m": 0.03364495051236194,
+      "linear_projection_residual_m": 8.383351235430325e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G06",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0773898413513059,
+      "broadcast_elevation_deg": 25.690991211372054,
+      "orbital_range_difference_m": -1.742857988923788,
+      "clock_range_difference_m": 0.2322090882172636,
+      "joint_range_difference_m": -1.5106489007065245,
+      "linear_projection_residual_m": 4.696640321100176e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08030906844812073,
+      "broadcast_elevation_deg": 15.959231916503732,
+      "orbital_range_difference_m": -1.8075291812419891,
+      "clock_range_difference_m": 0.6830109035361618,
+      "joint_range_difference_m": -1.1245182777058274,
+      "linear_projection_residual_m": 1.500632285100778e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G18",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07678968890136767,
+      "broadcast_elevation_deg": 29.373782443347025,
+      "orbital_range_difference_m": -1.6303837038576603,
+      "clock_range_difference_m": 0.35762547379406595,
+      "joint_range_difference_m": -1.2727582300635945,
+      "linear_projection_residual_m": 2.4813799237577427e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G19",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G20",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07221999256462405,
+      "broadcast_elevation_deg": 45.33141450439783,
+      "orbital_range_difference_m": -1.8464789427816868,
+      "clock_range_difference_m": 0.4263416686139783,
+      "joint_range_difference_m": -1.4201372741677085,
+      "linear_projection_residual_m": -6.598823709680346e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G25",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07236608450120577,
+      "broadcast_elevation_deg": 45.54852766011099,
+      "orbital_range_difference_m": -1.4737030267715454,
+      "clock_range_difference_m": 0.632584426103079,
+      "joint_range_difference_m": -0.8411186006684664,
+      "linear_projection_residual_m": 5.087961518768225e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G26",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07918209133530202,
+      "broadcast_elevation_deg": 17.38820668583103,
+      "orbital_range_difference_m": -1.3044935688376427,
+      "clock_range_difference_m": 0.16498820556369254,
+      "joint_range_difference_m": -1.1395053632739502,
+      "linear_projection_residual_m": 2.5943174497555788e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G28",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08248395474378063,
+      "broadcast_elevation_deg": 9.89329003007589,
+      "orbital_range_difference_m": -1.9469001926481724,
+      "clock_range_difference_m": 0.278244721072676,
+      "joint_range_difference_m": -1.6686554715754964,
+      "linear_projection_residual_m": 1.1600607141559749e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06819775545653933,
+      "broadcast_elevation_deg": 70.68215947359577,
+      "orbital_range_difference_m": -0.9476667419075966,
+      "clock_range_difference_m": 0.2632755491983988,
+      "joint_range_difference_m": -0.6843911927091978,
+      "linear_projection_residual_m": 1.500887647498672e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "DRAO00CAN",
+      "reference": "G31",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08093368444358673,
+      "broadcast_elevation_deg": 13.676167515411901,
+      "orbital_range_difference_m": -0.8939584456384182,
+      "clock_range_difference_m": 0.8280764007739547,
+      "joint_range_difference_m": -0.06588204486446347,
+      "linear_projection_residual_m": 8.930614359137223e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G04",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08494160421876597,
+      "broadcast_elevation_deg": 2.8541467400017244,
+      "orbital_range_difference_m": -1.894479427486658,
+      "clock_range_difference_m": 0.1763672028607963,
+      "joint_range_difference_m": -1.7181122246258618,
+      "linear_projection_residual_m": -3.132023529417438e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07288939836515344,
+      "broadcast_elevation_deg": 40.89940281206542,
+      "orbital_range_difference_m": -0.48076731711626053,
+      "clock_range_difference_m": 0.43308200922937434,
+      "joint_range_difference_m": -0.047685307886886186,
+      "linear_projection_residual_m": 8.340223289771131e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07395486997592503,
+      "broadcast_elevation_deg": 39.19751466137282,
+      "orbital_range_difference_m": -1.492546308785677,
+      "clock_range_difference_m": 0.4119949306345314,
+      "joint_range_difference_m": -1.0805513781511455,
+      "linear_projection_residual_m": 1.1808701261273313e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G07",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08178875312095125,
+      "broadcast_elevation_deg": 16.032165563100644,
+      "orbital_range_difference_m": -0.8478190861642361,
+      "clock_range_difference_m": 0.34742851613771897,
+      "joint_range_difference_m": -0.5003905700265171,
+      "linear_projection_residual_m": 5.137113401332272e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G09",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07547570133320497,
+      "broadcast_elevation_deg": 31.086949382906255,
+      "orbital_range_difference_m": -1.590442880988121,
+      "clock_range_difference_m": 0.2731882229856789,
+      "joint_range_difference_m": -1.317254658002442,
+      "linear_projection_residual_m": 1.2331649479335738e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06777436229307636,
+      "broadcast_elevation_deg": 78.00125519767978,
+      "orbital_range_difference_m": -1.9685911126434803,
+      "clock_range_difference_m": 0.2322090882172636,
+      "joint_range_difference_m": -1.7363820244262167,
+      "linear_projection_residual_m": 3.739187626194962e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G13",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G19",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08213596695331377,
+      "broadcast_elevation_deg": 7.88254136670103,
+      "orbital_range_difference_m": -0.8052066043019295,
+      "clock_range_difference_m": 0.38626226765004584,
+      "joint_range_difference_m": -0.41894433665188363,
+      "linear_projection_residual_m": 6.1811189500105e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08001693603242038,
+      "broadcast_elevation_deg": 16.798687323049553,
+      "orbital_range_difference_m": -2.5379128642380238,
+      "clock_range_difference_m": 0.37962824302964415,
+      "joint_range_difference_m": -2.1582846212083795,
+      "linear_projection_residual_m": 5.560870697252085e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06763157199127688,
+      "broadcast_elevation_deg": 79.12735803341951,
+      "orbital_range_difference_m": -1.7552628219127655,
+      "clock_range_difference_m": 0.4263416686139783,
+      "joint_range_difference_m": -1.3289211532987872,
+      "linear_projection_residual_m": 9.758649888169657e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G25",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08445159842192189,
+      "broadcast_elevation_deg": 4.896377746706979,
+      "orbital_range_difference_m": -1.4219653494656086,
+      "clock_range_difference_m": 0.632584426103079,
+      "joint_range_difference_m": -0.7893809233625296,
+      "linear_projection_residual_m": 4.480413307028641e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07747373843026702,
+      "broadcast_elevation_deg": 24.936948843986112,
+      "orbital_range_difference_m": -1.0022711381316185,
+      "clock_range_difference_m": 0.2632755491983988,
+      "joint_range_difference_m": -0.7389955889332197,
+      "linear_projection_residual_m": 8.153637320873486e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "STJO00CAN",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G04",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08337254148925038,
+      "broadcast_elevation_deg": 7.2107873803695695,
+      "orbital_range_difference_m": -1.8297946453094482,
+      "clock_range_difference_m": 0.1763672028607963,
+      "joint_range_difference_m": -1.653427442448652,
+      "linear_projection_residual_m": 8.532611062150863e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07154900748577124,
+      "broadcast_elevation_deg": 46.9083097077338,
+      "orbital_range_difference_m": -0.39622949063777924,
+      "clock_range_difference_m": 0.43308200922937434,
+      "joint_range_difference_m": 0.03685251859159511,
+      "linear_projection_residual_m": 5.783828083139042e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G06",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.0859809365047844,
+      "broadcast_elevation_deg": 1.0898153902658039,
+      "orbital_range_difference_m": -1.4380717240273952,
+      "clock_range_difference_m": 0.4119949306345314,
+      "joint_range_difference_m": -1.0260767933928638,
+      "linear_projection_residual_m": 1.075042339593324e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G09",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0792593174290513,
+      "broadcast_elevation_deg": 18.5934521122081,
+      "orbital_range_difference_m": -1.4611276723444462,
+      "clock_range_difference_m": 0.2731882229856789,
+      "joint_range_difference_m": -1.1879394493587672,
+      "linear_projection_residual_m": 1.7499913518292942e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07504372282998995,
+      "broadcast_elevation_deg": 33.98749952266584,
+      "orbital_range_difference_m": -1.7611115723848343,
+      "clock_range_difference_m": 0.2322090882172636,
+      "joint_range_difference_m": -1.5289024841675707,
+      "linear_projection_residual_m": 4.931669761454316e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G13",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08502792499303309,
+      "broadcast_elevation_deg": 2.52846492167977,
+      "orbital_range_difference_m": -1.8076673671603203,
+      "clock_range_difference_m": 0.6830109035361618,
+      "joint_range_difference_m": -1.1246564636241585,
+      "linear_projection_residual_m": 3.100951273538044e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G15",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G18",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07963826723521893,
+      "broadcast_elevation_deg": 19.975535915319664,
+      "orbital_range_difference_m": -1.6175592727959156,
+      "clock_range_difference_m": 0.35762547379406595,
+      "joint_range_difference_m": -1.2599337990018498,
+      "linear_projection_residual_m": 1.879371103186145e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G19",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G20",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07099106922239735,
+      "broadcast_elevation_deg": 51.421044085636034,
+      "orbital_range_difference_m": -1.8353395387530327,
+      "clock_range_difference_m": 0.4263416686139783,
+      "joint_range_difference_m": -1.4089978701390544,
+      "linear_projection_residual_m": 2.9838247428415343e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G25",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07625112853617526,
+      "broadcast_elevation_deg": 29.976421547270284,
+      "orbital_range_difference_m": -1.5333513617515564,
+      "clock_range_difference_m": 0.632584426103079,
+      "joint_range_difference_m": -0.9007669356484774,
+      "linear_projection_residual_m": 4.335104364372455e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G26",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07664649523283713,
+      "broadcast_elevation_deg": 25.465448154425232,
+      "orbital_range_difference_m": -1.3597766570746899,
+      "clock_range_difference_m": 0.16498820556369254,
+      "joint_range_difference_m": -1.1947884515109974,
+      "linear_projection_residual_m": 2.049595826392192e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G28",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08382932795168191,
+      "broadcast_elevation_deg": 6.11174117269509,
+      "orbital_range_difference_m": -1.9541784934699535,
+      "clock_range_difference_m": 0.278244721072676,
+      "joint_range_difference_m": -1.6759337723972776,
+      "linear_projection_residual_m": 5.248808720992315e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G29",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06835424899288248,
+      "broadcast_elevation_deg": 69.11640795175747,
+      "orbital_range_difference_m": -0.9258198961615562,
+      "clock_range_difference_m": 0.2632755491983988,
+      "joint_range_difference_m": -0.6625443469631574,
+      "linear_projection_residual_m": 2.1030276520228597e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "YELL00CAN",
+      "reference": "G31",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08010652005555233,
+      "broadcast_elevation_deg": 16.145271786508445,
+      "orbital_range_difference_m": -0.9211806990206242,
+      "clock_range_difference_m": 0.8280764007739547,
+      "joint_range_difference_m": -0.09310429824666944,
+      "linear_projection_residual_m": 2.3138809757128342e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07174950814130825,
+      "broadcast_elevation_deg": 45.867668819391994,
+      "orbital_range_difference_m": -0.5366855785250664,
+      "clock_range_difference_m": 0.43308200922937434,
+      "joint_range_difference_m": -0.10360356929569203,
+      "linear_projection_residual_m": 1.9061654477070533e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08089708321025174,
+      "broadcast_elevation_deg": 15.362751729567574,
+      "orbital_range_difference_m": -1.3981069438159466,
+      "clock_range_difference_m": 0.4119949306345314,
+      "joint_range_difference_m": -0.9861120131814152,
+      "linear_projection_residual_m": 1.1530390175984451e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07670411083283733,
+      "broadcast_elevation_deg": 27.85220098821693,
+      "orbital_range_difference_m": -1.987757883965969,
+      "clock_range_difference_m": 0.2322090882172636,
+      "joint_range_difference_m": -1.7555487957487055,
+      "linear_projection_residual_m": 3.153148298018493e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07415272859379303,
+      "broadcast_elevation_deg": 36.94201733269442,
+      "orbital_range_difference_m": -1.687662273645401,
+      "clock_range_difference_m": 0.6830109035361618,
+      "joint_range_difference_m": -1.0046513701092392,
+      "linear_projection_residual_m": 1.2295410689588948e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G14",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G15",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07406239676772834,
+      "broadcast_elevation_deg": 41.01732216217822,
+      "orbital_range_difference_m": -0.5571496039628983,
+      "clock_range_difference_m": 0.1944101901953409,
+      "joint_range_difference_m": -0.36273941376755736,
+      "linear_projection_residual_m": 4.380356077859915e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G17",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G19",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07333316361562821,
+      "broadcast_elevation_deg": 36.469922669212785,
+      "orbital_range_difference_m": -0.8394098207354546,
+      "clock_range_difference_m": 0.38626226765004584,
+      "joint_range_difference_m": -0.4531475530854087,
+      "linear_projection_residual_m": -8.488245661908422e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0684575478057404,
+      "broadcast_elevation_deg": 68.24105941936865,
+      "orbital_range_difference_m": -2.2352263629436493,
+      "clock_range_difference_m": 0.37962824302964415,
+      "joint_range_difference_m": -1.855598119914005,
+      "linear_projection_residual_m": 1.0134596761801618e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0750758800170541,
+      "broadcast_elevation_deg": 33.366540006315454,
+      "orbital_range_difference_m": -1.726711381226778,
+      "clock_range_difference_m": 0.4263416686139783,
+      "joint_range_difference_m": -1.3003697126127998,
+      "linear_projection_residual_m": 8.69663385749675e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G22",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G24",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G25",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G29",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G30",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BOGT00COL",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G05",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08234324987036837,
+      "broadcast_elevation_deg": 9.113476033383385,
+      "orbital_range_difference_m": -0.5657369866967201,
+      "clock_range_difference_m": 0.43308200922937434,
+      "joint_range_difference_m": -0.13265497746734578,
+      "linear_projection_residual_m": -7.470701834932925e-11
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G06",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07739035302600164,
+      "broadcast_elevation_deg": 26.383417933259057,
+      "orbital_range_difference_m": -1.6440757066011429,
+      "clock_range_difference_m": 0.4119949306345314,
+      "joint_range_difference_m": -1.2320807759666115,
+      "linear_projection_residual_m": 1.0540479000731295e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G07",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08697827831476655,
+      "broadcast_elevation_deg": 1.2141476266240827,
+      "orbital_range_difference_m": -0.8671377971768379,
+      "clock_range_difference_m": 0.34742851613771897,
+      "joint_range_difference_m": -0.519709281039119,
+      "linear_projection_residual_m": 1.289655049419025e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G11",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0805181513107634,
+      "broadcast_elevation_deg": 15.56114454013939,
+      "orbital_range_difference_m": -2.132933534681797,
+      "clock_range_difference_m": 0.2322090882172636,
+      "joint_range_difference_m": -1.9007244464645334,
+      "linear_projection_residual_m": 1.546576644528841e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08134157703672161,
+      "broadcast_elevation_deg": 13.035941166297386,
+      "orbital_range_difference_m": -1.5912791267037392,
+      "clock_range_difference_m": 0.6830109035361618,
+      "joint_range_difference_m": -0.9082682231675774,
+      "linear_projection_residual_m": 1.5759724414365905e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G14",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0792727015966829,
+      "broadcast_elevation_deg": 19.28522182133004,
+      "orbital_range_difference_m": -1.814144928008318,
+      "clock_range_difference_m": 0.3120713645889829,
+      "joint_range_difference_m": -1.502073563419335,
+      "linear_projection_residual_m": 3.13966370679708e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G15",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07550789418113585,
+      "broadcast_elevation_deg": 35.29924066150329,
+      "orbital_range_difference_m": -0.5791555270552635,
+      "clock_range_difference_m": 0.1944101901953409,
+      "joint_range_difference_m": -0.3847453368599226,
+      "linear_projection_residual_m": 4.563129873957905e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G17",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07174106806481756,
+      "broadcast_elevation_deg": 45.26745880810242,
+      "orbital_range_difference_m": -0.6116696819663048,
+      "clock_range_difference_m": 0.3059615793875443,
+      "joint_range_difference_m": -0.30570810257876047,
+      "linear_projection_residual_m": 2.7018198789363623e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G19",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06677749453108955,
+      "broadcast_elevation_deg": 77.66676285238812,
+      "orbital_range_difference_m": -0.8429184071719646,
+      "clock_range_difference_m": 0.38626226765004584,
+      "joint_range_difference_m": -0.4566561395219188,
+      "linear_projection_residual_m": -3.709121898509693e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06898235779224497,
+      "broadcast_elevation_deg": 63.85684993094956,
+      "orbital_range_difference_m": -2.1916426084935665,
+      "clock_range_difference_m": 0.37962824302964415,
+      "joint_range_difference_m": -1.8120143654639222,
+      "linear_projection_residual_m": 1.066664481186308e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G21",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G22",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07436978734852683,
+      "broadcast_elevation_deg": 32.75386923141293,
+      "orbital_range_difference_m": -0.6753235794603825,
+      "clock_range_difference_m": 0.5731452615364817,
+      "joint_range_difference_m": -0.10217831792390075,
+      "linear_projection_residual_m": 3.2898321844498923e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G24",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.08193246650960201,
+      "broadcast_elevation_deg": 16.265114898431932,
+      "orbital_range_difference_m": -1.2698532864451408,
+      "clock_range_difference_m": 0.3878382980363,
+      "joint_range_difference_m": -0.8820149884088408,
+      "linear_projection_residual_m": 4.026268207724115e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G25",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G29",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G30",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.075512902748718,
+      "broadcast_elevation_deg": 33.29810406873918,
+      "orbital_range_difference_m": -1.4378392286598682,
+      "clock_range_difference_m": 0.625758032831696,
+      "joint_range_difference_m": -0.8120811958281723,
+      "linear_projection_residual_m": 1.2167209795244105e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "BRAZ00BRA",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G04",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G05",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07751761125892467,
+      "broadcast_elevation_deg": 23.693246417074203,
+      "orbital_range_difference_m": -0.5497948043048382,
+      "clock_range_difference_m": 0.43308200922937434,
+      "joint_range_difference_m": -0.11671279507546384,
+      "linear_projection_residual_m": 3.813724003265406e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G06",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08368160078671681,
+      "broadcast_elevation_deg": 7.260669316218135,
+      "orbital_range_difference_m": -1.498812049627304,
+      "clock_range_difference_m": 0.4119949306345314,
+      "joint_range_difference_m": -1.0868171189927727,
+      "linear_projection_residual_m": 1.038285830645691e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G07",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G09",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G11",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08285677146467278,
+      "broadcast_elevation_deg": 8.75622032397183,
+      "orbital_range_difference_m": -2.0399452224373817,
+      "clock_range_difference_m": 0.2322090882172636,
+      "joint_range_difference_m": -1.8077361342201181,
+      "linear_projection_residual_m": 2.224690431873455e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G13",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07379848420081765,
+      "broadcast_elevation_deg": 38.38400191633345,
+      "orbital_range_difference_m": -1.6209634132683277,
+      "clock_range_difference_m": 0.6830109035361618,
+      "joint_range_difference_m": -0.9379525097321659,
+      "linear_projection_residual_m": 1.8459092476774686e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G14",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08501118479827591,
+      "broadcast_elevation_deg": 2.719095893860497,
+      "orbital_range_difference_m": -1.8033679649233818,
+      "clock_range_difference_m": 0.3120713645889829,
+      "joint_range_difference_m": -1.4912966003343988,
+      "linear_projection_residual_m": 2.697048984146022e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G15",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07052995416397816,
+      "broadcast_elevation_deg": 59.37601415516027,
+      "orbital_range_difference_m": -0.5733983404934406,
+      "clock_range_difference_m": 0.1944101901953409,
+      "joint_range_difference_m": -0.37898815029809974,
+      "linear_projection_residual_m": -9.419345303740556e-10
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G17",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07657263990586613,
+      "broadcast_elevation_deg": 26.462326441963096,
+      "orbital_range_difference_m": -0.6103475354611874,
+      "clock_range_difference_m": 0.3059615793875443,
+      "joint_range_difference_m": -0.30438595607364305,
+      "linear_projection_residual_m": 4.5068393461633605e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G18",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G19",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07035031731919045,
+      "broadcast_elevation_deg": 49.77229015807146,
+      "orbital_range_difference_m": -0.8499057665467262,
+      "clock_range_difference_m": 0.38626226765004584,
+      "joint_range_difference_m": -0.4636434988966804,
+      "linear_projection_residual_m": -2.2191688486827843e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G20",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.06748645302829726,
+      "broadcast_elevation_deg": 81.25174694451225,
+      "orbital_range_difference_m": -2.0573662631213665,
+      "clock_range_difference_m": 0.37962824302964415,
+      "joint_range_difference_m": -1.6777380200917222,
+      "linear_projection_residual_m": 1.2318217246232166e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G21",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.0821180395285942,
+      "broadcast_elevation_deg": 10.606521186184487,
+      "orbital_range_difference_m": -1.6964295245707035,
+      "clock_range_difference_m": 0.4263416686139783,
+      "joint_range_difference_m": -1.2700878559567252,
+      "linear_projection_residual_m": 1.0757900792413011e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G22",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07800191011770373,
+      "broadcast_elevation_deg": 20.430533476530943,
+      "orbital_range_difference_m": -0.6753525100648403,
+      "clock_range_difference_m": 0.5731452615364817,
+      "joint_range_difference_m": -0.10220724852835861,
+      "linear_projection_residual_m": 3.255201996843482e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G24",
+      "status": "PROJECTED",
+      "baseline_vacuum_flight_time_s": 0.07736455903303904,
+      "broadcast_elevation_deg": 31.1606282479434,
+      "orbital_range_difference_m": -1.2598174251616001,
+      "clock_range_difference_m": 0.3878382980363,
+      "joint_range_difference_m": -0.8719791271253001,
+      "linear_projection_residual_m": -2.0731882877100816e-09
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G25",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08330219420272236,
+      "broadcast_elevation_deg": 8.00625779181793,
+      "orbital_range_difference_m": -0.957965575158596,
+      "clock_range_difference_m": 0.632584426103079,
+      "joint_range_difference_m": -0.32538114905551707,
+      "linear_projection_residual_m": 7.050817907305884e-08
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G26",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G28",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G29",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G30",
+      "status": "BELOW_MASK",
+      "baseline_vacuum_flight_time_s": 0.08331046738028026,
+      "broadcast_elevation_deg": 8.529185344582855,
+      "orbital_range_difference_m": -1.3572411313652992,
+      "clock_range_difference_m": 0.625758032831696,
+      "joint_range_difference_m": -0.7314830985336033,
+      "linear_projection_residual_m": 1.1578285019631096e-07
+    },
+    {
+      "time_gpst_s": 38700.0,
+      "station": "AREQ00PER",
+      "reference": "G31",
+      "status": "NOT_OBSERVED_IN_ARCHIVED_WINDOW"
+    }
+  ]
+}

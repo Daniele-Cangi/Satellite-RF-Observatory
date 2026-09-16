@@ -70,6 +70,16 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The raw-product ray projection in `research/exploratory/REFERENCE_RAY_PROJECTION.md`
+propagates joint orbit/clock discrepancies onto 263 admitted geometric rays out
+of 602 station/reference/epoch combinations at the two bracketing nodes per event.
+It shares the baseline broadcast reception axes and freezes vacuum light time.
+Joint range RMS is 0.77/1.11 m with partial orbital/clock cancellation. These are
+conditional product discrepancies, not observed RF residuals or qualified error
+bounds. Reference-point/attitude/frame, signal biases/clock datum, differential
+relativity and observation-time evaluation remain open. No recalibration or target
+fit uses these values; complete convention alignment before applying corrections.
+
 The reference-product discrepancy study in
 `research/exploratory/REFERENCE_PRODUCT_DISCREPANCY.md` compares 4128 non-target
 broadcast/IGS rapid satellite-epoch pairs on the two exposed days. Target state

@@ -1,5 +1,7 @@
 import numpy as np
 import pytest
+import json
+from pathlib import Path
 
 from research.exploratory import reference_ray_projection as study
 
@@ -57,3 +59,39 @@ def test_bracket_preserves_exact_endpoints_and_rejects_extrapolation():
     assert study.bracket([0., 900., 1800.], 900., 1200.) == [900., 1800.]
     with pytest.raises(ValueError):
         study.bracket([0., 900.], -1., 100.)
+
+
+@pytest.mark.parametrize('tag,archive,total,projected', [
+    ('g14', 'experiments/positioning_g14_doy246_network', 294, 131),
+    ('g12', 'research/exploratory/inputs/g12_doy248', 308, 132),
+])
+def test_saved_projection_replays_all_paths_and_signed_station_means(tag, archive, total, projected):
+    root = Path(__file__).resolve().parents[3]
+    inputs = root/'research/exploratory/inputs/reference_products'/tag
+    saved = json.loads((root/f'research/exploratory/results/{tag}_reference_ray_projection_v1.json').read_bytes())
+    result = study.run(root/archive, inputs/'reference_extract.txt', inputs/'receipt.json')
+    assert result['sources_sha256'] == saved['sources_sha256']
+    assert result['input_sha256'] == saved['input_sha256']
+    assert result['case_count'] == len(result['rows']) == total
+    assert sum(result['status_counts'].values()) == total
+    assert result['status_counts']['PROJECTED'] == projected
+    assert result['target'] not in result['references']
+    assert not result['target_state_parsed'] and not result['applied_to_estimator']
+    assert not result['qualified_error_budget']
+    assert len(saved['rows']) == total
+    for row, old in zip(result['rows'], saved['rows']):
+        assert row.keys() == old.keys()
+        for key, value in row.items():
+            tolerance = (1e-13 if key == 'baseline_vacuum_flight_time_s' else
+                         1e-9 if key == 'broadcast_elevation_deg' else 1e-6)
+            assert old[key] == (pytest.approx(value, rel=1e-12, abs=tolerance)
+                                if isinstance(value, float) else value)
+        if row['status'] == 'PROJECTED':
+            assert row['joint_range_difference_m'] == pytest.approx(
+                row['orbital_range_difference_m']+row['clock_range_difference_m'], abs=1e-12)
+    for group in result['station_epoch_projections']:
+        included = [r for r in result['rows'] if r['status'] == 'PROJECTED'
+                    and r['station'] == group['station'] and r['time_gpst_s'] == group['time_gpst_s']]
+        assert group['references'] == [r['reference'] for r in included]
+        assert group['mean_joint_range_difference_m'] == pytest.approx(
+            np.mean([r['joint_range_difference_m'] for r in included]), abs=1e-12)
