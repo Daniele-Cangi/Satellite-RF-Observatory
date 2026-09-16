@@ -1,0 +1,26 @@
+{
+  "DEHANTTIDEINEL.F": {
+    "sha256": "bc6039a1704761881bb785ce44ce084ea82783107ff64c576e69155a4914e2cb",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/dehanttideinel/DEHANTTIDEINEL.F"
+  },
+  "ST1IDIU.F": {
+    "sha256": "d2976b8b76be8dd1d57e57a8d6b48f5764676126515bada3592753a07d3acd1e",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/dehanttideinel/ST1IDIU.F"
+  },
+  "ST1ISEM.F": {
+    "sha256": "efdf284bd977826a1f4aea4c79c5dbd0c38fc1c403a2376010048b511a11f2c6",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/dehanttideinel/ST1ISEM.F"
+  },
+  "ST1L1.F": {
+    "sha256": "b1dfd0e797a3ce950631ad7dbbf5f576bf6b58dc515688253a3d84ca059bc282",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/dehanttideinel/ST1L1.F"
+  },
+  "STEP2DIU.F": {
+    "sha256": "898c70d4b8d50e09e0c717c911c4117b3ad1ca4996d369c258b68d00ea3a5674",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/dehanttideinel/STEP2DIU.F"
+  },
+  "STEP2LON.F": {
+    "sha256": "f9d3bf0317222986d22e53557020bb13a6fbb90f8e3c9915137da6184d82813a",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/dehanttideinel/STEP2LON.F"
+  }
+}
