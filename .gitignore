@@ -219,3 +219,5 @@ transfer/
 research/exploratory/results/*
 !research/exploratory/results/g14_reference_sensitivity_v1.json
 !research/exploratory/results/g12_reference_sensitivity_v1.json
+!research/exploratory/results/g14_reference_clock_response_v1.json
+!research/exploratory/results/g12_reference_clock_response_v1.json

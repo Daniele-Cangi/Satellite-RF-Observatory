@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+import hashlib
+import json
+from pathlib import Path
 
-import numpy as np
 import pytest
 
 from positioning.calibration import C
@@ -69,3 +71,28 @@ def test_run_keeps_both_signs_and_all_failures(monkeypatch):
     assert report['status_counts'] == {'ESTIMATED': 3, 'ENGINEERING_FAILURE': 2}
     assert all(pair['status'] == 'NOT_COMPARABLE' for pair in report['paired_responses'])
     assert all('gain' not in key for pair in report['paired_responses'] for key in pair)
+
+
+@pytest.mark.parametrize('event,inputs', [
+    ('g14', 'experiments/positioning_g14_doy246_network'),
+    ('g12', 'research/exploratory/inputs/g12_doy248'),
+])
+def test_saved_response_binds_inputs_sources_and_all_signed_variants(event, inputs):
+    root = Path(__file__).resolve().parents[3]
+    report = json.loads((root / f'research/exploratory/results/{event}_reference_clock_response_v1.json').read_bytes())
+    for name, digest in report['sources_sha256'].items():
+        assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest
+    for name, digest in report['input_sha256'].items():
+        assert hashlib.sha256((root / inputs / 'estimation' / name).read_bytes()).hexdigest() == digest
+    assert report['target'] not in report['references']
+    assert report['case_count'] == len(report['cases']) == 1 + 2 * (len(report['references']) + 1)
+    assert sum(report['status_counts'].values()) == report['case_count']
+    assert report['cases'][0]['mode'] == 'baseline'
+    for index, mode in enumerate(report['references'] + ['all_references']):
+        minus, plus = report['cases'][1 + 2 * index:3 + 2 * index]
+        assert minus['mode'] == plus['mode'] == mode
+        assert (minus['clock_step_m'], plus['clock_step_m']) == (-1., 1.)
+        expected = {'mode': mode, **study.paired_response(report['cases'][0], minus, plus, 1.)}
+        assert report['paired_responses'][index] == expected
+    assert not any(report[key] for key in ('target_orbit_accessed', 'new_confirmation',
+                                          'measured_product_error', 'is_accuracy_bound'))
