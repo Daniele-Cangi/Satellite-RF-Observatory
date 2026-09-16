@@ -1,0 +1,39 @@
+{
+  "schema": "reference-code-bias-extract-v1",
+  "source_url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262460000_01D_01D_OSB.BIA.gz",
+  "source_compressed_sha256": "43f6579aba99b29f79be9a8dff2cf3903e92d6541815ec4a8ea22102771fee41",
+  "source_compressed_bytes": 70427,
+  "extract_sha256": "e7ceb3755416a060fd69f3f3f5e52f40f668253715346be5d8bc23bcb451478a",
+  "references": [
+    "G01",
+    "G02",
+    "G03",
+    "G05",
+    "G06",
+    "G07",
+    "G08",
+    "G09",
+    "G10",
+    "G12",
+    "G13",
+    "G15",
+    "G17",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G23",
+    "G24",
+    "G27",
+    "G30"
+  ],
+  "target_excluded": "G14",
+  "model": "IGS20_2425",
+  "signals": [
+    "C1C",
+    "C1W",
+    "C2W"
+  ],
+  "record_count": 63,
+  "note": "Reference satellite OSBs only. Target, receiver and other-signal records discarded as text before numeric conversion; source header count retained."
+}
