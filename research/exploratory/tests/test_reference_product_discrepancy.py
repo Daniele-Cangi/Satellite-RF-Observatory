@@ -78,7 +78,10 @@ def test_saved_real_product_comparison_replays_and_preserves_denominator(tag, ar
     for row, old in zip(actual['rows'], saved['rows']):
         assert row.keys() == old.keys()
         for key, value in row.items():
-            assert old[key] == (pytest.approx(value, rel=1e-10, abs=1e-8)
+            # Subtracting ~26,000 km propagated coordinates exposes libm
+            # roundoff. One micrometre remains below SP3 millimetre resolution.
+            tolerance = 1e-6 if key in ('delta_xyz_m', 'orbit_discrepancy_norm_m') else 1e-8
+            assert old[key] == (pytest.approx(value, rel=1e-10, abs=tolerance)
                                 if isinstance(value, (float, list)) else value)
     covariance = np.array(actual['centered_clock_sample_covariance_m2'])
     np.testing.assert_allclose(covariance, saved['centered_clock_sample_covariance_m2'], rtol=1e-10, atol=1e-10)
