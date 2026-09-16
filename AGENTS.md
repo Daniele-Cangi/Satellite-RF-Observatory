@@ -70,6 +70,18 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The observation-time trial in `research/exploratory/REFERENCE_TIME_ALIGNMENT.md`
+evaluates paired CODE rapid 5-minute orbits, 30-second clocks and daily biases.
+It solves emission offsets, applies periodic relativity and conditional radial
+PCO, then recalibrates/refits with frozen broadcast reference sets and historical
+checks. All eight baseline/primary/control cases estimate. On 1463 evaluated
+paths out of 1581 observed pairs, the primary changes G14/G12 by 3.375/5.623 m
+from bias-corrected broadcast; thinning clocks to 60 s changes the primary by
+0.022/0.121 m. Native-node holdout controls are numerical, not physical bounds.
+Actual attitude/code antenna response, station frame/media and receiver/error
+covariance remain open. This is an experimental model, not a production change,
+new confirmation or qualified error budget. Preserve all executed reports.
+
 The isolated satellite-code translation trial in
 `research/exploratory/REFERENCE_CODE_BIAS.md` uses CODE rapid C1W-minus-C1C
 bias differences, matched by day/SVN/IGS20_2425 and applied only to admitted
