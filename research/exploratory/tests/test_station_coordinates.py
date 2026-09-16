@@ -170,3 +170,27 @@ def test_station_report_replays_and_accounts_for_every_fit_station(tag):
             for t in {p['time_s'] for p in s['projections']}:
                 assert sum(p['centered_range_change_m'] for p in s['projections'] if p['time_s'] == t) == pytest.approx(0, abs=1e-12)
     for path, digest in result['sources_sha256'].items(): assert audit.sha((ROOT/path).read_bytes()) == digest
+
+
+@pytest.mark.parametrize('defect', ['date', 'target', 'missing_path', 'duplicate_path', 'direction', 'forbidden_flag'])
+def test_reference_evidence_cannot_silently_change_audit_scope(defect):
+    admitted = json.loads((ARCHIVES['g14']/'estimation/admitted.json').read_bytes())
+    report = json.loads((ROOT/'research/exploratory/results/g14_reference_residual_structure_v2.json').read_bytes())
+    if defect == 'date': report['date_gpst'] = '2026-09-04'
+    if defect == 'target': report['target_excluded'] = 'G12'
+    if defect == 'missing_path': report['reference_rows'].pop()
+    if defect == 'duplicate_path': report['reference_rows'].append(report['reference_rows'][0])
+    if defect == 'direction': report['reference_rows'][0]['los_enu'] = [2., 0., 0.]
+    if defect == 'forbidden_flag': report['target_orbit_accessed'] = True
+    with pytest.raises(ValueError):
+        audit.validate_reference_report(report, admitted, '2026-09-03', report['times_s'])
+
+
+def test_station_extract_byte_tampering_is_rejected(tmp_path):
+    source = INPUTS/'station_coordinates/g14'
+    for name in ('receipt.json', 'headers.json', 'station_sinex.txt'):
+        (tmp_path/name).write_bytes((source/name).read_bytes())
+    with (tmp_path/'station_sinex.txt').open('ab') as handle: handle.write(b'\n')
+    with pytest.raises(ValueError, match='hash mismatch'):
+        audit.run(tmp_path, ARCHIVES['g14']/'estimation/admitted.json',
+                  ROOT/'research/exploratory/results/g14_reference_residual_structure_v2.json')
