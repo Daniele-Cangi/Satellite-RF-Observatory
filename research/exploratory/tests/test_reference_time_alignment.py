@@ -25,10 +25,11 @@ def synthetic_provider():
 def test_emission_clock_sign_closure_and_independent_reception_rotation(monkeypatch):
     provider = synthetic_provider()
     code, tag, receiver_clock = 20000000., 3600., 150.
-    tx, clock, _, radial, closure = provider.emitted_state('G01', code, tag)
+    tx, clock, _, radial, closure, offset = provider.emitted_state('G01', code, tag)
     assert tx == pytest.approx(tag-code/model.C-1e-4, abs=1e-11)
     assert clock == pytest.approx(1e-4, abs=1e-15)
     assert abs(closure) < .001
+    assert offset == pytest.approx(-code/model.C-clock, abs=1e-15)
     monkeypatch.setattr(model, 'troposphere', lambda *args: (0., 30.))
     station = np.array([6378137., 0., 0.])
     actual, elevation = provider.model('G01', code, tag, station, receiver_clock)
@@ -181,6 +182,11 @@ def test_reports_bind_inputs_sources_all_variants_and_all_observed_paths(tag):
     for row in saved['paths']:
         if row['status'] == 'EVALUATED':
             assert abs(row['emission_closure_m']) < .001
+            state = provider.emitted_state(row['reference'], row['corrected_if_code_m'], row['time_s'])
+            assert state[0] == pytest.approx(row['emission_gpst_s'], abs=1e-11, rel=0.)
+            assert state[5] == pytest.approx(row['emission_offset_from_tag_s'], abs=1e-13, rel=0.)
+            assert model.C*(row['emission_offset_from_tag_s']+row['satellite_clock_with_relativity_s']
+                            +row['corrected_if_code_m']/model.C) == pytest.approx(row['emission_closure_m'], abs=1e-8)
             p9, _ = provider.orbit(row['reference'], row['emission_gpst_s'], 9)
             p7, _ = provider.orbit(row['reference'], row['emission_gpst_s'], 7)
             assert row['orbit_9_minus_7_norm_m'] == pytest.approx(np.linalg.norm(p9-p7), abs=1e-6)

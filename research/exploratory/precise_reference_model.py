@@ -162,30 +162,34 @@ class PreciseReference:
     def emitted_state(self, sv, code_m, tag_s, count=9, clock_step=30):
         if not np.isfinite([code_m, tag_s]).all() or code_m <= 0:
             raise ValueError('positive finite observed code required')
-        emitted = tag_s-code_m/C
-        tx = emitted
+        # Solve in an offset from the tag, avoiding cancellation of ~40000 s
+        # absolute epochs in the sub-nanosecond emission closure diagnostic.
+        emitted_offset = -code_m/C
+        offset = emitted_offset
         for _ in range(10):
+            tx = tag_s+offset
             com, velocity = self.orbit(sv, tx, count)
             clock = self.clock(sv, tx, clock_step)+relativity_m(com, velocity)/C
-            next_tx = emitted-clock
-            if abs(next_tx-tx) <= 1e-11:
-                tx = next_tx
+            next_offset = emitted_offset-clock
+            if abs(next_offset-offset) <= 1e-14:
+                offset = next_offset
                 break
-            tx = next_tx
+            offset = next_offset
         else:
             raise ValueError('emission clock iteration did not converge')
+        tx = tag_s+offset
         com, velocity = self.orbit(sv, tx, count)
         clock = self.clock(sv, tx, clock_step)+relativity_m(com, velocity)/C
-        closure = (tx+clock-emitted)*C
+        closure = (offset+clock-emitted_offset)*C
         if abs(closure) > .001:
             raise ValueError('emission equation did not close')
         pco = self.offsets[sv]['if_pco_body_m']
         radial = com-pco[2]*com/np.linalg.norm(com)
-        return tx, clock, com, radial, closure
+        return tx, clock, com, radial, closure, offset
 
     def model(self, sv, code_m, tag_s, station, receiver_clock_m, count=9, clock_step=30):
-        tx, clock, _, satellite, _ = self.emitted_state(sv, code_m, tag_s, count, clock_step)
-        tau = tag_s-receiver_clock_m/C-tx
+        _, clock, _, satellite, _, offset = self.emitted_state(sv, code_m, tag_s, count, clock_step)
+        tau = -receiver_clock_m/C-offset
         if not 0 < tau < 1:
             raise ValueError('invalid reception/emission interval')
         rotated = rotate_z(satellite, -OMEGA*tau)

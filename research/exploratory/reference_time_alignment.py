@@ -165,11 +165,12 @@ def run(archive, timed, biases, antennas, progress=None):
                     row['status'] = 'MISSING_PRECISE_CALIBRATION'
                     if t in fitted:
                         clock = fitted[t]['clock_m']
-                        tx, sat_clock, com, _, closure = provider.emitted_state(sv, code, t)
+                        tx, sat_clock, com, _, closure, offset = provider.emitted_state(sv, code, t)
                         p9, _ = provider.orbit(sv, tx, 9)
                         p7, _ = provider.orbit(sv, tx, 7)
-                        tau = t-clock/C-tx
+                        tau = -clock/C-offset
                         row.update(status='EVALUATED', emission_gpst_s=tx, reception_gpst_s=t-clock/C,
+                                   emission_offset_from_tag_s=offset, corrected_if_code_m=code,
                                    emission_closure_m=closure, satellite_clock_with_relativity_s=sat_clock,
                                    orbit_9_minus_7_norm_m=float(np.linalg.norm(p9-p7)),
                                    **radial_yaw_geometry(station, com, provider.offsets[sv]['if_pco_body_m'], tau))
