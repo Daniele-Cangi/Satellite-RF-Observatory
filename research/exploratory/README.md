@@ -1,5 +1,11 @@
 # Esperimenti di sviluppo su dati reali
 
+La [proiezione congiunta orbita-clock](REFERENCE_RAY_PROJECTION.md) confronta
+263 collegamenti geometrici ammessi su 602 combinazioni nei nodi che racchiudono
+le due finestre. Gli RMS congiunti sono 0,77/1,11 m: la compensazione parziale
+mostra perché mantenere i contributi con segno. L'allineamento fisico delle
+convenzioni resta incompleto e nessuna correzione entra nello stimatore.
+
 Il [confronto dei prodotti reali](REFERENCE_PRODUCT_DISCREPANCY.md) aggiunge
 4128 coppie satellite-epoca broadcast/IGS rapido, senza conversione numerica
 degli stati del bersaglio. Conserva scarti orbitali, clock grezzi e centrati,
