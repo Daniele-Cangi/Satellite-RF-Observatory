@@ -131,15 +131,34 @@ name and all DOMES/point/day/type checks. All fourteen then compare successfully
 No physical thresholds or station selections changed. Both report versions
 remain available; `*_station_coordinates_v2.json` is the complete result.
 
-Offline reproduction to fresh output paths:
+The final PR143 review identified remaining permissive archive JSON parsing
+and partial-manifest/unit-vector substitution weaknesses in those lower-level
+runners. The active boundary is now `verified_station_replay.py`, frozen at
+`9cf37a78e128a85c38faf4f770bb3f09803c7d65` before execution. It uses one read
+for archive JSON parsing/hashing, rejects duplicate keys and nonfinite values,
+and pins nine complete input artifacts per event, including the prior attitude,
+reference direction and station reports. A valid unit vector substituted into
+the report is rejected by the full-file digest. Empty/partial source manifests
+cannot bypass the same complete-report binding.
+
+This entry point recomputes every reference row, omission, model comparison,
+descriptive statistic and station projection. Both receipts close
+`ALL_PINNED_RESULTS_REPRODUCED`: eight reference cases and seven stations per
+event, with 716/747 evaluated paths. They are integrity repairs and exact-data
+replays, not additional physical trials. All earlier sources/reports remain
+unchanged. The trusted pins intentionally restrict this entry point to these
+two exposed datasets; they do not authorize importing a new event.
+
+Offline reproduction with the active verification boundary to fresh outputs:
 
 ```powershell
-python -m research.exploratory.reference_residual_structure_v2 experiments/positioning_g14_doy246_network research/exploratory/inputs/timed_reference_products/g14 research/exploratory/inputs/reference_biases/g14 research/exploratory/inputs/reference_antennas/g14 research/exploratory/inputs/reference_attitudes/g14 research/exploratory/results/g14_reference_attitude_v1.json g14-reference-v2-replay.json
-python -m research.exploratory.station_coordinates_v2 research/exploratory/inputs/station_coordinates/g14 experiments/positioning_g14_doy246_network/estimation/admitted.json research/exploratory/results/g14_reference_residual_structure_v2.json g14-station-replay.json
+python -m research.exploratory.verified_station_replay g14 g14-verified-replay.json
+python -m research.exploratory.verified_station_replay g12 g12-verified-replay.json
 ```
 
-For G12 replace the archive with `research/exploratory/inputs/g12_doy248` and
-the product/report tags with `g12`. These commands reject existing outputs.
+The commands reject existing outputs. The lower-level v1/v2 runners document
+historical execution; use the verified entry point for subsequent reuse.
 Tests cover known-axis synthetic geometry, range sign, identity/epoch/unit
 failures, poisoned excluded text, header-only parsing, forbidden causal flags,
-length mismatches, complete accounting, input hashes and both report replays.
+length mismatches, complete accounting, input hashes, full-file report binding,
+strict archive JSON and complete reference/station report replays.

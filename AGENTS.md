@@ -80,10 +80,13 @@ corrections, measured coordinate errors or improved target accuracy. The daily
 coordinate epochs differ from the observation windows; final/rapid frame
 alignment, site displacement, code antenna response and physical covariance
 remain unqualified. Phase IF PCO norms 0.039-0.111 m are descriptive only.
-Use `station_coordinates_v2.py` and its v2 reports; preserve the first audit's
-marker-description parser failures. Use `reference_residual_structure_v2.py`
-for guarded reuse: it repairs PR142 date/causal-flag and length validation while
-reproducing all prior numerical results. V1 sources/reports remain immutable.
+Use `verified_station_replay.py` as the active replay boundary for these two
+exposed events. It strictly parses the same archive bytes it hashes, pins the
+complete prior/calibration/geometry reports, and reproduces all numerical
+results. This addresses PR143's permissive archive JSON and partial provenance/
+unit-vector substitution findings. Lower-level v1/v2 runners and their reports
+remain immutable execution history, including the first marker-parser failures.
+The reference v2 also preserves the PR142 date/causal-flag and length repairs.
 Next qualify one coherent terrestrial frame/epoch/site-motion convention before
 reference-only recalibration over broader geometry. No target fit, new confirmation
 or production estimator change was made; G3/S2 remain incomplete.
