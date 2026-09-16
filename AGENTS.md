@@ -70,6 +70,20 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The regularized station study in `research/exploratory/STATION_FRAME_EPOCH.md`
+propagates the CODE IGc20 catalogue with velocity and cumulative post-seismic
+motion. All fourteen daily SINEX a-priori positions reproduce within 7 micrometres;
+this is product-model consistency, not physical coordinate accuracy. Five fixed
+coordinate modes per event all pass the historical reference calibration checks
+(770 station/epochs). Final transported coordinates reduce pooled reference RMS
+by 6.163%/0.629% for G14/G12; two/three stations worsen and remain reported.
+AREQ's supplied cumulative PSD is 0.355 m; daily-to-event slow transport is only
+2-69 micrometres. Preserve all cases, inputs and source hashes. Coordinates remain
+regularized: periodic tides/loading, seasonal terms, code antenna response and
+physical covariance are unresolved. Next implement and validate periodic site
+motion at RF epochs, then extend reference-only geometry. No target fit or new
+confirmation occurred, production is unchanged, and S2/G3 remain incomplete.
+
 The terrestrial audit in `research/exploratory/STATION_COORDINATES.md` compares
 all fourteen fit-station/day ARPs with the daily middle solution of CODE final
 three-day SINEX products. Marker identity, DOMES, antenna type/radome and

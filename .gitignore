@@ -243,3 +243,5 @@ research/exploratory/results/*
 !research/exploratory/results/g12_station_coordinates_v2.json
 !research/exploratory/results/g14_verified_station_replay_v1.json
 !research/exploratory/results/g12_verified_station_replay_v1.json
+!research/exploratory/results/g14_station_frame_epoch_v1.json
+!research/exploratory/results/g12_station_frame_epoch_v1.json

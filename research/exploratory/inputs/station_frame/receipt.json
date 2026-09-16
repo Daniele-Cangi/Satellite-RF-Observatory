@@ -1,0 +1,43 @@
+{
+  "schema": "station-frame-inputs-v1",
+  "access_utc": "2026-09-16T21:40:56.899361+00:00",
+  "station_short_codes": [
+    "ALGO",
+    "AREQ",
+    "BOGT",
+    "BRAZ",
+    "DRAO",
+    "MKEA",
+    "PIE1",
+    "STJO",
+    "YELL"
+  ],
+  "satellite_parameters_parsed": false,
+  "files": {
+    "IGC20.CRD": {
+      "source_url": "https://www.aiub.unibe.ch/download/BSWUSER54/REF/IGC20.CRD",
+      "raw_sha256": "54ae26d24224543221d335d70e93e3142be1c570142ebce55fb91744507dfd32",
+      "extract_sha256": "11b8aef9f785da4feeaf93307dbd65f920e5d642d80677dea65c7f2f839a9a1b"
+    },
+    "IGC20.VEL": {
+      "source_url": "https://www.aiub.unibe.ch/download/BSWUSER54/REF/IGC20.VEL",
+      "raw_sha256": "147dbb29e3096d2b5f18dff1ebe29ec3b8537563259b0a3e4c47b3173114bd81",
+      "extract_sha256": "4e05595ec7df2283dd53728ae0e62c18de64b8d318beca1180f9565bfbdb3eb9"
+    },
+    "IGC20.PSD": {
+      "source_url": "https://www.aiub.unibe.ch/download/BSWUSER54/REF/IGC20.PSD",
+      "raw_sha256": "482650e17fb89b9c6af7b9935947df36cb4586e78a3a988cdbdad4026e13941b",
+      "extract_sha256": "98b3536998f94d29a6322b5d79f4e8b2ad1fa45153c9fbe19ab62446fdbe2579"
+    },
+    "g14_apriori.txt": {
+      "source_url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSFIN_20262460000_01D_01D_SOL.SNX.gz",
+      "raw_sha256": "5070fd4038b102c9f74548298ddbbc8da2dc7b7bde0781cdf85ab220f7ee8e0a",
+      "extract_sha256": "7f4ef5d13ddd4d74c3c065158723d5de99c9a3c7ad078ad8584446f9523e6afa"
+    },
+    "g12_apriori.txt": {
+      "source_url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSFIN_20262480000_01D_01D_SOL.SNX.gz",
+      "raw_sha256": "1479139f1c6b996aa0c12c5f3cc0d8cbba29f12d58ba9af95d31e8fcecba6f6e",
+      "extract_sha256": "5abe8f3609bf45ac95b97c66b6ddc6976336340822319e2db6b9d20d56b72602"
+    }
+  }
+}
