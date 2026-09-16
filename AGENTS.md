@@ -70,6 +70,17 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The isolated satellite-code translation trial in
+`research/exploratory/REFERENCE_CODE_BIAS.md` uses CODE rapid C1W-minus-C1C
+bias differences, matched by day/SVN/IGS20_2425 and applied only to admitted
+non-target IF observations. Its exploratory recalibration and inverse fit move
+G14/G12 by 9.058/3.906 m relative to their development baselines. Reference RMS
+decreases, while target fit residuals slightly increase. No target orbit/bias,
+holdout or new uncertainty is used; this does not establish improved accuracy.
+The common pseudo-absolute OSB datum cancels in the difference. This component
+trial does not apply the incompletely aligned SP3 discrepancies to an estimator.
+Full precise-product integration and receiver/bias covariance remain open.
+
 The partial convention alignment in `research/exploratory/REFERENCE_CONVENTIONS.md`
 uses the archived IGS20_2425 antenna model, matching the SP3 header. On the same
 263 rays it applies IF radial PCO and differential periodic relativity; joint

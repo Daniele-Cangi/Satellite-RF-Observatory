@@ -227,3 +227,5 @@ research/exploratory/results/*
 !research/exploratory/results/g12_reference_ray_projection_v1.json
 !research/exploratory/results/g14_reference_conventions_v1.json
 !research/exploratory/results/g12_reference_conventions_v1.json
+!research/exploratory/results/g14_reference_code_bias_v1.json
+!research/exploratory/results/g12_reference_code_bias_v1.json
