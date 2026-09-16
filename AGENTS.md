@@ -70,6 +70,19 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The lunisolar station study in `research/exploratory/SOLID_EARTH_DISPLACEMENT.md`
+adds IERS-derived step-1/step-2 displacement with permanent tide retained to
+regularized ARPs. All 924 station/epoch calibrations pass; primary reference RMS
+falls 0.0670%/0.5850% for G14/G12, with DRAO and YELL worsening on G14. Modeled
+motion is 0.037-0.160 m and changes up to 4.40 mm over five minutes. Three published
+IERS examples match at numerical precision; the inconsistent fourth remains an
+explicit mismatch in both reports. Preserve all six variants, including controls
+with incorrect time/permanent-tide conventions; never select by the best RMS.
+Sun/Moon DE440s and observed terrestrial EOP are pinned, with explicit GPST/UTC/TT.
+Next validate station-specific ocean loading and pole tide; atmospheric loading,
+seasonal motion, receiver response and covariance remain open. No target fit,
+new accuracy claim or production change occurred; S2/G3 remain incomplete.
+
 The regularized station study in `research/exploratory/STATION_FRAME_EPOCH.md`
 propagates the CODE IGc20 catalogue with velocity and cumulative post-seismic
 motion. All fourteen daily SINEX a-priori positions reproduce within 7 micrometres;

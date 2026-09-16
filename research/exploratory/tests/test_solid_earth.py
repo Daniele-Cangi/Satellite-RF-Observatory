@@ -75,3 +75,17 @@ def test_complete_study_replay(tag):
         assert len(case['calibrations'])==7
         assert all(len(c['epochs'])==11 for c in case['calibrations'].values())
     assert not actual['target_fit_performed'] and not actual['instantaneous_site_position_qualified']
+
+
+def test_all_engineering_failures_are_retained(monkeypatch):
+    old=json.loads((study.BASE/'results/g14_station_frame_epoch_v1.json').read_bytes())
+    monkeypatch.setattr(study.frame,'run',lambda tag:old)
+    def fail(*args,**kwargs):raise ValueError('injected tide calibration failure')
+    monkeypatch.setattr(study.frame,'calibrate_fixed',fail)
+    result=study.run('g14')
+    assert result['status_counts']=={'CALIBRATION_NOT_QUALIFIED':6}
+    assert result['observed_path_count']==734
+    for case in result['cases']:
+        assert case['pooled_reference_rms_m'] is None and case['evaluated_path_count']==0
+        assert len(case['calibrations'])==7
+        assert all(c['status']=='ENGINEERING_FAILURE' for c in case['calibrations'].values())
