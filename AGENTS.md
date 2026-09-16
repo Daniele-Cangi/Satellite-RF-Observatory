@@ -70,6 +70,16 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The partial convention alignment in `research/exploratory/REFERENCE_CONVENTIONS.md`
+uses the archived IGS20_2425 antenna model, matching the SP3 header. On the same
+263 rays it applies IF radial PCO and differential periodic relativity; joint
+product RMS becomes 0.688/0.495 m. Full-yaw transverse PCO excursions are at most
+0.094 m conditional on nadir body Z. This is not an attitude measurement or a
+total antenna/code error bound. Nine-versus-seven orbit-node derivatives control
+numerical sensitivity only. Raw reports remain immutable. Code bias/clock datum,
+actual attitude and code antenna response, frame/media and observation-time
+evaluation remain unresolved before recalibration; S2/G3 remain incomplete.
+
 The raw-product ray projection in `research/exploratory/REFERENCE_RAY_PROJECTION.md`
 propagates joint orbit/clock discrepancies onto 263 admitted geometric rays out
 of 602 station/reference/epoch combinations at the two bracketing nodes per event.

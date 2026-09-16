@@ -1,0 +1,33 @@
+{
+  "schema": "reference-antenna-extract-v1",
+  "source_url": "https://files.igs.org/pub/station/general/pcv_archive/igs20_2425.atx.gz",
+  "source_compressed_sha256": "cc15ff342305278fc818b7300453b02068b5f8e7393b03c9aa98b70918ba7260",
+  "source_compressed_bytes": 7660658,
+  "extract_sha256": "35ea3174f31acb3da95ffa487832f366ec830bbd63fe7906e5db2827b31fd47d",
+  "target_excluded": "G14",
+  "references": [
+    "G01",
+    "G02",
+    "G03",
+    "G05",
+    "G06",
+    "G07",
+    "G08",
+    "G09",
+    "G10",
+    "G12",
+    "G13",
+    "G15",
+    "G17",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G23",
+    "G24",
+    "G27",
+    "G30"
+  ],
+  "model": "IGS20_2425",
+  "note": "Allowlisted antenna blocks only; no orbital states. All unselected blocks discarded as text before numeric conversion."
+}
