@@ -1,0 +1,32 @@
+{
+  "schema": "reference-product-extract-v1",
+  "source_url": "https://igs.bkg.bund.de/root_ftp/IGS/products/2434/IGS0OPSRAP_20262460000_01D_15M_ORB.SP3.gz",
+  "source_gzip_sha256": "4070544ff1087cea12dca91a0c168404bd434c11989faa4e7febd1bc8b070fea",
+  "source_gzip_bytes": 101435,
+  "extract_sha256": "bb87b4f8fe877822628d15d7cd0b2ac7c2b64fd8332c8071dbf904f658724355",
+  "target_excluded": "G14",
+  "references": [
+    "G01",
+    "G02",
+    "G03",
+    "G05",
+    "G06",
+    "G07",
+    "G08",
+    "G09",
+    "G10",
+    "G12",
+    "G13",
+    "G15",
+    "G17",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G23",
+    "G24",
+    "G27",
+    "G30"
+  ],
+  "exclusion": "All unselected state records discarded as text before numeric conversion. Raw mixed product remains outside repository."
+}
