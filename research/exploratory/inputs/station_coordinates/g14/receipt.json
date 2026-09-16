@@ -1,0 +1,24 @@
+{
+  "schema": "station-coordinate-receipt-v1",
+  "target_excluded": "G14",
+  "date_gpst": "2026-09-03",
+  "fit_stations": [
+    "ALGO00CAN",
+    "BOGT00COL",
+    "DRAO00CAN",
+    "MKEA00USA",
+    "PIE100USA",
+    "STJO00CAN",
+    "YELL00CAN"
+  ],
+  "source_url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSFIN_20262460000_01D_01D_SOL.SNX.gz",
+  "raw_gzip_sha256": "5070fd4038b102c9f74548298ddbbc8da2dc7b7bde0781cdf85ab220f7ee8e0a",
+  "raw_bytes": 47591292,
+  "access_utc": "2026-09-16T21:03:00.693699+00:00",
+  "product_family": "CODE final 3-day solution; daily middle-day record required",
+  "satellite_parameters_parsed": false,
+  "sha256": {
+    "headers.json": "2d66a1a4c68e103cb2fd4fb5f5cddad5be890a1078cd41988d16647bf772817e",
+    "station_sinex.txt": "e5541712120dbd1584122e47bd0cebb48604714bc14a0e5013737e0a1453863a"
+  }
+}

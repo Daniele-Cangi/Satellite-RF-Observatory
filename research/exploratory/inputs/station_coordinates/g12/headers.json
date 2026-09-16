@@ -1,0 +1,228 @@
+{
+  "schema": "station-header-extract-v1",
+  "fit_stations": [
+    "ALGO00CAN",
+    "DRAO00CAN",
+    "STJO00CAN",
+    "YELL00CAN",
+    "BOGT00COL",
+    "BRAZ00BRA",
+    "AREQ00PER"
+  ],
+  "source_inventory_sha256": "3db445e2eeccb2f6c4e1638e76b17ebddc26b3cef4b408ad4b0f569b8331ded0",
+  "headers": {
+    "ALGO00CAN": {
+      "MARKER NAME": [
+        "ALGO                                                        "
+      ],
+      "MARKER NUMBER": [
+        "40104M002                                                   "
+      ],
+      "REC # / TYPE / VERS": [
+        "3015995             SEPT POLARX5        5.3.2               "
+      ],
+      "ANT # / TYPE": [
+        "303                 AOAD/M_T        NONE                    "
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.1000        0.0000        0.0000                  "
+      ],
+      "APPROX POSITION XYZ": [
+        "   918129.1676 -4346071.3170  4561977.9061                  "
+      ]
+    },
+    "DRAO00CAN": {
+      "APPROX POSITION XYZ": [
+        " -2059164.6900 -3621108.3500  4814432.3900                  "
+      ],
+      "REC # / TYPE / VERS": [
+        "3022792             SEPT POLARX5        5.2.0               "
+      ],
+      "MARKER NAME": [
+        "DRAO CACS-GSD 887006 Penticton BC Canada                    "
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.1000        0.0000        0.0000                  "
+      ],
+      "MARKER NUMBER": [
+        "40105M002                                                   "
+      ],
+      "ANT # / TYPE": [
+        "710152202004170097  TWIVC6050       SCIS                    "
+      ]
+    },
+    "STJO00CAN": {
+      "APPROX POSITION XYZ": [
+        "  2612631.2000 -3426807.0000  4686757.8000                  "
+      ],
+      "REC # / TYPE / VERS": [
+        "3015938             SEPT POLARX5        5.3.2               "
+      ],
+      "MARKER NAME": [
+        "STJO CACS-GSD 920000 St. John's NL Canada                   "
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0500        0.0000        0.0000                  "
+      ],
+      "MARKER NUMBER": [
+        "40101M001                                                   "
+      ],
+      "ANT # / TYPE": [
+        "VC6150202206240024  TWIVC6150       NONE                    "
+      ]
+    },
+    "YELL00CAN": {
+      "APPROX POSITION XYZ": [
+        " -1224452.4000 -2689216.0000  5633638.2000                  "
+      ],
+      "REC # / TYPE / VERS": [
+        "4100652             SEPT POLARX5        5.5.0               "
+      ],
+      "MARKER NAME": [
+        "YELL CACS-GSD 889201 Yellowknife NT Canada                  "
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.1000        0.0000        0.0000                  "
+      ],
+      "MARKER NUMBER": [
+        "40127M003                                                   "
+      ],
+      "ANT # / TYPE": [
+        "527                 AOAD/M_T        NONE                    "
+      ]
+    },
+    "BOGT00COL": {
+      "MARKER NAME": [
+        "BOGT                                                        "
+      ],
+      "MARKER NUMBER": [
+        "41901M001                                                   "
+      ],
+      "REC # / TYPE / VERS": [
+        "01972               JAVAD TRE_3 DELTA   4.6.00              "
+      ],
+      "APPROX POSITION XYZ": [
+        "  1744399.0397 -6116037.5577   512731.7532                  "
+      ],
+      "ANT # / TYPE": [
+        "00989               JAVRINGANT_DM   NONE                    "
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0610        0.0000        0.0000                  "
+      ]
+    },
+    "BRAZ00BRA": {
+      "MARKER NAME": [
+        "BRAZ                                                        "
+      ],
+      "MARKER NUMBER": [
+        "41606M001                                                   "
+      ],
+      "REC # / TYPE / VERS": [
+        "2091265             LEICA GR50          4.83/7.900          "
+      ],
+      "ANT # / TYPE": [
+        "25347037            LEIAR10         NONE                    "
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0080        0.0000        0.0000                  "
+      ],
+      "APPROX POSITION XYZ": [
+        "  4115014.0848 -4550641.5491 -1741444.0190                  "
+      ]
+    },
+    "AREQ00PER": {
+      "MARKER NAME": [
+        "AREQ                                                        "
+      ],
+      "MARKER NUMBER": [
+        "42202M005                                                   "
+      ],
+      "REC # / TYPE / VERS": [
+        "3025537             SEPT POLARX5        5.7.0               "
+      ],
+      "ANT # / TYPE": [
+        "01548               JAVRINGANT_DM   NONE                    "
+      ],
+      "APPROX POSITION XYZ": [
+        "  1942826.2687 -5804070.3514 -1796894.1312                  "
+      ],
+      "ANTENNA: DELTA H/E/N": [
+        "        0.0610        0.0000        0.0000                  "
+      ]
+    }
+  },
+  "receipts": [
+    {
+      "station": "ALGO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/ALGO00CAN_R_20262480000_01D_30S_MO.crx.gz",
+      "bytes": 4208665,
+      "sha256": "dd9edc3f73651f196cfca6c1a986cc21d6a3b3bdff9759922a1803aff750fc64",
+      "access_utc": "2026-09-08T23:29:28.026539+00:00",
+      "http_status": 200,
+      "decoded_sha256": "7e1dee8f03b8e1610af489dbef4ec5603c5fa7b8462b7333488eeb62635429f5",
+      "header_access_utc": "2026-09-16T20:59:56.239756+00:00"
+    },
+    {
+      "station": "DRAO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/DRAO00CAN_R_20262480000_01D_30S_MO.crx.gz",
+      "bytes": 2787197,
+      "sha256": "8217718156da201614c2044a7b1c468980c125edea0e3b12959c32d8e64fb60c",
+      "access_utc": "2026-09-08T23:29:34.293478+00:00",
+      "http_status": 200,
+      "decoded_sha256": "fe8e576e5cfc1f0575521641b22c3d79b0389d722629a7b1f3b8238a576a968d",
+      "header_access_utc": "2026-09-16T20:59:54.744501+00:00"
+    },
+    {
+      "station": "STJO00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/STJO00CAN_R_20262480000_01D_30S_MO.crx.gz",
+      "bytes": 2799597,
+      "sha256": "c160c4da0e7032d58565eefdf8bad10fbca8a7f89268e59734203c1e985bec33",
+      "access_utc": "2026-09-08T23:29:40.117007+00:00",
+      "http_status": 200,
+      "decoded_sha256": "e93671046c98812ccd54813d3d2d294e834797e5b1096184506b9c24407797ed",
+      "header_access_utc": "2026-09-16T20:59:54.924537+00:00"
+    },
+    {
+      "station": "YELL00CAN",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/YELL00CAN_R_20262480000_01D_30S_MO.crx.gz",
+      "bytes": 3182010,
+      "sha256": "43e50f728bd3c7c1c7549c7849887e593c2f4443e77e6db84fe804a2a0f7e0ec",
+      "access_utc": "2026-09-08T23:29:45.692602+00:00",
+      "http_status": 200,
+      "decoded_sha256": "34c2869e849db481fe02be5a96d7328fb9ccab99efafd235ce94ef477f1214bf",
+      "header_access_utc": "2026-09-16T20:59:56.359829+00:00"
+    },
+    {
+      "station": "BOGT00COL",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/BOGT00COL_R_20262480000_01D_30S_MO.crx.gz",
+      "bytes": 3170678,
+      "sha256": "d96603f63c203fa55bab44af0e85effa95d46f261cd70bd869d2883ab8ec4d05",
+      "access_utc": "2026-09-08T23:29:51.342908+00:00",
+      "http_status": 200,
+      "decoded_sha256": "d5a0504dc8b017c950f6be70196a73e7f626159b71e8f7aa873818ec064235c2",
+      "header_access_utc": "2026-09-16T20:59:58.361197+00:00"
+    },
+    {
+      "station": "BRAZ00BRA",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/BRAZ00BRA_R_20262480000_01D_30S_MO.crx.gz",
+      "bytes": 2461779,
+      "sha256": "442f70613f0902f58a6b322d011f2560e160636505e4e3bfe190b3a895e206ea",
+      "access_utc": "2026-09-08T23:29:56.026850+00:00",
+      "http_status": 200,
+      "decoded_sha256": "830fd3c3c52deeeb76648c9ae6d940ce0280c90a63ca2584c799b690bfd24281",
+      "header_access_utc": "2026-09-16T20:59:59.249508+00:00"
+    },
+    {
+      "station": "AREQ00PER",
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/248/AREQ00PER_R_20262480000_01D_30S_MO.crx.gz",
+      "bytes": 3380365,
+      "sha256": "00d84fa4bd90f2f6422b4aa0c8c8da66f26e4e539dfdc1a85ecba7f7d99c8ec5",
+      "access_utc": "2026-09-08T23:30:02.813817+00:00",
+      "http_status": 200,
+      "decoded_sha256": "d786cf44129b6d731549afc579001685f76c9797c08fc42fcaf3e8b77e206baa",
+      "header_access_utc": "2026-09-16T20:59:58.020703+00:00"
+    }
+  ],
+  "observation_numbers_parsed": false
+}
