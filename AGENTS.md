@@ -70,6 +70,16 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The 2026-09-16 exploratory reference-clock response study is documented in
+`research/exploratory/REFERENCE_CLOCK_RESPONSE.md`. On exposed G14/G12 fit data,
+92 variants (including two baselines) propagate invented +/-1 m non-target af0
+perturbations through recalibration and the inverse fit. Maximum single-reference
+position responses are 4.13 and 7.86 m/m; common perturbations primarily change B.
+These are finite-step sensitivities, not measured product errors, orbit-error
+transfer or new uncertainty bounds. Preserve their source/input hashes. Next
+physical work must characterize actual non-target product amplitudes and
+correlations, including orbital components; do not treat these gains as closing S2/G3.
+
 Optional reference-sensitivity diagnostics now accompany local CLI result/status
 reads via `service/diagnostics.py`; see `docs/REFERENCE_SENSITIVITY_DIAGNOSTIC.md`.
 They are input-bound presentation additions, never persisted into the sealed

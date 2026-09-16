@@ -1,5 +1,11 @@
 # Esperimenti di sviluppo su dati reali
 
+Il [trasferimento degli errori di orologio](REFERENCE_CLOCK_RESPONSE.md) è ora
+misurato con perturbazioni controllate sui due eventi: 92 varianti complessive,
+incluse due baseline, senza accesso all'orbita bersaglio. Risposte massime
+4,13 m/m (G14) e 7,86 m/m (G12); le ampiezze reali degli errori dei prodotti
+restano da qualificare.
+
 Le prove in questa cartella possono riutilizzare dati già esposti e modificare
 ipotesi durante lo sviluppo. Non sono nuove conferme indipendenti. Gli eventi
 originali restano immutati e ogni variante, inclusi i fallimenti, è conservata.
