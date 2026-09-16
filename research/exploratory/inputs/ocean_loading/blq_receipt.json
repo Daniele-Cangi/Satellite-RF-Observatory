@@ -1,0 +1,17 @@
+{
+  "raw_sha256": "b882e7c5e69ca60eddc280bd2b485e60e6307371ee15a530b4672d001d57563e",
+  "url": "https://www.aiub.unibe.ch/download/BSWUSER54/REF/FES2014b.BLQ",
+  "extract_sha256": "69ca3bd3d84ee996864df126cf01d15ff9b4a6544a4b2a690290d5228bc9c4ad",
+  "stations": [
+    "ALGO",
+    "BOGT",
+    "DRAO",
+    "MKEA",
+    "PIE1",
+    "STJO",
+    "YELL",
+    "BRAZ",
+    "AREQ"
+  ],
+  "selection": "Exact short-name allowlist before numeric parsing. No other station blocks retained."
+}

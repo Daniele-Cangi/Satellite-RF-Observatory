@@ -248,3 +248,6 @@ research/exploratory/results/*
 
 !research/exploratory/results/g14_solid_earth_v1.json
 !research/exploratory/results/g12_solid_earth_v1.json
+
+!research/exploratory/results/g14_ocean_pole_v1.json
+!research/exploratory/results/g12_ocean_pole_v1.json

@@ -1,0 +1,50 @@
+{
+  "ADMINT.F": {
+    "sha256": "478e3f0c001c09dd4d9e2e9920033d29e76eb60b808238e416e6db9ffaeae6c8",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/ADMINT.F"
+  },
+  "ETUTC.F": {
+    "sha256": "a067c10de2c63269a54b6a14dce2daa49c30bfd52e66086b76492cd438414e1f",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/ETUTC.F"
+  },
+  "EVAL.F": {
+    "sha256": "b4056a09ec5d77674cab8eac0fa32b5d1be8f471fbe33e753e81ab97a7767add",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/EVAL.F"
+  },
+  "HARDISP.F": {
+    "sha256": "df8556e0db396fe5358a1bb2edd8ae2ea19253993a5f8a8641495b9ca0224f75",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/HARDISP.F"
+  },
+  "JULDAT.F": {
+    "sha256": "d1f39f83503178711845532e1a4ba46d0824b896fa961d81c983d694d48dde73",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/JULDAT.F"
+  },
+  "LEAP.F": {
+    "sha256": "31d18153242823606beb9690ab0c685dd5403fe1e9bb5f214e22d21dd5e6a771",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/LEAP.F"
+  },
+  "MDAY.F": {
+    "sha256": "d4eae8a9a0b866a63f22134fb57bad1c57fc1f3baf98450892ddeee4f7ee8aec",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/MDAY.F"
+  },
+  "RECURS.F": {
+    "sha256": "8a3c88d69cebd130981887dc9c8c2f9e3d2af26fded3e052385c022126f9d44b",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/RECURS.F"
+  },
+  "SHELLS.F": {
+    "sha256": "6c69dede79f9adfb16d38dcbd890bbbfc3e4e47b2cbacd5fabfb520deba86701",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/SHELLS.F"
+  },
+  "SPLINE.F": {
+    "sha256": "a13cc2b405079a2b86872341ca50d9b3f0cc219e43d1ce301b461af15df857f0",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/SPLINE.F"
+  },
+  "TDFRPH.F": {
+    "sha256": "24068e0cd1e2e210fab7dd8d4473bb60ff8335bfcb53a2fc12dad7e6d1cccd19",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/TDFRPH.F"
+  },
+  "TOYMD.F": {
+    "sha256": "9b69b6a27d544215c516da60351e4ec51d03b04ce9bf71b6608ebf55080bf70a",
+    "url": "https://iers-conventions.obspm.fr/content/chapter7/software/hardisp/TOYMD.F"
+  }
+}
