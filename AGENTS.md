@@ -70,6 +70,18 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The reference-contrast study in `research/exploratory/REFERENCE_RESIDUAL_STRUCTURE.md`
+compares zero, shared-satellite, station-direction and station/satellite models
+across disjoint five/six-epoch blocks of the exposed G14/G12 windows. All 16
+comparisons execute. Directional terms reduce test RMS by 1–10% overall but
+worsen several stations; per-link constants worsen G12 reverse testing. Preserve
+the nine unsupported G14 predictions and all denominators. Clock centering
+removes 77 common modes per event and induces residual dependence; the short
+series do not identify physical covariance or antenna/code errors. No target fit
+or correction is made. Next distinguish terrestrial coordinate/ARP/APC conventions
+using epoch-matched geodetic evidence before interpreting directional terms as
+receiver calibration; broader reference-only geometry is then needed.
+
 The paired CODE attitude trial in `research/exploratory/REFERENCE_ATTITUDE.md`
 orients the complete IGS20_2425 IF PCO at emission times using restricted 30 s
 ORBEX products. All eight baseline/primary/control cases estimate. The full PCO
