@@ -251,3 +251,5 @@ research/exploratory/results/*
 
 !research/exploratory/results/g14_ocean_pole_v1.json
 !research/exploratory/results/g12_ocean_pole_v1.json
+
+!research/exploratory/results/code_convention_audit_v1.json

@@ -91,6 +91,8 @@ python -m research.exploratory.code_convention_audit NEW_REPORT.json
 python -m pytest research/exploratory/tests/test_code_conventions.py -q
 ```
 
+The implementation and evidence were frozen at `aef3c2e` before producing
+`results/code_convention_audit_v1.json`. All 17 targeted tests pass.
 The output must not exist. Tests cover metadata interpretation, incompatible
 CMC/origin flags, date/family/frame mismatches, duplicate/malformed declarations,
 body exclusion, tampered evidence and exact report replay. No numerical fit

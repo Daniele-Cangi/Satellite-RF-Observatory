@@ -1,0 +1,100 @@
+{
+  "schema": "code-convention-audit-v1",
+  "events": [
+    {
+      "event": "g14",
+      "paired_orbit_source": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262460000_01D_05M_ORB.SP3.gz",
+      "paired_clock_source": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262460000_01D_30S_CLK.CLK.gz",
+      "erp_source": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262460000_01D_01D_ERP.ERP.gz",
+      "sp3": {
+        "antenna_model": "IGS20_2425",
+        "ocean_model": "FES2014b",
+        "atmosphere_field": "NONE",
+        "ocean_cmc_flag": "Y",
+        "atmosphere_cmc_flag": "N",
+        "orbit_origin": "CoN",
+        "clock_origin": "CoN",
+        "date": "2026-09-03",
+        "frame": "IGc20",
+        "raw_model_comment": "/* PCV:IGS20_2425 OL/AL:FES2014b NONE     YN ORB:CoN CLK:CoN"
+      },
+      "erp": {
+        "date": "2026-09-03",
+        "nutation_model": "IAU2000R06",
+        "subdaily_pole_model": "DESAI2016",
+        "raw_title": "CODE RAPID GNSS ERP INFORMATION FOR (MIDDLE) DAY 246, 2026       04-SEP-26 16:18",
+        "raw_model_comment": "NUTATION MODEL       : IAU2000R06               SUBDAILY POLE MODEL: DESAI2016",
+        "mean_pole_model_declared": false,
+        "numeric_eop_values_parsed": false
+      },
+      "decision": {
+        "ocean_cmc_product_declaration_resolved": true,
+        "station_cmc_action": "retain CMC:NO local loading; do not add a geocenter translation",
+        "atmospheric_loading_absence_inferred": false,
+        "mean_pole_realization_qualified": false,
+        "instantaneous_code_eop_reconstructed": false,
+        "subdaily_model_required": "DESAI2016",
+        "whole_station_model_qualified": false
+      }
+    },
+    {
+      "event": "g12",
+      "paired_orbit_source": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262480000_01D_05M_ORB.SP3.gz",
+      "paired_clock_source": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262480000_01D_30S_CLK.CLK.gz",
+      "erp_source": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262480000_01D_01D_ERP.ERP.gz",
+      "sp3": {
+        "antenna_model": "IGS20_2425",
+        "ocean_model": "FES2014b",
+        "atmosphere_field": "NONE",
+        "ocean_cmc_flag": "Y",
+        "atmosphere_cmc_flag": "N",
+        "orbit_origin": "CoN",
+        "clock_origin": "CoN",
+        "date": "2026-09-05",
+        "frame": "IGc20",
+        "raw_model_comment": "/* PCV:IGS20_2425 OL/AL:FES2014b NONE     YN ORB:CoN CLK:CoN"
+      },
+      "erp": {
+        "date": "2026-09-05",
+        "nutation_model": "IAU2000R06",
+        "subdaily_pole_model": "DESAI2016",
+        "raw_title": "CODE RAPID GNSS ERP INFORMATION FOR (MIDDLE) DAY 248, 2026       06-SEP-26 15:25",
+        "raw_model_comment": "NUTATION MODEL       : IAU2000R06               SUBDAILY POLE MODEL: DESAI2016",
+        "mean_pole_model_declared": false,
+        "numeric_eop_values_parsed": false
+      },
+      "decision": {
+        "ocean_cmc_product_declaration_resolved": true,
+        "station_cmc_action": "retain CMC:NO local loading; do not add a geocenter translation",
+        "atmospheric_loading_absence_inferred": false,
+        "mean_pole_realization_qualified": false,
+        "instantaneous_code_eop_reconstructed": false,
+        "subdaily_model_required": "DESAI2016",
+        "whole_station_model_qualified": false
+      }
+    }
+  ],
+  "input_sha256": {
+    "research/exploratory/inputs/code_conventions/receipt.json": "46e57b9fd4731d7608f6423f8635f180a76536be2eb5269f507b58bf40afa36c",
+    "research/exploratory/inputs/timed_reference_products/g14/receipt.json": "0799952d9f1cc2e54516fa609f919e86bee5150fb7252bee173efb63be171b79",
+    "research/exploratory/inputs/timed_reference_products/g14/reference_orbit.txt": "76ce18a058fa13ce08bbef49fc06734600dbb4488e34f1725c09896eb779a4cc",
+    "research/exploratory/inputs/code_conventions/g14.erp": "4abadc80e60fa7a0fc37cd4ce30a02069ffa6fe2ff570b643f4309da676736bd",
+    "research/exploratory/inputs/timed_reference_products/g12/receipt.json": "7689d44af0b47ba4a0def2db61b11f2fc5fdc692897ea74a734ec8291b924333",
+    "research/exploratory/inputs/timed_reference_products/g12/reference_orbit.txt": "09595690ca693bdf7d57c1954cba68fa1aaea7cdd928307de289399be63fbbae",
+    "research/exploratory/inputs/code_conventions/g12.erp": "a7b56ac495cce33686ff4b8e6214f7cadb4f4d255d369e035135b930e9d3c711"
+  },
+  "source_sha256": "9ae90d101deac50750c2180f71666778c2d4a65da2b57931a0507ae98a6bc6af",
+  "scope": "product declarations; not a numerical or physical calibration",
+  "target_states_parsed": false,
+  "rf_observations_parsed": false,
+  "eop_values_parsed": false,
+  "target_fit_performed": false,
+  "previous_results_modified": false,
+  "production_changed": false,
+  "unresolved": [
+    "event-specific mean pole realization",
+    "DESAI2016 subdaily and other EOP terms",
+    "atmospheric loading declaration and local model",
+    "receiver/media response and physical covariance"
+  ]
+}

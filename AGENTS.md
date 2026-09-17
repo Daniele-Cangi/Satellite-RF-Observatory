@@ -70,6 +70,21 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The paired CODE metadata audit in `research/exploratory/CODE_PRODUCT_CONVENTIONS.md`
+resolves the declared ocean-loading CMC handling for both archived rapid SP3s:
+FES2014b, ocean flag Y, ORB:CoN and CLK:CoN. Retain local CMC:NO loading;
+do not add a geocenter translation to stations consuming these CoN products.
+This is product-declaration evidence, not physical calibration or proof of CODE
+execution. Preserve PR146 results/flags as the earlier evidence state.
+The paired rapid ERP headers explicitly declare IAU2000R06 and DESAI2016.
+Next reconstruct and validate that ERP/subdaily convention separately; the
+specific mean-pole realization is not identified by those headers. The Bernese
+IGS20 example's IERS2010_v1.2.0 is context, not event-specific processing proof.
+SP3's NONE atmospheric field does not demonstrate absence of atmospheric tides.
+Then broaden reference-only geometry for larger receiver/media terms. No target
+state, RF value or EOP value was parsed by this metadata audit; production and
+S2/G3 status remain unchanged.
+
 The local ocean/pole study in `research/exploratory/OCEAN_POLE_LOADING.md`
 uses original IERS HARDISP with FES2014b coefficients for all nine fit sites,
 plus solid-Earth pole models for 2018 and an explicit 2010 control. All 48
