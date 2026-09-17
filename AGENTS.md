@@ -77,11 +77,18 @@ is complete: six-station chronological training transfers to the seventh at
 DRAO slightly worsens with final. Preserve these degradations; no blanket
 promotion of the shared correction. Use `spatial_reference_checked.py`.
 The upstream products can still include the locally excluded receiver.
-Next connect error assumptions to position/motion uncertainty: map estimator
-sensitivity to independent, station-common and temporal errors, including modes
-invisible to centered contrasts, in a separate exploratory propagation study.
-Keep zero/shared alternatives and existing uncertainty floors; do not reopen
-closed target outcomes, claim calibrated covariance or start new confirmation.
+The error-to-position study in `research/exploratory/POSITION_ERROR_TRANSFER.md`
+is now complete. Use `position_error_checked_v2.py`: v1's centered-window +60 s
+was interpolation; v2 puts zero at the last observation and retains the resulting
+below-mask case (five valid synthetic designs out of six). Invented 1 m station
+modes give 11–166 m position response while remaining invisible in centered
+contrasts. This is not a measured amplitude, 95% radius or qualified covariance.
+Next use exposed reference RF in rotating excluded-reference-satellite tests:
+remove the pseudo-target from clock calibration and measure differential errors,
+including temporal/cross-station behavior. Keep zero/shared alternatives and
+unsupported cases. This cannot identify perfectly common modes: record the need
+for external bounds or independent observables, rather than infer them from RMS.
+Keep existing uncertainty floors and closed targets; no new confirmation yet.
 Do not return to minor component audits or pooled-RMS optimization as default.
 
 The fixed-RF rapid/final comparison in

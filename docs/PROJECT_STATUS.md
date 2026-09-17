@@ -1,4 +1,4 @@
-# Stato del progetto — 17 settembre 2026
+# Stato del progetto — 18 settembre 2026
 
 ## Obiettivo
 
@@ -76,18 +76,23 @@ puo sostituire queste verifiche sperimentali.
    stazioni: AREQ peggiora in entrambi i casi, DRAO leggermente con i final.
    La correzione non va promossa come beneficio universale. I prodotti a monte
    possono ancora includere la stazione esclusa dalla stima locale.
-3. Trasportare errori e correlazioni fino a posizione e moto; validare le
-   osservabili aggiuntive e l'incertezza senza aggiustarla dopo le conferme.
-   Questo e ora il prossimo passo: misurare la sensibilita del solver a errori
-   indipendenti, comuni per stazione e correlati nel tempo, mantenendo visibili
-   anche i modi che i contrasti RF centrati non permettono di stimare.
+3. Collegamento errori-posizione/moto consegnato su geometrie sintetiche:
+   cinque casi validi e uno sotto la maschera, tutti conservati. Un modo comune
+   per stazione di ampiezza ipotetica 1 m produce 11–166 m sulla posizione,
+   pur essendo invisibile nei contrasti centrati. Non sono errori misurati o
+   raggi al 95%; il budget reale e i suoi limiti restano invariati.
+   Prossimo passo: escludere a rotazione un satellite di riferimento dalla
+   calibrazione e misurarne l'errore differenziale come pseudo-bersaglio sui
+   dati RF gia esposti, comprese correlazioni temporali e fra stazioni.
+   I modi perfettamente comuni richiedono ancora vincoli esterni o osservabili
+   indipendenti: questi test differenziali non possono identificarli.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
 5. Riprendere API e sito quando i risultati stabiliscono cosa il servizio puo
    promettere e quando deve dichiarare che non sa determinare una posizione.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
-Ultimo studio: [trasferimento a ricevitori esclusi](../research/exploratory/SPATIAL_REFERENCE_TRANSFER.md).
+Ultimo studio: [trasporto degli errori a posizione e moto](../research/exploratory/POSITION_ERROR_TRANSFER.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.
