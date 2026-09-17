@@ -1,0 +1,30 @@
+{
+  "schema": "atmosphere-source-v1",
+  "sources": {
+    "gnss.ell": {
+      "url": "https://vmf.geo.tuwien.ac.at/station_coord_files/gnss.ell",
+      "sha256": "4fcc6ff376ab6a70cf353d62a1f54d4e24d3f2f371dd92aca2ca93121809ee3a",
+      "bytes": 31057,
+      "access_utc": "2026-09-17T13:08:17.784383+00:00"
+    },
+    "2026246.vmf3_g": {
+      "url": "https://vmf.geo.tuwien.ac.at/trop_products/GNSS/VMF3/VMF3_OP/daily/2026/2026246.vmf3_g",
+      "sha256": "bffeaaea504818356563e6f10e32dd3d29b3bdc503c2f55f66b25f84607e881d",
+      "bytes": 216152,
+      "access_utc": "2026-09-17T13:08:18.225543+00:00"
+    },
+    "2026248.vmf3_g": {
+      "url": "https://vmf.geo.tuwien.ac.at/trop_products/GNSS/VMF3/VMF3_OP/daily/2026/2026248.vmf3_g",
+      "sha256": "9ef22c155d4146563158b5a3f684f305f1c02ba6702de8aea575c4b9a4eb026c",
+      "bytes": 216152,
+      "access_utc": "2026-09-17T13:08:18.658069+00:00"
+    }
+  },
+  "local_sha256": {
+    "results/g14_station_frame_epoch_v1.json": "1b6abc0d29a468941b47e90ca70880a156ae4e259dab9b3615ae4b7526190e6a",
+    "results/g12_station_frame_epoch_v1.json": "6fd24f5849a56df372ddf6a64323bcab08d38bbb03eb542d904fa03805af501e",
+    "../../positioning/calibration.py": "112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491",
+    "erp_polar_bound.py": "ec93926220d34042d20c4e89592d2095ecabc5dc205369f7dbf4ffffc6a8c9a5"
+  },
+  "scope": "Meteorological zenith sensitivity only; fixed nine fit roots, both exposed days, four UTC epochs, no target or RF access."
+}
