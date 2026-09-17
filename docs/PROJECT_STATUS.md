@@ -65,8 +65,15 @@ puo sostituire queste verifiche sperimentali.
    stazioni migliorate; anche le cinque comuni migliorano (−5.77%). Cambiano
    due stazioni, riferimenti e bersaglio escluso: replica del metodo su un altro
    campione esposto, non effetto isolato del giorno né conferma indipendente.
-   Prossimo passo: stessi dati RF con prodotti di riferimento alternativi e
-   compatibili, per distinguere correzioni fisiche ed effetti dei prodotti.
+   Confronto rapid/final CODE consegnato sugli stessi dati e collegamenti:
+   RMS di base 1.010 -> 0.988 m (−2.17%), ma dopo correzione condivisa resta
+   0.931 m in entrambi i casi. Anche trasferendo le correzioni rapid ai dati
+   final si migliora: 0.935 m, −5.38%, tutte le stazioni. Il cambio di prodotti
+   non risolve la struttura dominante; due prodotti CODE non sono una verita
+   indipendente. Prossimo passo: stimare le correzioni da sei stazioni e
+   verificarle sulla settima esclusa, nella mezz'ora successiva, ruotando
+   tutte le stazioni. Conservare i blocchi non supportati; i prodotti a monte
+   possono ancora includere la stazione esclusa dalla stima locale.
 3. Trasportare errori e correlazioni fino a posizione e moto; validare le
    osservabili aggiuntive e l'incertezza senza aggiustarla dopo le conferme.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
@@ -75,7 +82,7 @@ puo sostituire queste verifiche sperimentali.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
-Ultimo studio: [predizione su un giorno distinto](../research/exploratory/DAY_REFERENCE_PREDICTION.md).
+Ultimo studio: [confronto rapid/final sugli stessi dati RF](../research/exploratory/FINAL_REFERENCE_COMPARISON.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.

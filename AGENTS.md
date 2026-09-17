@@ -70,6 +70,22 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The fixed-RF rapid/final comparison in
+`research/exploratory/FINAL_REFERENCE_COMPARISON.md` is complete: the same
+847 station epochs qualify and the same 3942 test paths remain. CODE final
+reduces zero RMS 1.009796 -> 0.987925 m (2.17%), but locally fitted shared
+corrections give 0.931068/0.931178 m on rapid/final. Rapid-trained corrections
+transfer to final at 0.934770 m (5.38% improvement, all seven stations).
+Paired-product differences do not remove the dominant residual structure;
+same-provider processing is not independent truth or physical attribution.
+Use `final_reference_checked.py`; preserve the two pre-calibration format
+failures and the frozen successful source/input chain. Next test spatial
+transfer on exposed rapid/final rows: train the shared-satellite correction
+on six stations' first half and test the excluded station's later half,
+rotating all seven. Keep unsupported/rank-deficient blocks and all failures.
+No target fit, covariance qualification, new confirmation or production change.
+Upstream orbit/clock products may still include the held-out receiver.
+
 The distinct-day study in `research/exploratory/DAY_REFERENCE_PREDICTION.md`
 is complete: September 5, 10:00-11:00 GPST, G12-excluded historical network,
 847 qualified station epochs. Shared-satellite offsets give 1.009796 -> 0.931068 m
