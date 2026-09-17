@@ -1,0 +1,60 @@
+{
+  "schema": "day-reference-plan-v1",
+  "archive_tag": "g12",
+  "date_gpst": "2026-09-05",
+  "target_excluded": "G12",
+  "stations": [
+    "ALGO00CAN",
+    "DRAO00CAN",
+    "STJO00CAN",
+    "YELL00CAN",
+    "BOGT00COL",
+    "BRAZ00BRA",
+    "AREQ00PER"
+  ],
+  "start_gpst_s": 36000,
+  "samples": 121,
+  "step_s": 30,
+  "training_before_gpst_s": 37800,
+  "models": [
+    "zero",
+    "shared_satellite",
+    "station_direction",
+    "station_satellite"
+  ],
+  "minimum_elevation_deg": 10,
+  "minimum_references": 4,
+  "references": [
+    "G04",
+    "G05",
+    "G06",
+    "G07",
+    "G09",
+    "G11",
+    "G13",
+    "G14",
+    "G15",
+    "G17",
+    "G18",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G24",
+    "G25",
+    "G26",
+    "G28",
+    "G29",
+    "G30",
+    "G31"
+  ],
+  "common_stations_with_day246": [
+    "ALGO00CAN",
+    "BOGT00COL",
+    "DRAO00CAN",
+    "STJO00CAN",
+    "YELL00CAN"
+  ],
+  "scope": "Exploratory distinct-day local chronological contrast prediction. Five shared stations, two changed; different excluded target and reference allowlist. Not isolated day causality, cross-day coefficient transfer, absolute future RF, new confirmation or covariance qualification.",
+  "stopping_rule": "One fixed hour and full declared cohort; retain failures and unsupported predictions, no station or time replacements."
+}
