@@ -114,7 +114,11 @@ def test_frozen_versions_and_wrapper_ancestry():
     paths=[*checked.SOURCES,'research/exploratory/position_error_checked_v2.py','research/exploratory/position_error_plan_v2.json']
     for name in paths:
         assert subprocess.check_output(['git','show','b2e7792:'+name],cwd=root)==(root/name).read_bytes()
-    old=json.loads((study.BASE/'results/position_error_v1.json').read_bytes())
+    old_path='research/exploratory/results/position_error_v1.json'
+    old_raw=(root/old_path).read_bytes()
+    assert subprocess.check_output(['git','show','b2e7792:'+old_path],cwd=root)==old_raw
+    assert hashlib.sha256(old_raw).hexdigest()=='a33561bbf6edbbac1e362c96b8e25f2320da25c73b8828a372aba8e2835b526f'
+    old=json.loads(old_raw)
     assert old['schema']=='position-error-transfer-v1' and len(old['cases'])==6
 
 
@@ -124,4 +128,42 @@ def test_changed_source_stops_before_geometry(monkeypatch):
         return original(path)+(b'\n' if path==Path(study.__file__) else b'')
     monkeypatch.setattr(Path,'read_bytes',changed)
     monkeypatch.setattr(study,'run',lambda *args:pytest.fail('modified implementation executed'))
+    with pytest.raises(ValueError): checked.run()
+
+
+def test_pinned_report_cohort_is_admitted(context):
+    # The frozen runner accepts this exact report, not arbitrary future inputs.
+    # Bind its admission contract explicitly without editing executed sources.
+    plan,names,train,test,blocks,_=context
+    path=study.BASE/'results/day_reference_v1.json'
+    raw=path.read_bytes()
+    assert hashlib.sha256(raw).hexdigest()==plan['reference_report_sha256']
+    report=json.loads(raw)
+    day=report['plan']
+    assert report['calibration_complete']
+    assert report['target_orbit_accessed'] is False
+    assert len(names)==7 and len(set(names))==7
+    seen=set()
+    for row in report['rows']:
+        assert row['station'] in day['stations']
+        assert row['reference'] in day['references']
+        assert row['reference']!=day['target_excluded']
+        key=(row['station'],row['time_s'],row['reference'])
+        assert key not in seen
+        seen.add(key)
+    assert len(train)==4132 and len(test)==747 and len(blocks)==77
+
+
+def test_unadmitted_report_path_rejected_before_operator(monkeypatch):
+    original=Path.read_bytes
+    report_path=study.BASE/'results/day_reference_v1.json'
+    def changed(path):
+        raw=original(path)
+        if path==report_path:
+            report=json.loads(raw)
+            report['rows'][0]['reference']='UNADMITTED'
+            return json.dumps(report).encode()
+        return raw
+    monkeypatch.setattr(Path,'read_bytes',changed)
+    monkeypatch.setattr(study,'calibration_map',lambda *args:pytest.fail('unadmitted report reached operator'))
     with pytest.raises(ValueError): checked.run()

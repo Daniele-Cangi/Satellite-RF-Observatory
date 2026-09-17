@@ -82,9 +82,11 @@ The output must not already exist. The wrapper checks pinned sources and plan;
 tests additionally bind the wrapper itself to its frozen Git blob and ancestry.
 V2 result SHA-256:
 `422f09adba2232aa704f5cd9e77272d16431cffc5a4311a198c4cb59d0dad84a`.
-Seven tests cover direct least-squares equivalence, receiver exclusion,
+Nine tests cover direct least-squares equivalence, receiver exclusion,
 blind/common modes, cancellation, rank and forward epoch, full replay,
-frozen ancestry and rejection of changed source before computation.
+frozen ancestry, exact v1 result bytes, the admitted pinned-report cohort and
+rejection of changed source/report before computation. The frozen runner accepts
+one exact report hash; it is not a generic admission boundary for future reports.
 
 ## Next physical work
 
