@@ -60,9 +60,13 @@ puo sostituire queste verifiche sperimentali.
    calibrazioni valide, RMS 1.047 -> 1.003 m con stima recente (−4.15%) e
    1.015 m trasferendo le correzioni precedenti (−3.04%). Il modello direzionale
    trasferito peggiora tutte le stazioni; quello per coppia stazione/satellite
-   non supporta nessun blocco completo del test. Prossimo passo: giorno distinto
-   con gli stessi quattro modelli. Entrambi gli archi condividono i prodotti
-   giornalieri; non è ancora conferma indipendente né previsione di posizione.
+   non supporta nessun blocco completo del test. Verifica del 5 settembre
+   consegnata: altre 847 calibrazioni, RMS 1.010 -> 0.931 m (−7.80%), tutte le
+   stazioni migliorate; anche le cinque comuni migliorano (−5.77%). Cambiano
+   due stazioni, riferimenti e bersaglio escluso: replica del metodo su un altro
+   campione esposto, non effetto isolato del giorno né conferma indipendente.
+   Prossimo passo: stessi dati RF con prodotti di riferimento alternativi e
+   compatibili, per distinguere correzioni fisiche ed effetti dei prodotti.
 3. Trasportare errori e correlazioni fino a posizione e moto; validare le
    osservabili aggiuntive e l'incertezza senza aggiustarla dopo le conferme.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
@@ -71,7 +75,7 @@ puo sostituire queste verifiche sperimentali.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
-Ultimo studio: [trasferimento tra archi](../research/exploratory/ARC_REFERENCE_TRANSFER.md).
+Ultimo studio: [predizione su un giorno distinto](../research/exploratory/DAY_REFERENCE_PREDICTION.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.
