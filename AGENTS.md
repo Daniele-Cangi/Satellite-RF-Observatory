@@ -70,6 +70,17 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The active status recap is `docs/PROJECT_STATUS.md`. The meteorological study
+in `research/exploratory/ATMOSPHERE_ZENITH.md` retains 72/72 station/UTC samples
+on the two exposed days. Zenith differences reach 0.12544 m; multiplying by
+the same legacy mapping gives 0.70023 m at 10 degrees, not measured RF gains
+or a physical error bound. Use `atmosphere_zenith_v2.py`; preserve v1 and its
+recorded parser failure. Resolve the provider ALGO latitude difference (about
+333 m) and station-height handling before applying weather products to ARPs.
+Next benchmark dry/wet VMF3 mapping and replay actual reference-only geometry,
+then broaden RF time/elevation coverage. No target fit or new confirmation;
+S2 and production are unchanged. Avoid more minor convention audits as default.
+
 The bounded polar study in `research/exploratory/ERP_POLAR_BOUND.md` evaluates
 paired CODE daily X/Y offsets/rates and bounds all 159 DESAI2016 polar harmonics
 without assuming phases. For the same mean-pole convention, the solid-pole
