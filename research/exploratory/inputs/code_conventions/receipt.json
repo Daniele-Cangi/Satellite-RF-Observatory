@@ -1,0 +1,46 @@
+{
+  "schema": "code-convention-evidence-v1",
+  "erp_files": {
+    "g14": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262460000_01D_01D_ERP.ERP.gz",
+      "access_utc": "2026-09-17T11:20:57.339902+00:00",
+      "compressed_sha256": "7d2fa2fb0c35bbd4c241305c1482db6229fba217482a943d60b689eb5517006d",
+      "sha256": "4abadc80e60fa7a0fc37cd4ce30a02069ffa6fe2ff570b643f4309da676736bd",
+      "path": "research/exploratory/inputs/code_conventions/g14.erp"
+    },
+    "g12": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262480000_01D_01D_ERP.ERP.gz",
+      "access_utc": "2026-09-17T11:20:57.552042+00:00",
+      "compressed_sha256": "49bab87ef00345f3e55c3ebf66725d0272a7f92b95618926459d2d437b94d1bb",
+      "sha256": "a7b56ac495cce33686ff4b8e6214f7cadb4f4d255d369e035135b930e9d3c711",
+      "path": "research/exploratory/inputs/code_conventions/g12.erp"
+    }
+  },
+  "paired_receipt_sha256": {
+    "research/exploratory/inputs/timed_reference_products/g14/receipt.json": "0799952d9f1cc2e54516fa609f919e86bee5150fb7252bee173efb63be171b79",
+    "research/exploratory/inputs/timed_reference_products/g12/receipt.json": "7689d44af0b47ba4a0def2db61b11f2fc5fdc692897ea74a734ec8291b924333"
+  },
+  "document_receipts": {
+    "sp3_comments": {
+      "url": "https://acc.igs.org/sp3-comments.html",
+      "sha256": "cfe9c31af86b0aaca022ce8014d1df763aa88db70c90c25f7240524e4ab4ba6e",
+      "bytes": 3318,
+      "access_utc": "2026-09-17T11:22:29.452683+00:00"
+    },
+    "bernese_examples": {
+      "url": "https://www.bernese.unibe.ch/faq/table_exampleBPEs.html",
+      "sha256": "08e2f47c040fba89c1ac57fea8ba4b75100f529c699609286c99f5c62a2aeedc",
+      "bytes": 13161,
+      "access_utc": "2026-09-17T11:22:29.943515+00:00"
+    },
+    "code_geocenter_2024": {
+      "url": "https://www.bernese.unibe.ch/publist/2024/pres/IGSWS2024_gcc.pdf",
+      "sha256": "cf92cfa68fb8ce5e6fd15c238631254d7cb32bb67fde7004d749d4f6b77bc8bd",
+      "bytes": 1339942,
+      "access_utc": "2026-09-17T11:22:30.555450+00:00"
+    }
+  },
+  "satellite_products_downloaded": false,
+  "new_observations_acquired": false,
+  "note": "ERP headers are event-specific. Document hashes record consulted versions; documents are cited, not redistributed. Metadata audit only, not an EOP reconstruction."
+}
