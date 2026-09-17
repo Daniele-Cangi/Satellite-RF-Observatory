@@ -1,0 +1,49 @@
+{
+  "schema": "timed-reference-products-v1",
+  "target_excluded": "G12",
+  "references": [
+    "G04",
+    "G05",
+    "G06",
+    "G07",
+    "G09",
+    "G11",
+    "G13",
+    "G14",
+    "G15",
+    "G17",
+    "G18",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G24",
+    "G25",
+    "G26",
+    "G28",
+    "G29",
+    "G30",
+    "G31"
+  ],
+  "date_gpst": "2026-09-05",
+  "product_family": "COD0OPSRAP",
+  "antenna_model": "IGS20_2425",
+  "frame": "IGc20",
+  "clock_window_gpst_s": [
+    35880,
+    39720
+  ],
+  "note": "Restricted extracts. Target states/clocks and all receiver clock data excluded before numeric conversion. SP3 clock fields retained as text but unused.",
+  "orbit": {
+    "source_url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262480000_01D_05M_ORB.SP3.gz",
+    "source_compressed_sha256": "ff4648b38da408141236d81347ef40b6506c30eb1de60a6eaf90d80d7383a9d4",
+    "source_compressed_bytes": 654490,
+    "extract_sha256": "09595690ca693bdf7d57c1954cba68fa1aaea7cdd928307de289399be63fbbae"
+  },
+  "clock": {
+    "source_url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSRAP_20262480000_01D_30S_CLK.CLK.gz",
+    "source_compressed_sha256": "1e1b357b7c360773977643377e4d4f3a15568a27d8cea2207c5b6754a59d0284",
+    "source_compressed_bytes": 3573731,
+    "extract_sha256": "27a8dfe956f5c1dbca24fc238f1585718cd2d33220855a43bd4c457deed7bf7b"
+  }
+}
