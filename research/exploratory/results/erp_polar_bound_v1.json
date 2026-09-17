@@ -1,0 +1,384 @@
+{
+  "schema": "erp-polar-bound-v1",
+  "events": [
+    {
+      "event": "g14",
+      "erp": {
+        "date": "2026-09-03",
+        "epoch_mjd_utc": 61286.5,
+        "pole_arcsec": [
+          0.20801899999999998,
+          0.338261
+        ],
+        "rate_arcsec_per_day": [
+          -0.001547,
+          -0.0005909999999999999
+        ]
+      },
+      "samples": [
+        {
+          "gpst_s": 14100,
+          "utc": "2026-09-03T03:54:42",
+          "code_daily_linear_pole_arcsec": [
+            0.2085403604861111,
+            0.3384601752083333
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843968909721738,
+            0.3385008739583314
+          ],
+          "daily_difference_norm_arcsec": 0.00010858690894023938,
+          "same_mean_pole_displacement_upper_m": 4.43300528684617e-05
+        },
+        {
+          "gpst_s": 14130,
+          "utc": "2026-09-03T03:55:12",
+          "code_daily_linear_pole_arcsec": [
+            0.20853982333333332,
+            0.33845997
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.2084391366666716,
+            0.338500650000002
+          ],
+          "daily_difference_norm_arcsec": 0.00010859404791981484,
+          "same_mean_pole_displacement_upper_m": 4.433028845478769e-05
+        },
+        {
+          "gpst_s": 14160,
+          "utc": "2026-09-03T03:55:42",
+          "code_daily_linear_pole_arcsec": [
+            0.20853928618055553,
+            0.3384597647916666
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843858423611425,
+            0.33850042604166797
+          ],
+          "daily_difference_norm_arcsec": 0.00010860119182553991,
+          "same_mean_pole_displacement_upper_m": 4.433052420367661e-05
+        },
+        {
+          "gpst_s": 14190,
+          "utc": "2026-09-03T03:56:12",
+          "code_daily_linear_pole_arcsec": [
+            0.20853874902777775,
+            0.3384595595833333
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.2084380318055569,
+            0.33850020208333387
+          ],
+          "daily_difference_norm_arcsec": 0.00010860834064739925,
+          "same_mean_pole_displacement_upper_m": 4.433076011479797e-05
+        },
+        {
+          "gpst_s": 14220,
+          "utc": "2026-09-03T03:56:42",
+          "code_daily_linear_pole_arcsec": [
+            0.208538211875,
+            0.33845935437499997
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843747937499954,
+            0.3384999781249998
+          ],
+          "daily_difference_norm_arcsec": 0.00010861549438451021,
+          "same_mean_pole_displacement_upper_m": 4.433099618812263e-05
+        },
+        {
+          "gpst_s": 14250,
+          "utc": "2026-09-03T03:57:12",
+          "code_daily_linear_pole_arcsec": [
+            0.2085376747222222,
+            0.33845914916666664
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843692694444219,
+            0.3384997541666658
+          ],
+          "daily_difference_norm_arcsec": 0.00010862265303582942,
+          "same_mean_pole_displacement_upper_m": 4.4331232423616174e-05
+        },
+        {
+          "gpst_s": 14280,
+          "utc": "2026-09-03T03:57:42",
+          "code_daily_linear_pole_arcsec": [
+            0.20853713756944442,
+            0.3384589439583333
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843637451388483,
+            0.3384995302083317
+          ],
+          "daily_difference_norm_arcsec": 0.00010862981660039035,
+          "same_mean_pole_displacement_upper_m": 4.433146882124668e-05
+        },
+        {
+          "gpst_s": 14310,
+          "utc": "2026-09-03T03:58:12",
+          "code_daily_linear_pole_arcsec": [
+            0.20853660041666666,
+            0.33845873875
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843582208333905,
+            0.33849930625000235
+          ],
+          "daily_difference_norm_arcsec": 0.00010863698506831343,
+          "same_mean_pole_displacement_upper_m": 4.4331705380688145e-05
+        },
+        {
+          "gpst_s": 14340,
+          "utc": "2026-09-03T03:58:42",
+          "code_daily_linear_pole_arcsec": [
+            0.20853606326388888,
+            0.33845853354166666
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843526965278167,
+            0.33849908229166825
+          ],
+          "daily_difference_norm_arcsec": 0.00010864415845650693,
+          "same_mean_pole_displacement_upper_m": 4.433194210249853e-05
+        },
+        {
+          "gpst_s": 14370,
+          "utc": "2026-09-03T03:59:12",
+          "code_daily_linear_pole_arcsec": [
+            0.2085355261111111,
+            0.33845832833333334
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.2084347172222243,
+            0.3384988583333342
+          ],
+          "daily_difference_norm_arcsec": 0.0001086513367550408,
+          "same_mean_pole_displacement_upper_m": 4.4332178986350143e-05
+        },
+        {
+          "gpst_s": 14400,
+          "utc": "2026-09-03T03:59:42",
+          "code_daily_linear_pole_arcsec": [
+            0.2085349889583333,
+            0.33845812312499995
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20843416479166696,
+            0.33849863437500016
+          ],
+          "daily_difference_norm_arcsec": 0.00010865851996296758,
+          "same_mean_pole_displacement_upper_m": 4.433241603221173e-05
+        }
+      ],
+      "max_same_mean_pole_displacement_upper_m": 4.433241603221173e-05
+    },
+    {
+      "event": "g12",
+      "erp": {
+        "date": "2026-09-05",
+        "epoch_mjd_utc": 61288.5,
+        "pole_arcsec": [
+          0.204341,
+          0.336649
+        ],
+        "rate_arcsec_per_day": [
+          -0.001725,
+          -0.0009019999999999999
+        ]
+      },
+      "samples": [
+        {
+          "gpst_s": 37800,
+          "utc": "2026-09-05T10:29:42",
+          "code_daily_linear_pole_arcsec": [
+            0.204449171875,
+            0.33670556291666665
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20451447208332962,
+            0.3367253831249979
+          ],
+          "daily_difference_norm_arcsec": 6.824190696475255e-05,
+          "same_mean_pole_displacement_upper_m": 4.299866780327063e-05
+        },
+        {
+          "gpst_s": 37830,
+          "utc": "2026-09-05T10:30:12",
+          "code_daily_linear_pole_arcsec": [
+            0.20444857291666665,
+            0.3367052497222222
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20451389361110553,
+            0.33672505708333017
+          ],
+          "daily_difference_norm_arcsec": 6.82577810658829e-05,
+          "same_mean_pole_displacement_upper_m": 4.299919164860793e-05
+        },
+        {
+          "gpst_s": 37860,
+          "utc": "2026-09-05T10:30:42",
+          "code_daily_linear_pole_arcsec": [
+            0.20444797395833333,
+            0.3367049365277778
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20451331513889354,
+            0.3367247310416693
+          ],
+          "daily_difference_norm_arcsec": 6.827366005423927e-05,
+          "same_mean_pole_displacement_upper_m": 4.2999715655223694e-05
+        },
+        {
+          "gpst_s": 37890,
+          "utc": "2026-09-05T10:31:12",
+          "code_daily_linear_pole_arcsec": [
+            0.204447375,
+            0.3367046233333333
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20451273666666941,
+            0.33672440500000156
+          ],
+          "daily_difference_norm_arcsec": 6.82895438993412e-05,
+          "same_mean_pole_displacement_upper_m": 4.3000239822112054e-05
+        },
+        {
+          "gpst_s": 37920,
+          "utc": "2026-09-05T10:31:42",
+          "code_daily_linear_pole_arcsec": [
+            0.20444677604166667,
+            0.33670431013888885
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20451215819444532,
+            0.33672407895833384
+          ],
+          "daily_difference_norm_arcsec": 6.830543261132096e-05,
+          "same_mean_pole_displacement_upper_m": 4.300076414960739e-05
+        },
+        {
+          "gpst_s": 37950,
+          "utc": "2026-09-05T10:32:12",
+          "code_daily_linear_pole_arcsec": [
+            0.20444617708333332,
+            0.3367039969444444
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.2045115797222212,
+            0.3367237529166661
+          ],
+          "daily_difference_norm_arcsec": 6.832132618679911e-05,
+          "same_mean_pole_displacement_upper_m": 4.300128863759817e-05
+        },
+        {
+          "gpst_s": 37980,
+          "utc": "2026-09-05T10:32:42",
+          "code_daily_linear_pole_arcsec": [
+            0.204445578125,
+            0.33670368375
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.2045110012499971,
+            0.33672342687499834
+          ],
+          "daily_difference_norm_arcsec": 6.833722462236625e-05,
+          "same_mean_pole_displacement_upper_m": 4.300181328597188e-05
+        },
+        {
+          "gpst_s": 38010,
+          "utc": "2026-09-05T10:33:12",
+          "code_daily_linear_pole_arcsec": [
+            0.20444497916666665,
+            0.33670337055555555
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20451042277777298,
+            0.3367231008333306
+          ],
+          "daily_difference_norm_arcsec": 6.835312791466316e-05,
+          "same_mean_pole_displacement_upper_m": 4.3002338094617684e-05
+        },
+        {
+          "gpst_s": 38040,
+          "utc": "2026-09-05T10:33:42",
+          "code_daily_linear_pole_arcsec": [
+            0.20444438020833333,
+            0.3367030573611111
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.20450984430556102,
+            0.33672277479166973
+          ],
+          "daily_difference_norm_arcsec": 6.836903607386762e-05,
+          "same_mean_pole_displacement_upper_m": 4.300286306387143e-05
+        },
+        {
+          "gpst_s": 38070,
+          "utc": "2026-09-05T10:34:12",
+          "code_daily_linear_pole_arcsec": [
+            0.20444378124999998,
+            0.3367027441666666
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.2045092658333369,
+            0.336722448750002
+          ],
+          "daily_difference_norm_arcsec": 6.838494906944184e-05,
+          "same_mean_pole_displacement_upper_m": 4.300338819272538e-05
+        },
+        {
+          "gpst_s": 38100,
+          "utc": "2026-09-05T10:34:42",
+          "code_daily_linear_pole_arcsec": [
+            0.20444318229166666,
+            0.3367024309722222
+          ],
+          "previous_bulletin_a_pole_arcsec": [
+            0.2045086873611128,
+            0.3367221227083343
+          ],
+          "daily_difference_norm_arcsec": 6.840086691155268e-05,
+          "same_mean_pole_displacement_upper_m": 4.3003913481515034e-05
+        }
+      ],
+      "max_same_mean_pole_displacement_upper_m": 4.3003913481515034e-05
+    }
+  ],
+  "desai_harmonic_count": 159,
+  "desai_phase_free_polar_norm_upper_arcsec": 0.0012347480264676908,
+  "desai_solid_pole_displacement_upper_m": 4.0746684873433796e-05,
+  "pole_operator_norm_upper_m_per_arcsec": 0.033,
+  "input_sha256": {
+    "inputs/code_conventions/g14.erp": "4abadc80e60fa7a0fc37cd4ce30a02069ffa6fe2ff570b643f4309da676736bd",
+    "inputs/code_conventions/g12.erp": "a7b56ac495cce33686ff4b8e6214f7cadb4f4d255d369e035135b930e9d3c711",
+    "inputs/solid_earth/sun_moon.json": "8e0c8f978d2c48e278bdc2cb099f0be3bb215a346c764c225b75da38b4b5e173",
+    "inputs/erp_polar/receipt.json": "9277ba942e8b57f99fa431f227c8e77ecf6675a98f0eb8902456390072023c15",
+    "inputs/erp_polar/DESAI2016.SUB": "467ba1f52b0feeb281990a83b031ef8501e99887fed258df2885a8d8a26948c1"
+  },
+  "source_sha256": "ec93926220d34042d20c4e89592d2095ecabc5dc205369f7dbf4ffffc6a8c9a5",
+  "conditional_on": [
+    "published DESAI2016 coefficient model",
+    "daily offset/rate linear model within its day",
+    "same secular/mean pole convention",
+    "IERS solid pole displacement equations"
+  ],
+  "not_bounded": [
+    "actual Earth orientation error",
+    "different mean pole conventions",
+    "ocean pole tide",
+    "other subdaily terms",
+    "UT1 and celestial body rotation",
+    "total station motion",
+    "inverse satellite position error"
+  ],
+  "desai_phases_reconstructed": false,
+  "instantaneous_code_eop_qualified": false,
+  "sp3_rotated_again": false,
+  "target_states_accessed": false,
+  "new_rf_accessed": false,
+  "calibration_repeated": false,
+  "new_confirmation": false,
+  "production_changed": false
+}

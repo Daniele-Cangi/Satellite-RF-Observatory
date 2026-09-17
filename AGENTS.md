@@ -70,6 +70,18 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The bounded polar study in `research/exploratory/ERP_POLAR_BOUND.md` evaluates
+paired CODE daily X/Y offsets/rates and bounds all 159 DESAI2016 polar harmonics
+without assuming phases. For the same mean-pole convention, the solid-pole
+station displacement difference from prior Bulletin A is at most 0.04434 mm
+on these windows. This is a supplied-model component bound, not physical error,
+full instantaneous EOP, celestial orientation or inverse-position uncertainty.
+Do not rotate terrestrial SP3s again or require complete ERP phase synthesis
+before investigating the much larger reference residuals. Next characterize
+atmospheric delay and receiver response on wider reference-only time/elevation
+coverage. Mean-pole convention, other station motion and covariance stay open;
+S2/G3 and production are unchanged. Preserve all historical studies.
+
 Use `code_convention_audit_v2.py` and its v2 report as the active metadata audit.
 V2 adds strict JSON, first-epoch validation and paired source-name checks;
 preserve v1 as superseded evidence with the same product findings.
