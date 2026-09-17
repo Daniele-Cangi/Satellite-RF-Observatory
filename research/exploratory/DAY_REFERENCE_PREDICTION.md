@@ -94,7 +94,7 @@ positions match within 2 micrometres. Only the nine previously recorded CRLF/LF
 source variants are accepted. Frozen historical evidence is unchanged.
 
 ```powershell
-python -m research.exploratory.day_reference NEW_REPORT.json
+python -m research.exploratory.day_reference_checked NEW_REPORT.json
 python -m pytest research/exploratory/tests/test_day_reference.py -q
 ```
 
@@ -114,3 +114,30 @@ This can test whether the shared correction follows the reference products or
 persists across processing choices. Different providers do not automatically
 mean statistically independent data. Keep failed products and unsupported paths;
 do not claim physical covariance from residual RMS alone. S2 remains open.
+
+## Review follow-up and execution boundary
+
+The analysis was frozen after acquisition, in a separate stage from the producer:
+its literal input-receipt hash depends on the finished inputs. Putting the analysis
+hash into that same input receipt would create a circular hash dependency. The
+report and Git tests already bind the separately frozen runner. The active entry
+point `day_reference_checked.py`, frozen in `5387ba3`, additionally checks the
+runner's exact bytes before ordinary execution. The numerical implementation and
+result remain unchanged; the full replay test now uses this checked entry point.
+
+The separate retained-source audit re-extracts the reference-only orbit directly
+from the hash-pinned compressed CODE archive and verifies byte identity with the
+copied extract (`09595690...`). Thus the actual retained extract is not stale or
+mismatched. This is an explicit post-execution provenance check, not a claim that
+the historical producer re-derived the orbit. The small audit report preserves
+source, archive, derived-orbit, input-receipt and retained celestial hashes.
+
+Preparation hashes DE440s before Skyfield opens its local path. It assumes the
+local raw cache is not concurrently modified during preparation; it is not an
+atomic or adversarial concurrent-writer interface. The retained DE440s and EOP
+files still match their recorded hashes. That check cannot retrospectively prove
+absence of a change between reads, and is labelled accordingly. No concurrent
+cache modification was observed in this run. Historical executed code is preserved;
+ordinary offline analysis does not reopen the celestial kernel, using the pinned
+station-position artifact instead. General shared-cache concurrency hardening is
+outside this fixed experiment's execution contract.

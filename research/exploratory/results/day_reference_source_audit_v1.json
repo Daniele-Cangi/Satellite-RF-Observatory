@@ -1,0 +1,15 @@
+{
+  "schema": "day-reference-retained-source-audit-v1",
+  "after_execution": true,
+  "source_sha256": "f5f087d3fef0e326e5eedecb54604ec030d3e4cf97367b93f44574b123b23c06",
+  "runner_sha256": "bc96b7ab08ee058ee47ce4f134e09074b9064b6d6a4287648cc4315c8fa99dea",
+  "input_receipt_sha256": "42b8c63c6799fe24428a0a0dfd492ac9d30a3a562e80fb35b8eada62819eaaf5",
+  "orbit_archive_sha256": "ff4648b38da408141236d81347ef40b6506c30eb1de60a6eaf90d80d7383a9d4",
+  "rederived_orbit_sha256": "09595690ca693bdf7d57c1954cba68fa1aaea7cdd928307de289399be63fbbae",
+  "rederived_orbit_matches": true,
+  "retained_celestial_sha256": {
+    "de440s.bsp": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+    "finals2000A.all": "d7adc96fca77e27746586e8b7dd75376eebbc82ba5f65ced13379cf0ebd62327"
+  },
+  "scope": "Direct orbit derivation and retained celestial bytes; not retrospective proof of concurrent file immutability."
+}

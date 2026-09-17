@@ -75,7 +75,8 @@ is complete: September 5, 10:00-11:00 GPST, G12-excluded historical network,
 847 qualified station epochs. Shared-satellite offsets give 1.009796 -> 0.931068 m
 (7.80%, all seven stations) on 3942 chronological test contrasts; five common
 stations also improve (5.77%). Station/satellite offsets leave 1141 unsupported
-paths. Use `day_reference.py`; dates and authoritative inputs are bound before
+paths. Use `day_reference_checked.py` to verify the frozen runner before replay;
+dates and authoritative inputs are bound before
 execution. This changes two stations, reference cohort and excluded target as
 well as day; no cross-day coefficient transfer or independent confirmation.
 Next compare convention-compatible alternative reference products on fixed RF

@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 
 from research.exploratory import day_reference as study
+from research.exploratory import day_reference_checked as checked
 from research.exploratory import day_reference_inputs as basis
 from research.exploratory import solid_earth_study as comparison
 
@@ -125,7 +126,7 @@ def test_complete_distinct_day_replay_and_chronological_predictions(monkeypatch)
         return components(provider,weather,mjd_day,*args)
     monkeypatch.setattr(study.frame.AttitudeReference,'antenna_state',guarded_antenna)
     monkeypatch.setattr(study.atmosphere,'components',guarded_weather)
-    comparison.compare_replay(study.run(),expected)
+    comparison.compare_replay(checked.run(),expected)
     assert dates == {61288}
     assert expected['status_counts'] == {'CALIBRATION_QUALIFIED':7}
     assert expected['training_times'] == list(range(36000,37800,30))
@@ -142,3 +143,32 @@ def test_complete_distinct_day_replay_and_chronological_predictions(monkeypatch)
     assert expected['predictions'][-1]['all_test_error_rms_m'] is None
     assert not expected['physical_covariance_qualified'] and not expected['absolute_future_rf_prediction']
     assert hashlib.sha256((study.BASE/'day_reference.py').read_bytes()).hexdigest() == expected['source_sha256']
+
+
+def test_checked_entry_point_frozen_before_retained_source_audit():
+    root = study.frame.ROOT
+    subprocess.run(['git','merge-base','--is-ancestor','5387ba3','HEAD'],cwd=root,check=True)
+    source = subprocess.check_output(['git','show','5387ba3:research/exploratory/day_reference_checked.py'],cwd=root)
+    assert source == Path(checked.__file__).read_bytes()
+    audit = json.loads((study.BASE/'results/day_reference_source_audit_v1.json').read_bytes())
+    _,_,_,_,receipt = study.inputs()
+    _,timed,_,_,_,_,_ = basis.load_basis(basis.read_plan())
+    assert audit['source_sha256'] == hashlib.sha256(source).hexdigest()
+    assert audit['runner_sha256'] == checked.RUNNER_SHA
+    assert audit['input_receipt_sha256'] == study.RECEIPT_SHA
+    assert audit['after_execution'] and audit['rederived_orbit_matches']
+    assert audit['orbit_archive_sha256'] == timed['orbit']['source_compressed_sha256']
+    assert audit['rederived_orbit_sha256'] == receipt['files']['timed/reference_orbit.txt']
+    assert audit['retained_celestial_sha256'] == receipt['celestial_raw_sha256']
+
+
+def test_checked_entry_point_rejects_modified_runner_before_calibration(monkeypatch):
+    original = Path.read_bytes
+    def changed(path):
+        return original(path)+(b'\n# changed implementation\n' if path == Path(study.__file__) else b'')
+    def forbidden(*args,**kwargs):
+        pytest.fail('modified runner reached calibration')
+    monkeypatch.setattr(Path,'read_bytes',changed)
+    monkeypatch.setattr(study,'run',forbidden)
+    with pytest.raises(ValueError):
+        checked.run()
