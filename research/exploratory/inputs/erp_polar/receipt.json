@@ -1,0 +1,16 @@
+{
+  "schema": "erp-polar-evidence-v1",
+  "desai_source": {
+    "url": "https://www.aiub.unibe.ch/download/BSWUSER54/MODEL/DESAI2016.SUB",
+    "sha256": "467ba1f52b0feeb281990a83b031ef8501e99887fed258df2885a8d8a26948c1",
+    "access_utc": "2026-09-17T12:18:48.306231+00:00",
+    "bytes": 16702
+  },
+  "local_sha256": {
+    "inputs/code_conventions/g14.erp": "4abadc80e60fa7a0fc37cd4ce30a02069ffa6fe2ff570b643f4309da676736bd",
+    "inputs/code_conventions/g12.erp": "a7b56ac495cce33686ff4b8e6214f7cadb4f4d255d369e035135b930e9d3c711",
+    "inputs/solid_earth/sun_moon.json": "8e0c8f978d2c48e278bdc2cb099f0be3bb215a346c764c225b75da38b4b5e173"
+  },
+  "scope": "paired CODE daily pole offsets/rates and phase-independent DESAI2016 polar bound; no UT1 reconstruction or satellite data",
+  "data_access": "exploratory terrestrial products only"
+}

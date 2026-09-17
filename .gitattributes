@@ -96,3 +96,5 @@ research/exploratory/loading_reference/* -text -whitespace
 
 # Original event-specific terrestrial ERP evidence.
 research/exploratory/inputs/code_conventions/*.erp -text
+
+research/exploratory/inputs/erp_polar/*.SUB -text
