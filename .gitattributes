@@ -98,3 +98,4 @@ research/exploratory/loading_reference/* -text -whitespace
 research/exploratory/inputs/code_conventions/*.erp -text
 
 research/exploratory/inputs/erp_polar/*.SUB -text
+research/exploratory/hour_reference_plan.json -text

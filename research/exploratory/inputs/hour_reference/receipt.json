@@ -1,0 +1,153 @@
+{
+  "schema": "hour-reference-input-v1",
+  "plan_sha256": "4b9408d9848d3a866c22e12c16d4ad7f4c751e33d69dcbf405c212c4e54b5152",
+  "sources_sha256": {
+    "research/exploratory/atmosphere_zenith.py": "0225760159c61cbabff439ea7e136c4fae7307d7b3f936c815c15d37d2a5390b",
+    "research/exploratory/atmosphere_zenith_v2.py": "6c7c719712844316ed908d80cefdb0e445533a30c1cb26e99b020feb104016f8",
+    "research/exploratory/benchmark_vmf3.py": "c05f1223799f501d0b242d5c37dbb66dc3ad3eb0c022df2be286194c80914961",
+    "research/exploratory/code_convention_audit.py": "9ae90d101deac50750c2180f71666778c2d4a65da2b57931a0507ae98a6bc6af",
+    "research/exploratory/code_convention_audit_v2.py": "a816b976e80ab52be7287ea9e423968408b2d9638346b32405769db14d115837",
+    "research/exploratory/erp_polar_bound.py": "ec93926220d34042d20c4e89592d2095ecabc5dc205369f7dbf4ffffc6a8c9a5",
+    "research/exploratory/ocean_pole_model.py": "a9588d0f4020d647c3f6394a7ff687746965d84466a81bfd14ce02f41e0dab8c",
+    "research/exploratory/ocean_pole_study.py": "2d7fdc8bee1e5c83927d9b601ddc8580d11e4e00f2fbd8ff30a07dc1f7348116",
+    "research/exploratory/precise_reference_model.py": "1313034b39e17658cc60b98ef039fa0663b066faeb66331eb97f0f481afbba37",
+    "research/exploratory/prepare_hour_reference.py": "a31bb4dcf090b23852ba1cfd942842429c48c725606cfeb0ad630ca8f6c4a447",
+    "research/exploratory/prepare_ocean_loading.py": "eccc18bc43326db51c7054da82b89ef9b099b69066aa8fccc72b765b2e37710f",
+    "research/exploratory/prepare_solid_earth_inputs.py": "a175933c3bbfd73681e5f9b94ead96598ae6da5cf4a7b0126828934bff528ce3",
+    "research/exploratory/reference_attitude.py": "58a4a41525fbf70ff10843bba03372b7296bce548215660c50c8b6515721db22",
+    "research/exploratory/reference_attitude_model.py": "3ae4ad0f1a7b0343f71002b3a59a5d6966f5b789c852670f9f0ca6b4050da0f1",
+    "research/exploratory/reference_clock_response.py": "79667e23cf2338d663ec0601e56c48388919705d40860b6c0d0eec871fb25bb5",
+    "research/exploratory/reference_code_bias.py": "81b2240f519a9c78328728dd1fd723349a1c02ca76a1ffbab2dafaa082918f94",
+    "research/exploratory/reference_conventions.py": "37e748ee2fd73912ea1b15fc0217a5fd90a9a12c5aa565d314eee3eee9c2b924",
+    "research/exploratory/reference_product_discrepancy.py": "d66693c813938bde4630ca1f4cf85424ca3b60a04f7045ca1fca357c319976c4",
+    "research/exploratory/reference_ray_projection.py": "3cef125d6df456dd147e1b3727cf5e69e7e039cf3681ba6d5c7a4b17bec67c14",
+    "research/exploratory/reference_residual_structure.py": "becc9b5aff951790f2ed4d6b7f42f02bdd6eac56211f37f4d1cc70e140645a76",
+    "research/exploratory/reference_residual_structure_v2.py": "b003f35a71ac0ac14705876dcef621f03c8ec07ec9f4ecf033ecc731f197fd0d",
+    "research/exploratory/reference_sensitivity.py": "406720e80e01e5839e47c44679abe4797da0500f0af0dac1cdabee11e0f5adb0",
+    "research/exploratory/reference_time_alignment.py": "33817ce8a85c7257efb70f5208f5ddcb0e1c4d6b81aa3bbb1ff8e83148347750",
+    "research/exploratory/solid_earth_model.py": "59f60fc6e72ae0d77ebc02e90e88ee9706ed56a15a23fb91e1798802151521ac",
+    "research/exploratory/solid_earth_study.py": "5550da19229efca9fd64d8f83910991adc30f02e09718ce13ab355c02244118a",
+    "research/exploratory/station_coordinates.py": "22581a73cb22481ef043b5f974c4a3e88807238931bcd86188e33feba2d84aaa",
+    "research/exploratory/station_coordinates_v2.py": "94d3add9ff57c7b82479f3dedb5bdb22199136339c183ad4a9f2574baa78308e",
+    "research/exploratory/station_frame_epoch.py": "c91e8a269eff6a87ed505cf96a402d4bb7820765679e42bc62fbdcf3e5e36213",
+    "research/exploratory/verified_station_replay.py": "228071664684399ac3012310e8ef005d4193b39fde45695037b15fc0955db027",
+    "research/exploratory/vmf3_grid_model.py": "41849e1f3b0d3d233321c28e35b684267b17a4976dbdf055d0c9194fbc3039ae",
+    "research/exploratory/vmf3_reference_study.py": "ebdc3757fecbc3619b3bf93191e0e6f1919f9815bfda0dceb8f0aad6f8aa2fed",
+    "positioning/acquisition.py": "79c392b0b8bce5f5a7eba6e3d18bf8bbc6f583a3d7cb7b66f3d0031ff3834bdf",
+    "positioning/calibration.py": "112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491",
+    "positioning/context.py": "26aea7f720f7f03c06b6b3ddcf0deebb7bda9ea2909b1823a2f1ca331214bafb",
+    "positioning/errors.py": "49ee71ad1458232342fcb9383fe41ff3ec2f218bf9482cbe9030ae0f443414df",
+    "positioning/estimation.py": "2e4ffea0c9ef6ebb565611b85d092bf65a8b284f9c45595c9bfdff0cf4da0ef9",
+    "positioning/jobs.py": "b4e001a51c6b5531e381d174d159d953fa4aee92de9b7c536e8228db29bcc2c4",
+    "positioning/navigation.py": "bb8fb719ea370489e9c2126e49d4359634aedac9d2f243f17cb1fc7771946501",
+    "positioning/network.py": "459997d1978fe7726be5963f445465ebbf0acbd0cc6229774e8969e584f74cc4",
+    "positioning/plans.py": "e3a97503b9a12712ed1bc6502e853eaf80303cef3a79697d69e8b629c16b6f6c",
+    "positioning/qualification.py": "2c34727f0d51e9cee5f0afc12d07098df13be6b9c92cbecee26334dde8817f2c",
+    "positioning/solver.py": "87f6a564e4a42c7e21cdb33d0dfa0f9f46d97b4e03debfab8eb0e3957c0b9318",
+    "positioning/verification.py": "9bd092aa0bb38b0fecc0d739953a333897c4f96a5e0b71d629aad756dfe57dfe",
+    "positioning/__init__.py": "7ef78eb340bd020ccec25130ddd160987541d3cd1ce73bbb184765c334344b04",
+    "positioning/__main__.py": "4882ecf7fb916fcb256ac11f433d80eacdf41e536f69051beca92235ba4ebcc7"
+  },
+  "observation_receipts": {
+    "ALGO00CAN": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/ALGO00CAN_R_20262460000_01D_30S_MO.crx.gz",
+      "bytes": 4257352,
+      "sha256": "e22f05fa6890370ec6a261ee349a942627c1acc1b666b97df031f2c27a16a3a5",
+      "access_utc": "2026-09-09T08:12:19.497800+00:00",
+      "http_status": 200,
+      "decoded_sha256": "ad05fbdd78314d2a41a4758d74c9e117e37a0609a0fde14e85e7ab5de0664a5c",
+      "status": "EXTRACTED"
+    },
+    "BOGT00COL": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/BOGT00COL_R_20262460000_01D_30S_MO.crx.gz",
+      "bytes": 3188214,
+      "sha256": "fc86631605975d48c8b9056efe5f1d5fe4b8416e6247debf3697c112e9b1cf0d",
+      "access_utc": "2026-09-09T08:12:32.622312+00:00",
+      "http_status": 200,
+      "decoded_sha256": "b6a19ec15bee13a979e27133c0b49a66c631112b6da52587601031311248890e",
+      "status": "EXTRACTED"
+    },
+    "DRAO00CAN": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/DRAO00CAN_R_20262460000_01D_30S_MO.crx.gz",
+      "bytes": 2839527,
+      "sha256": "340f93d5db17c26538571e277e22ecf12d910eab31826bf31775dfb2639bfa35",
+      "access_utc": "2026-09-09T08:12:42.385289+00:00",
+      "http_status": 200,
+      "decoded_sha256": "dad09a527b9e677818d4d7216f920637abaf0045e2f1afbfd863bb186e8fc9df",
+      "status": "EXTRACTED"
+    },
+    "MKEA00USA": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/MKEA00USA_R_20262460000_01D_30S_MO.crx.gz",
+      "bytes": 3737667,
+      "sha256": "f3cb66ea34b6b52ef4306451cc6a365b700be6a835294cba19cbfbbe2851db72",
+      "access_utc": "2026-09-09T08:12:48.611512+00:00",
+      "http_status": 200,
+      "decoded_sha256": "0f60fc6bc7fc60942c5eecc10ea0503415774bbdde7a021e9329bbc37309e840",
+      "status": "EXTRACTED"
+    },
+    "PIE100USA": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/PIE100USA_R_20262460000_01D_30S_MO.crx.gz",
+      "bytes": 3299747,
+      "sha256": "412ecec13d56872eef8de964caab124822d32310b8f252b5ea0157cd9707c6a9",
+      "access_utc": "2026-09-09T08:12:54.873617+00:00",
+      "http_status": 200,
+      "decoded_sha256": "717c919953e575450927f2e7f9d88a5697c86c336900058a7c44f630e3d7c926",
+      "status": "EXTRACTED"
+    },
+    "STJO00CAN": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/STJO00CAN_R_20262460000_01D_30S_MO.crx.gz",
+      "bytes": 2819573,
+      "sha256": "4baf4c87de0c7e0e57bb0c46555f9942380cb40246e54b785bb9b190275411b9",
+      "access_utc": "2026-09-09T08:13:00.148552+00:00",
+      "http_status": 200,
+      "decoded_sha256": "cb668f6dc2e6157e687561405c6e9ffd37768dc4dfe3291398bc7dfb52045c65",
+      "status": "EXTRACTED"
+    },
+    "YELL00CAN": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGS/obs/2026/246/YELL00CAN_R_20262460000_01D_30S_MO.crx.gz",
+      "bytes": 3235134,
+      "sha256": "0815dd4a8d861f1f6e5176c4c055c2e3e8eb06f97281c1b70606e89a432e8ddf",
+      "access_utc": "2026-09-09T08:13:05.965912+00:00",
+      "http_status": 200,
+      "decoded_sha256": "b98b1e8934526c6675f793731ceb83e3624533bd5e62bb57b897b1e126dff889",
+      "status": "EXTRACTED"
+    }
+  },
+  "station_model": "same final_transport+solid Earth+HARDISP CMC:NO+2018 pole recipe as PR150",
+  "celestial_raw_sha256": {
+    "de440s.bsp": "c1c7feeab882263fc493a9d5a5b2ddd71b54826cdf65d8d17a76126b260a49f2",
+    "finals2000A.all": "d7adc96fca77e27746586e8b7dd75376eebbc82ba5f65ced13379cf0ebd62327"
+  },
+  "hardisp_build": {
+    "compiler": "GNU Fortran (x86_64-posix-seh-rev0, Built by MinGW-Builds project) 13.2.0",
+    "compiler_flags": [
+      "-O2",
+      "-std=legacy"
+    ],
+    "binary_sha256": "41710e8dad0cc9d7438cd97d10cb860e510350bad4d7ee9d041338bd7dc218bd",
+    "sources": {
+      "ADMINT.F": "478e3f0c001c09dd4d9e2e9920033d29e76eb60b808238e416e6db9ffaeae6c8",
+      "ETUTC.F": "a067c10de2c63269a54b6a14dce2daa49c30bfd52e66086b76492cd438414e1f",
+      "EVAL.F": "b4056a09ec5d77674cab8eac0fa32b5d1be8f471fbe33e753e81ab97a7767add",
+      "HARDISP.F": "df8556e0db396fe5358a1bb2edd8ae2ea19253993a5f8a8641495b9ca0224f75",
+      "JULDAT.F": "d1f39f83503178711845532e1a4ba46d0824b896fa961d81c983d694d48dde73",
+      "LEAP.F": "31d18153242823606beb9690ab0c685dd5403fe1e9bb5f214e22d21dd5e6a771",
+      "MDAY.F": "d4eae8a9a0b866a63f22134fb57bad1c57fc1f3baf98450892ddeee4f7ee8aec",
+      "RECURS.F": "8a3c88d69cebd130981887dc9c8c2f9e3d2af26fded3e052385c022126f9d44b",
+      "SHELLS.F": "6c69dede79f9adfb16d38dcbd890bbbfc3e4e47b2cbacd5fabfb520deba86701",
+      "SPLINE.F": "a13cc2b405079a2b86872341ca50d9b3f0cc219e43d1ce301b461af15df857f0",
+      "TDFRPH.F": "24068e0cd1e2e210fab7dd8d4473bb60ff8335bfcb53a2fc12dad7e6d1cccd19",
+      "TOYMD.F": "9b69b6a27d544215c516da60351e4ec51d03b04ce9bf71b6608ebf55080bf70a"
+    }
+  },
+  "target_orbit_accessed": false,
+  "files": {
+    "observations.json": "9cff3c4503d17f647472476ced5b92d20b2805b1832421be10f1ffb93b28fd20",
+    "positions.json": "99b9ce9a38d63cab0e83045b79feca237fdc87c7bc3fa27fe699cd65c9ce6b35",
+    "attitude/receipt.json": "fe5a17ab9fc8da106a8b94dacfd096d0997e2e3ee72182ec115e26f011140706",
+    "attitude/reference_attitude.obx": "7e291d22274b25b3cb7883d58cdb454aee502a8e04d6f02fa7cfb167e79d3718",
+    "timed/receipt.json": "4e9480a4de430da4d6e8445d58d7b82ce537d20075f1e95d0c34f9c6fdb7e838",
+    "timed/reference_clock.txt": "b4361b5d2e01e688a9f66b824573834ae6fab584e1888d6f40e2a7be58a9e31e",
+    "timed/reference_orbit.txt": "76ce18a058fa13ce08bbef49fc06734600dbb4488e34f1725c09896eb779a4cc"
+  }
+}
