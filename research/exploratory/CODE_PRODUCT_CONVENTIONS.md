@@ -97,7 +97,9 @@ checks for the first epoch, strict JSON and paired product source names. V2 was
 frozen at `46a22ee` before its report; it adds those checks, including non-finite
 JSON rejection, while preserving v1 source and output. Both report exactly the
 same product findings. Use `results/code_convention_audit_v2.json` for the active
-boundary. All 33 targeted tests pass.
+boundary. All 34 targeted tests pass, including source/input binding against the execution
+commit and its ancestry. The duplicate-header regression inserts a second PCV
+declaration before the first epoch; it does not merely duplicate an epoch.
 The output must not exist. Tests cover metadata interpretation, incompatible
 CMC/origin flags, date/family/frame mismatches, duplicate/malformed declarations,
 body exclusion, tampered evidence and exact report replay. No numerical fit

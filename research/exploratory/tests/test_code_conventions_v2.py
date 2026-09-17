@@ -35,3 +35,15 @@ def test_v2_frozen_report_replays_and_keeps_findings():
     assert audit.run()==expected
     prior=json.loads((audit.v1.BASE/'results/code_convention_audit_v1.json').read_bytes())
     assert expected['events']==prior['events']
+
+
+def test_report_binds_committed_execution_sources_and_inputs():
+    import hashlib
+    import subprocess
+    report=json.loads((audit.v1.BASE/'results/code_convention_audit_v2.json').read_bytes())
+    freeze='46a22ee'
+    subprocess.run(['git','merge-base','--is-ancestor',freeze,'HEAD'],cwd=audit.v1.ROOT,check=True)
+    for path,digest in (report['source_sha256']|report['input_sha256']).items():
+        committed=subprocess.check_output(['git','show',freeze+':'+path],cwd=audit.v1.ROOT)
+        assert hashlib.sha256(committed).hexdigest()==digest
+        assert hashlib.sha256((audit.v1.ROOT/path).read_bytes()).hexdigest()==digest
