@@ -70,6 +70,17 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The coordinate-aware VMF3 RF study in `research/exploratory/VMF3_REFERENCE_CALIBRATION.md`
+now applies gridded weather at admitted ARPs, avoiding the site-wise ALGO
+catalogue discrepancy. Original Fortran/Python agree in 88/88 numerical cases.
+All 616/616 calibrations pass across four fixed modes; the full model reduces
+pooled reference RMS only 0.133935%/0.837912% (G14/G12), with three stations
+worsening on each day. Preserve the better zenith-only diagnostic without
+selecting it after seeing RMS. No target fit or covariance qualification.
+Next broaden actual reference-only RF time/elevation coverage and test held-out
+times to separate receiver response, multipath and media correlations. Do not
+repeat small component audits as the default next task; S2 remains open.
+
 The active status recap is `docs/PROJECT_STATUS.md`. The meteorological study
 in `research/exploratory/ATMOSPHERE_ZENITH.md` retains 72/72 station/UTC samples
 on the two exposed days. Zenith differences reach 0.12544 m; multiplying by
