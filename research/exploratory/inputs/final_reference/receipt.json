@@ -1,0 +1,81 @@
+{
+  "schema": "final-reference-inputs-v1",
+  "plan_sha256": "c615e39ddcc809f527a999bc1169130a74e6c190bf845811d7fa349e45b94645",
+  "sources_sha256": {
+    "research/exploratory/arc_reference.py": "334f3ca890e841657d6a0581806ab053bc196640221ec1ee995bc6ab6f62072e",
+    "research/exploratory/atmosphere_zenith.py": "0225760159c61cbabff439ea7e136c4fae7307d7b3f936c815c15d37d2a5390b",
+    "research/exploratory/atmosphere_zenith_v2.py": "6c7c719712844316ed908d80cefdb0e445533a30c1cb26e99b020feb104016f8",
+    "research/exploratory/benchmark_vmf3.py": "c05f1223799f501d0b242d5c37dbb66dc3ad3eb0c022df2be286194c80914961",
+    "research/exploratory/code_convention_audit.py": "9ae90d101deac50750c2180f71666778c2d4a65da2b57931a0507ae98a6bc6af",
+    "research/exploratory/code_convention_audit_v2.py": "a816b976e80ab52be7287ea9e423968408b2d9638346b32405769db14d115837",
+    "research/exploratory/day_reference.py": "bc96b7ab08ee058ee47ce4f134e09074b9064b6d6a4287648cc4315c8fa99dea",
+    "research/exploratory/day_reference_checked.py": "f5f087d3fef0e326e5eedecb54604ec030d3e4cf97367b93f44574b123b23c06",
+    "research/exploratory/day_reference_inputs.py": "df22ca788aa907c2c1f25a0d4c6fd6d4045993edb8837ddf20105db8eeefe1b6",
+    "research/exploratory/erp_polar_bound.py": "ec93926220d34042d20c4e89592d2095ecabc5dc205369f7dbf4ffffc6a8c9a5",
+    "research/exploratory/hour_reference.py": "0e7729609d088a7181addfbc2d5f670a8fbcb0bd9244c2f21ef753e035b1d00b",
+    "research/exploratory/hour_reference_checked.py": "6e8b405ac20cbc4b2c19ec3979cf1ce216086fd70eeb35708fca8ba4db402d13",
+    "research/exploratory/hour_reference_v2.py": "202b848c35fe925f0cc40dcf152097b39bc2158d0fe0e5e8a89ed72a3c40f358",
+    "research/exploratory/ocean_pole_model.py": "a9588d0f4020d647c3f6394a7ff687746965d84466a81bfd14ce02f41e0dab8c",
+    "research/exploratory/ocean_pole_study.py": "2d7fdc8bee1e5c83927d9b601ddc8580d11e4e00f2fbd8ff30a07dc1f7348116",
+    "research/exploratory/precise_reference_model.py": "1313034b39e17658cc60b98ef039fa0663b066faeb66331eb97f0f481afbba37",
+    "research/exploratory/prepare_arc_reference.py": "7d815b1ab804412dd4cd3b89b5da3f169603f47c5b3d275cdb11f30e54e63509",
+    "research/exploratory/prepare_arc_reference_checked.py": "10f17cf7640cba67af876c3191000d8855c7f145e2ea5534fac61d3a5aaab1ce",
+    "research/exploratory/prepare_day_reference.py": "b02fc89a6df943e2ed424086165fcbcc631ceeeed05bcb3d200a70fb5798badb",
+    "research/exploratory/prepare_final_reference.py": "b8d82c7ed1bd6fffa606684bb92fbe5a3f92b87f982ad65c43ba5b642d164312",
+    "research/exploratory/prepare_hour_reference.py": "a31bb4dcf090b23852ba1cfd942842429c48c725606cfeb0ad630ca8f6c4a447",
+    "research/exploratory/prepare_ocean_loading.py": "eccc18bc43326db51c7054da82b89ef9b099b69066aa8fccc72b765b2e37710f",
+    "research/exploratory/prepare_solid_earth_inputs.py": "a175933c3bbfd73681e5f9b94ead96598ae6da5cf4a7b0126828934bff528ce3",
+    "research/exploratory/reference_attitude.py": "58a4a41525fbf70ff10843bba03372b7296bce548215660c50c8b6515721db22",
+    "research/exploratory/reference_attitude_model.py": "3ae4ad0f1a7b0343f71002b3a59a5d6966f5b789c852670f9f0ca6b4050da0f1",
+    "research/exploratory/reference_clock_response.py": "79667e23cf2338d663ec0601e56c48388919705d40860b6c0d0eec871fb25bb5",
+    "research/exploratory/reference_code_bias.py": "81b2240f519a9c78328728dd1fd723349a1c02ca76a1ffbab2dafaa082918f94",
+    "research/exploratory/reference_conventions.py": "37e748ee2fd73912ea1b15fc0217a5fd90a9a12c5aa565d314eee3eee9c2b924",
+    "research/exploratory/reference_product_discrepancy.py": "d66693c813938bde4630ca1f4cf85424ca3b60a04f7045ca1fca357c319976c4",
+    "research/exploratory/reference_ray_projection.py": "3cef125d6df456dd147e1b3727cf5e69e7e039cf3681ba6d5c7a4b17bec67c14",
+    "research/exploratory/reference_residual_structure.py": "becc9b5aff951790f2ed4d6b7f42f02bdd6eac56211f37f4d1cc70e140645a76",
+    "research/exploratory/reference_residual_structure_v2.py": "b003f35a71ac0ac14705876dcef621f03c8ec07ec9f4ecf033ecc731f197fd0d",
+    "research/exploratory/reference_sensitivity.py": "406720e80e01e5839e47c44679abe4797da0500f0af0dac1cdabee11e0f5adb0",
+    "research/exploratory/reference_time_alignment.py": "33817ce8a85c7257efb70f5208f5ddcb0e1c4d6b81aa3bbb1ff8e83148347750",
+    "research/exploratory/solid_earth_model.py": "59f60fc6e72ae0d77ebc02e90e88ee9706ed56a15a23fb91e1798802151521ac",
+    "research/exploratory/solid_earth_study.py": "5550da19229efca9fd64d8f83910991adc30f02e09718ce13ab355c02244118a",
+    "research/exploratory/station_coordinates.py": "22581a73cb22481ef043b5f974c4a3e88807238931bcd86188e33feba2d84aaa",
+    "research/exploratory/station_coordinates_v2.py": "94d3add9ff57c7b82479f3dedb5bdb22199136339c183ad4a9f2574baa78308e",
+    "research/exploratory/station_frame_epoch.py": "c91e8a269eff6a87ed505cf96a402d4bb7820765679e42bc62fbdcf3e5e36213",
+    "research/exploratory/verified_station_replay.py": "228071664684399ac3012310e8ef005d4193b39fde45695037b15fc0955db027",
+    "research/exploratory/vmf3_grid_model.py": "41849e1f3b0d3d233321c28e35b684267b17a4976dbdf055d0c9194fbc3039ae",
+    "research/exploratory/vmf3_reference_study.py": "ebdc3757fecbc3619b3bf93191e0e6f1919f9815bfda0dceb8f0aad6f8aa2fed",
+    "positioning/__init__.py": "7ef78eb340bd020ccec25130ddd160987541d3cd1ce73bbb184765c334344b04",
+    "positioning/__main__.py": "4882ecf7fb916fcb256ac11f433d80eacdf41e536f69051beca92235ba4ebcc7",
+    "positioning/acquisition.py": "79c392b0b8bce5f5a7eba6e3d18bf8bbc6f583a3d7cb7b66f3d0031ff3834bdf",
+    "positioning/calibration.py": "112e62f69df1baf597caa3772bc78a92ab085d6471ef13357e6ec1275cc91491",
+    "positioning/context.py": "26aea7f720f7f03c06b6b3ddcf0deebb7bda9ea2909b1823a2f1ca331214bafb",
+    "positioning/errors.py": "49ee71ad1458232342fcb9383fe41ff3ec2f218bf9482cbe9030ae0f443414df",
+    "positioning/estimation.py": "2e4ffea0c9ef6ebb565611b85d092bf65a8b284f9c45595c9bfdff0cf4da0ef9",
+    "positioning/jobs.py": "b4e001a51c6b5531e381d174d159d953fa4aee92de9b7c536e8228db29bcc2c4",
+    "positioning/navigation.py": "bb8fb719ea370489e9c2126e49d4359634aedac9d2f243f17cb1fc7771946501",
+    "positioning/network.py": "459997d1978fe7726be5963f445465ebbf0acbd0cc6229774e8969e584f74cc4",
+    "positioning/plans.py": "e3a97503b9a12712ed1bc6502e853eaf80303cef3a79697d69e8b629c16b6f6c",
+    "positioning/qualification.py": "2c34727f0d51e9cee5f0afc12d07098df13be6b9c92cbecee26334dde8817f2c",
+    "positioning/solver.py": "87f6a564e4a42c7e21cdb33d0dfa0f9f46d97b4e03debfab8eb0e3957c0b9318",
+    "positioning/verification.py": "9bd092aa0bb38b0fecc0d739953a333897c4f96a5e0b71d629aad756dfe57dfe"
+  },
+  "products": {
+    "orbit": {
+      "url": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/COD0OPSFIN_20262480000_01D_05M_ORB.SP3.gz",
+      "bytes": 655371,
+      "sha256": "ffdf5305d45ed22a38cd1acd7bebf5c0e8e991dbb01aff5606c0ccef25043056",
+      "access_utc": "2026-09-17T20:34:22.665775+00:00",
+      "http_status": 200,
+      "decoded_sha256": "00036e255635766d931d3501d9fa79ffc340569e4623b382055bb9d1585fd34f"
+    }
+  },
+  "files": {
+    "orbit.txt": "f8a47337662c35d7a4368147afbb03432463494eeee667ded67c2b40346cd338"
+  },
+  "failures": [
+    {
+      "product": "clock",
+      "error": "ValueError: CODE RINEX clock 2.00 required"
+    }
+  ]
+}

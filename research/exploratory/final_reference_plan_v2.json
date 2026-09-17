@@ -1,0 +1,23 @@
+{
+  "schema": "final-reference-plan-v2",
+  "baseline_plan_sha256": "4fdcd32196b126d9d3bcaf05201c2d817dcea3ae3c434a3ed9130f80859cd4ac",
+  "baseline_report_sha256": "ff4caa87d4963524252437184ab67128b9a75beaf704b664dff1951350b33600",
+  "product_family": "COD0OPSFIN",
+  "source_base": "https://igs.bkg.bund.de/root_ftp/IGSac/products/2434/",
+  "files": {
+    "orbit": "COD0OPSFIN_20262480000_01D_05M_ORB.SP3.gz",
+    "clock": "COD0OPSFIN_20262480000_01D_30S_CLK.CLK.gz",
+    "bias": "COD0OPSFIN_20262480000_01D_01D_OSB.BIA.gz",
+    "attitude": "COD0OPSFIN_20262480000_01D_30S_ATT.OBX.gz",
+    "erp": "COD0OPSFIN_20262480000_01D_01D_ERP.ERP.gz"
+  },
+  "window_gpst_s": [
+    35880,
+    39720
+  ],
+  "fixed_inputs": "All day-reference RF, station positions, weather, antenna calibration and baseline admitted reference paths; no refiltering by final-product elevation.",
+  "evaluation": "Same four models and chronological split. Compare zero and shared-satellite RMS, per-station gains and centered residual differences. Transfer rapid-trained shared offsets to final test rows as a labelled diagnostic, without refitting to test outcomes.",
+  "stopping_rule": "Same five named files; reuse retained v1 orbit/clock bytes with new receipts identifying local reuse, acquire remaining bias/attitude/ERP once. Retain failures, no substitute sources or scientific cohorts.",
+  "scope": "Same-provider rapid/final paired-product sensitivity, not independent truth or causal identification of physical errors. No target fit, target-state parsing, covariance qualification or production change.",
+  "supersedes": "v1 retained: native clock 3.04 rejected before calibration; same named files, new native-format adapter, no clock-version substitution"
+}
