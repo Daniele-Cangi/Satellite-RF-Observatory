@@ -70,6 +70,18 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The second arc in `research/exploratory/ARC_REFERENCE_TRANSFER.md` is complete:
+05:00-06:00 GPST, same day/stations/products, 847 qualified station epochs.
+On 3446 identical test contrasts, recent shared-satellite training improves RMS
+1.046946 -> 1.003486 m (4.15%, all seven stations); earlier 03:30-04:00 coefficients
+give 1.015071 m (3.04%, five improve). Transferred directional response worsens
+all stations (+2.64% RMS), and transferred station/satellite offsets support zero
+complete test blocks. Preserve failures and null scores. Use `arc_reference.py`;
+plan/producer and inputs/analysis were frozen before execution. Next keep the
+four candidates and test a distinct day, then distinguish upstream product-linked
+correlations before promotion. No absolute RF prediction or covariance qualification.
+
+
 The one-hour reference experiment in `research/exploratory/HOUR_REFERENCE_PREDICTION.md`
 extends G14 to 03:30-04:30 GPST with seven stations and 847 qualified epochs.
 Use `hour_reference_checked.py` to validate auxiliary inputs before the unchanged
