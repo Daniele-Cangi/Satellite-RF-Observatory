@@ -1,0 +1,1265 @@
+{
+  "schema": "position-error-transfer-v1",
+  "plan": {
+    "schema": "position-error-transfer-plan-v1",
+    "reference_report_sha256": "ff4caa87d4963524252437184ab67128b9a75beaf704b664dff1951350b33600",
+    "station_positions_sha256": "0361930f1c46486b075df1fda511213761b64ce32305ad1e0c94d503aac5864e",
+    "training_before_gpst_s": 37800,
+    "evaluation_times_gpst_s": [
+      37800,
+      37830,
+      37860,
+      37890,
+      37920,
+      37950,
+      37980,
+      38010,
+      38040,
+      38070,
+      38100
+    ],
+    "synthetic_geocentric_radii_m": [
+      12000000,
+      26000000,
+      42000000
+    ],
+    "synthetic_tangent_speeds_m_s": [
+      0,
+      4000
+    ],
+    "synthetic_inward_acceleration_m_s2": 0.5,
+    "direction": "Normalized mean of the seven admitted geocentric receiver directions; fixed synthetic design, not a target state or prior.",
+    "station_geometry": "Fixed receiver coordinates from positions.json index 65 (10:32:30); tidal changes are not part of this synthetic vacuum model.",
+    "minimum_joint_elevation_deg": 5,
+    "maximum_scaled_condition": 10000000000,
+    "weight_code_sigma_m": 20,
+    "future_position_offsets_s": [
+      0,
+      60
+    ],
+    "models": [
+      "zero",
+      "shared_satellite"
+    ],
+    "error_scenarios": [
+      "independent_raw_1m",
+      "reference_station_offset_1m",
+      "reference_station_ramp_1m_per_300s",
+      "reference_satellite_offset_1m",
+      "matched_station_offset_1m",
+      "reference_station_temporal_1m_tau60s"
+    ],
+    "calibration": "Equal-weight reference mean per receiver/epoch. Shared-satellite coefficients use the same six-other-station chronological training and minimum-norm gauge as spatial_reference. Linear additive error transport; not the full nonlinear RF calibration.",
+    "scope": "Real receiver coordinates and reference incidence; entirely synthetic target trajectory, vacuum code-only geometry and invented error amplitudes/correlations. No target data or orbit, production changes, real covariance identification or 95-percent coverage claim.",
+    "stopping_rule": "All six synthetic radius/speed designs and both correction operators; retain below-mask/rank failures. No selection by output quality. Report additive unit-mode sensitivity and unchanged 20m independent-code control, never replace existing real uncertainty floors with measured residual RMS."
+  },
+  "plan_sha256": "64d904e3566c0b1668f260db690c216092430b13b86e9da03828d8a00293586e",
+  "source_sha256": "fb311a0ceae1ca08da97e03af2effda8f68896386008fac6c7c6d1da3a9bf70e",
+  "stations": [
+    "ALGO00CAN",
+    "DRAO00CAN",
+    "STJO00CAN",
+    "YELL00CAN",
+    "BOGT00COL",
+    "BRAZ00BRA",
+    "AREQ00PER"
+  ],
+  "training_reference_paths": 4132,
+  "test_reference_paths": 747,
+  "synthetic_code_count": 77,
+  "calibration_operator_metadata": {
+    "zero": [],
+    "shared_satellite": [
+      {
+        "excluded_station": "ALGO00CAN",
+        "training_count": 3590,
+        "rank": 21,
+        "reference_count": 22,
+        "coefficient_gauge": "minimum Euclidean norm"
+      },
+      {
+        "excluded_station": "AREQ00PER",
+        "training_count": 3489,
+        "rank": 21,
+        "reference_count": 22,
+        "coefficient_gauge": "minimum Euclidean norm"
+      },
+      {
+        "excluded_station": "BOGT00COL",
+        "training_count": 3606,
+        "rank": 21,
+        "reference_count": 22,
+        "coefficient_gauge": "minimum Euclidean norm"
+      },
+      {
+        "excluded_station": "BRAZ00BRA",
+        "training_count": 3512,
+        "rank": 21,
+        "reference_count": 22,
+        "coefficient_gauge": "minimum Euclidean norm"
+      },
+      {
+        "excluded_station": "DRAO00CAN",
+        "training_count": 3581,
+        "rank": 21,
+        "reference_count": 22,
+        "coefficient_gauge": "minimum Euclidean norm"
+      },
+      {
+        "excluded_station": "STJO00CAN",
+        "training_count": 3600,
+        "rank": 21,
+        "reference_count": 22,
+        "coefficient_gauge": "minimum Euclidean norm"
+      },
+      {
+        "excluded_station": "YELL00CAN",
+        "training_count": 3414,
+        "rank": 21,
+        "reference_count": 22,
+        "coefficient_gauge": "minimum Euclidean norm"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "radius_m": 12000000,
+      "speed_m_s": 0,
+      "minimum_elevation_deg": 7.0276301147153575,
+      "rank": 11,
+      "scaled_condition": 245710.57978838895,
+      "synthetic_state": [
+        2700389.5876728534,
+        -10260074.7040376,
+        5607028.01333789,
+        0.0,
+        0.0,
+        -0.0,
+        -0.11251623281970223,
+        0.42750311266823326,
+        -0.23362616722241206,
+        0.0,
+        0.0
+      ],
+      "status": "LOCAL_LINEAR_RESPONSE",
+      "models": {
+        "zero": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 3.547306406770575,
+              "position_t_plus_60_m": 4.195461799214258,
+              "velocity_t0_m_s": 0.03735361365576798
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.47300940627038,
+              "position_t_plus_60_m": 79.77920436825565,
+              "velocity_t0_m_s": 0.7103476006390281
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 11.161853543076731,
+              "position_t_plus_60_m": 11.162148258368264,
+              "velocity_t0_m_s": 2.9059560394370793e-06
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 68.29794368751763,
+              "position_t_plus_60_m": 80.44695778049243,
+              "velocity_t0_m_s": 0.7093648014740068
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.0009230740721119506,
+              "position_t_plus_60_m": 2.23287605793185,
+              "velocity_t0_m_s": 0.03719937113960223
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.3796973774964,
+              "position_t_plus_60_m": 79.70009589862126,
+              "velocity_t0_m_s": 0.7103395066974855
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 2.535058900278452,
+              "position_t_plus_60_m": 2.492118461024015,
+              "velocity_t0_m_s": 0.00319186642266563
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.42696092272048,
+              "position_t_plus_60_m": 79.70745402185278,
+              "velocity_t0_m_s": 0.7093719757091792
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.3392674612253458e-15,
+              "position_t_plus_60_m": 1.295442810831913e-15,
+              "velocity_t0_m_s": 3.605950903866126e-18
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.3796973711738,
+              "position_t_plus_60_m": 79.6688116797145,
+              "velocity_t0_m_s": 0.7093648014682187
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.185479146233602,
+              "position_t_plus_60_m": 6.945614383185542,
+              "velocity_t0_m_s": 0.05270772653245662
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.66301588080064,
+              "position_t_plus_60_m": 79.9710017030521,
+              "velocity_t0_m_s": 0.7113202696382718
+            }
+          }
+        },
+        "shared_satellite": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 3.5555981671745003,
+              "position_t_plus_60_m": 4.202434323284224,
+              "velocity_t0_m_s": 0.037355355082803916
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.47344583844473,
+              "position_t_plus_60_m": 79.77957133723882,
+              "velocity_t0_m_s": 0.7103476922095628
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 11.161853543076731,
+              "position_t_plus_60_m": 11.162148258368264,
+              "velocity_t0_m_s": 2.9059560447080234e-06
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 68.29794368751763,
+              "position_t_plus_60_m": 80.44695778049243,
+              "velocity_t0_m_s": 0.7093648014740068
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.0009230740721022418,
+              "position_t_plus_60_m": 2.23287605793185,
+              "velocity_t0_m_s": 0.03719937113960223
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.3796973774964,
+              "position_t_plus_60_m": 79.70009589862126,
+              "velocity_t0_m_s": 0.7103395066974855
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 2.4093628539723767e-08,
+              "position_t_plus_60_m": 2.746751006284556e-08,
+              "velocity_t0_m_s": 5.4064920557514946e-11
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.3796973711738,
+              "position_t_plus_60_m": 79.6688116797145,
+              "velocity_t0_m_s": 0.7093648014682187
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.312979241445115e-15,
+              "position_t_plus_60_m": 1.2823238073664853e-15,
+              "velocity_t0_m_s": 3.5558482469062616e-18
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.3796973711738,
+              "position_t_plus_60_m": 79.6688116797145,
+              "velocity_t0_m_s": 0.7093648014682187
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.185479146233602,
+              "position_t_plus_60_m": 6.945614383185542,
+              "velocity_t0_m_s": 0.05270772653245662
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.66301588080064,
+              "position_t_plus_60_m": 79.9710017030521,
+              "velocity_t0_m_s": 0.7113202696382718
+            }
+          }
+        }
+      },
+      "independent_20m_control": {
+        "position_t_plus_0_m": 67.3796973711738,
+        "position_t_plus_60_m": 79.6688116797145,
+        "velocity_t0_m_s": 0.7093648014682187
+      },
+      "local_code_linearization_remainder_max_m": 4.0165518315829485e-09
+    },
+    {
+      "radius_m": 12000000,
+      "speed_m_s": 4000,
+      "minimum_elevation_deg": 5.2904746864595005,
+      "rank": 11,
+      "scaled_condition": 247169.28100682437,
+      "synthetic_state": [
+        2700389.5876728534,
+        -10260074.7040376,
+        5607028.01333789,
+        3868.263821111454,
+        1018.1036343517346,
+        -0.0,
+        -0.11251623281970223,
+        0.42750311266823326,
+        -0.23362616722241206,
+        0.0,
+        0.0
+      ],
+      "status": "LOCAL_LINEAR_RESPONSE",
+      "models": {
+        "zero": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 3.561799703243455,
+              "position_t_plus_60_m": 4.16720328380342,
+              "velocity_t0_m_s": 0.03756746147413144
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.7480139550261,
+              "position_t_plus_60_m": 79.24342544594126,
+              "velocity_t0_m_s": 0.7143892516039994
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 11.197098057084558,
+              "position_t_plus_60_m": 11.110021976316164,
+              "velocity_t0_m_s": 0.006328329106557774
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 68.57463596740892,
+              "position_t_plus_60_m": 79.90986887970872,
+              "velocity_t0_m_s": 0.7134261564818172
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.15248449685963866,
+              "position_t_plus_60_m": 2.2023891154462,
+              "velocity_t0_m_s": 0.037318461079392976
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.65449155654491,
+              "position_t_plus_60_m": 79.16441876402357,
+              "velocity_t0_m_s": 0.7143762006381912
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 2.5430347687056436,
+              "position_t_plus_60_m": 2.51043380092416,
+              "velocity_t0_m_s": 0.0035929350881275346
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.70169592331887,
+              "position_t_plus_60_m": 79.1732522992133,
+              "velocity_t0_m_s": 0.71340979440132
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.3452024575385881e-15,
+              "position_t_plus_60_m": 1.293062446225954e-15,
+              "velocity_t0_m_s": 3.814958791515338e-18
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.65431974347673,
+              "position_t_plus_60_m": 79.13377848773766,
+              "velocity_t0_m_s": 0.7134007912294651
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.212443047016376,
+              "position_t_plus_60_m": 6.900789051113088,
+              "velocity_t0_m_s": 0.05303329669323553
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.93895334092777,
+              "position_t_plus_60_m": 79.43409700227602,
+              "velocity_t0_m_s": 0.7153692885810481
+            }
+          }
+        },
+        "shared_satellite": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 3.5701135861819915,
+              "position_t_plus_60_m": 4.174308047972307,
+              "velocity_t0_m_s": 0.037570366515070244
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.7484515550512,
+              "position_t_plus_60_m": 79.24379937131867,
+              "velocity_t0_m_s": 0.7143894043733909
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 11.197098057084558,
+              "position_t_plus_60_m": 11.110021976316164,
+              "velocity_t0_m_s": 0.006328329106557774
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 68.57463596740892,
+              "position_t_plus_60_m": 79.90986887970872,
+              "velocity_t0_m_s": 0.7134261564818172
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.15248449685963875,
+              "position_t_plus_60_m": 2.2023891154462008,
+              "velocity_t0_m_s": 0.03731846107939299
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.65449155654491,
+              "position_t_plus_60_m": 79.16441876402357,
+              "velocity_t0_m_s": 0.7143762006381912
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 2.3872303508303288e-08,
+              "position_t_plus_60_m": 2.8365369387325914e-08,
+              "velocity_t0_m_s": 3.441828219797858e-11
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.65431974347673,
+              "position_t_plus_60_m": 79.13377848773766,
+              "velocity_t0_m_s": 0.7134007912294651
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.3186910678086785e-15,
+              "position_t_plus_60_m": 1.280825493666361e-15,
+              "velocity_t0_m_s": 3.6624492838390106e-18
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.65431974347673,
+              "position_t_plus_60_m": 79.13377848773766,
+              "velocity_t0_m_s": 0.7134007912294651
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.212443047016376,
+              "position_t_plus_60_m": 6.900789051113088,
+              "velocity_t0_m_s": 0.05303329669323553
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 67.93895334092777,
+              "position_t_plus_60_m": 79.43409700227602,
+              "velocity_t0_m_s": 0.7153692885810481
+            }
+          }
+        }
+      },
+      "independent_20m_control": {
+        "position_t_plus_0_m": 67.65431974347673,
+        "position_t_plus_60_m": 79.13377848773766,
+        "velocity_t0_m_s": 0.7134007912294651
+      },
+      "local_code_linearization_remainder_max_m": 4.538418504613888e-09
+    },
+    {
+      "radius_m": 26000000,
+      "speed_m_s": 0,
+      "minimum_elevation_deg": 26.157532911386415,
+      "rank": 11,
+      "scaled_condition": 1565208.0692276221,
+      "synthetic_state": [
+        5850844.106624516,
+        -22230161.85874813,
+        12148560.695565427,
+        0.0,
+        0.0,
+        -0.0,
+        -0.11251623281970223,
+        0.42750311266823326,
+        -0.23362616722241206,
+        0.0,
+        0.0
+      ],
+      "status": "LOCAL_LINEAR_RESPONSE",
+      "models": {
+        "zero": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 18.370280712239083,
+              "position_t_plus_60_m": 21.748586571555023,
+              "velocity_t0_m_s": 0.1936579497799325
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.5881362466995,
+              "position_t_plus_60_m": 413.74940911536487,
+              "velocity_t0_m_s": 3.6843147425134526
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 57.8905209596991,
+              "position_t_plus_60_m": 57.89059569902521,
+              "velocity_t0_m_s": 1.1463177196281664e-05
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 353.8724482789405,
+              "position_t_plus_60_m": 417.21324714349856,
+              "velocity_t0_m_s": 3.6792216190829206
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.01357703597251965,
+              "position_t_plus_60_m": 11.589964289228817,
+              "velocity_t0_m_s": 0.19293999464425848
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.1051388749066,
+              "position_t_plus_60_m": 413.33993253759144,
+              "velocity_t0_m_s": 3.6842770747774374
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 13.390092390903353,
+              "position_t_plus_60_m": 13.159566009977722,
+              "velocity_t0_m_s": 0.01813842887384366
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.3612300523789,
+              "position_t_plus_60_m": 413.3864182501006,
+              "velocity_t0_m_s": 3.679266317382652
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.87620819548125e-15,
+              "position_t_plus_60_m": 6.617247519303008e-15,
+              "velocity_t0_m_s": 2.083225579096776e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.105138610895,
+              "position_t_plus_60_m": 413.1774105143719,
+              "velocity_t0_m_s": 3.67922161906527
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 32.0595368412032,
+              "position_t_plus_60_m": 36.02048624170706,
+              "velocity_t0_m_s": 0.27338137372419974
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 350.5741172525602,
+              "position_t_plus_60_m": 414.74455751505263,
+              "velocity_t0_m_s": 3.6893643216273158
+            }
+          }
+        },
+        "shared_satellite": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 18.41600440645763,
+              "position_t_plus_60_m": 21.787106332481592,
+              "velocity_t0_m_s": 0.19366859296879174
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.5905418865874,
+              "position_t_plus_60_m": 413.75143563580787,
+              "velocity_t0_m_s": 3.6843153019562713
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 57.8905209596991,
+              "position_t_plus_60_m": 57.89059569902521,
+              "velocity_t0_m_s": 1.1463177182248286e-05
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 353.8724482789405,
+              "position_t_plus_60_m": 417.21324714349856,
+              "velocity_t0_m_s": 3.6792216190829206
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.013577035972468508,
+              "position_t_plus_60_m": 11.58996428922882,
+              "velocity_t0_m_s": 0.19293999464425848
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.1051388749066,
+              "position_t_plus_60_m": 413.33993253759144,
+              "velocity_t0_m_s": 3.6842770747774374
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.1775155698618282e-07,
+              "position_t_plus_60_m": 1.4345121079344766e-07,
+              "velocity_t0_m_s": 2.1628576470169764e-10
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.105138610895,
+              "position_t_plus_60_m": 413.1774105143719,
+              "velocity_t0_m_s": 3.67922161906527
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.77480236964353e-15,
+              "position_t_plus_60_m": 6.559198361524542e-15,
+              "velocity_t0_m_s": 2.060153600987134e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.105138610895,
+              "position_t_plus_60_m": 413.1774105143719,
+              "velocity_t0_m_s": 3.67922161906527
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 32.0595368412032,
+              "position_t_plus_60_m": 36.02048624170706,
+              "velocity_t0_m_s": 0.27338137372419974
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 350.5741172525602,
+              "position_t_plus_60_m": 414.74455751505263,
+              "velocity_t0_m_s": 3.6893643216273158
+            }
+          }
+        }
+      },
+      "independent_20m_control": {
+        "position_t_plus_0_m": 349.105138610895,
+        "position_t_plus_60_m": 413.1774105143719,
+        "velocity_t0_m_s": 3.67922161906527
+      },
+      "local_code_linearization_remainder_max_m": 6.630153351469201e-09
+    },
+    {
+      "radius_m": 26000000,
+      "speed_m_s": 4000,
+      "minimum_elevation_deg": 25.308721316103252,
+      "rank": 11,
+      "scaled_condition": 1566169.928401333,
+      "synthetic_state": [
+        5850844.106624516,
+        -22230161.85874813,
+        12148560.695565427,
+        3868.263821111454,
+        1018.1036343517346,
+        -0.0,
+        -0.11251623281970223,
+        0.42750311266823326,
+        -0.23362616722241206,
+        0.0,
+        0.0
+      ],
+      "status": "LOCAL_LINEAR_RESPONSE",
+      "models": {
+        "zero": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 18.37964421596899,
+              "position_t_plus_60_m": 21.667533172612227,
+              "velocity_t0_m_s": 0.19376120177824335
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.76564874958694,
+              "position_t_plus_60_m": 412.20869421283686,
+              "velocity_t0_m_s": 3.6862442184162885
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 57.91599195865258,
+              "position_t_plus_60_m": 57.744779262365185,
+              "velocity_t0_m_s": 0.01131510953881031
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 354.0514925125621,
+              "position_t_plus_60_m": 415.66932156671714,
+              "velocity_t0_m_s": 3.6811573656866625
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.2141065028398332,
+              "position_t_plus_60_m": 11.509030027547709,
+              "velocity_t0_m_s": 0.19298328101128315
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.2824695906954,
+              "position_t_plus_60_m": 411.7996883409647,
+              "velocity_t0_m_s": 3.6862034103879537
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 13.397530185597226,
+              "position_t_plus_60_m": 13.16569377163754,
+              "velocity_t0_m_s": 0.01850141820039611
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.53865588092,
+              "position_t_plus_60_m": 411.8488117659111,
+              "velocity_t0_m_s": 3.681194775840549
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.8828802063806765e-15,
+              "position_t_plus_60_m": 6.616900304682369e-15,
+              "velocity_t0_m_s": 2.1004278397459148e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.282403990328,
+              "position_t_plus_60_m": 411.6388291024574,
+              "velocity_t0_m_s": 3.6811483311948354
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 32.07728845700661,
+              "position_t_plus_60_m": 35.88962437726858,
+              "velocity_t0_m_s": 0.2735216597915667
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 350.7522632193932,
+              "position_t_plus_60_m": 413.20042443512233,
+              "velocity_t0_m_s": 3.691296132034641
+            }
+          }
+        },
+        "shared_satellite": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 18.42539220991763,
+              "position_t_plus_60_m": 21.706324459230515,
+              "velocity_t0_m_s": 0.19377262069087536
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.7680556720012,
+              "position_t_plus_60_m": 412.2107350285391,
+              "velocity_t0_m_s": 3.6862448186412995
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 57.91599195865258,
+              "position_t_plus_60_m": 57.744779262365185,
+              "velocity_t0_m_s": 0.011315109538810325
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 354.0514925125621,
+              "position_t_plus_60_m": 415.66932156671714,
+              "velocity_t0_m_s": 3.6811573656866625
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.2141065028398285,
+              "position_t_plus_60_m": 11.509030027547709,
+              "velocity_t0_m_s": 0.19298328101128315
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.2824695906954,
+              "position_t_plus_60_m": 411.7996883409647,
+              "velocity_t0_m_s": 3.6862034103879537
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.1865607012663201e-07,
+              "position_t_plus_60_m": 1.384660282982454e-07,
+              "velocity_t0_m_s": 2.0330248306645158e-10
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.282403990328,
+              "position_t_plus_60_m": 411.6388291024574,
+              "velocity_t0_m_s": 3.6811483311948354
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 6.7810935775476334e-15,
+              "position_t_plus_60_m": 6.559684461160312e-15,
+              "velocity_t0_m_s": 2.0654041566964795e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 349.282403990328,
+              "position_t_plus_60_m": 411.6388291024574,
+              "velocity_t0_m_s": 3.6811483311948354
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 32.07728845700661,
+              "position_t_plus_60_m": 35.88962437726858,
+              "velocity_t0_m_s": 0.2735216597915667
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 350.7522632193932,
+              "position_t_plus_60_m": 413.20042443512233,
+              "velocity_t0_m_s": 3.691296132034641
+            }
+          }
+        }
+      },
+      "independent_20m_control": {
+        "position_t_plus_0_m": 349.282403990328,
+        "position_t_plus_60_m": 411.6388291024574,
+        "velocity_t0_m_s": 3.6811483311948354
+      },
+      "local_code_linearization_remainder_max_m": 9.674707175146013e-09
+    },
+    {
+      "radius_m": 42000000,
+      "speed_m_s": 0,
+      "minimum_elevation_deg": 31.434114795384602,
+      "rank": 11,
+      "scaled_condition": 4578574.492675682,
+      "synthetic_state": [
+        9451363.556854988,
+        -35910261.46413159,
+        19624598.04668261,
+        0.0,
+        0.0,
+        -0.0,
+        -0.11251623281970223,
+        0.42750311266823326,
+        -0.23362616722241206,
+        0.0,
+        0.0
+      ],
+      "status": "LOCAL_LINEAR_RESPONSE",
+      "models": {
+        "zero": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 52.62527638274972,
+              "position_t_plus_60_m": 62.32132563013845,
+              "velocity_t0_m_s": 0.55481513078817
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1001.5641963859489,
+              "position_t_plus_60_m": 1185.721093176903,
+              "velocity_t0_m_s": 10.55622580830002
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 165.86037514812222,
+              "position_t_plus_60_m": 165.8604152713946,
+              "velocity_t0_m_s": 2.5462672852689402e-05
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1013.8397721716901,
+              "position_t_plus_60_m": 1195.642187536923,
+              "velocity_t0_m_s": 10.54163571237617
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.06800510927100123,
+              "position_t_plus_60_m": 33.236467053529566,
+              "velocity_t0_m_s": 0.5528080254857068
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.1806958907436,
+              "position_t_plus_60_m": 1184.5485325732095,
+              "velocity_t0_m_s": 10.55612050920407
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 38.45978842198039,
+              "position_t_plus_60_m": 37.80236363569245,
+              "velocity_t0_m_s": 0.052728315597324396
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.9192176426122,
+              "position_t_plus_60_m": 1184.6848950592596,
+              "velocity_t0_m_s": 10.541767567965033
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.9767847187640474e-14,
+              "position_t_plus_60_m": 1.9012684638701414e-14,
+              "velocity_t0_m_s": 6.047220487333498e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.1806935788187,
+              "position_t_plus_60_m": 1184.0821606964416,
+              "velocity_t0_m_s": 10.541635712345476
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 91.85184174311541,
+              "position_t_plus_60_m": 103.22096596447696,
+              "velocity_t0_m_s": 0.7832956785395351
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1004.3894566511904,
+              "position_t_plus_60_m": 1188.5727285673984,
+              "velocity_t0_m_s": 10.570697025826448
+            }
+          }
+        },
+        "shared_satellite": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 52.75849758094625,
+              "position_t_plus_60_m": 62.433632866160124,
+              "velocity_t0_m_s": 0.5548465169509333
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1001.5712050129832,
+              "position_t_plus_60_m": 1185.7270012753709,
+              "velocity_t0_m_s": 10.556227457934359
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 165.86037514812222,
+              "position_t_plus_60_m": 165.8604152713946,
+              "velocity_t0_m_s": 2.5462672854524377e-05
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1013.8397721716901,
+              "position_t_plus_60_m": 1195.642187536923,
+              "velocity_t0_m_s": 10.54163571237617
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.06800510927095603,
+              "position_t_plus_60_m": 33.23646705352956,
+              "velocity_t0_m_s": 0.5528080254857068
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.1806958907436,
+              "position_t_plus_60_m": 1184.5485325732095,
+              "velocity_t0_m_s": 10.55612050920407
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 3.6224902609573486e-07,
+              "position_t_plus_60_m": 4.143415313646739e-07,
+              "velocity_t0_m_s": 1.458412218300108e-10
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.1806935788187,
+              "position_t_plus_60_m": 1184.0821606964416,
+              "velocity_t0_m_s": 10.541635712345476
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.9501897155195943e-14,
+              "position_t_plus_60_m": 1.885478920947378e-14,
+              "velocity_t0_m_s": 5.982511348366651e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.1806935788187,
+              "position_t_plus_60_m": 1184.0821606964416,
+              "velocity_t0_m_s": 10.541635712345476
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 91.85184174311541,
+              "position_t_plus_60_m": 103.22096596447696,
+              "velocity_t0_m_s": 0.7832956785395351
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1004.3894566511904,
+              "position_t_plus_60_m": 1188.5727285673984,
+              "velocity_t0_m_s": 10.570697025826448
+            }
+          }
+        }
+      },
+      "independent_20m_control": {
+        "position_t_plus_0_m": 1000.1806935788187,
+        "position_t_plus_60_m": 1184.0821606964416,
+        "velocity_t0_m_s": 10.541635712345476
+      },
+      "local_code_linearization_remainder_max_m": 2.0839055460408762e-08
+    },
+    {
+      "radius_m": 42000000,
+      "speed_m_s": 4000,
+      "minimum_elevation_deg": 30.92630498705583,
+      "rank": 11,
+      "scaled_condition": 4579149.223737661,
+      "synthetic_state": [
+        9451363.556854988,
+        -35910261.46413159,
+        19624598.04668261,
+        3868.263821111454,
+        1018.1036343517346,
+        -0.0,
+        -0.11251623281970223,
+        0.42750311266823326,
+        -0.23362616722241206,
+        0.0,
+        0.0
+      ],
+      "status": "LOCAL_LINEAR_RESPONSE",
+      "models": {
+        "zero": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 52.633898919944734,
+              "position_t_plus_60_m": 62.18730726076765,
+              "velocity_t0_m_s": 0.5548684010689928
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1001.7273222289317,
+              "position_t_plus_60_m": 1183.172462207407,
+              "velocity_t0_m_s": 10.557188886819619
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 165.88457280159113,
+              "position_t_plus_60_m": 165.61848821475203,
+              "velocity_t0_m_s": 0.018546449938273153
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1014.0044339757313,
+              "position_t_plus_60_m": 1193.088134878307,
+              "velocity_t0_m_s": 10.542604158446958
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.3134080085585672,
+              "position_t_plus_60_m": 33.102568704052864,
+              "velocity_t0_m_s": 0.5527619470252352
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.3436404592438,
+              "position_t_plus_60_m": 1182.000674395907,
+              "velocity_t0_m_s": 10.557078384881095
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 38.46820398403272,
+              "position_t_plus_60_m": 37.80697156562865,
+              "velocity_t0_m_s": 0.05326979739970028
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1001.0823238667758,
+              "position_t_plus_60_m": 1182.141234437349,
+              "velocity_t0_m_s": 10.542731854406362
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.9776457675895486e-14,
+              "position_t_plus_60_m": 1.901393268303475e-14,
+              "velocity_t0_m_s": 6.074383002810723e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.3435913847424,
+              "position_t_plus_60_m": 1181.5370558070829,
+              "velocity_t0_m_s": 10.54259732014154
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 91.86827680286191,
+              "position_t_plus_60_m": 103.00339680536207,
+              "velocity_t0_m_s": 0.7833287127480457
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1004.553174849483,
+              "position_t_plus_60_m": 1186.0183447119214,
+              "velocity_t0_m_s": 10.571658437854946
+            }
+          }
+        },
+        "shared_satellite": {
+          "independent_raw_1m": {
+            "reference_contrast_response_max": null,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 52.76714888478888,
+              "position_t_plus_60_m": 62.3000588031081,
+              "velocity_t0_m_s": 0.5549008232672337
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1001.7343323757706,
+              "position_t_plus_60_m": 1183.1783937038658,
+              "velocity_t0_m_s": 10.55719059091704
+            }
+          },
+          "reference_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 165.88457280159113,
+              "position_t_plus_60_m": 165.61848821475203,
+              "velocity_t0_m_s": 0.01854644993827315
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1014.0044339757313,
+              "position_t_plus_60_m": 1193.088134878307,
+              "velocity_t0_m_s": 10.542604158446958
+            }
+          },
+          "reference_station_ramp_1m_per_300s": {
+            "reference_contrast_response_max": 1.7763568394002505e-15,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 0.3134080085585671,
+              "position_t_plus_60_m": 33.10256870405287,
+              "velocity_t0_m_s": 0.5527619470252352
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.3436404592438,
+              "position_t_plus_60_m": 1182.000674395907,
+              "velocity_t0_m_s": 10.557078384881095
+            }
+          },
+          "reference_satellite_offset_1m": {
+            "reference_contrast_response_max": 0.9230769230769231,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 3.5504915054100045e-07,
+              "position_t_plus_60_m": 4.1911367401382886e-07,
+              "velocity_t0_m_s": 4.2125654074803116e-10
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.3435913847424,
+              "position_t_plus_60_m": 1181.5370558070829,
+              "velocity_t0_m_s": 10.54259732014154
+            }
+          },
+          "matched_station_offset_1m": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 1.951003600244499e-14,
+              "position_t_plus_60_m": 1.885696828884457e-14,
+              "velocity_t0_m_s": 5.993943029262827e-17
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1000.3435913847424,
+              "position_t_plus_60_m": 1181.5370558070829,
+              "velocity_t0_m_s": 10.54259732014154
+            }
+          },
+          "reference_station_temporal_1m_tau60s": {
+            "reference_contrast_response_max": 0.0,
+            "unit_mode_principal_std": {
+              "position_t_plus_0_m": 91.86827680286191,
+              "position_t_plus_60_m": 103.00339680536207,
+              "velocity_t0_m_s": 0.7833287127480457
+            },
+            "control_plus_independent_mode_principal_std": {
+              "position_t_plus_0_m": 1004.553174849483,
+              "position_t_plus_60_m": 1186.0183447119214,
+              "velocity_t0_m_s": 10.571658437854946
+            }
+          }
+        }
+      },
+      "independent_20m_control": {
+        "position_t_plus_0_m": 1000.3435913847424,
+        "position_t_plus_60_m": 1181.5370558070829,
+        "velocity_t0_m_s": 10.54259732014154
+      },
+      "local_code_linearization_remainder_max_m": 1.660879825338135e-08
+    }
+  ],
+  "real_target_fit": false,
+  "target_orbit_accessed": false,
+  "physical_covariance_qualified": false,
+  "real_uncertainty_floors_modified": false,
+  "scope": "Conditional local synthetic sensitivity. Principal standard deviations under invented covariances, not physical error bounds or 95-percent coverage."
+}
