@@ -1,0 +1,58 @@
+{
+  "schema": "vmf3-grid-inputs-v1",
+  "sources": {
+    "2026/VMF3_20260903.H00": {
+      "url": "https://vmf.geo.tuwien.ac.at/trop_products/GRID/1x1/VMF3/VMF3_OP/2026/VMF3_20260903.H00",
+      "sha256": "a5e13e17315904576638f2ade38016935806e98928ae9bac808890e70c1ef86e",
+      "bytes": 3434750,
+      "access_utc": "2026-09-17T13:38:01.994629+00:00",
+      "packed_file": "VMF3_20260903.H00.gz",
+      "packed_sha256": "1b0ce95cab05c69d39a2cfbdd1c211fcea0c7f38e672d0a116365b2cb3776b25"
+    },
+    "2026/VMF3_20260903.H06": {
+      "url": "https://vmf.geo.tuwien.ac.at/trop_products/GRID/1x1/VMF3/VMF3_OP/2026/VMF3_20260903.H06",
+      "sha256": "6cf01050b2ac66b5650696ed26477699e5e483aef99bbd0fb18ba668b21512b7",
+      "bytes": 3434750,
+      "access_utc": "2026-09-17T13:38:02.226744+00:00",
+      "packed_file": "VMF3_20260903.H06.gz",
+      "packed_sha256": "77cb07af553cd233b8049ebc3107dca4031930d64054e3e94d6a5e43941233f0"
+    },
+    "2026/VMF3_20260905.H06": {
+      "url": "https://vmf.geo.tuwien.ac.at/trop_products/GRID/1x1/VMF3/VMF3_OP/2026/VMF3_20260905.H06",
+      "sha256": "f6730fa7acdb7c9634b247efe26177232f4af25b491dde0ddda11f327a60ef4f",
+      "bytes": 3434750,
+      "access_utc": "2026-09-17T13:38:02.216937+00:00",
+      "packed_file": "VMF3_20260905.H06.gz",
+      "packed_sha256": "cbfbc21038644e13069a27035e026627ecfc636e8df77ed5299e90f3901fe1f8"
+    },
+    "2026/VMF3_20260905.H12": {
+      "url": "https://vmf.geo.tuwien.ac.at/trop_products/GRID/1x1/VMF3/VMF3_OP/2026/VMF3_20260905.H12",
+      "sha256": "2a7dc5211d88de5a125db364a82e3d4262f79fc2bbc25b56205848020a138224",
+      "bytes": 3434750,
+      "access_utc": "2026-09-17T13:38:04.611547+00:00",
+      "packed_file": "VMF3_20260905.H12.gz",
+      "packed_sha256": "a39b5147d3b86d4fc2a2562da23da088b0a63020ed8939955b3bc99dac99e9cb"
+    },
+    "orography_ell_1x1": {
+      "url": "https://vmf.geo.tuwien.ac.at/station_coord_files/orography_ell_1x1",
+      "sha256": "57cf5b6bf9bb3f54b4abdfb413e9c2e84f19cd7e59c0641d36c009bbfa736a4d",
+      "bytes": 583198,
+      "access_utc": "2026-09-17T13:38:00.821626+00:00",
+      "packed_file": "orography_ell_1x1.gz",
+      "packed_sha256": "2901fabb572cf4f21c43e06a317a781128220939596e531e2f0b30e372ff81bc"
+    },
+    "vmf3_grid.f90": {
+      "url": "https://vmf.geo.tuwien.ac.at/codes/vmf3_grid.f90",
+      "sha256": "8cdcf530c57c226a50585350ff71e5e11dbe0320000042697443cbf5f528a2da",
+      "bytes": 110758
+    }
+  },
+  "prior_sha256": {
+    "results/g14_ocean_pole_v1.json": "c2c9abb64c7752ae051f74144b03cae28469cbcafa00dd7cd59d1c09a75880a2",
+    "results/g14_solid_earth_v1.json": "4b6c2d55466d0b6d339de1e5e0dd54dcb6e2b76e1edfc2a071461131e46bb6c8",
+    "results/g14_station_frame_epoch_v1.json": "1b6abc0d29a468941b47e90ca70880a156ae4e259dab9b3615ae4b7526190e6a",
+    "results/g12_ocean_pole_v1.json": "a62178ee2d01583ed183c5f42a3f0c98eefd1fbb209357c1f1395b24eaab95ab",
+    "results/g12_solid_earth_v1.json": "dc9c31237973776f287a44880a357d79d7bbea152c88632d8fba718c391af905",
+    "results/g12_station_frame_epoch_v1.json": "6fd24f5849a56df372ddf6a64323bcab08d38bbb03eb542d904fa03805af501e"
+  }
+}
