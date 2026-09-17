@@ -100,3 +100,22 @@ replace missing station/satellite predictions after seeing their score. Separate
 check sensitivity to upstream reference products to distinguish product-linked
 common residuals from persistent RF behavior. S2 remains open; the website and
 new confirmatory campaign remain separate work.
+
+## Preparation review follow-up
+
+`prepare_arc_reference_checked.py` (frozen in `715069b`) is the active preparation
+entry point. Before invoking the preserved producer, it compares observation
+sidecars and recorded decoded hashes with the pinned admitted observation manifest.
+It also checks the original timed/attitude receipts and copied orbit against the
+pinned earlier attitude report, then verifies that this arc's orbit bytes match.
+The original producer omitted these explicit upstream consistency checks. The
+preflight verifies that the actual executed inputs agree; no scientific artifact
+or original executed source was rewritten. Mutation tests reject each changed
+upstream artifact before any preparation work starts.
+
+This is deliberately a fixed-date experiment, not a configurable multi-day tool.
+The plan is pinned by the literal input-receipt hash, and its exact bytes are now
+also compared with `b611bdb` in tests. The weather MJD 61286 and observation DOY246
+match that frozen September 3 plan. The preflight enforces this date explicitly.
+Reusing these fixed sources by editing the plan for another day is unsupported;
+a new dated experiment needs a separately versioned preparation and runner.

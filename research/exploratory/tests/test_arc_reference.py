@@ -6,6 +6,7 @@ import numpy as np
 import pytest
 
 from research.exploratory import arc_reference as study
+from research.exploratory import prepare_arc_reference_checked as preparation
 from research.exploratory import solid_earth_study as comparison
 
 
@@ -77,6 +78,9 @@ def test_second_arc_inputs_and_implementation_frozen_before_execution():
     root = study.frame.ROOT
     for commit in ('b611bdb','08792b9'):
         subprocess.run(['git','merge-base','--is-ancestor',commit,'HEAD'],cwd=root,check=True)
+    plan = subprocess.check_output(['git','show','b611bdb:research/exploratory/arc_reference_plan.json'],cwd=root)
+    assert hashlib.sha256(plan).hexdigest() == receipt['plan_sha256']
+    assert plan == (study.BASE/'arc_reference_plan.json').read_bytes()
     for name,digest in receipt['files'].items():
         raw = subprocess.check_output(['git','show','08792b9:research/exploratory/inputs/arc_reference/'+name],cwd=root)
         assert hashlib.sha256(raw).hexdigest() == digest
@@ -119,3 +123,38 @@ def test_complete_second_arc_replay_and_same_test_cohort(monkeypatch):
     assert expected['transferred_predictions'][-1]['supported_test_error_rms_m'] is None
     assert not expected['physical_covariance_qualified'] and not expected['absolute_future_rf_prediction']
     assert hashlib.sha256((study.BASE/'arc_reference.py').read_bytes()).hexdigest() == expected['source_sha256']
+
+
+def test_preparation_preflight_matches_authoritative_frozen_inputs():
+    preparation.preflight()
+    root = study.frame.ROOT
+    subprocess.run(['git','merge-base','--is-ancestor','715069b','HEAD'],cwd=root,check=True)
+    source = subprocess.check_output(['git','show','715069b:research/exploratory/prepare_arc_reference_checked.py'],cwd=root)
+    assert source == (study.BASE/'prepare_arc_reference_checked.py').read_bytes()
+
+
+@pytest.mark.parametrize('kind', ['observation','orbit','timed_receipt','attitude_receipt'])
+def test_preparation_rejects_changed_upstream_inputs_before_work(monkeypatch,kind,tmp_path):
+    from pathlib import Path
+    paths = {
+        'observation': study.frame.verified.paths('g14')['admission_receipt'].parent/'raw_observations/ALGO00CAN_R_20262460000_01D_30S_MO.crx.gz.json',
+        'orbit': study.BASE/'inputs/timed_reference_products/g14/reference_orbit.txt',
+        'timed_receipt': study.BASE/'inputs/timed_reference_products/g14/receipt.json',
+        'attitude_receipt': study.BASE/'inputs/reference_attitudes/g14/receipt.json',
+    }
+    original = Path.read_bytes
+    def changed(path):
+        raw = original(path)
+        if path != paths[kind]:
+            return raw
+        if kind == 'observation':
+            value = json.loads(raw)
+            value['sha256'] = '0'*64
+            return json.dumps(value).encode()
+        return raw+b' '
+    def forbidden(*args,**kwargs):
+        pytest.fail('producer reached before rejecting changed upstream input')
+    monkeypatch.setattr(Path,'read_bytes',changed)
+    monkeypatch.setattr(preparation.frozen,'prepare',forbidden)
+    with pytest.raises(ValueError):
+        preparation.prepare(tmp_path,tmp_path,tmp_path,tmp_path)

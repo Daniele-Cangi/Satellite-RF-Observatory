@@ -62,7 +62,7 @@ puo sostituire queste verifiche sperimentali.
    trasferito peggiora tutte le stazioni; quello per coppia stazione/satellite
    non supporta nessun blocco completo del test. Prossimo passo: giorno distinto
    con gli stessi quattro modelli. Entrambi gli archi condividono i prodotti
-   giornalieri; non e ancora conferma indipendente ne previsione di posizione.
+   giornalieri; non è ancora conferma indipendente né previsione di posizione.
 3. Trasportare errori e correlazioni fino a posizione e moto; validare le
    osservabili aggiuntive e l'incertezza senza aggiustarla dopo le conferme.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
