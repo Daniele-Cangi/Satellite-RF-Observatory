@@ -70,6 +70,18 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The one-hour reference experiment in `research/exploratory/HOUR_REFERENCE_PREDICTION.md`
+extends G14 to 03:30-04:30 GPST with seven stations and 847 qualified epochs.
+Use `hour_reference_v2.py`; v1 is preserved, and v2 explicitly accommodates only
+the recorded CRLF/LF variants of nine source files. Chronological 30-minute
+training/30-minute testing gives 3954 test contrasts. Shared-satellite offsets
+reduce RMS 0.973703 -> 0.937967 m with all stations improving; station/satellite
+offsets leave 1964 paths unsupported. These are clock-free residual contrasts,
+not absolute future RF or target position predictions. No covariance qualification.
+Next retain all four candidates and test a separate arc/day before promotion;
+keep unseen-link failures and distinguish upstream reference-product correlations.
+S2 remains open; do not return to minor component audits as the default.
+
 The coordinate-aware VMF3 RF study in `research/exploratory/VMF3_REFERENCE_CALIBRATION.md`
 now applies gridded weather at admitted ARPs, avoiding the site-wise ALGO
 catalogue discrepancy. Original Fortran/Python agree in 88/88 numerical cases.
