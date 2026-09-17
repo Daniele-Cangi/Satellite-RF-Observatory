@@ -64,3 +64,16 @@ def test_report_replay():
     assert len(expected['events'])==2
     assert all(len(e['samples'])==11 for e in expected['events'])
     assert not expected['instantaneous_code_eop_qualified']
+
+
+def test_execution_commit_source_and_input_binding():
+    import hashlib
+    import subprocess
+    root=study.BASE.parents[1]
+    report=json.loads((study.BASE/'results/erp_polar_bound_v1.json').read_bytes())
+    subprocess.run(['git','merge-base','--is-ancestor','829a422','HEAD'],cwd=root,check=True)
+    hashes={'erp_polar_bound.py':report['source_sha256']}|report['input_sha256']
+    for name,digest in hashes.items():
+        blob=subprocess.check_output(['git','show','829a422:research/exploratory/'+name],cwd=root)
+        assert hashlib.sha256(blob).hexdigest()==digest
+        assert hashlib.sha256((study.BASE/name).read_bytes()).hexdigest()==digest
