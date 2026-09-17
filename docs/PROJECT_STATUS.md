@@ -56,9 +56,13 @@ puo sostituire queste verifiche sperimentali.
 2. Prima estensione temporale consegnata: un'ora G14, sette stazioni, 847
    calibrazioni qualificate. Stima delle correzioni nella prima mezz'ora e
    verifica nella seconda: RMS dei contrasti 0.974 -> 0.938 m con offset
-   condivisi per satellite. Prossimo passo: stessa prova su un arco/giorno
-   distinto, conservando i collegamenti non prevedibili. Non equivale ancora
-   a prevedere pseudorange assolute o una posizione futura.
+   condivisi per satellite. Secondo arco 05:00–06:00 completato: altre 847
+   calibrazioni valide, RMS 1.047 -> 1.003 m con stima recente (−4.15%) e
+   1.015 m trasferendo le correzioni precedenti (−3.04%). Il modello direzionale
+   trasferito peggiora tutte le stazioni; quello per coppia stazione/satellite
+   non supporta nessun blocco completo del test. Prossimo passo: giorno distinto
+   con gli stessi quattro modelli. Entrambi gli archi condividono i prodotti
+   giornalieri; non e ancora conferma indipendente ne previsione di posizione.
 3. Trasportare errori e correlazioni fino a posizione e moto; validare le
    osservabili aggiuntive e l'incertezza senza aggiustarla dopo le conferme.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
@@ -67,7 +71,7 @@ puo sostituire queste verifiche sperimentali.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
-Ultimo studio: [predizione temporale dei riferimenti](../research/exploratory/HOUR_REFERENCE_PREDICTION.md).
+Ultimo studio: [trasferimento tra archi](../research/exploratory/ARC_REFERENCE_TRANSFER.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.
