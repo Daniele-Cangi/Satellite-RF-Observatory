@@ -28,7 +28,8 @@ ma la priorita e dimostrare la capacita scientifica su misure vere.
 - Il nuovo confronto meteorologico conserva 72 campioni su nove stazioni e due
   giorni: differenze zenitali fino a 12.54 cm dal modello semplice, equivalenti
   fino a 70.02 cm a 10 gradi usando la medesima funzione di elevazione. E una
-  sensibilita del modello; il miglioramento dei residui RF non e ancora misurato.
+  sensibilita del modello. Il successivo replay RF con VMF3 completo misura
+  miglioramenti dello 0.134%/0.838%, con tre stazioni peggiorate per giorno.
 
 ## Piano e stato
 
@@ -47,8 +48,11 @@ puo sostituire queste verifiche sperimentali.
 
 ## Prossimo tratto di lavoro
 
-1. Collegare meteorologia, coordinate e ritardi secchi/umidi alla calibrazione
-   dei soli riferimenti; risolvere lo scarto geografico ALGO nei dati VMF3.
+1. Collegamento meteorologico consegnato sulle due finestre esposte: griglie
+   alle coordinate ammesse, 88 confronti numerici con la routine originale e
+   616 calibrazioni riuscite. Il modello completo riduce i residui soltanto
+   dello 0.134%/0.838%; tre stazioni peggiorano per ciascun giorno. Lo scarto
+   del catalogo ALGO viene evitato usando le griglie, senza modificarne i dati.
 2. Ampliare gli archi RF e le elevazioni; distinguere atmosfera, risposta del
    ricevitore/antenna e multipath, verificando predizioni su tempi esclusi.
 3. Trasportare errori e correlazioni fino a posizione e moto; validare le
@@ -57,5 +61,6 @@ puo sostituire queste verifiche sperimentali.
 5. Riprendere API e sito quando i risultati stabiliscono cosa il servizio puo
    promettere e quando deve dichiarare che non sa determinare una posizione.
 
-Dettagli del nuovo studio: [atmosfera zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md).
+Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
+[calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
