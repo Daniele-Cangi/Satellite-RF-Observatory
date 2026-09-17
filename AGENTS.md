@@ -70,6 +70,20 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The distinct-day study in `research/exploratory/DAY_REFERENCE_PREDICTION.md`
+is complete: September 5, 10:00-11:00 GPST, G12-excluded historical network,
+847 qualified station epochs. Shared-satellite offsets give 1.009796 -> 0.931068 m
+(7.80%, all seven stations) on 3942 chronological test contrasts; five common
+stations also improve (5.77%). Station/satellite offsets leave 1141 unsupported
+paths. Use `day_reference.py`; dates and authoritative inputs are bound before
+execution. This changes two stations, reference cohort and excluded target as
+well as day; no cross-day coefficient transfer or independent confirmation.
+Next compare convention-compatible alternative reference products on fixed RF
+inputs before promotion, distinguishing product-linked common residuals from
+persistent physical behavior. No target fit, production change or covariance
+qualification; do not restart minor component audits as the default.
+
+
 The second arc in `research/exploratory/ARC_REFERENCE_TRANSFER.md` is complete:
 05:00-06:00 GPST, same day/stations/products, 847 qualified station epochs.
 On 3446 identical test contrasts, recent shared-satellite training improves RMS
