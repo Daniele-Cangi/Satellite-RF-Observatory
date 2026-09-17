@@ -1,0 +1,11 @@
+{
+  "schema": "atmosphere-zenith-attempt-v1",
+  "execution_commit": "b53f015",
+  "status": "parser_rejected_unused_mapping_coefficient",
+  "source_sha256": "0225760159c61cbabff439ea7e136c4fae7307d7b3f936c815c15d37d2a5390b",
+  "receipt_sha256": "5604eb9482a1a2a9e51e10f65d9c09fe8b83233dcc62d69f399ed73e5dda3689",
+  "error": "ValueError: invalid meteorological value",
+  "trigger": "2026248.vmf3_g: GANP 61288.50 wet mapping coefficient -0.00020830",
+  "scientific_report_written": false,
+  "superseded_by": "atmosphere_zenith_v2.py; accept any finite unused mapping coefficient; retain zenith and meteorology domain checks"
+}
