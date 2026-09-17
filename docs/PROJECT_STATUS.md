@@ -53,8 +53,12 @@ puo sostituire queste verifiche sperimentali.
    616 calibrazioni riuscite. Il modello completo riduce i residui soltanto
    dello 0.134%/0.838%; tre stazioni peggiorano per ciascun giorno. Lo scarto
    del catalogo ALGO viene evitato usando le griglie, senza modificarne i dati.
-2. Ampliare gli archi RF e le elevazioni; distinguere atmosfera, risposta del
-   ricevitore/antenna e multipath, verificando predizioni su tempi esclusi.
+2. Prima estensione temporale consegnata: un'ora G14, sette stazioni, 847
+   calibrazioni qualificate. Stima delle correzioni nella prima mezz'ora e
+   verifica nella seconda: RMS dei contrasti 0.974 -> 0.938 m con offset
+   condivisi per satellite. Prossimo passo: stessa prova su un arco/giorno
+   distinto, conservando i collegamenti non prevedibili. Non equivale ancora
+   a prevedere pseudorange assolute o una posizione futura.
 3. Trasportare errori e correlazioni fino a posizione e moto; validare le
    osservabili aggiuntive e l'incertezza senza aggiustarla dopo le conferme.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
@@ -63,4 +67,7 @@ puo sostituire queste verifiche sperimentali.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
+Ultimo studio: [predizione temporale dei riferimenti](../research/exploratory/HOUR_REFERENCE_PREDICTION.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
+
+The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.

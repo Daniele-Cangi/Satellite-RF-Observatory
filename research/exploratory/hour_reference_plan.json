@@ -1,0 +1,50 @@
+{
+  "schema": "hour-reference-plan-v1",
+  "date_gpst": "2026-09-03",
+  "target_excluded": "G14",
+  "stations": [
+    "ALGO00CAN",
+    "BOGT00COL",
+    "DRAO00CAN",
+    "MKEA00USA",
+    "PIE100USA",
+    "STJO00CAN",
+    "YELL00CAN"
+  ],
+  "start_gpst_s": 12600,
+  "samples": 121,
+  "step_s": 30,
+  "training_before_gpst_s": 14400,
+  "models": [
+    "zero",
+    "shared_satellite",
+    "station_direction",
+    "station_satellite"
+  ],
+  "minimum_elevation_deg": 10,
+  "minimum_references": 4,
+  "references": [
+    "G01",
+    "G02",
+    "G03",
+    "G05",
+    "G06",
+    "G07",
+    "G08",
+    "G09",
+    "G10",
+    "G12",
+    "G13",
+    "G15",
+    "G17",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G23",
+    "G24",
+    "G27",
+    "G30"
+  ],
+  "scope": "Exploratory reference-only one-hour clock-free contrasts. No target fit, no unexposed confirmation, no covariance qualification."
+}
