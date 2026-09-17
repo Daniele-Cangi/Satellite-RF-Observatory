@@ -72,7 +72,8 @@ Do not make every exploratory iteration another numbered admission gate.
 
 The one-hour reference experiment in `research/exploratory/HOUR_REFERENCE_PREDICTION.md`
 extends G14 to 03:30-04:30 GPST with seven stations and 847 qualified epochs.
-Use `hour_reference_v2.py`; v1 is preserved, and v2 explicitly accommodates only
+Use `hour_reference_checked.py` to validate auxiliary inputs before the unchanged
+v2 calculation; v1 is preserved, and v2 explicitly accommodates only
 the recorded CRLF/LF variants of nine source files. Chronological 30-minute
 training/30-minute testing gives 3954 test contrasts. Shared-satellite offsets
 reduce RMS 0.973703 -> 0.937967 m with all stations improving; station/satellite

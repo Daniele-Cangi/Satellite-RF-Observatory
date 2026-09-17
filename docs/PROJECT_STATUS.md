@@ -69,3 +69,5 @@ Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
 Ultimo studio: [predizione temporale dei riferimenti](../research/exploratory/HOUR_REFERENCE_PREDICTION.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
+
+The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.

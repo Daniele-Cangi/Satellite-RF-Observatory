@@ -88,7 +88,7 @@ both hashes and Git ancestry are tested. Any other source edit is rejected;
 there is no general whitespace normalization. Scientific outcomes are unchanged.
 
 ```powershell
-python -m research.exploratory.hour_reference_v2 NEW_REPORT.json
+python -m research.exploratory.hour_reference_checked NEW_REPORT.json
 python -m pytest research/exploratory/tests/test_hour_reference.py -q
 ```
 
@@ -111,3 +111,31 @@ availability on newly rising references. Add absolute clock/time prediction as
 a separate objective; this study does not supply it. Physical error covariance,
 kinematic target inference, a new confirmatory campaign and product launch remain
 open. S2 is still in progress.
+
+## PR review follow-up
+
+The active entry point is `hour_reference_checked.py`, frozen in `bcf674d`
+before its replay. It validates fixed bias/antenna receipt and extract hashes
+before invoking the unchanged v2 calculation. This closes a real gap: v2 alone
+checked those extracts against mutable local receipts, although the recorded
+v2 result already includes their exact hashes. The wrapper retains the v2 result
+schema and numerical source identity; its own exact source is bound by a Git
+ancestry/byte test. The complete CI replay now runs through this entry point.
+
+Frame and loading inputs were already transitively bound before preparation:
+`station_frame_epoch.read_frame()` pins root receipt `816ed068...` and its five
+files; `ocean_pole_study.read_loading()` pins `16632931...`, the BLQ receipt and
+extract, HARDISP sources and products. Their source bytes (including these
+constants) are in the hour receipt's frozen source manifest. The station report
+is separately pinned by `verified.PINS`. Discarding the returned diagnostic hash
+maps did not remove these checks. The new entry point also revalidates those
+chains, with mutation tests for both root receipts.
+
+Review observations on `inputs/hour_source_bytes/estimation.py`,
+`qualification.py` and `verification.py` concern preserved historical bytes.
+They are not imported as code by this experiment and must not be edited to repair
+historical evidence. This run performs neither target estimation nor oracle
+interpolation; general acquisition hardening is separate from this replay.
+Tests reject a simultaneous bias/antenna extract and matching-receipt change
+before any calibration. No model, cohort, fitted coefficient or recorded
+scientific outcome was changed by this review follow-up.

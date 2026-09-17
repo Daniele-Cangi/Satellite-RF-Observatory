@@ -6,6 +6,7 @@ import numpy as np
 import pytest
 
 from research.exploratory import hour_reference_v2 as study
+from research.exploratory import hour_reference_checked as checked
 from research.exploratory import solid_earth_study as comparison
 
 
@@ -115,7 +116,7 @@ def test_complete_hour_replay_and_chronological_cohort(monkeypatch):
         assert sv != 'G14'
         return original(self, sv, code, t)
     monkeypatch.setattr(study.frame.AttitudeReference, 'antenna_state', guard)
-    comparison.compare_replay(study.run(), expected)
+    comparison.compare_replay(checked.run(), expected)
     assert expected['status_counts'] == {'CALIBRATION_QUALIFIED':7}
     assert expected['training_times'] == list(range(12600,14400,30))
     assert expected['test_times'] == list(range(14400,16201,30))
@@ -130,3 +131,55 @@ def test_complete_hour_replay_and_chronological_cohort(monkeypatch):
     blob = subprocess.check_output(['git','show','65d41fa:research/exploratory/hour_reference_v2.py'],cwd=study.frame.ROOT)
     assert hashlib.sha256(blob).hexdigest() == expected['source_sha256']
     assert hashlib.sha256((study.BASE/'hour_reference_v2.py').read_bytes()).hexdigest() == expected['source_sha256']
+
+
+def test_auxiliary_checks_frozen_before_replay():
+    evidence = checked.validate_auxiliary()
+    assert evidence['frame']['frame_receipt'] == study.frame.RECEIPT_SHA256
+    assert evidence['loading']['loading_receipt'] == checked.loading.RECEIPT_SHA
+    expected = json.loads((study.BASE/'results/hour_reference_v2.json').read_bytes())['product_sha256']
+    for name, key in [('reference_biases/g14/receipt.json','bias_receipt'),
+                      ('reference_biases/g14/reference_bias.bia','bias_extract'),
+                      ('reference_antennas/g14/receipt.json','antenna_receipt'),
+                      ('reference_antennas/g14/reference_antenna.atx','antenna_extract')]:
+        assert evidence['auxiliary']['inputs/'+name] == expected[key]
+    subprocess.run(['git','merge-base','--is-ancestor','bcf674d','HEAD'],cwd=study.frame.ROOT,check=True)
+    blob = subprocess.check_output(['git','show','bcf674d:research/exploratory/hour_reference_checked.py'],cwd=study.frame.ROOT)
+    assert blob == (study.BASE/'hour_reference_checked.py').read_bytes()
+
+
+@pytest.mark.parametrize('folder,filename', [
+    ('reference_biases/g14','reference_bias.bia'),
+    ('reference_antennas/g14','reference_antenna.atx'),
+])
+def test_consistent_auxiliary_replacement_rejected_before_calibration(monkeypatch, folder, filename):
+    from pathlib import Path
+    root = study.BASE/'inputs'/folder
+    original = Path.read_bytes
+    changed = original(root/filename)+b'\n'
+    receipt = json.loads(original(root/'receipt.json'))
+    receipt['extract_sha256'] = hashlib.sha256(changed).hexdigest()
+    def replaced(path):
+        if path == root/filename:
+            return changed
+        if path == root/'receipt.json':
+            return json.dumps(receipt).encode()
+        return original(path)
+    def forbidden(*args, **kwargs):
+        pytest.fail('calibration reached before rejecting changed auxiliary files')
+    monkeypatch.setattr(Path,'read_bytes',replaced)
+    monkeypatch.setattr(study,'run',forbidden)
+    with pytest.raises(ValueError):
+        checked.run()
+
+
+@pytest.mark.parametrize('folder', ['station_frame','ocean_loading'])
+def test_station_input_root_receipts_are_already_pinned(monkeypatch, folder):
+    from pathlib import Path
+    original = Path.read_bytes
+    target = study.BASE/'inputs'/folder/'receipt.json'
+    def replaced(path):
+        return original(path)+(b' ' if path == target else b'')
+    monkeypatch.setattr(Path,'read_bytes',replaced)
+    with pytest.raises(ValueError):
+        checked.validate_auxiliary()
