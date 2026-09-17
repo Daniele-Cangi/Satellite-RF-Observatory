@@ -98,6 +98,11 @@ def test_acquisition_failures_and_preexecution_freezes_remain():
     root = products.BASE.parents[1]
     for commit in ('5b20664','99c4f28','2441fd0','5799b2e'):
         subprocess.run(['git','merge-base','--is-ancestor',commit,'HEAD'],cwd=root,check=True)
+    # Independent Git anchor also covers the actual documented CLI wrapper.
+    # A wrapper cannot meaningfully authenticate itself with its own mutable
+    # embedded hash; changing/bypassing its checks must instead fail this test.
+    wrapper = subprocess.check_output(['git','show','5799b2e:research/exploratory/final_reference_checked.py'],cwd=root)
+    assert wrapper == Path(checked.__file__).read_bytes()
     first = json.loads((products.BASE/'inputs/final_reference/receipt.json').read_bytes())
     second = json.loads((products.BASE/'inputs/final_reference_v2/receipt.json').read_bytes())
     assert first['failures'][0]['product']=='clock'

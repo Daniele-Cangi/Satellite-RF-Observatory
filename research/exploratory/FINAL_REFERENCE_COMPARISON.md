@@ -129,3 +129,19 @@ within-station/epoch clock-free contrasts, not absolute future RF. Products
 may contain measurements from these same stations. Repeated improvements
 cannot establish independent physical corrections, general satellite
 position accuracy or a defensible prospective uncertainty radius.
+
+## Verification and review
+
+Eleven focused tests pass locally, including full numerical replay (210.85 s).
+All five retained compressed archives were independently re-extracted after
+execution and matched their recorded raw, decoded and restricted hashes.
+The full scientific suite also runs on Linux and Windows in CI.
+
+Review identified missing test coverage for changes to the checked CLI wrapper
+itself. The freeze regression now compares that entire file byte-for-byte with
+its independently resolved `5799b2e` Git blob, in addition to the runtime pins
+for analysis and adapter. This preserves the actually executed wrapper and
+makes later changes fail CI without rewriting the historical calculation.
+The wrapper is not a security boundary against a party able to rewrite both
+the checkout and its tests/history; a self-declared hash inside that mutable
+wrapper would not provide such authentication either.
