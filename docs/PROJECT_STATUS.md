@@ -70,19 +70,24 @@ puo sostituire queste verifiche sperimentali.
    0.931 m in entrambi i casi. Anche trasferendo le correzioni rapid ai dati
    final si migliora: 0.935 m, −5.38%, tutte le stazioni. Il cambio di prodotti
    non risolve la struttura dominante; due prodotti CODE non sono una verita
-   indipendente. Prossimo passo: stimare le correzioni da sei stazioni e
-   verificarle sulla settima esclusa, nella mezz'ora successiva, ruotando
-   tutte le stazioni. Conservare i blocchi non supportati; i prodotti a monte
+   indipendente. Trasferimento alla settima stazione esclusa ora consegnato:
+   RMS 0.953 m con entrambe le famiglie, miglioramento aggregato 5.64% rapid
+   e 3.55% final, tutti i 3942 campioni supportati. Migliorano sei/cinque
+   stazioni: AREQ peggiora in entrambi i casi, DRAO leggermente con i final.
+   La correzione non va promossa come beneficio universale. I prodotti a monte
    possono ancora includere la stazione esclusa dalla stima locale.
 3. Trasportare errori e correlazioni fino a posizione e moto; validare le
    osservabili aggiuntive e l'incertezza senza aggiustarla dopo le conferme.
+   Questo e ora il prossimo passo: misurare la sensibilita del solver a errori
+   indipendenti, comuni per stazione e correlati nel tempo, mantenendo visibili
+   anche i modi che i contrasti RF centrati non permettono di stimare.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
 5. Riprendere API e sito quando i risultati stabiliscono cosa il servizio puo
    promettere e quando deve dichiarare che non sa determinare una posizione.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
-Ultimo studio: [confronto rapid/final sugli stessi dati RF](../research/exploratory/FINAL_REFERENCE_COMPARISON.md).
+Ultimo studio: [trasferimento a ricevitori esclusi](../research/exploratory/SPATIAL_REFERENCE_TRANSFER.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.

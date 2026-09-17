@@ -70,6 +70,20 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+The excluded-receiver study in `research/exploratory/SPATIAL_REFERENCE_TRANSFER.md`
+is complete: six-station chronological training transfers to the seventh at
+0.952836 m rapid / 0.952889 m final on all 3942 test paths. Pooled gains are
+5.64% / 3.55%, but only six/five stations improve: AREQ worsens with both,
+DRAO slightly worsens with final. Preserve these degradations; no blanket
+promotion of the shared correction. Use `spatial_reference_checked.py`.
+The upstream products can still include the locally excluded receiver.
+Next connect error assumptions to position/motion uncertainty: map estimator
+sensitivity to independent, station-common and temporal errors, including modes
+invisible to centered contrasts, in a separate exploratory propagation study.
+Keep zero/shared alternatives and existing uncertainty floors; do not reopen
+closed target outcomes, claim calibrated covariance or start new confirmation.
+Do not return to minor component audits or pooled-RMS optimization as default.
+
 The fixed-RF rapid/final comparison in
 `research/exploratory/FINAL_REFERENCE_COMPARISON.md` is complete: the same
 847 station epochs qualify and the same 3942 test paths remain. CODE final
