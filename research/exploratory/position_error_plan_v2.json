@@ -1,0 +1,56 @@
+{
+  "schema": "position-error-transfer-plan-v2",
+  "reference_report_sha256": "ff4caa87d4963524252437184ab67128b9a75beaf704b664dff1951350b33600",
+  "station_positions_sha256": "0361930f1c46486b075df1fda511213761b64ce32305ad1e0c94d503aac5864e",
+  "training_before_gpst_s": 37800,
+  "evaluation_times_gpst_s": [
+    37800,
+    37830,
+    37860,
+    37890,
+    37920,
+    37950,
+    37980,
+    38010,
+    38040,
+    38070,
+    38100
+  ],
+  "synthetic_geocentric_radii_m": [
+    12000000,
+    26000000,
+    42000000
+  ],
+  "synthetic_tangent_speeds_m_s": [
+    0,
+    4000
+  ],
+  "synthetic_inward_acceleration_m_s2": 0.5,
+  "direction": "Normalized mean of the seven admitted geocentric receiver directions; fixed synthetic design, not a target state or prior.",
+  "station_geometry": "Fixed receiver coordinates from positions.json index 70 (10:35:00); static receiver geometry in synthetic vacuum model.",
+  "minimum_joint_elevation_deg": 5,
+  "maximum_scaled_condition": 10000000000,
+  "weight_code_sigma_m": 20,
+  "future_position_offsets_s": [
+    0,
+    60
+  ],
+  "models": [
+    "zero",
+    "shared_satellite"
+  ],
+  "error_scenarios": [
+    "independent_raw_1m",
+    "reference_station_offset_1m",
+    "reference_station_ramp_1m_per_300s",
+    "reference_satellite_offset_1m",
+    "matched_station_offset_1m",
+    "reference_station_temporal_1m_tau60s"
+  ],
+  "calibration": "Equal-weight reference mean per receiver/epoch. Shared-satellite coefficients use the same six-other-station chronological training and minimum-norm gauge as spatial_reference. Linear additive error transport; not the full nonlinear RF calibration.",
+  "scope": "Real receiver coordinates and reference incidence; entirely synthetic target trajectory, vacuum code-only geometry and invented error amplitudes/correlations. No target data or orbit, production changes, real covariance identification or 95-percent coverage claim.",
+  "stopping_rule": "All six synthetic radius/speed designs and both correction operators; retain below-mask/rank failures. No selection by output quality. Report additive unit-mode sensitivity and unchanged 20m independent-code control, never replace existing real uncertainty floors with measured residual RMS.",
+  "origin_gpst_s": 38100,
+  "station_epoch_index": 70,
+  "supersedes": "v1 retained as centered-window sensitivity: its +60 seconds is inside the sample window. v2 anchors t=0 at the final endpoint, so +60 seconds is genuinely outside the synthetic observation window. Same scenarios and no outcome-based selection."
+}
