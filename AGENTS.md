@@ -70,6 +70,9 @@ Do not make every exploratory iteration another numbered admission gate.
 
 ## Current delivery objective — general verification workflow
 
+Use `code_convention_audit_v2.py` and its v2 report as the active metadata audit.
+V2 adds strict JSON, first-epoch validation and paired source-name checks;
+preserve v1 as superseded evidence with the same product findings.
 The paired CODE metadata audit in `research/exploratory/CODE_PRODUCT_CONVENTIONS.md`
 resolves the declared ocean-loading CMC handling for both archived rapid SP3s:
 FES2014b, ocean flag Y, ORB:CoN and CLK:CoN. Retain local CMC:NO loading;

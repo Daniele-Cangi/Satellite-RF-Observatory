@@ -82,17 +82,22 @@ necessary.
 
 ## Reproduction and next step
 
-`code_convention_audit.py` uses only the standard library. Input hashes are
+`code_convention_audit_v2.py` uses only the standard library. Input hashes are
 checked before interpretation. The evidence receipt also records hashes of
 consulted documentation; those documents are linked, not redistributed.
 
 ```powershell
-python -m research.exploratory.code_convention_audit NEW_REPORT.json
-python -m pytest research/exploratory/tests/test_code_conventions.py -q
+python -m research.exploratory.code_convention_audit_v2 NEW_REPORT.json
+python -m pytest research/exploratory/tests/test_code_conventions.py research/exploratory/tests/test_code_conventions_v2.py -q
 ```
 
 The implementation and evidence were frozen at `aef3c2e` before producing
-`results/code_convention_audit_v1.json`. All 17 targeted tests pass.
+`results/code_convention_audit_v1.json`. Review then identified missing explicit
+checks for the first epoch, strict JSON and paired product source names. V2 was
+frozen at `46a22ee` before its report; it adds those checks, including non-finite
+JSON rejection, while preserving v1 source and output. Both report exactly the
+same product findings. Use `results/code_convention_audit_v2.json` for the active
+boundary. All 33 targeted tests pass.
 The output must not exist. Tests cover metadata interpretation, incompatible
 CMC/origin flags, date/family/frame mismatches, duplicate/malformed declarations,
 body exclusion, tampered evidence and exact report replay. No numerical fit
