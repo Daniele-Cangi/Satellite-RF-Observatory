@@ -1,0 +1,24 @@
+{
+  "schema": "spatial-reference-plan-v1",
+  "baseline_plan_sha256": "4fdcd32196b126d9d3bcaf05201c2d817dcea3ae3c434a3ed9130f80859cd4ac",
+  "reports": {
+    "rapid": {
+      "path": "results/day_reference_v1.json",
+      "sha256": "ff4caa87d4963524252437184ab67128b9a75beaf704b664dff1951350b33600"
+    },
+    "final": {
+      "path": "results/final_reference_v1.json",
+      "sha256": "51faab82e28ac2a82d1bf4814bfb9f15cb1c6712fb51e3bf555d67ea29f7aaf3"
+    }
+  },
+  "models": [
+    "zero",
+    "shared_satellite"
+  ],
+  "training_before_gpst_s": 37800,
+  "folds": "Each of all seven stations excluded from the entire training set; train other six on 10:00-10:29:30, test excluded station at 10:30-11:00 GPST. No test-half rows of any station enter training.",
+  "support": "Retain whole-block unseen-support and rowspace failures from frozen predict_block. Whole-cohort RMS is null if any test row unsupported; report supported RMS with its matching zero baseline.",
+  "comparison": "Two within-product spatial-transfer experiments, rapid and final, on identical fixed paths. Pooled summaries concatenate disjoint held-out test stations, not independent trials. No model selection using test scores.",
+  "stopping_rule": "Evaluate all seven folds on both frozen reports once; retain all failures, no replacement stations, windows, retraining on held-out stations or new acquisition.",
+  "scope": "Exploratory conditional receiver transfer on exposed reference-only clock-free contrasts; upstream CODE products may include held-out receivers. Not absolute RF, independent confirmation, target positioning or covariance qualification."
+}
