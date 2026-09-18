@@ -1,0 +1,27 @@
+{
+  "schema": "reference-pseudotarget-plan-v1",
+  "baseline_report_sha256": "ff4caa87d4963524252437184ab67128b9a75beaf704b664dff1951350b33600",
+  "product": "CODE rapid, unchanged September 5 admitted RF and reference products",
+  "selection": "all 22 declared references, all seven stations, all 61 second-half epochs; no replacements",
+  "training": "all first-half epochs, pseudo-target excluded from every receiver-clock calibration and offset fit",
+  "models": [
+    "zero",
+    "shared_satellite"
+  ],
+  "coefficient_gauge": "zero mean over training reference coefficients; pseudo-target coefficient never estimated or applied",
+  "minimum_remaining_references": 4,
+  "maximum_clock_iterations": 8,
+  "clock_closure_tolerance_m": 1e-06,
+  "maximum_reference_abs_m": 50.0,
+  "maximum_reference_rms_m": 20.0,
+  "maximum_split_clock_m": 30.0,
+  "lag_seconds": [
+    30,
+    60,
+    150,
+    300
+  ],
+  "minimum_correlation_pairs": 10,
+  "scope": "Exploratory differential RF diagnostic with known reference states. Not independent positioning, population coverage or absolute-error qualification. Common modes remain unidentifiable.",
+  "stopping": "Keep missing observations, insufficient remaining references, rank/support failures and numerical failures. No target G12 observations or orbit. No promotion or floor reduction."
+}

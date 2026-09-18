@@ -81,18 +81,23 @@ puo sostituire queste verifiche sperimentali.
    per stazione di ampiezza ipotetica 1 m produce 11–166 m sulla posizione,
    pur essendo invisibile nei contrasti centrati. Non sono errori misurati o
    raggi al 95%; il budget reale e i suoi limiti restano invariati.
-   Prossimo passo: escludere a rotazione un satellite di riferimento dalla
-   calibrazione e misurarne l'errore differenziale come pseudo-bersaglio sui
-   dati RF gia esposti, comprese correlazioni temporali e fra stazioni.
-   I modi perfettamente comuni richiedono ancora vincoli esterni o osservabili
-   indipendenti: questi test differenziali non possono identificarli.
+   Test con riferimenti esclusi consegnato: 22 rotazioni, 3942 percorsi valutati
+   e 5452 assenze conservate. Ricalibrando senza il satellite in esame, RMS
+   1.135 -> 1.132 m: beneficio della correzione condivisa soltanto 0.26%,
+   con BOGT e BRAZ peggiorate. I contrasti fra stazioni migliorano dello 0.86%.
+   Manteniamo quindi la versione senza correzione come base; nessuna riduzione
+   del limite di errore o promozione della correzione in produzione.
+   Prossimo passo: combinare codice e fase dei soli riferimenti per misurare
+   il comportamento differenziale fra le due osservabili, verificando segnali,
+   trasformazioni e continuita. I modi comuni a entrambe rimangono non misurati
+   da questa combinazione e richiedono ancora vincoli indipendenti.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
 5. Riprendere API e sito quando i risultati stabiliscono cosa il servizio puo
    promettere e quando deve dichiarare che non sa determinare una posizione.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
-Ultimo studio: [trasporto degli errori a posizione e moto](../research/exploratory/POSITION_ERROR_TRANSFER.md).
+Ultimo studio: [ricalibrazione con satellite di riferimento escluso](../research/exploratory/PSEUDOTARGET_REFERENCE.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.
