@@ -84,7 +84,7 @@ below-mask case (five valid synthetic designs out of six). Invented 1 m station
 modes give 11–166 m position response while remaining invisible in centered
 contrasts. This is not a measured amplitude, 95% radius or qualified covariance.
 The excluded-reference experiment in `research/exploratory/PSEUDOTARGET_REFERENCE.md`
-is now complete; use `pseudotarget_checked.py`. All 22 rotations and 3942 admitted
+is now complete; use `pseudotarget_checked_v2.py`. All 22 rotations and 3942 admitted
 second-half paths evaluated; 5452 absent slots retained. Exact receiver-clock
 recalibration excludes the pseudo-target from both clock and offset training.
 Raw differential RMS 1.135228 -> 1.132307 m (0.2573%); spatial contrasts

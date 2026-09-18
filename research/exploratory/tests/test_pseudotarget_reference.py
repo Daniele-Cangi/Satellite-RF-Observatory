@@ -108,7 +108,8 @@ def test_training_failure_is_visible_without_rescuing_subset(plan):
 @pytest.fixture(scope='module')
 def actual():
     import hashlib
-    from research.exploratory import pseudotarget_checked as checked
+    from research.exploratory import pseudotarget_checked_v2 as checked
+    checked.verify_sources()
     raw=(study.BASE/'results/pseudotarget_v1.json').read_bytes()
     assert hashlib.sha256(raw).hexdigest()=='d12c3d1b57520569b39c9faacb1c0089065f229d60ad87fa709806201f50c823'
     return json.loads(raw),study.inputs(checked.PLAN_SHA)
@@ -170,3 +171,22 @@ def test_source_and_wrapper_freeze_and_changed_source_rejection(monkeypatch):
     monkeypatch.setattr(Path,'read_bytes',lambda p: original(p)+(b'\n' if p==Path(study.__file__) else b''))
     monkeypatch.setattr(study,'run',lambda *args:pytest.fail('modified source executed'))
     with pytest.raises(ValueError): checked.run()
+
+
+def test_bootstrap_verifier_is_checked_independently_before_analysis(monkeypatch):
+    import subprocess
+    from pathlib import Path
+    from research.exploratory import pseudotarget_checked_v2 as checked
+    root=study.BASE.parents[1]
+    subprocess.run(['git','merge-base','--is-ancestor','1ec9ee8','HEAD'],cwd=root,check=True)
+    name='research/exploratory/pseudotarget_checked_v2.py'
+    assert subprocess.check_output(['git','show','1ec9ee8:'+name],cwd=root)==(root/name).read_bytes()
+    assert 'research/exploratory/erp_polar_bound.py' in checked.SOURCES
+    checked.verify_sources()
+    monkeypatch.setattr(study,'run',lambda sha,progress:sha)
+    assert checked.run()==checked.PLAN_SHA
+    original=Path.read_bytes
+    helper=root/'research/exploratory/erp_polar_bound.py'
+    monkeypatch.setattr(Path,'read_bytes',lambda p: original(p)+(b'\n' if p==helper else b''))
+    monkeypatch.setattr(study,'run',lambda *args:pytest.fail('unverified helper reached analysis'))
+    with pytest.raises(ValueError,match='erp_polar_bound'): checked.run()

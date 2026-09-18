@@ -96,16 +96,22 @@ the exact recalculation, rather than the approximation, generated the report.
 ## Reproduction and tests
 
 ```console
-python -m research.exploratory.pseudotarget_checked NEW_OUTPUT.json
+python -m research.exploratory.pseudotarget_checked_v2 NEW_OUTPUT.json
 ```
 
 The output must not exist. The checked entry point binds plan and executed
-sources; the existing admitted-input chain checks observations, coordinates,
+sources. The original wrapper remains frozen; review identified that it used
+the hash-helper module before the nested input chain checked that helper.
+Wrapper v2, frozen at `1ec9ee8`, checks the helper bytes with standard-library
+SHA-256 before importing the analysis. Numerical sources and the original
+report are unchanged; this strengthens subsequent replay validation without
+claiming a retroactive independent bootstrap check.
+The existing admitted-input chain checks observations, coordinates,
 reference products and model sources, including its recorded line-ending
 compatibility. The complete report is `results/pseudotarget_v1.json`, SHA-256
 `d12c3d1b57520569b39c9faacb1c0089065f229d60ad87fa709806201f50c823`.
 
-Nine tests cover exclusion (including poisoned training pseudo-target codes),
+Ten tests cover exclusion (including poisoned training pseudo-target codes),
 nonlinear closure and correction sign, failures and disconnected training,
 exact-time statistics, complete report/statistics replay, actual nonlinear
 sample recalibration at every receiver, and frozen source/wrapper integrity.
