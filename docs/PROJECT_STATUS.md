@@ -87,17 +87,28 @@ puo sostituire queste verifiche sperimentali.
    con BOGT e BRAZ peggiorate. I contrasti fra stazioni migliorano dello 0.86%.
    Manteniamo quindi la versione senza correzione come base; nessuna riduzione
    del limite di errore o promozione della correzione in produzione.
-   Prossimo passo: combinare codice e fase dei soli riferimenti per misurare
-   il comportamento differenziale fra le due osservabili, verificando segnali,
-   trasformazioni e continuita. I modi comuni a entrambe rimangono non misurati
-   da questa combinazione e richiedono ancora vincoli indipendenti.
+   Collegamento fase reale consegnato sui due cohort esposti: 6299 intervalli
+   valutati, sette/cinque stazioni utilizzabili; due esclusioni del 5 settembre
+   conservate. La componente differenziale della fase e circa 0.19–0.24 mm/s,
+   ma quella comune alla stazione resta circa 14 mm/s. Trasferendo questi errori
+   nel modello a intervalli esistente, su traiettorie sintetiche e coordinate
+   reali, la fase grezza viene rigettata in 12/12 finestre. Corretta con gli
+   altri riferimenti, migliora la velocita in 9/12, ma peggiora la posizione
+   iniziale in 8/12 e quella futura in 5/12. Un bias costante ipotetico di 1 m
+   conserva fino a circa 70 m di risposta sulla posizione, quasi invariata.
+   Questo e un risultato ibrido di sensibilita, non una nuova ricostruzione
+   indipendente o una covarianza qualificata. La priorita diventa vincolare il
+   bias assoluto durante l'integrazione sul bersaglio reale: clock dai soli
+   altri riferimenti, propagazione dalla geometria stimata, correlazioni e
+   verifiche escluse. Nessuna riduzione del limite storico di 20 m sulla misura
+   e nessun passaggio automatico a nuovi dati finche manca un margine credibile.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
 5. Riprendere API e sito quando i risultati stabiliscono cosa il servizio puo
    promettere e quando deve dichiarare che non sa determinare una posizione.
 
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
-Ultimo studio: [ricalibrazione con satellite di riferimento escluso](../research/exploratory/PSEUDOTARGET_REFERENCE.md).
+Ultimo studio: [fase reale e trasferimento al modello a intervalli](../research/exploratory/REAL_PHASE_INFORMATION.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.
