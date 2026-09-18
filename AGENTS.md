@@ -1,897 +1,140 @@
-# Satellite-RF-Observatory — Independent Position Verification
-
-## Mission and causal order
-
-Use public RF observations acquired through the Internet to reconstruct a
-satellite's position independently of that satellite's orbit products. Declare
-uncertainty before revealing an excluded receiver and an external orbit solution.
-
-The scientific question is:
-> Can Internet observations determine a new satellite position with defensible
-> uncertainty, predict an excluded receiver, and agree with an unopened orbit?
-
-```
-predeclared target, stations, selection rule and error model
-  -> public RF observations + allowed non-target calibration
-  -> independent xyz and emission time, with uncertainty
-  -> freeze solution, predictions, inputs and implementation
-  -> reveal excluded receiver, then external orbit
-  -> report error, uncertainty, all criteria and reproducible evidence
-```
-
-This replaces the old forward-orbit-first roadmap. A target orbit is an
-evaluation reference after the freeze, not an input to inverse reconstruction.
-User instructions continue to take precedence over this file.
-
-## Exploratory development authorized on 2026-09-13
-
-The user approved rapid exploratory tests on public/previously exposed data,
-with changeable development hypotheses and clearly labelled results. Reusing
-archived admitted measurements in a separate development directory is allowed
-for reference-calibration sensitivity, without rewriting or relabelling the
-closed event. This supersedes blanket no-rerun/no-acquisition development pauses
-below, not the independence requirements for a new confirmation. Keep target
-orbits out of calibration and fitting; record all tested variants and failures.
-Reserve preregistration/new unexposed data for confirmatory performance claims.
-Do not make every exploratory iteration another numbered admission gate.
-
-## Acquired results: preserve scope and evidence
-
-- DRAO labelled-forward DOY234 reached
-  `ORBITAL_MODEL_PREDICTIVELY_PREFERRED`. It is closed. Do not reopen, improve,
-  replicate or relabel it during independent-positioning work.
-- G08 DOY249 gave 188.705 m orbit-comparison error and 1.849 m held-out GOLD
-  residual. Its prospective uncertainty radius was 21,607.660 m; the terminal
-  remains `UNCERTAINTY_TOO_LARGE`. It did not pass the 10 km uncertainty limit.
-- Preserve G08's frozen implementation, inputs and outcome under
-  `experiments/gnss_inverse_positioning/`. Replay is a regression, not new proof.
-- G12 DOY250 with seven fit roots closed `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`:
-  eighteen consecutive common epochs did not meet its frozen 41-epoch rule.
-- A separate G12 DOY248 eleven-epoch attempt reconstructed a new position:
-  15.139 m external orbit error, -3.137 m excluded-GOLD residual, but prospective
-  uncertainty radius 10,121.469 m. It remains `UNCERTAINTY_TOO_LARGE` and is
-  closed. Its 5% margin and uncertainty floors must not be lowered after reveal.
-  Preserve its plan, solution, receipts and executed sources under
-  `experiments/positioning_g12_doy248/`.
-- Historical forward and measurement-integrity experiments are reference
-  material. Their gate sequence is not the roadmap for new work.
-- G13 DOY247 through the configurable request worker closed
-  `SOURCE_OR_MEASUREMENT_NOT_QUALIFIED`: zero eligible epochs common to the
-  eight fixed stations. No position or target-orbit access. Preserve
-  `experiments/positioning_g13_doy247_request/`; do not retry it with a new
-  station subset. The local worker is delivered; web job submission is pending.
-- G14 DOY246 reached `INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED` for one
-  conditional historical event: 31.017 m external 3D error, 5755.157 m prospective
-  uncertainty radius and -0.846 m excluded-GOLD residual. All eight calibrations
-  passed. Its declared pool selected ALGO, BOGT, DRAO, MKEA, PIE1, STJO and YELL
-  at the first qualifying 03:55–04:00 GPST window; AMC4's expected file was absent.
-  Preserve `experiments/positioning_g14_doy246_network/` and its original scope.
-  Do not rerun, tune or generalize this success into universal accuracy/coverage.
-
-## Current delivery objective — general verification workflow
-
-The excluded-receiver study in `research/exploratory/SPATIAL_REFERENCE_TRANSFER.md`
-is complete: six-station chronological training transfers to the seventh at
-0.952836 m rapid / 0.952889 m final on all 3942 test paths. Pooled gains are
-5.64% / 3.55%, but only six/five stations improve: AREQ worsens with both,
-DRAO slightly worsens with final. Preserve these degradations; no blanket
-promotion of the shared correction. Use `spatial_reference_checked.py`.
-The upstream products can still include the locally excluded receiver.
-The error-to-position study in `research/exploratory/POSITION_ERROR_TRANSFER.md`
-is now complete. Use `position_error_checked_v2.py`: v1's centered-window +60 s
-was interpolation; v2 puts zero at the last observation and retains the resulting
-below-mask case (five valid synthetic designs out of six). Invented 1 m station
-modes give 11–166 m position response while remaining invisible in centered
-contrasts. This is not a measured amplitude, 95% radius or qualified covariance.
-The excluded-reference experiment in `research/exploratory/PSEUDOTARGET_REFERENCE.md`
-is now complete; use `pseudotarget_checked_v2.py`. All 22 rotations and 3942 admitted
-second-half paths evaluated; 5452 absent slots retained. Exact receiver-clock
-recalibration excludes the pseudo-target from both clock and offset training.
-Raw differential RMS 1.135228 -> 1.132307 m (0.2573%); spatial contrasts
-0.845685 -> 0.838392 m (0.8623%). Five receivers improve, BOGT/BRAZ worsen.
-The unseen satellite coefficient is never estimated; raw shared residuals use
-an explicit zero-mean reference coefficient gauge. No independent position,
-physical covariance or general accuracy is established. Keep zero as the
-baseline and shared correction experimental, with existing floors unchanged.
-Next isolate reference-only dual-frequency code-minus-carrier behavior on the
-exposed cohort where available: validate signal pairing, header transforms,
-continuity/slips and train-only ambiguity handling. This measures code-versus-
-phase differential behavior; perfectly common modes still need independent
-bounds. Exclude G12 as text before parsing additional observations, preserve
-unsupported cases and closed events. Do not restart pooled RMS optimization
-or launch S3 from these diagnostics.
-
-The fixed-RF rapid/final comparison in
-`research/exploratory/FINAL_REFERENCE_COMPARISON.md` is complete: the same
-847 station epochs qualify and the same 3942 test paths remain. CODE final
-reduces zero RMS 1.009796 -> 0.987925 m (2.17%), but locally fitted shared
-corrections give 0.931068/0.931178 m on rapid/final. Rapid-trained corrections
-transfer to final at 0.934770 m (5.38% improvement, all seven stations).
-Paired-product differences do not remove the dominant residual structure;
-same-provider processing is not independent truth or physical attribution.
-Use `final_reference_checked.py`; preserve the two pre-calibration format
-failures and the frozen successful source/input chain. Next test spatial
-transfer on exposed rapid/final rows: train the shared-satellite correction
-on six stations' first half and test the excluded station's later half,
-rotating all seven. Keep unsupported/rank-deficient blocks and all failures.
-No target fit, covariance qualification, new confirmation or production change.
-Upstream orbit/clock products may still include the held-out receiver.
-
-The distinct-day study in `research/exploratory/DAY_REFERENCE_PREDICTION.md`
-is complete: September 5, 10:00-11:00 GPST, G12-excluded historical network,
-847 qualified station epochs. Shared-satellite offsets give 1.009796 -> 0.931068 m
-(7.80%, all seven stations) on 3942 chronological test contrasts; five common
-stations also improve (5.77%). Station/satellite offsets leave 1141 unsupported
-paths. Use `day_reference_checked.py` to verify the frozen runner before replay;
-dates and authoritative inputs are bound before
-execution. This changes two stations, reference cohort and excluded target as
-well as day; no cross-day coefficient transfer or independent confirmation.
-Next compare convention-compatible alternative reference products on fixed RF
-inputs before promotion, distinguishing product-linked common residuals from
-persistent physical behavior. No target fit, production change or covariance
-qualification; do not restart minor component audits as the default.
-
-
-The second arc in `research/exploratory/ARC_REFERENCE_TRANSFER.md` is complete:
-05:00-06:00 GPST, same day/stations/products, 847 qualified station epochs.
-On 3446 identical test contrasts, recent shared-satellite training improves RMS
-1.046946 -> 1.003486 m (4.15%, all seven stations); earlier 03:30-04:00 coefficients
-give 1.015071 m (3.04%, five improve). Transferred directional response worsens
-all stations (+2.64% RMS), and transferred station/satellite offsets support zero
-complete test blocks. Preserve failures and null scores. Use `arc_reference.py`;
-plan/producer and inputs/analysis were frozen before execution. Next keep the
-four candidates and test a distinct day, then distinguish upstream product-linked
-correlations before promotion. No absolute RF prediction or covariance qualification.
-
-
-The one-hour reference experiment in `research/exploratory/HOUR_REFERENCE_PREDICTION.md`
-extends G14 to 03:30-04:30 GPST with seven stations and 847 qualified epochs.
-Use `hour_reference_checked.py` to validate auxiliary inputs before the unchanged
-v2 calculation; v1 is preserved, and v2 explicitly accommodates only
-the recorded CRLF/LF variants of nine source files. Chronological 30-minute
-training/30-minute testing gives 3954 test contrasts. Shared-satellite offsets
-reduce RMS 0.973703 -> 0.937967 m with all stations improving; station/satellite
-offsets leave 1964 paths unsupported. These are clock-free residual contrasts,
-not absolute future RF or target position predictions. No covariance qualification.
-Next retain all four candidates and test a separate arc/day before promotion;
-keep unseen-link failures and distinguish upstream reference-product correlations.
-S2 remains open; do not return to minor component audits as the default.
-
-The coordinate-aware VMF3 RF study in `research/exploratory/VMF3_REFERENCE_CALIBRATION.md`
-now applies gridded weather at admitted ARPs, avoiding the site-wise ALGO
-catalogue discrepancy. Original Fortran/Python agree in 88/88 numerical cases.
-All 616/616 calibrations pass across four fixed modes; the full model reduces
-pooled reference RMS only 0.133935%/0.837912% (G14/G12), with three stations
-worsening on each day. Preserve the better zenith-only diagnostic without
-selecting it after seeing RMS. No target fit or covariance qualification.
-Next broaden actual reference-only RF time/elevation coverage and test held-out
-times to separate receiver response, multipath and media correlations. Do not
-repeat small component audits as the default next task; S2 remains open.
-
-The active status recap is `docs/PROJECT_STATUS.md`. The meteorological study
-in `research/exploratory/ATMOSPHERE_ZENITH.md` retains 72/72 station/UTC samples
-on the two exposed days. Zenith differences reach 0.12544 m; multiplying by
-the same legacy mapping gives 0.70023 m at 10 degrees, not measured RF gains
-or a physical error bound. Use `atmosphere_zenith_v2.py`; preserve v1 and its
-recorded parser failure. Resolve the provider ALGO latitude difference (about
-333 m) and station-height handling before applying weather products to ARPs.
-Next benchmark dry/wet VMF3 mapping and replay actual reference-only geometry,
-then broaden RF time/elevation coverage. No target fit or new confirmation;
-S2 and production are unchanged. Avoid more minor convention audits as default.
-
-The bounded polar study in `research/exploratory/ERP_POLAR_BOUND.md` evaluates
-paired CODE daily X/Y offsets/rates and bounds all 159 DESAI2016 polar harmonics
-without assuming phases. For the same mean-pole convention, the solid-pole
-station displacement difference from prior Bulletin A is at most 0.04434 mm
-on these windows. This is a supplied-model component bound, not physical error,
-full instantaneous EOP, celestial orientation or inverse-position uncertainty.
-Do not rotate terrestrial SP3s again or require complete ERP phase synthesis
-before investigating the much larger reference residuals. Next characterize
-atmospheric delay and receiver response on wider reference-only time/elevation
-coverage. Mean-pole convention, other station motion and covariance stay open;
-S2/G3 and production are unchanged. Preserve all historical studies.
-
-Use `code_convention_audit_v2.py` and its v2 report as the active metadata audit.
-V2 adds strict JSON, first-epoch validation and paired source-name checks;
-preserve v1 as superseded evidence with the same product findings.
-The paired CODE metadata audit in `research/exploratory/CODE_PRODUCT_CONVENTIONS.md`
-resolves the declared ocean-loading CMC handling for both archived rapid SP3s:
-FES2014b, ocean flag Y, ORB:CoN and CLK:CoN. Retain local CMC:NO loading;
-do not add a geocenter translation to stations consuming these CoN products.
-This is product-declaration evidence, not physical calibration or proof of CODE
-execution. Preserve PR146 results/flags as the earlier evidence state.
-The paired rapid ERP headers explicitly declare IAU2000R06 and DESAI2016.
-Next reconstruct and validate that ERP/subdaily convention separately; the
-specific mean-pole realization is not identified by those headers. The Bernese
-IGS20 example's IERS2010_v1.2.0 is context, not event-specific processing proof.
-SP3's NONE atmospheric field does not demonstrate absence of atmospheric tides.
-Then broaden reference-only geometry for larger receiver/media terms. No target
-state, RF value or EOP value was parsed by this metadata audit; production and
-S2/G3 status remain unchanged.
-
-The local ocean/pole study in `research/exploratory/OCEAN_POLE_LOADING.md`
-uses original IERS HARDISP with FES2014b coefficients for all nine fit sites,
-plus solid-Earth pole models for 2018 and an explicit 2010 control. All 48
-published HARDISP benchmark samples match at printed precision; all 924 new
-station/epoch calibrations pass. Ocean/pole combined displacement reaches
-22.56 mm but changes reference RMS only +0.01636%/-0.03713% (G14/G12), with
-four/three stations worsening. Preserve every variant and failure denominator.
-BLQ geographic separation is 1.03-7.08 m; do not invent DOMES identity in BLQ.
-CMC:NO is explicit. The 19.13 mm phase-free header-model envelope is not an
-error budget and is not applied. Next resolve CMC and pole/EOP pairing for the
-actual terrestrial orbit products, then investigate larger residual terms over
-broader geometry. Avoid duplicate CMC application or model selection by RMS.
-Ocean pole loading, atmospheric/seasonal motion, receiver code response and
-covariance remain open; no target fit or new confirmation occurred, S2/G3 remain
-incomplete and production is unchanged.
-
-The lunisolar station study in `research/exploratory/SOLID_EARTH_DISPLACEMENT.md`
-adds IERS-derived step-1/step-2 displacement with permanent tide retained to
-regularized ARPs. All 924 station/epoch calibrations pass; primary reference RMS
-falls 0.0670%/0.5850% for G14/G12, with DRAO and YELL worsening on G14. Modeled
-motion is 0.037-0.160 m and changes up to 4.40 mm over five minutes. Three published
-IERS examples match at numerical precision; the inconsistent fourth remains an
-explicit mismatch in both reports. Preserve all six variants, including controls
-with incorrect time/permanent-tide conventions; never select by the best RMS.
-Sun/Moon DE440s and observed terrestrial EOP are pinned, with explicit GPST/UTC/TT.
-Next validate station-specific ocean loading and pole tide; atmospheric loading,
-seasonal motion, receiver response and covariance remain open. No target fit,
-new accuracy claim or production change occurred; S2/G3 remain incomplete.
-
-The regularized station study in `research/exploratory/STATION_FRAME_EPOCH.md`
-propagates the CODE IGc20 catalogue with velocity and cumulative post-seismic
-motion. All fourteen daily SINEX a-priori positions reproduce within 7 micrometres;
-this is product-model consistency, not physical coordinate accuracy. Five fixed
-coordinate modes per event all pass the historical reference calibration checks
-(770 station/epochs). Final transported coordinates reduce pooled reference RMS
-by 6.163%/0.629% for G14/G12; two/three stations worsen and remain reported.
-AREQ's supplied cumulative PSD is 0.355 m; daily-to-event slow transport is only
-2-69 micrometres. Preserve all cases, inputs and source hashes. Coordinates remain
-regularized: periodic tides/loading, seasonal terms, code antenna response and
-physical covariance are unresolved. Next implement and validate periodic site
-motion at RF epochs, then extend reference-only geometry. No target fit or new
-confirmation occurred, production is unchanged, and S2/G3 remain incomplete.
-
-The terrestrial audit in `research/exploratory/STATION_COORDINATES.md` compares
-all fourteen fit-station/day ARPs with the daily middle solution of CODE final
-three-day SINEX products. Marker identity, DOMES, antenna type/radome and
-H/E/N versus UNE eccentricities agree; archived ARP reconstruction is exact.
-ARP differences are 0.114-0.933 m. Fixed-reference geometric projections after
-clock-mode removal have pooled RMS 0.307/0.251 m for G14/G12. They are not code
-corrections, measured coordinate errors or improved target accuracy. The daily
-coordinate epochs differ from the observation windows; final/rapid frame
-alignment, site displacement, code antenna response and physical covariance
-remain unqualified. Phase IF PCO norms 0.039-0.111 m are descriptive only.
-Use `verified_station_replay.py` as the active replay boundary for these two
-exposed events. It strictly parses the same archive bytes it hashes, pins the
-complete prior/calibration/geometry reports, and reproduces all numerical
-results. This addresses PR143's permissive archive JSON and partial provenance/
-unit-vector substitution findings. Lower-level v1/v2 runners and their reports
-remain immutable execution history, including the first marker-parser failures.
-The reference v2 also preserves the PR142 date/causal-flag and length repairs.
-Next qualify one coherent terrestrial frame/epoch/site-motion convention before
-reference-only recalibration over broader geometry. No target fit, new confirmation
-or production estimator change was made; G3/S2 remain incomplete.
-
-The reference-contrast study in `research/exploratory/REFERENCE_RESIDUAL_STRUCTURE.md`
-compares zero, shared-satellite, station-direction and station/satellite models
-across disjoint five/six-epoch blocks of the exposed G14/G12 windows. All 16
-comparisons execute. Directional terms reduce test RMS by 1–10% overall but
-worsen several stations; per-link constants worsen G12 reverse testing. Preserve
-the nine unsupported G14 predictions and all denominators. Clock centering
-removes 77 common modes per event and induces residual dependence; the short
-series do not identify physical covariance or antenna/code errors. No target fit
-or correction is made. Next distinguish terrestrial coordinate/ARP/APC conventions
-using epoch-matched geodetic evidence before interpreting directional terms as
-receiver calibration; broader reference-only geometry is then needed.
-
-The paired CODE attitude trial in `research/exploratory/REFERENCE_ATTITUDE.md`
-orients the complete IGS20_2425 IF PCO at emission times using restricted 30 s
-ORBEX products. All eight baseline/primary/control cases estimate. The full PCO
-moves G14/G12 by 0.818/0.283 m from radial; reference residual RMS slightly rises.
-The body-Z-only control reproduces radial, and 60 s attitude thinning changes
-the fits by under 0.4 mm. These are model/numerical sensitivities, not physical
-accuracy or uncertainty. CODE processing attitude is not independently measured
-true attitude. Directional code response, station/media, receiver biases and
-physical covariance remain open. New guarded loading checks CODE.BIA, strict
-JSON and all ANTEX validity boundaries; preserve earlier frozen sources/results.
-
-The observation-time trial in `research/exploratory/REFERENCE_TIME_ALIGNMENT.md`
-evaluates paired CODE rapid 5-minute orbits, 30-second clocks and daily biases.
-It solves emission offsets, applies periodic relativity and conditional radial
-PCO, then recalibrates/refits with frozen broadcast reference sets and historical
-checks. All eight baseline/primary/control cases estimate. On 1463 evaluated
-paths out of 1581 observed pairs, the primary changes G14/G12 by 3.375/5.623 m
-from bias-corrected broadcast; thinning clocks to 60 s changes the primary by
-0.022/0.121 m. Native-node holdout controls are numerical, not physical bounds.
-Actual attitude/code antenna response, station frame/media and receiver/error
-covariance remain open. This is an experimental model, not a production change,
-new confirmation or qualified error budget. Preserve all executed reports.
-
-The isolated satellite-code translation trial in
-`research/exploratory/REFERENCE_CODE_BIAS.md` uses CODE rapid C1W-minus-C1C
-bias differences, matched by day/SVN/IGS20_2425 and applied only to admitted
-non-target IF observations. Its exploratory recalibration and inverse fit move
-G14/G12 by 9.058/3.906 m relative to their development baselines. Reference RMS
-decreases, while target fit residuals slightly increase. No target orbit/bias,
-holdout or new uncertainty is used; this does not establish improved accuracy.
-The common pseudo-absolute OSB datum cancels in the difference. This component
-trial does not apply the incompletely aligned SP3 discrepancies to an estimator.
-Full precise-product integration and receiver/bias covariance remain open.
-
-The partial convention alignment in `research/exploratory/REFERENCE_CONVENTIONS.md`
-uses the archived IGS20_2425 antenna model, matching the SP3 header. On the same
-263 rays it applies IF radial PCO and differential periodic relativity; joint
-product RMS becomes 0.688/0.495 m. Full-yaw transverse PCO excursions are at most
-0.094 m conditional on nadir body Z. This is not an attitude measurement or a
-total antenna/code error bound. Nine-versus-seven orbit-node derivatives control
-numerical sensitivity only. Raw reports remain immutable. Code bias/clock datum,
-actual attitude and code antenna response, frame/media and observation-time
-evaluation remain unresolved before recalibration; S2/G3 remain incomplete.
-
-The raw-product ray projection in `research/exploratory/REFERENCE_RAY_PROJECTION.md`
-propagates joint orbit/clock discrepancies onto 263 admitted geometric rays out
-of 602 station/reference/epoch combinations at the two bracketing nodes per event.
-It shares the baseline broadcast reception axes and freezes vacuum light time.
-Joint range RMS is 0.77/1.11 m with partial orbital/clock cancellation. These are
-conditional product discrepancies, not observed RF residuals or qualified error
-bounds. Reference-point/attitude/frame, signal biases/clock datum, differential
-relativity and observation-time evaluation remain open. No recalibration or target
-fit uses these values; complete convention alignment before applying corrections.
-
-The reference-product discrepancy study in
-`research/exploratory/REFERENCE_PRODUCT_DISCREPANCY.md` compares 4128 non-target
-broadcast/IGS rapid satellite-epoch pairs on the two exposed days. Target state
-records are discarded as text before numeric conversion. Preserve the admitted
-extracts, receipts and reports. Orbital RMS discrepancies are 1.71/1.80 m and
-ensemble-centered clock RMS discrepancies 0.33/0.19 m, but reference-point,
-frame, signal-bias and clock-datum conventions remain incompletely aligned.
-The centered sample covariance is descriptive, with centering-induced dependence;
-do not treat it as physical error covariance or multiply daily RMS by the prior
-constant-perturbation gains to claim an uncertainty bound. Next work aligns
-conventions and projects joint orbit/clock differences onto receiver paths.
-
-The 2026-09-16 exploratory reference-clock response study is documented in
-`research/exploratory/REFERENCE_CLOCK_RESPONSE.md`. On exposed G14/G12 fit data,
-92 variants (including two baselines) propagate invented +/-1 m non-target af0
-perturbations through recalibration and the inverse fit. Maximum single-reference
-position responses are 4.13 and 7.86 m/m; common perturbations primarily change B.
-These are finite-step sensitivities, not measured product errors, orbit-error
-transfer or new uncertainty bounds. Preserve their source/input hashes. Next
-physical work must characterize actual non-target product amplitudes and
-correlations, including orbital components; do not treat these gains as closing S2/G3.
-
-Optional reference-sensitivity diagnostics now accompany local CLI result/status
-reads via `service/diagnostics.py`; see `docs/REFERENCE_SENSITIVITY_DIAGNOSTIC.md`.
-They are input-bound presentation additions, never persisted into the sealed
-queue result. `service diagnose` explicitly runs post-terminal development in a
-separate process; reads do not recalculate. Missing/invalid/partial diagnostics
-must not promote or overwrite the scientific verdict or uncertainty.
-
-The G3 candidate and offline cohort accounting are documented in
-`docs/VALIDATION_COHORT_PROTOCOL.md`. Preserve its explicit
-`CANDIDATE_NOT_ADMITTED` status: the 24 exact future plans are a design proposal,
-not acquisition admission or completed preregistration. `service/validation.py`
-keeps missing bindings, cancellations, quarantine and invalid evidence visible;
-it never dispatches. Distinct days reduce same-product cross-target exposure,
-but do not establish statistical independence or qualify the S2 error budget.
-
-On 2026-09-12 the user made the general verification flow the product objective:
-supported satellite/day request -> source availability -> qualified estimation
--> frozen prediction -> withheld checks -> understandable result or explicit
-reason verification is unavailable. Follow `docs/GENERAL_VERIFICATION_WORKFLOW.md`.
-This supersedes earlier blanket pauses on service/workflow development below.
-Start locally with the existing historical GPS code profile; preserve frozen
-positioning sources and research results. Do not advertise arbitrary satellites,
-live positions, population coverage or the experimental kinematic path as ready.
-
-Scientific work now supplies measurable capabilities and validation to this
-flow. Service integration may proceed alongside that work; public deployment
-and new S3 acquisition still require their separately specified prerequisites.
-Request preparation alone never establishes source availability, prior-access
-independence or physical qualification. Closed events remain archive results.
-Use the existing worker and queue rather than creating a second execution
-system. Request preparation and sealed-result presentation live in
-`service/workflow.py`. `service/worker.py` now connects RequestStore to the
-unchanged staged worker with pinned checkout checks, lease renewal, one attempt
-per target/day and terminal reconciliation without re-execution. Use external
-private runtime directories and a dedicated clean checkout. This is a trusted
-local operator workflow, not an HTTP service or a new scientific qualification.
-A hard supervisor crash can leave a child alive; the expired claim blocks all
-replacement dispatch. Inspect remaining processes rather than clearing or
-requeuing the request. Only an exited and sealed result can be reconciled.
-
-## Scientific development history and preserved constraints
-
-The local synthetic calibration-transfer operator is documented in
-`research/kinematic/CALIBRATION_TRANSFER.md`. It computes GLS reference residual
-and corrected-target mappings with full supplied cross covariance, and exposes
-clock-like reference errors invisible to fitted residuals. The 100 m / 0.1 m/s
-injections and covariance examples are invented observable errors, not measured
-target errors or position bounds. Do not turn their amplitudes into physical
-floors, alter DOY240 receipts, or admit S3 from these algebraic tests. Actual
-reference-product errors, shared/differential receiver coupling and propagation
-through the final inverse fit remain to be qualified.
-
-On 2026-09-10 the user postponed website, API, Docker and hosting development
-and approved the scientific project in `docs/SCIENTIFIC_ROADMAP.md`.
-That plan supersedes the website roadmap. Keep the five-event private archive
-and service queue as delivered; do not extend or deploy them during this work.
-
-Deliver S0: read-only diagnosis of the frozen events, with provenance and local
-uncertainty geometry; never re-estimate or relabel a closed event.
-Deliver S1: an isolated synthetic code/range-rate kinematic prototype, comparing
-identical data with and without the new observable and predicting excluded
-times/receivers. Report failed and mismodelled cases alongside nominal gains.
-The first physical information is whether time/range-rate observations can
-separate position, velocity and clock nuisance under explicit assumptions.
-Synthetic results are not real satellite confirmation or a full Doppler pipeline.
-
-Proceed to S2 only with explicit emission/reception, rotation, clock-drift,
-correlation and model-truncation treatment. Real campaigns in S3 require exact
-frozen manifests before acquisition; the symbolic 24-case blueprint is not a
-ready-to-run experiment. No search for passing targets or post-reveal tuning.
-Keep the current real-data estimator unchanged as the v1 reference. Use
-`research/kinematic/` for the new prototype and report progress in its results.
-
-S0/S1 are delivered. S2a now supplies a synthetic receiver-time vacuum model,
-independent inertial generator, narrow GPS Doppler field conversion, non-target
-reference-residual clock fitting and joint correlated covariance. Read
-`research/kinematic/S2_MODEL.md` and `results/S2_REPORT.md` in that package.
-S2 is not complete: S2b still requires real RINEX/header/receiver qualification,
-reference-residual generation, propagation and a total inverse-error envelope.
-Taylor remainder checks are not fitted-state uncertainty bounds. No S3 data
-acquisition is authorized by the S2a synthetic result. Keep S1 evidence intact.
-The current S2a report is `receiver_time_study_v2.json`. Its noisy case stops
-at a rejected reference calibration; no fit/holdout prediction is admissible.
-The first S2a report and commit `5f2a922` retain the diagnosed runner defect.
-Never cite that superseded noisy fit as an accepted performance result.
-
-S2b now delivers the bounded RINEX 3.04/3.05 GPS reference importer and
-broadcast-reference code-to-clock fit, with an unused-Doppler consistency check.
-See `research/kinematic/S2B_REFERENCE_BRIDGE.md` and `results/S2B_REPORT.md` in
-that package. The six-case study uses invented full-file fixtures only.
-`REFERENCE_MODEL_ACCEPTED` is not receiver/RF qualification; all results retain
-`real_rf_qualified=false`. Actual receiver conventions and the total inverse
-error budget remain open before S3. Never relax failed source/calibration gates
-or consume target/future measurements to obtain a passing calibration.
-
-S2 now also delivers local inverse-error transport in
-`research/kinematic/inverse_uncertainty.py`, documented in
-`research/kinematic/S2_INVERSE_UNCERTAINTY.md`. It includes uncertain ground
-coordinates and excluded clocks, shared input covariance and separate affine
-systematic/truncation responses. These are conditional synthetic diagnostics,
-not a total nonlinear 95% envelope. The S2a optimizer and its nominal residual
-test are unchanged; a sandwich covariance does not recalibrate that test for
-additional errors. All fit and excluded calibrations must pass before local
-transport. Preserve this study and prior source hashes. Real receiver and
-propagation qualification, full correlated fitting/testing and general
-truncation bounds remain open; no S3 acquisition or website work follows yet.
-
-The subsequent `research/kinematic/joint_fit.py` adds a separate joint Gaussian
-estimator for RF, reference-clock and terrestrial-coordinate data, with one
-fixed covariance for optimization, local uncertainty and residual testing.
-See `research/kinematic/S2_JOINT_FIT.md` and its results report. Preserve the
-earlier estimators/reports; the joint fit does not retroactively qualify them.
-Its chi-square test is exact only in the local linear Gaussian problem and
-approximate for the nonlinear solver. Synthetic compressed calibrations are
-assumed admitted; they are not newly qualified real reference data. Excluded
-predictions require accepted fit/calibration and retain cross correlations
-without reading excluded target values. Physical covariance qualification,
-nonlinear/selection calibration and total systematic/truncation coverage
-remain open before S3; no website development or acquisition is implied.
-
-The physical-source audit in `research/kinematic/S2_PHYSICAL_SOURCES.md`
-finds only four required-Doppler declarations among the eleven archived G14
-station entries (ten headers available); GOLD lacks the required Doppler.
-Do not assume that network can feed the kinematic Doppler estimator. A separate
-reference-only phase-increment adapter now models interval-mean phase rates,
-shared-endpoint covariance and declared neutral-delay sensitivity. It is NOT
-an automatic Doppler replacement, full RINEX phase importer or inverse fit.
-Unflagged slips remain undetected by the adapter; no receiver is qualified.
-Keep old experiments/sources intact and qualify the reference-side phase
-observable and continuity before integrating a new inverse measurement model.
-
-The subsequent phase-reference bridge is documented in
-`research/kinematic/S2_PHASE_REFERENCE_BRIDGE.md`. Its new RINEX importer
-requires C1C/C2W/L1C/L2W without Doppler, fits reference clocks to codes only,
-then tests unused phase increments on identical endpoints with full rectangular
-code/rate covariance. The synthetic one-cycle unflagged slip is rejected;
-a small common phase drift remains compatible. Neither is universal slip
-qualification. `REFERENCE_PHASE_MODEL_ACCEPTED` is not real RF admission or
-an automatic input to old instantaneous-rate inverse models. Preserve all
-old sources/results; a dedicated interval inverse model and physical error
-qualification still precede any S3 target acquisition or website work.
-
-The dedicated interval inverse prototype is now in
-`research/kinematic/interval_fit.py`, documented in `S2_INTERVAL_INVERSE.md`
-in that package. It fits endpoint codes and interval-mean phase paths with
-one full covariance, compares identical synthetic codes with/without phase,
-and predicts an excluded interval. Reference calibrations in its study are
-invented compressed Gaussian inputs, not an integrated real target RINEX
-pipeline. Preserve its evidence and all earlier sources. Local uncertainty
-gains and four fixed paired noise trials do not establish real RF accuracy,
-global branch uniqueness or total coverage. Physical source/phase continuity,
-reference/target cross covariance and systematic error qualification remain
-open before S3; do not acquire target data or resume website development.
-
-The subsequent `interval_systematics.py` and `systematics_study.py` quantify
-six fixed phenomenological bias templates with signed refits and local
-noncentral residual diagnostics. See `research/kinematic/S2_INTERVAL_SYSTEMATICS.md`.
-Small temporal path errors can bias position while leaving residual tests
-accepted. Their declared amplitudes are sensitivity examples, not measured
-receiver/atmosphere limits. The affine bias box is separate from Gaussian
-uncertainty and is not a total nonlinear 95% envelope. Preserve these sources
-and reports. Qualify common reference/target calibration and physically
-justified residual amplitudes before S3; website and target acquisition stay paused.
-
-`shared_calibration.py` now derives compressed clocks from explicit synthetic
-reference-code residual rows and retains cross covariance with target phase/code.
-See `research/kinematic/S2_SHARED_CALIBRATION.md`. A shared affine path drift
-is largely absorbed; shared curvature still biases position with accepted code
-gates. This study does not run the unused reference-phase gate and is not a
-qualified RINEX target chain. Integrate and test that gate before advancing
-physical qualification. Keep historical sources/results immutable; S3 and website
-remain paused, and no new real target acquisition is implied.
-
-`shared_phase_gate.py` now checks unused reference-phase increments before
-loading target observations for the shared fit. See
-`research/kinematic/S2_SHARED_PHASE_GATE.md`. The synthetic 0.5 m reference
-phase slip and 1 m curvature stop before target loading; 0.1 m curvature still
-passes and biases position by about 100 m. Preserve this failed sensitivity
-boundary; do not tune thresholds on the revealed case. This is a synthetic
-geometry-subtracted residual chain, not real RINEX qualification. A separate
-design for persistent shared/differential errors, selection effects and
-excluded prediction remains necessary before S3; website stays paused.
-
-`slow_calibration.py` adds a reference-code-only quadratic shared-path nuisance
-with complete correction/clock/target covariance and an unused reference-phase
-gate. See `research/kinematic/S2_SLOW_CALIBRATION.md`. It removes the known
-synthetic shared quadratic bias while increasing local uncertainty. The
-differential-case improvement also reflects changed covariance weights, not
-measurement of a target-only delay. These are development cases used to build
-the model, not independent confirmation. Preserve all old results and require
-a separate validation design and physically justified amplitudes before real
-RF qualification or S3. Website and new target acquisition remain paused.
-
-`slow_validation.py` now evaluates frozen affine/quadratic estimators on six
-fixed out-of-basis cases and eight paired raw-noise trials, under the local
-hash-bound `slow_validation_plan.json`. See `research/kinematic/S2_SLOW_VALIDATION.md`.
-Retain rejected trials, the quadratic nominal worsening and its excluded-rate
-band miss; do not relabel eight accepted quadratic positions as 95% coverage.
-This is separate synthetic temporal-shape validation on the existing geometry,
-not independent RF confirmation. Selection, broader geometry/directional errors
-and physically justified amplitudes remain open before S3. Preserve the plan,
-source hashes and results; do not tune on these outcomes or resume the website.
-
-The first bounded real reference-only qualification on DOY252 stopped at ALGO
-before any observation number was parsed. The runner inherited an undeclared
-`MARKER TYPE == GEODETIC` gate and retained the source receipt only after that
-gate. Therefore its generated `PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED` terminal
-is not an authorized physical conclusion. Preserve the raw result and the
-typed audit under `research/kinematic/results/`; the valid outcome is
-`QUALIFICATION_EXECUTION_INVALID`. Do not retry or redownload DOY252. Repair
-receipt ordering and plan/parser agreement offline, then use a distinct frozen
-artifact if physical qualification continues. S3 remains unauthorized.
-
-The repaired runner and a distinct DOY253 plan were frozen at `52f2e03` before
-access. Receipts were retained first. ALGO and BOGT each passed full-day
-structural continuity with unchanged receiver identity. DRAO then exposed the
-legacy `WAVELENGTH FACT L1/2` header, whose RINEX-2 semantics can rescale carrier
-phase and interact with LLI; it is absent from the frozen RINEX-3 transform
-ledger. The exact complete-root plan therefore closed
-`PHYSICAL_ERROR_ENVELOPE_NOT_SUPPORTED`. Preserve the v2 result; do not retry
-DOY253, assume factor one, drop DRAO or continue to later roots in that run.
-No observation value, navigation product, target fit or phase residual was
-used, and all payloads were ephemeral. A future distinct attempt requires
-header-only prequalification of every phase-scale transform before values.
-
-That bounded header-only prequalification is now closed. DOY251 is
-`HEADER_AUDIT_EXECUTION_INVALID` because the frozen parser misspelled the exact
-CRINEX preamble label; all eight artifact hashes were retained, but no RINEX
-header or observation row was entered. DOY254 is also execution-invalid because
-the full-day product was requested before its declared final epoch; its HTTP 404
-responses do not reject the roots. Both dates are forbidden for retry.
-
-The final, mature DOY243 attempt retained eight complete source receipts and
-stopped `PHASE_TRANSFORM_HEADERS_NOT_QUALIFIED`. ALGO, BOGT, MKEA, PIE1 and GOLD
-provided explicit ledgers: unit RINEX scale factors, zero required phase shifts,
-no legacy wavelength record and no applied GPS DCB/PCV product. DRAO, STJO and
-YELL failed the frozen composite RINEX format check before a transform ledger.
-The receipt did not retain which of version/file-type/system caused that check,
-so do not infer a specific alternate version or transform. No observation body,
-navigation, target value, residual or fit was accessed; all payloads remained
-ephemeral. Do not search another date to make this fixed eight-root set pass.
-S3 remains unauthorized.
-
-The subsequent target-free five-root local-feasibility audit is closed
-`FIVE_ROOT_PROSPECTIVE_VERTICAL_INCOMPLETE`. It used only terrestrial coordinates
-for ALGO, BOGT, MKEA, PIE1 and GOLD and a frozen synthetic family: 181 cases were
-jointly visible and all had full local rank, but only 65 met the conditional
-10 km envelope at +60 seconds (range 0.501--83.332 km). This is a local Gaussian
-plus affine sensitivity result, not global uniqueness or physical coverage.
-Exactly five fit roots leave no independent held-out root, and the total physical
-error envelope remains unresolved. Preserve its plan/result and do not use a
-target orbit to select a favorable case. S3 remains unauthorized.
-
-The following target-free code-only held-out topology audit is closed
-`HELDOUT_CODE_TOPOLOGY_CONDITIONALLY_AVAILABLE`. DRAO ranks above YELL and STJO
-using terrestrial coordinates only: it is held-out-visible in all 181 predecessor
-cases and has positive conditional physical slack at both +30/+60 s in 180, but
-the median slack under the 100 m criterion is only 12.530 m and one case is
-already negative. No candidate artifact or observation was accessed; this is
-not DRAO admission. Carrier-phase transform failures are irrelevant to a future
-code-only heldout, but C1C/C2W transform/coverage/clock and the total physical
-envelope remain unresolved. Do not use a target orbit to choose a favorable
-case. S3 remains unauthorized.
-
-The following bounded DRAO code-only header qualification is closed
-`DRAO_CODE_HEADERS_NOT_QUALIFIED`. Its independently frozen DOY242 product was
-available and fully hash-bound, but admission stopped at
-`UNSUPPORTED_NAMED_CODE_FORMAT`: it did not expose the RINEX 3.04/3.05 named
-C1C/C2W coordinate required by the frozen contract. This is a capability
-rejection, not a software error or claim about observation values. Exactly zero
-observation-body lines and zero target values were accessed. Do not retry DRAO
-on another date, alias a legacy field to C1C/C2W, or reopen this product. The
-conditional geometric advantage therefore does not materialize into an admitted
-sixth root; S3 remains unauthorized.
-
-The subsequent target-free four-fit/one-heldout topology audit is closed
-`FOUR_FIT_ONE_HELDOUT_CONDITIONALLY_AVAILABLE`. Over the same 181 frozen
-synthetic cases, every leave-one-out partition retained full local rank. GOLD
-held out gave 62 cases satisfying both the 10 km fit envelope and positive
-100 m held-out slack; PIE1 gave 60; MKEA, BOGT and ALGO gave zero. GOLD's usable
-cases cover the 12,000 and 20,000 km shells and 30 of 44 cases at 30,000 km,
-with none at 45,000 or 60,000 km. This is conditional topology evidence, not
-real measurement admission or an S3 authorization. Preserve the invalid first
-invocation receipt: it used a wrong declared commit suffix and its numeric
-outcome is unauthorized. The corrected result is bound to commit `b8c0a1f`.
-Do not use a target orbit to select a favorable synthetic analogue. The smallest
-physical follow-up is a distinct target-free qualification of ALGO/BOGT/MKEA/PIE1
-as fit roots and GOLD as code-only heldout, including total physical envelopes.
-
-That DOY242 target-free structural qualification is closed
-`FIVE_ROOT_STRUCTURE_NOT_QUALIFIED`. All five artifacts were materialized and
-hash-bound; zero observation numbers were converted. ALGO, MKEA and PIE1 each
-passed a complete 2,880-epoch structural scan. BOGT and GOLD stopped before
-body scanning at the frozen composite `PHASE_SHIFT_DIFFERS_FROM_PLAN:L1C`
-clause. Do not infer that either lacks required measurements: a declared static
-phase offset is reversible and cancels from stable same-satellite increments,
-while phase is outside GOLD's code-only causal path entirely. Preserve the
-clause-level failure attribution, keep cross-root capacity and physical envelope
-`NOT_EVALUATED`, and never retry or rescore DOY242. A future distinct artifact
-requires role-specific transform semantics frozen offline first.
-
-The distinct DOY241 role-specific follow-up is closed
-`FIVE_ROOT_ROLE_STRUCTURE_QUALIFIED`. All five artifacts were hash-bound and all
-roots supplied 2,880 gap-free epochs; 2,834 eleven-endpoint windows met the
-unchanged target-free structural rule. BOGT's prior obstruction was a header
-shape distinction: it declared zero-cycle overrides for all 32 GPS identities,
-which are static, retained and reversible. GOLD passed only its C1C/C2W path;
-phase semantics were not interpreted. Exactly zero observation numbers and no
-target state were accessed. This is structural capacity, not measurement or
-physical-envelope admission. Preserve DOY241 as qualification evidence and do
-not reuse it as a primary. The smallest next step is a separately frozen,
-distinct-artifact reference-only physical-envelope qualification; S3 remains
-unauthorized.
-
-The distinct DOY240 reference-only numerical qualification is closed
-`FIVE_ROOT_REFERENCE_RESIDUAL_ENVELOPE_QUALIFIED`. The first structure/geometry
-selected 00:00--00:05 GPST window passed all frozen S2 limits at ALGO, BOGT,
-MKEA and PIE1 for phase increments and at GOLD for code only. The controlling
-fit-root phase residual was ALGO at 0.018669513 m/s maximum; GOLD's code maximum
-was 7.560523 m. The frozen two-times conditional envelopes are 0.037339025 m/s
-and 15.121047 m respectively. G14 was only an exclusion sentinel: 736--949 rows
-per station and thirteen navigation blocks were removed as text before numeric
-parsing; no target value, state or orbit was accessed. Individual observations,
-residuals and payloads were not persisted. This is a real reference-path
-admission, not population coverage or a total future-target envelope. Preserve
-DOY240 as qualification evidence and never use it as a primary. Directional
-PCV/multipath, unflagged slips, future atmosphere, broadcast-reference transfer
-and reference/target correlations remain `UNRESOLVED`; S3 remains unauthorized.
-
-The subsequent offline reference-to-target causal audit is closed
-`FUTURE_TARGET_ENVELOPE_NOT_IDENTIFIABLE_FROM_REFERENCE_RECEIPT`. It read only
-the hash-bound aggregate DOY240 JSON receipt: no source, observation, target or
-orbit was accessed. All six open terms remain `UNRESOLVED`; the receipt has no
-direction-resolved response, target continuity series, future-path atmosphere,
-reference-state covariance projection or joint reference-target covariance.
-The conditional `0.037339025 m/s` fit phase-rate and `15.121047 m` GOLD code
-envelopes remain valid only in their distinct reference coordinates and were
-not combined. Preserve this as a causal sufficiency result, not evidence that
-the terms are large or that the reference path failed. Do not authorize a
-primary or S3 from DOY240 alone.
-Post-merge review found execution-integrity defects in the v1 audit receipt:
-incomplete whole-plan validation, an optional programmatic source-freeze path,
-weak receipt object/byte coupling and incomplete non-finite JSON rejection.
-Preserve v1 unchanged as superseded evidence. The repaired v2, frozen at
-`4993d37`, closes all four defects and reproduces the same causal outcome with
-no source, target or orbit access. A later completed review found a receipt
-hash/parse race and two commit-provenance test defects in v2. Preserve v2
-unchanged as superseded evidence. V3, frozen at `fc20392`, uses single-read
-buffers and commit-resolved provenance under full-history CI, and reproduces
-the same causal outcome; use v3 as the authoritative receipt.
-
-The bounded, target-free differential-observable audit then tested whether a
-same-station target-minus-reference construction could close those six terms.
-It proved exact cancellation only for an identical affine receiver-clock mode
-and for the ideal first-order same-ray L1C/L2W ionosphere subspace. Those are
-transform invariants, not measured physical amplitudes. Directional antenna
-response, directional multipath, missed-slip sensitivity, residual media,
-reference orbit/clock transfer, and differential receiver/covariance terms all
-remain `UNRESOLVED`. The frozen terminal is
-`DIFFERENTIAL_OBSERVABLE_HAS_ABSORBING_UNRESOLVED_TERM`; the total envelope is
-null and S3 remains unauthorized. No source, target, orbit, observation or
-navigation data was accessed. Do not repeat aggregate residual measurements to
-address this boundary: further work must measure or independently bound a named
-differential component.
-
-## Scientific objective and information value
-
-The first one-event milestone was reached by preregistered G14 DOY246: BOTH
-prospective uncertainty radius <=10 km and subsequent 3D error <=10 km, plus
-the excluded-receiver test. Preserve the conditional claim. A new event is
-needed for additional physical evidence, and a validation design is needed
-before claiming repeatability or population uncertainty coverage.
-
-For scientific runs, consolidate the software required to execute and reproduce
-the declared event. The current read-only web archive is separate product work.
-Packaging G08 alone is insufficient scientific progress. Complete the bounded
-event through its declared terminal; failure does not authorize indefinite
-search for a passing example.
-
-Before substantial work, state the new physical information it can produce.
-Fix ordinary parser/runtime problems as engineering repairs, not new numbered
-gates. When a physical route fails, identify the failed assumption, what was
-learned, alternative physical mechanisms and the smallest worthwhile new test.
-Infrastructure is not the default answer to poor geometry or missing observables.
-
-## Target-state exclusion
-
-The target's TLE, OMM, SP3, broadcast orbit/clock, orbit-derived corrections,
-catalogue state, propagated previous solution, radius constraint or trajectory
-must not inform event selection, preprocessing, calibration, initialization,
-regularization, optimization or uncertainty tuning.
-
-Allowed: terrestrial coordinates, declared physical constants and states/clocks
-of explicitly identified NON-target reference satellites. Record this boundary.
-Target-state independence does not mean absence of all reference ephemerides.
-
-Discard target blocks from mixed navigation downloads as text BEFORE numerical
-parsing; hash and retain the admitted reference-only input. Reject target
-records again at the numerical calibration boundary. Removing or poisoning
-excluded target blocks must leave admitted inputs unchanged.
-
-Run estimation offline with only admitted inputs. Put held-out target and
-oracle evaluation in a separate stage that verifies the solution freeze first.
-Hashes and process separation support the audit; neither alone proves physical
-independence or provides a trusted public timestamp.
-
-## Selection, blinding and stopping
-
-Before target measurement values are read, fix target/date, bounded station set,
-excluded receiver, observable, structural window-selection rule, calibration,
-transformations, nuisance model, uncertainty assumptions, thresholds, oracle
-product rule, frame/time conventions, stopping rules and outcome labels.
-
-Ground-coordinate-only or explicitly synthetic geometry design is allowed.
-Do not use the real target orbit to choose the network or interval.
-If selection uses fit-side numerical data, preregister the exact rule, account
-for selection in the claim and keep confirmation independent. Prefer a simple
-structure-only chronological rule for the next event.
-
-Implementation defects may be repaired before confirmation if changes/accesses
-are recorded and selection/outcome rules remain fixed. After confirmation, do
-not tune thresholds, swap stations/targets, shift time, refit offsets or silently
-rerun. A defect affecting a revealed result invalidates that attempt; a new proof
-requires new unexposed confirmation evidence.
-
-## Physical and numerical obligations
-
-- Solve at least xyz and relevant emission-time/clock nuisance. A snapshot is
-  not velocity, an orbit or independently discovered satellite identity.
-- Check rank after nuisance removal, alternative branches, far-field degeneracy
-  and geometric amplification. Receiver count alone is not observability.
-- Common reception epochs and common emitted events differ. Interpolation must
-  bracket the event; do not silently extrapolate.
-- Make GPST/UTC, week rollover, date boundaries and frame epoch explicit. Use
-  integer/base epochs plus small local floating-point offsets for fine time.
-- Include Earth rotation over light time, reference clock conventions and
-  relevant propagation/receiver terms. Never correct the fit with target oracle.
-- Propagate correlations from code tags, reference clocks and ground coordinates
-  through the complete estimation chain.
-- Justify uncertainty floors/envelopes or explicitly label them conditional
-  design assumptions before reveal. Do not lower them after an accurate result.
-- Finite branch searches, axis profiles, Monte Carlo and box corners are
-  diagnostics, not certified global bounds or proofs of 95% coverage. Report
-  numerical search limits and model assumptions.
-- Small residuals are not position accuracy. Oracle error is not prospective
-  uncertainty. Report both without substituting one for the other.
-
-## Quantitative evaluation and claims
-
-For the current milestone require all of:
-1. Qualified measurements/calibration with no target-state contamination.
-2. Numerically identifiable finite solution with branches investigated.
-3. Declared total prospective 95% uncertainty radius <=10,000 m.
-4. Excluded receiver absolute range-equivalent residual <=100 m AND within its
-   predeclared predictive band, without holdout-fitted offsets.
-5. Subsequent 3D orbit error <=10,000 m and consistency with frozen uncertainty,
-   under the declared oracle error treatment.
-
-Reserve `INDEPENDENT_SATELLITE_POSITION_DEMONSTRATED` for all required criteria
-passing within the explicitly limited, conditional claim. Distinguish missing
-or invalid data, calibration failure, non-identifiability, excessive uncertainty,
-holdout rejection, oracle rejection and contamination. Report every attempt.
-
-An independently produced orbit may reuse the same ground measurements. Do not
-claim statistically disjoint oracle evidence without establishing it. Repeated
-events support repeatability; coverage claims need an appropriate validation
-design and sample size.
-
-## Engineering for the next physical result
-
-Keep a small active positioning package separate from frozen experiments.
-Make target/date/stations/window explicit inputs, without machine paths or
-hidden date constants. Prefer portable stage commands and bounded files over
-a framework, database, service mesh or global receiver inventory.
-
-Maintain reproducible dependencies and meaningful tests for units/signs,
-emitted-event alignment, independent receiver-clock gauge shifts, target
-exclusion, rollover, branches/degeneracy and data-to-result replay. Run active
-tests in CI. Automated tests do not replace a new real event.
-
-Preserve frozen outputs before improving active code. Never overwrite an event
-to make a regression green. Historical experiments stay immutable except for
-separately identified user-authorized maintenance.
-
-## Experimental website
-
-Build a public archive/service of reproducible verifications for supported
-satellites and epochs with qualified Internet measurements. Every result must
-show event time, stations, inferred position, uncertainty, withheld checks,
-oracle error, versions and downloadable evidence. Show failed/inconclusive
-outcomes plainly.
-
-A verified historical position is not a live position. Propagation is a labelled
-prediction. GPS support is not support for all satellites. Worldwide uniqueness
-is an unproven product claim.
-
-The web layer consumes sealed results and must not substitute an oracle-derived
-position or hide uncertainty. The five-event archive is delivered; further product work is paused.
-On-demand positioning, monitoring and a public launch remain separate work;
-they are not implied by publishing historical verification dossiers privately.
-
-## Working agreement
-
-The user authorized this change of direction and immediate implementation of
-the next bounded inverse experiment. Proceed with necessary local edits, tests
-and public-data acquisition without repeated confirmation. Honor the freeze/
-reveal order and the experiment's stopping rules.
-
-Do not message other people or publish/deploy externally without authorization.
-The user has authorized ordinary Git commits and pushes when needed for this
-work. Review the exact outgoing changes and push without forcing history.
-On 2026-09-11 the user also authorized merging this completed work into main
-and treating reviewed integration as part of the ongoing workflow. For work
-within the agreed scope, use a pull request, inspect its full comparison and
-require the relevant CI checks to pass before ordinary merge. Preserve the
-scientific commit ancestry with merge commits; do not squash/rebase sealed
-research history. Follow repository protections without bypass. This does
-not authorize deployment, force pushes or changing branch protections.
-
-### GitHub CLI on Windows
-
-- GitHub CLI is authenticated as `Daniele-Cangi` through the Windows keyring.
-- Always run `gh` commands requiring network or authentication outside the
-  Windows sandbox. Verify authentication with `gh auth status` outside it.
-- Socket, DNS and `api.github.com` access errors inside the sandbox are network
-  failures, not evidence of expired credentials. Never run or request
-  `gh auth login` based only on an error from inside the sandbox.
-- Prefer `gh` over the browser or GitHub connector for forks and pull requests.
-
-Do not spawn sub-agents merely because this file is named AGENTS.md; use them
-only when separately requested or instructed.
-
-Communicate concrete physical findings and remaining uncertainty. Finish with
-what changed, what was measured, what passed/failed and where evidence is stored.
+# Satellite-RF-Observatory — operational constitution
+
+**Freeze claims, not ordinary engineering.** Use the least machinery that
+protects scientific validity and reproducibility. User instructions take
+precedence. This replaces administrative defaults, not existing experiments'
+scientific boundaries.
+
+## Direction and where to read
+
+Build a general verification workflow: satellite/day request -> qualified
+estimation -> withheld checks -> result or explicit failure. Infer position from
+Internet RF without target-state input to fitting. Answer new physical questions,
+not administrative extensions of old gates. Reference-only exploration on
+exposed data may proceed rapidly; prospective confirmation needs blind preparation.
+
+Read only the documents relevant to the task:
+
+- [Project status](docs/PROJECT_STATUS.md): current priorities, results and gaps.
+- [General workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md): product and worker
+  behavior; [development workflow](docs/DEVELOPMENT_WORKFLOW.md): Git integration.
+- [Scientific roadmap](docs/SCIENTIFIC_ROADMAP.md): research and validation;
+  [cohort protocol](docs/VALIDATION_COHORT_PROTOCOL.md): campaign prerequisites,
+  not acquisition permission.
+- Reports in `research/exploratory/`, `research/kinematic/` and `experiments/`:
+  evidence, access boundaries, manifests, retries and replay. Read the affected
+  experiment's documents before operating it, not the whole history.
+- [Original roadmap](ROADMAP.md) and Git history: historical forward-orbit work,
+  not the active gate sequence.
+
+Keep results, version histories and next-step detail there, not in this file.
+
+## Three regimes
+
+### 1. Exploratory / already-exposed data
+
+Refactor, revise hypotheses, compare models and rerun analyses with reproducible
+inputs, relevant tests/CI, honest versioning and complete reporting of variants,
+failures and worsening cases. Label prior exposure and exploratory scope.
+
+Preregistration, independent review, separate authority, freeze commits,
+checked wrappers and experiment-specific seals are **not required by default**.
+Require a concrete scientific reason not covered by existing mechanisms.
+Ordinary PR review rules still apply. Distinguish new development results from
+preserved evidence; exposed-case replay is not prospective confirmation.
+
+### 2. Pre-confirmatory / observation-blind selection
+
+Before opening the relevant observation, freeze candidates, selection rules and
+measurement-access boundary. Distinguish allowed metadata/structure from
+forbidden values, and qualification from primary confirmation. Preserve hashes,
+provenance and prior-access records. No silent candidate replacement contrary
+to the rule after inspecting availability or measurements.
+
+Use the minimum sufficient authority: one manifest binding inputs, implementation
+and rules rather than duplicate plan/scorer/executor seals. Repair engineering
+with recorded changes/accesses while preserving selection and claim boundaries.
+Changes to those boundaries require a new valid blind design.
+
+### 3. Prospective one-shot confirmation
+
+Before access, freeze the hypothesis, geometry/candidates, observables, nulls,
+transforms, uncertainty assumptions, thresholds, selection/stopping rules,
+implementation and evaluation order relevant to the claim. Retain hash-before-
+decode where applicable. Ephemeral/value-blind handling is mandatory wherever
+it protects an unopened prospective experiment; keep observation values out of
+logs, caches and artifacts that its access contract forbids.
+
+Fit only admitted inputs. Freeze the solution, uncertainty and predictions
+before held-out evaluation and oracle reveal. Retain every attempt and terminal,
+including missing data, invalid execution and rejected results. No post-reveal
+tuning, silent fallback or search for a passing replacement. Declare retry
+semantics in advance; a technical failure is not automatic permission to retry.
+Preserve replay evidence. Record corrections/invalidation separately from the
+original outcome. New confirmation claims need appropriately unexposed evidence.
+
+## Scientific invariants in every regime
+
+- Closed experimental outcomes remain immutable. Never change thresholds,
+  windows, candidate sets, nulls or uncertainty floors after reveal to obtain a
+  preferred outcome. Corrections and exploratory extensions remain separate.
+- Where independence is claimed, target state must not influence selection,
+  preprocessing, calibration, initialization, fitting, regularization or
+  uncertainty tuning. This includes orbit/clock products, derived corrections,
+  radius constraints and propagated prior solutions. Explicitly admitted
+  non-target reference states and terrestrial coordinates are allowed.
+- Exclude forbidden target records before numeric parsing; reject them again
+  at the calibration boundary. Keep removal/poisoning invariance tests. Preserve
+  admitted extracts or receipts as the experiment's retention contract permits.
+- Never relabel exploratory, synthetic, qualification or replay evidence as
+  prospective confirmation. Failures, unsupported cases and worsening results
+  stay visible with their denominators. Claims cannot exceed the evidence.
+- Residual RMS is not position accuracy; oracle error is not prospective
+  uncertainty. Check observability, nuisance modes, degeneracies and branches.
+  State units, frames, time scales, emission/reception, Earth rotation and
+  interpolation/extrapolation conventions. Propagate correlations/systematics;
+  declare uncertainty assumptions and numerical limits. Local covariance,
+  finite simulations and shared products do not prove global bounds,
+  independent truth or population coverage.
+- Preserve each event's declared criteria and outcome labels in its plan/report;
+  do not replace them with generic defaults. A historical position is not live
+  tracking, a snapshot is not motion, and GPS support is not universal support.
+
+## Engineering autonomy and restraint
+
+Make normal implementation decisions within scope without repeated permission.
+Refactor parsers/helpers/infrastructure, fix adjacent bugs, consolidate modules,
+reuse qualification/replay primitives, remove dead or redundant
+**non-authoritative** scaffolding, and improve tests, CI, typing, error handling,
+performance and stale documentation.
+
+Preserve reproducible evidence, historical source bytes and line endings bound
+by manifests. Improve active code while retaining historical versions through
+existing mechanisms. Never change expected hashes to conceal altered evidence
+or weaken prospective boundaries for convenience.
+
+**Do not create a new seal, authority, verifier, checked wrapper, replay layer
+or experiment-specific executor when tests, CI, Git history, an existing
+manifest or an existing replay mechanism already protects the same invariant.**
+First identify the concrete failure mode uniquely prevented and why existing
+protection is insufficient. This adds no approval gate or governance document.
+
+Preserve Linux/Windows CI and relevant regression/fail-closed tests; prefer
+reusable tests over per-experiment wrappers. Check proportionately: routine
+documentation edits need no new scientific run or numerical test. Never weaken
+tests or remove evidence for green CI. Reuse the worker/queue; inspect expired
+claims and reconcile terminal results instead of blindly redispatching.
+
+## Collaboration and integration
+
+Commits, pushes and PR integration are authorized within agreed work. Inspect
+diffs, pass applicable checks and respect repository protections. Preserve
+scientific ancestry with merge commits where receipts/tests require it; no
+force push or bypass. Deployment and messages to others need authorization.
+Git integration is not scientific admission.
+
+Use `gh` for GitHub; authenticated/network commands run outside the Windows
+sandbox. Sandbox DNS/socket errors do not prove expired tokens: verify with
+`gh auth status` outside it, never demand `gh auth login` from that error.
+Do not spawn sub-agents merely because this file is named AGENTS.md.
+Report what changed, relevant checks, physical findings and remaining limits.

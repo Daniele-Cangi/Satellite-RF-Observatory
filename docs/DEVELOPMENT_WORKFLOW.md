@@ -4,9 +4,11 @@ Main contains completed, tested work, including research prototypes whose
 scientific limitations remain explicit. Integration does not change an
 experiment's outcome or turn a synthetic result into RF qualification.
 
-1. Start scoped implementation from the current main branch. Preserve old
-   scientific sources, plans and results; extend through separately versioned
-   modules and immutable reports where source hashes are already recorded.
+1. Start scoped implementation from the current main branch. Follow the three
+   scientific regimes in [AGENTS.md](../AGENTS.md): freeze claims, not ordinary
+   engineering. Refactor active code normally; retain the exact evidence and
+   historical source versions required by existing scientific manifests.
+   Separate versioned modules are not a default requirement for development.
 2. Run checks appropriate to the change and inspect the full outgoing diff.
    Verify historical source manifests when scientific modules are involved.
 3. Push the working branch and open a pull request describing the resulting
