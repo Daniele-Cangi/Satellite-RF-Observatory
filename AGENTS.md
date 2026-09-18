@@ -83,13 +83,23 @@ was interpolation; v2 puts zero at the last observation and retains the resultin
 below-mask case (five valid synthetic designs out of six). Invented 1 m station
 modes give 11–166 m position response while remaining invisible in centered
 contrasts. This is not a measured amplitude, 95% radius or qualified covariance.
-Next use exposed reference RF in rotating excluded-reference-satellite tests:
-remove the pseudo-target from clock calibration and measure differential errors,
-including temporal/cross-station behavior. Keep zero/shared alternatives and
-unsupported cases. This cannot identify perfectly common modes: record the need
-for external bounds or independent observables, rather than infer them from RMS.
-Keep existing uncertainty floors and closed targets; no new confirmation yet.
-Do not return to minor component audits or pooled-RMS optimization as default.
+The excluded-reference experiment in `research/exploratory/PSEUDOTARGET_REFERENCE.md`
+is now complete; use `pseudotarget_checked.py`. All 22 rotations and 3942 admitted
+second-half paths evaluated; 5452 absent slots retained. Exact receiver-clock
+recalibration excludes the pseudo-target from both clock and offset training.
+Raw differential RMS 1.135228 -> 1.132307 m (0.2573%); spatial contrasts
+0.845685 -> 0.838392 m (0.8623%). Five receivers improve, BOGT/BRAZ worsen.
+The unseen satellite coefficient is never estimated; raw shared residuals use
+an explicit zero-mean reference coefficient gauge. No independent position,
+physical covariance or general accuracy is established. Keep zero as the
+baseline and shared correction experimental, with existing floors unchanged.
+Next isolate reference-only dual-frequency code-minus-carrier behavior on the
+exposed cohort where available: validate signal pairing, header transforms,
+continuity/slips and train-only ambiguity handling. This measures code-versus-
+phase differential behavior; perfectly common modes still need independent
+bounds. Exclude G12 as text before parsing additional observations, preserve
+unsupported cases and closed events. Do not restart pooled RMS optimization
+or launch S3 from these diagnostics.
 
 The fixed-RF rapid/final comparison in
 `research/exploratory/FINAL_REFERENCE_COMPARISON.md` is complete: the same
