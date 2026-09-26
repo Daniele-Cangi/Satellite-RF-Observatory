@@ -1,5 +1,11 @@
 # Flusso generale di verifica satellitare
 
+Dal 26 settembre 2026 la direzione attiva e il
+[piano di sicurezza PNT](PNT_SECURITY_PLAN.md). Questo documento descrive il
+workflow satellitare esistente e le sue consegne precedenti: e una base da
+riusare, non un rilevatore di spoofing gia validato. Il nuovo piano determina
+le priorita; criteri e risultati degli esperimenti precedenti restano validi.
+
 La [diagnostica di sensibilità ai riferimenti](REFERENCE_SENSITIVITY_DIAGNOSTIC.md)
 è integrata nella lettura locale dei risultati e dello stato delle richieste.
 È opzionale, collegata agli input esatti e distinta dal verdetto scientifico.

@@ -2,15 +2,24 @@
 
 ## Obiettivo
 
-Ricostruire posizione e moto di un satellite da osservazioni RF pubbliche
-ottenute via Internet, senza usare l'orbita del bersaglio nella stima. Prima
-delle verifiche esterne, dichiarare incertezza e predizioni per dati esclusi.
-Il risultato deve essere riproducibile, con fallimenti e limiti visibili.
+La direzione attiva e il [piano di sicurezza PNT](PNT_SECURITY_PLAN.md):
+confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
+valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
+Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
 
-Il prodotto finale potra offrire verifiche per satelliti ed epoche supportati.
-Non abbiamo ancora un servizio generale di localizzazione in tempo reale.
-Il sito resta in pausa: archivio di cinque eventi e worker locale sono consegnati,
-ma la priorita e dimostrare la capacita scientifica su misure vere.
+Il piano e consegnato; il rilevatore distribuito non e ancora implementato o
+validato. La rete esterna da sola non verifica un attacco limitato all'antenna
+della vittima. Le doppie differenze non proteggono da sole il tempo assoluto:
+servono osservazioni locali e un riferimento temporale appropriato al claim.
+
+Il prossimo ciclo P0/P1 deve individuare dati locali/esterni contemporanei e
+misurare la distinguibilita e il beneficio rispetto ai controlli solo locali.
+Sono previste due iterazioni, poi una decisione documentata su prosecuzione,
+dominio piu limitato o diversa topologia. Il sito segue la prova fisica.
+La presente consegna cambia documentazione e priorita; nessun nuovo esperimento.
+
+Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
+riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.
 
 ## Cosa abbiamo dimostrato
 
@@ -31,13 +40,13 @@ ma la priorita e dimostrare la capacita scientifica su misure vere.
   sensibilita del modello. Il successivo replay RF con VMF3 completo misura
   miglioramenti dello 0.134%/0.838%, con tre stazioni peggiorate per giorno.
 
-## Piano e stato
+## Stato della ricerca inversa precedente
 
 | Fase | Stato | Risultato necessario |
 |---|---|---|
 | S0: diagnosi | Consegnata | Cause e limiti degli eventi precedenti documentati |
 | S1: cinematica sintetica | Consegnata | Posizione/moto con codice e variazione di distanza in simulazione |
-| S2: misure vere | In corso | Calibrazione fisica, continuita delle osservabili e incertezza difendibile |
+| S2: misure vere | Aperta; avanzamento subordinato al nuovo obiettivo | Calibrazione fisica, continuita delle osservabili e incertezza difendibile |
 | S3: conferma su nuovi dati | Non ancora avviata | Campioni nuovi, regole fissate prima dei dati, verifiche escluse |
 | S4: prestazioni e prodotto | Da affrontare dopo S3 | Disponibilita, errori, incertezza e dominio d'uso misurati |
 
@@ -59,9 +68,11 @@ retrospettivo, non un raggio d'incertezza.
 identificano il bias assoluto del codice specifico della stazione. La sua
 ampiezza fisica e la covarianza completa non sono ancora vincolate; un metro
 ipotetico di bias puo spostare la posizione fino a circa 70 m nel trasferimento
-gia misurato. Il prossimo lavoro scientifico deve porre un limite indipendente
-a quel modo o cambiare osservabile/geometria. Non avviamo una nuova conferma
-S3 finche non esiste un inviluppo totale credibile con margine utile.
+gia misurato. Una futura chiusura della ricostruzione indipendente richiede un
+limite indipendente a quel modo o un'altra osservabile/geometria. Nel pivot
+PNT si qualifica invece il budget del test di sicurezza specifico, senza
+trasferire a esso una precisione orbitale non dimostrata. La campagna inversa
+S3 resta subordinata a un inviluppo totale credibile con margine utile.
 
 Il [controllo diretto di identificabilita](../research/exploratory/REAL_TARGET_BIAS_IDENTIFIABILITY.md)
 conferma il limite sulla geometria G12 reale: aggiungendo quattro contrasti
@@ -75,7 +86,10 @@ Il disegno di 24 tentativi contiene ancora parametri da fissare: non equivale
 a una campagna gia pronta o validata. Nessuna percentuale di completamento
 puo sostituire queste verifiche sperimentali.
 
-## Prossimo tratto di lavoro
+## Consegne e passi residui del percorso inverso
+
+Il riepilogo seguente conserva il percorso S2/S3. Le nuove priorita operative
+sono P0/P1 nel piano PNT, non la prosecuzione automatica di ogni voce storica.
 
 1. Collegamento meteorologico consegnato sulle due finestre esposte: griglie
    alle coordinate ammesse, 88 confronti numerici con la routine originale e
