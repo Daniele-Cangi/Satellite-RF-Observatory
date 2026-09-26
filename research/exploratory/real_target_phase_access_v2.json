@@ -1,0 +1,17 @@
+{
+  "schema": "exploratory-real-target-phase-access-v2",
+  "prior_attempt": "real_target_phase_access.json and results/real_target_interval_v1.json remain closed as an exploratory failure: 3/20 RF-fitted STJO elevations below 10 degrees, 17/20 incomplete STJO phase windows",
+  "claim_regime": "separate exploratory redesign after G12 phase values at the first five stations were exposed; no prospective or confirmatory claim",
+  "new_question": "Can the already selected DOY 248 G12 arcs be fitted with five geometrically admitted receivers if GPS-only phase metadata at BOGT is parsed without depending on malformed unused constellation declarations?",
+  "target": "G12",
+  "date_gpst": "2026-09-05",
+  "receipt_sha256": "42b8c63c6799fe24428a0a0dfd492ac9d30a3a562e80fb35b8eada62819eaaf5",
+  "previous_target_extract_sha256": "7f0d1375c816a20e72f9dcde2002f3bd9f405bd20425c39b46bfc54dd5599393",
+  "previous_reference_extract_sha256": "5b584f712015b473d562771f508dad3b90a300dd17a11ef35ec6eabcc44aa867",
+  "stations": ["ALGO00CAN", "DRAO00CAN", "BRAZ00BRA", "AREQ00PER", "BOGT00COL"],
+  "excluded_stations": {"STJO00CAN": "below the original 10 degree RF-derived target elevation mask in all three previously complete windows; later target phase missing", "YELL00CAN": "observation event/header change remains unsupported"},
+  "header_adapter": "For BOGT only, discard SYS / PHASE SHIFT records for non-GPS constellations before invoking the existing strict parser. Preserve every GPS phase-shift record and all other header and body bytes. The GPS L1C/L2W shift declarations were structurally complete on the receipt-verified header before BOGT target values were decoded. Reject if GPS declarations, required observables, scaling, wavelength or event semantics fail.",
+  "windows": "Same 20 disjoint 90 s arcs and first three fit/last endpoint withheld rule as v1; retain all outcomes. No window replacement or ranking after values.",
+  "model": "Reuse v1 ionosphere-free target parser, independent reference-only median phase clock (minimum four references per 30 s interval), day reference code clock, 10 degree RF-derived target elevation, VMF3 from code-only RF geometry and existing interval inverse. Same fixed 20 m code floor and conditional covariance scenario. No target orbit/clock product in calibration or fit.",
+  "failure_and_claim": "Any missing G12 field, nonzero LLI, GPS header inconsistency, insufficient references, low target elevation, rejected fit or withheld failure remains visible. No later station substitution or tuning within this variant. RF heldout performance is not a total uncertainty bound; constant code bias and shared reference products remain unresolved."
+}
