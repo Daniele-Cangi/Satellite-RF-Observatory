@@ -1,4 +1,5 @@
 """Target-only read boundary and explicit RINEX failures."""
+import hashlib
 import json
 import pytest
 
@@ -85,3 +86,16 @@ def test_v2_retains_all_fits_and_model_rejections():
         assert case['fits']['code_only']['status'] == 'CONDITIONAL_INTERVAL_MODEL_ACCEPTED'
         for fit in case['fits'].values():
             assert ('withheld' in fit) == (fit['status'] == 'CONDITIONAL_INTERVAL_MODEL_ACCEPTED')
+
+
+def test_oracle_is_bound_to_frozen_rf_report_and_keeps_rejections():
+    report_bytes = (phase.BASE/'results/real_target_interval_v2.json').read_bytes()
+    comparison = json.loads((phase.BASE/'results/real_target_oracle_v2.json').read_bytes())
+    assert comparison['frozen_rf_report_sha256'] == hashlib.sha256(report_bytes).hexdigest()
+    assert comparison['target_state_used_only_for_diagnostic']
+    assert len(comparison['cases']) == 20
+    assert comparison['counts']['phase_status'] == {
+        'MODEL_REJECTED': 15, 'CONDITIONAL_INTERVAL_MODEL_ACCEPTED': 5}
+    assert comparison['summary']['paired_accepted_phase_better_count'] == 3
+    assert comparison['summary']['paired_accepted_phase_worse_count'] == 2
+    assert comparison['summary']['phase_accepted']['max_m'] > 120.

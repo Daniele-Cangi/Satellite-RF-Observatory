@@ -130,14 +130,12 @@ promising for motion, but it cannot close S2 on its own.
 | Reference orbit/clock and antenna/media terms | Existing conditional reference model | Independent total-error envelope, including phase-specific effects |
 | Slips and missing fields | Explicit admission failures and no gap bridging | A bound on unflagged slips; LLI=0 alone does not prove continuity |
 
-The next substantive implementation is a real-target interval adapter with
-reference-only clock calibration, the tested satellite excluded from that
-calibration, propagation corrections evaluated from the fitted state rather
-than its reference orbit, and joint calibration/measurement uncertainty.
-The absolute-bias mode must be bounded alongside this work. Do not reduce a
-position envelope from the small differential-phase RMS. Do not open another
-confirmation until geometry and a credible total error envelope leave useful
-margin. Website work remains deferred.
+The subsequent [real-target interval study](REAL_TARGET_INTERVAL.md) now
+implements reference-only clock calibration and RF-derived propagation on
+G12. Five of twenty phase fits are conditionally accepted and fifteen are
+rejected; the constant code-bias mode still lacks a physical bound. Do not
+reduce a position envelope from the small differential-phase RMS. New
+confirmation still requires a credible total-error margin.
 
 ## Reproduction
 

@@ -1,4 +1,4 @@
-# Stato del progetto — 18 settembre 2026
+# Stato del progetto — 26 settembre 2026
 
 ## Obiettivo
 
@@ -40,6 +40,28 @@ ma la priorita e dimostrare la capacita scientifica su misure vere.
 | S2: misure vere | In corso | Calibrazione fisica, continuita delle osservabili e incertezza difendibile |
 | S3: conferma su nuovi dati | Non ancora avviata | Campioni nuovi, regole fissate prima dei dati, verifiche escluse |
 | S4: prestazioni e prodotto | Da affrontare dopo S3 | Disponibilita, errori, incertezza e dominio d'uso misurati |
+
+## Esito della fase reale su G12
+
+La [prova sugli intervalli RF reali](../research/exploratory/REAL_TARGET_INTERVAL.md)
+ha portato il codice e gli incrementi di fase di G12 nel solver esistente,
+senza orbita del bersaglio nel fit. Il primo insieme di cinque stazioni fallisce
+per geometria o fase assente (20/20 casi conservati). Una variante esplorativa
+separata usa BOGT, con header GPS verificato: venti finestre complete, codice
+accettato condizionalmente in 20/20, codice+fase in 5/20 e rigettato in 15/20.
+Nei cinque casi ammessi la fase migliora le previsioni RF escluse, ma la
+posizione rispetto all'oracolo storico migliora soltanto in 3/5 e peggiora in
+2/5. L'RMS di posizione accoppiato e 49,88 m col solo codice e 55,41 m con
+la fase; un caso di fase arriva a 120,68 m. L'oracolo e un confronto
+retrospettivo, non un raggio d'incertezza.
+
+**S2 rimane aperta per un motivo preciso:** gli incrementi di fase non
+identificano il bias assoluto del codice specifico della stazione. La sua
+ampiezza fisica e la covarianza completa non sono ancora vincolate; un metro
+ipotetico di bias puo spostare la posizione fino a circa 70 m nel trasferimento
+gia misurato. Il prossimo lavoro scientifico deve porre un limite indipendente
+a quel modo o cambiare osservabile/geometria. Non avviamo una nuova conferma
+S3 finche non esiste un inviluppo totale credibile con margine utile.
 
 La [roadmap scientifica](SCIENTIFIC_ROADMAP.md) resta il piano originale.
 Il disegno di 24 tentativi contiene ancora parametri da fissare: non equivale
@@ -97,11 +119,9 @@ puo sostituire queste verifiche sperimentali.
    iniziale in 8/12 e quella futura in 5/12. Un bias costante ipotetico di 1 m
    conserva fino a circa 70 m di risposta sulla posizione, quasi invariata.
    Questo e un risultato ibrido di sensibilita, non una nuova ricostruzione
-   indipendente o una covarianza qualificata. La priorita diventa vincolare il
-   bias assoluto durante l'integrazione sul bersaglio reale: clock dai soli
-   altri riferimenti, propagazione dalla geometria stimata, correlazioni e
-   verifiche escluse. Nessuna riduzione del limite storico di 20 m sulla misura
-   e nessun passaggio automatico a nuovi dati finche manca un margine credibile.
+   indipendente o una covarianza qualificata. L'integrazione successiva sul
+   bersaglio reale e descritta sopra; resta da vincolare il bias assoluto.
+   Nessuna riduzione del limite storico di 20 m sulla misura.
 4. Congelare il metodo e provarlo su dati nuovi, conservando tutti gli esiti.
 5. Riprendere API e sito quando i risultati stabiliscono cosa il servizio puo
    promettere e quando deve dichiarare che non sa determinare una posizione.
@@ -109,6 +129,7 @@ puo sostituire queste verifiche sperimentali.
 Studi: [sensibilita zenitale](../research/exploratory/ATMOSPHERE_ZENITH.md) e
 [calibrazione RF con VMF3](../research/exploratory/VMF3_REFERENCE_CALIBRATION.md).
 Ultimo studio: [fase reale e trasferimento al modello a intervalli](../research/exploratory/REAL_PHASE_INFORMATION.md).
+Risultato piu recente: [G12 reale, fit RF e confronto retrospettivo](../research/exploratory/REAL_TARGET_INTERVAL.md).
 Commit, push, CI e merge ordinario restano parte del workflow; deploy separato.
 
 The one-hour replay entry point is `research.exploratory.hour_reference_checked`: it pins auxiliary bias/antenna inputs and revalidates the existing frame/loading chains before unchanged v2 calculation. Frozen v1/v2 evidence is preserved.
