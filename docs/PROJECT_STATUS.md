@@ -63,6 +63,13 @@ gia misurato. Il prossimo lavoro scientifico deve porre un limite indipendente
 a quel modo o cambiare osservabile/geometria. Non avviamo una nuova conferma
 S3 finche non esiste un inviluppo totale credibile con margine utile.
 
+Il [controllo diretto di identificabilita](../research/exploratory/REAL_TARGET_BIAS_IDENTIFIABILITY.md)
+conferma il limite sulla geometria G12 reale: aggiungendo quattro contrasti
+liberi di bias per stazione, il rango numerico e 38/40 col codice in 20/20
+archi e 39/40 nei cinque archi di fase ammessi. La fase recupera una direzione,
+ma ne lascia una che accoppia bias e posizione. La risposta a +1 m omesso resta
+circa 70–77 m; nessuna ampiezza fisica del bias e stata misurata.
+
 La [roadmap scientifica](SCIENTIFIC_ROADMAP.md) resta il piano originale.
 Il disegno di 24 tentativi contiene ancora parametri da fissare: non equivale
 a una campagna gia pronta o validata. Nessuna percentuale di completamento
