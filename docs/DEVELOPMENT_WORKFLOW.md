@@ -35,8 +35,9 @@ checkpoint. Do not normalize frozen sources or update expected hashes to hide
 a checkout conversion. Preserve the original byte stream and pin its Git
 attributes instead.
 
-The active delivery objective is in
-[GENERAL_VERIFICATION_WORKFLOW.md](GENERAL_VERIFICATION_WORKFLOW.md) and root
-AGENTS.md. The preserved [SCIENTIFIC_ROADMAP.md](SCIENTIFIC_ROADMAP.md) supplies
-the research requirements. Public deployment, target acquisition for S3 and
-physical qualification remain separate from Git integration.
+The active delivery objective is in [PNT_SECURITY_PLAN.md](PNT_SECURITY_PLAN.md)
+and root AGENTS.md. [GENERAL_VERIFICATION_WORKFLOW.md](GENERAL_VERIFICATION_WORKFLOW.md)
+describes the reusable satellite-request foundation. The preserved
+[SCIENTIFIC_ROADMAP.md](SCIENTIFIC_ROADMAP.md) retains the inverse research
+requirements. Public deployment, prospective acquisition and physical
+qualification remain separate from Git integration.

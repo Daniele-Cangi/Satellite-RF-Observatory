@@ -1,22 +1,35 @@
 # Satellite RF Observatory
 
-Reconstruct satellite positions from public RF observations obtained through
-the Internet, without supplying the target's orbit to the calculation. Declare
-uncertainty before testing an excluded receiver and opening an orbit reference.
+The active direction is an [open PNT security framework](docs/PNT_SECURITY_PLAN.md):
+compare a local receiver's GNSS observations with external observations obtained
+through the Internet, assess geometric and timing consistency, and preserve
+replayable evidence for incident analysis. The first proposed use case is a fixed
+GPS receiver at independently known coordinates. This is a development plan;
+distributed spoofing detection and operational timing protection are not yet
+demonstrated by this repository.
 
-The one-event milestone was reached by G14 DOY246. The active objective is now
-a [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md): request
-a supported satellite/day, assess available observations, estimate with declared
-uncertainty, and return verified evidence or a precise reason for an inconclusive
-result. Development starts locally with the historical GPS code profile.
-Scientific validation continues as part of that objective. The five-event
-archive remains documentation. A trusted local operator can now submit requests,
-run one queued job and read its sealed result through `python -m service`;
-see [the service commands](service/README.md). HTTP/browser submission and public
-deployment are not delivered; scientific validation of a broader domain remains open.
+Remote observations alone cannot authenticate a victim's local RF signal.
+Absolute-time verification needs its own qualified reference because receiver
+clock terms cancel in double differences. See [project status](docs/PROJECT_STATUS.md)
+for current evidence and the next bounded feasibility work. Website work follows
+the physical demonstration.
 
-The preserved [scientific project](docs/SCIENTIFIC_ROADMAP.md) supplies the research
-and validation work for this objective. Its first [S0/S1 report](research/kinematic/results/REPORT.md)
+The existing [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md)
+provides a local satellite/day request, estimation and evidence pipeline. A
+trusted local operator can submit requests, run one queued job and read its
+sealed result through `python -m service`; see [the service commands](service/README.md).
+HTTP/browser submission and public deployment are not delivered.
+
+## Research foundation and historical results
+
+The inverse research reconstructs satellite positions from public RF without
+supplying the target's orbit to fitting, declares uncertainty, then tests an
+excluded receiver and an orbit reference. G14 DOY246 reached one conditional
+event milestone. The five-event archive and the results below retain their
+original scopes; they are not evidence of an implemented cyber detector.
+
+The preserved [scientific project](docs/SCIENTIFIC_ROADMAP.md) supplies the inverse
+research history. Its first [S0/S1 report](research/kinematic/results/REPORT.md)
 finds a conditional gain from added range-rate observations in an idealized
 synthetic model. This is not yet real Doppler integration or new satellite proof.
 

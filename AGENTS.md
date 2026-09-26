@@ -7,18 +7,21 @@ scientific boundaries.
 
 ## Direction and where to read
 
-Build a general verification workflow: satellite/day request -> qualified
-estimation -> withheld checks -> result or explicit failure. Infer position from
-Internet RF without target-state input to fitting. Answer new physical questions,
-not administrative extensions of old gates. Reference-only exploration on
-exposed data may proceed rapidly; prospective confirmation needs blind preparation.
+Build open PNT security verification: local GNSS observations + external
+Internet observations -> geometry/time checks -> bounded result and replayable
+evidence. The [PNT security plan](docs/PNT_SECURITY_PLAN.md) defines the active
+direction; the general verification workflow remains reusable infrastructure.
+Orbit-consistency testing may use an explicitly declared target-orbit hypothesis;
+independent target-state estimation must still exclude it from fitting. Answer
+new physical questions. Exploration on exposed data may proceed rapidly;
+prospective confirmation needs blind preparation.
 
 Read only the documents relevant to the task:
 
 - [Project status](docs/PROJECT_STATUS.md): current priorities, results and gaps.
 - [General workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md): product and worker
   behavior; [development workflow](docs/DEVELOPMENT_WORKFLOW.md): Git integration.
-- [Scientific roadmap](docs/SCIENTIFIC_ROADMAP.md): research and validation;
+- [Scientific roadmap](docs/SCIENTIFIC_ROADMAP.md): preserved inverse research;
   [cohort protocol](docs/VALIDATION_COHORT_PROTOCOL.md): campaign prerequisites,
   not acquisition permission.
 - Reports in `research/exploratory/`, `research/kinematic/` and `experiments/`:
