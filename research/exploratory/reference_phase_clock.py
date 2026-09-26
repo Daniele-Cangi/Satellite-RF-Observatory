@@ -73,10 +73,10 @@ def model_environment(context):
     return model
 
 
-def run():
+def run(phase_path=BASE/'inputs/real_phase/observations.json'):
     context = pseudo.inputs(PLAN_SHA)
     _, original, ctx, _, _, receipt, baseline = context
-    source = (BASE/'inputs/real_phase/observations.json').read_bytes()
+    source = phase_path.read_bytes()
     phase = json.loads(source)['cohorts']['day']
     if (phase['plan'] != original or phase['receipt_sha256'] != baseline['receipt_sha256']
             or ctx.target != 'G12' or phase['plan']['target_excluded'] in phase['plan']['references']):
@@ -161,8 +161,9 @@ def run():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--phase-input', type=Path, default=BASE/'inputs/real_phase/observations.json')
     args = parser.parse_args()
-    result = run()
+    result = run(args.phase_input)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, separators=(',', ':'), allow_nan=False)+'\n',
                            encoding='utf-8', newline='\n')
