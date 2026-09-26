@@ -12,8 +12,8 @@ Il [primo ciclo esplorativo P0/P1]
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come
 separare anomalie locali da anomalie condivise **nel modello ammesso**, ma non
 dimostra un vantaggio di rilevamento a pari falsi allarmi ne identifica un
-attacco. Manca una registrazione d'attacco locale abbinata a riferimenti esterni
-contemporanei; manca anche un riferimento temporale indipendente. La rete sola
+attacco. Quel ciclo non aveva una registrazione d'attacco locale abbinata a
+riferimenti esterni contemporanei; manca ancora un clock indipendente. La rete sola
 non verifica l'RF locale e la differenziazione non verifica il tempo assoluto.
 Il passo P2 e un caso offline documentato con quelle misure abbinate, mantenendo
 i controlli locali. Il [primo intake P2]
@@ -22,10 +22,14 @@ osservazioni GPS strutturalmente utilizzabili della vittima ferma a due stazioni
 ufficiale JammerTest chiarisce che gli orari dei tre test sono CEST e li porta
 nella finestra delle osservazioni GPST. Il CSV appiattito slitta alcune colonne
 quando mancano misure: 12.012 righe GPS sono state escluse e non resta alcuna
-coppia nei primi due test, una sola nel terzo. Il prossimo passo e recuperare
-osservabili qualificate dal file UBX grezzo o scegliere un altro corpus.
-L'ora del CSV proviene inoltre dal ricevitore potenzialmente attaccato:
-rilevamenti e falsi allarmi non sono ancora misurabili su questo intake.
+coppia nei primi due test, una sola nel terzo. Il successivo
+[recupero UBX](../research/exploratory/PNT_JAMMERTEST_RAWX.md) ha ricavato
+318 coppie a tre ricevitori in 82 epoche, incluse 108 coppie nelle finestre
+dei test, e ha osservato salti dell'ora interna nei due test GPS L1. L'ordine
+dei pacchetti fornisce un tempo di acquisizione monotono provvisorio, non un
+clock indipendente. Resta da confrontare quantitativamente controlli locali,
+sola rete e combinazione sugli stessi episodi. Nessun tasso di rilevamento o
+falso allarme e ancora misurato.
 Il sito segue la prova fisica.
 
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
