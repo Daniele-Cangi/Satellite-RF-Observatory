@@ -17,19 +17,20 @@
   "last_inferred_capture_gpst_s": 32393.599,
   "endpoint_receiver_minus_inferred_s": 0.002,
   "raw_status": {
-    "dual_gps_measurements": 47693,
-    "dual_gps_packets": 11202,
+    "dual_gps_measurements": 47642,
+    "dual_gps_packets": 11186,
     "gps_signal_records": 226660,
     "nav_pvt_packets": 3671,
     "nonpositive_or_nonfinite_valid_flag_code": 45509,
+    "out_of_range_valid_flag_code": 7674,
     "rawx_packets": 18355,
     "ubx_packets": 60023,
-    "valid_gps_signal_records": 181151
+    "valid_gps_signal_records": 173477
   },
   "grid_status": {
     "near_grid_packets": 122,
-    "selected_epochs": 82,
-    "selected_grid_satellites": 346
+    "selected_epochs": 81,
+    "selected_grid_satellites": 345
   },
   "receiver_time_discontinuities": [
     {
@@ -107,7 +108,7 @@
     },
     "2.1.2": {
       "clock_reset_flags": 3,
-      "dual_gps_measurements": 6793,
+      "dual_gps_measurements": 6746,
       "paired_epochs": 26,
       "paired_rows": 64,
       "rawx_packets": 4500
@@ -121,8 +122,8 @@
     },
     "outside_official_windows": {
       "clock_reset_flags": 3,
-      "dual_gps_measurements": 35700,
-      "paired_rows": 210,
+      "dual_gps_measurements": 35696,
+      "paired_rows": 209,
       "rawx_packets": 4855
     }
   },
@@ -150,7 +151,7 @@
     "KIRU00SWE": 28,
     "TRO100NOR": 2
   },
-  "paired_count": 318,
-  "paired_epoch_count": 82,
+  "paired_count": 317,
+  "paired_epoch_count": 81,
   "scope": "Recovered raw code and clock behavior; no detector threshold, attack attribution or independent absolute time."
 }

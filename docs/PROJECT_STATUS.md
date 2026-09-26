@@ -24,7 +24,7 @@ nella finestra delle osservazioni GPST. Il CSV appiattito slitta alcune colonne
 quando mancano misure: 12.012 righe GPS sono state escluse e non resta alcuna
 coppia nei primi due test, una sola nel terzo. Il successivo
 [recupero UBX](../research/exploratory/PNT_JAMMERTEST_RAWX.md) ha ricavato
-318 coppie a tre ricevitori in 82 epoche, incluse 108 coppie nelle finestre
+317 coppie a tre ricevitori in 81 epoche, incluse 108 coppie nelle finestre
 dei test, e ha osservato salti dell'ora interna nei due test GPS L1. L'ordine
 dei pacchetti fornisce un tempo di acquisizione monotono provvisorio, non un
 clock indipendente. Resta da confrontare quantitativamente controlli locali,

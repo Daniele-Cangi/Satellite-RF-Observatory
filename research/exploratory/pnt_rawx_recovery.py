@@ -78,6 +78,11 @@ def rawx_epochs(content):
             if not math.isfinite(code) or code <= 0:
                 counts['nonpositive_or_nonfinite_valid_flag_code'] += 1
                 continue
+            if code >= 100_000_000:
+                # Keep the anomaly in the denominator; a range this large is
+                # not a usable Earth-orbit GNSS pseudorange for pairing.
+                counts['out_of_range_valid_flag_code'] += 1
+                continue
             key = satellite, signal
             if key in measurements:
                 raise ValueError('duplicate RAWX GPS satellite/signal')

@@ -28,12 +28,14 @@ def test_rawx_identifies_valid_signals_and_rejects_corrupt_packet():
     frame = rawx_packet(288000, [(3, 0, 21000000., True),
                                   (3, 3, 21000005., True),
                                   (4, 0, 0., False),
-                                  (5, 0, 0., True)])
+                                  (5, 0, 0., True),
+                                  (6, 0, 2.2e13, True)])
     epochs, status = recovery.rawx_epochs(b'ignored prefix' + frame)
     assert epochs[0]['receiver_time'] == datetime(2024, 9, 11, 8)
     assert epochs[0]['dual'] == {'G03': (21000000., 21000005.)}
     assert status['invalid_pseudorange_flag'] == 1
     assert status['nonpositive_or_nonfinite_valid_flag_code'] == 1
+    assert status['out_of_range_valid_flag_code'] == 1
     assert status['dual_gps_measurements'] == 1
     broken = bytearray(frame)
     broken[-1] ^= 1

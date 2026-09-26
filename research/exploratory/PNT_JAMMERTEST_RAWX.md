@@ -6,8 +6,8 @@ published archive also contains the original `240911_075843.ubx` recording.
 [`pnt_rawx_recovery.py`](pnt_rawx_recovery.py) reads its checksum-verified
 UBX-RXM-RAWX packets, uses the receiver's GPS signal identifiers and
 `prValid` bit, and pairs actual L1 C/A plus L2 CL code with the same archived
-TRO1 and KIRU reference epochs. This recovers **318 three-receiver pairs in
-82 epochs**, including 108 pairs in the scheduled tests. The [compact result]
+TRO1 and KIRU reference epochs. This recovers **317 three-receiver pairs in
+81 epochs**, including 108 pairs in the scheduled tests. The [compact result]
 (results/pnt_jammertest_rawx_recovery_v1.json) retains counts, source hashes,
 time discontinuities and missing-reference counts; the 43 MB raw member and
 375 MB archive stay outside Git.
@@ -15,9 +15,9 @@ time discontinuities and missing-reference counts; the 43 MB raw member and
 | Official test | Raw dual-GPS samples at 5 Hz | Three-receiver pairs / epochs at 30 s |
 |---|---:|---:|
 | 2.1.3, Galileo E1 only | 4,863 | 40 / 23 |
-| 2.1.2, GPS L1 C/A only | 6,793 | 64 / 26 |
+| 2.1.2, GPS L1 C/A only | 6,746 | 64 / 26 |
 | 2.1.4, GPS L1 and Galileo E1 | 337 | 4 / 1 |
-| Outside the three windows | 35,700 | 210 pairs |
+| Outside the three windows | 35,696 | 209 pairs |
 
 The reader verified 60,023 UBX packets, of which 18,355 are RAWX and 3,671
 are NAV-PVT, a five-to-one count consistent with the observed 5 Hz cadence.
@@ -44,9 +44,12 @@ The raw payload identifies GPS L1 C/A (`gnssId=0`, `sigId=0`) and L2 CL
 (`sigId=3`) under the [u-blox RAWX format][ublox]. External RINEX offers C1C
 and C2W. C1C is the corresponding GPS L1 C/A code; **C2W is not L2 CL**.
 Unqualified cross-receiver subtraction of the two L2 observables would include
-signal-specific biases. The reader rejects invalid code flags and nonpositive
-or nonfinite values even when `prValid` is set. Of 226,660 GPS L1/L2 records,
-45,509 meet that latter exclusion; all failure counts remain visible. It does
+signal-specific biases. The reader rejects invalid code flags, nonpositive or
+nonfinite values, and pseudoranges at least 100 million metres even when
+`prValid` is set. Of 226,660 GPS L1/L2 records, 45,509 meet the former numeric
+exclusion and 7,674 exceed the deliberately generous range cap. Such values
+remain counted as input anomalies; they are not silently treated as usable
+satellite ranges. All failure counts remain visible. The reader does
 not infer a detector threshold, spoofing source, authenticated RF origin,
 absolute-time truth or false-alarm rate.
 
