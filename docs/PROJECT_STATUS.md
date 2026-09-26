@@ -16,7 +16,12 @@ attacco. Manca una registrazione d'attacco locale abbinata a riferimenti esterni
 contemporanei; manca anche un riferimento temporale indipendente. La rete sola
 non verifica l'RF locale e la differenziazione non verifica il tempo assoluto.
 Il passo P2 e un caso offline documentato con quelle misure abbinate, mantenendo
-i controlli locali. Il sito segue la prova fisica.
+i controlli locali. Il [primo intake P2]
+(../research/exploratory/PNT_JAMMERTEST_PAIRING.md) ha gia accoppiato 340
+osservazioni GPS della vittima ferma a due stazioni esterne reali. Le etichette
+orarie dell'attacco non coincidono letteralmente con le epoche RF, quindi il
+dataset non e ancora qualificato per misurare rilevamenti o falsi allarmi.
+Il sito segue la prova fisica.
 
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
 riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.

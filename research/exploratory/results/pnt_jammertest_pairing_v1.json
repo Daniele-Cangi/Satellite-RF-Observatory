@@ -1,0 +1,91 @@
+{
+  "schema": "pnt-exposed-observation-pairing-v1",
+  "source": {
+    "url": "https://zenodo.org/records/15911589",
+    "archive_sha256": "73e78934aa00d01dfeebabc45f81b38c9c0aecf972f5fc94d9ff60527065b313",
+    "member": "Spoofing/stationary/Medium Power (_1W)/Bands_E1_L1/2.1.3,2.1.2,2.1.4/rinex.csv",
+    "scenario_id": "2.1.3,2.1.2,2.1.4",
+    "declared_attack_log": [
+      {
+        "timestamp_utc": "2024-09-11T10:00:00Z",
+        "event": "Jamming started (2.1.3)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:16:30Z",
+        "event": "Jamming end (2.1.3)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:20:00Z",
+        "event": "Jamming started (2.1.2)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:35:30Z",
+        "event": "Jamming end (2.1.2)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:40:00Z",
+        "event": "Jamming started (2.1.4)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:55:30Z",
+        "event": "Jamming end (2.1.4)"
+      }
+    ]
+  },
+  "date_gpst": "2024-09-11",
+  "local_time_interpretation": "CSV time provisionally treated as GPST; derived from receiver, not an independent clock.",
+  "local_signals": "unqualified dataset pseudorange_L1/pseudorange_L2 labels",
+  "external_signals": "RINEX GPS C1C/C2W",
+  "local_status": {
+    "gps_rows": 123109,
+    "missing_dual_code": 75405,
+    "near_grid_rows": 1617,
+    "non_gps_rows": 353978,
+    "off_grid": 46087,
+    "repeated_grid_satellite": 1248,
+    "selected_epochs": 85,
+    "selected_grid_satellites": 369,
+    "source_rows": 477087
+  },
+  "stations": {
+    "TRO100NOR": {
+      "file_sha256": "45315eca5a5e65c58c419fd9a8ff51c35b93578585475bbe96bab6db29f40c54",
+      "status": {
+        "gps_rows": 33613,
+        "invalid_dual_code": 311,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 33302
+      }
+    },
+    "KIRU00SWE": {
+      "file_sha256": "950aa80894752f4bb6312373d69f343cdfc65570a81501c6cc05e1fb076aac1c",
+      "status": {
+        "gps_rows": 33448,
+        "missing_dual_code": 2341,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 31107
+      }
+    }
+  },
+  "missing_simultaneous_satellite": {
+    "KIRU00SWE": 29,
+    "TRO100NOR": 3
+  },
+  "paired_count": 340,
+  "paired_epoch_count": 85,
+  "paired_satellites": [
+    "G03",
+    "G04",
+    "G06",
+    "G12",
+    "G17",
+    "G25",
+    "G28",
+    "G31",
+    "G32"
+  ],
+  "first_paired_gpst_s": 28740,
+  "last_paired_gpst_s": 32370,
+  "maximum_selected_time_offset_s": 0.4389999999984866,
+  "scope": "Pairing only; no label alignment, signal equivalence, detector score or attack outcome."
+}
