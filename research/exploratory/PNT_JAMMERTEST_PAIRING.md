@@ -26,9 +26,11 @@ event windows:
 | 2.1.2 | GPS L1 C/A only | 08:20:28–08:35:28 | 75 / 26 |
 | 2.1.4 | GPS L1 and Galileo E1 only | 08:40:35–08:55:35 | 4 / 1 |
 
-The first window is a useful **GPS negative control** for the stated
-transmitted bands; it is not necessarily free of all interference. The last
-window has too little paired coverage for a conventional residual comparison.
+The first window is only a **candidate GPS negative control** based on the
+transmitted-band schedule. A preliminary look at its local GPS L1/L2 fields
+shows large changes, so it cannot be treated as clean without investigating
+the receiver, CSV conversion and signal IDs. The last window has too little
+paired coverage for a conventional residual comparison.
 The remaining 210 paired rows fall outside these windows by receiver time.
 The CSV timestamp is receiver-derived and may itself jump under attack, so
 this is **provisional overlap, not independently timed attack truth**. The
@@ -82,8 +84,8 @@ next physical test; they are not published as purported attack evidence.
 ## Next physical test
 
 Use the official schedule for a first **exploratory physical contrast**:
-local GPS behavior against the Galileo-only control, the GPS L1 interval, and
-the mixed interval's severe coverage loss. Investigate local signal IDs and
+local GPS behavior in the nominal Galileo-only, GPS L1 and mixed intervals,
+including the last interval's severe coverage loss. Investigate local signal IDs and
 receiver clock behavior before treating local L1/L2 and reference C1C/C2W as
 equivalent observables. Compare a fixed-site local baseline, remote-only
 control and their combination on the same available episodes. Keep pre-event
