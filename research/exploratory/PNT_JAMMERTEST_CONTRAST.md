@@ -26,8 +26,10 @@ receiver: its local GPS L1–L2 observable changes by tens to hundreds of metres
 This could involve receiver behavior, signal coupling or other effects; the
 comparison does not identify a cause.
 
-The external stations remain comparatively stable on the matched epochs,
-providing useful context that the large change is local to this recording.
+The external **frequency-difference observables** remain comparatively stable
+on the matched epochs. That gives context for a change in the victim observable
+which the same diagnostic does not show at the two references; it does not
+exclude an anomaly shared in another, untested measurement mode.
 The local-only change is already large in all three windows, and subtracting
 the network control leaves nearly the same median. **This case has not shown
 an added attack-detection advantage over the local observable.** The smaller
