@@ -27,9 +27,11 @@ coppia nei primi due test, una sola nel terzo. Il successivo
 317 coppie a tre ricevitori in 81 epoche, incluse 108 coppie nelle finestre
 dei test, e ha osservato salti dell'ora interna nei due test GPS L1. L'ordine
 dei pacchetti fornisce un tempo di acquisizione monotono provvisorio, non un
-clock indipendente. Resta da confrontare quantitativamente controlli locali,
-sola rete e combinazione sugli stessi episodi. Nessun tasso di rilevamento o
-falso allarme e ancora misurato.
+clock indipendente. Il [confronto esplorativo sui medesimi campioni]
+(../research/exploratory/PNT_JAMMERTEST_CONTRAST.md) trova variazioni locali
+molto maggiori di quelle esterne durante i test, ma la combinazione resta
+simile al controllo locale: un vantaggio di rilevamento dato dalla rete non e
+ancora dimostrato. Nessun tasso di rilevamento o falso allarme e misurato.
 Il sito segue la prova fisica.
 
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
