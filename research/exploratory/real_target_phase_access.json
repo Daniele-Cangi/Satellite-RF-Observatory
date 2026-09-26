@@ -1,0 +1,22 @@
+{
+  "schema": "exploratory-real-target-phase-access-v1",
+  "purpose": "Test whether reference-only clock drift plus actual G12 phase improves a real-target interval inverse and withheld 30 s prediction.",
+  "claim_regime": "exploratory: the G12 code and historical outcome were already exposed; G12 phase values have not been numerically decoded in this study",
+  "source": {
+    "date_gpst": "2026-09-05",
+    "target": "G12",
+    "archive": "the seven cached DOY 248 station RINEX files, each compressed and decoded SHA-256 checked against inputs/day_reference/receipt.json",
+    "receipt_sha256": "42b8c63c6799fe24428a0a0dfd492ac9d30a3a562e80fb35b8eada62819eaaf5",
+    "reference_phase_input_sha256": "5b584f712015b473d562771f508dad3b90a300dd17a11ef35ec6eabcc44aa867"
+  },
+  "stations": ["ALGO00CAN", "DRAO00CAN", "STJO00CAN", "YELL00CAN", "BOGT00COL", "BRAZ00BRA", "AREQ00PER"],
+  "reference_phase_supported_before_target_access": ["ALGO00CAN", "DRAO00CAN", "STJO00CAN", "BRAZ00BRA", "AREQ00PER"],
+  "station_rule": "Attempt the five pre-supported stations; retain YELL and BOGT as unsupported. A missing target observation or invalid header at any of the five makes its window incomplete; do not substitute stations, targets or days.",
+  "windows": "20 consecutive non-overlapping 90 s arcs, starts 37800+90*i GPST s for i=0..19; fit endpoints at start,start+30,start+60; withhold start+90. Retain every arc and rejection. No ranking by residual, fit quality, or oracle error.",
+  "measurements": "At each admitted endpoint decode only target G12 C1C,C2W,L1C,L2W. Form ionosphere-free code and carrier paths with the existing constants and header scaling. Reject missing/nonfinite/zero fields, nonzero carrier LLI, nonunit unsupported legacy wavelength factors, event/header changes, gaps and duplicate target records. Never interpolate or repair phase.",
+  "calibration_boundary": "Reference-only code clock comes from the unchanged day-reference calibration. Reference-only phase clock drift is the median of >=4 reference phase-minus-model increments at each fit interval. G12 observation/state values are absent from reference masks, calibration, products and drift estimation; poisoning the excluded value must not affect them.",
+  "inverse_and_comparison": "Attempt code-only and code-plus-phase fits on identical admitted real RF arcs with the existing interval inverse; first-order ionosphere-free paths, RF-derived target propagation geometry and no target orbit/clock product in fitting. Preserve exact covariance assumptions and all branch/rejection diagnostics. The endpoint at start+90 is excluded from fitting, tuning and candidate selection, then used only to score frozen predictions. Do not reduce the historical 20 m code floor or claim physical covariance from a conditional scenario.",
+  "failure_semantics": "Missing/inconsistent measurements, insufficient references/stations, failed geometry or propagation correction, fit rejection, ambiguity and withheld failures remain in the result. No fallback station, window, day, solver or threshold after inspecting phase values. Any later exploratory redesign is a separately versioned study.",
+  "oracle_boundary": "Precise G12 orbit/clock, if available, may be accessed only after RF predictions are serialized and hashed; oracle comparisons are diagnostics, never calibration or an uncertainty bound. A real-target result without this independent check remains unqualified.",
+  "scientific_limits": "Clock phase increments cannot constrain constant station code offsets. Shared reference products, target antenna/attitude effects, unflagged phase discontinuities, finite branch search and total correlated/systematic uncertainty remain unresolved unless separately measured. This manifest is the sole selection/access record, not a new authority or prospective seal."
+}
