@@ -104,6 +104,11 @@ position envelope and a new prospective S3 attempt would lack a justified
 margin. The general verification workflow may still report explicit failure;
 it must not advertise these conditional errors as guaranteed accuracy.
 
+The subsequent [direct bias-identifiability check](REAL_TARGET_BIAS_IDENTIFIABILITY.md)
+finds a surviving bias/position near-null direction even in the five accepted
+phase fits, under the same local rank criterion. The phase does not materially
+reduce the unit station-bias response of the position.
+
 ## Replay
 
 From repository root, with the original receipt-verified cached RINEX files:
