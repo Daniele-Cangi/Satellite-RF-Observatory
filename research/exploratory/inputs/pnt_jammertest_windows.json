@@ -1,0 +1,32 @@
+{
+  "schema": "pnt-jammertest-official-windows-v1",
+  "source_url": "https://www.jammertest.no/content/files/2026/05/Logg_Jammertest_2024_v1.xlsx",
+  "source_sha256": "4ef5091a4ee6489e8700b3495c51b4e99e9c37c138617c7c9c7f83f2047e60e2",
+  "sheet": "Site 1 - Bleik",
+  "source_time_zone": "CEST (UTC+02:00)",
+  "gpst_minus_utc_seconds_on_date": 18,
+  "date": "2024-09-11",
+  "rows": [
+    {
+      "source_row": 352,
+      "test_id": "2.1.3",
+      "name": "Large position and time jump. Galileo E1 only",
+      "start_cest": "10:00:47",
+      "stop_cest": "10:15:47"
+    },
+    {
+      "source_row": 353,
+      "test_id": "2.1.2",
+      "name": "Large position and time jump. GPS L1 C/A only",
+      "start_cest": "10:20:10",
+      "stop_cest": "10:35:10"
+    },
+    {
+      "source_row": 354,
+      "test_id": "2.1.4",
+      "name": "Large position and time jump. GPS L1 and Galileo E1 only",
+      "start_cest": "10:40:17",
+      "stop_cest": "10:55:17"
+    }
+  ]
+}

@@ -16,7 +16,17 @@ attacco. Manca una registrazione d'attacco locale abbinata a riferimenti esterni
 contemporanei; manca anche un riferimento temporale indipendente. La rete sola
 non verifica l'RF locale e la differenziazione non verifica il tempo assoluto.
 Il passo P2 e un caso offline documentato con quelle misure abbinate, mantenendo
-i controlli locali. Il sito segue la prova fisica.
+i controlli locali. Il [primo intake P2]
+(../research/exploratory/PNT_JAMMERTEST_PAIRING.md) ha accoppiato 210
+osservazioni GPS strutturalmente utilizzabili della vittima ferma a due stazioni esterne reali. Il registro
+ufficiale JammerTest chiarisce che gli orari dei tre test sono CEST e li porta
+nella finestra delle osservazioni GPST. Il CSV appiattito slitta alcune colonne
+quando mancano misure: 12.012 righe GPS sono state escluse e non resta alcuna
+coppia nei primi due test, una sola nel terzo. Il prossimo passo e recuperare
+osservabili qualificate dal file UBX grezzo o scegliere un altro corpus.
+L'ora del CSV proviene inoltre dal ricevitore potenzialmente attaccato:
+rilevamenti e falsi allarmi non sono ancora misurabili su questo intake.
+Il sito segue la prova fisica.
 
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
 riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.

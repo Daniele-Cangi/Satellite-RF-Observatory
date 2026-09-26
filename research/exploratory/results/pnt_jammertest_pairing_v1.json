@@ -1,0 +1,132 @@
+{
+  "schema": "pnt-exposed-observation-pairing-v1",
+  "source": {
+    "url": "https://zenodo.org/records/15911589",
+    "archive_sha256": "73e78934aa00d01dfeebabc45f81b38c9c0aecf972f5fc94d9ff60527065b313",
+    "member": "Spoofing/stationary/Medium Power (_1W)/Bands_E1_L1/2.1.3,2.1.2,2.1.4/rinex.csv",
+    "scenario_id": "2.1.3,2.1.2,2.1.4",
+    "declared_attack_log": [
+      {
+        "timestamp_utc": "2024-09-11T10:00:00Z",
+        "event": "Jamming started (2.1.3)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:16:30Z",
+        "event": "Jamming end (2.1.3)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:20:00Z",
+        "event": "Jamming started (2.1.2)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:35:30Z",
+        "event": "Jamming end (2.1.2)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:40:00Z",
+        "event": "Jamming started (2.1.4)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T10:55:30Z",
+        "event": "Jamming end (2.1.4)"
+      }
+    ]
+  },
+  "date_gpst": "2024-09-11",
+  "local_time_interpretation": "CSV time provisionally treated as GPST; derived from receiver, not an independent clock.",
+  "local_signals": "unqualified dataset pseudorange_L1/pseudorange_L2 labels",
+  "external_signals": "RINEX GPS C1C/C2W",
+  "local_status": {
+    "ambiguous_dual_code_columns": 12012,
+    "gps_rows": 123109,
+    "missing_dual_code": 75405,
+    "near_grid_rows": 1155,
+    "non_gps_rows": 353978,
+    "off_grid": 34537,
+    "repeated_grid_satellite": 924,
+    "selected_epochs": 32,
+    "selected_grid_satellites": 231,
+    "source_rows": 477087
+  },
+  "stations": {
+    "TRO100NOR": {
+      "file_sha256": "45315eca5a5e65c58c419fd9a8ff51c35b93578585475bbe96bab6db29f40c54",
+      "status": {
+        "gps_rows": 33613,
+        "invalid_dual_code": 311,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 33302
+      }
+    },
+    "KIRU00SWE": {
+      "file_sha256": "950aa80894752f4bb6312373d69f343cdfc65570a81501c6cc05e1fb076aac1c",
+      "status": {
+        "gps_rows": 33448,
+        "missing_dual_code": 2341,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 31107
+      }
+    }
+  },
+  "missing_simultaneous_satellite": {
+    "KIRU00SWE": 21,
+    "TRO100NOR": 2
+  },
+  "paired_count": 210,
+  "paired_epoch_count": 32,
+  "paired_satellites": [
+    "G03",
+    "G04",
+    "G06",
+    "G12",
+    "G17",
+    "G25",
+    "G28",
+    "G31",
+    "G32"
+  ],
+  "first_paired_gpst_s": 28740,
+  "last_paired_gpst_s": 32370,
+  "maximum_selected_time_offset_s": 0.004001000001153443,
+  "official_event_coverage": {
+    "source_url": "https://www.jammertest.no/content/files/2026/05/Logg_Jammertest_2024_v1.xlsx",
+    "source_sha256": "4ef5091a4ee6489e8700b3495c51b4e99e9c37c138617c7c9c7f83f2047e60e2",
+    "extract_sha256": "ef1714297809f0226c41b1febb1cc9915800574d7d7c64d624ef2df6bf9445e4",
+    "sheet": "Site 1 - Bleik",
+    "conversion": "CEST - 2 hours + 18 seconds = GPST (2024-09-11)",
+    "windows": [
+      {
+        "source_row": 352,
+        "test_id": "2.1.3",
+        "name": "Large position and time jump. Galileo E1 only",
+        "start_gpst_s": 28865,
+        "stop_gpst_s": 29765
+      },
+      {
+        "source_row": 353,
+        "test_id": "2.1.2",
+        "name": "Large position and time jump. GPS L1 C/A only",
+        "start_gpst_s": 30028,
+        "stop_gpst_s": 30928
+      },
+      {
+        "source_row": 354,
+        "test_id": "2.1.4",
+        "name": "Large position and time jump. GPS L1 and Galileo E1 only",
+        "start_gpst_s": 31235,
+        "stop_gpst_s": 32135
+      }
+    ],
+    "paired_rows_by_receiver_time": {
+      "2.1.4": 1,
+      "outside_official_windows": 209
+    },
+    "paired_epochs_by_receiver_time": {
+      "2.1.3": 0,
+      "2.1.2": 0,
+      "2.1.4": 1
+    },
+    "qualification": "Window overlap uses receiver-derived time; not independent attack truth."
+  },
+  "scope": "Pairing and provisional official-window overlap only; no independent time, signal equivalence, detector score or attack outcome."
+}
