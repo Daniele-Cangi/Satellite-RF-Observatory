@@ -18,9 +18,13 @@ non verifica l'RF locale e la differenziazione non verifica il tempo assoluto.
 Il passo P2 e un caso offline documentato con quelle misure abbinate, mantenendo
 i controlli locali. Il [primo intake P2]
 (../research/exploratory/PNT_JAMMERTEST_PAIRING.md) ha gia accoppiato 340
-osservazioni GPS della vittima ferma a due stazioni esterne reali. Le etichette
-orarie dell'attacco non coincidono letteralmente con le epoche RF, quindi il
-dataset non e ancora qualificato per misurare rilevamenti o falsi allarmi.
+osservazioni GPS della vittima ferma a due stazioni esterne reali. Il registro
+ufficiale JammerTest chiarisce che gli orari dei tre test sono CEST e li porta
+nella finestra delle osservazioni GPST. La copertura abbinata e pero minima
+nel terzo test (una sola epoca), e l'ora del CSV proviene dal ricevitore
+potenzialmente attaccato. Il prossimo passo e un confronto fisico esplorativo
+dei controlli GPS; rilevamenti e falsi allarmi richiedono ancora qualificare
+segnali, clock e disponibilita.
 Il sito segue la prova fisica.
 
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto

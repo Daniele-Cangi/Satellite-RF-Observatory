@@ -165,7 +165,33 @@ def sha256(path):
         return hashlib.file_digest(source, 'sha256').hexdigest()
 
 
-def run(archive, member, stations, day):
+def official_windows(extract, day):
+    """Convert the official event log's CEST clock to seconds of this GPST day."""
+    if (extract.get('schema') != 'pnt-jammertest-official-windows-v1' or
+            extract.get('date') != day.isoformat() or
+            extract.get('source_time_zone') != 'CEST (UTC+02:00)' or
+            extract.get('gpst_minus_utc_seconds_on_date') != 18):
+        raise ValueError('unqualified official event time scale or date')
+    windows, previous_stop, ids = [], -1, set()
+    for row in extract['rows']:
+        if row['test_id'] in ids:
+            raise ValueError('repeated official test identifier')
+        ids.add(row['test_id'])
+        def gps_seconds(key):
+            clock = datetime.strptime(row[key], '%H:%M:%S')
+            return clock.hour * 3600 + clock.minute * 60 + clock.second - 7200 + 18
+        start, stop = gps_seconds('start_cest'), gps_seconds('stop_cest')
+        if not 0 <= start < stop <= 86400 or start < previous_stop:
+            raise ValueError('overlapping or invalid official event windows')
+        windows.append({'source_row': row['source_row'], 'test_id': row['test_id'],
+                        'name': row['name'], 'start_gpst_s': start, 'stop_gpst_s': stop})
+        previous_stop = stop
+    if not windows:
+        raise ValueError('empty official event log')
+    return windows
+
+
+def run(archive, member, stations, day, windows_path=None):
     """Return a compact report, not the paired raw observations."""
     if len(stations) < 2:
         raise ValueError('two external stations required')
@@ -186,6 +212,30 @@ def run(archive, member, stations, day):
         decoded = hatanaka.decompress(Path(path).read_bytes(), strict=True).decode('ascii')
         remote[name], external_status[name] = reference_codes(decoded, day)
     paired, missing = pair(local, remote)
+    event_coverage = None
+    if windows_path is not None:
+        with Path(windows_path).open(encoding='utf-8') as source:
+            extract = json.load(source)
+        windows = official_windows(extract, day)
+        counts = Counter()
+        epochs = {window['test_id']: set() for window in windows}
+        for row in paired:
+            match = next((window for window in windows
+                          if window['start_gpst_s'] <= row['time_s'] < window['stop_gpst_s']), None)
+            key = match['test_id'] if match else 'outside_official_windows'
+            counts[key] += 1
+            if match:
+                epochs[key].add(row['time_s'])
+        event_coverage = {'source_url': extract['source_url'],
+                          'source_sha256': extract['source_sha256'],
+                          'extract_sha256': sha256(windows_path),
+                          'sheet': extract['sheet'],
+                          'conversion': 'CEST - 2 hours + 18 seconds = GPST (2024-09-11)',
+                          'windows': windows,
+                          'paired_rows_by_receiver_time': dict(sorted(counts.items())),
+                          'paired_epochs_by_receiver_time':
+                          {key: len(value) for key, value in epochs.items()},
+                          'qualification': 'Window overlap uses receiver-derived time; not independent attack truth.'}
     return {'schema': 'pnt-exposed-observation-pairing-v1',
             'source': {'url': 'https://zenodo.org/records/15911589',
                        'archive_sha256': sha256(archive), 'member': member,
@@ -205,7 +255,8 @@ def run(archive, member, stations, day):
             'first_paired_gpst_s': min((r['time_s'] for r in paired), default=None),
             'last_paired_gpst_s': max((r['time_s'] for r in paired), default=None),
             'maximum_selected_time_offset_s': max((r['time_offset_s'] for r in paired), default=None),
-            'scope': 'Pairing only; no label alignment, signal equivalence, detector score or attack outcome.'}
+            'official_event_coverage': event_coverage,
+            'scope': 'Pairing and provisional official-window overlap only; no independent time, signal equivalence, detector score or attack outcome.'}
 
 
 if __name__ == '__main__':
@@ -216,10 +267,12 @@ if __name__ == '__main__':
     parser.add_argument('station_a', type=Path)
     parser.add_argument('station_b', type=Path)
     parser.add_argument('output', type=Path)
+    parser.add_argument('--windows', type=Path, help='Extracted official CEST event windows')
     args = parser.parse_args()
     result = run(args.archive, args.scenario_member,
-                 {args.station_a.name.split('_')[0]: args.station_a,
-                  args.station_b.name.split('_')[0]: args.station_b}, args.day_gpst)
+                  {args.station_a.name.split('_')[0]: args.station_a,
+                   args.station_b.name.split('_')[0]: args.station_b}, args.day_gpst,
+                  windows_path=args.windows)
     with args.output.open('x', encoding='utf-8', newline='\n') as destination:
         json.dump(result, destination, indent=2, allow_nan=False)
         destination.write('\n')

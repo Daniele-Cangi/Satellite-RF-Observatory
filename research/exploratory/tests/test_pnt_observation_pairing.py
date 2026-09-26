@@ -1,5 +1,7 @@
 from datetime import date
 import io
+import json
+from pathlib import Path
 
 import pytest
 
@@ -59,3 +61,21 @@ def test_reference_time_and_header_changes_fail_closed():
     correction = f'{"G  1  1.0 C1C":<60}{"SYS / SCALE FACTOR":<20}'
     with pytest.raises(ValueError, match='unqualified applied'):
         pairing.reference_codes(rinex(extra_header=correction), DAY)
+
+
+def test_official_cest_windows_convert_to_gpst_and_reject_ambiguity():
+    extract = json.loads((Path(__file__).parents[1] / 'inputs' /
+                          'pnt_jammertest_windows.json').read_text(encoding='utf-8'))
+    windows = pairing.official_windows(extract, DAY)
+    assert [(w['test_id'], w['start_gpst_s'], w['stop_gpst_s']) for w in windows] == [
+        ('2.1.3', 28865, 29765),
+        ('2.1.2', 30028, 30928),
+        ('2.1.4', 31235, 32135),
+    ]
+    changed = {**extract, 'source_time_zone': 'UTC'}
+    with pytest.raises(ValueError, match='time scale'):
+        pairing.official_windows(changed, DAY)
+    changed = {**extract, 'rows': [*extract['rows']]}
+    changed['rows'][1] = {**changed['rows'][1], 'start_cest': '10:10:00'}
+    with pytest.raises(ValueError, match='overlapping'):
+        pairing.official_windows(changed, DAY)
