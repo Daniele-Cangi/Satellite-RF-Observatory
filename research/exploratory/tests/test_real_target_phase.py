@@ -4,6 +4,7 @@ import pytest
 
 from research.exploratory.real_target_phase import parse_target_fields
 from research.exploratory import real_target_phase as phase
+from research.exploratory.real_target_phase_v2 import gps_only_phase_header
 from research.kinematic.tests.test_phase_transform_header_audit import _header, _wavelength
 
 
@@ -49,3 +50,38 @@ def test_original_five_station_attempt_retains_all_failed_windows():
                                        'INCOMPLETE_TARGET_WINDOW': 17}
     assert all(case['station'] == 'STJO00CAN' for case in report['cases'])
     assert all(case['elevation_deg'] < 10. for case in report['cases'][:3])
+
+
+def test_gps_header_adapter_preserves_gps_and_body_but_rejects_bad_gps():
+    original = fixture()
+    end = next(line for line in original.splitlines(keepends=True) if 'END OF HEADER' in line)
+    malformed_other = f"{'R L1C  0.00000  02 R01':60}SYS / PHASE SHIFT\n"
+    dirty = original.replace(end, malformed_other+end)
+    with pytest.raises(ValueError, match='PHASE_SHIFT'):
+        parse_target_fields(dirty, PLAN)
+    cleaned = gps_only_phase_header(dirty)
+    assert cleaned == original
+    assert parse_target_fields(cleaned, PLAN)['rows'] == parse_target_fields(original, PLAN)['rows']
+    bad_gps = original.replace(end,
+                               f"{'G L1C  0.00000  02 G01':60}SYS / PHASE SHIFT\n"
+                               +end)
+    with pytest.raises(ValueError, match='PHASE_SHIFT'):
+        parse_target_fields(gps_only_phase_header(bad_gps), PLAN)
+
+
+def test_v2_retains_all_fits_and_model_rejections():
+    report = json.loads((phase.BASE/'results/real_target_interval_v2.json').read_bytes())
+    target = json.loads((phase.BASE/'inputs/real_phase/g12_target_phase_v2.json').read_bytes())
+    assert not report['target_orbit_accessed'] and not report['physical_covariance_qualified']
+    assert report['historical_code_floor_m'] == 20.
+    assert report['status_counts'] == {'EVALUATED': 20}
+    assert target['stations']['BOGT00COL']['status'] == 'PARSED'
+    assert target['stations']['YELL00CAN']['status'] == 'UNSUPPORTED_REFERENCE_PHASE'
+    assert [case['fits']['code_phase']['status'] for case in report['cases']].count(
+        'CONDITIONAL_INTERVAL_MODEL_ACCEPTED') == 5
+    assert [case['fits']['code_phase']['status'] for case in report['cases']].count(
+        'MODEL_REJECTED') == 15
+    for case in report['cases']:
+        assert case['fits']['code_only']['status'] == 'CONDITIONAL_INTERVAL_MODEL_ACCEPTED'
+        for fit in case['fits'].values():
+            assert ('withheld' in fit) == (fit['status'] == 'CONDITIONAL_INTERVAL_MODEL_ACCEPTED')
