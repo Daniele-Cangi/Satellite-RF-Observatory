@@ -7,16 +7,16 @@ confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
 valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
 Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
 
-Il piano e consegnato; il rilevatore distribuito non e ancora implementato o
-validato. La rete esterna da sola non verifica un attacco limitato all'antenna
-della vittima. Le doppie differenze non proteggono da sole il tempo assoluto:
-servono osservazioni locali e un riferimento temporale appropriato al claim.
-
-Il prossimo ciclo P0/P1 deve individuare dati locali/esterni contemporanei e
-misurare la distinguibilita e il beneficio rispetto ai controlli solo locali.
-Sono previste due iterazioni, poi una decisione documentata su prosecuzione,
-dominio piu limitato o diversa topologia. Il sito segue la prova fisica.
-La presente consegna cambia documentazione e priorita; nessun nuovo esperimento.
+Il [primo ciclo esplorativo P0/P1]
+(../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
+stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come
+separare anomalie locali da anomalie condivise **nel modello ammesso**, ma non
+dimostra un vantaggio di rilevamento a pari falsi allarmi ne identifica un
+attacco. Manca una registrazione d'attacco locale abbinata a riferimenti esterni
+contemporanei; manca anche un riferimento temporale indipendente. La rete sola
+non verifica l'RF locale e la differenziazione non verifica il tempo assoluto.
+Il passo P2 e un caso offline documentato con quelle misure abbinate, mantenendo
+i controlli locali. Il sito segue la prova fisica.
 
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
 riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.

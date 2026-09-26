@@ -1,0 +1,256 @@
+{
+  "schema": "pnt-local-network-exploratory-v1",
+  "victim": "ALGO00CAN",
+  "stations": [
+    "ALGO00CAN",
+    "DRAO00CAN",
+    "STJO00CAN",
+    "YELL00CAN",
+    "BOGT00COL",
+    "BRAZ00BRA",
+    "AREQ00PER"
+  ],
+  "train_before_gpst_s": 38700,
+  "threshold_method": "nearest-rank training |score| at 0.99",
+  "minimum_training_per_satellite": 5,
+  "minimum_simultaneous_witnesses": 2,
+  "source_row_count": 9394,
+  "source_status_counts": {
+    "EVALUATED": 3942,
+    "PSEUDO_TARGET_NOT_ADMITTED": 5452
+  },
+  "pairing_failures": {
+    "PSEUDO_TARGET_NOT_ADMITTED": 5452
+  },
+  "paired_count": 518,
+  "training_count": 270,
+  "test_count": 248,
+  "unsupported_test_count": 0,
+  "supported_satellites": [
+    "G05",
+    "G06",
+    "G09",
+    "G11",
+    "G13",
+    "G20",
+    "G21",
+    "G25",
+    "G29"
+  ],
+  "test_witness_count_range": [
+    2,
+    6
+  ],
+  "controls": {
+    "local": {
+      "threshold_m": 3.051249550189823,
+      "training_alerts": 2,
+      "clean_test_alerts": 13
+    },
+    "network": {
+      "threshold_m": 1.182272332332559,
+      "training_alerts": 2,
+      "clean_test_alerts": 3
+    },
+    "combined": {
+      "threshold_m": 3.2536196294463657,
+      "training_alerts": 2,
+      "clean_test_alerts": 11
+    }
+  },
+  "perturbations": [
+    {
+      "scenario": "local_satellite_code",
+      "offset_m": 5.0,
+      "test_alerts": {
+        "local": 232,
+        "network": 3,
+        "combined": 225
+      }
+    },
+    {
+      "scenario": "shared_satellite_code",
+      "offset_m": 5.0,
+      "test_alerts": {
+        "local": 232,
+        "network": 248,
+        "combined": 11
+      }
+    },
+    {
+      "scenario": "local_common_clock",
+      "offset_m": 5.0,
+      "test_alerts": {
+        "local": 13,
+        "network": 3,
+        "combined": 11
+      }
+    },
+    {
+      "scenario": "local_satellite_code",
+      "offset_m": 10.0,
+      "test_alerts": {
+        "local": 248,
+        "network": 3,
+        "combined": 248
+      }
+    },
+    {
+      "scenario": "shared_satellite_code",
+      "offset_m": 10.0,
+      "test_alerts": {
+        "local": 248,
+        "network": 248,
+        "combined": 11
+      }
+    },
+    {
+      "scenario": "local_common_clock",
+      "offset_m": 10.0,
+      "test_alerts": {
+        "local": 13,
+        "network": 3,
+        "combined": 11
+      }
+    },
+    {
+      "scenario": "local_satellite_code",
+      "offset_m": 25.0,
+      "test_alerts": {
+        "local": 248,
+        "network": 3,
+        "combined": 248
+      }
+    },
+    {
+      "scenario": "shared_satellite_code",
+      "offset_m": 25.0,
+      "test_alerts": {
+        "local": 248,
+        "network": 248,
+        "combined": 11
+      }
+    },
+    {
+      "scenario": "local_common_clock",
+      "offset_m": 25.0,
+      "test_alerts": {
+        "local": 13,
+        "network": 3,
+        "combined": 11
+      }
+    }
+  ],
+  "scope": "Exposed reference-only GPS code; known reference orbits and site coordinates; calibrated residual perturbations, not recorded spoofing; no independent absolute time.",
+  "source_sha256": "d12c3d1b57520569b39c9faacb1c0089065f229d60ad87fa709806201f50c823",
+  "station_rotations": {
+    "DRAO00CAN": {
+      "test_count": 183,
+      "clean_test_alerts": {
+        "local": 4,
+        "network": 5,
+        "combined": 4
+      },
+      "local_code_10m_test_alerts": {
+        "local": 183,
+        "network": 5,
+        "combined": 183
+      },
+      "shared_code_10m_test_alerts": {
+        "local": 183,
+        "network": 183,
+        "combined": 4
+      }
+    },
+    "STJO00CAN": {
+      "test_count": 217,
+      "clean_test_alerts": {
+        "local": 0,
+        "network": 6,
+        "combined": 2
+      },
+      "local_code_10m_test_alerts": {
+        "local": 217,
+        "network": 6,
+        "combined": 217
+      },
+      "shared_code_10m_test_alerts": {
+        "local": 217,
+        "network": 217,
+        "combined": 2
+      }
+    },
+    "YELL00CAN": {
+      "test_count": 186,
+      "clean_test_alerts": {
+        "local": 10,
+        "network": 7,
+        "combined": 14
+      },
+      "local_code_10m_test_alerts": {
+        "local": 186,
+        "network": 7,
+        "combined": 186
+      },
+      "shared_code_10m_test_alerts": {
+        "local": 186,
+        "network": 186,
+        "combined": 14
+      }
+    },
+    "BOGT00COL": {
+      "test_count": 248,
+      "clean_test_alerts": {
+        "local": 14,
+        "network": 2,
+        "combined": 12
+      },
+      "local_code_10m_test_alerts": {
+        "local": 248,
+        "network": 2,
+        "combined": 248
+      },
+      "shared_code_10m_test_alerts": {
+        "local": 248,
+        "network": 248,
+        "combined": 12
+      }
+    },
+    "BRAZ00BRA": {
+      "test_count": 186,
+      "clean_test_alerts": {
+        "local": 0,
+        "network": 1,
+        "combined": 0
+      },
+      "local_code_10m_test_alerts": {
+        "local": 186,
+        "network": 1,
+        "combined": 186
+      },
+      "shared_code_10m_test_alerts": {
+        "local": 186,
+        "network": 186,
+        "combined": 0
+      }
+    },
+    "AREQ00PER": {
+      "test_count": 160,
+      "clean_test_alerts": {
+        "local": 0,
+        "network": 4,
+        "combined": 0
+      },
+      "local_code_10m_test_alerts": {
+        "local": 160,
+        "network": 4,
+        "combined": 160
+      },
+      "shared_code_10m_test_alerts": {
+        "local": 160,
+        "network": 160,
+        "combined": 0
+      }
+    }
+  }
+}
