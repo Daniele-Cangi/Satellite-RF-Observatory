@@ -37,14 +37,15 @@
   "local_signals": "unqualified dataset pseudorange_L1/pseudorange_L2 labels",
   "external_signals": "RINEX GPS C1C/C2W",
   "local_status": {
+    "ambiguous_dual_code_columns": 12012,
     "gps_rows": 123109,
     "missing_dual_code": 75405,
-    "near_grid_rows": 1617,
+    "near_grid_rows": 1155,
     "non_gps_rows": 353978,
-    "off_grid": 46087,
-    "repeated_grid_satellite": 1248,
-    "selected_epochs": 85,
-    "selected_grid_satellites": 369,
+    "off_grid": 34537,
+    "repeated_grid_satellite": 924,
+    "selected_epochs": 32,
+    "selected_grid_satellites": 231,
     "source_rows": 477087
   },
   "stations": {
@@ -68,11 +69,11 @@
     }
   },
   "missing_simultaneous_satellite": {
-    "KIRU00SWE": 29,
-    "TRO100NOR": 3
+    "KIRU00SWE": 21,
+    "TRO100NOR": 2
   },
-  "paired_count": 340,
-  "paired_epoch_count": 85,
+  "paired_count": 210,
+  "paired_epoch_count": 32,
   "paired_satellites": [
     "G03",
     "G04",
@@ -86,7 +87,7 @@
   ],
   "first_paired_gpst_s": 28740,
   "last_paired_gpst_s": 32370,
-  "maximum_selected_time_offset_s": 0.4389999999984866,
+  "maximum_selected_time_offset_s": 0.004001000001153443,
   "official_event_coverage": {
     "source_url": "https://www.jammertest.no/content/files/2026/05/Logg_Jammertest_2024_v1.xlsx",
     "source_sha256": "4ef5091a4ee6489e8700b3495c51b4e99e9c37c138617c7c9c7f83f2047e60e2",
@@ -117,14 +118,12 @@
       }
     ],
     "paired_rows_by_receiver_time": {
-      "2.1.2": 75,
-      "2.1.3": 51,
-      "2.1.4": 4,
-      "outside_official_windows": 210
+      "2.1.4": 1,
+      "outside_official_windows": 209
     },
     "paired_epochs_by_receiver_time": {
-      "2.1.3": 26,
-      "2.1.2": 26,
+      "2.1.3": 0,
+      "2.1.2": 0,
       "2.1.4": 1
     },
     "qualification": "Window overlap uses receiver-derived time; not independent attack truth."

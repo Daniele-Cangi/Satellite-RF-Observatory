@@ -24,7 +24,8 @@ def local_codes(stream, day, tolerance_s=0.5):
         raise ValueError('grid tolerance must be in (0, 15) seconds')
     rows, counts = {}, Counter()
     reader = csv.DictReader(stream)
-    needed = {'time', 'satellite', 'pseudorange_L1', 'pseudorange_L2'}
+    needed = {'time', 'satellite', 'pseudorange_L1', 'pseudorange_L2',
+              'snr_L1', 'snr_L2'}
     if not needed <= set(reader.fieldnames or ()):
         raise ValueError('local observation columns missing')
     for row in reader:
@@ -36,6 +37,16 @@ def local_codes(stream, day, tolerance_s=0.5):
         counts['gps_rows'] += 1
         if not (row['pseudorange_L1'] and row['pseudorange_L2']):
             counts['missing_dual_code'] += 1
+            continue
+        # The published CSV sometimes shifts subsequent fields left when a
+        # measurement is absent: a carrier phase can then occupy a code column.
+        # Two plausible terminal SNR fields are a necessary structural check.
+        try:
+            snr = (float(row['snr_L1']), float(row['snr_L2']))
+            if not all(math.isfinite(v) and 0 < v <= 100 for v in snr):
+                raise ValueError('implausible SNR')
+        except (ValueError, TypeError):
+            counts['ambiguous_dual_code_columns'] += 1
             continue
         try:
             stamp = datetime.fromisoformat(row['time'])

@@ -7,9 +7,9 @@ The first **real, contemporaneous observation path** now exists. The
 measurements on 11 September 2024. For the selected `2.1.3,2.1.2,2.1.4`
 scenario, archived [TRO100NOR][tro] and [KIRU00SWE][kiru] daily RINEX files
 provide two physically distinct external stations on the same GPST epochs.
-[`pnt_observation_pairing.py`](pnt_observation_pairing.py) pairs 340 GPS
-satellite/epoch rows in 85 epochs, across nine satellites, with at most
-0.439 seconds between the selected local sample and the 30-second grid.
+[`pnt_observation_pairing.py`](pnt_observation_pairing.py) pairs **210 structurally
+usable GPS satellite/epoch rows** in 32 epochs, across nine satellites, with
+at most 0.0041 seconds between the selected local sample and the 30-second grid.
 This is an input/coverage result, **not a successful attack detector**.
 
 The [official 2024 test log][official-log] labels its Site 1 Bleik columns
@@ -22,16 +22,21 @@ event windows:
 
 | Test | Transmitted signals in official log | GPST window | Paired GPS rows / epochs by receiver time |
 |---|---|---|---:|
-| 2.1.3 | Galileo E1 only | 08:01:05–08:16:05 | 51 / 26 |
-| 2.1.2 | GPS L1 C/A only | 08:20:28–08:35:28 | 75 / 26 |
-| 2.1.4 | GPS L1 and Galileo E1 only | 08:40:35–08:55:35 | 4 / 1 |
+| 2.1.3 | Galileo E1 only | 08:01:05–08:16:05 | 0 / 0 |
+| 2.1.2 | GPS L1 C/A only | 08:20:28–08:35:28 | 0 / 0 |
+| 2.1.4 | GPS L1 and Galileo E1 only | 08:40:35–08:55:35 | 1 / 1 |
 
-The first window is only a **candidate GPS negative control** based on the
-transmitted-band schedule. A preliminary look at its local GPS L1/L2 fields
-shows large changes, so it cannot be treated as clean without investigating
-the receiver, CSV conversion and signal IDs. The last window has too little
-paired coverage for a conventional residual comparison.
-The remaining 210 paired rows fall outside these windows by receiver time.
+An initial version counted 340 pairs, but the flattened source CSV omits empty
+measurements in some rows, shifting subsequent fields left. For example, a
+carrier phase can land in `pseudorange_L2` while `snr_L1` takes a range-sized
+value and `snr_L2` is blank. Numeric range checks alone admitted those rows.
+Requiring both terminal SNR fields to be populated and physically plausible
+excludes 12,012 ambiguous GPS rows. The revised result has **no usable paired
+GPS code in the first two test windows and one pair in the third**. The other
+209 pairs fall outside the official windows by receiver time. Neither the
+nominal Galileo-only interval nor the GPS L1 interval can be scored from this
+CSV. It is not evidence that the attack is undetectable or that its effect is
+large; it is a data-format/availability limit.
 The CSV timestamp is receiver-derived and may itself jump under attack, so
 this is **provisional overlap, not independently timed attack truth**. The
 archive's unmodified `scenario.json` entries still say `timestamp_utc` and
@@ -66,12 +71,13 @@ receiver `iTOW` at the start, but both derive from the attacked receiver and
 cannot serve as independent time evidence. No surveyed victim coordinate or
 independent clock is established by this intake.
 
-Of 477,087 local CSV rows, 123,109 are GPS and 47,704 have both L1 and L2
-pseudoranges. The 0.5-second grid tolerance admits 1,617 raw rows at 85 epochs;
-repeated receiver samples reduce these to 369 unique satellite/epoch keys.
-TRO1 lacks three of those keys and KIRU lacks 29, leaving 340 present at all
-three physical receivers. The report retains the remaining non-GPS, single-
-frequency, off-grid and missing-reference counts. The off-grid fraction may
+Of 477,087 local CSV rows, 123,109 are GPS and 47,704 superficially have both
+L1 and L2 pseudoranges. The structural SNR check excludes 12,012 of those.
+The 0.5-second grid tolerance admits 1,155 raw rows at 32 epochs; repeated
+receiver samples reduce these to 231 unique satellite/epoch keys. TRO1 lacks
+two of those keys and KIRU lacks 21, leaving 210 present at all three physical
+receivers. The report retains non-GPS, single-frequency, ambiguous-column,
+off-grid and missing-reference counts. The off-grid fraction may
 include ordinary sampling phase as well as attack-induced time behavior; it
 is not an attack score. External C1C/C2W were present at the matched keys.
 
@@ -83,15 +89,15 @@ next physical test; they are not published as purported attack evidence.
 
 ## Next physical test
 
-Use the official schedule for a first **exploratory physical contrast**:
-local GPS behavior in the nominal Galileo-only, GPS L1 and mixed intervals,
-including the last interval's severe coverage loss. Investigate local signal IDs and
-receiver clock behavior before treating local L1/L2 and reference C1C/C2W as
-equivalent observables. Compare a fixed-site local baseline, remote-only
-control and their combination on the same available episodes. Keep pre-event
-fit separate, report nonmatches/clock jumps, and declare any orbit/propagation
-hypothesis used for absolute residuals. An independent time witness remains
-necessary for absolute-time verification and rigorous detection timing.
+Recover signal-qualified raw observations from the archived `240911_075843.ubx`
+file, rather than trusting the flattened CSV columns, and check whether the
+attacked windows have usable GPS code and receiver-time continuity. If raw
+recovery fails, choose another documented receiver recording; do not extract
+attack-performance claims from the one usable pair. Once a real contrast is
+available, compare fixed-site local, remote-only and combined controls on the
+same episodes, keeping pre-event fit and missing rows visible. An independent
+time witness remains necessary for absolute-time verification and rigorous
+detection timing.
 
 Reproduce pairing after downloading the three files above:
 

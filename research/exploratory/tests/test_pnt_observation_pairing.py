@@ -25,18 +25,21 @@ def rinex(*, flag=0, time_scale='GPS', extra_header=''):
 
 
 def test_local_grid_selection_reports_missing_and_repeats():
-    content = io.StringIO('time,satellite,pseudorange_L1,pseudorange_L2\n'
-                          '2024-09-11 08:00:00.4,G01,21000000,21000005\n'
-                          '2024-09-11 08:00:00.1,G01,21000001,21000006\n'
-                          '2024-09-11 08:00:01.0,G01,21000002,21000007\n'
-                          '2024-09-11 08:00:00.0,G02,21000000,\n'
-                          '2024-09-11 08:00:00.0,E01,21000000,21000005\n')
+    content = io.StringIO('time,satellite,pseudorange_L1,pseudorange_L2,snr_L1,snr_L2\n'
+                          '2024-09-11 08:00:00.4,G01,21000000,21000005,45,43\n'
+                          '2024-09-11 08:00:00.1,G01,21000001,21000006,45,43\n'
+                          '2024-09-11 08:00:01.0,G01,21000002,21000007,45,43\n'
+                          '2024-09-11 08:00:00.0,G02,21000000,,45,\n'
+                          '2024-09-11 08:00:00.0,E01,21000000,21000005,45,43\n'
+                          '2024-09-11 08:00:00.0,G03,21000000,85000000,21000001,\n')
     values, status = pairing.local_codes(content, DAY)
     assert values[(28800, 'G01')][2:] == (21000001., 21000006.)
-    assert status['source_rows'] == 5
+    assert status['source_rows'] == 6
     assert status['repeated_grid_satellite'] == 1
     assert status['off_grid'] == 1
     assert status['missing_dual_code'] == 1
+    assert status['ambiguous_dual_code_columns'] == 1
+    assert (28800, 'G03') not in values
 
 
 def test_external_parser_and_two_station_pairing():
