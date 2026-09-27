@@ -72,6 +72,15 @@ riporta osservabili ma anche forti distorsioni locali; i file completi di
 rilasciati. Il passo ad alto valore è acquisire/qualificare tale registrazione
 cooperativa, non aggiungere altri sigilli o varianti JammerTest.
 
+La [qualifica mirata di una traiettoria simulata]
+(../research/exploratory/PNT_P2_RECORDING_DECISION.md) mostra perché un'altra
+registrazione dello stesso archivio non colma P2: nella finestra GPS 2.3.5
+restano 33 coppie su 16 epoche, contro una sola coppia nella finestra Galileo
+precedente. La pausa fra le due trasmissioni non è un controllo benigno
+certificato; il CSV non identifica senza ambiguità i codici e il registro
+secondario contraddice i nomi degli scenari. Il rapporto fissa i dati minimi da
+ottenere per la prossima prova, senza introdurre nuovi sigilli o soglie.
+
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
 riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.
 

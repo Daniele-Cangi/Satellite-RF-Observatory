@@ -202,6 +202,39 @@ def official_windows(extract, day):
     return windows
 
 
+def segmented_coverage(local, paired, windows):
+    """Keep pre-event, between-event and post-event support distinct.
+
+    These are receiver-time overlaps, not independently timed benign or attack
+    labels. Counting local rows as well as three-receiver pairs makes missing
+    network support visible without treating every outside row as a control.
+    """
+    intervals, cursor = [], 0
+    for index, window in enumerate(windows):
+        if cursor < window['start_gpst_s']:
+            intervals.append({'kind': 'pre_event' if index == 0 else 'between_events',
+                              'test_id': None, 'start_gpst_s': cursor,
+                              'stop_gpst_s': window['start_gpst_s']})
+        intervals.append({'kind': 'official_window', 'test_id': window['test_id'],
+                          'start_gpst_s': window['start_gpst_s'],
+                          'stop_gpst_s': window['stop_gpst_s']})
+        cursor = window['stop_gpst_s']
+    if cursor < 86400:
+        intervals.append({'kind': 'post_event', 'test_id': None,
+                          'start_gpst_s': cursor, 'stop_gpst_s': 86400})
+    for interval in intervals:
+        start, stop = interval['start_gpst_s'], interval['stop_gpst_s']
+        local_rows = [(time, satellite) for time, satellite in local
+                      if start <= time < stop]
+        paired_rows = [row for row in paired if start <= row['time_s'] < stop]
+        interval.update({'local_dual_rows': len(local_rows),
+                         'local_epochs': len({time for time, _ in local_rows}),
+                         'paired_rows': len(paired_rows),
+                         'paired_epochs': len({row['time_s'] for row in paired_rows}),
+                         'paired_satellites': sorted({row['satellite'] for row in paired_rows})})
+    return intervals
+
+
 def run(archive, member, stations, day, windows_path=None):
     """Return a compact report, not the paired raw observations."""
     if len(stations) < 2:
@@ -246,8 +279,10 @@ def run(archive, member, stations, day, windows_path=None):
                           'paired_rows_by_receiver_time': dict(sorted(counts.items())),
                           'paired_epochs_by_receiver_time':
                           {key: len(value) for key, value in epochs.items()},
+                          'segmented_coverage': segmented_coverage(local, paired, windows),
                           'qualification': 'Window overlap uses receiver-derived time; not independent attack truth.'}
-    return {'schema': 'pnt-exposed-observation-pairing-v1',
+    return {'schema': ('pnt-exposed-observation-pairing-v2' if windows_path is not None
+                       else 'pnt-exposed-observation-pairing-v1'),
             'source': {'url': 'https://zenodo.org/records/15911589',
                        'archive_sha256': sha256(archive), 'member': member,
                        'scenario_id': metadata['scenario_id'],

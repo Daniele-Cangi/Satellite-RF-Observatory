@@ -228,7 +228,9 @@ controllo benigno abbinato e un
 attacco con controlli locali plausibili, oltre a riferimenti contemporanei e
 tempo/verità indipendenti. I risultati e il vaglio delle fonti sono nello
 [stato del progetto](PROJECT_STATUS.md); non aprire P3 per compensare l'assenza
-di questi dati.
+di questi dati. La [specifica minima della registrazione]
+(../research/exploratory/PNT_P2_RECORDING_DECISION.md) e la qualifica di un
+ulteriore candidato esposto rendono esplicito quali osservazioni mancano.
 
 ### Primo ciclo di lavoro: P0 e P1
 
