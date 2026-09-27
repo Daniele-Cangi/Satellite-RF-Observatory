@@ -10,6 +10,16 @@ test windows. The [versioned result]
 (results/pnt_jammertest_rawx_contrast_v1.json) contains hashes, exclusions,
 support, per-window counts and unrounded statistics.
 
+The later [reference-agreement result]
+(results/pnt_jammertest_rawx_contrast_v3.json) retains those outcomes and also
+reports each external station separately. Its median absolute between-station
+disagreement is 0.43 m outside the scheduled tests, 0.25 m in 2.1.3,
+0.41 m in 2.1.2, and 0.85 m on the four 2.1.4 pairs. The 2.1.4 support is too
+small to establish stability. A near-zero network median could otherwise hide
+opposite changes at the two stations; the v3 test explicitly exercises that
+failure mode. Agreement here concerns only separately centred GPS
+frequency-difference changes on matched rows, not every possible shared error.
+
 | Window | Paired rows / epochs | Median absolute local change | External change | Combined change |
 |---|---:|---:|---:|---:|
 | Outside scheduled tests | 209 / 31 | 0.40 m | 0.41 m | 0.35 m |
@@ -61,3 +71,6 @@ Reproduce using the archive and station files listed in the
 python -m research.exploratory.pnt_rawx_contrast ARCHIVE.tar.gz "Spoofing/stationary/Medium Power (_1W)/Bands_E1_L1/2.1.3,2.1.2,2.1.4/240911_075843.ubx" 2024-09-11 TRO100NOR_S_20242550000_01D_30S_MO.crx.gz KIRU00SWE_R_20242550000_01D_30S_MO.crx.gz NEW_OUTPUT.json --windows research/exploratory/inputs/pnt_jammertest_windows.json
 python -m pytest research/exploratory/tests/test_pnt_rawx_contrast.py -q
 ```
+
+The current command writes the v3 schema; the original v1 file remains as
+historical evidence.

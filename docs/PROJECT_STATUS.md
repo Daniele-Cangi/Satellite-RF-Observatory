@@ -47,6 +47,31 @@ attacco in cui l'evidenza locale non sia già decisiva, oppure va limitata la
 rivendicazione del prodotto al contesto indipendente dell'incidente. Ulteriori
 varianti amministrative dello stesso confronto non sostituiscono quei dati.
 
+La [verifica separata delle due stazioni]
+(../research/exploratory/PNT_JAMMERTEST_211.md) evita che la mediana della rete
+nasconda variazioni opposte: nella rampa 2.1.1 il disaccordo mediano sui 154
+campioni supportati è 0,55 m, contro 0,42 m prima dell'evento. Il risultato
+descrive contesto esterno per questo osservabile, non un'autenticazione del
+segnale locale. Il confronto originario resta conservato e il nuovo output
+versionato aggiunge il controllo di accordo, senza cambiare gli esiti chiusi.
+
+Decisione P2: il risultato utilizzabile oggi è un **rapporto tecnico
+riproducibile di contesto indipendente per un episodio offline**. Non
+promuovere l'allarme a verifica del fix o
+del timestamp e non dichiarare un beneficio di rilevamento della rete. La
+prova successiva richiede nello stesso sito un periodo benigno e un attacco
+meno evidente localmente, osservazioni grezze locali con qualità/clock/PVT,
+due riferimenti contemporanei e una base temporale o verità indipendente.
+La ricerca mirata di fonti pubbliche non ha ancora trovato questa combinazione:
+[TEXBAT](https://radionavlab.ae.utexas.edu/texbat/) e
+[FGI-JSDR](https://www.maanmittauslaitos.fi/en/research/research/gnss-specialists/fgi-gnss-jamming-and-spoofing-dataset-repository-fgi-jsdr)
+pubblicano soprattutto RF da elaborare; il
+[corpus di Kunming](https://pmc.ncbi.nlm.nih.gov/articles/PMC11220923/)
+riporta osservabili ma anche forti distorsioni locali; i file completi di
+[CG-SpoofGNSS](https://github.com/agilawood4/CG-SpoofGNSS) non risultano ancora
+rilasciati. Il passo ad alto valore è acquisire/qualificare tale registrazione
+cooperativa, non aggiungere altri sigilli o varianti JammerTest.
+
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
 riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.
 

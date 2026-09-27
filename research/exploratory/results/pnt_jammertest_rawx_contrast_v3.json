@@ -1,0 +1,239 @@
+{
+  "schema": "pnt-jammertest-rawx-contrast-v3",
+  "source": {
+    "url": "https://zenodo.org/records/15911589",
+    "archive_sha256": "73e78934aa00d01dfeebabc45f81b38c9c0aecf972f5fc94d9ff60527065b313",
+    "member": "Spoofing/stationary/Medium Power (_1W)/Bands_E1_L1/2.1.3,2.1.2,2.1.4/240911_075843.ubx",
+    "member_sha256": "65caa9bc90091e56b6c17d2d8f0d42c14c128e73a6e124e32e95ea06dd2baa45",
+    "station_sha256": {
+      "TRO100NOR": "45315eca5a5e65c58c419fd9a8ff51c35b93578585475bbe96bab6db29f40c54",
+      "KIRU00SWE": "950aa80894752f4bb6312373d69f343cdfc65570a81501c6cc05e1fb076aac1c"
+    },
+    "official_log_source_url": "https://www.jammertest.no/content/files/2026/05/Logg_Jammertest_2024_v1.xlsx",
+    "official_log_source_sha256": "4ef5091a4ee6489e8700b3495c51b4e99e9c37c138617c7c9c7f83f2047e60e2",
+    "official_log_extract_sha256": "ef1714297809f0226c41b1febb1cc9915800574d7d7c64d624ef2df6bf9445e4"
+  },
+  "time_basis": "5 Hz packet order anchored to first pre-test receiver GPST; not independent time",
+  "signal_basis": "local GPS L1 C/A minus L2 CL; remote C1C minus C2W; temporal changes only",
+  "raw_status": {
+    "dual_gps_measurements": 47642,
+    "dual_gps_packets": 11186,
+    "gps_signal_records": 226660,
+    "nav_pvt_packets": 3671,
+    "nonpositive_or_nonfinite_valid_flag_code": 45509,
+    "out_of_range_valid_flag_code": 7674,
+    "rawx_packets": 18355,
+    "ubx_packets": 60023,
+    "valid_gps_signal_records": 173477
+  },
+  "grid_status": {
+    "near_grid_packets": 122,
+    "selected_epochs": 81,
+    "selected_grid_satellites": 345
+  },
+  "receiver_time_discontinuity_count": 6,
+  "missing_simultaneous_satellite": {
+    "KIRU00SWE": 28,
+    "TRO100NOR": 2
+  },
+  "total_paired_count": 317,
+  "official_windows": [
+    {
+      "source_row": 352,
+      "test_id": "2.1.3",
+      "name": "Large position and time jump. Galileo E1 only",
+      "start_gpst_s": 28865,
+      "stop_gpst_s": 29765
+    },
+    {
+      "source_row": 353,
+      "test_id": "2.1.2",
+      "name": "Large position and time jump. GPS L1 C/A only",
+      "start_gpst_s": 30028,
+      "stop_gpst_s": 30928
+    },
+    {
+      "source_row": 354,
+      "test_id": "2.1.4",
+      "name": "Large position and time jump. GPS L1 and Galileo E1 only",
+      "start_gpst_s": 31235,
+      "stop_gpst_s": 32135
+    }
+  ],
+  "contrast": {
+    "baseline": "per-satellite median of scheduled-outside paired rows; remote stations centred separately",
+    "minimum_outside_per_satellite": 3,
+    "supported_satellites": [
+      "G03",
+      "G04",
+      "G06",
+      "G12",
+      "G17",
+      "G25",
+      "G28",
+      "G31",
+      "G32"
+    ],
+    "quantile": "nearest-rank 90th percentile of absolute change",
+    "reference_agreement_basis": "range of separately centred reference-station frequency-difference changes on each matched satellite and epoch; a small network median alone does not establish station agreement",
+    "groups": {
+      "outside_official_windows": {
+        "paired_count": 209,
+        "paired_epoch_count": 31,
+        "unsupported_satellite_pairs": 0,
+        "modes": {
+          "local": {
+            "median_absolute_m": 0.40303022786974907,
+            "p90_absolute_m": 1.9477235041558743,
+            "maximum_absolute_m": 5.682593608275056
+          },
+          "network": {
+            "median_absolute_m": 0.4114999994635582,
+            "p90_absolute_m": 1.8180000018328428,
+            "maximum_absolute_m": 4.4892499996349216
+          },
+          "combined": {
+            "median_absolute_m": 0.35014503449201584,
+            "p90_absolute_m": 0.9318275302648544,
+            "maximum_absolute_m": 1.8622536063194275
+          }
+        },
+        "reference_station_changes": {
+          "KIRU00SWE": {
+            "median_absolute_m": 0.5410000011324883,
+            "p90_absolute_m": 1.8829999975860119,
+            "maximum_absolute_m": 5.722500000149012
+          },
+          "TRO100NOR": {
+            "median_absolute_m": 0.4519999995827675,
+            "p90_absolute_m": 1.9810000024735928,
+            "maximum_absolute_m": 3.665999999269843
+          }
+        },
+        "reference_station_disagreement": {
+          "median_absolute_m": 0.42800000309944153,
+          "p90_absolute_m": 1.2589999996125698,
+          "maximum_absolute_m": 3.166999999433756
+        }
+      },
+      "2.1.3": {
+        "paired_count": 40,
+        "paired_epoch_count": 23,
+        "unsupported_satellite_pairs": 0,
+        "modes": {
+          "local": {
+            "median_absolute_m": 88.99886760860682,
+            "p90_absolute_m": 299.40490290522575,
+            "maximum_absolute_m": 989.9042253941298
+          },
+          "network": {
+            "median_absolute_m": 0.4817499993368983,
+            "p90_absolute_m": 2.0884999986737967,
+            "maximum_absolute_m": 2.3904999997466803
+          },
+          "combined": {
+            "median_absolute_m": 89.21886760927737,
+            "p90_absolute_m": 298.94590290635824,
+            "maximum_absolute_m": 990.9407253973186
+          }
+        },
+        "reference_station_changes": {
+          "KIRU00SWE": {
+            "median_absolute_m": 0.5339999999850988,
+            "p90_absolute_m": 2.2269999980926514,
+            "maximum_absolute_m": 2.7230000011622906
+          },
+          "TRO100NOR": {
+            "median_absolute_m": 0.5544999986886978,
+            "p90_absolute_m": 1.8829999975860119,
+            "maximum_absolute_m": 2.2259999997913837
+          }
+        },
+        "reference_station_disagreement": {
+          "median_absolute_m": 0.2530000004917383,
+          "p90_absolute_m": 0.8650000020861626,
+          "maximum_absolute_m": 1.2539999969303608
+        }
+      },
+      "2.1.2": {
+        "paired_count": 64,
+        "paired_epoch_count": 26,
+        "unsupported_satellite_pairs": 0,
+        "modes": {
+          "local": {
+            "median_absolute_m": 231.87632949836552,
+            "p90_absolute_m": 617.9477039072663,
+            "maximum_absolute_m": 2397970.7991684917
+          },
+          "network": {
+            "median_absolute_m": 0.2389999981969595,
+            "p90_absolute_m": 1.1899999994784594,
+            "maximum_absolute_m": 2.6132499994710088
+          },
+          "combined": {
+            "median_absolute_m": 232.023079498671,
+            "p90_absolute_m": 615.9644539086148,
+            "maximum_absolute_m": 2397973.071418491
+          }
+        },
+        "reference_station_changes": {
+          "KIRU00SWE": {
+            "median_absolute_m": 0.4580000005662441,
+            "p90_absolute_m": 1.5425000004470348,
+            "maximum_absolute_m": 3.7160000018775463
+          },
+          "TRO100NOR": {
+            "median_absolute_m": 0.2654999978840351,
+            "p90_absolute_m": 0.9869999997317791,
+            "maximum_absolute_m": 2.8969999980181456
+          }
+        },
+        "reference_station_disagreement": {
+          "median_absolute_m": 0.41074999887496233,
+          "p90_absolute_m": 1.2469999976456165,
+          "maximum_absolute_m": 2.8509999997913837
+        }
+      },
+      "2.1.4": {
+        "paired_count": 4,
+        "paired_epoch_count": 1,
+        "unsupported_satellite_pairs": 0,
+        "modes": {
+          "local": {
+            "median_absolute_m": 750136.5019571874,
+            "p90_absolute_m": 2697618.308156356,
+            "maximum_absolute_m": 2697618.308156356
+          },
+          "network": {
+            "median_absolute_m": 0.3652499997988343,
+            "p90_absolute_m": 0.4719999972730875,
+            "maximum_absolute_m": 0.4719999972730875
+          },
+          "combined": {
+            "median_absolute_m": 750136.8934571864,
+            "p90_absolute_m": 2697618.727656355,
+            "maximum_absolute_m": 2697618.727656355
+          }
+        },
+        "reference_station_changes": {
+          "KIRU00SWE": {
+            "median_absolute_m": 0.4379999991506338,
+            "p90_absolute_m": 0.7910000011324883,
+            "maximum_absolute_m": 0.7910000011324883
+          },
+          "TRO100NOR": {
+            "median_absolute_m": 0.5114999990910292,
+            "p90_absolute_m": 0.8049999997019768,
+            "maximum_absolute_m": 0.8049999997019768
+          }
+        },
+        "reference_station_disagreement": {
+          "median_absolute_m": 0.8490000031888485,
+          "p90_absolute_m": 0.9879999980330467,
+          "maximum_absolute_m": 0.9879999980330467
+        }
+      }
+    }
+  },
+  "scope": "Exposed attack recording, outside-window baseline also exposed; descriptive change, not calibrated detection, RF attribution or independent absolute time."
+}

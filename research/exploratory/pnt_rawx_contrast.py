@@ -37,6 +37,13 @@ def nearest_rank(values, proportion):
     return sorted(values)[math.ceil(len(values) * proportion) - 1]
 
 
+def absolute_summary(values):
+    values = [abs(value) for value in values]
+    return ({'median_absolute_m': median(values),
+             'p90_absolute_m': nearest_rank(values, 0.9),
+             'maximum_absolute_m': max(values)} if values else None)
+
+
 def analyze(paired, windows, minimum_outside_per_satellite=3,
             baseline_mode='outside'):
     """Centre on exposed control rows, then compare the same paired changes."""
@@ -80,28 +87,34 @@ def analyze(paired, windows, minimum_outside_per_satellite=3,
             unsupported[group_name] += 1
             continue
         local = row['local_l1_m'] - row['local_l2_m'] - baseline[satellite]['local']
-        network = median(row['references'][station]['c1c_m'] -
-                         row['references'][station]['c2w_m'] -
-                         baseline[satellite]['network'][station] for station in stations)
+        station_changes = {station: row['references'][station]['c1c_m'] -
+                           row['references'][station]['c2w_m'] -
+                           baseline[satellite]['network'][station] for station in stations}
+        network = median(station_changes.values())
         grouped[group_name].append({'time_s': row['time_s'], 'satellite': satellite,
                                     'local': local, 'network': network,
-                                    'combined': local - network})
+                                    'combined': local - network,
+                                    'station_changes': station_changes,
+                                    'station_disagreement': max(station_changes.values()) -
+                                    min(station_changes.values())})
     summaries = {}
     groups = (['pre_event', *(window['test_id'] for window in windows), 'post_event',
                'outside_official_windows'] if baseline_mode == 'pre-event' else
               ['outside_official_windows', *(window['test_id'] for window in windows)])
     for group_name in groups:
         rows = grouped[group_name]
-        modes = {}
-        for mode in MODES:
-            values = [abs(row[mode]) for row in rows]
-            modes[mode] = ({'median_absolute_m': median(values),
-                            'p90_absolute_m': nearest_rank(values, 0.9),
-                            'maximum_absolute_m': max(values)} if values else None)
+        modes = {mode: absolute_summary(row[mode] for row in rows)
+                 for mode in MODES}
         summaries[group_name] = {'paired_count': len(rows),
                                  'paired_epoch_count': len({row['time_s'] for row in rows}),
                                  'unsupported_satellite_pairs': unsupported[group_name],
-                                 'modes': modes}
+                                 'modes': modes,
+                                 'reference_station_changes': {
+                                     station: absolute_summary(row['station_changes'][station]
+                                                               for row in rows)
+                                     for station in stations},
+                                 'reference_station_disagreement': absolute_summary(
+                                     row['station_disagreement'] for row in rows)}
     baseline_description = ('per-satellite median of pre-event paired rows; '
                             'remote stations centred separately' if baseline_mode == 'pre-event'
                             else 'per-satellite median of scheduled-outside paired rows; '
@@ -110,6 +123,10 @@ def analyze(paired, windows, minimum_outside_per_satellite=3,
             'minimum_outside_per_satellite': minimum_outside_per_satellite,
             'supported_satellites': sorted(supported),
             'quantile': 'nearest-rank 90th percentile of absolute change',
+            'reference_agreement_basis': ('range of separately centred reference-station '
+                                          'frequency-difference changes on each matched '
+                                          'satellite and epoch; a small network median alone '
+                                          'does not establish station agreement'),
             'groups': summaries}
 
 
@@ -135,8 +152,7 @@ def run(archive, member, stations, day, windows_path, recover_corrupt=False,
         content = hatanaka.decompress(Path(path).read_bytes(), strict=True).decode('ascii')
         external[name], _ = reference_codes(content, day)
     paired, missing = pair(local, external)
-    return {'schema': 'pnt-jammertest-rawx-contrast-v2' if recover_corrupt or
-            baseline_mode != 'outside' else 'pnt-jammertest-rawx-contrast-v1',
+    return {'schema': 'pnt-jammertest-rawx-contrast-v3',
             'source': {'url': 'https://zenodo.org/records/15911589',
                        'archive_sha256': sha256(archive), 'member': member,
                        'member_sha256': hashlib.sha256(payload).hexdigest(),

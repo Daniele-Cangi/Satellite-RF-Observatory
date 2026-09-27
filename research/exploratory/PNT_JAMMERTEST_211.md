@@ -49,6 +49,16 @@ pre-event satellite support. Missing observations and local clock jumps are
 themselves important local controls; they cannot be hidden by selecting the
 surviving pairs.
 
+The [v3 station-agreement result]
+(results/pnt_jammertest_211_rawx_contrast_v3.json) checks that the small
+network aggregate is not just cancellation between the two references. On
+the 154 supported ramp pairs, median absolute changes are 0.51 m at KIRU,
+0.37 m at TRO1, and the median absolute difference between their separately
+centred changes is 0.55 m (1.38 m at the 90th percentile). Pre-event
+between-station disagreement is 0.42 m on 49 pairs. These are matched-row,
+in-sample descriptions; agreement of this one channel cannot rule out a
+common-mode disturbance or validate the local RF.
+
 As in the [first episode](PNT_JAMMERTEST_CONTRAST.md), local L2 CL and external
 C2W are different tracking codes. Temporal centring removes a static offset,
 not dynamic receiver biases. No fixed-site ground truth, independent clock,
@@ -68,3 +78,6 @@ Reproduce with the archive and same-day station files identified in the
 python -m research.exploratory.pnt_rawx_recovery ARCHIVE.tar.gz "Spoofing/stationary/Medium Power (_1W)/Bands_L1_L2_L5/2.1.1/240911_065707.ubx" 2024-09-11 TRO100NOR_S_20242550000_01D_30S_MO.crx.gz KIRU00SWE_R_20242550000_01D_30S_MO.crx.gz NEW_RECOVERY.json --windows research/exploratory/inputs/pnt_jammertest_211_windows.json --recover-corrupt
 python -m research.exploratory.pnt_rawx_contrast ARCHIVE.tar.gz "Spoofing/stationary/Medium Power (_1W)/Bands_L1_L2_L5/2.1.1/240911_065707.ubx" 2024-09-11 TRO100NOR_S_20242550000_01D_30S_MO.crx.gz KIRU00SWE_R_20242550000_01D_30S_MO.crx.gz NEW_CONTRAST.json --windows research/exploratory/inputs/pnt_jammertest_211_windows.json --recover-corrupt --baseline pre-event
 ```
+
+The current contrast command writes the v3 schema. The v2 report remains
+unchanged as historical evidence.

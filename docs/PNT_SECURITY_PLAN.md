@@ -218,6 +218,18 @@ causa probabile e attribuzione dell'attaccante; quest'ultima non deriva dal fit.
 | P4 — Pilota con flussi | Raccolta contemporanea, allarmi osservati dall'operatore e gestione di lacune/ritardi | Latenza, disponibilità e falsi allarmi compatibili con il caso d'uso scelto |
 | P5 — Integrazione | API/SIEM, policy del sito, documentazione e interfaccia | Evidenza sufficiente per la promessa specifica; autorizzazione al deployment |
 
+P2 produce già un confronto riproducibile tra osservazioni locali e due
+riferimenti esterni, inclusa la verifica che le stazioni non si annullino nella
+mediana. La capacità dimostrata per ora è un **rapporto riproducibile di
+contesto indipendente per un episodio offline**. Il beneficio di rilevamento
+rispetto ai controlli locali e l'autenticazione di posizione/tempo non sono
+dimostrati. La prossima prova per una rivendicazione più forte richiede un
+controllo benigno abbinato e un
+attacco con controlli locali plausibili, oltre a riferimenti contemporanei e
+tempo/verità indipendenti. I risultati e il vaglio delle fonti sono nello
+[stato del progetto](PROJECT_STATUS.md); non aprire P3 per compensare l'assenza
+di questi dati.
+
 ### Primo ciclo di lavoro: P0 e P1
 
 1. Usare un ricevitore del corpus esposto come vittima di sviluppo e gli altri
