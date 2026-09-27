@@ -26,31 +26,45 @@ RAWX = (0x02, 0x15)
 GPS_SIGNALS = {0: 'L1 C/A', 3: 'L2 CL'}
 
 
-def ubx_packets(content):
-    """Yield checksum-verified UBX packets amid any non-UBX stream bytes."""
+def ubx_packets(content, corrupt=None):
+    """Yield checksum-verified UBX packets; optionally count and skip damage.
+
+    Recovery is explicit and never accepts a damaged packet as evidence.
+    """
     offset = 0
     while (start := content.find(b'\xb5\x62', offset)) >= 0:
         if start + 8 > len(content):
+            if corrupt is not None:
+                corrupt['truncated_header'] += 1
+                break
             raise ValueError('truncated UBX header')
         length = int.from_bytes(content[start + 4:start + 6], 'little')
         end = start + 8 + length
         if end > len(content):
+            if corrupt is not None:
+                corrupt['truncated_payload'] += 1
+                offset = start + 1
+                continue
             raise ValueError('truncated UBX payload')
         check_a = check_b = 0
         for byte in content[start + 2:end - 2]:
             check_a = (check_a + byte) & 0xff
             check_b = (check_b + check_a) & 0xff
         if content[end - 2:end] != bytes((check_a, check_b)):
+            if corrupt is not None:
+                corrupt['bad_checksum'] += 1
+                offset = start + 1
+                continue
             raise ValueError('UBX checksum mismatch')
         yield (content[start + 2], content[start + 3],
                memoryview(content)[start + 6:end - 2])
         offset = end
 
 
-def rawx_epochs(content):
+def rawx_epochs(content, corrupt=None):
     """Read GPS L1 C/A and L2 CL code only when RAWX marks pseudorange valid."""
     epochs, counts = [], Counter()
-    for cls, message, payload in ubx_packets(content):
+    for cls, message, payload in ubx_packets(content, corrupt):
         counts['ubx_packets'] += 1
         if (cls, message) == (0x01, 0x07):
             counts['nav_pvt_packets'] += 1
@@ -101,8 +115,13 @@ def rawx_epochs(content):
     return epochs, dict(sorted(counts.items()))
 
 
-def capture_grid(epochs, day, rate_hz=5, tolerance_s=0.1):
-    """Pair by monotonic packet index, retaining receiver-time discontinuities."""
+def capture_grid(epochs, day, rate_hz=5, tolerance_s=0.1,
+                 infer_missing_packets=False):
+    """Pair by monotonic packet order, retaining receiver-time discontinuities.
+
+    An explicitly enabled short, integral receiver-time gap can account for
+    missing RAWX packets. Large clock jumps never change the capture order.
+    """
     if rate_hz != 5 or not 0 < tolerance_s < 0.1 + 1e-9:
         raise ValueError('unsupported capture cadence or grid tolerance')
     first = epochs[0]['receiver_time']
@@ -110,13 +129,21 @@ def capture_grid(epochs, day, rate_hz=5, tolerance_s=0.1):
         raise ValueError('first receiver epoch does not anchor selected day')
     first_s = (first - datetime.combine(day, datetime.min.time())).total_seconds()
     selected, counts, jumps = {}, Counter(), []
+    capture_tick = 0
     for index, epoch in enumerate(epochs):
-        capture_s = first_s + index / rate_hz
-        if not 0 <= capture_s < 86400:
-            raise ValueError('inferred capture time outside selected day')
         if index:
             before = epochs[index - 1]['receiver_time']
             delta = (epoch['receiver_time'] - before).total_seconds()
+            if infer_missing_packets and 0.3 <= delta <= 1.0:
+                ticks = round(delta * rate_hz)
+                if abs(delta - ticks / rate_hz) <= 0.05:
+                    counts['inferred_missing_rawx_packets'] += ticks - 1
+                    capture_tick += ticks - 1
+            capture_tick += 1
+        capture_s = first_s + capture_tick / rate_hz
+        if not 0 <= capture_s < 86400:
+            raise ValueError('inferred capture time outside selected day')
+        if index:
             if abs(delta - 1 / rate_hz) > 1:
                 jumps.append({'capture_gpst_s': round(capture_s, 3),
                               'receiver_before': before.isoformat(),
@@ -136,18 +163,24 @@ def capture_grid(epochs, day, rate_hz=5, tolerance_s=0.1):
                 selected[key] = candidate
     counts['selected_grid_satellites'] = len(selected)
     counts['selected_epochs'] = len({time for time, _ in selected})
+    if infer_missing_packets:
+        counts['last_inferred_capture_gpst_s'] = round(first_s + capture_tick / rate_hz, 3)
     return selected, jumps, dict(sorted(counts.items()))
 
 
-def run(archive, member, stations, day, windows_path):
+def run(archive, member, stations, day, windows_path, recover_corrupt=False):
     day = date.fromisoformat(day)
     with Path(windows_path).open(encoding='utf-8') as source:
         extract = json.load(source)
     windows = official_windows(extract, day)
     with tarfile.open(archive, 'r:gz') as source:
         payload = source.extractfile(member).read()
-    epochs, raw_status = rawx_epochs(payload)
-    local, jumps, grid_status = capture_grid(epochs, day)
+    corrupt = Counter() if recover_corrupt else None
+    epochs, raw_status = rawx_epochs(payload, corrupt)
+    if corrupt is not None:
+        raw_status['corrupt_ubx_packets_skipped'] = dict(sorted(corrupt.items()))
+    local, jumps, grid_status = capture_grid(
+        epochs, day, infer_missing_packets=recover_corrupt)
     hashes = {name: sha256(path) for name, path in stations.items()}
     if len(stations) < 2 or len(set(hashes.values())) != len(hashes):
         raise ValueError('two distinct external stations required')
@@ -173,20 +206,26 @@ def run(archive, member, stations, day, windows_path):
     for window in windows:
         counts[window['test_id']]['paired_epochs'] = len({row['time_s'] for row in paired
             if group(row['time_s']) == window['test_id']})
-    return {'schema': 'pnt-jammertest-rawx-recovery-v1',
+    return {'schema': ('pnt-jammertest-rawx-recovery-v2' if recover_corrupt
+                       else 'pnt-jammertest-rawx-recovery-v1'),
             'source': {'url': 'https://zenodo.org/records/15911589',
                        'archive_sha256': sha256(archive), 'member': member,
                        'member_sha256': hashlib.sha256(payload).hexdigest()},
             'rawx_protocol': 'https://content.u-blox.com/sites/default/files/documents/u-blox-F9-HPG-1.32_InterfaceDescription_UBX-22008968.pdf',
             'signals': {'local': 'GPS L1 C/A (gnssId 0, sigId 0), L2 CL (sigId 3), prValid',
                         'external': 'GPS C1C/C2W; L2 tracking code differs'},
-            'time_basis': '5 Hz packet order anchored to first pre-test receiver GPST; no independent capture clock',
+            'time_basis': ('5 Hz packet order with short RAWX gaps inferred; anchored to '
+                           'first pre-test receiver GPST; no independent capture clock'
+                           if recover_corrupt else
+                           '5 Hz packet order anchored to first pre-test receiver GPST; no independent capture clock'),
             'first_receiver_gpst': epochs[0]['receiver_time'].isoformat(),
             'last_receiver_gpst': epochs[-1]['receiver_time'].isoformat(),
-            'last_inferred_capture_gpst_s': round(first_s + (len(epochs) - 1) / 5, 3),
+            'last_inferred_capture_gpst_s': grid_status.get(
+                'last_inferred_capture_gpst_s', round(first_s + (len(epochs) - 1) / 5, 3)),
             'endpoint_receiver_minus_inferred_s': round(
                 (epochs[-1]['receiver_time'] - datetime.combine(day, datetime.min.time())).total_seconds()
-                - (first_s + (len(epochs) - 1) / 5), 3),
+                - grid_status.get('last_inferred_capture_gpst_s',
+                                  first_s + (len(epochs) - 1) / 5), 3),
             'raw_status': raw_status, 'grid_status': grid_status,
             'receiver_time_discontinuities': jumps,
             'official_log': {'source_url': extract['source_url'],
@@ -211,11 +250,13 @@ if __name__ == '__main__':
     parser.add_argument('station_b', type=Path)
     parser.add_argument('output', type=Path)
     parser.add_argument('--windows', type=Path, required=True)
+    parser.add_argument('--recover-corrupt', action='store_true',
+                        help='Count and skip damaged UBX packets; infer short RAWX gaps')
     args = parser.parse_args()
     report = run(args.archive, args.rawx_member,
                  {args.station_a.name.split('_')[0]: args.station_a,
                   args.station_b.name.split('_')[0]: args.station_b},
-                 args.day_gpst, args.windows)
+                 args.day_gpst, args.windows, recover_corrupt=args.recover_corrupt)
     with args.output.open('x', encoding='utf-8', newline='\n') as destination:
         json.dump(report, destination, indent=2, allow_nan=False)
         destination.write('\n')

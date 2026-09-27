@@ -28,3 +28,13 @@ def test_insufficient_outside_support_cannot_be_scored():
     with pytest.raises(ValueError, match='adequate outside-window support'):
         analyze([row(0), row(90, 20)],
                 [{'test_id': 'event', 'start_gpst_s': 90, 'stop_gpst_s': 120}])
+
+
+def test_pre_event_baseline_does_not_use_post_event_rows():
+    windows = [{'test_id': 'event', 'start_gpst_s': 90, 'stop_gpst_s': 120}]
+    rows = [row(t) for t in (0, 30, 60)] + [row(90, 5), row(120, 100)]
+    result = analyze(rows, windows, baseline_mode='pre-event')['groups']
+    assert result['pre_event']['paired_count'] == 3
+    assert result['event']['modes']['local']['median_absolute_m'] == 5
+    assert result['post_event']['modes']['local']['median_absolute_m'] == 100
+    assert result['outside_official_windows']['paired_count'] == 0

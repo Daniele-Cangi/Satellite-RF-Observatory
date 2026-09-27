@@ -1,0 +1,109 @@
+{
+  "schema": "pnt-jammertest-rawx-recovery-v2",
+  "source": {
+    "url": "https://zenodo.org/records/15911589",
+    "archive_sha256": "73e78934aa00d01dfeebabc45f81b38c9c0aecf972f5fc94d9ff60527065b313",
+    "member": "Spoofing/stationary/Medium Power (_1W)/Bands_L1_L2_L5/2.1.1/240911_065707.ubx",
+    "member_sha256": "05b41c23ea4ec35951bfc2d96b3638e104781c0c70e82ae23ab3adde626b749d"
+  },
+  "rawx_protocol": "https://content.u-blox.com/sites/default/files/documents/u-blox-F9-HPG-1.32_InterfaceDescription_UBX-22008968.pdf",
+  "signals": {
+    "local": "GPS L1 C/A (gnssId 0, sigId 0), L2 CL (sigId 3), prValid",
+    "external": "GPS C1C/C2W; L2 tracking code differs"
+  },
+  "time_basis": "5 Hz packet order with short RAWX gaps inferred; anchored to first pre-test receiver GPST; no independent capture clock",
+  "first_receiver_gpst": "2024-09-11T06:57:21.797000",
+  "last_receiver_gpst": "2024-09-11T07:39:05.399000",
+  "last_inferred_capture_gpst_s": 27545.397,
+  "endpoint_receiver_minus_inferred_s": 0.002,
+  "raw_status": {
+    "dual_gps_measurements": 35975,
+    "dual_gps_packets": 8445,
+    "gps_signal_records": 128679,
+    "nav_pvt_packets": 2503,
+    "nonpositive_or_nonfinite_valid_flag_code": 1983,
+    "out_of_range_valid_flag_code": 16059,
+    "rawx_packets": 12518,
+    "ubx_packets": 39503,
+    "valid_gps_signal_records": 110637,
+    "corrupt_ubx_packets_skipped": {
+      "bad_checksum": 2
+    }
+  },
+  "grid_status": {
+    "inferred_missing_rawx_packets": 1,
+    "last_inferred_capture_gpst_s": 27545.397,
+    "near_grid_packets": 84,
+    "selected_epochs": 56,
+    "selected_grid_satellites": 245
+  },
+  "receiver_time_discontinuities": [
+    {
+      "capture_gpst_s": 26906.797,
+      "receiver_before": "2024-09-11T07:28:26.598000",
+      "receiver_after": "2024-09-10T12:27:19.800000",
+      "receiver_jump_s": -68466.798
+    },
+    {
+      "capture_gpst_s": 27429.197,
+      "receiver_before": "2024-09-10T12:36:02",
+      "receiver_after": "2024-09-11T07:37:09.239000",
+      "receiver_jump_s": 68467.239
+    }
+  ],
+  "official_log": {
+    "source_url": "https://www.jammertest.no/content/files/2026/05/Logg_Jammertest_2024_v1.xlsx",
+    "source_sha256": "4ef5091a4ee6489e8700b3495c51b4e99e9c37c138617c7c9c7f83f2047e60e2",
+    "extract_sha256": "eef1ce9b27d0152dfe463385cc80f2e92f11562dbdc4477ad457d7d9a0c83aac"
+  },
+  "official_windows": [
+    {
+      "source_row": "341-351",
+      "test_id": "2.1.1",
+      "name": "Stationary power-ramped spoofing; eleven contiguous log rows",
+      "start_gpst_s": 25259,
+      "stop_gpst_s": 27427
+    }
+  ],
+  "window_coverage_by_inferred_capture_time": {
+    "2.1.1": {
+      "clock_reset_flags": 1,
+      "dual_gps_measurements": 24944,
+      "paired_epochs": 39,
+      "paired_rows": 166,
+      "rawx_packets": 10840
+    },
+    "outside_official_windows": {
+      "clock_reset_flags": 2,
+      "dual_gps_measurements": 11031,
+      "paired_rows": 65,
+      "rawx_packets": 1678
+    }
+  },
+  "stations": {
+    "TRO100NOR": {
+      "file_sha256": "45315eca5a5e65c58c419fd9a8ff51c35b93578585475bbe96bab6db29f40c54",
+      "status": {
+        "gps_rows": 33613,
+        "invalid_dual_code": 311,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 33302
+      }
+    },
+    "KIRU00SWE": {
+      "file_sha256": "950aa80894752f4bb6312373d69f343cdfc65570a81501c6cc05e1fb076aac1c",
+      "status": {
+        "gps_rows": 33448,
+        "missing_dual_code": 2341,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 31107
+      }
+    }
+  },
+  "missing_simultaneous_satellite": {
+    "KIRU00SWE": 14
+  },
+  "paired_count": 231,
+  "paired_epoch_count": 50,
+  "scope": "Recovered raw code and clock behavior; no detector threshold, attack attribution or independent absolute time."
+}
