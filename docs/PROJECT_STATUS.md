@@ -81,6 +81,13 @@ certificato; il CSV non identifica senza ambiguità i codici e il registro
 secondario contraddice i nomi degli scenari. Il rapporto fissa i dati minimi da
 ottenere per la prossima prova, senza introdurre nuovi sigilli o soglie.
 
+L'[intake RINEX per sito fisso](../research/exploratory/PNT_FIXED_SITE_INTAKE.md)
+riusa il parser e l'abbinamento esistenti: su tre stazioni pubbliche distinte
+del giorno 255/2024 trova 28.515 righe satellite-epoca comuni in 2.880 epoche,
+con 8–12 satelliti per epoca. È una verifica della disponibilità dei dati,
+senza etichette d'attacco, verità locale indipendente o misura del beneficio
+della rete. La registrazione decisiva descritta sopra resta da ottenere.
+
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
 riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.
 

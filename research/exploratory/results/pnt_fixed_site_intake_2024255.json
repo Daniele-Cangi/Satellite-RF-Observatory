@@ -1,0 +1,112 @@
+{
+  "schema": "pnt-fixed-site-rinex-intake-v1",
+  "day_gpst": "2024-09-11",
+  "signals": "GPS RINEX C1C/C2W at local and external receivers",
+  "local": {
+    "file": "NYA200NOR_R_20242550000_01D_30S_MO.crx.gz",
+    "sha256": "1bd263249839795fe24ac86a2df362d89bf6fe0658b08f635772efbd3c7ab7e0",
+    "marker_name": "NYA200NOR",
+    "declared_approx_xyz_m": [
+      1202379.31,
+      252474.6543,
+      6237786.5417
+    ],
+    "code_status": {
+      "gps_rows": 35067,
+      "missing_dual_code": 362,
+      "ordinary_epochs": 2880,
+      "selected_grid_satellites": 34705
+    }
+  },
+  "references": {
+    "KIRU00SWE": {
+      "file": "KIRU00SWE_R_20242550000_01D_30S_MO.crx.gz",
+      "sha256": "950aa80894752f4bb6312373d69f343cdfc65570a81501c6cc05e1fb076aac1c",
+      "marker_name": "KIRU00SWE",
+      "declared_approx_xyz_m": [
+        2251420.932,
+        862817.14,
+        5885476.604
+      ],
+      "code_status": {
+        "gps_rows": 33448,
+        "missing_dual_code": 2341,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 31107
+      }
+    },
+    "TRO100NOR": {
+      "file": "TRO100NOR_S_20242550000_01D_30S_MO.crx.gz",
+      "sha256": "45315eca5a5e65c58c419fd9a8ff51c35b93578585475bbe96bab6db29f40c54",
+      "marker_name": "TRO1",
+      "declared_approx_xyz_m": [
+        2102928.8112,
+        721619.348,
+        5958196.1255
+      ],
+      "code_status": {
+        "gps_rows": 33613,
+        "invalid_dual_code": 311,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 33302
+      }
+    }
+  },
+  "local_code_rows": 34705,
+  "local_code_epochs": 2880,
+  "paired_rows": 28515,
+  "paired_epochs": 2880,
+  "local_epochs_without_pair": 0,
+  "paired_satellites_per_epoch": {
+    "8": 212,
+    "9": 727,
+    "10": 1241,
+    "11": 534,
+    "12": 166
+  },
+  "paired_satellites": [
+    "G02",
+    "G03",
+    "G04",
+    "G05",
+    "G06",
+    "G07",
+    "G08",
+    "G09",
+    "G10",
+    "G11",
+    "G12",
+    "G13",
+    "G14",
+    "G15",
+    "G16",
+    "G17",
+    "G18",
+    "G19",
+    "G20",
+    "G21",
+    "G22",
+    "G23",
+    "G24",
+    "G25",
+    "G26",
+    "G27",
+    "G28",
+    "G29",
+    "G30",
+    "G31",
+    "G32"
+  ],
+  "missing_simultaneous_satellite": {
+    "KIRU00SWE": 5317,
+    "TRO100NOR": 3546
+  },
+  "paired_coverage_runs": [
+    {
+      "first_gpst_s": 0,
+      "last_gpst_s": 86370,
+      "epoch_count": 2880
+    }
+  ],
+  "scope": "Structural same-epoch/satellite availability only. RINEX approximate coordinates are declarations, not independently surveyed truth. Receiver GPST is not an independent capture clock. No event labels, attack decision, RF authenticity or network detection gain."
+}
