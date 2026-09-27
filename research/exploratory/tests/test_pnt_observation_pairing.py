@@ -59,6 +59,10 @@ def test_external_parser_and_two_station_pairing():
 def test_reference_time_and_header_changes_fail_closed():
     with pytest.raises(ValueError, match='time scale'):
         pairing.reference_codes(rinex(time_scale='UTC'), DAY)
+    second_time = f'{"  2024     9    11     0     0    0.0000000     UTC":<60}' \
+                  f'{"TIME OF FIRST OBS":<20}'
+    with pytest.raises(ValueError, match='exactly one TIME OF FIRST OBS'):
+        pairing.reference_codes(rinex(extra_header=second_time), DAY)
     with pytest.raises(ValueError, match='nonstandard'):
         pairing.reference_codes(rinex(flag=4), DAY)
     correction = f'{"G  1  1.0 C1C":<60}{"SYS / SCALE FACTOR":<20}'

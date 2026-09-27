@@ -99,7 +99,10 @@ def reference_codes(content, day):
         raise ValueError('expected RINEX 3 observations')
     if not {'C1C', 'C2W'} <= set(types):
         raise ValueError('external GPS C1C/C2W missing')
-    if headers.get('TIME OF FIRST OBS', [''])[0][48:51] != 'GPS':
+    time_headers = headers.get('TIME OF FIRST OBS', [])
+    if len(time_headers) != 1:
+        raise ValueError('exactly one TIME OF FIRST OBS required')
+    if time_headers[0][48:51] != 'GPS':
         raise ValueError('external time scale is not GPST')
     if any(key in headers for key in ('SYS / SCALE FACTOR', 'SYS / DCBS APPLIED', 'SYS / PCVS APPLIED')):
         raise ValueError('unqualified applied RINEX correction')
