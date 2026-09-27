@@ -1,0 +1,18 @@
+{
+  "schema": "pnt-jammertest-official-windows-v1",
+  "source_url": "https://www.jammertest.no/content/files/2026/05/Logg_Jammertest_2024_v1.xlsx",
+  "source_sha256": "4ef5091a4ee6489e8700b3495c51b4e99e9c37c138617c7c9c7f83f2047e60e2",
+  "sheet": "Site 1 - Bleik",
+  "source_time_zone": "CEST (UTC+02:00)",
+  "gpst_minus_utc_seconds_on_date": 18,
+  "date": "2024-09-11",
+  "rows": [
+    {
+      "source_row": "341-351",
+      "test_id": "2.1.1",
+      "name": "Stationary power-ramped spoofing; eleven contiguous log rows",
+      "start_cest": "09:00:41",
+      "stop_cest": "09:36:49"
+    }
+  ]
+}

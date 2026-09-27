@@ -225,6 +225,8 @@ research/exploratory/results/*
 !research/exploratory/results/pnt_jammertest_pairing_v1.json
 !research/exploratory/results/pnt_jammertest_rawx_recovery_v1.json
 !research/exploratory/results/pnt_jammertest_rawx_contrast_v1.json
+!research/exploratory/results/pnt_jammertest_211_rawx_recovery_v2.json
+!research/exploratory/results/pnt_jammertest_211_rawx_contrast_v2.json
 !research/exploratory/results/g14_reference_product_discrepancy_v1.json
 !research/exploratory/results/g12_reference_product_discrepancy_v1.json
 !research/exploratory/results/g14_reference_ray_projection_v1.json

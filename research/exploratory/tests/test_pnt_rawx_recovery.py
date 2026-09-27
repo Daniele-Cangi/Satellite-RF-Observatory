@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import date, datetime, timedelta
 import struct
 
@@ -53,3 +54,35 @@ def test_packet_order_preserves_capture_grid_across_receiver_time_jump():
     assert status['selected_grid_satellites'] == 1
     assert len(jumps) == 1
     assert jumps[0]['receiver_jump_s'] == -72000.
+
+
+def test_explicit_corruption_recovery_skips_only_bad_frame():
+    first = rawx_packet(288000, [(3, 0, 21000000., True),
+                                 (3, 3, 21000005., True)])
+    damaged = bytearray(first)
+    damaged[-1] ^= 1
+    last = rawx_packet(288000.4, [(3, 0, 21000001., True),
+                                  (3, 3, 21000006., True)])
+    stream = first + damaged + last
+    with pytest.raises(ValueError, match='checksum'):
+        recovery.rawx_epochs(stream)
+    corrupt = Counter()
+    epochs, status = recovery.rawx_epochs(stream, corrupt)
+    assert len(epochs) == 2
+    assert status['dual_gps_measurements'] == 2
+    assert corrupt == {'bad_checksum': 1}
+
+
+def test_inferred_missing_rawx_packet_restores_capture_grid():
+    first = datetime(2024, 9, 11, 8)
+    epochs = [{'receiver_time': first + timedelta(seconds=tick / 5),
+               'dual': {'G03': (21000000., 21000005.)}}
+              for tick in range(151) if tick != 75]
+    plain, _, _ = recovery.capture_grid(epochs, first.date())
+    recovered, jumps, status = recovery.capture_grid(
+        epochs, first.date(), infer_missing_packets=True)
+    assert (28830, 'G03') not in plain
+    assert (28830, 'G03') in recovered
+    assert status['inferred_missing_rawx_packets'] == 1
+    assert status['last_inferred_capture_gpst_s'] == 28830
+    assert not jumps

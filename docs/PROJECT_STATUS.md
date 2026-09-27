@@ -1,4 +1,4 @@
-# Stato del progetto — 26 settembre 2026
+# Stato del progetto — 27 settembre 2026
 
 ## Obiettivo
 
@@ -33,6 +33,19 @@ molto maggiori di quelle esterne durante i test, ma la combinazione resta
 simile al controllo locale: un vantaggio di rilevamento dato dalla rete non e
 ancora dimostrato. Nessun tasso di rilevamento o falso allarme e misurato.
 Il sito segue la prova fisica.
+
+Il [secondo episodio stazionario P2]
+(../research/exploratory/PNT_JAMMERTEST_211.md) aggiunge una rampa ufficiale
+di 36 minuti dello stesso archivio. Il parser conserva due pacchetti UBX con
+checksum errato come scarti espliciti e ricostruisce un intervallo RAWX mancante.
+Si ottengono 231 coppie a tre ricevitori; nella rampa 154 coppie con supporto
+pre-evento mostrano variazioni mediane di 0,71 m locali e 0,78 m combinate.
+Il ricevitore presenta inoltre un salto del proprio tempo di circa 19 ore.
+Neppure questo caso dimostra vantaggio di rilevamento della rete rispetto ai
+controlli locali. P2 resta aperto: servono un controllo benigno abbinato e un
+attacco in cui l'evidenza locale non sia già decisiva, oppure va limitata la
+rivendicazione del prodotto al contesto indipendente dell'incidente. Ulteriori
+varianti amministrative dello stesso confronto non sostituiscono quei dati.
 
 Il lavoro inverso resta una base scientifica riutilizzabile, con i limiti sotto
 riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.
@@ -104,8 +117,8 @@ puo sostituire queste verifiche sperimentali.
 
 ## Consegne e passi residui del percorso inverso
 
-Il riepilogo seguente conserva il percorso S2/S3. Le nuove priorita operative
-sono P0/P1 nel piano PNT, non la prosecuzione automatica di ogni voce storica.
+Il riepilogo seguente conserva il percorso S2/S3. La priorita operativa e P2
+nel piano PNT, non la prosecuzione automatica di ogni voce storica.
 
 1. Collegamento meteorologico consegnato sulle due finestre esposte: griglie
    alle coordinate ammesse, 88 confronti numerici con la routine originale e

@@ -37,16 +37,28 @@ def nearest_rank(values, proportion):
     return sorted(values)[math.ceil(len(values) * proportion) - 1]
 
 
-def analyze(paired, windows, minimum_outside_per_satellite=3):
-    """Centre each observable on scheduled-outside rows, then compare changes."""
+def analyze(paired, windows, minimum_outside_per_satellite=3,
+            baseline_mode='outside'):
+    """Centre on exposed control rows, then compare the same paired changes."""
     if minimum_outside_per_satellite < 1:
         raise ValueError('positive baseline support required')
+    if baseline_mode not in ('outside', 'pre-event'):
+        raise ValueError('unsupported baseline mode')
     stations = sorted(paired[0]['references']) if paired else []
     if len(stations) < 2:
         raise ValueError('two external stations required')
+    def group(time_s):
+        if baseline_mode == 'pre-event':
+            if time_s < windows[0]['start_gpst_s']:
+                return 'pre_event'
+            if time_s >= windows[-1]['stop_gpst_s']:
+                return 'post_event'
+        return window_id(time_s, windows)
+
+    control_group = 'pre_event' if baseline_mode == 'pre-event' else 'outside_official_windows'
     outside = defaultdict(list)
     for row in paired:
-        if window_id(row['time_s'], windows) == 'outside_official_windows':
+        if group(row['time_s']) == control_group:
             outside[row['satellite']].append(row)
     supported = {satellite: rows for satellite, rows in outside.items()
                  if len(rows) >= minimum_outside_per_satellite}
@@ -62,48 +74,59 @@ def analyze(paired, windows, minimum_outside_per_satellite=3):
         }
     grouped, unsupported = defaultdict(list), Counter()
     for row in paired:
-        group = window_id(row['time_s'], windows)
+        group_name = group(row['time_s'])
         satellite = row['satellite']
         if satellite not in baseline:
-            unsupported[group] += 1
+            unsupported[group_name] += 1
             continue
         local = row['local_l1_m'] - row['local_l2_m'] - baseline[satellite]['local']
         network = median(row['references'][station]['c1c_m'] -
                          row['references'][station]['c2w_m'] -
                          baseline[satellite]['network'][station] for station in stations)
-        grouped[group].append({'time_s': row['time_s'], 'satellite': satellite,
-                               'local': local, 'network': network,
-                               'combined': local - network})
+        grouped[group_name].append({'time_s': row['time_s'], 'satellite': satellite,
+                                    'local': local, 'network': network,
+                                    'combined': local - network})
     summaries = {}
-    for group in ['outside_official_windows', *(window['test_id'] for window in windows)]:
-        rows = grouped[group]
+    groups = (['pre_event', *(window['test_id'] for window in windows), 'post_event',
+               'outside_official_windows'] if baseline_mode == 'pre-event' else
+              ['outside_official_windows', *(window['test_id'] for window in windows)])
+    for group_name in groups:
+        rows = grouped[group_name]
         modes = {}
         for mode in MODES:
             values = [abs(row[mode]) for row in rows]
             modes[mode] = ({'median_absolute_m': median(values),
                             'p90_absolute_m': nearest_rank(values, 0.9),
                             'maximum_absolute_m': max(values)} if values else None)
-        summaries[group] = {'paired_count': len(rows),
-                            'paired_epoch_count': len({row['time_s'] for row in rows}),
-                            'unsupported_satellite_pairs': unsupported[group],
-                            'modes': modes}
-    return {'baseline': 'per-satellite median of scheduled-outside paired rows; '
-                        'remote stations centred separately',
+        summaries[group_name] = {'paired_count': len(rows),
+                                 'paired_epoch_count': len({row['time_s'] for row in rows}),
+                                 'unsupported_satellite_pairs': unsupported[group_name],
+                                 'modes': modes}
+    baseline_description = ('per-satellite median of pre-event paired rows; '
+                            'remote stations centred separately' if baseline_mode == 'pre-event'
+                            else 'per-satellite median of scheduled-outside paired rows; '
+                                 'remote stations centred separately')
+    return {'baseline': baseline_description,
             'minimum_outside_per_satellite': minimum_outside_per_satellite,
             'supported_satellites': sorted(supported),
             'quantile': 'nearest-rank 90th percentile of absolute change',
             'groups': summaries}
 
 
-def run(archive, member, stations, day, windows_path):
+def run(archive, member, stations, day, windows_path, recover_corrupt=False,
+        baseline_mode='outside'):
     day = date.fromisoformat(day)
     with Path(windows_path).open(encoding='utf-8') as source:
         extract = json.load(source)
     windows = official_windows(extract, day)
     with tarfile.open(archive, 'r:gz') as source:
         payload = source.extractfile(member).read()
-    epochs, raw_status = rawx_epochs(payload)
-    local, jumps, grid_status = capture_grid(epochs, day)
+    corrupt = Counter() if recover_corrupt else None
+    epochs, raw_status = rawx_epochs(payload, corrupt)
+    if corrupt is not None:
+        raw_status['corrupt_ubx_packets_skipped'] = dict(sorted(corrupt.items()))
+    local, jumps, grid_status = capture_grid(
+        epochs, day, infer_missing_packets=recover_corrupt)
     hashes = {name: sha256(path) for name, path in stations.items()}
     if len(stations) < 2 or len(set(hashes.values())) != len(hashes):
         raise ValueError('two distinct external stations required')
@@ -112,7 +135,8 @@ def run(archive, member, stations, day, windows_path):
         content = hatanaka.decompress(Path(path).read_bytes(), strict=True).decode('ascii')
         external[name], _ = reference_codes(content, day)
     paired, missing = pair(local, external)
-    return {'schema': 'pnt-jammertest-rawx-contrast-v1',
+    return {'schema': 'pnt-jammertest-rawx-contrast-v2' if recover_corrupt or
+            baseline_mode != 'outside' else 'pnt-jammertest-rawx-contrast-v1',
             'source': {'url': 'https://zenodo.org/records/15911589',
                        'archive_sha256': sha256(archive), 'member': member,
                        'member_sha256': hashlib.sha256(payload).hexdigest(),
@@ -120,14 +144,16 @@ def run(archive, member, stations, day, windows_path):
                        'official_log_source_url': extract['source_url'],
                        'official_log_source_sha256': extract['source_sha256'],
                        'official_log_extract_sha256': sha256(windows_path)},
-            'time_basis': '5 Hz packet order anchored to first pre-test receiver GPST; not independent time',
+            'time_basis': ('5 Hz packet order with short RAWX gaps inferred; anchored to first '
+                           'pre-test receiver GPST; not independent time' if recover_corrupt else
+                           '5 Hz packet order anchored to first pre-test receiver GPST; not independent time'),
             'signal_basis': 'local GPS L1 C/A minus L2 CL; remote C1C minus C2W; temporal changes only',
             'raw_status': raw_status, 'grid_status': grid_status,
             'receiver_time_discontinuity_count': len(jumps),
             'missing_simultaneous_satellite': missing,
             'total_paired_count': len(paired),
             'official_windows': windows,
-            'contrast': analyze(paired, windows),
+            'contrast': analyze(paired, windows, baseline_mode=baseline_mode),
             'scope': 'Exposed attack recording, outside-window baseline also exposed; descriptive change, not calibrated detection, RF attribution or independent absolute time.'}
 
 
@@ -140,11 +166,15 @@ if __name__ == '__main__':
     parser.add_argument('station_b', type=Path)
     parser.add_argument('output', type=Path)
     parser.add_argument('--windows', type=Path, required=True)
+    parser.add_argument('--recover-corrupt', action='store_true',
+                        help='Count and skip damaged UBX packets; infer short RAWX gaps')
+    parser.add_argument('--baseline', choices=('outside', 'pre-event'), default='outside')
     args = parser.parse_args()
     report = run(args.archive, args.rawx_member,
                  {args.station_a.name.split('_')[0]: args.station_a,
                   args.station_b.name.split('_')[0]: args.station_b},
-                 args.day_gpst, args.windows)
+                 args.day_gpst, args.windows, recover_corrupt=args.recover_corrupt,
+                 baseline_mode=args.baseline)
     with args.output.open('x', encoding='utf-8', newline='\n') as destination:
         json.dump(report, destination, indent=2, allow_nan=False)
         destination.write('\n')
