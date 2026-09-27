@@ -119,3 +119,9 @@ python -m pytest research/exploratory/tests/test_pnt_local_network.py -q
 [texbat]: https://radionavlab.ae.utexas.edu/texbat/
 [fgi]: https://www.maanmittauslaitos.fi/en/research/research/gnss-specialists/fgi-gnss-jamming-and-spoofing-dataset-repository-fgi-jsdr
 [fleet]: https://doi.org/10.57745/3C63J0
+
+Subsequent exposed-data work found UT's processed TEXBAT observables and
+simultaneous NOAA C1 from TXAU/SAM2; see [the separate TEXBAT/NOAA contrast]
+(PNT_TEXBAT_NOAA.md). The original cycle's decision and counts above are
+retained as reported. The new pairing still lacks an independent time witness
+and does not demonstrate network detection advantage.

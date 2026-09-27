@@ -62,15 +62,25 @@ del timestamp e non dichiarare un beneficio di rilevamento della rete. La
 prova successiva richiede nello stesso sito un periodo benigno e un attacco
 meno evidente localmente, osservazioni grezze locali con qualità/clock/PVT,
 due riferimenti contemporanei e una base temporale o verità indipendente.
-La ricerca mirata di fonti pubbliche non ha ancora trovato questa combinazione:
-[TEXBAT](https://radionavlab.ae.utexas.edu/texbat/) e
-[FGI-JSDR](https://www.maanmittauslaitos.fi/en/research/research/gnss-specialists/fgi-gnss-jamming-and-spoofing-dataset-repository-fgi-jsdr)
-pubblicano soprattutto RF da elaborare; il
+Una [nuova qualifica TEXBAT/NOAA]
+(../research/exploratory/PNT_TEXBAT_NOAA.md) ha trovato osservabili TEXBAT
+gia elaborati e due stazioni fisicamente distinte con GPS C1 contemporaneo. Nel ds7
+time-push, 110 coppie su dieci epoche mostrano una variazione mediana locale
+di 168,86 m, contro 0,53 m nelle differenze fra satelliti: una modalita cieca
+della sola geometria differenziale. Il confronto usa cleanStatic come
+controfattuale esposto; non dimostra un allarme di rete, un clock indipendente
+o un vantaggio a pari falsi allarmi. La combinazione completa richiesta da P2
+resta dunque da dimostrare. [FGI-JSDR]
+(https://www.maanmittauslaitos.fi/en/research/research/gnss-specialists/fgi-gnss-jamming-and-spoofing-dataset-repository-fgi-jsdr)
+pubblica soprattutto RF da elaborare; il
 [corpus di Kunming](https://pmc.ncbi.nlm.nih.gov/articles/PMC11220923/)
 riporta osservabili ma anche forti distorsioni locali; i file completi di
 [CG-SpoofGNSS](https://github.com/agilawood4/CG-SpoofGNSS) non risultano ancora
-rilasciati. Il passo ad alto valore è acquisire/qualificare tale registrazione
-cooperativa, non aggiungere altri sigilli o varianti JammerTest.
+rilasciati. Il passo ad alto valore e verificare se un modello di rete
+calibrato solo sui riferimenti rende osservabile il clock locale senza usare
+l'output attaccato come verita; se manca una base indipendente difendibile,
+serve una registrazione cooperativa. Non servono altri sigilli o varianti
+JammerTest.
 
 La [qualifica mirata di una traiettoria simulata]
 (../research/exploratory/PNT_P2_RECORDING_DECISION.md) mostra perché un'altra
