@@ -82,3 +82,22 @@ def test_official_cest_windows_convert_to_gpst_and_reject_ambiguity():
     changed['rows'][1] = {**changed['rows'][1], 'start_cest': '10:10:00'}
     with pytest.raises(ValueError, match='overlapping'):
         pairing.official_windows(changed, DAY)
+
+
+def test_segmented_coverage_does_not_merge_gap_into_benign_control():
+    windows = [{'test_id': 'first', 'start_gpst_s': 30, 'stop_gpst_s': 60},
+               {'test_id': 'second', 'start_gpst_s': 90, 'stop_gpst_s': 120}]
+    local = {(t, 'G01'): None for t in (0, 30, 60, 90, 120)}
+    local[(90, 'G02')] = None
+    paired = [{'time_s': t, 'satellite': 'G01'} for t in (0, 60, 90, 120)]
+    intervals = pairing.segmented_coverage(local, paired, windows)
+    assert [(row['kind'], row['test_id'], row['local_dual_rows'], row['paired_rows'])
+            for row in intervals] == [
+                ('pre_event', None, 1, 1),
+                ('official_window', 'first', 1, 0),
+                ('between_events', None, 1, 1),
+                ('official_window', 'second', 2, 1),
+                ('post_event', None, 1, 1),
+            ]
+    assert intervals[3]['paired_satellites'] == ['G01']
+    assert intervals[3]['local_epochs'] == intervals[3]['paired_epochs'] == 1

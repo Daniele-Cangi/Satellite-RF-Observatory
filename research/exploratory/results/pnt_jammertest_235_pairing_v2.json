@@ -1,0 +1,208 @@
+{
+  "schema": "pnt-exposed-observation-pairing-v2",
+  "source": {
+    "url": "https://zenodo.org/records/15911589",
+    "archive_sha256": "73e78934aa00d01dfeebabc45f81b38c9c0aecf972f5fc94d9ff60527065b313",
+    "member": "Spoofing/stationary/Medium Power (_1W)/Bands_E1_E5_L1_L2_L5/2.3.5,2.3.8/rinex.csv",
+    "scenario_id": "2.3.5,2.3.8",
+    "declared_attack_log": [
+      {
+        "timestamp_utc": "2024-09-11T15:25:00Z",
+        "event": "Initial jamming started (sub-scenario 2.2.3)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T15:36:00Z",
+        "event": "Initial jamming ended (sub-scenario 2.2.3)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T15:40:00Z",
+        "event": "Continuous jamming started on other bands (sub-scenario 2.3.3)"
+      },
+      {
+        "timestamp_utc": "2024-09-11T15:50:30Z",
+        "event": "Continuous jamming ended (sub-scenario 2.3.3)"
+      }
+    ]
+  },
+  "date_gpst": "2024-09-11",
+  "local_time_interpretation": "CSV time provisionally treated as GPST; derived from receiver, not an independent clock.",
+  "local_signals": "unqualified dataset pseudorange_L1/pseudorange_L2 labels",
+  "external_signals": "RINEX GPS C1C/C2W",
+  "local_status": {
+    "ambiguous_dual_code_columns": 1393,
+    "gps_rows": 64613,
+    "missing_dual_code": 47254,
+    "near_grid_rows": 590,
+    "non_gps_rows": 258314,
+    "off_grid": 15376,
+    "repeated_grid_satellite": 455,
+    "selected_epochs": 31,
+    "selected_grid_satellites": 135,
+    "source_rows": 322927
+  },
+  "stations": {
+    "TRO100NOR": {
+      "file_sha256": "45315eca5a5e65c58c419fd9a8ff51c35b93578585475bbe96bab6db29f40c54",
+      "status": {
+        "gps_rows": 33613,
+        "invalid_dual_code": 311,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 33302
+      }
+    },
+    "KIRU00SWE": {
+      "file_sha256": "950aa80894752f4bb6312373d69f343cdfc65570a81501c6cc05e1fb076aac1c",
+      "status": {
+        "gps_rows": 33448,
+        "missing_dual_code": 2341,
+        "ordinary_epochs": 2880,
+        "selected_grid_satellites": 31107
+      }
+    }
+  },
+  "missing_simultaneous_satellite": {
+    "KIRU00SWE": 11
+  },
+  "paired_count": 124,
+  "paired_epoch_count": 31,
+  "paired_satellites": [
+    "G05",
+    "G07",
+    "G09",
+    "G11",
+    "G16",
+    "G18",
+    "G20",
+    "G26",
+    "G27",
+    "G29",
+    "G30"
+  ],
+  "first_paired_gpst_s": 48240,
+  "last_paired_gpst_s": 49920,
+  "maximum_selected_time_offset_s": 0.0029999999969732016,
+  "official_event_coverage": {
+    "source_url": "https://www.jammertest.no/content/files/2026/05/Logg_Jammertest_2024_v1.xlsx",
+    "source_sha256": "4ef5091a4ee6489e8700b3495c51b4e99e9c37c138617c7c9c7f83f2047e60e2",
+    "extract_sha256": "3946569f7389537027d58df4dd607e9043b24d2b064e6a56b2a53832cdabcd9a",
+    "sheet": "Site 1 - Bleik",
+    "conversion": "CEST - 2 hours + 18 seconds = GPST (2024-09-11)",
+    "windows": [
+      {
+        "source_row": 375,
+        "test_id": "2.3.8",
+        "name": "Simulated driving, Galileo only",
+        "start_gpst_s": 48333,
+        "stop_gpst_s": 48995
+      },
+      {
+        "source_row": 376,
+        "test_id": "2.3.5",
+        "name": "Simulated driving, GPS only",
+        "start_gpst_s": 49234,
+        "stop_gpst_s": 49849
+      }
+    ],
+    "paired_rows_by_receiver_time": {
+      "2.3.5": 33,
+      "2.3.8": 1,
+      "outside_official_windows": 90
+    },
+    "paired_epochs_by_receiver_time": {
+      "2.3.8": 1,
+      "2.3.5": 16
+    },
+    "segmented_coverage": [
+      {
+        "kind": "pre_event",
+        "test_id": null,
+        "start_gpst_s": 0,
+        "stop_gpst_s": 48333,
+        "local_dual_rows": 24,
+        "local_epochs": 3,
+        "paired_rows": 20,
+        "paired_epochs": 3,
+        "paired_satellites": [
+          "G05",
+          "G07",
+          "G09",
+          "G11",
+          "G26",
+          "G29",
+          "G30"
+        ]
+      },
+      {
+        "kind": "official_window",
+        "test_id": "2.3.8",
+        "start_gpst_s": 48333,
+        "stop_gpst_s": 48995,
+        "local_dual_rows": 1,
+        "local_epochs": 1,
+        "paired_rows": 1,
+        "paired_epochs": 1,
+        "paired_satellites": [
+          "G07"
+        ]
+      },
+      {
+        "kind": "between_events",
+        "test_id": null,
+        "start_gpst_s": 48995,
+        "stop_gpst_s": 49234,
+        "local_dual_rows": 56,
+        "local_epochs": 8,
+        "paired_rows": 49,
+        "paired_epochs": 8,
+        "paired_satellites": [
+          "G05",
+          "G07",
+          "G09",
+          "G11",
+          "G18",
+          "G29",
+          "G30"
+        ]
+      },
+      {
+        "kind": "official_window",
+        "test_id": "2.3.5",
+        "start_gpst_s": 49234,
+        "stop_gpst_s": 49849,
+        "local_dual_rows": 33,
+        "local_epochs": 16,
+        "paired_rows": 33,
+        "paired_epochs": 16,
+        "paired_satellites": [
+          "G05",
+          "G07",
+          "G16",
+          "G20",
+          "G27",
+          "G30"
+        ]
+      },
+      {
+        "kind": "post_event",
+        "test_id": null,
+        "start_gpst_s": 49849,
+        "stop_gpst_s": 86400,
+        "local_dual_rows": 21,
+        "local_epochs": 3,
+        "paired_rows": 21,
+        "paired_epochs": 3,
+        "paired_satellites": [
+          "G05",
+          "G07",
+          "G09",
+          "G11",
+          "G18",
+          "G27",
+          "G30"
+        ]
+      }
+    ],
+    "qualification": "Window overlap uses receiver-derived time; not independent attack truth."
+  },
+  "scope": "Pairing and provisional official-window overlap only; no independent time, signal equivalence, detector score or attack outcome."
+}
