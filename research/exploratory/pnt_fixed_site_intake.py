@@ -8,13 +8,14 @@ three-receiver pairing; no event labels or thresholds are inferred.
 import argparse
 from collections import Counter
 from datetime import date
+import hashlib
 import json
 import math
 from pathlib import Path
 
 import hatanaka
 
-from research.exploratory.pnt_observation_pairing import pair, reference_codes, sha256
+from research.exploratory.pnt_observation_pairing import pair, reference_codes
 
 
 def station_header(content):
@@ -30,7 +31,7 @@ def station_header(content):
             break
     else:
         raise ValueError('incomplete RINEX header')
-    marker = fields.get('MARKER NAME', '').split()
+    marker = fields.get('MARKER NAME', '')
     if not marker:
         raise ValueError('RINEX marker name required to distinguish receivers')
     xyz = fields.get('APPROX POSITION XYZ', '').split()
@@ -42,14 +43,16 @@ def station_header(content):
             raise ValueError('nonfinite approximate RINEX XYZ')
     else:
         coordinates = None
-    return {'marker_name': marker[0], 'declared_approx_xyz_m': coordinates}
+    return {'marker_name': marker, 'declared_approx_xyz_m': coordinates}
 
 
 def read_station(path, day):
-    content = hatanaka.decompress(Path(path).read_bytes(), strict=True).decode('ascii')
+    source_bytes = Path(path).read_bytes()
+    content = hatanaka.decompress(source_bytes, strict=True).decode('ascii')
     header = station_header(content)
     rows, status = reference_codes(content, day)
-    return rows, {'file': Path(path).name, 'sha256': sha256(path),
+    return rows, {'file': Path(path).name,
+                  'sha256': hashlib.sha256(source_bytes).hexdigest(),
                   **header, 'code_status': status}
 
 

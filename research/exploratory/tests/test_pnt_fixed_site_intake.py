@@ -1,4 +1,6 @@
 from datetime import date
+import hashlib
+from pathlib import Path
 
 import pytest
 
@@ -71,3 +73,27 @@ def test_ambiguous_time_and_missing_marker_fail_closed(tmp_path):
     local.write_text(rinex(''), encoding='ascii')
     with pytest.raises(ValueError, match='marker name'):
         intake.run(local, {'A': a, 'B': b}, DAY.isoformat())
+
+
+def test_descriptive_marker_names_remain_complete_and_distinct(tmp_path):
+    local, a, b = files(tmp_path)
+    local.write_text(rinex('SITE A'), encoding='ascii')
+    a.write_text(rinex('SITE B'), encoding='ascii')
+    report = intake.run(local, {'A': a, 'B': b}, DAY.isoformat())
+    assert report['local']['marker_name'] == 'SITE A'
+    assert report['references']['A']['marker_name'] == 'SITE B'
+
+
+def test_digest_is_of_the_same_bytes_that_were_decoded(tmp_path, monkeypatch):
+    path = tmp_path / 'local.rnx'
+    source_bytes = rinex('LOCAL').encode('ascii')
+    calls = []
+
+    def read_once(self):
+        calls.append(self)
+        return source_bytes if len(calls) == 1 else rinex('CHANGED').encode('ascii')
+
+    monkeypatch.setattr(Path, 'read_bytes', read_once)
+    _, info = intake.read_station(path, DAY)
+    assert calls == [path]
+    assert info['sha256'] == hashlib.sha256(source_bytes).hexdigest()
