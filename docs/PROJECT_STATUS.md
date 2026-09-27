@@ -76,11 +76,16 @@ pubblica soprattutto RF da elaborare; il
 [corpus di Kunming](https://pmc.ncbi.nlm.nih.gov/articles/PMC11220923/)
 riporta osservabili ma anche forti distorsioni locali; i file completi di
 [CG-SpoofGNSS](https://github.com/agilawood4/CG-SpoofGNSS) non risultano ancora
-rilasciati. Il passo ad alto valore e verificare se un modello di rete
-calibrato solo sui riferimenti rende osservabile il clock locale senza usare
-l'output attaccato come verita; se manca una base indipendente difendibile,
-serve una registrazione cooperativa. Non servono altri sigilli o varianti
-JammerTest.
+rilasciati. Il [confronto del clock TEXBAT/NOAA]
+(../research/exploratory/PNT_TEXBAT_CLOCK_CONTEXT.md) usa le stesse 14 epoche
+e un modello broadcast comune: il massimo pulito e 1,17 m sul solo ricevitore
+e 1,23 m dopo la correzione di rete; durante il time-push ds7 entrambi i
+canali arrivano a circa 312 m. Le due stazioni forniscono contesto stabile,
+ma non un beneficio di rilevamento per questo attacco gia evidente localmente.
+La posizione locale usata viene dal cleanStatic pubblicato, non da un rilievo
+indipendente. Il passo ad alto valore e cercare un episodio con controllo
+locale ambiguo e base fisica difendibile, non aggiungere altri sigilli o
+varianti JammerTest.
 
 La [qualifica mirata di una traiettoria simulata]
 (../research/exploratory/PNT_P2_RECORDING_DECISION.md) mostra perché un'altra

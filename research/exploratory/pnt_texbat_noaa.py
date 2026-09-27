@@ -183,14 +183,13 @@ def rinex2_c1_text(content, station):
     return rows, dict(sorted(counts.items()))
 
 
-def compare(clean, attack, references, anchor):
-    """Compare matched local RF outputs on epochs observed by both witnesses."""
+def paired_codes(clean, attack, references, anchor):
+    """Select the same local and two-witness code rows for downstream studies."""
     if set(references) != {'TXAU', 'SAM2'}:
         raise ValueError('expected two distinct Austin witnesses')
     common = sorted(references['TXAU'].keys() & references['SAM2'].keys())
-    changes = []
+    paired = []
     counts = Counter()
-    epochs = defaultdict(list)
     local_span = (max(min(rrt for rrt, _, _ in clean.values()), min(rrt for rrt, _, _ in attack.values())),
                   min(max(rrt for rrt, _, _ in clean.values()), max(rrt for rrt, _, _ in attack.values())))
     for tow, prn in common:
@@ -210,11 +209,25 @@ def compare(clean, attack, references, anchor):
         if max(abs(rrt - target_rrt), abs(attack_rrt - target_rrt)) > MAX_GRID_OFFSET_S:
             counts['outside_time_tolerance'] += 1
             continue
-        change = attack_code - clean_code
         phase = ('preattack' if rrt < PREATTACK_END_RRT else
                  'takeover' if rrt < TIME_PUSH_START_RRT else 'time_push')
+        paired.append({'phase': phase, 'gpst_tow_s': tow, 'prn': prn, 'rrt_s': rrt,
+                       'clean_m': clean_code, 'ds7_m': attack_code,
+                       'TXAU_m': references['TXAU'][tow, prn],
+                       'SAM2_m': references['SAM2'][tow, prn]})
+    counts['matched_rows'] = len(paired)
+    counts['matched_epochs'] = len({row['gpst_tow_s'] for row in paired})
+    return paired, counts
+
+
+def compare(clean, attack, references, anchor):
+    """Compare matched local RF outputs on epochs observed by both witnesses."""
+    paired, counts = paired_codes(clean, attack, references, anchor)
+    changes = [(row['phase'], row['gpst_tow_s'], row['prn'], row['ds7_m'] - row['clean_m'])
+               for row in paired]
+    epochs = defaultdict(list)
+    for phase, tow, prn, change in changes:
         epochs[phase, tow].append((prn, change))
-        changes.append((phase, tow, prn, change))
     summary = {}
     per_epoch = []
     for phase in ('preattack', 'takeover', 'time_push'):
@@ -240,8 +253,6 @@ def compare(clean, attack, references, anchor):
         }
     if not summary['preattack']['matched_satellite_rows'] or not summary['time_push']['matched_satellite_rows']:
         raise ValueError('both preattack and time-push matched observations required')
-    counts['matched_rows'] = len(changes)
-    counts['matched_epochs'] = len({tow for _, tow, _, _ in changes})
     return summary, dict(sorted(counts.items())), sorted(per_epoch, key=lambda row: row['gpst_tow_s'])
 
 
