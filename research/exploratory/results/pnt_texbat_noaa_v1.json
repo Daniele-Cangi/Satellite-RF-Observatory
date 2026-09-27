@@ -1,0 +1,208 @@
+{
+  "anchor_matched_rows": 3192,
+  "anchor_rrt_s": [
+    20.0,
+    80.0
+  ],
+  "contrast": {
+    "preattack": {
+      "epochs": 2,
+      "matched_satellite_rows": 22,
+      "max_absolute_satellite_difference_change_m": 0.0,
+      "median_absolute_local_code_change_m": 0.0,
+      "median_absolute_satellite_difference_change_m": 0.0,
+      "median_signed_local_code_change_m": 0.0,
+      "reference_satellite_differences": 20
+    },
+    "takeover": {
+      "epochs": 2,
+      "matched_satellite_rows": 22,
+      "max_absolute_satellite_difference_change_m": 4.623478140681982,
+      "median_absolute_local_code_change_m": 6.613539477810264,
+      "median_absolute_satellite_difference_change_m": 0.07666239328682423,
+      "median_signed_local_code_change_m": -6.613539477810264,
+      "reference_satellite_differences": 20
+    },
+    "time_push": {
+      "epochs": 10,
+      "matched_satellite_rows": 110,
+      "max_absolute_satellite_difference_change_m": 3.67138185352087,
+      "median_absolute_local_code_change_m": 168.86429816111922,
+      "median_absolute_satellite_difference_change_m": 0.5320756398141384,
+      "median_signed_local_code_change_m": 168.86429816111922,
+      "reference_satellite_differences": 100
+    }
+  },
+  "gps_week": 1705,
+  "gpst_day": "2012-09-14",
+  "interpretation": [
+    "At each matched epoch, subtracting the same external C1 from clean and ds7 leaves the local code change.",
+    "Satellite differences use the lowest common PRN in each epoch as reference; a receiver-wide code shift cancels.",
+    "The RRT-to-GPST anchor uses TEXBAT preattack ORT and is not an independent clock.",
+    "TEXBAT cleanStatic and ds7 share a source recording; rows and epochs are correlated, not independent incidents."
+  ],
+  "max_epoch_offset_s": 0.11,
+  "pairing_counts": {
+    "matched_epochs": 14,
+    "matched_rows": 154,
+    "missing_local_clean_or_attack": 10,
+    "outside_local_recording_span": 28368,
+    "two_witness_c1_rows": 28532,
+    "two_witness_rows_in_local_span": 164
+  },
+  "per_epoch": [
+    {
+      "gpst_tow_s": 477930,
+      "median_absolute_satellite_difference_change_m": 0.0,
+      "median_signed_local_code_change_m": 0.0,
+      "phase": "preattack",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 477960,
+      "median_absolute_satellite_difference_change_m": 0.0,
+      "median_signed_local_code_change_m": 0.0,
+      "phase": "preattack",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 477990,
+      "median_absolute_satellite_difference_change_m": 0.0020410865545272827,
+      "median_signed_local_code_change_m": -0.009227391332387924,
+      "phase": "takeover",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478020,
+      "median_absolute_satellite_difference_change_m": 0.9771561603993177,
+      "median_signed_local_code_change_m": -16.407568957656622,
+      "phase": "takeover",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478050,
+      "median_absolute_satellite_difference_change_m": 0.576900128275156,
+      "median_signed_local_code_change_m": -11.277112148702145,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478080,
+      "median_absolute_satellite_difference_change_m": 0.5711995363235474,
+      "median_signed_local_code_change_m": 36.521471966058016,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478110,
+      "median_absolute_satellite_difference_change_m": 0.26979840733110905,
+      "median_signed_local_code_change_m": 75.30055097490549,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478140,
+      "median_absolute_satellite_difference_change_m": 0.5399151723831892,
+      "median_signed_local_code_change_m": 111.92088829353452,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478170,
+      "median_absolute_satellite_difference_change_m": 0.8058134149760008,
+      "median_signed_local_code_change_m": 148.9901257790625,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478200,
+      "median_absolute_satellite_difference_change_m": 0.491581154987216,
+      "median_signed_local_code_change_m": 186.7658505514264,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478230,
+      "median_absolute_satellite_difference_change_m": 0.41793485917150974,
+      "median_signed_local_code_change_m": 224.42533427476883,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478260,
+      "median_absolute_satellite_difference_change_m": 0.4365062825381756,
+      "median_signed_local_code_change_m": 262.34929363802075,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478290,
+      "median_absolute_satellite_difference_change_m": 0.4629266634583473,
+      "median_signed_local_code_change_m": 289.6575126834214,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    },
+    {
+      "gpst_tow_s": 478320,
+      "median_absolute_satellite_difference_change_m": 1.0361319743096828,
+      "median_signed_local_code_change_m": 313.1741593852639,
+      "phase": "time_push",
+      "reference_prn": 3,
+      "satellites": 11
+    }
+  ],
+  "preattack_end_rrt_s": 110.0,
+  "rrt_to_gpst_anchor_s": 477879.3684438271,
+  "schema": "pnt-texbat-noaa-exploratory-v1",
+  "scope": "exposed counterfactual code contrast; no detection, attribution or absolute-time claim",
+  "source_counts": {
+    "SAM2": {
+      "comment_only_events": 23,
+      "gps_rows": 28563,
+      "ordinary_epochs": 2880,
+      "selected_c1_rows": 28563
+    },
+    "TXAU": {
+      "comment_only_events": 23,
+      "gps_rows": 28546,
+      "ordinary_epochs": 2880,
+      "selected_c1_rows": 28546
+    },
+    "cleanStatic": {
+      "gps_rows": 27336,
+      "invalid_code_or_time": 1596,
+      "other_signal_or_prn": 4556,
+      "selected_code_rows": 25740,
+      "selected_with_error_indicator": 18,
+      "source_rows": 31892
+    },
+    "ds7": {
+      "gps_rows": 28056,
+      "invalid_code_or_time": 1596,
+      "other_signal_or_prn": 4676,
+      "selected_code_rows": 26460,
+      "selected_with_error_indicator": 45,
+      "source_rows": 32732
+    }
+  },
+  "source_sha256": {
+    "SAM2": "1c71ea86be310af42ca6d11994bf5d12519e2500726014e48cb15b252868e938",
+    "TXAU": "cd6b4079b1d96b17bac61dd2987018bb91607ea9c6cd7e82fa6d272a42828fff",
+    "cleanStatic": "4943045923140423d3202e363f9737fae6e2f6af0d2bba02f4f950d62ef07649",
+    "ds7": "d6b1f51cd342af9c0d0bf5ae54826282c16a0dd7f2ca648ef44bfc98041543d2"
+  },
+  "time_push_start_rrt_s": 150.0
+}
