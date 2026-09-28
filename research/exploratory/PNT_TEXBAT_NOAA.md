@@ -94,3 +94,8 @@ that a local-only control misses at comparable benign false alarms. If no
 defensible independent coordinate/clock baseline is available, the honest
 claim remains incident context and this geometry-only blind mode. Do not turn
 this exposed comparison into prospective confirmation or a live blocking rule.
+
+The subsequent [broadcast-model clock contrast](PNT_TEXBAT_CLOCK_CONTEXT.md)
+tested this question as an exposed diagnostic. It found a stable external
+context but no incremental detection benefit for ds7. This original pairing
+result and its numerical output remain unchanged.

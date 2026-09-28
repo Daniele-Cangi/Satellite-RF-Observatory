@@ -1,0 +1,661 @@
+{
+  "anchor_matched_rows": 3192,
+  "epochs": [
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.2690737247467041,
+          "local_only": -0.21179727092385292
+        },
+        "ds7": {
+          "local_minus_network": -0.2690737247467041,
+          "local_only": -0.21179727092385292
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.4961503781378269,
+          "max_absolute_satellite_residual_m": 5.922696329653263,
+          "median_absolute_satellite_residual_m": 2.224769249558449
+        },
+        "TXAU": {
+          "clock_m": -0.1314353309571743,
+          "max_absolute_satellite_residual_m": 5.085517521947622,
+          "median_absolute_satellite_residual_m": 2.053574074059725
+        },
+        "cleanStatic": {
+          "clock_m": 70841.55411665887,
+          "max_absolute_satellite_residual_m": 21.30584616586566,
+          "median_absolute_satellite_residual_m": 13.969241250306368
+        },
+        "ds7": {
+          "clock_m": 70841.55411665887,
+          "max_absolute_satellite_residual_m": 21.30584616586566,
+          "median_absolute_satellite_residual_m": 13.969241250306368
+        }
+      },
+      "gpst_tow_s": 477930,
+      "network_clock_m": -0.3137928545475006,
+      "network_only_centered_clock_m": 0.05727645382285118,
+      "phase": "preattack",
+      "reference_clock_disagreement_m": 0.3647150471806526,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": 0.2690737247467041,
+          "local_only": 0.21179727092385292
+        },
+        "ds7": {
+          "local_minus_network": 0.2690737247467041,
+          "local_only": 0.21179727092385292
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.40575990825891495,
+          "max_absolute_satellite_residual_m": 6.627202369272709,
+          "median_absolute_satellite_residual_m": 2.4096498861908913
+        },
+        "TXAU": {
+          "clock_m": -0.450931616127491,
+          "max_absolute_satellite_residual_m": 6.797718182206154,
+          "median_absolute_satellite_residual_m": 2.162893634289503
+        },
+        "cleanStatic": {
+          "clock_m": 70841.97771120071,
+          "max_absolute_satellite_residual_m": 19.684132009744644,
+          "median_absolute_satellite_residual_m": 13.294453840702772
+        },
+        "ds7": {
+          "clock_m": 70841.97771120071,
+          "max_absolute_satellite_residual_m": 19.684132009744644,
+          "median_absolute_satellite_residual_m": 13.294453840702772
+        }
+      },
+      "gpst_tow_s": 477960,
+      "network_clock_m": -0.428345762193203,
+      "network_only_centered_clock_m": -0.05727645382285118,
+      "phase": "preattack",
+      "reference_clock_disagreement_m": -0.04517170786857605,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.28156035766005516,
+          "local_only": -0.3689867816865444
+        },
+        "ds7": {
+          "local_minus_network": -0.29238201305270195,
+          "local_only": -0.3798084370791912
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.4304564967751503,
+          "max_absolute_satellite_residual_m": 6.903713263571262,
+          "median_absolute_satellite_residual_m": 2.2881148420274258
+        },
+        "TXAU": {
+          "clock_m": -0.4865349680185318,
+          "max_absolute_satellite_residual_m": 6.191559698432684,
+          "median_absolute_satellite_residual_m": 2.1264113821089268
+        },
+        "cleanStatic": {
+          "clock_m": 70841.3969271481,
+          "max_absolute_satellite_residual_m": 23.94992746785283,
+          "median_absolute_satellite_residual_m": 13.938776016235352
+        },
+        "ds7": {
+          "clock_m": 70841.38610549271,
+          "max_absolute_satellite_residual_m": 23.939463950693607,
+          "median_absolute_satellite_residual_m": 13.940370298922062
+        }
+      },
+      "gpst_tow_s": 477990,
+      "network_clock_m": -0.45849573239684105,
+      "network_only_centered_clock_m": -0.08742642402648926,
+      "phase": "takeover",
+      "reference_clock_disagreement_m": -0.0560784712433815,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -1.2302938029170036,
+          "local_only": -1.1683496460318565
+        },
+        "ds7": {
+          "local_minus_network": -17.589538268744946,
+          "local_only": -17.5275941118598
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.41760115325450897,
+          "max_absolute_satellite_residual_m": 6.737615294754505,
+          "median_absolute_satellite_residual_m": 1.5880270414054394
+        },
+        "TXAU": {
+          "clock_m": -0.20064914971590042,
+          "max_absolute_satellite_residual_m": 6.537425167858601,
+          "median_absolute_satellite_residual_m": 2.4543925113976
+        },
+        "cleanStatic": {
+          "clock_m": 70840.59756428376,
+          "max_absolute_satellite_residual_m": 19.751135148108006,
+          "median_absolute_satellite_residual_m": 14.08306598290801
+        },
+        "ds7": {
+          "clock_m": 70824.23831981793,
+          "max_absolute_satellite_residual_m": 23.751314908266068,
+          "median_absolute_satellite_residual_m": 11.051269549876451
+        }
+      },
+      "gpst_tow_s": 478020,
+      "network_clock_m": -0.3091251514852047,
+      "network_only_centered_clock_m": 0.061944156885147095,
+      "phase": "takeover",
+      "reference_clock_disagreement_m": 0.21695200353860855,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.9095963202416897,
+          "local_only": -0.8440890721976757
+        },
+        "ds7": {
+          "local_minus_network": -11.79951485991478,
+          "local_only": -11.734007611870766
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.13679678365588188,
+          "max_absolute_satellite_residual_m": 6.295774325728416,
+          "median_absolute_satellite_residual_m": 1.4606399536132812
+        },
+        "TXAU": {
+          "clock_m": -0.47432733699679375,
+          "max_absolute_satellite_residual_m": 7.337513089179993,
+          "median_absolute_satellite_residual_m": 2.2073331475257874
+        },
+        "cleanStatic": {
+          "clock_m": 70840.92182485759,
+          "max_absolute_satellite_residual_m": 20.611550968140364,
+          "median_absolute_satellite_residual_m": 12.460368819534779
+        },
+        "ds7": {
+          "clock_m": 70830.03190631792,
+          "max_absolute_satellite_residual_m": 20.686309725046158,
+          "median_absolute_satellite_residual_m": 11.991909433156252
+        }
+      },
+      "gpst_tow_s": 478050,
+      "network_clock_m": -0.3055620603263378,
+      "network_only_centered_clock_m": 0.06550724804401398,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": -0.33753055334091187,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.2579212598502636,
+          "local_only": -0.0958433672785759
+        },
+        "ds7": {
+          "local_minus_network": 35.88163210824132,
+          "local_only": 36.04371000081301
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.06836723163723946,
+          "max_absolute_satellite_residual_m": 6.492306441068649,
+          "median_absolute_satellite_residual_m": 1.342176541686058
+        },
+        "TXAU": {
+          "clock_m": -0.34961559996008873,
+          "max_absolute_satellite_residual_m": 6.800265625119209,
+          "median_absolute_satellite_residual_m": 2.138770002871752
+        },
+        "cleanStatic": {
+          "clock_m": 70841.67007056251,
+          "max_absolute_satellite_residual_m": 20.809859704226255,
+          "median_absolute_satellite_residual_m": 14.033276438713074
+        },
+        "ds7": {
+          "clock_m": 70877.8096239306,
+          "max_absolute_satellite_residual_m": 19.91103332862258,
+          "median_absolute_satellite_residual_m": 14.409622740000486
+        }
+      },
+      "gpst_tow_s": 478080,
+      "network_clock_m": -0.2089914157986641,
+      "network_only_centered_clock_m": 0.1620778925716877,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": -0.2812483683228493,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.4481371585279703,
+          "local_only": -0.53416433557868
+        },
+        "ds7": {
+          "local_minus_network": 75.06065786443651,
+          "local_only": 74.9746306873858
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.5378370694816113,
+          "max_absolute_satellite_residual_m": 7.000642690807581,
+          "median_absolute_satellite_residual_m": 2.0580774061381817
+        },
+        "TXAU": {
+          "clock_m": -0.3763559013605118,
+          "max_absolute_satellite_residual_m": 6.241888277232647,
+          "median_absolute_satellite_residual_m": 2.0307900719344616
+        },
+        "cleanStatic": {
+          "clock_m": 70841.23174959421,
+          "max_absolute_satellite_residual_m": 20.526814822107553,
+          "median_absolute_satellite_residual_m": 13.57561719790101
+        },
+        "ds7": {
+          "clock_m": 70916.74054461718,
+          "max_absolute_satellite_residual_m": 20.37486520037055,
+          "median_absolute_satellite_residual_m": 13.324764247983694
+        }
+      },
+      "gpst_tow_s": 478110,
+      "network_clock_m": -0.4570964854210615,
+      "network_only_centered_clock_m": -0.08602717705070972,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": 0.16148116812109947,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.915101196616888,
+          "local_only": -0.9163248874247074
+        },
+        "ds7": {
+          "local_minus_network": 111.20883624628186,
+          "local_only": 111.20761255547404
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.6663348488509655,
+          "max_absolute_satellite_residual_m": 7.27004075422883,
+          "median_absolute_satellite_residual_m": 2.3041658252477646
+        },
+        "TXAU": {
+          "clock_m": -0.07825114950537682,
+          "max_absolute_satellite_residual_m": 7.380698978900909,
+          "median_absolute_satellite_residual_m": 2.592890165746212
+        },
+        "cleanStatic": {
+          "clock_m": 70840.84958904237,
+          "max_absolute_satellite_residual_m": 20.908653285354376,
+          "median_absolute_satellite_residual_m": 13.402172606438398
+        },
+        "ds7": {
+          "clock_m": 70952.97352648526,
+          "max_absolute_satellite_residual_m": 20.41799669340253,
+          "median_absolute_satellite_residual_m": 13.046772997826338
+        }
+      },
+      "gpst_tow_s": 478140,
+      "network_clock_m": -0.37229299917817116,
+      "network_only_centered_clock_m": -0.0012236908078193665,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": 0.5880836993455887,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.8910990562289953,
+          "local_only": -0.8213555067777634
+        },
+        "ds7": {
+          "local_minus_network": 148.0990833248943,
+          "local_only": 148.16882687434554
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.38383709639310837,
+          "max_absolute_satellite_residual_m": 6.539860468357801,
+          "median_absolute_satellite_residual_m": 2.3373940847814083
+        },
+        "TXAU": {
+          "clock_m": -0.2188144214451313,
+          "max_absolute_satellite_residual_m": 7.442607261240482,
+          "median_absolute_satellite_residual_m": 2.358020257204771
+        },
+        "cleanStatic": {
+          "clock_m": 70840.94455842301,
+          "max_absolute_satellite_residual_m": 17.523159757256508,
+          "median_absolute_satellite_residual_m": 13.287254646420479
+        },
+        "ds7": {
+          "clock_m": 70989.93474080414,
+          "max_absolute_satellite_residual_m": 18.525638811290264,
+          "median_absolute_satellite_residual_m": 12.73978291079402
+        }
+      },
+      "gpst_tow_s": 478170,
+      "network_clock_m": -0.30132575891911983,
+      "network_only_centered_clock_m": 0.06974354945123196,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": 0.16502267494797707,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.9964426532387733,
+          "local_only": -0.9526654332876205
+        },
+        "ds7": {
+          "local_minus_network": 186.0400303117931,
+          "local_only": 186.08380753174424
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.165790144354105,
+          "max_absolute_satellite_residual_m": 6.672645676881075,
+          "median_absolute_satellite_residual_m": 1.8192121908068657
+        },
+        "TXAU": {
+          "clock_m": -0.488794032484293,
+          "max_absolute_satellite_residual_m": 7.6703457199037075,
+          "median_absolute_satellite_residual_m": 1.90925332903862
+        },
+        "cleanStatic": {
+          "clock_m": 70840.8132484965,
+          "max_absolute_satellite_residual_m": 17.701326843351126,
+          "median_absolute_satellite_residual_m": 13.692104268819094
+        },
+        "ds7": {
+          "clock_m": 71027.84972146153,
+          "max_absolute_satellite_residual_m": 18.066029030829668,
+          "median_absolute_satellite_residual_m": 12.78090002387762
+        }
+      },
+      "gpst_tow_s": 478200,
+      "network_clock_m": -0.327292088419199,
+      "network_only_centered_clock_m": 0.0437772199511528,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": -0.323003888130188,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -1.2020023968070745,
+          "local_only": -1.0627454593777657
+        },
+        "ds7": {
+          "local_minus_network": 223.09376296959817,
+          "local_only": 223.23301990702748
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.07210906222462654,
+          "max_absolute_satellite_residual_m": 7.0852169170975685,
+          "median_absolute_satellite_residual_m": 1.678228136152029
+        },
+        "TXAU": {
+          "clock_m": -0.39151567965745926,
+          "max_absolute_satellite_residual_m": 7.66288460418582,
+          "median_absolute_satellite_residual_m": 2.1569491662085056
+        },
+        "cleanStatic": {
+          "clock_m": 70840.70316847041,
+          "max_absolute_satellite_residual_m": 19.549657713621855,
+          "median_absolute_satellite_residual_m": 12.795372761785984
+        },
+        "ds7": {
+          "clock_m": 71064.99893383682,
+          "max_absolute_satellite_residual_m": 19.71556982025504,
+          "median_absolute_satellite_residual_m": 11.80815190821886
+        }
+      },
+      "gpst_tow_s": 478230,
+      "network_clock_m": -0.2318123709410429,
+      "network_only_centered_clock_m": 0.1392569374293089,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": -0.3194066174328327,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.9948001708835363,
+          "local_only": -0.8302373848855495
+        },
+        "ds7": {
+          "local_minus_network": 261.35460239090025,
+          "local_only": 261.51916517689824
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.2191729135811329,
+          "max_absolute_satellite_residual_m": 6.9433989226818085,
+          "median_absolute_satellite_residual_m": 2.4926644526422024
+        },
+        "TXAU": {
+          "clock_m": -0.1938401311635971,
+          "max_absolute_satellite_residual_m": 7.644118871539831,
+          "median_absolute_satellite_residual_m": 1.6591971404850483
+        },
+        "cleanStatic": {
+          "clock_m": 70840.9356765449,
+          "max_absolute_satellite_residual_m": 18.174253094941378,
+          "median_absolute_satellite_residual_m": 13.625026728957891
+        },
+        "ds7": {
+          "clock_m": 71103.28507910669,
+          "max_absolute_satellite_residual_m": 17.652148813009262,
+          "median_absolute_satellite_residual_m": 12.678486101329327
+        }
+      },
+      "gpst_tow_s": 478260,
+      "network_clock_m": -0.206506522372365,
+      "network_only_centered_clock_m": 0.1645627859979868,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": 0.025332782417535782,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.6888372451066971,
+          "local_only": -0.3930022530257702
+        },
+        "ds7": {
+          "local_minus_network": 288.7829104959965,
+          "local_only": 289.0787454880774
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": 0.03586140647530556,
+          "max_absolute_satellite_residual_m": 6.774173974990845,
+          "median_absolute_satellite_residual_m": 2.6765370778739452
+        },
+        "TXAU": {
+          "clock_m": -0.18633003905415535,
+          "max_absolute_satellite_residual_m": 7.424597468227148,
+          "median_absolute_satellite_residual_m": 2.453266393393278
+        },
+        "cleanStatic": {
+          "clock_m": 70841.37291167676,
+          "max_absolute_satellite_residual_m": 19.815486259758472,
+          "median_absolute_satellite_residual_m": 12.465021722018719
+        },
+        "ds7": {
+          "clock_m": 71130.84465941787,
+          "max_absolute_satellite_residual_m": 19.331706296652555,
+          "median_absolute_satellite_residual_m": 12.259107045829296
+        }
+      },
+      "gpst_tow_s": 478290,
+      "network_clock_m": -0.0752343162894249,
+      "network_only_centered_clock_m": 0.2958349920809269,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": -0.2221914455294609,
+      "satellites": 11
+    },
+    {
+      "centered_clock_m": {
+        "cleanStatic": {
+          "local_minus_network": -0.9949414022266865,
+          "local_only": -0.8625217042863369
+        },
+        "ds7": {
+          "local_minus_network": 312.17935541272163,
+          "local_only": 312.311775110662
+        }
+      },
+      "clock_fit": {
+        "SAM2": {
+          "clock_m": -0.0802450031042099,
+          "max_absolute_satellite_residual_m": 7.508305251598358,
+          "median_absolute_satellite_residual_m": 2.401616584509611
+        },
+        "TXAU": {
+          "clock_m": -0.3970542177557945,
+          "max_absolute_satellite_residual_m": 7.012510567903519,
+          "median_absolute_satellite_residual_m": 2.6256954558193684
+        },
+        "cleanStatic": {
+          "clock_m": 70840.9033922255,
+          "max_absolute_satellite_residual_m": 19.158583022654057,
+          "median_absolute_satellite_residual_m": 12.80925663933158
+        },
+        "ds7": {
+          "clock_m": 71154.07768904045,
+          "max_absolute_satellite_residual_m": 20.314051497727633,
+          "median_absolute_satellite_residual_m": 12.563894014805555
+        }
+      },
+      "gpst_tow_s": 478320,
+      "network_clock_m": -0.2386496104300022,
+      "network_only_centered_clock_m": 0.13241969794034958,
+      "phase": "time_push",
+      "reference_clock_disagreement_m": -0.3168092146515846,
+      "satellites": 11
+    }
+  ],
+  "gps_week": 1705,
+  "gpst_day": "2012-09-14",
+  "interpretation": [
+    "The network channel provides stable contemporaneous clock context but is GNSS-derived, not an independent absolute-time witness.",
+    "The ds7 time push is already apparent in the local-only modeled clock; incremental network detection is not demonstrated here.",
+    "cleanStatic is a correlated exposed counterfactual, not a representative false-alarm population."
+  ],
+  "local_fixed_ecef_m": [
+    -741992.74,
+    -5462240.48,
+    3198027.11
+  ],
+  "local_position_source": "https://radionavlab.ae.utexas.edu/images/stories/files/papers/LemmenesGNSSpaper.pdf",
+  "local_position_status": "published cleanStatic mean solution; not independent survey",
+  "model": {
+    "baseline": "median of two source-defined preattack 30-second epochs",
+    "code": "GPS L1 code/C1, no TGD or inter-receiver bias correction",
+    "network_clock": "mean of separately fitted TXAU and SAM2 receiver clocks",
+    "orbit_and_clock": "shared positioning.calibration reference_model, nearest healthy toc <= 7200 s",
+    "receiver_clock": "median code-minus-model across identical common PRNs; 6 iterations",
+    "source": "NOAA composite GPS RINEX 2 broadcast NAV"
+  },
+  "noaa_antenna_ecef_m": {
+    "SAM2": [
+      -751969.757,
+      -5463640.156,
+      3193399.159
+    ],
+    "TXAU": [
+      -743773.722,
+      -5460645.916,
+      3200347.828
+    ]
+  },
+  "pairing_counts": {
+    "matched_epochs": 14,
+    "matched_rows": 154,
+    "missing_local_clean_or_attack": 10,
+    "outside_local_recording_span": 28368,
+    "two_witness_c1_rows": 28532,
+    "two_witness_rows_in_local_span": 164
+  },
+  "rrt_to_gpst_anchor_s": 477879.3684438271,
+  "schema": "pnt-texbat-network-clock-exploratory-v1",
+  "scope": "exposed broadcast-model receiver-clock contrast; no absolute-time or detection-gain claim",
+  "source_counts": {
+    "SAM2": {
+      "comment_only_events": 23,
+      "gps_rows": 28563,
+      "ordinary_epochs": 2880,
+      "selected_c1_rows": 28563
+    },
+    "TXAU": {
+      "comment_only_events": 23,
+      "gps_rows": 28546,
+      "ordinary_epochs": 2880,
+      "selected_c1_rows": 28546
+    },
+    "broadcast_nav": {
+      "admitted_records": 473,
+      "source_records": 475,
+      "unhealthy_or_invalid_records": 2
+    },
+    "cleanStatic": {
+      "gps_rows": 27336,
+      "invalid_code_or_time": 1596,
+      "other_signal_or_prn": 4556,
+      "selected_code_rows": 25740,
+      "selected_with_error_indicator": 18,
+      "source_rows": 31892
+    },
+    "ds7": {
+      "gps_rows": 28056,
+      "invalid_code_or_time": 1596,
+      "other_signal_or_prn": 4676,
+      "selected_code_rows": 26460,
+      "selected_with_error_indicator": 45,
+      "source_rows": 32732
+    }
+  },
+  "source_sha256": {
+    "SAM2": "1c71ea86be310af42ca6d11994bf5d12519e2500726014e48cb15b252868e938",
+    "TXAU": "cd6b4079b1d96b17bac61dd2987018bb91607ea9c6cd7e82fa6d272a42828fff",
+    "broadcast_nav": "43e91666ad4798942206a37d131b2758d87c56e107a038748553960c428af5ca",
+    "cleanStatic": "4943045923140423d3202e363f9737fae6e2f6af0d2bba02f4f950d62ef07649",
+    "ds7": "d6b1f51cd342af9c0d0bf5ae54826282c16a0dd7f2ca648ef44bfc98041543d2"
+  },
+  "summary": {
+    "clean_max_absolute_local_minus_network_m": 1.2302938029170036,
+    "clean_max_absolute_local_only_m": 1.1683496460318565,
+    "max_absolute_reference_clock_disagreement_m": 0.5880836993455887,
+    "preattack_epochs": 2,
+    "time_push_epochs": 10,
+    "time_push_max_absolute_ds7_local_minus_network_m": 312.17935541272163,
+    "time_push_max_absolute_ds7_local_only_m": 312.311775110662
+  }
+}
