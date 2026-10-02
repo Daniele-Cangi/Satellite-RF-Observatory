@@ -101,3 +101,62 @@ cover actual parser-to-model execution, common clock cancellation, local
 anomalies leaving remote fits unchanged, opposing remote errors, missing
 sources/navigation, invalid inputs and preservation of failed epochs. These
 synthetic checks qualify implementation behavior, not detection performance.
+
+## Development comparison
+
+```console
+python -m pnt compare 2024-09-11 LOCAL.crx.gz brdc2550.24n.gz --reference TRO1=TRO1.crx.gz --reference KIRU=KIRU.crx.gz --start 28800 --train-stop 30600 --calibration-stop 32400 --stop 34200 --output comparison.json
+```
+
+This reads the same original inputs once and compares local geometry, mean
+external geometry, their difference and disagreement between references.
+It uses all available satellite pairs, without depending on a changing
+reference PRN. Each score is the maximum absolute innovation from the
+training median for each pair. Pairs need five training epochs by default;
+an epoch needs at least six trained pairs. Unsupported pairs are counted.
+Pair count and geometry can vary with time; no uncertainty normalization or
+claim of independent pair measurements is made.
+
+The three windows are chronological and disjoint: baseline fitting, empirical
+threshold calibration, then evaluation. Defaults use the 95th-percentile
+nearest-rank calibration score, at least 20 eligible calibration epochs and a
+strict `score > threshold` comparison. Each method has the same calibration
+tail budget and uses the same eligible epochs. Ties and distribution shifts
+can yield different actual exceedance counts: the report retains those counts,
+including original evaluation counts on each challenge's exact support. No
+threshold is adjusted using evaluation data. These are development thresholds,
+not qualified detector operating points or measured false-alarm guarantees.
+The evaluation window requires at least two grid epochs for distinct ramp endpoints.
+
+Five software ramps are applied **before** fitting: one local satellite,
+local modeled geometry displacement, a common local code/clock offset, one
+satellite shared across receivers, and one satellite at one external receiver.
+Both C1C and C2W receive the same added range; tracking, phase, signal quality,
+navigation bits and receiver PVT are not simulated. The geometry ramp adds
+the existing model's range difference between the declared antenna and a
+displaced ECEF hypothesis at the supplied code and zero nuisance clock. It
+is a model perturbation, not a complete RF position-spoofing simulation.
+
+Default ramp endpoints are 2, 5 and 10 metres, from zero at the first evaluation
+epoch to full amplitude at the last requested epoch. Use repeated `--amplitude`
+to specify different endpoints and `--direction-ecef X Y Z` for the normalized
+displacement direction (default ECEF +X). The satellite is chosen only from
+training support, ties by PRN, unless `--satellite Gxx` is explicit. The
+reference fault affects the first named external receiver in lexical order.
+Those choices are retained in the report; they are not searched for a success.
+
+The original and perturbed matched satellite sets must be identical. A
+single-satellite ramp needs at least one trained pair containing that satellite
+at the evaluated epoch. Mere presence in the common satellite set is not enough:
+`PERTURBATION_OUTSIDE_MATCHED_SUPPORT` also covers missing trained partners.
+Missing support, a perturbation outside the scored pairs, changed admission, failed fits
+and insufficient calibration remain inconclusive with their denominators.
+The reference-disagreement diagnostic remains separate; it does not certify
+the reference network or automatically identify which receiver is wrong.
+Clock changes are retained, but no absolute-time authentication is inferred.
+
+Original records are **unlabeled**, not certified benign: exceedances are not
+measured false alarms. Software-ramp responses are not measured RF detection
+rates. [The exposed-data exercise](../research/exploratory/PNT_COMPARISON_BENCHMARK.md)
+retains the full comparison, including worse combined behavior and missed
+common-clock modes. The `analyze` command's diagnostic contract is unchanged.

@@ -125,15 +125,19 @@ def evaluate_epoch(time_s, observations, positions, navigation, context):
             'excluded_satellites': excluded, 'standalone_receiver_fits': standalone, 'matched': joint}
 
 
-def analyze(local_path, references, navigation_path, day_gpst, *, start_s=0, stop_s=86400,
-            local_ecef=None, position_source=None):
+def validate_window(start_s, stop_s):
+    if (not all(isinstance(value, int) and not isinstance(value, bool) for value in (start_s, stop_s))
+            or not 0 <= start_s < stop_s <= 86400 or start_s % 30 or stop_s % 30):
+        raise ValueError('window must be increasing 30-second GPST grid boundaries within one day')
+
+
+def load_inputs(local_path, references, navigation_path, day_gpst, *,
+                local_ecef=None, position_source=None):
+    """Read/hash each original source once for analysis or a development comparison."""
     if (not isinstance(references, dict) or len(references) < 2 or
             any(not isinstance(name, str) or not name.strip() or name in ('local', 'navigation')
                 for name in references)):
         raise ValueError('at least two named external receivers required; local/navigation are reserved')
-    if (not all(isinstance(value, int) and not isinstance(value, bool) for value in (start_s, stop_s))
-            or not 0 <= start_s < stop_s <= 86400 or start_s % 30 or stop_s % 30):
-        raise ValueError('window must be increasing 30-second GPST grid boundaries within one day')
     if local_ecef is None and position_source is not None:
         raise ValueError('coordinate source requires explicit local ECEF')
     day = date.fromisoformat(day_gpst)
@@ -151,17 +155,32 @@ def analyze(local_path, references, navigation_path, day_gpst, *, start_s=0, sto
     nav, nav_counts = broadcast_navigation(nav_data)
     sources['navigation'] = {'file': Path(navigation_path).name,
                              'sha256': hashlib.sha256(nav_data).hexdigest(), 'record_status': nav_counts}
+    return data, positions, nav, context, sources
+
+
+def observation_epochs(data, start_s, stop_s):
+    """Yield every requested grid epoch, including empty receiver observations."""
     by_epoch = {name: defaultdict(dict) for name in data}
     for name, rows in data.items():
         for (time_s, satellite), codes in rows.items():
             if start_s <= time_s < stop_s:
                 by_epoch[name][time_s][satellite] = codes
-    epochs = [evaluate_epoch(time_s, {name: rows.get(time_s, {}) for name, rows in by_epoch.items()},
-                             positions, nav, context) for time_s in range(start_s, stop_s, 30)]
+    for time_s in range(start_s, stop_s, 30):
+        yield time_s, {name: rows.get(time_s, {}) for name, rows in by_epoch.items()}
+
+
+def analyze(local_path, references, navigation_path, day_gpst, *, start_s=0, stop_s=86400,
+            local_ecef=None, position_source=None):
+    validate_window(start_s, stop_s)
+    data, positions, nav, context, sources = load_inputs(
+        local_path, references, navigation_path, day_gpst,
+        local_ecef=local_ecef, position_source=position_source)
+    epochs = [evaluate_epoch(time_s, values, positions, nav, context)
+              for time_s, values in observation_epochs(data, start_s, stop_s)]
     matched_counts = dict(sorted(Counter(epoch['matched']['status'] for epoch in epochs).items()))
     standalone_counts = {name: dict(sorted(Counter(epoch['standalone_receiver_fits'][name]['status']
                                                  for epoch in epochs).items())) for name in data}
-    return {'schema': 'pnt-fixed-site-diagnostics-v1', 'day_gpst': day.isoformat(),
+    return {'schema': 'pnt-fixed-site-diagnostics-v1', 'day_gpst': context.day.date().isoformat(),
             'window_gpst_s': [start_s, stop_s], 'sources': sources,
             'status': 'DIAGNOSTICS_AVAILABLE' if matched_counts.get('EVALUATED', 0) else 'INSUFFICIENT_EVIDENCE',
             'coverage': {'expected_epochs': len(epochs), 'matched_status_counts': matched_counts,
