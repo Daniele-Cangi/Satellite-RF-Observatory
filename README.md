@@ -14,6 +14,11 @@ clock terms cancel in double differences. See [project status](docs/PROJECT_STAT
 for current evidence and the next bounded feasibility work. Website work follows
 the physical demonstration.
 
+For offline fixed-site recordings, [`python -m pnt analyze`](pnt/README.md)
+now produces local and matched-network geometry/clock diagnostics, source hashes
+and coverage gaps in one report. It keeps the two external receivers visible
+and leaves absolute time and attack decisions unevaluated where evidence is missing.
+
 The existing [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md)
 provides a local satellite/day request, estimation and evidence pipeline. A
 trusted local operator can submit requests, run one queued job and read its

@@ -1,4 +1,4 @@
-# Stato del progetto — 27 settembre 2026
+# Stato del progetto — 2 ottobre 2026
 
 ## Obiettivo
 
@@ -6,6 +6,15 @@ La direzione attiva e il [piano di sicurezza PNT](PNT_SECURITY_PLAN.md):
 confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
 valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
 Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
+
+La [CLI PNT riutilizzabile](../pnt/README.md) ora analizza registrazioni RINEX
+di un sito fisso: controlli locali e abbinati alla rete, doppie differenze,
+clock relativo, disaccordo fra riferimenti e lacune in un unico rapporto.
+La [verifica software sui tre file gia esposti]
+(../research/exploratory/PNT_FIXED_SITE_ANALYSIS.md) produce diagnostica su
+tutte le 20 epoche richieste; il report storico ds7 resta identico dopo il
+riuso dei calcoli. Non e ancora un rilevatore qualificato: P2 richiede ancora
+la prova del beneficio e il tempo assoluto un testimone indipendente.
 
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
