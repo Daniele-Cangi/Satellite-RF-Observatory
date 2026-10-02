@@ -11,7 +11,7 @@ from pnt.tests.test_fixed_site import (DAY, TIME, POSITIONS, constellation,
                                       nav_text, observations, rinex)
 
 
-def recording(tmp_path, *, missing=None, evaluation_shift=0.):
+def recording(tmp_path, *, missing=None, evaluation_shift=0., satellite_support=None):
     navigation = constellation()
     by_receiver = {name: {} for name in POSITIONS}
     for index, time in enumerate(range(TIME, TIME + 540, 30)):
@@ -23,6 +23,17 @@ def recording(tmp_path, *, missing=None, evaluation_shift=0.):
             codes['G02'] = tuple(code + delta for code in codes['G02'])
             if name == 'local' and time >= TIME + 360:
                 codes['G04'] = tuple(code + evaluation_shift for code in codes['G04'])
+            if satellite_support == 'untrained' and time < TIME + 180:
+                codes.pop('G04')
+            elif satellite_support in ('partners_absent', 'one_partner'):
+                # Two disjoint training constellations. In evaluation G04
+                # remains observed, but its trained partners can be absent.
+                admitted = ({'G01', 'G02', 'G03', 'G04'} if index < 3 else
+                            {'G05', 'G06', 'G07', 'G08'} if index < 6 else
+                            {'G04', 'G05', 'G06', 'G07', 'G08'})
+                if index >= 6 and satellite_support == 'one_partner':
+                    admitted.add('G01')
+                codes = {sv: pair for sv, pair in codes.items() if sv in admitted}
             if missing != (name, time):
                 by_receiver[name][time] = codes
     paths = {name: tmp_path / f'{name}.rnx' for name in POSITIONS}
@@ -108,6 +119,30 @@ def test_unobserved_perturbation_is_inconclusive_instead_of_counted_as_a_miss(tm
         assert row['summary']['status_counts'] == {'PERTURBATION_OUTSIDE_MATCHED_SUPPORT': 6}
         assert row['summary']['evaluated_epochs'] == 0
         assert row['equal_observed_original_exceedance_counts'] is None
+
+
+@pytest.mark.parametrize('support', ['untrained', 'partners_absent', 'one_partner'])
+def test_satellite_ramps_require_a_trained_pair_present_at_the_evaluated_epoch(tmp_path, support):
+    paths, nav = recording(tmp_path, satellite_support=support)
+    report = run(paths, nav, satellite='G04', minimum_training=3)
+    originals = report['original']['epochs'][-6:]
+    assert all(epoch['status'] == 'EVALUATED' and 'G04' in epoch['satellites'] for epoch in originals)
+    trained = [pair for pair in report['baselines'] if 'G04' in pair.split('/')]
+    assert bool(trained) == (support != 'untrained')
+    expected_pairs = 1 if support == 'one_partner' else 0
+    assert all(sum('G04' in pair.split('/') for pair in epoch['scored_pairs']) == expected_pairs
+               for epoch in originals)
+    for scenario in ('local_satellite_ramp', 'shared_satellite_ramp', 'reference_satellite_ramp'):
+        result = case(report, scenario)
+        if support == 'one_partner':
+            assert result['summary']['evaluated_epochs'] == 6
+            assert result['summary']['status_counts'] == {'EVALUATED': 6}
+        else:
+            assert result['summary']['status_counts'] == {'PERTURBATION_OUTSIDE_MATCHED_SUPPORT': 6}
+            assert result['summary']['evaluated_epochs'] == 0
+            assert result['original_on_same_support']['requested_epochs'] == 0
+            assert result['equal_observed_original_exceedance_counts'] is None
+            assert all('exceedances' not in epoch for epoch in result['epochs'])
 
 
 def test_insufficient_calibration_retains_original_coverage_without_fabricating_thresholds(tmp_path):

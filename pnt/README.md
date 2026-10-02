@@ -145,8 +145,11 @@ training support, ties by PRN, unless `--satellite Gxx` is explicit. The
 reference fault affects the first named external receiver in lexical order.
 Those choices are retained in the report; they are not searched for a success.
 
-The original and perturbed matched satellite sets must be identical. Missing
-support, a perturbation outside the common set, changed admission, failed fits
+The original and perturbed matched satellite sets must be identical. A
+single-satellite ramp needs at least one trained pair containing that satellite
+at the evaluated epoch. Mere presence in the common satellite set is not enough:
+`PERTURBATION_OUTSIDE_MATCHED_SUPPORT` also covers missing trained partners.
+Missing support, a perturbation outside the scored pairs, changed admission, failed fits
 and insufficient calibration remain inconclusive with their denominators.
 The reference-disagreement diagnostic remains separate; it does not certify
 the reference network or automatically identify which receiver is wrong.

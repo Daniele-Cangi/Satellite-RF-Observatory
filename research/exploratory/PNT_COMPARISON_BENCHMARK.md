@@ -40,6 +40,14 @@ eligible epochs and a largest evaluated shift of 7.63 m for the requested
 10 m endpoint; geometry and common-clock ramps have 60/60. The unsupported
 epochs are inconclusive, not silently removed or counted as missed attacks.
 
+PR #173 review identified a missing support check: an observed satellite can
+have no trained pair in the score. G04 is matched in all 60 evaluation epochs
+here but has no trained pair. Single-satellite ramps now require at least one
+qualified pair containing the perturbed satellite at that epoch, including
+when trained partners disappear. The G04 counterexample becomes 60 retained
+inconclusive epochs per satellite-ramp family; baselines and thresholds are
+unchanged. The published default G02 report still reproduces byte for byte.
+
 ## Result
 
 | Channel | Threshold (m) | Calibration exceedances / 60 | Original evaluation exceedances / 60 |

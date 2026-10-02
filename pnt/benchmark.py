@@ -177,7 +177,10 @@ def compare(local_path, references, navigation_path, day_gpst, *, start_s, train
                     if base['status'] != 'EVALUATED':
                         rows.append(dict(base))
                         continue
-                    if scenario.endswith('satellite_ramp') and satellite not in base['satellites']:
+                    # Raw matched presence is insufficient: the perturbation
+                    # must reach at least one trained pair scored at this epoch.
+                    if (scenario.endswith('satellite_ramp') and
+                            not any(satellite in pair.split('/') for pair in base['scored_pairs'])):
                         row = dict(base)
                         row['status'] = 'PERTURBATION_OUTSIDE_MATCHED_SUPPORT'
                         row.pop('exceedances', None)
