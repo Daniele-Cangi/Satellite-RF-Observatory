@@ -18,6 +18,10 @@ For offline fixed-site recordings, [`python -m pnt analyze`](pnt/README.md)
 now produces local and matched-network geometry/clock diagnostics, source hashes
 and coverage gaps in one report. It keeps the two external receivers visible
 and leaves absolute time and attack decisions unevaluated where evidence is missing.
+[`python -m pnt compare`](pnt/README.md#development-comparison) adds a development
+benchmark with separate baseline/calibration/evaluation windows and software
+code ramps. It retains unequal original exceedance rates and worsening cases;
+these are not measured RF detection or false-alarm rates.
 
 The existing [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md)
 provides a local satellite/day request, estimation and evidence pipeline. A

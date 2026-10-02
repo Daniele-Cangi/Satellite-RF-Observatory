@@ -1,4 +1,4 @@
-# Stato del progetto — 2 ottobre 2026
+# Stato del progetto — 3 ottobre 2026
 
 ## Obiettivo
 
@@ -15,6 +15,16 @@ La [verifica software sui tre file gia esposti]
 tutte le 20 epoche richieste; il report storico ds7 resta identico dopo il
 riuso dei calcoli. Non e ancora un rilevatore qualificato: P2 richiede ancora
 la prova del beneficio e il tempo assoluto un testimone indipendente.
+
+Il [confronto di sviluppo riutilizzabile]
+(../research/exploratory/PNT_COMPARISON_BENCHMARK.md) aggiunge `python -m pnt compare`:
+baseline, calibrazione e valutazione separate, stesso supporto locale/rete e
+rampe software nelle pseudodistanze prima del fit. Nel corpus gia esposto il
+combinato supera la soglia in 9/60 epoche originali, il locale in 6/60; non si
+dimostra un vantaggio a pari falsi allarmi. Le rampe confermano la cancellazione
+del clock comune e del disturbo condiviso, e la contaminazione da un riferimento
+alterato. Tutte le 15 varianti e i campioni non valutabili restano nel report.
+Sono risposte a perturbazioni software, non prestazioni su attacchi RF reali.
 
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
