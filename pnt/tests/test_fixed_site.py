@@ -127,6 +127,51 @@ def test_navigation_week_boundary_uses_absolute_toe_and_toc():
         nearest_record({'G01': [replace(record, gps_week=record.gps_week - 1)]}, 'G01', 0., context)
 
 
+@pytest.mark.parametrize('direction', [-1, 1])
+def test_recent_clock_reference_cannot_admit_a_four_hour_old_orbit(direction):
+    context = day_context(DAY)
+    record = replace(constellation()['G01'][0],
+                     toc_gps=context.day + timedelta(seconds=TIME + direction * 7200),
+                     toe_sow=context.sow_midnight + TIME + direction * 14400)
+    with pytest.raises(ValueError, match='STALE_OR_WRONG_WEEK_NAVIGATION'):
+        nearest_record({'G01': [record]}, 'G01', TIME, context)
+
+
+@pytest.mark.parametrize('fit_hours, age_limit', [(None, 7200), (2., 3600), (4., 7200), (6., 7200)])
+@pytest.mark.parametrize('direction', [-1, 1])
+def test_orbit_age_boundary_respects_fit_duration_without_extending_the_two_hour_cap(fit_hours, age_limit, direction):
+    context = day_context(DAY)
+    record = replace(constellation()['G01'][0], fit_interval_h=fit_hours,
+                     toe_sow=context.sow_midnight + TIME + direction * age_limit)
+    assert nearest_record({'G01': [record]}, 'G01', TIME, context) is record
+    expired = replace(record, toe_sow=record.toe_sow + direction * .001)
+    with pytest.raises(ValueError, match='STALE_OR_WRONG_WEEK_NAVIGATION'):
+        nearest_record({'G01': [expired]}, 'G01', TIME, context)
+
+
+def test_nonpositive_declared_fit_interval_is_rejected():
+    record = replace(constellation()['G01'][0], fit_interval_h=-1.)
+    with pytest.raises(ValueError, match='INVALID_NAVIGATION_FIT_INTERVAL'):
+        nearest_record({'G01': [record]}, 'G01', TIME, day_context(DAY))
+
+
+def test_stale_orbit_is_excluded_from_coverage_and_insufficient_epoch_is_retained():
+    nav = constellation()
+    values = observations(nav)
+    nav = {sv: nav[sv] for sv in ('G01', 'G02', 'G03', 'G04')}
+    context = day_context(DAY)
+    nav['G01'] = [replace(nav['G01'][0],
+                         toc_gps=context.day + timedelta(seconds=TIME - 7200),
+                         toe_sow=context.sow_midnight + TIME - 14400)]
+    result = evaluate_epoch(TIME, values, POSITIONS, nav, context)
+    assert result['gpst_s'] == TIME
+    assert result['matched']['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert result['matched']['satellites'] == ['G02', 'G03', 'G04']
+    for name in POSITIONS:
+        assert result['excluded_satellites'][name]['G01'] == 'STALE_OR_WRONG_WEEK_NAVIGATION'
+        assert result['standalone_receiver_fits'][name]['status'] == 'INSUFFICIENT_EVIDENCE'
+
+
 def header(value, label):
     return f'{value:<60}{label:<20}'
 

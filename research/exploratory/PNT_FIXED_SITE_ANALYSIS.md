@@ -39,7 +39,9 @@ or another locally obvious episode does not supply that information.
 ## Reproduce
 
 Obtain the three exact files linked by the [intake](PNT_FIXED_SITE_INTAKE.md)
-and the NOAA file above, then run at this repository revision:
+and the NOAA file above. The preserved v1 report was generated at commit
+`79a18bc19e018255a1e9e2db5656860439930be4`; use that revision to reproduce
+its exact bytes:
 
 ```console
 python -m pnt analyze 2024-09-11 NYA200NOR_R_20242550000_01D_30S_MO.crx.gz brdc2550.24n.gz --reference TRO1=TRO100NOR_S_20242550000_01D_30S_MO.crx.gz --reference KIRU=KIRU00SWE_R_20242550000_01D_30S_MO.crx.gz --start 28800 --stop 29400 --output NEW_REPORT.json
@@ -48,3 +50,11 @@ python -m pnt analyze 2024-09-11 NYA200NOR_R_20242550000_01D_30S_MO.crx.gz brdc2
 The original compressed observation bytes match the earlier intake hashes.
 Repeated execution produces identical report bytes. This is software
 qualification on exposed data, with no new prospective experiment.
+
+PR #172 review identified a navigation-age bug: bounding observation-to-`toc`
+and `toe`-to-`toc` separately could admit an orbit four hours from the
+observation. The corrected command also bounds observation-to-`toe` directly
+and caps that age by half the declared fit duration when available. Replaying
+the same exposed inputs after the correction leaves all numerical results,
+exclusions and coverage unchanged (20/20 matched epochs); only the report's
+orbit admission description changes. The original v1 JSON remains unchanged.

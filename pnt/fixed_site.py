@@ -167,7 +167,8 @@ def analyze(local_path, references, navigation_path, day_gpst, *, start_s=0, sto
             'coverage': {'expected_epochs': len(epochs), 'matched_status_counts': matched_counts,
                          'standalone_status_counts': standalone_counts},
             'model': {'observables': 'GPS ionosphere-free C1C/C2W',
-                      'orbit': 'declared broadcast orbit/clock; nearest healthy toc within 7200 s',
+                      'orbit': 'declared broadcast orbit/clock; nearest healthy toc within 7200 s; '
+                               'absolute toe age within min(7200 s, half declared fit duration)',
                       'propagation': 'existing emission/reception, Earth rotation and simple troposphere model',
                       'clock': 'fixed-coordinate median code-minus-model; six iterations',
                       'minimum_satellites': MIN_SATELLITES, 'elevation_mask_deg': MIN_ELEVATION_DEG,

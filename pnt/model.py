@@ -77,10 +77,19 @@ def nearest_record(navigation, satellite, time_s, context):
         raise ValueError('MISSING_NAVIGATION')
     record = min(records, key=lambda r: abs((r.toc_gps - context.day).total_seconds() - time_s))
     age = abs((record.toc_gps - context.day).total_seconds() - time_s)
-    # Accept a previous-week record only across a week boundary; age still
-    # binds the absolute toc, and propagation uses the record's GPS week.
+    # RINEX's continuous week belongs to toe, including at a week boundary.
+    # Bound observation-to-toe directly: short toc age and toe-to-toc distance
+    # do not together bound orbit age. A declared fit duration can tighten the
+    # symmetric toe-age guard, but never extend our two-hour admission cap.
     toe = GPS_EPOCH + timedelta(seconds=record.gps_week * 604800 + record.toe_sow)
-    if age > MAX_NAV_AGE_S or abs((toe - record.toc_gps).total_seconds()) > MAX_NAV_AGE_S:
+    toe_age = abs((toe - context.day).total_seconds() - time_s)
+    orbit_age_limit = MAX_NAV_AGE_S
+    if record.fit_interval_h is not None:
+        if not math.isfinite(record.fit_interval_h) or record.fit_interval_h <= 0:
+            raise ValueError('INVALID_NAVIGATION_FIT_INTERVAL')
+        orbit_age_limit = min(orbit_age_limit, record.fit_interval_h * 1800)
+    if (age > MAX_NAV_AGE_S or toe_age > orbit_age_limit or
+            abs((toe - record.toc_gps).total_seconds()) > MAX_NAV_AGE_S):
         raise ValueError('STALE_OR_WRONG_WEEK_NAVIGATION')
     return record
 

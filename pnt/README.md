@@ -26,6 +26,16 @@ The observation layout follows the [IGS RINEX 3.05 specification]
 above, not every format or signal described by that specification. These
 diagnostics open observation values and do not implement prospective blinding.
 
+Navigation selection keeps the nearest healthy `toc` record and requires both
+its absolute clock-reference age and orbit-reference (`toe`) age to be at most
+7,200 seconds from the observation. The `toe` age is also capped by half the
+declared fit duration, in hours per [RINEX 2.11, section 6.6]
+(https://files.igs.org/pub/data/format/rinex211.txt), when supplied. This is a
+symmetric age admission guard around `toe`, not a reconstruction of the exact
+broadcast transmission/curve-fit interval. Unknown fit duration retains the
+two-hour cap; invalid duration is rejected. An inadmissible nearest record is
+reported as an exclusion rather than silently replaced by another record.
+
 `--start` is inclusive and `--stop` exclusive, in seconds of the declared GPST
 day. The report retains **every requested grid epoch**, including intervals
 without local observations, remote support or usable ephemerides. Input errors
