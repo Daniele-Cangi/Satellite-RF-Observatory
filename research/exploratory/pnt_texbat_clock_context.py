@@ -10,7 +10,6 @@ from collections import Counter, defaultdict
 from datetime import timezone
 import gzip
 import json
-import math
 from pathlib import Path
 from statistics import median
 from types import SimpleNamespace
@@ -19,7 +18,7 @@ import hatanaka
 import numpy as np
 
 from positioning.calibration import antenna_position, reference_model
-from positioning.navigation import parse_gps_record
+from pnt.model import broadcast_navigation, fit_clock
 from .pnt_texbat_noaa import (DAY, GPS_EPOCH, GPS_WEEK, channel_rows, digest,
                                paired_codes, preattack_anchor, rinex2_c1_text,
                                select_gps_code)
@@ -32,45 +31,6 @@ LOCAL_POSITION_SOURCE = 'https://radionavlab.ae.utexas.edu/images/stories/files/
 SOURCE_DAY = DAY.date().isoformat()
 SOW_MIDNIGHT = ((DAY - GPS_EPOCH).days % 7) * 86400
 MAX_NAV_AGE_S = 7200
-
-
-def broadcast_navigation(data):
-    """Adapt a complete NOAA RINEX 2 GPS NAV file to the shared record parser."""
-    lines = gzip.decompress(data).decode('ascii').splitlines()
-    stop = next((i for i, line in enumerate(lines) if line[60:80].strip() == 'END OF HEADER'), None)
-    if stop is None:
-        raise ValueError('incomplete GPS navigation header')
-    version = [line[:60] for line in lines[:stop] if line[60:80].strip() == 'RINEX VERSION / TYPE']
-    if len(version) != 1 or not 2 <= float(version[0][:9]) < 3 or 'GPS NAV DATA' not in version[0]:
-        raise ValueError('expected one RINEX 2 GPS navigation header')
-    body = lines[stop + 1:]
-    if not body or len(body) % 8:
-        raise ValueError('truncated GPS navigation record')
-    records, counts = defaultdict(list), Counter()
-    for start in range(0, len(body), 8):
-        block = body[start:start + 8]
-        fields = block[0][:22].split()
-        if len(fields) != 7 or any(not line.startswith('   ') for line in block[1:]):
-            raise ValueError('invalid RINEX 2 GPS navigation block')
-        prn, yy, month, day, hour, minute = (int(value) for value in fields[:6])
-        second = float(fields[6])
-        if not 1 <= prn <= 32 or not math.isfinite(second) or second != int(second):
-            raise ValueError('unsupported GPS navigation epoch or PRN')
-        year = 2000 + yy if yy < 80 else 1900 + yy
-        prefix = f'G{prn:02d} {year:04d} {month:02d} {day:02d} {hour:02d} {minute:02d} {int(second):02d}'
-        if len(prefix) != 23:
-            raise ValueError('invalid GPS navigation epoch width')
-        normalized = [prefix + block[0][22:]] + [' ' + line for line in block[1:]]
-        record = parse_gps_record(normalized)
-        counts['source_records'] += 1
-        if record.sv_health != 0 or not 0 <= record.eccentricity < 1 or record.sqrt_a_m_sqrt <= 0:
-            counts['unhealthy_or_invalid_records'] += 1
-            continue
-        records[record.satellite].append(record)
-        counts['admitted_records'] += 1
-    if not records:
-        raise ValueError('no usable GPS navigation records')
-    return records, dict(sorted(counts.items()))
 
 
 def station_codes_and_position(data, station):
@@ -109,33 +69,12 @@ def chosen_records(nav, prns, tow, context):
 
 
 def fitted_clock(codes, position, records, tow, context):
-    """Median common-mode code residual at a fixed coordinate, in metres."""
-    if set(codes) != set(records) or len(codes) < 4:
-        raise ValueError('incomplete common satellite set for clock fit')
-    t = tow - context.sow_midnight
-    clock = 0.0
-    estimates = None
-    for _ in range(6):
-        estimates = np.array([codes[prn] - reference_model(records[prn], codes[prn], t,
-                                                          position, clock, context)[0]
-                              for prn in sorted(codes)])
-        updated = float(np.median(estimates))
-        if abs(updated - clock) < 1e-6:
-            clock = updated
-            break
-        clock = updated
-    else:
-        raise ValueError('receiver clock fit did not converge')
-    # Evaluate at the final clock, rather than retaining the previous iterate.
-    estimates = np.array([codes[prn] - reference_model(records[prn], codes[prn], t,
-                                                      position, clock, context)[0]
-                          for prn in sorted(codes)])
-    if not np.isfinite(estimates).all():
-        raise ValueError('nonfinite clock residual')
-    clock = float(np.median(estimates))
-    return {'clock_m': clock, 'median_absolute_satellite_residual_m':
-            float(np.median(np.abs(estimates - clock))),
-            'max_absolute_satellite_residual_m': float(np.max(np.abs(estimates - clock)))}
+    """Reuse the shared fit while preserving this study's summary schema."""
+    result = fit_clock(codes, position, records, tow - context.sow_midnight,
+                       context, model=reference_model)
+    return {key: result[key] for key in (
+        'clock_m', 'median_absolute_satellite_residual_m',
+        'max_absolute_satellite_residual_m')}
 
 
 def evaluate(paired, nav, positions):

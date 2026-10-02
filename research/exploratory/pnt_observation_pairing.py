@@ -81,6 +81,7 @@ def reference_codes(content, day):
     """Read only C1C/C2W from a complete RINEX 3 daily observation file."""
     lines = iter(content.splitlines())
     types, system, headers = [], None, {}
+    declared_gps_types = None
     for line in lines:
         label = line[60:80].strip()
         if label in ('RINEX VERSION / TYPE', 'TIME OF FIRST OBS', 'RCV CLOCK OFFS APPL', 'SYS / SCALE FACTOR',
@@ -89,14 +90,24 @@ def reference_codes(content, day):
         if label == 'SYS / # / OBS TYPES':
             if line[:1].strip():
                 system = line[0]
+                if system == 'G':
+                    if declared_gps_types is not None:
+                        raise ValueError('duplicate GPS observation type declaration')
+                    declared_gps_types = int(line[3:6])
             if system == 'G':
                 types.extend(line[7:60].split())
         if label == 'END OF HEADER':
             break
     else:
         raise ValueError('incomplete RINEX header')
-    if not 3 <= float(headers.get('RINEX VERSION / TYPE', ['0'])[0][:9]) < 4:
+    versions = headers.get('RINEX VERSION / TYPE', [])
+    if (len(versions) != 1 or not 3 <= float(versions[0][:9]) < 4 or
+            'OBSERVATION DATA' not in versions[0].upper()):
         raise ValueError('expected RINEX 3 observations')
+    if declared_gps_types != len(types):
+        raise ValueError('GPS observation type count mismatch')
+    if len(types) != len(set(types)):
+        raise ValueError('duplicate GPS observation type')
     if not {'C1C', 'C2W'} <= set(types):
         raise ValueError('external GPS C1C/C2W missing')
     time_headers = headers.get('TIME OF FIRST OBS', [])
@@ -106,10 +117,11 @@ def reference_codes(content, day):
         raise ValueError('external time scale is not GPST')
     if any(key in headers for key in ('SYS / SCALE FACTOR', 'SYS / DCBS APPLIED', 'SYS / PCVS APPLIED')):
         raise ValueError('unqualified applied RINEX correction')
-    if int(headers.get('RCV CLOCK OFFS APPL', ['0'])[0]) != 0:
+    clock_headers = headers.get('RCV CLOCK OFFS APPL', ['0'])
+    if len(clock_headers) != 1 or int(clock_headers[0]) != 0:
         raise ValueError('external receiver clock correction already applied')
     indices = types.index('C1C'), types.index('C2W')
-    rows, counts = {}, Counter()
+    rows, counts, seen_epochs = {}, Counter(), set()
     for line in lines:
         if not line.startswith('>'):
             raise ValueError('expected RINEX epoch header')
@@ -119,8 +131,17 @@ def reference_codes(content, day):
         year, month, day_number, hour, minute = map(int, fields[:5])
         if date(year, month, day_number) != day:
             raise ValueError('external epoch outside selected GPST day')
-        seconds = hour * 3600 + minute * 60 + float(fields[5])
+        second = float(fields[5])
+        if not 0 <= hour < 24 or not 0 <= minute < 60 or not 0 <= second < 60:
+            raise ValueError('invalid RINEX epoch clock')
+        seconds = hour * 3600 + minute * 60 + second
         flag, record_count = int(fields[6]), int(fields[7])
+        if record_count < 0:
+            raise ValueError('negative RINEX epoch record count')
+        grid = round(seconds / 30) * 30
+        if grid in seen_epochs:
+            raise ValueError('duplicate external RINEX epoch')
+        seen_epochs.add(grid)
         block = [next(lines, None) for _ in range(record_count)]
         if any(record is None for record in block):
             raise ValueError('truncated RINEX epoch')
@@ -137,6 +158,8 @@ def reference_codes(content, day):
             seen.add(satellite)
             if not satellite.startswith('G'):
                 continue
+            if not satellite[1:].isdigit() or not 1 <= int(satellite[1:]) <= 32:
+                raise ValueError('invalid GPS observation PRN')
             counts['gps_rows'] += 1
             code = [record[3 + 16 * i:3 + 16 * i + 14].strip() for i in indices]
             if not all(code):
