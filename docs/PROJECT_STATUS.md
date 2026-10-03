@@ -115,6 +115,19 @@ la correzione non cambia gli esiti CTTC. Il prossimo prerequisito e un testimone
 Internet che preservi i valori trasmessi o abbia limiti di conversione
 documentati, prima del confronto benigno/attacco P2.
 
+Il [testimone GFZ NavBit](../research/exploratory/PNT_GFZ_NAVIGATION_WITNESS.md)
+colma quel limite di rappresentazione sul caso CTTC gia esposto: l'archivio
+pubblico conserva le parole GPS trasmesse, senza passare da decimali NAV.
+Tutti i 270 campi dei dieci cicli completi concordano; i cinque cicli locali
+incompleti restano tali. Sono conservati cinque file giornalieri originali,
+45 sottoframe con parita verificata e un replay offline. Il confronto con
+NOAA resta non qualificato e quello con entrambe le fonti conserva dieci
+conflitti; nessuna correzione dei risultati precedenti. GFZ e un singolo
+fornitore aggregato, non una rete di testimoni indipendenti qualificati.
+Resta da trovare la coppia benigno/attacco con NAV locale recuperabile e
+copertura esterna contemporanea: autenticita RF e beneficio P2 non sono
+dimostrati dalla concordanza dei messaggi.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come
