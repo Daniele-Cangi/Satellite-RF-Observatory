@@ -60,15 +60,19 @@ def read_gfz_navbit_issues(path):
                 or np.any(np.diff(times.astype(np.int64)) <= 0)):
             raise ValueError('invalid GFZ ordered subframe times')
         satellite, day_start = f"G{scalars['prn']:02d}", (gps_days % 7) * 86400
-        groups, failures, statuses = {}, [], Counter()
+        # A daily member may omit every CEI row in a frame, including at the
+        # day's edges. Derive the denominator from the day, not received rows.
+        groups = {start: {'index': index, 'frame_start_sow': start,
+                          'source_row_indices': [], 'frames': {}, 'invalid_rows': []}
+                  for index, start in enumerate(range(day_start, day_start + 86400, 30))}
+        failures, statuses = [], Counter()
         for index, (transmitted, time, multiple) in enumerate(zip(words.T, times, multiplicity)):
             time, multiple = int(time), int(multiple)
             sow = day_start + time
             start, expected_sf = sow // 30 * 30, sow // 6 % 5 + 1
             cycle = None
             if expected_sf in (1, 2, 3):
-                cycle = groups.setdefault(start, {'index': len(groups), 'frame_start_sow': start,
-                                                   'source_row_indices': [], 'frames': {}, 'invalid_rows': []})
+                cycle = groups[start]
                 cycle['source_row_indices'].append(index)
             try:
                 if multiple <= 0:

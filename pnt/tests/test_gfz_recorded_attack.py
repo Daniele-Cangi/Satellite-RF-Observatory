@@ -150,10 +150,34 @@ def test_incompatible_source_metadata_is_rejected(tmp_path, scalar):
         read_gfz_navbit_issues(excerpt(tmp_path, scalar=scalar))
 
 
+@pytest.mark.parametrize('columns,complete_indices', [
+    ((0, 1, 2, 10, 11, 12), (0, 2)),
+    ((5, 6, 7, 15, 16, 17), (1, 3)),
+    ((3, 4), ()),  # Only SF4/SF5: every daily CEI is wholly absent.
+])
+def test_wholly_absent_cycles_remain_in_the_daily_denominator(tmp_path, columns, complete_indices):
+    rows, source = read_gfz_navbit_issues(excerpt(tmp_path, columns=columns))
+    assert len(rows) == len(complete_indices)
+    assert len(source['cycles']) == 2880
+    day_start = 3 * 86400  # Wednesday, 2024-09-11 GPST.
+    assert [c['frame_start_sow'] for c in source['cycles']] == list(range(day_start, day_start + 86400, 30))
+    assert [r['gfz_cycle_index'] for r in rows] == list(complete_indices)
+    assert source['cycle_status_counts']['INCOMPLETE_CYCLE'] == 2880 - len(rows)
+    for index, cycle in enumerate(source['cycles']):
+        assert cycle['index'] == index
+        if index in complete_indices:
+            assert cycle['status'] == 'DECODED_ISSUE'
+        else:
+            assert cycle['status'] == 'INCOMPLETE_CYCLE'
+            assert cycle['missing_subframes'] == [1, 2, 3]
+            assert cycle['source_row_indices'] == cycle['invalid_rows'] == []
+            assert 'record_index' not in cycle
+
+
 def test_missing_subframe_cannot_borrow_the_next_cycles_piece(tmp_path):
     rows, source = read_gfz_navbit_issues(excerpt(tmp_path, columns=(0, 2, 3, 4, 5, 6, 7)))
     assert len(rows) == 1
-    assert source['cycle_status_counts'] == {'INCOMPLETE_CYCLE': 1, 'DECODED_ISSUE': 1}
+    assert source['cycle_status_counts'] == {'INCOMPLETE_CYCLE': 2879, 'DECODED_ISSUE': 1}
     assert source['cycles'][0]['missing_subframes'] == [2]
 
 
@@ -162,7 +186,7 @@ def test_parity_damage_invalidates_whole_cei_cycle_and_stays_visible(tmp_path):
         arrays['navbits'][2, 0] ^= 1 << 12
     rows, source = read_gfz_navbit_issues(excerpt(tmp_path, damage=damage))
     assert len(rows) == 1
-    assert source['cycle_status_counts'] == {'INVALID_CYCLE': 1, 'DECODED_ISSUE': 1}
+    assert source['cycle_status_counts'] == {'INVALID_CYCLE': 1, 'DECODED_ISSUE': 1, 'INCOMPLETE_CYCLE': 2878}
     assert source['failed_subframes'][0]['source_row_index'] == 0
     assert 'parity failure' in source['failed_subframes'][0]['reason']
 
@@ -223,6 +247,6 @@ def test_unavailable_metadata_remains_a_diagnostic_not_a_qualified_issue(tmp_pat
         arrays['navbits'][:, 0] = encode_test_words(changed)
     rows, source = read_gfz_navbit_issues(excerpt(tmp_path, columns=(0, 1, 2), damage=damage))
     assert len(rows) == 1
-    assert source['cycle_status_counts'] == {'DECODED_UNAVAILABLE_METADATA': 1}
+    assert source['cycle_status_counts'] == {'DECODED_UNAVAILABLE_METADATA': 1, 'INCOMPLETE_CYCLE': 2879}
     assert source['cycles'][0]['unavailable_fields'] == [field]
     assert qualify_fields(rows[0]['intervals'])[field]['status'] == status

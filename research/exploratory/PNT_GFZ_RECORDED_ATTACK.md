@@ -39,6 +39,11 @@ the 8,640 CEI cycles yield 8,637 structurally decoded issues and three
 `UNUSABLE_ISSUE` cycles with inconsistent IODE/IODC. Those failures stay in the
 report with their original source rows. Parity does not guarantee a coherent
 three-subframe issue. Missing/bad pieces cannot be borrowed from another cycle.
+The daily grid retains all 2,880 expected CEI cycles per satellite, including
+wholly absent SF1–SF3 at the day's edges or between received messages. Such
+cycles are `INCOMPLETE_CYCLE`, with no source rows or fabricated issue. This
+correction for sparse members leaves the complete retained files' report bytes
+and scientific outcomes unchanged.
 Unavailable URA/TGD are retained as unqualified diagnostics, not usable bounds.
 
 The existing V2 representation comparator receives every decoded issue,
