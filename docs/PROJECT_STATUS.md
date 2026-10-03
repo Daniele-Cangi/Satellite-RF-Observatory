@@ -12,8 +12,11 @@ log di telefoni, con clock a precisione nanosecondo, identificazione esplicita
 del segnale e conservazione delle misure non utilizzabili. Il campione Pixel 6
 pubblico contiene 11.406 misure GPS normalizzate e 76 tempi non risolti;
 non copre gli attacchi dichiarati e non dimostra rilevamento o beneficio della
-rete. Il confronto con riferimenti esterni resta da implementare e qualificare
-su dati con posizione e cronologia dell'evento adeguatamente documentate.
+rete. `android-analyze` collega ora L1/C1C ai riferimenti RINEX C1C e al motore
+geometrico esistente, con coordinate locali esplicite, selezione temporale
+documentata e tutte le lacune conservate. I test fisici sono sintetici;
+ionosfera e ritardi di codice restano nuisance non corretti. La dimostrazione
+su dati reali con posizione e cronologia dell'evento documentate resta aperta.
 
 La [CLI PNT riutilizzabile](../pnt/README.md) ora analizza registrazioni RINEX
 di un sito fisso: controlli locali e abbinati alla rete, doppie differenze,
