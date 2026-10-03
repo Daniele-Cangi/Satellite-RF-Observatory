@@ -160,3 +160,47 @@ measured false alarms. Software-ramp responses are not measured RF detection
 rates. [The exposed-data exercise](../research/exploratory/PNT_COMPARISON_BENCHMARK.md)
 retains the full comparison, including worse combined behavior and missed
 common-clock modes. The `analyze` command's diagnostic contract is unchanged.
+
+## Held-out reference transfer
+
+```console
+python -m pnt transfer 2024-09-11 LOCAL.crx.gz brdc2550.24n.gz --reference TRO1=TRO1.crx.gz --reference KIRU=KIRU.crx.gz --start 28800 --train-stop 30600 --stop 34200 --output transfer.json
+```
+
+This asks whether a component of local pair-residual variation can be predicted
+from external pair residuals at later epochs. It compares three methods on
+identical qualified pairs: no correction, subtraction of the mean external
+innovation, and subtraction of a training-only learned multiple of that mean.
+It introduces no detector threshold, attack verdict or false-alarm claim.
+
+Pair-specific local and external medians use only the training interval.
+For each qualified pair, let `u` be the centered local residual and `v` the
+centered mean external residual. One zero-intercept coefficient is fitted as
+`sum_epochs(mean_pairs(u*v)) / sum_epochs(mean_pairs(v*v))`. Each eligible
+training epoch has equal weight; pairs remain correlated. Defaults require
+five training samples per pair, six trained pairs at an epoch and 20 eligible
+training epochs. The coefficient is applied unchanged after `--train-stop`.
+There is no reference selection, clipping, regularization or evaluation tuning.
+Insufficient training or zero remote training variation retains an explicit
+inconclusive outcome without a coefficient fallback.
+
+The report retains source hashes, baselines, the coefficient and training
+products, every requested epoch, pair innovations/errors, model failures,
+unsupported pairs and the clock/reference-disagreement diagnostics. Its main
+continuous metric is RMS from the mean squared pair error at each epoch,
+averaged equally over eligible epochs. It also retains per-epoch maxima,
+improved/worsened/equal epoch counts and summaries by scored-pair count.
+All three methods share the same support and denominators. Cardinality groups
+describe changes in support; they do not establish independent measurements
+or remove selection effects.
+
+Local values are admitted in supervised training. This is not independent
+target calibration or prospective confirmation. A smaller residual can result
+from removing a shared model error or harmful manipulation; it does not prove
+RF authenticity, accuracy or useful attack detection. Contaminated training
+can teach a harmful correction. The slope has no qualified uncertainty bound.
+
+The [two-window, three-receiver exercise](../research/exploratory/PNT_REFERENCE_TRANSFER.md)
+retains all six comparisons. Unit subtraction worsens each comparison; the
+learned slope gives small improvements and worsenings without a consistent
+advantage. The previous comparison's thresholds and report remain unchanged.
