@@ -16,7 +16,8 @@ Inputs are GPS C1C/C2W observations in RINEX 3, plain, gzip or Hatanaka as
 supported by the existing decoder. Epochs must follow the 30-second GPST grid
 within the existing 0.001-second tolerance; no resampling, retiming or alternate
 signal fallback is performed. Navigation currently accepts plain or gzipped
-**RINEX 2 GPS NAV**, such as NOAA's daily composite. Other observation signals
+**RINEX 2/3 GPS NAV**, such as NOAA's daily composite or a software receiver's
+GPS-only export. Mixed-constellation NAV and RINEX 4 are rejected. Other observation signals
 and navigation formats require a qualified adapter. Applied code/clock
 corrections and nonordinary events need explicit interpretation and are rejected
 by the shared observation reader.
@@ -212,7 +213,7 @@ python -m pnt navigation 2012-09-14 LOCAL.12n.gz --witness NOAA=EXTERNAL.12n.gz 
 ```
 
 This compares locally declared **decoded navigation messages** with explicitly
-supplied external archives. It accepts plain/gzipped RINEX 2 GPS NAV, using
+supplied external archives. It accepts plain/gzipped RINEX 2/3 GPS NAV, using
 the existing block normalizer. It does not require external residuals to
 predict local noise. At least one named `--witness NAME=PATH` is required;
 names and differing file hashes do not certify independent physical sources.
@@ -236,6 +237,13 @@ conditional on witnesses that contain that same issue. Conflicting witnesses
 are not resolved by majority voting. Structural/nonfinite/missing required
 fields are input errors rather than silently discarded records. These are
 message diagnostics, not ALLOW/BLOCK or RF-authenticity verdicts.
+
+The [public RF reference exercise](../research/exploratory/PNT_PUBLIC_RF_NAVIGATION.md)
+decodes a freely available recording with GNSS-SDR and feeds its GPS-only
+RINEX 3 export into this same command. All five exported messages differ from
+the NOAA archive. Receiver export errors, archive serialization and L2-code
+disagreement remain visible; none is labeled a spoofing detection. Do not
+assume that a software receiver's NAV export preserves every broadcast field.
 
 The [first mechanism exercise](../research/exploratory/PNT_NAVIGATION_WITNESS.md)
 shows why the comparison can add information: a software change in all
@@ -292,7 +300,7 @@ python -m pnt navigation-compare 2024-09-11 LOCAL.crx.gz ORIGINAL.n.gz --case al
 Each repeated `--case NAME OBS NAV` supplies an observation file and its
 navigation hypothesis. A case can reuse the original observations or supply
 a retained variant. This supports the same RINEX 3 GPS C1C/C2W observations
-and RINEX 2 GPS NAV as the fixed-site diagnostic. It uses one original antenna
+and RINEX 2/3 GPS NAV as the fixed-site diagnostic. It uses one original antenna
 coordinate in every case; other observations must declare the same receiver
 marker. An explicit `--local-ecef` needs `--position-source`.
 

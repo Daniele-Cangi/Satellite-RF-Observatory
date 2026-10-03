@@ -19,7 +19,7 @@ def main():
     transfer = commands.add_parser('transfer', help='test training-only external residual prediction on later epochs')
     nav_check = commands.add_parser('navigation', help='compare local decoded navigation issues with external files')
     nav_check.add_argument('day_gpst')
-    nav_check.add_argument('local_navigation', type=Path, help='local RINEX 2 GPS NAV or explicitly selected UBX')
+    nav_check.add_argument('local_navigation', type=Path, help='local RINEX 2/3 GPS NAV or explicitly selected UBX')
     nav_check.add_argument('--local-format', choices=('rinex', 'ubx'), default='rinex')
     nav_check.add_argument('--recover-corrupt', action='store_true',
                            help='UBX only: exclude and count damaged packets instead of rejecting the file')
@@ -30,7 +30,7 @@ def main():
     nav_comparison = commands.add_parser('navigation-compare', help='compare paired OBS/NAV cases and local controls')
     nav_comparison.add_argument('day_gpst')
     nav_comparison.add_argument('local_rinex', type=Path)
-    nav_comparison.add_argument('navigation', type=Path, help='original RINEX 2 GPS NAV')
+    nav_comparison.add_argument('navigation', type=Path, help='original RINEX 2/3 GPS NAV')
     nav_comparison.add_argument('--case', nargs=3, action='append', required=True, metavar=('NAME', 'OBS', 'NAV'))
     nav_comparison.add_argument('--witness', dest='reference', action='append', required=True, metavar='NAME=PATH')
     for flag in ('start', 'calibration-stop', 'stop'):
@@ -43,7 +43,7 @@ def main():
     for command in (analysis, comparison, transfer):
         command.add_argument('day_gpst')
         command.add_argument('local_rinex', type=Path)
-        command.add_argument('navigation', type=Path, help='RINEX 2 GPS NAV, plain or gzip')
+        command.add_argument('navigation', type=Path, help='RINEX 2/3 GPS NAV, plain or gzip')
         command.add_argument('--reference', action='append', required=True, metavar='NAME=PATH')
         command.add_argument('--local-ecef', nargs=3, type=float, metavar=('X', 'Y', 'Z'))
         command.add_argument('--position-source', help='source of the explicit antenna ECEF coordinate')
