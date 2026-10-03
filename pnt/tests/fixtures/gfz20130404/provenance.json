@@ -1,0 +1,56 @@
+{
+  "schema": "gfz-navbit-input-provenance-v1",
+  "accessed_utc": "2026-10-03",
+  "day_gpst": "2013-04-04",
+  "doi": "10.1594/GFZ.ISDC.GNSS/GNSS-GPS-1-NAVBIT",
+  "license": "CC BY 4.0",
+  "license_source": "https://dataservices.gfz.de/10.1594/gfz.isdc.gnss/gnss-gps-1-navbit/gps-ca-navigation-message-data-bits",
+  "attribution": "Rothacher, Markus; Beyerle, Georg (2008): GPS C/A Navigation Message Data Bits. GFZ Data Services.",
+  "archive_url": "https://isdc-data.gfz.de/gnss/GNSS-GPS-1-NAVBIT/y2013/GNSS-GPS-1-NAVBIT+2013_094_A.tar",
+  "archive_sha256": "431341f496f3128a6faabf03a6d9430b297ba8b17341f3a0f339e0759c5bed58",
+  "archive_bytes": 3246080,
+  "retention": "Five unchanged daily members for all satellites present in the exposed CTTC local cycles; no outcome-based source/member selection.",
+  "members": [
+    {
+      "file": "NAVBIT-GPS-L1CA-2013-094-01-14400.nc.gz",
+      "satellite": "G01",
+      "sha256": "2de7c103c98eb888a8a4f24fed68e4c1efdb105a24ca5fdb39c72b7443bbd03d",
+      "bytes": 99979,
+      "netcdf_sha256": "9a3bff86421f0daff44a5f78961e9425f7d133f908a20f0f1e32cda26086bdef",
+      "netcdf_bytes": 693664
+    },
+    {
+      "file": "NAVBIT-GPS-L1CA-2013-094-11-14400.nc.gz",
+      "satellite": "G11",
+      "sha256": "aadecbb7a1a4a0cbd3b2c2b41885a5848c60a17bb33d81c0ef277d464f019630",
+      "bytes": 100528,
+      "netcdf_sha256": "124aa272cad839b520d0b312fc425e36788cf738852adeaebe43b871f08a3b35",
+      "netcdf_bytes": 693664
+    },
+    {
+      "file": "NAVBIT-GPS-L1CA-2013-094-17-14400.nc.gz",
+      "satellite": "G17",
+      "sha256": "34f5a7a57ae575d9b0a67405d8f0b9754d8fb6fed0b29ac6d9bdd816bc3c8553",
+      "bytes": 100412,
+      "netcdf_sha256": "da86aed49d6deeeace20e819fba497a73e9aa6bf23a16cb87062e21e0daa84c1",
+      "netcdf_bytes": 693664
+    },
+    {
+      "file": "NAVBIT-GPS-L1CA-2013-094-20-14400.nc.gz",
+      "satellite": "G20",
+      "sha256": "93e9bba4efd49d40323694cfc6b41cca43497d01bcf72c3763582e1c7c440a71",
+      "bytes": 101434,
+      "netcdf_sha256": "88a983f8195ae705cdedfdfd439953d9c2656b717e146ef8d39cc12a4ea32ced",
+      "netcdf_bytes": 693664
+    },
+    {
+      "file": "NAVBIT-GPS-L1CA-2013-094-32-14400.nc.gz",
+      "satellite": "G32",
+      "sha256": "d52607d07d79f8e7859c5d4886e6dab1759c5670645944925558a21e48f2252e",
+      "bytes": 100429,
+      "netcdf_sha256": "370f7be34feae9f7ff8de9c27eac65893bb721e664dd869ad9fc1b616406abd8",
+      "netcdf_bytes": 693664
+    }
+  ],
+  "archive_regular_members": 32
+}

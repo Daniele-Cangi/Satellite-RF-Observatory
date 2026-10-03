@@ -318,8 +318,14 @@ as `written_decimal_rejection`. Structural/issue/time checks are still required.
 
 The [exposed RF qualification](../research/exploratory/PNT_NAVIGATION_REPRESENTATION.md)
 retains all five native discrepancies and marks the archived representations
-unqualified. Source/conversion qualification is still needed before measuring
-detection benefit on a benign/attack pair.
+unqualified. The subsequent [GFZ NavBit intake](../research/exploratory/PNT_GFZ_NAVIGATION_WITNESS.md)
+retains transmitted words from one public Internet provider: all 27 fields
+agree in each of the ten complete exposed CTTC cycles. The reusable
+`pnt.lnav.decode_lnav_words` checks parity and de-inverts transmitted words;
+it must not be applied to already recovered receiver output. This is offline
+fixture intake, not a new CLI adapter. NOAA conflicts and the five incomplete
+local cycles remain visible; source independence and a matched benign/attack
+comparison remain open before measuring detection benefit.
 
 ## Paired navigation comparison
 
