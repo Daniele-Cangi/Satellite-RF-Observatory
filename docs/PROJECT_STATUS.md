@@ -99,6 +99,22 @@ confronto riutilizzabile che qualifichi queste rappresentazioni, conservando
 variazioni reali di un bit e ambiguita. Non occorre acquistare sensori per
 proseguire questo sviluppo; la concordanza NAV resta distinta dall'autenticita RF.
 
+La [qualifica delle rappresentazioni LNAV]
+(../research/exploratory/PNT_NAVIGATION_REPRESENTATION.md) aggiunge
+`navigation --qualify-lnav`, conservando il confronto precedente. Ogni campo
+deve ammettere un unico valore trasmissibile entro l'intervallo scritto;
+nessuna correzione al bit piu vicino o precisione inferita. Sui dieci cicli
+CTTC completi tutti i 270 campi locali sono risolvibili, ma le rappresentazioni
+NOAA hanno 136 campi senza candidato, dieci zeri af2 ambigui e sei metadati L2
+invalidi. Tutti i cicli restano non qualificati; le cinque discordanze native
+restano invariate e non diventano attacchi. I test preservano cambiamenti di
+un bit, conflitti e casi mancanti. La revisione V2 usa limiti razionali esatti
+per la conversione angolare e rende espliciti URA/TGD indisponibili anche da
+UBX, senza ammetterli nel confronto precedente. Il risultato V1 resta conservato;
+la correzione non cambia gli esiti CTTC. Il prossimo prerequisito e un testimone
+Internet che preservi i valori trasmessi o abbia limiti di conversione
+documentati, prima del confronto benigno/attacco P2.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come

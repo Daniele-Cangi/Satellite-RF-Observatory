@@ -23,6 +23,8 @@ def main():
     nav_check.add_argument('--local-format', choices=('rinex', 'ubx'), default='rinex')
     nav_check.add_argument('--recover-corrupt', action='store_true',
                            help='UBX only: exclude and count damaged packets instead of rejecting the file')
+    nav_check.add_argument('--qualify-lnav', action='store_true',
+                           help='also test whether written intervals uniquely identify encodable GPS LNAV values')
     nav_check.add_argument('--witness', dest='reference', action='append', required=True, metavar='NAME=PATH')
     nav_check.add_argument('--start', type=int, default=0)
     nav_check.add_argument('--stop', type=int, default=86400)
@@ -91,7 +93,8 @@ def main():
             options.update(train_stop_s=args.train_stop, minimum_training=args.minimum_training,
                            minimum_fit_epochs=args.minimum_fit_epochs)
         if args.command == 'navigation':
-            options.update(local_format=args.local_format, recover_corrupt=args.recover_corrupt)
+            options.update(local_format=args.local_format, recover_corrupt=args.recover_corrupt,
+                           qualify_lnav=args.qualify_lnav)
             report = inspect_navigation(args.local_navigation, references, args.day_gpst, **options)
         elif args.command == 'navigation-compare':
             options.update(calibration_stop_s=args.calibration_stop, proportion=args.quantile,
@@ -111,6 +114,8 @@ def main():
                {name: case['paired_evaluation']['status_counts'] for name, case in report['cases'].items()}
                if args.command == 'navigation-compare' else
                report['coverage']['matched_status_counts'])
+    if args.command == 'navigation' and args.qualify_lnav:
+        summary = {'written_decimal': summary, 'lnav_representation': report['lnav_representation']['status_counts']}
     print(f"{report['status']}: {summary}; {args.output}")
 
 

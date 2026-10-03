@@ -291,6 +291,36 @@ match NOAA; a third declares 1 October in an 11 September capture and lacks a
 same-issue witness. This is missing corroboration, not a matched-field conflict,
 qualified attack attribution or measured incremental detection benefit.
 
+## LNAV representation qualification
+
+Add `--qualify-lnav` to `navigation` to retain the existing written-decimal
+comparison and add encodable-value qualification under schema v3:
+
+```console
+python -m pnt navigation 2024-09-11 capture.ubx --local-format ubx --witness NOAA=brdc2550.24n.gz --qualify-lnav --output NEW.json
+```
+
+Each written interval must contain exactly one GPS LNAV value. Zero or
+multiple candidates, invalid L2-code metadata and unavailable URA/TGD remain
+unqualified. The report retains all fields, duplicates, conflicting witnesses
+and missing issues. It never selects the nearest integer, infers lost precision
+or repairs exported fields. Unique agreement is conditional representation
+agreement, not source independence, freshness, RF authentication or an allow
+verdict. With the flag absent, v1/v2 output stays unchanged.
+
+The representation profile V2 uses exact rational bounds and a candidate-scaled
+pi interval; it adds no fixed angular tolerance, including around zero.
+For UBX, complete issues with unavailable URA/TGD also receive field diagnostics
+while retaining their original unusable-cycle outcome. These rows have a
+`representation_record_index` and `sfrbx_cycle_index`; `local_record_index` is
+null when the prior comparator rejected the issue, with the reason retained
+as `written_decimal_rejection`. Structural/issue/time checks are still required.
+
+The [exposed RF qualification](../research/exploratory/PNT_NAVIGATION_REPRESENTATION.md)
+retains all five native discrepancies and marks the archived representations
+unqualified. Source/conversion qualification is still needed before measuring
+detection benefit on a benign/attack pair.
+
 ## Paired navigation comparison
 
 ```console
