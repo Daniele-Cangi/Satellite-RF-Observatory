@@ -117,7 +117,8 @@ def member_arrays():
         return {name: variable.data.copy() for name, variable in source.variables.items()}
 
 
-def excerpt(tmp_path, *, columns=(0, 1, 2, 3, 4, 5, 6, 7), scalar=None, damage=None):
+def excerpt(tmp_path, *, columns=(0, 1, 2, 3, 4, 5, 6, 7), scalar=None, damage=None,
+            gps_word_type='i', gps_word_dimension='gps_word'):
     arrays = member_arrays()
     arrays['nofsfr'][...] = len(columns)
     arrays['navbits'] = arrays['navbits'][:, columns]
@@ -132,16 +133,29 @@ def excerpt(tmp_path, *, columns=(0, 1, 2, 3, 4, 5, 6, 7), scalar=None, damage=N
     with netcdf_file(stream, 'w') as output:
         output.createDimension('gps_word', 10)
         output.createDimension('time', len(columns))
+        if gps_word_dimension != 'gps_word':
+            output.createDimension(gps_word_dimension, 10)
         for name, array in arrays.items():
             dimensions = ('gps_word', 'time') if name == 'navbits' else (
-                ('gps_word',) if name == 'gps_word' else ('time',) if array.ndim else ())
-            variable = output.createVariable(name, 'i', dimensions)
+                (gps_word_dimension,) if name == 'gps_word' else ('time',) if array.ndim else ())
+            variable = output.createVariable(name, gps_word_type if name == 'gps_word' else 'i', dimensions)
             variable.data[...] = array
         output.flush()
         raw = stream.getvalue()
     path = tmp_path / 'excerpt.nc.gz'
     path.write_bytes(gzip.compress(raw, mtime=0))
     return path
+
+
+@pytest.mark.parametrize('coordinate', [
+    {'gps_word_type': 'f'},
+    {'gps_word_dimension': 'unrelated_axis'},
+])
+def test_word_coordinate_requires_integer_type_and_its_own_dimension(tmp_path, coordinate):
+    # Keep labels 1..10 numerically correct: values alone must not admit a
+    # floating coordinate or one attached to an unrelated NetCDF dimension.
+    with pytest.raises(ValueError, match='array layout'):
+        read_gfz_navbit_issues(excerpt(tmp_path, **coordinate))
 
 
 @pytest.mark.parametrize('scalar', [{'version': 2}, {'day_of_year': 367}, {'gps_week': 2332}, {'prn': 0}])

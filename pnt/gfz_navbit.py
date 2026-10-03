@@ -52,6 +52,8 @@ def read_gfz_navbit_issues(path):
         if (not 0 <= count <= 14400 or words.shape != (10, count)
                 or times.shape != (count,) or multiplicity.shape != (count,)
                 or variables['navbits'].dimensions != ('gps_word', 'time')
+                or variables['gps_word'].dimensions != ('gps_word',)
+                or variables['gps_word'].data.dtype.kind != 'i'
                 or any(variables[name].dimensions != ('time',) for name in ('time', 'multiplicity'))
                 or any(value.dtype.kind != 'i' for value in (words, times, multiplicity))
                 or not np.array_equal(variables['gps_word'].data, np.arange(1, 11))):
