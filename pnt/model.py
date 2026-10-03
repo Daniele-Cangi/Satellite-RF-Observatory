@@ -28,8 +28,8 @@ def day_context(day):
                            sow_midnight=elapsed % 604800)
 
 
-def broadcast_navigation(data):
-    """Adapt plain/gzipped RINEX 2 GPS NAV to the existing record parser."""
+def navigation_blocks(data):
+    """Normalize plain/gzipped RINEX 2 GPS NAV blocks without discarding fields."""
     decoded = gzip.decompress(data) if data.startswith(b'\x1f\x8b') else data
     lines = decoded.decode('ascii').splitlines()
     stop = next((i for i, line in enumerate(lines) if line[60:80].strip() == 'END OF HEADER'), None)
@@ -41,7 +41,6 @@ def broadcast_navigation(data):
     body = lines[stop + 1:]
     if not body or len(body) % 8:
         raise ValueError('truncated GPS navigation record')
-    records, counts = defaultdict(list), Counter()
     for start in range(0, len(body), 8):
         block = body[start:start + 8]
         values = block[0][:22].split()
@@ -55,7 +54,13 @@ def broadcast_navigation(data):
         prefix = f'G{prn:02d} {year:04d} {month:02d} {day:02d} {hour:02d} {minute:02d} {int(second):02d}'
         if len(prefix) != 23:
             raise ValueError('invalid GPS navigation epoch width')
-        normalized = [prefix + block[0][22:]] + [' ' + line for line in block[1:]]
+        yield [prefix + block[0][22:]] + [' ' + line for line in block[1:]]
+
+
+def broadcast_navigation(data):
+    """Adapt RINEX 2 GPS NAV while retaining the original model admission rules."""
+    records, counts = defaultdict(list), Counter()
+    for normalized in navigation_blocks(data):
         record = parse_gps_record(normalized)
         if any(isinstance(value := getattr(record, field.name), (int, float)) and
                not math.isfinite(value) for field in fields(record)):

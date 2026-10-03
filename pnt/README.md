@@ -204,3 +204,45 @@ The [two-window, three-receiver exercise](../research/exploratory/PNT_REFERENCE_
 retains all six comparisons. Unit subtraction worsens each comparison; the
 learned slope gives small improvements and worsenings without a consistent
 advantage. The previous comparison's thresholds and report remain unchanged.
+
+## Decoded navigation witnesses
+
+```console
+python -m pnt navigation 2012-09-14 LOCAL.12n.gz --witness NOAA=EXTERNAL.12n.gz --start 43200 --stop 50400 --output navigation.json
+```
+
+This compares locally declared **decoded navigation messages** with explicitly
+supplied external archives. It accepts plain/gzipped RINEX 2 GPS NAV, using
+the existing block normalizer. It does not require external residuals to
+predict local noise. At least one named `--witness NAME=PATH` is required;
+names and differing file hashes do not certify independent physical sources.
+Identical input hashes and duplicate external content are exposed in coverage.
+
+Messages are matched by satellite, GPST `toc`, continuous week, `toe`, IODE
+and IODC. No nearest-message substitution is performed when that issue is
+missing. All 27 clock/orbit-1..6 fields are retained, including unhealthy
+records, IODC and L2 flags that orbit fitting does not use. Integer fields are
+compared exactly; other fields allow only rounding to the last written decimal
+digit. Duplicate issues must have compatible field intervals. Different
+transmission times and optional derived fit durations are not payload conflicts;
+ionosphere/UTC headers and spare fields are outside this first comparison.
+
+Each local record whose `toc` lies in the requested half-open GPST window is
+retained with its source index, fields and every witness's matching records.
+Outcomes are `COMPATIBLE_WITH_EXTERNAL`, `DIFFERENT_FROM_EXTERNAL`,
+`INSUFFICIENT_EVIDENCE`, `CONFLICTING_LOCAL_RECORDS` or
+`EXTERNAL_RECORD_CONFLICT`. Missing witnesses remain visible; agreement is
+conditional on witnesses that contain that same issue. Conflicting witnesses
+are not resolved by majority voting. Structural/nonfinite/missing required
+fields are input errors rather than silently discarded records. These are
+message diagnostics, not ALLOW/BLOCK or RF-authenticity verdicts.
+
+The [first mechanism exercise](../research/exploratory/PNT_NAVIGATION_WITNESS.md)
+shows why the comparison can add information: a software change in all
+satellite clock biases can enter the local receiver-clock fit while leaving
+geometry almost unchanged, yet differ from external message fields. It uses
+real archived codes with **synthetic local navigation variants**, not a
+recorded RF attack. Unchanged messages can accompany harmful RF manipulation;
+a match does not authenticate pseudoranges, freshness, position or absolute time.
+The command currently needs decoded RINEX NAV; raw UBX SFRBX decoding is the
+next adapter, supported by packet availability in the existing JammerTest file.

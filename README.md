@@ -27,6 +27,11 @@ external residuals predict later local variation using a training-only slope.
 The [two-window receiver rotations](research/exploratory/PNT_REFERENCE_TRANSFER.md)
 retain all six results: unit subtraction worsens each, and learned transfer
 shows no consistent advantage. Residual prediction is not RF authentication.
+[`python -m pnt navigation`](pnt/README.md#decoded-navigation-witnesses) compares
+local decoded navigation issues with supplied external messages. It exposes
+missing coverage, conflicting records and changed fields without certifying
+RF origin; the [mechanism exercise](research/exploratory/PNT_NAVIGATION_WITNESS.md)
+documents a synthetic clock-message ambiguity and the remaining raw-log adapter.
 
 The existing [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md)
 provides a local satellite/day request, estimation and evidence pipeline. A

@@ -43,6 +43,23 @@ varianti della stessa regressione per cercare un risultato positivo: la
 prossima estensione deve motivare un diverso effetto fisico o una topologia
 di riferimenti che lo osservi, prima di valutarne il beneficio P2.
 
+Il [confronto dei messaggi di navigazione]
+(../research/exploratory/PNT_NAVIGATION_WITNESS.md) apre un meccanismo diverso:
+`python -m pnt navigation` confronta la stessa issue GPS dichiarata localmente
+con archivi esterni, mantenendo messaggi mancanti, discordanti e conflitti fra
+fonti. Nel primo controllo software, una modifica comune di 0,954 microsecondi
+dei clock satellitari sposta il clock stimato da codici TXAU reali di 285,905 m,
+ma cambia i residui per satellite di meno di 1 mm. I campi alterati restano
+discordanti rispetto all'archivio esterno. I messaggi locali sono varianti
+**sintetiche** dell'archivio NOAA: questo dimostra un meccanismo e il codice,
+non un beneficio su un attacco RF registrato o a pari falsi allarmi.
+Il file UBX gia esposto dell'episodio JammerTest 2.1.1 contiene 9.387 pacchetti
+SFRBX multi-GNSS con checksum UBX valido; due pacchetti con checksum errato
+restano esclusi. Il prossimo passo concreto e decodificare le issue GPS da
+quei payload e confrontarle con i messaggi esterni contemporanei, conservando
+copertura e discrepanze. La concordanza dei messaggi non autentica le misure
+di distanza o il tempo; la provenienza indipendente delle fonti resta da qualificare.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come
