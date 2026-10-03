@@ -108,3 +108,6 @@ research/exploratory/position_error_plan.json -text
 research/exploratory/position_error_plan_v2.json -text
 
 research/exploratory/pseudotarget_plan.json -text
+
+# Public RF-derived NAV evidence retains fixed columns and original bytes.
+pnt/tests/fixtures/cttc20130404/** -text whitespace=-blank-at-eol

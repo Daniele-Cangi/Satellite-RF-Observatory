@@ -86,6 +86,19 @@ non un confronto benigno/attacco fisico, una fonte indipendente qualificata
 o una misura dei falsi allarmi. P2 resta aperto, ma ora il confronto puo
 essere applicato a un caso reale adeguato senza un nuovo esecutore o sigillo.
 
+La [prova RF pubblica con ricevitore software]
+(../research/exploratory/PNT_PUBLIC_RF_NAVIGATION.md) ha decodificato 100 secondi
+di campioni GPS L1 senza nuovo hardware. La CLI ammette ora anche NAV RINEX 3
+GPS, con gli stessi campi e criteri di confronto. Tutti i cinque messaggi
+esportati da GNSS-SDR risultano discordanti con NOAA: il controllo dei bit
+individua errori nell'esportazione del flag P e dell'URA, precisione degli
+archivi e differenze nei codici L2 di tre satelliti. I risultati e i dieci
+cicli completi, oltre ai cinque incompleti, restano visibili; non sono
+rilevamenti di attacco. Prima della coppia benigno/attacco P2 serve un
+confronto riutilizzabile che qualifichi queste rappresentazioni, conservando
+variazioni reali di un bit e ambiguita. Non occorre acquistare sensori per
+proseguire questo sviluppo; la concordanza NAV resta distinta dall'autenticita RF.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come

@@ -1,0 +1,484 @@
+Initializing GNSS-SDR v0.0.21 ... Please wait.
+Logging will be written at /mnt/c/temp/satellite-rf-iq-feasibility-2026-10-03/decode-v1/logs
+RF Channels: 1
+Processing file /mnt/c/temp/satellite-rf-iq-feasibility-2026-10-03/2013_04_04_GNSS_SIGNAL_at_CTTC_SPAIN.dat, which contains 800000000 samples (1600000000 bytes)
+GNSS signal recorded time to be processed: 99.95 [s]
+vmcircbuf_prefs::get :info: /home/dacang/.config/gnuradio/prefs/vmcircbuf_default_factory failed to open: bad true, fail true, eof true
+Tracking of GPS L1 C/A signal started on channel 6 for satellite GPS PRN 11 (Block III)
+Current receiver time: 1 s
+Tracking of GPS L1 C/A signal started on channel 0 for satellite GPS PRN 17 (Block IIR-M)
+Tracking of GPS L1 C/A signal started on channel 1 for satellite GPS PRN 20 (Block IIR)
+Tracking of GPS L1 C/A signal started on channel 4 for satellite GPS PRN 32 (Block IIF)
+Tracking of GPS L1 C/A signal started on channel 3 for satellite GPS PRN 01 (Block IIF)
+Current receiver time: 2 s
+Current receiver time: 3 s
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 30 (Block IIF)
+Current receiver time: 4 s
+Tracking of GPS L1 C/A signal started on channel 2 for satellite GPS PRN 04 (Block III)
+Current receiver time: 5 s
+Current receiver time: 6 s
+Current receiver time: 7 s
+GPS L1 C/A histogram bit synchronization locked in channel 6 for satellite GPS PRN 11 (Block III)
+GPS L1 C/A histogram bit synchronization locked in channel 0 for satellite GPS PRN 17 (Block IIR-M)
+GPS L1 C/A histogram bit synchronization locked in channel 1 for satellite GPS PRN 20 (Block IIR)
+GPS L1 C/A histogram bit synchronization locked in channel 3 for satellite GPS PRN 01 (Block IIF)
+GPS L1 C/A histogram bit synchronization locked in channel 4 for satellite GPS PRN 32 (Block IIF)
+Current receiver time: 8 s
+Tracking of GPS L1 C/A signal started on channel 7 for satellite GPS PRN 21 (Block IIR)
+Current receiver time: 9 s
+Current receiver time: 10 s
+Current receiver time: 11 s
+Current receiver time: 12 s
+Current receiver time: 13 s
+Current receiver time: 14 s
+Loss of lock in channel 5, satellite GPS PRN 30 (Block IIF) !
+Current receiver time: 15 s
+Loss of lock in channel 2, satellite GPS PRN 04 (Block III) !
+Current receiver time: 16 s
+Current receiver time: 17 s
+Tracking of GPS L1 C/A signal started on channel 2 for satellite GPS PRN 16 (Block IIR)
+Current receiver time: 18 s
+Current receiver time: 19 s
+Current receiver time: 20 s
+Loss of lock in channel 7, satellite GPS PRN 21 (Block IIR) !
+Current receiver time: 21 s
+Current receiver time: 22 s
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 26 (Block IIF)
+Current receiver time: 23 s
+Current receiver time: 24 s
+Current receiver time: 25 s
+Tracking of GPS L1 C/A signal started on channel 7 for satellite GPS PRN 08 (Block IIF)
+Current receiver time: 26 s
+New GPS NAV message received in channel 1: subframe 3 from satellite GPS PRN 20 (Block IIR) with CN0=44 dB-Hz
+New GPS NAV message received in channel 3: subframe 3 from satellite GPS PRN 01 (Block IIF) with CN0=48 dB-Hz
+New GPS NAV message received in channel 4: subframe 3 from satellite GPS PRN 32 (Block IIF) with CN0=47 dB-Hz
+New GPS NAV message received in channel 6: subframe 3 from satellite GPS PRN 11 (Block III) with CN0=46 dB-Hz
+New GPS NAV message received in channel 0: subframe 3 from satellite GPS PRN 17 (Block IIR-M) with CN0=46 dB-Hz
+Current receiver time: 27 s
+First position fix at 2013-Apr-04 06:23:33.380000 UTC is Lat = 41.2748 [deg], Long = 1.98766 [deg], Height = 80.9887 [m], with GDOP = 5.94464
+[1m[32mPosition at 2013-Apr-04 06:23:33.500000 UTC using 5 observations is Lat = 41.274803 [deg], Long = 1.987684 [deg], Height = 68.29 [m][0m
+[1m[32mVelocity: East: 0.38 [m/s], North: 0.41 [m/s], Up = 1.45 [m/s][0m
+Current receiver time: 28 s
+[1m[32mPosition at 2013-Apr-04 06:23:34.000000 UTC using 5 observations is Lat = 41.274827 [deg], Long = 1.987696 [deg], Height = 76.89 [m][0m
+[1m[32mVelocity: East: 0.11 [m/s], North: -0.43 [m/s], Up = -1.18 [m/s][0m
+Loss of lock in channel 2, satellite GPS PRN 16 (Block IIR) !
+[1m[32mPosition at 2013-Apr-04 06:23:34.500000 UTC using 5 observations is Lat = 41.274743 [deg], Long = 1.987670 [deg], Height = 74.20 [m][0m
+[1m[32mVelocity: East: -0.19 [m/s], North: -0.18 [m/s], Up = -3.80 [m/s][0m
+Current receiver time: 29 s
+[1m[32mPosition at 2013-Apr-04 06:23:35.000000 UTC using 5 observations is Lat = 41.274805 [deg], Long = 1.987681 [deg], Height = 80.55 [m][0m
+[1m[32mVelocity: East: -0.81 [m/s], North: -1.11 [m/s], Up = 0.60 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:35.500000 UTC using 5 observations is Lat = 41.274750 [deg], Long = 1.987620 [deg], Height = 88.15 [m][0m
+[1m[32mVelocity: East: 0.45 [m/s], North: -0.39 [m/s], Up = -0.61 [m/s][0m
+Current receiver time: 30 s
+[1m[32mPosition at 2013-Apr-04 06:23:36.000000 UTC using 5 observations is Lat = 41.274832 [deg], Long = 1.987715 [deg], Height = 71.20 [m][0m
+[1m[32mVelocity: East: 0.71 [m/s], North: 1.33 [m/s], Up = -1.18 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:36.500000 UTC using 5 observations is Lat = 41.274783 [deg], Long = 1.987661 [deg], Height = 80.83 [m][0m
+[1m[32mVelocity: East: -0.98 [m/s], North: -0.59 [m/s], Up = 2.32 [m/s][0m
+Current receiver time: 31 s
+[1m[32mPosition at 2013-Apr-04 06:23:37.000000 UTC using 5 observations is Lat = 41.274747 [deg], Long = 1.987637 [deg], Height = 83.73 [m][0m
+[1m[32mVelocity: East: 0.58 [m/s], North: 1.23 [m/s], Up = 0.58 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:37.500000 UTC using 5 observations is Lat = 41.274772 [deg], Long = 1.987669 [deg], Height = 78.47 [m][0m
+[1m[32mVelocity: East: 0.89 [m/s], North: 1.14 [m/s], Up = -2.67 [m/s][0m
+Current receiver time: 32 s
+[1m[32mPosition at 2013-Apr-04 06:23:38.000000 UTC using 5 observations is Lat = 41.274840 [deg], Long = 1.987698 [deg], Height = 75.32 [m][0m
+[1m[32mVelocity: East: -0.63 [m/s], North: -1.33 [m/s], Up = 3.21 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:38.500000 UTC using 5 observations is Lat = 41.274814 [deg], Long = 1.987698 [deg], Height = 69.28 [m][0m
+[1m[32mVelocity: East: 1.49 [m/s], North: 0.22 [m/s], Up = -3.47 [m/s][0m
+Current receiver time: 33 s
+Loss of lock in channel 5, satellite GPS PRN 26 (Block IIF) !
+[1m[32mPosition at 2013-Apr-04 06:23:39.000000 UTC using 5 observations is Lat = 41.274824 [deg], Long = 1.987682 [deg], Height = 70.85 [m][0m
+[1m[32mVelocity: East: -0.32 [m/s], North: -0.64 [m/s], Up = 1.22 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:39.500000 UTC using 5 observations is Lat = 41.274792 [deg], Long = 1.987676 [deg], Height = 76.67 [m][0m
+[1m[32mVelocity: East: -0.79 [m/s], North: -0.54 [m/s], Up = 1.38 [m/s][0m
+Current receiver time: 34 s
+Tracking of GPS L1 C/A signal started on channel 2 for satellite GPS PRN 21 (Block IIR)
+[1m[32mPosition at 2013-Apr-04 06:23:40.000000 UTC using 5 observations is Lat = 41.274809 [deg], Long = 1.987681 [deg], Height = 73.64 [m][0m
+[1m[32mVelocity: East: -0.36 [m/s], North: -0.04 [m/s], Up = 1.82 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:40.500000 UTC using 5 observations is Lat = 41.274811 [deg], Long = 1.987658 [deg], Height = 68.51 [m][0m
+[1m[32mVelocity: East: -0.68 [m/s], North: 0.60 [m/s], Up = 0.83 [m/s][0m
+Current receiver time: 35 s
+[1m[32mPosition at 2013-Apr-04 06:23:41.000000 UTC using 5 observations is Lat = 41.274867 [deg], Long = 1.987736 [deg], Height = 61.98 [m][0m
+[1m[32mVelocity: East: -0.60 [m/s], North: -0.77 [m/s], Up = 2.08 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:41.500000 UTC using 5 observations is Lat = 41.274812 [deg], Long = 1.987650 [deg], Height = 77.23 [m][0m
+[1m[32mVelocity: East: -0.13 [m/s], North: 0.12 [m/s], Up = 1.97 [m/s][0m
+Current receiver time: 36 s
+[1m[32mPosition at 2013-Apr-04 06:23:42.000000 UTC using 5 observations is Lat = 41.274806 [deg], Long = 1.987699 [deg], Height = 69.49 [m][0m
+[1m[32mVelocity: East: 0.12 [m/s], North: 0.48 [m/s], Up = -2.23 [m/s][0m
+Loss of lock in channel 7, satellite GPS PRN 08 (Block IIF) !
+[1m[32mPosition at 2013-Apr-04 06:23:42.500000 UTC using 5 observations is Lat = 41.274853 [deg], Long = 1.987711 [deg], Height = 73.36 [m][0m
+[1m[32mVelocity: East: 0.38 [m/s], North: 0.83 [m/s], Up = -1.99 [m/s][0m
+Current receiver time: 37 s
+[1m[32mPosition at 2013-Apr-04 06:23:43.000000 UTC using 5 observations is Lat = 41.274821 [deg], Long = 1.987676 [deg], Height = 77.89 [m][0m
+[1m[32mVelocity: East: 1.61 [m/s], North: 0.95 [m/s], Up = -2.63 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 12 (Block IIR-M)
+[1m[32mPosition at 2013-Apr-04 06:23:43.500000 UTC using 5 observations is Lat = 41.274800 [deg], Long = 1.987668 [deg], Height = 86.19 [m][0m
+[1m[32mVelocity: East: 0.94 [m/s], North: 0.25 [m/s], Up = -2.76 [m/s][0m
+Current receiver time: 38 s
+[1m[32mPosition at 2013-Apr-04 06:23:44.000000 UTC using 5 observations is Lat = 41.274850 [deg], Long = 1.987670 [deg], Height = 82.59 [m][0m
+[1m[32mVelocity: East: -0.07 [m/s], North: 0.11 [m/s], Up = 1.30 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:44.500000 UTC using 5 observations is Lat = 41.274820 [deg], Long = 1.987691 [deg], Height = 88.03 [m][0m
+[1m[32mVelocity: East: 1.08 [m/s], North: 0.60 [m/s], Up = -1.38 [m/s][0m
+Current receiver time: 39 s
+[1m[32mPosition at 2013-Apr-04 06:23:45.000000 UTC using 5 observations is Lat = 41.274828 [deg], Long = 1.987676 [deg], Height = 82.39 [m][0m
+[1m[32mVelocity: East: -0.03 [m/s], North: 0.50 [m/s], Up = -0.51 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:45.500000 UTC using 5 observations is Lat = 41.274822 [deg], Long = 1.987699 [deg], Height = 72.55 [m][0m
+[1m[32mVelocity: East: 0.40 [m/s], North: -0.31 [m/s], Up = -1.08 [m/s][0m
+Current receiver time: 40 s
+[1m[32mPosition at 2013-Apr-04 06:23:46.000000 UTC using 5 observations is Lat = 41.274834 [deg], Long = 1.987693 [deg], Height = 77.31 [m][0m
+[1m[32mVelocity: East: 0.01 [m/s], North: -0.15 [m/s], Up = 1.19 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:46.500000 UTC using 5 observations is Lat = 41.274829 [deg], Long = 1.987710 [deg], Height = 80.33 [m][0m
+[1m[32mVelocity: East: 0.29 [m/s], North: 1.00 [m/s], Up = -2.69 [m/s][0m
+Current receiver time: 41 s
+[1m[32mPosition at 2013-Apr-04 06:23:47.000000 UTC using 5 observations is Lat = 41.274863 [deg], Long = 1.987728 [deg], Height = 73.12 [m][0m
+[1m[32mVelocity: East: -1.50 [m/s], North: -1.89 [m/s], Up = 2.41 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:47.500000 UTC using 5 observations is Lat = 41.274848 [deg], Long = 1.987731 [deg], Height = 80.07 [m][0m
+[1m[32mVelocity: East: 0.02 [m/s], North: -0.11 [m/s], Up = -0.21 [m/s][0m
+Current receiver time: 42 s
+[1m[32mPosition at 2013-Apr-04 06:23:48.000000 UTC using 5 observations is Lat = 41.274825 [deg], Long = 1.987685 [deg], Height = 73.20 [m][0m
+[1m[32mVelocity: East: 0.24 [m/s], North: 0.79 [m/s], Up = -0.55 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:48.500000 UTC using 5 observations is Lat = 41.274842 [deg], Long = 1.987720 [deg], Height = 73.98 [m][0m
+[1m[32mVelocity: East: 0.22 [m/s], North: -0.19 [m/s], Up = -1.81 [m/s][0m
+Current receiver time: 43 s
+[1m[32mPosition at 2013-Apr-04 06:23:49.000000 UTC using 5 observations is Lat = 41.274860 [deg], Long = 1.987727 [deg], Height = 71.92 [m][0m
+[1m[32mVelocity: East: 1.02 [m/s], North: 0.98 [m/s], Up = -0.27 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:49.500000 UTC using 5 observations is Lat = 41.274810 [deg], Long = 1.987698 [deg], Height = 74.10 [m][0m
+[1m[32mVelocity: East: 0.24 [m/s], North: 0.46 [m/s], Up = 0.65 [m/s][0m
+Current receiver time: 44 s
+New GPS NAV message received in channel 1: subframe 1 from satellite GPS PRN 20 (Block IIR) with CN0=New GPS NAV message received in channel 3: subframe 1 from satellite GPS PRN 43.970 dB-Hz1 (Block IIF
+New GPS NAV message received in channel 4: subframe 1 from satellite GPS PRN 32 (Block IIF) with CN0=46.67 dB-Hz
+) with CN0=48.07 dB-Hz
+New GPS NAV message received in channel 6: subframe 1 from satellite GPS PRN 11 (Block III) with CN0=45.43 dB-Hz
+New GPS NAV message received in channel 0: subframe 1 from satellite GPS PRN 17 (Block IIR-M) with CN0=45.75 dB-Hz
+[1m[32mPosition at 2013-Apr-04 06:23:50.000000 UTC using 5 observations is Lat = 41.274827 [deg], Long = 1.987687 [deg], Height = 80.42 [m][0m
+[1m[32mVelocity: East: 1.22 [m/s], North: 1.04 [m/s], Up = -1.39 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:50.500000 UTC using 5 observations is Lat = 41.274823 [deg], Long = 1.987700 [deg], Height = 70.76 [m][0m
+[1m[32mVelocity: East: -0.21 [m/s], North: -0.26 [m/s], Up = 0.82 [m/s][0m
+Current receiver time: 45 s
+Loss of lock in channel 2, satellite GPS PRN 21 (Block IIR) !
+[1m[32mPosition at 2013-Apr-04 06:23:51.000000 UTC using 5 observations is Lat = 41.274837 [deg], Long = 1.987738 [deg], Height = 70.70 [m][0m
+[1m[32mVelocity: East: -0.52 [m/s], North: -0.64 [m/s], Up = 1.25 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:51.500000 UTC using 5 observations is Lat = 41.274851 [deg], Long = 1.987693 [deg], Height = 67.62 [m][0m
+[1m[32mVelocity: East: 0.35 [m/s], North: 0.36 [m/s], Up = -1.91 [m/s][0m
+Current receiver time: 46 s
+[1m[32mPosition at 2013-Apr-04 06:23:52.000000 UTC using 5 observations is Lat = 41.274793 [deg], Long = 1.987664 [deg], Height = 76.39 [m][0m
+[1m[32mVelocity: East: -0.67 [m/s], North: -1.21 [m/s], Up = 0.73 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:52.500000 UTC using 5 observations is Lat = 41.274842 [deg], Long = 1.987735 [deg], Height = 67.08 [m][0m
+[1m[32mVelocity: East: 0.29 [m/s], North: -0.99 [m/s], Up = -1.01 [m/s][0m
+Current receiver time: 47 s
+[1m[32mPosition at 2013-Apr-04 06:23:53.000000 UTC using 5 observations is Lat = 41.274856 [deg], Long = 1.987703 [deg], Height = 66.61 [m][0m
+[1m[32mVelocity: East: -1.02 [m/s], North: -1.24 [m/s], Up = -0.71 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:53.500000 UTC using 5 observations is Lat = 41.274843 [deg], Long = 1.987710 [deg], Height = 67.27 [m][0m
+[1m[32mVelocity: East: -0.37 [m/s], North: -1.82 [m/s], Up = -0.66 [m/s][0m
+Current receiver time: 48 s
+[1m[32mPosition at 2013-Apr-04 06:23:54.000000 UTC using 5 observations is Lat = 41.274861 [deg], Long = 1.987681 [deg], Height = 61.92 [m][0m
+[1m[32mVelocity: East: 0.17 [m/s], North: -0.38 [m/s], Up = 0.15 [m/s][0m
+Loss of lock in channel 5, satellite GPS PRN 12 (Block IIR-M) !
+Tracking of GPS L1 C/A signal started on channel 7 for satellite GPS PRN 24 (Block IIF)
+[1m[32mPosition at 2013-Apr-04 06:23:54.500000 UTC using 5 observations is Lat = 41.274829 [deg], Long = 1.987684 [deg], Height = 76.27 [m][0m
+[1m[32mVelocity: East: -0.86 [m/s], North: -0.67 [m/s], Up = 1.18 [m/s][0m
+Current receiver time: 49 s
+[1m[32mPosition at 2013-Apr-04 06:23:55.000000 UTC using 5 observations is Lat = 41.274869 [deg], Long = 1.987686 [deg], Height = 58.54 [m][0m
+[1m[32mVelocity: East: 0.72 [m/s], North: 0.87 [m/s], Up = -2.94 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:55.500000 UTC using 5 observations is Lat = 41.274795 [deg], Long = 1.987651 [deg], Height = 72.92 [m][0m
+[1m[32mVelocity: East: 0.72 [m/s], North: 1.07 [m/s], Up = -1.91 [m/s][0m
+Current receiver time: 50 s
+New GPS NAV message received in channel 1: subframe 2 from satellite GPS PRN 20 (Block IIR) with CN0=44.48 dB-Hz
+New GPS NAV message received in channel 3: subframe 2 from satellite GPS PRN 01 (Block IIF) with CN0=48.66 dB-Hz
+New GPS NAV message received in channel 4: subframe 2 from satellite GPS PRN 32 (Block IIF) with CN0=47.12 dB-Hz
+New GPS NAV message received in channel 0: subframe 2 from satellite GPS PRN 17 (Block IIR-M) with CN0=45.33 dB-Hz
+New GPS NAV message received in channel 6: subframe 2 from satellite GPS PRN 11 (Block III) with CN0=45.98 dB-Hz
+[1m[32mPosition at 2013-Apr-04 06:23:56.000000 UTC using 5 observations is Lat = 41.274863 [deg], Long = 1.987673 [deg], Height = 68.89 [m][0m
+[1m[32mVelocity: East: -0.77 [m/s], North: -1.75 [m/s], Up = 2.28 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:56.500000 UTC using 5 observations is Lat = 41.274822 [deg], Long = 1.987668 [deg], Height = 74.46 [m][0m
+[1m[32mVelocity: East: 0.62 [m/s], North: 0.55 [m/s], Up = 1.30 [m/s][0m
+Current receiver time: 51 s
+[1m[32mPosition at 2013-Apr-04 06:23:57.000000 UTC using 5 observations is Lat = 41.274826 [deg], Long = 1.987653 [deg], Height = 77.80 [m][0m
+[1m[32mVelocity: East: 0.96 [m/s], North: 1.03 [m/s], Up = -1.99 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 21 (Block IIR)
+[1m[32mPosition at 2013-Apr-04 06:23:57.500000 UTC using 5 observations is Lat = 41.274819 [deg], Long = 1.987668 [deg], Height = 78.62 [m][0m
+[1m[32mVelocity: East: -0.03 [m/s], North: 0.55 [m/s], Up = 1.68 [m/s][0m
+Current receiver time: 52 s
+[1m[32mPosition at 2013-Apr-04 06:23:58.000000 UTC using 5 observations is Lat = 41.274823 [deg], Long = 1.987665 [deg], Height = 75.27 [m][0m
+[1m[32mVelocity: East: 1.47 [m/s], North: 0.32 [m/s], Up = -4.64 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:58.500000 UTC using 5 observations is Lat = 41.274811 [deg], Long = 1.987687 [deg], Height = 83.22 [m][0m
+[1m[32mVelocity: East: 0.30 [m/s], North: 0.30 [m/s], Up = -2.52 [m/s][0m
+Current receiver time: 53 s
+[1m[32mPosition at 2013-Apr-04 06:23:59.000000 UTC using 5 observations is Lat = 41.274790 [deg], Long = 1.987663 [deg], Height = 90.24 [m][0m
+[1m[32mVelocity: East: 1.72 [m/s], North: 2.27 [m/s], Up = -0.74 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:23:59.500000 UTC using 5 observations is Lat = 41.274807 [deg], Long = 1.987673 [deg], Height = 71.09 [m][0m
+[1m[32mVelocity: East: -0.12 [m/s], North: 0.26 [m/s], Up = 0.61 [m/s][0m
+Current receiver time: 54 s
+[1m[32mPosition at 2013-Apr-04 06:24:00.000000 UTC using 5 observations is Lat = 41.274857 [deg], Long = 1.987680 [deg], Height = 85.57 [m][0m
+[1m[32mVelocity: East: 0.39 [m/s], North: -1.06 [m/s], Up = -1.01 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:00.500000 UTC using 5 observations is Lat = 41.274835 [deg], Long = 1.987685 [deg], Height = 72.59 [m][0m
+[1m[32mVelocity: East: 0.44 [m/s], North: 0.38 [m/s], Up = -0.39 [m/s][0m
+Current receiver time: 55 s
+[1m[32mPosition at 2013-Apr-04 06:24:01.000000 UTC using 5 observations is Lat = 41.274859 [deg], Long = 1.987691 [deg], Height = 77.18 [m][0m
+[1m[32mVelocity: East: -0.63 [m/s], North: -0.25 [m/s], Up = -1.03 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 2 for satellite GPS PRN 16 (Block IIR)
+[1m[32mPosition at 2013-Apr-04 06:24:01.500000 UTC using 5 observations is Lat = 41.274846 [deg], Long = 1.987676 [deg], Height = 76.77 [m][0m
+[1m[32mVelocity: East: 0.75 [m/s], North: 0.61 [m/s], Up = -2.29 [m/s][0m
+Current receiver time: 56 s
+New GPS NAV message received in channel 1: subframe 3 from satellite GPS PRN 20 (Block IIR) with CN0=44.06 dB-Hz
+New GPS NAV message received in channel 4: subframe 3 from satellite GPS PRN 32 (Block IIF) with CN0=46.43 dB-Hz
+New GPS NAV message received in channel 6: subframe 3 from satellite GPS PRN 11 (Block III) with CN0=45.72 dB-Hz
+New GPS NAV message received in channel 3: subframe 3 from satellite GPS PRN 01 (Block IIF) with CN0=48.26 dB-Hz
+New GPS NAV message received in channel 0: subframe 3 from satellite GPS PRN 17 (Block IIR-M) with CN0=45.79 dB-Hz
+[1m[32mPosition at 2013-Apr-04 06:24:02.000000 UTC using 5 observations is Lat = 41.274870 [deg], Long = 1.987718 [deg], Height = 74.26 [m][0m
+[1m[32mVelocity: East: -0.36 [m/s], North: -0.06 [m/s], Up = 5.57 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:02.500000 UTC using 5 observations is Lat = 41.274876 [deg], Long = 1.987751 [deg], Height = 71.83 [m][0m
+[1m[32mVelocity: East: 0.80 [m/s], North: 1.51 [m/s], Up = -0.43 [m/s][0m
+Current receiver time: 57 s
+[1m[32mPosition at 2013-Apr-04 06:24:03.000000 UTC using 5 observations is Lat = 41.274856 [deg], Long = 1.987703 [deg], Height = 77.96 [m][0m
+[1m[32mVelocity: East: 0.28 [m/s], North: 0.74 [m/s], Up = 0.43 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:03.500000 UTC using 5 observations is Lat = 41.274885 [deg], Long = 1.987710 [deg], Height = 63.18 [m][0m
+[1m[32mVelocity: East: 0.57 [m/s], North: 0.51 [m/s], Up = 1.29 [m/s][0m
+Current receiver time: 58 s
+[1m[32mPosition at 2013-Apr-04 06:24:04.000000 UTC using 5 observations is Lat = 41.274857 [deg], Long = 1.987739 [deg], Height = 73.86 [m][0m
+[1m[32mVelocity: East: 0.51 [m/s], North: 1.04 [m/s], Up = -2.88 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:04.500000 UTC using 5 observations is Lat = 41.274825 [deg], Long = 1.987655 [deg], Height = 88.30 [m][0m
+[1m[32mVelocity: East: 0.26 [m/s], North: 0.05 [m/s], Up = -3.93 [m/s][0m
+Current receiver time: 59 s
+[1m[32mPosition at 2013-Apr-04 06:24:05.000000 UTC using 5 observations is Lat = 41.274851 [deg], Long = 1.987713 [deg], Height = 79.08 [m][0m
+[1m[32mVelocity: East: 0.97 [m/s], North: 0.51 [m/s], Up = -2.87 [m/s][0m
+Loss of lock in channel 7, satellite GPS PRN 24 (Block IIF) !
+[1m[32mPosition at 2013-Apr-04 06:24:05.500000 UTC using 5 observations is Lat = 41.274838 [deg], Long = 1.987681 [deg], Height = 66.46 [m][0m
+[1m[32mVelocity: East: -1.11 [m/s], North: -0.87 [m/s], Up = 1.31 [m/s][0m
+Current receiver time: 1 min 0 s
+[1m[32mPosition at 2013-Apr-04 06:24:06.000000 UTC using 5 observations is Lat = 41.274846 [deg], Long = 1.987668 [deg], Height = 71.05 [m][0m
+[1m[32mVelocity: East: -0.69 [m/s], North: -0.32 [m/s], Up = 0.03 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:06.500000 UTC using 5 observations is Lat = 41.274840 [deg], Long = 1.987670 [deg], Height = 78.72 [m][0m
+[1m[32mVelocity: East: 0.30 [m/s], North: 1.56 [m/s], Up = -3.77 [m/s][0m
+Current receiver time: 1 min 1 s
+[1m[32mPosition at 2013-Apr-04 06:24:07.000000 UTC using 5 observations is Lat = 41.274822 [deg], Long = 1.987656 [deg], Height = 76.22 [m][0m
+[1m[32mVelocity: East: 0.27 [m/s], North: -0.10 [m/s], Up = -2.11 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:07.500000 UTC using 5 observations is Lat = 41.274828 [deg], Long = 1.987659 [deg], Height = 75.08 [m][0m
+[1m[32mVelocity: East: -1.03 [m/s], North: -0.54 [m/s], Up = 1.46 [m/s][0m
+Current receiver time: 1 min 2 s
+[1m[32mPosition at 2013-Apr-04 06:24:08.000000 UTC using 5 observations is Lat = 41.274842 [deg], Long = 1.987694 [deg], Height = 68.12 [m][0m
+[1m[32mVelocity: East: 1.17 [m/s], North: 1.10 [m/s], Up = -2.63 [m/s][0m
+Loss of lock in channel 5, satellite GPS PRN 21 (Block IIR) !
+[1m[32mPosition at 2013-Apr-04 06:24:08.500000 UTC using 5 observations is Lat = 41.274801 [deg], Long = 1.987706 [deg], Height = 77.38 [m][0m
+[1m[32mVelocity: East: -0.21 [m/s], North: -0.18 [m/s], Up = 1.83 [m/s][0m
+Current receiver time: 1 min 3 s
+[1m[32mPosition at 2013-Apr-04 06:24:09.000000 UTC using 5 observations is Lat = 41.274827 [deg], Long = 1.987682 [deg], Height = 82.39 [m][0m
+[1m[32mVelocity: East: -0.62 [m/s], North: 0.33 [m/s], Up = -1.36 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:09.500000 UTC using 5 observations is Lat = 41.274862 [deg], Long = 1.987744 [deg], Height = 70.48 [m][0m
+[1m[32mVelocity: East: 0.36 [m/s], North: 0.00 [m/s], Up = -2.64 [m/s][0m
+Current receiver time: 1 min 4 s
+Tracking of GPS L1 C/A signal started on channel 7 for satellite GPS PRN 26 (Block IIF)
+[1m[32mPosition at 2013-Apr-04 06:24:10.000000 UTC using 5 observations is Lat = 41.274816 [deg], Long = 1.987634 [deg], Height = 86.34 [m][0m
+[1m[32mVelocity: East: -0.55 [m/s], North: -0.76 [m/s], Up = 1.32 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:10.500000 UTC using 5 observations is Lat = 41.274814 [deg], Long = 1.987684 [deg], Height = 74.83 [m][0m
+[1m[32mVelocity: East: -0.11 [m/s], North: -0.30 [m/s], Up = 3.29 [m/s][0m
+Current receiver time: 1 min 5 s
+[1m[32mPosition at 2013-Apr-04 06:24:11.000000 UTC using 5 observations is Lat = 41.274826 [deg], Long = 1.987678 [deg], Height = 72.21 [m][0m
+[1m[32mVelocity: East: -0.10 [m/s], North: -0.54 [m/s], Up = 1.95 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:11.500000 UTC using 5 observations is Lat = 41.274779 [deg], Long = 1.987692 [deg], Height = 76.12 [m][0m
+[1m[32mVelocity: East: 0.06 [m/s], North: -0.09 [m/s], Up = -2.11 [m/s][0m
+Current receiver time: 1 min 6 s
+[1m[32mPosition at 2013-Apr-04 06:24:12.000000 UTC using 5 observations is Lat = 41.274836 [deg], Long = 1.987682 [deg], Height = 74.95 [m][0m
+[1m[32mVelocity: East: -0.99 [m/s], North: -1.54 [m/s], Up = 1.86 [m/s][0m
+Loss of lock in channel 2, satellite GPS PRN 16 (Block IIR) !
+[1m[32mPosition at 2013-Apr-04 06:24:12.500000 UTC using 5 observations is Lat = 41.274826 [deg], Long = 1.987717 [deg], Height = 73.34 [m][0m
+[1m[32mVelocity: East: 1.26 [m/s], North: 0.93 [m/s], Up = -0.08 [m/s][0m
+Current receiver time: 1 min 7 s
+[1m[32mPosition at 2013-Apr-04 06:24:13.000000 UTC using 5 observations is Lat = 41.274820 [deg], Long = 1.987701 [deg], Height = 69.36 [m][0m
+[1m[32mVelocity: East: 0.24 [m/s], North: -0.04 [m/s], Up = -0.20 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 08 (Block IIF)
+[1m[32mPosition at 2013-Apr-04 06:24:13.500000 UTC using 5 observations is Lat = 41.274854 [deg], Long = 1.987755 [deg], Height = 71.88 [m][0m
+[1m[32mVelocity: East: 0.20 [m/s], North: -0.27 [m/s], Up = 0.95 [m/s][0m
+Current receiver time: 1 min 8 s
+[1m[32mPosition at 2013-Apr-04 06:24:14.000000 UTC using 5 observations is Lat = 41.274853 [deg], Long = 1.987682 [deg], Height = 68.21 [m][0m
+[1m[32mVelocity: East: 0.92 [m/s], North: 0.75 [m/s], Up = -0.95 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:14.500000 UTC using 5 observations is Lat = 41.274811 [deg], Long = 1.987662 [deg], Height = 89.73 [m][0m
+[1m[32mVelocity: East: -0.46 [m/s], North: 1.67 [m/s], Up = 0.74 [m/s][0m
+Current receiver time: 1 min 9 s
+[1m[32mPosition at 2013-Apr-04 06:24:15.000000 UTC using 5 observations is Lat = 41.274809 [deg], Long = 1.987703 [deg], Height = 82.43 [m][0m
+[1m[32mVelocity: East: -0.32 [m/s], North: -0.17 [m/s], Up = 1.82 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:15.500000 UTC using 5 observations is Lat = 41.274812 [deg], Long = 1.987712 [deg], Height = 77.77 [m][0m
+[1m[32mVelocity: East: 0.56 [m/s], North: 1.20 [m/s], Up = -1.45 [m/s][0m
+Current receiver time: 1 min 10 s
+[1m[32mPosition at 2013-Apr-04 06:24:16.000000 UTC using 5 observations is Lat = 41.274783 [deg], Long = 1.987698 [deg], Height = 78.69 [m][0m
+[1m[32mVelocity: East: -0.85 [m/s], North: -0.13 [m/s], Up = 1.58 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:16.500000 UTC using 5 observations is Lat = 41.274778 [deg], Long = 1.987678 [deg], Height = 96.99 [m][0m
+[1m[32mVelocity: East: 0.85 [m/s], North: 1.60 [m/s], Up = -2.80 [m/s][0m
+Current receiver time: 1 min 11 s
+[1m[32mPosition at 2013-Apr-04 06:24:17.000000 UTC using 5 observations is Lat = 41.274801 [deg], Long = 1.987637 [deg], Height = 80.03 [m][0m
+[1m[32mVelocity: East: 0.01 [m/s], North: 0.52 [m/s], Up = -1.17 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:17.500000 UTC using 5 observations is Lat = 41.274783 [deg], Long = 1.987758 [deg], Height = 94.17 [m][0m
+[1m[32mVelocity: East: 0.37 [m/s], North: 0.42 [m/s], Up = -0.93 [m/s][0m
+Current receiver time: 1 min 12 s
+[1m[32mPosition at 2013-Apr-04 06:24:18.000000 UTC using 5 observations is Lat = 41.274868 [deg], Long = 1.987681 [deg], Height = 59.01 [m][0m
+[1m[32mVelocity: East: 0.55 [m/s], North: 0.59 [m/s], Up = -1.11 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:18.500000 UTC using 5 observations is Lat = 41.274828 [deg], Long = 1.987707 [deg], Height = 88.46 [m][0m
+[1m[32mVelocity: East: 0.39 [m/s], North: 0.49 [m/s], Up = -3.37 [m/s][0m
+Current receiver time: 1 min 13 s
+[1m[32mPosition at 2013-Apr-04 06:24:19.000000 UTC using 5 observations is Lat = 41.274866 [deg], Long = 1.987774 [deg], Height = 83.24 [m][0m
+[1m[32mVelocity: East: 0.69 [m/s], North: 0.64 [m/s], Up = -2.39 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:19.500000 UTC using 5 observations is Lat = 41.274809 [deg], Long = 1.987645 [deg], Height = 64.80 [m][0m
+[1m[32mVelocity: East: -1.05 [m/s], North: -0.58 [m/s], Up = 2.82 [m/s][0m
+Current receiver time: 1 min 14 s
+New GPS NAV message received in channel 1: subframe 1 from satellite GPS PRN 20 (Block IIR) with CN0=44.56 dB-Hz
+New GPS NAV message received in channel 4: subframe 1 from satellite New GPS NAV message received in channel 3: subframe 1 from satellite GPSGPS PRN  PRN 01 (Block IIF) with CN0=32 (Block IIF) with CN0=48.26 dB-Hz45.89
+ dB-Hz
+New GPS NAV message received in channel 6: subframe 1 from satellite GPS PRN 11 (Block III) with CN0=45.98 dB-Hz
+New GPS NAV message received in channel 0: subframe 1 from satellite GPS PRN 17 (Block IIR-M) with CN0=46.14 dB-Hz
+[1m[32mPosition at 2013-Apr-04 06:24:20.000000 UTC using 5 observations is Lat = 41.274816 [deg], Long = 1.987681 [deg], Height = 84.11 [m][0m
+[1m[32mVelocity: East: -0.37 [m/s], North: 0.68 [m/s], Up = 1.91 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:20.500000 UTC using 5 observations is Lat = 41.274840 [deg], Long = 1.987728 [deg], Height = 73.39 [m][0m
+[1m[32mVelocity: East: 0.38 [m/s], North: -0.11 [m/s], Up = -1.42 [m/s][0m
+Current receiver time: 1 min 15 s
+Loss of lock in channel 7, satellite GPS PRN 26 (Block IIF) !
+[1m[32mPosition at 2013-Apr-04 06:24:21.000000 UTC using 5 observations is Lat = 41.274817 [deg], Long = 1.987692 [deg], Height = 64.85 [m][0m
+[1m[32mVelocity: East: -0.74 [m/s], North: -0.78 [m/s], Up = 2.19 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:21.500000 UTC using 5 observations is Lat = 41.274795 [deg], Long = 1.987684 [deg], Height = 72.95 [m][0m
+[1m[32mVelocity: East: -0.94 [m/s], North: -0.72 [m/s], Up = 2.01 [m/s][0m
+Current receiver time: 1 min 16 s
+[1m[32mPosition at 2013-Apr-04 06:24:22.000000 UTC using 5 observations is Lat = 41.274870 [deg], Long = 1.987734 [deg], Height = 70.57 [m][0m
+[1m[32mVelocity: East: -1.55 [m/s], North: -1.26 [m/s], Up = -0.20 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 7 for satellite GPS PRN 07 (Block IIR-M)
+[1m[32mPosition at 2013-Apr-04 06:24:22.500000 UTC using 5 observations is Lat = 41.274813 [deg], Long = 1.987684 [deg], Height = 77.30 [m][0m
+[1m[32mVelocity: East: 0.32 [m/s], North: 0.35 [m/s], Up = -0.15 [m/s][0m
+Current receiver time: 1 min 17 s
+[1m[32mPosition at 2013-Apr-04 06:24:23.000000 UTC using 5 observations is Lat = 41.274848 [deg], Long = 1.987738 [deg], Height = 69.15 [m][0m
+[1m[32mVelocity: East: -1.37 [m/s], North: -0.30 [m/s], Up = 1.51 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:23.500000 UTC using 5 observations is Lat = 41.274835 [deg], Long = 1.987730 [deg], Height = 75.86 [m][0m
+[1m[32mVelocity: East: -0.79 [m/s], North: -0.52 [m/s], Up = 1.76 [m/s][0m
+Current receiver time: 1 min 18 s
+[1m[32mPosition at 2013-Apr-04 06:24:24.000000 UTC using 5 observations is Lat = 41.274815 [deg], Long = 1.987695 [deg], Height = 78.63 [m][0m
+[1m[32mVelocity: East: -0.80 [m/s], North: -1.22 [m/s], Up = 0.02 [m/s][0m
+Loss of lock in channel 5, satellite GPS PRN 08 (Block IIF) !
+[1m[32mPosition at 2013-Apr-04 06:24:24.500000 UTC using 5 observations is Lat = 41.274829 [deg], Long = 1.987734 [deg], Height = 77.26 [m][0m
+[1m[32mVelocity: East: -0.06 [m/s], North: 0.80 [m/s], Up = -1.40 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 21 (Block IIR)
+Current receiver time: 1 min 19 s
+[1m[32mPosition at 2013-Apr-04 06:24:25.000000 UTC using 5 observations is Lat = 41.274834 [deg], Long = 1.987696 [deg], Height = 70.88 [m][0m
+[1m[32mVelocity: East: 0.42 [m/s], North: -0.32 [m/s], Up = 0.21 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:25.500000 UTC using 5 observations is Lat = 41.274856 [deg], Long = 1.987646 [deg], Height = 65.86 [m][0m
+[1m[32mVelocity: East: 0.37 [m/s], North: -0.39 [m/s], Up = -4.30 [m/s][0m
+Current receiver time: 1 min 20 s
+New GPS NAV message received in channel 1: subframe 2 from satellite GPS PRN 20 (Block IIR) with CN0=44.50 dB-Hz
+New GPS NAV message received in channel 3: subframe 2 from satellite GPS PRN 01 (Block IIF) with CN0=48.25 dB-Hz
+New GPS NAV message received in channel 4: subframe 2 from satellite GPS PRN 32 (Block IIF) with CN0=46.05 dB-Hz
+New GPS NAV message received in channel 0: subframe 2 from satellite GPS PRN 17 (Block IIR-M) with CN0=45.03 dB-Hz
+New GPS NAV message received in channel 6: subframe 2 from satellite GPS PRN 11 (Block III) with CN0=46.09 dB-Hz
+[1m[32mPosition at 2013-Apr-04 06:24:26.000000 UTC using 5 observations is Lat = 41.274835 [deg], Long = 1.987706 [deg], Height = 76.40 [m][0m
+[1m[32mVelocity: East: 1.89 [m/s], North: 2.15 [m/s], Up = -0.65 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:26.500000 UTC using 5 observations is Lat = 41.274821 [deg], Long = 1.987676 [deg], Height = 71.32 [m][0m
+[1m[32mVelocity: East: -0.29 [m/s], North: -0.42 [m/s], Up = 2.20 [m/s][0m
+Current receiver time: 1 min 21 s
+[1m[32mPosition at 2013-Apr-04 06:24:27.000000 UTC using 5 observations is Lat = 41.274828 [deg], Long = 1.987712 [deg], Height = 74.60 [m][0m
+[1m[32mVelocity: East: 0.00 [m/s], North: 0.90 [m/s], Up = -0.21 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:27.500000 UTC using 5 observations is Lat = 41.274815 [deg], Long = 1.987668 [deg], Height = 71.03 [m][0m
+[1m[32mVelocity: East: -0.03 [m/s], North: -1.55 [m/s], Up = 0.14 [m/s][0m
+Current receiver time: 1 min 22 s
+[1m[32mPosition at 2013-Apr-04 06:24:28.000000 UTC using 5 observations is Lat = 41.274865 [deg], Long = 1.987715 [deg], Height = 74.43 [m][0m
+[1m[32mVelocity: East: 1.28 [m/s], North: 1.92 [m/s], Up = -1.61 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 2 for satellite GPS PRN 23 (Block III)
+[1m[32mPosition at 2013-Apr-04 06:24:28.500000 UTC using 5 observations is Lat = 41.274843 [deg], Long = 1.987703 [deg], Height = 62.55 [m][0m
+[1m[32mVelocity: East: -0.27 [m/s], North: 0.43 [m/s], Up = 0.08 [m/s][0m
+Current receiver time: 1 min 23 s
+[1m[32mPosition at 2013-Apr-04 06:24:29.000000 UTC using 5 observations is Lat = 41.274820 [deg], Long = 1.987687 [deg], Height = 69.38 [m][0m
+[1m[32mVelocity: East: -0.47 [m/s], North: -1.56 [m/s], Up = 1.72 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:29.500000 UTC using 5 observations is Lat = 41.274862 [deg], Long = 1.987700 [deg], Height = 76.90 [m][0m
+[1m[32mVelocity: East: 0.34 [m/s], North: 0.72 [m/s], Up = -0.58 [m/s][0m
+Current receiver time: 1 min 24 s
+[1m[32mPosition at 2013-Apr-04 06:24:30.000000 UTC using 5 observations is Lat = 41.274795 [deg], Long = 1.987668 [deg], Height = 75.46 [m][0m
+[1m[32mVelocity: East: 0.09 [m/s], North: 0.29 [m/s], Up = -5.11 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:30.500000 UTC using 5 observations is Lat = 41.274866 [deg], Long = 1.987684 [deg], Height = 70.47 [m][0m
+[1m[32mVelocity: East: 0.27 [m/s], North: -0.61 [m/s], Up = 1.72 [m/s][0m
+Current receiver time: 1 min 25 s
+[1m[32mPosition at 2013-Apr-04 06:24:31.000000 UTC using 5 observations is Lat = 41.274829 [deg], Long = 1.987663 [deg], Height = 81.01 [m][0m
+[1m[32mVelocity: East: 0.69 [m/s], North: 0.46 [m/s], Up = -0.98 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:31.500000 UTC using 5 observations is Lat = 41.274791 [deg], Long = 1.987643 [deg], Height = 78.20 [m][0m
+[1m[32mVelocity: East: 0.55 [m/s], North: 0.86 [m/s], Up = -2.21 [m/s][0m
+Current receiver time: 1 min 26 s
+New GPS NAV message received in channel 1: subframe 3 from satellite GPS PRN 20 (Block IIR) with CN0=44.05 dB-Hz
+New GPS NAV message received in channel 3: subframe 3 from satellite GPS PRN 01 (Block IIF) with CN0=48.15 dB-Hz
+New GPS NAV message received in channel 4: subframe 3 from satellite GPS PRN 32 (Block IIF) with CN0=46.36 dB-Hz
+New GPS NAV message received in channel 0: subframe 3 from satellite GPS PRN 17 (Block IIR-M) with CN0=44.74 dB-Hz
+New GPS NAV message received in channel 6: subframe 3 from satellite GPS PRN 11 (Block III) with CN0=45.59 dB-Hz
+[1m[32mPosition at 2013-Apr-04 06:24:32.000000 UTC using 5 observations is Lat = 41.274841 [deg], Long = 1.987663 [deg], Height = 73.83 [m][0m
+[1m[32mVelocity: East: -1.31 [m/s], North: -0.63 [m/s], Up = 2.14 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:32.500000 UTC using 5 observations is Lat = 41.274841 [deg], Long = 1.987686 [deg], Height = 67.89 [m][0m
+[1m[32mVelocity: East: -0.70 [m/s], North: -0.44 [m/s], Up = 0.39 [m/s][0m
+Current receiver time: 1 min 27 s
+[1m[32mPosition at 2013-Apr-04 06:24:33.000000 UTC using 5 observations is Lat = 41.274809 [deg], Long = 1.987632 [deg], Height = 92.22 [m][0m
+[1m[32mVelocity: East: -0.34 [m/s], North: -0.40 [m/s], Up = -2.98 [m/s][0m
+Loss of lock in channel 7, satellite GPS PRN 07 (Block IIR-M) !
+[1m[32mPosition at 2013-Apr-04 06:24:33.500000 UTC using 5 observations is Lat = 41.274858 [deg], Long = 1.987672 [deg], Height = 72.83 [m][0m
+[1m[32mVelocity: East: -0.26 [m/s], North: 0.15 [m/s], Up = -0.49 [m/s][0m
+Current receiver time: 1 min 28 s
+[1m[32mPosition at 2013-Apr-04 06:24:34.000000 UTC using 5 observations is Lat = 41.274839 [deg], Long = 1.987682 [deg], Height = 75.07 [m][0m
+[1m[32mVelocity: East: 1.13 [m/s], North: 0.81 [m/s], Up = -2.51 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:34.500000 UTC using 5 observations is Lat = 41.274849 [deg], Long = 1.987699 [deg], Height = 68.87 [m][0m
+[1m[32mVelocity: East: 1.17 [m/s], North: 1.15 [m/s], Up = -2.20 [m/s][0m
+Current receiver time: 1 min 29 s
+[1m[32mPosition at 2013-Apr-04 06:24:35.000000 UTC using 5 observations is Lat = 41.274839 [deg], Long = 1.987688 [deg], Height = 66.38 [m][0m
+[1m[32mVelocity: East: 0.33 [m/s], North: 0.46 [m/s], Up = 1.44 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 7 for satellite GPS PRN 03 (Block IIF)
+[1m[32mPosition at 2013-Apr-04 06:24:35.500000 UTC using 5 observations is Lat = 41.274841 [deg], Long = 1.987712 [deg], Height = 72.41 [m][0m
+[1m[32mVelocity: East: 0.65 [m/s], North: 0.57 [m/s], Up = -0.64 [m/s][0m
+Loss of lock in channel 5, satellite GPS PRN 21 (Block IIR) !
+Current receiver time: 1 min 30 s
+[1m[32mPosition at 2013-Apr-04 06:24:36.000000 UTC using 5 observations is Lat = 41.274844 [deg], Long = 1.987668 [deg], Height = 68.26 [m][0m
+[1m[32mVelocity: East: 0.29 [m/s], North: -0.30 [m/s], Up = 1.09 [m/s][0m
+Tracking of GPS L1 C/A signal started on channel 5 for satellite GPS PRN 08 (Block IIF)
+[1m[32mPosition at 2013-Apr-04 06:24:36.500000 UTC using 5 observations is Lat = 41.274852 [deg], Long = 1.987710 [deg], Height = 76.91 [m][0m
+[1m[32mVelocity: East: -0.54 [m/s], North: -0.68 [m/s], Up = 0.23 [m/s][0m
+Current receiver time: 1 min 31 s
+[1m[32mPosition at 2013-Apr-04 06:24:37.000000 UTC using 5 observations is Lat = 41.274908 [deg], Long = 1.987726 [deg], Height = 64.06 [m][0m
+[1m[32mVelocity: East: 0.02 [m/s], North: 0.00 [m/s], Up = -1.02 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:37.500000 UTC using 5 observations is Lat = 41.274886 [deg], Long = 1.987733 [deg], Height = 63.48 [m][0m
+[1m[32mVelocity: East: 0.82 [m/s], North: 0.07 [m/s], Up = -0.23 [m/s][0m
+Current receiver time: 1 min 32 s
+[1m[32mPosition at 2013-Apr-04 06:24:38.000000 UTC using 5 observations is Lat = 41.274826 [deg], Long = 1.987666 [deg], Height = 80.95 [m][0m
+[1m[32mVelocity: East: -0.46 [m/s], North: 1.03 [m/s], Up = 0.64 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:38.500000 UTC using 5 observations is Lat = 41.274861 [deg], Long = 1.987664 [deg], Height = 64.16 [m][0m
+[1m[32mVelocity: East: -0.64 [m/s], North: -0.12 [m/s], Up = -0.18 [m/s][0m
+Current receiver time: 1 min 33 s
+[1m[32mPosition at 2013-Apr-04 06:24:39.000000 UTC using 5 observations is Lat = 41.274831 [deg], Long = 1.987717 [deg], Height = 67.73 [m][0m
+[1m[32mVelocity: East: 1.60 [m/s], North: 1.59 [m/s], Up = -3.11 [m/s][0m
+Loss of lock in channel 2, satellite GPS PRN 23 (Block III) !
+[1m[32mPosition at 2013-Apr-04 06:24:39.500000 UTC using 5 observations is Lat = 41.274852 [deg], Long = 1.987767 [deg], Height = 61.52 [m][0m
+[1m[32mVelocity: East: -1.61 [m/s], North: -1.00 [m/s], Up = 4.60 [m/s][0m
+Current receiver time: 1 min 34 s
+[1m[32mPosition at 2013-Apr-04 06:24:40.000000 UTC using 5 observations is Lat = 41.274840 [deg], Long = 1.987684 [deg], Height = 75.65 [m][0m
+[1m[32mVelocity: East: -0.35 [m/s], North: 0.19 [m/s], Up = 2.68 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:40.500000 UTC using 5 observations is Lat = 41.274860 [deg], Long = 1.987723 [deg], Height = 67.55 [m][0m
+[1m[32mVelocity: East: -0.16 [m/s], North: -0.62 [m/s], Up = -1.45 [m/s][0m
+Current receiver time: 1 min 35 s
+[1m[32mPosition at 2013-Apr-04 06:24:41.000000 UTC using 5 observations is Lat = 41.274817 [deg], Long = 1.987662 [deg], Height = 75.75 [m][0m
+[1m[32mVelocity: East: -0.38 [m/s], North: -0.15 [m/s], Up = 1.52 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:41.500000 UTC using 5 observations is Lat = 41.274827 [deg], Long = 1.987677 [deg], Height = 82.04 [m][0m
+[1m[32mVelocity: East: 0.18 [m/s], North: 0.18 [m/s], Up = 2.67 [m/s][0m
+Current receiver time: 1 min 36 s
+[1m[32mPosition at 2013-Apr-04 06:24:42.000000 UTC using 5 observations is Lat = 41.274851 [deg], Long = 1.987711 [deg], Height = 72.59 [m][0m
+[1m[32mVelocity: East: -0.25 [m/s], North: -0.15 [m/s], Up = 0.27 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:42.500000 UTC using 5 observations is Lat = 41.274858 [deg], Long = 1.987737 [deg], Height = 71.50 [m][0m
+[1m[32mVelocity: East: -0.79 [m/s], North: -1.43 [m/s], Up = 0.88 [m/s][0m
+Current receiver time: 1 min 37 s
+[1m[32mPosition at 2013-Apr-04 06:24:43.000000 UTC using 5 observations is Lat = 41.274851 [deg], Long = 1.987708 [deg], Height = 74.13 [m][0m
+[1m[32mVelocity: East: 0.61 [m/s], North: -0.95 [m/s], Up = -0.76 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:43.500000 UTC using 5 observations is Lat = 41.274811 [deg], Long = 1.987687 [deg], Height = 73.57 [m][0m
+[1m[32mVelocity: East: 0.98 [m/s], North: 0.09 [m/s], Up = -0.22 [m/s][0m
+Current receiver time: 1 min 38 s
+[1m[32mPosition at 2013-Apr-04 06:24:44.000000 UTC using 5 observations is Lat = 41.274854 [deg], Long = 1.987693 [deg], Height = 75.14 [m][0m
+[1m[32mVelocity: East: 0.46 [m/s], North: 0.63 [m/s], Up = -0.39 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:44.500000 UTC using 5 observations is Lat = 41.274858 [deg], Long = 1.987703 [deg], Height = 82.93 [m][0m
+[1m[32mVelocity: East: -0.28 [m/s], North: 0.72 [m/s], Up = 1.02 [m/s][0m
+Current receiver time: 1 min 39 s
+[1m[32mPosition at 2013-Apr-04 06:24:45.000000 UTC using 5 observations is Lat = 41.274860 [deg], Long = 1.987699 [deg], Height = 69.61 [m][0m
+[1m[32mVelocity: East: -0.49 [m/s], North: -0.56 [m/s], Up = -0.54 [m/s][0m
+[1m[32mPosition at 2013-Apr-04 06:24:45.500000 UTC using 5 observations is Lat = 41.274839 [deg], Long = 1.987690 [deg], Height = 79.30 [m][0m
+[1m[32mVelocity: East: 0.51 [m/s], North: 0.61 [m/s], Up = -2.05 [m/s][0m
+Current receiver time: 1 min 40 s
+[1m[32mPosition at 2013-Apr-04 06:24:46.000000 UTC using 5 observations is Lat = 41.274812 [deg], Long = 1.987627 [deg], Height = 61.83 [m][0m
+[1m[32mVelocity: East: 0.10 [m/s], North: -0.26 [m/s], Up = 1.20 [m/s][0m
+Loss of lock in channel 7, satellite GPS PRN 03 (Block IIF) !
+[1m[32mPosition at 2013-Apr-04 06:24:46.500000 UTC using 5 observations is Lat = 41.274865 [deg], Long = 1.987682 [deg], Height = 70.20 [m][0m
+[1m[32mVelocity: East: -0.22 [m/s], North: -0.36 [m/s], Up = -0.73 [m/s][0m
+Stopping GNSS-SDR, please wait!
+Total GNSS-SDR run time: 11.52 [seconds]
+GNSS-SDR program ended.

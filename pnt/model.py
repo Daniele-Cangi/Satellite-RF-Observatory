@@ -29,20 +29,46 @@ def day_context(day):
 
 
 def navigation_blocks(data):
-    """Normalize plain/gzipped RINEX 2 GPS NAV blocks without discarding fields."""
+    """Normalize plain/gzipped RINEX 2/3 GPS NAV without discarding fields.
+
+    Mixed-constellation and RINEX 4 files are outside this adapter. Reject
+    them rather than guessing record lengths or silently dropping messages.
+    """
     decoded = gzip.decompress(data) if data.startswith(b'\x1f\x8b') else data
     lines = decoded.decode('ascii').splitlines()
     stop = next((i for i, line in enumerate(lines) if line[60:80].strip() == 'END OF HEADER'), None)
     if stop is None:
         raise ValueError('incomplete GPS navigation header')
-    version = [line[:60] for line in lines[:stop] if line[60:80].strip() == 'RINEX VERSION / TYPE']
-    if len(version) != 1 or not 2 <= float(version[0][:9]) < 3 or 'GPS NAV DATA' not in version[0]:
-        raise ValueError('expected one RINEX 2 GPS navigation header')
+    versions = [line[:60] for line in lines[:stop] if line[60:80].strip() == 'RINEX VERSION / TYPE']
+    if len(versions) != 1:
+        raise ValueError('expected one RINEX 2/3 GPS navigation header')
+    header = versions[0]
+    version = float(header[:9])
+    is_v2 = 2 <= version < 3 and 'GPS NAV DATA' in header
+    is_v3 = 3 <= version < 4 and header[20:21] == 'N' and header[40:41] == 'G'
+    if not (is_v2 or is_v3):
+        raise ValueError('expected one RINEX 2/3 GPS navigation header')
     body = lines[stop + 1:]
     if not body or len(body) % 8:
         raise ValueError('truncated GPS navigation record')
     for start in range(0, len(body), 8):
         block = body[start:start + 8]
+        if is_v3:
+            prefix = block[0][:23]
+            if (not prefix.startswith('G') or len(prefix) != 23 or
+                    not prefix[1:3].isdigit() or not 1 <= int(prefix[1:3]) <= 32 or
+                    any(not line.startswith('    ') for line in block[1:])):
+                raise ValueError('invalid RINEX 3 GPS navigation block')
+            # Validate the fixed epoch separately from the floating clock
+            # fields. Preserve every serialized digit for issue comparison.
+            try:
+                epoch = datetime.strptime(prefix[3:], ' %Y %m %d %H %M %S')
+            except ValueError as error:
+                raise ValueError('invalid RINEX 3 GPS navigation epoch') from error
+            if prefix != 'G' + prefix[1:3] + epoch.strftime(' %Y %m %d %H %M %S'):
+                raise ValueError('invalid RINEX 3 GPS navigation epoch width')
+            yield block
+            continue
         values = block[0][:22].split()
         if len(values) != 7 or any(not line.startswith('   ') for line in block[1:]):
             raise ValueError('invalid RINEX 2 GPS navigation block')
@@ -78,7 +104,7 @@ def indexed_broadcast_navigation(data, *, require_usable=True):
 
 
 def broadcast_navigation(data):
-    """Adapt RINEX 2 GPS NAV while retaining the original model admission rules."""
+    """Adapt RINEX 2/3 GPS NAV with the same model admission rules."""
     records, counts, _ = indexed_broadcast_navigation(data)
     return records, counts
 
