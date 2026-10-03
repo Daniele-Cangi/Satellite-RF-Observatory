@@ -43,6 +43,19 @@ varianti della stessa regressione per cercare un risultato positivo: la
 prossima estensione deve motivare un diverso effetto fisico o una topologia
 di riferimenti che lo osservi, prima di valutarne il beneficio P2.
 
+La [prova con riferimenti vicini WegenerNet]
+(../research/exploratory/PNT_CLOSE_REFERENCE_TRANSFER.md) riusa lo stesso metodo
+su W181/W182/W183, distanti 4,6–9,9 km, nelle stesse finestre A/B. Il coefficiente
+imparato riduce l'errore quadratico medio in 6/6 confronti, ma solo dello
+0,372–2,287%; la sottrazione unitaria peggiora tutti e sei. Sono valutabili
+717/720 righe richieste: l'ultima epoca omessa dal convertitore resta visibile.
+Coordinate dichiarate prima del training, varianti preliminari, errori di
+conversione e peggioramenti per epoca sono conservati con gli input originali.
+E un piccolo effetto descrittivo, non un beneficio di sicurezza o una precisione
+di posizione; P2 resta aperta. Non estendere queste regressioni per cercare
+un guadagno maggiore: servono evidenze benigne/challenge abbinate o una diversa
+osservabile fisica. Il risultato precedente resta invariato.
+
 Il [confronto dei messaggi di navigazione]
 (../research/exploratory/PNT_NAVIGATION_WITNESS.md) apre un meccanismo diverso:
 `python -m pnt navigation` confronta la stessa issue GPS dichiarata localmente

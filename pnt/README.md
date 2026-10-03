@@ -206,6 +206,15 @@ retains all six comparisons. Unit subtraction worsens each comparison; the
 learned slope gives small improvements and worsenings without a consistent
 advantage. The previous comparison's thresholds and report remain unchanged.
 
+The [short-baseline WegenerNet exercise](../research/exploratory/PNT_CLOSE_REFERENCE_TRANSFER.md)
+reuses this command on three receivers 4.6–9.9 km apart in the same A/B windows.
+Learned transfer improves aggregate MSE by only 0.372–2.287% in six comparisons;
+unit subtraction worsens all six, and individual epoch worsenings are retained.
+Earlier declared coordinates, original/converted inputs and the omitted final
+epoch are preserved. This is a small descriptive effect, not detection benefit,
+surveyed accuracy or RF authentication. No further slope search is warranted
+on these windows; P2 still needs matched benign/challenge evidence.
+
 ## Decoded navigation witnesses
 
 ```console

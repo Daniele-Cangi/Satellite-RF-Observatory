@@ -114,3 +114,6 @@ pnt/tests/fixtures/cttc20130404/** -text whitespace=-blank-at-eol
 
 # Original GFZ member bytes and attributed source-license hashes are portable.
 pnt/tests/fixtures/gfz*/** -text whitespace=-blank-at-eol
+
+# Public WegenerNet sources, converted RINEX columns and provenance bytes.
+pnt/tests/fixtures/wegener20240911/** -text whitespace=-blank-at-eol,-blank-at-eof
