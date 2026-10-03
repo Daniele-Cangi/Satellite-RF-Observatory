@@ -22,6 +22,11 @@ and leaves absolute time and attack decisions unevaluated where evidence is miss
 benchmark with separate baseline/calibration/evaluation windows and software
 code ramps. It retains unequal original exceedance rates and worsening cases;
 these are not measured RF detection or false-alarm rates.
+[`python -m pnt transfer`](pnt/README.md#held-out-reference-transfer) tests whether
+external residuals predict later local variation using a training-only slope.
+The [two-window receiver rotations](research/exploratory/PNT_REFERENCE_TRANSFER.md)
+retain all six results: unit subtraction worsens each, and learned transfer
+shows no consistent advantage. Residual prediction is not RF authentication.
 
 The existing [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md)
 provides a local satellite/day request, estimation and evidence pipeline. A

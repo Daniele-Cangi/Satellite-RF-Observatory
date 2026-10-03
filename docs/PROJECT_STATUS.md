@@ -26,6 +26,23 @@ del clock comune e del disturbo condiviso, e la contaminazione da un riferimento
 alterato. Tutte le 15 varianti e i campioni non valutabili restano nel report.
 Sono risposte a perturbazioni software, non prestazioni su attacchi RF reali.
 
+La [prova di trasferibilita su intervalli successivi]
+(../research/exploratory/PNT_REFERENCE_TRANSFER.md) aggiunge `python -m pnt transfer`:
+un solo coefficiente locale/rete imparato sul training e applicato senza
+adattamenti a epoche successive, confrontato con nessuna correzione e
+sottrazione unitaria. Due intervalli disgiunti e le tre rotazioni delle stazioni
+producono sei confronti, ciascuno con 60 epoche di training e 120 di valutazione.
+La sottrazione unitaria peggiora tutti e sei; il coefficiente imparato migliora
+tre casi e peggiora tre, con riduzioni dell'errore quadratico medio fra
+-1,00% (peggioramento) e +2,24%. Le classi di supporto e i peggioramenti per epoca restano
+visibili. Non emerge un beneficio ripetibile sufficiente a promuovere questa
+correzione a rilevatore; nessuna soglia del confronto precedente e modificata.
+Si tratta di previsione di residui su dati gia esposti, senza etichette benigne,
+non di conferma prospettica. Su questa topologia non proseguire con altre
+varianti della stessa regressione per cercare un risultato positivo: la
+prossima estensione deve motivare un diverso effetto fisico o una topologia
+di riferimenti che lo osservi, prima di valutarne il beneficio P2.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come
