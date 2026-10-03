@@ -84,7 +84,8 @@ def conflicting_fields(intervals):
     return [name for name, (lower, upper) in intervals.items() if lower > upper]
 
 
-def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=86400):
+def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=86400,
+                       local_format='rinex', recover_corrupt=False):
     """Report agreement/discordance on the same issue, never RF authenticity.
 
     Names declare supplied sources, not independent receivers or authorities.
@@ -96,8 +97,18 @@ def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=864
             any(not isinstance(name, str) or not name.strip() or name == 'local' for name in witnesses)):
         raise ValueError('at least one named external navigation witness required; local is reserved')
     context = day_context(date.fromisoformat(day_gpst))
-    local, local_source = read_issues(local_path)
-    selected = [row for row in local if start_s <= (row['toc'] - context.day).total_seconds() < stop_s]
+    if local_format == 'ubx':
+        if (start_s, stop_s) != (0, 86400):
+            raise ValueError('UBX comparison retains the whole capture; toc windows require RINEX')
+        from .sfrbx import read_sfrbx_issues
+        local, local_source = read_sfrbx_issues(local_path, day_gpst,
+                                               recover_corrupt=recover_corrupt)
+    elif local_format == 'rinex' and not recover_corrupt:
+        local, local_source = read_issues(local_path)
+    else:
+        raise ValueError('local format must be rinex or ubx; recovery applies only to UBX')
+    selected = (local if local_format == 'ubx' else
+                [row for row in local if start_s <= (row['toc'] - context.day).total_seconds() < stop_s])
     groups = group_issues(selected)
     sources, external = {'local': local_source}, {}
     for name, path in sorted(witnesses.items()):
@@ -154,7 +165,9 @@ def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=864
                         'status': status, 'local_conflicting_fields': local_conflicts,
                         'local_fields': {field: str(value) for field, value in row['values'].items()},
                         'witnesses': peers})
-    return {'schema': 'pnt-navigation-witness-v1',
+        if 'sfrbx_cycle_index' in row:
+            outputs[-1]['sfrbx_cycle_index'] = row['sfrbx_cycle_index']
+    report = {'schema': 'pnt-navigation-witness-v1',
             'status': 'NAVIGATION_DIAGNOSTICS_AVAILABLE' if outputs else 'INSUFFICIENT_EVIDENCE',
             'day_gpst': day_gpst, 'window_gpst_s': [start_s, stop_s], 'sources': sources,
             'coverage': {'selected_local_records': len(outputs),
@@ -177,3 +190,11 @@ def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=864
                 'Different fields can reflect conversion error, receiver fault, legitimate changes or manipulation.',
                 'Attacks that preserve navigation content remain outside this diagnostic; a match is not an allow verdict.',
             ]}
+    if local_format == 'ubx':
+        report.update(schema='pnt-navigation-witness-v2', window_gpst_s=None,
+                      selection='ALL_DECODED_UBX_ISSUES')
+        report['coverage']['decoded_toc_outside_declared_day'] = sum(
+            not 0 <= (row['toc'] - context.day).total_seconds() < 86400 for row in local)
+        report['limits'].append(
+            'UBX keeps every decoded issue, including toc outside the declared day; no capture-time window is inferred.')
+    return report

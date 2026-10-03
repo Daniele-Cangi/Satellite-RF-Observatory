@@ -67,7 +67,7 @@ RF attack detection, absolute-time error, false-alarm performance or an attack
 whose every local check was proven plausible. A qualified independent local
 clock or other local controls could also expose such a change.
 
-## Actual raw-log intake and next step
+## Raw-log intake and delivered extension
 
 The already exposed JammerTest archive contains
 `Spoofing/stationary/Medium Power (_1W)/Bands_L1_L2_L5/2.1.1/240911_065707.ubx`.
@@ -82,16 +82,16 @@ An initial strict inventory of the first stationary jamming member stopped on
 a checksum mismatch; no result from that member is admitted. Attempts to get
 individual NOAA TXAU/SAM2 NAV files and a BKG NAV URL returned HTTP 404; the
 three URLs are retained in the report. No second independent message archive
-was silently substituted. The current exercise has one external archive and
-no independent local NAV capture. Distinct file hashes or source labels do not
+was silently substituted. The original 2012 software exercise has one external
+archive and no independent local NAV capture. Distinct hashes or labels do not
 establish independence.
 
-**Next:** decode GPS navigation issues from the recorded SFRBX payloads,
-qualify bit/parity/week/issue assembly against known examples, then compare
-with the existing contemporaneous external NAV. Retain every malformed,
-incomplete, mismatched and unchanged message. This is an ordinary exposed-log
-adapter, not a new prospective experiment or an excuse for another gate chain.
-Only then can we state which message differences the real episode contains.
+**Completed extension:** the [SFRBX comparison](PNT_NAVIGATION_JAMMERTEST_211.md)
+now decodes three complete GPS L1 C/A cycles and retains 204 incomplete cycles.
+Two complete issues match NOAA; G14 declares a different date and has no
+same-issue witness. The original software report above remains unchanged.
+UBX checksums and structure are checked; radio parity processing remains
+receiver-reported. No RF authentication or added detection benefit is inferred.
 
 ## Limits and reproduction
 

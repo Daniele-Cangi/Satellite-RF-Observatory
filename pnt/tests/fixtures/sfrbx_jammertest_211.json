@@ -1,0 +1,46 @@
+{
+  "day_gpst": "2024-09-11",
+  "description": "Public captured GPS L1CA SFRBX complete-cycle excerpts and separately archived NOAA same-day G17 NAV record; not an RF truth label.",
+  "external_rinex": "     2.11           N: GPS NAV DATA                         RINEX VERSION / TYPE\nteqc  2019Feb25     CORS-ADM Account    20240915 15:45:10UTCPGM / RUN BY / DATE\nLinux 2.4.21-27.ELsmp|Opteron|gcc|Linux 64|=+               COMMENT\n     2.10           N: GPS NAV DATA                         COMMENT\nrvacn.e(1404.07)                        2024-09-15T12:55 UTCCOMMENT\nThis file contains the validated broadcast navigation       COMMENT\nmessages from the following files:                          COMMENT\nabmf2550.24n, abpo2550.24n, albh2550.24n, alic2550.24n,     COMMENT\nareq2550.24n, badg2550.24n, bake2550.24n, bogt2550.24n,     COMMENT\nbrew2550.24n, cas12550.24n, cedu2550.24n, chum2550.24n,     COMMENT\nchur2550.24n, ckis2550.24n, coco2550.24n, cro12550.24n,     COMMENT\ndaej2550.24n, darw2550.24n, dav12550.24n, dgar2550.24n,     COMMENT\ndrao2550.24n, dubo2550.24n, fair2550.24n, falk2550.24n,     COMMENT\nflin2550.24n, glsv2550.24n, gode2550.24n, gold2550.24n,     COMMENT\nharb2550.24n, hlfx2550.24n, hob22550.24n, hofn2550.24n,     COMMENT\nholb2550.24n, hrao2550.24n, iisc2550.24n, invk2550.24n,     COMMENT\nirkj2550.24n, jplm2550.24n, karr2550.24n, kat12550.24n,     COMMENT\nkiri2550.24n, kiru2550.24n, kour2550.24n, laut2550.24n,     COMMENT\nlmmf2550.24n, lpal2550.24n, mac12550.24n, maju2550.24n,     COMMENT\nmal22550.24n, mana2550.24n, mas12550.24n, mat12550.24n,     COMMENT\nmate2550.24n, maui2550.24n, maw12550.24n, mbar2550.24n,     COMMENT\nmcm42550.24n, mdo12550.24n, mdvj2550.24n, mkea2550.24n,     COMMENT\nmobs2550.24n, mtka2550.24n, nano2550.24n, naur2550.24n,     COMMENT\nnico2550.24n, nium2550.24n, nklg2550.24n, nnor2550.24n,     COMMENT\nnot12550.24n, nvsk2550.24n, ohi32550.24n, pert2550.24n,     COMMENT\npie12550.24n, pimo2550.24n, pohn2550.24n, pol22550.24n,     COMMENT\npolv2550.24n, reun2550.24n, sant2550.24n, sch22550.24n,     COMMENT\nstjo2550.24n, suth2550.24n, suwn2550.24n, sydn2550.24n,     COMMENT\ntid12550.24n, tow22550.24n, twtf2550.24n, unbj2550.24n,     COMMENT\nvill2550.24n, vndp2550.24n, whit2550.24n, will2550.24n,     COMMENT\nwsrt2550.24n, xmis2550.24n, yar22550.24n, yarr2550.24n,     COMMENT\nyebe2550.24n, yell2550.24n, zamb2550.24n                    COMMENT\n    2.8871D-08  2.2352D-08 -1.1921D-07 -1.1921D-07          ION ALPHA\n    1.3722D+05  1.6384D+04 -1.9661D+05  3.9322D+05          ION BETA\n    9.313225746155D-10 7.993605777301D-15   405504     2331 DELTA-UTC: A0,A1,T,W\n                                                            END OF HEADER\n17 24  9 11  8  0  0.0 6.301719695330D-04-1.102762325900D-11 0.000000000000D+00\n    5.700000000000D+01 7.078125000000D+01 4.428755904031D-09 3.049521126190D+00\n    3.771856427193D-06 1.352820883039D-02 5.273148417473D-06 5.153798862457D+03\n    2.880000000000D+05 2.719461917877D-07-8.446831862738D-01 1.490116119385D-07\n    9.672359240929D-01 2.784375000000D+02-1.305140879556D+00-7.871399303947D-09\n   -4.893060958486D-11 1.000000000000D+00 2.331000000000D+03 0.000000000000D+00\n    2.000000000000D+00 0.000000000000D+00-1.117587089539D-08 5.700000000000D+01\n    2.808180000000D+05 4.000000000000D+00\n",
+  "navigation_sha256": "ef484bb751743dcb37601112c2a6c0b81c7e738b4cb9f2faf4bfb1fa446aace3",
+  "packets": [
+    {
+      "original_packet_index": 2002,
+      "ubx_hex": "b56202133000001100000a2902001a1bc12238e923970500b41190fce796d9e8303892b72d8a133af88b1994510ef7e73f80b744a614a8f2"
+    },
+    {
+      "original_packet_index": 2112,
+      "ubx_hex": "b56202133000001100000a2902001a1bc1228c0a24974536420e3e1f1c8c572fea8fa841fa017dd74a3b6fe8c382a70499034b1f94117211"
+    },
+    {
+      "original_packet_index": 2225,
+      "ubx_hex": "b56202133000001100000a2902001a1bc122042b249756b7240079a068a5d6091480e1be289a97b2b388e1c1b834527aeabf8c777f8e4f6e"
+    },
+    {
+      "original_packet_index": 16318,
+      "ubx_hex": "b56202133000001500000a2402001a1bc122942934970500b41190fce796d9e8303892b72d8ab63af88bd693d18684fe3f8060625703b65a"
+    },
+    {
+      "original_packet_index": 16417,
+      "ubx_hex": "b56202133000001500000a2402001a1bc122044a3497c681c006f9dd5b8c749c65b73f038400d8cf943e7068cb013a10510330c793914de1"
+    },
+    {
+      "original_packet_index": 16518,
+      "ubx_hex": "b56202133000001500000a2402001a1bc1228c6b3497bbc0e13f11dc4201dd093e80af994b8b9b3ac1096bdc9131a575ea3f1b85ff860157"
+    },
+    {
+      "original_packet_index": 27424,
+      "ubx_hex": "b56202133000000e00000a2602008955d5227be1b0912b00e41196aaaa0a95aaaaaa95aaaaaa5c82aaaa8d9f8d00db0b00809b0af80625dd"
+    },
+    {
+      "original_packet_index": 27510,
+      "ubx_hex": "b56202133000000e00000a2602008955d5226f02b1911c888000e06fb90cdde4802010c08b8018a70d0c67e8b404e2ce6e035c9f9f8da846"
+    },
+    {
+      "original_packet_index": 27596,
+      "ubx_hex": "b56202133000000e00000a2602008955d522e723b191a3fd02003417932ce589fa3fa8a4cf93eef26b06c1e5318a8a23eabf03aa8580617a"
+    }
+  ],
+  "tar_member": "Spoofing/stationary/Medium Power (_1W)/Bands_L1_L2_L5/2.1.1/240911_065707.ubx",
+  "ubx_sha256": "05b41c23ea4ec35951bfc2d96b3638e104781c0c70e82ae23ab3adde626b749d"
+}

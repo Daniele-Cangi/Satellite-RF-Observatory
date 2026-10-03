@@ -18,7 +18,10 @@ def main():
     transfer = commands.add_parser('transfer', help='test training-only external residual prediction on later epochs')
     nav_check = commands.add_parser('navigation', help='compare local decoded navigation issues with external files')
     nav_check.add_argument('day_gpst')
-    nav_check.add_argument('local_navigation', type=Path, help='local RINEX 2 GPS NAV, plain or gzip')
+    nav_check.add_argument('local_navigation', type=Path, help='local RINEX 2 GPS NAV or explicitly selected UBX')
+    nav_check.add_argument('--local-format', choices=('rinex', 'ubx'), default='rinex')
+    nav_check.add_argument('--recover-corrupt', action='store_true',
+                           help='UBX only: exclude and count damaged packets instead of rejecting the file')
     nav_check.add_argument('--witness', dest='reference', action='append', required=True, metavar='NAME=PATH')
     nav_check.add_argument('--start', type=int, default=0)
     nav_check.add_argument('--stop', type=int, default=86400)
@@ -68,6 +71,7 @@ def main():
             options.update(train_stop_s=args.train_stop, minimum_training=args.minimum_training,
                            minimum_fit_epochs=args.minimum_fit_epochs)
         if args.command == 'navigation':
+            options.update(local_format=args.local_format, recover_corrupt=args.recover_corrupt)
             report = inspect_navigation(args.local_navigation, references, args.day_gpst, **options)
         else:
             function = {'analyze': analyze, 'compare': compare, 'transfer': reference_transfer}[args.command]

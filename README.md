@@ -31,7 +31,11 @@ shows no consistent advantage. Residual prediction is not RF authentication.
 local decoded navigation issues with supplied external messages. It exposes
 missing coverage, conflicting records and changed fields without certifying
 RF origin; the [mechanism exercise](research/exploratory/PNT_NAVIGATION_WITNESS.md)
-documents a synthetic clock-message ambiguity and the remaining raw-log adapter.
+documents a synthetic clock-message ambiguity. An explicit `--local-format ubx`
+adapter now decodes GPS L1 C/A SFRBX and retains incomplete cycles and message
+dates outside the capture day. The [recorded JammerTest comparison](research/exploratory/PNT_NAVIGATION_JAMMERTEST_211.md)
+finds two corroborated issues and one without a same-day archive witness;
+incremental RF detection benefit remains unproven.
 
 The existing [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md)
 provides a local satellite/day request, estimation and evidence pipeline. A

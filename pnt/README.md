@@ -244,5 +244,41 @@ geometry almost unchanged, yet differ from external message fields. It uses
 real archived codes with **synthetic local navigation variants**, not a
 recorded RF attack. Unchanged messages can accompany harmful RF manipulation;
 a match does not authenticate pseudoranges, freshness, position or absolute time.
-The command currently needs decoded RINEX NAV; raw UBX SFRBX decoding is the
-next adapter, supported by packet availability in the existing JammerTest file.
+
+For a receiver's raw UBX recording, select the adapter explicitly:
+
+```console
+python -m pnt navigation 2024-09-11 capture.ubx --local-format ubx --witness NOAA=brdc2550.24n.gz --output navigation-ubx.json
+```
+
+This supports **RXM-SFRBX version 2, GPS L1 C/A LNAV**. Other GNSS/signals
+are counted rather than interpreted as LNAV. It reuses the existing UBX packet
+reader and the same issue/field comparator. It decodes all 27 fields from
+complete subframes 1/2/3 for the same satellite and HOW 30-second cycle, with
+consistent IODE/IODC. Missing pieces are never borrowed from another cycle.
+Repeated frames and conflicts, incomplete cycles, raw GPS payloads and packet
+indices remain in `sources.local`; decoded records link back to their cycle.
+The conservative cycle rule limits coverage when receiver output is sparse.
+
+UBX mode retains **every decoded issue in the file**, including `toc` outside
+the declared day. `--start`/`--stop` windows are unavailable in this mode: the
+message's own time must not hide an anomalous message, and capture time is not
+qualified. The supplied GPST day resolves only the 1024-week era. The v2 report
+has `selection=ALL_DECODED_UBX_ISSUES`, a null window, and counts decoded `toc`
+outside that day. The RINEX v1 contract and its `toc` selection are unchanged.
+
+Bad UBX checksums reject the input by default. `--recover-corrupt` explicitly
+excludes and counts damaged packets; they never become evidence. Receiver
+parity processing is reported by u-blox; the adapter does **not independently
+validate RF parity or authenticate the receiver output**. It strips padding
+and parity from already de-inverted data. Binary scales are exact; semicircle
+conversion uses decimal pi with a numerical bound of 1e-58 rad (or rad/s).
+URA is mapped to ICD nominal metres; unavailable URA/TGD and malformed
+reference times retain an unusable-cycle outcome. RINEX written precision can
+limit a field comparison, especially zero coefficients with coarse exponents.
+
+The [actual JammerTest 2.1.1 comparison](../research/exploratory/PNT_NAVIGATION_JAMMERTEST_211.md)
+retains three complete cycles and 204 incomplete cycles: two complete issues
+match NOAA; a third declares 1 October in an 11 September capture and lacks a
+same-issue witness. This is missing corroboration, not a matched-field conflict,
+qualified attack attribution or measured incremental detection benefit.

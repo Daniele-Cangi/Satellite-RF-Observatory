@@ -53,12 +53,22 @@ ma cambia i residui per satellite di meno di 1 mm. I campi alterati restano
 discordanti rispetto all'archivio esterno. I messaggi locali sono varianti
 **sintetiche** dell'archivio NOAA: questo dimostra un meccanismo e il codice,
 non un beneficio su un attacco RF registrato o a pari falsi allarmi.
-Il file UBX gia esposto dell'episodio JammerTest 2.1.1 contiene 9.387 pacchetti
-SFRBX multi-GNSS con checksum UBX valido; due pacchetti con checksum errato
-restano esclusi. Il prossimo passo concreto e decodificare le issue GPS da
-quei payload e confrontarle con i messaggi esterni contemporanei, conservando
-copertura e discrepanze. La concordanza dei messaggi non autentica le misure
-di distanza o il tempo; la provenienza indipendente delle fonti resta da qualificare.
+Il [confronto della registrazione JammerTest 2.1.1]
+(../research/exploratory/PNT_NAVIGATION_JAMMERTEST_211.md) aggiunge l'adattatore
+SFRBX GPS L1 C/A: 424 messaggi in 9.387 SFRBX multi-GNSS, due pacchetti
+corrotti esclusi e conteggiati solo con recupero esplicito. Tre cicli completi
+sono decodificabili senza riusare frammenti di altri cicli; 204 restano incompleti.
+G17 e G21 concordano con il NAV NOAA dell'11 settembre 2024. G14 dichiara
+invece il 1 ottobre e non trova la stessa issue nell'archivio del giorno: resta
+evidenza insufficiente, non una discordanza fra campi della stessa issue.
+La modalita UBX conserva l'intero file, anche i messaggi con `toc` fuori giorno;
+la data dichiarata serve soltanto a risolvere l'era della settimana GPS.
+La parita radio resta dichiarata dal ricevitore, non verificata indipendentemente.
+L'episodio aveva gia anomalie locali evidenti: P2 non dimostra ancora beneficio
+aggiuntivo a pari falsi allarmi. Il prossimo passo deve trovare un confronto
+benigno/alterato abbinato che possa misurarlo, prima di moltiplicare analisi su
+questo file. La concordanza dei messaggi non autentica distanze o tempo;
+la provenienza indipendente delle fonti resta da qualificare.
 
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
