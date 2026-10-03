@@ -144,7 +144,7 @@ def compare_issue_records(selected, external):
 
 
 def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=86400,
-                       local_format='rinex', recover_corrupt=False):
+                       local_format='rinex', recover_corrupt=False, qualify_lnav=False):
     """Report agreement/discordance on the same issue, never RF authenticity.
 
     Names declare supplied sources, not independent receivers or authorities.
@@ -203,4 +203,9 @@ def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=864
             not 0 <= (row['toc'] - context.day).total_seconds() < 86400 for row in local)
         report['limits'].append(
             'UBX keeps every decoded issue, including toc outside the declared day; no capture-time window is inferred.')
+    if qualify_lnav:
+        from .navigation_representation import qualify_navigation_records
+        report['written_decimal_schema'] = report['schema']
+        report['schema'] = 'pnt-navigation-witness-v3'
+        report['lnav_representation'] = qualify_navigation_records(selected, external)
     return report
