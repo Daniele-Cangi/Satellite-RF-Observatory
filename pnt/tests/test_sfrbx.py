@@ -176,10 +176,46 @@ def test_unsupported_signal_is_counted_without_lnav_misinterpretation(tmp_path):
     (0, 8, 0, 'INVALID_TLM_HOW'), (43, 3, 0, 'INVALID_TLM_HOW'),
     (24, 17, 100800, 'INVALID_TLM_HOW'), (24, 17, 47390, 'INVALID_FRAME_PHASE'),
 ])
-def test_invalid_tlm_how_is_retained_without_decoding(tmp_path, offset, length, value, status):
-    rows, source = read_sfrbx_issues(write(tmp_path, [set_bits(PACKETS[0], offset, length, value)]), DAY)
+def test_invalid_tlm_how_is_retained_and_interrupts_only_its_satellite_cycle(
+        tmp_path, offset, length, value, status):
+    invalid = set_bits(PACKETS[0], offset, length, value)
+    rows, source = read_sfrbx_issues(write(tmp_path, [invalid]), DAY)
     assert rows == []
     assert source['frames'][0]['status'] == status
+    # An invalid G17 frame separates occurrences even when HOW later returns
+    # to the old cycle. An interleaved G21 cycle remains usable.
+    rows, source = read_sfrbx_issues(write(tmp_path, [
+        PACKETS[0], PACKETS[3], invalid, *PACKETS[1:3], *PACKETS[4:6],
+    ]), DAY)
+    assert [row['identity'][0] for row in rows] == ['G21']
+    assert source['cycle_status_counts'] == {'DECODED_ISSUE': 1, 'INCOMPLETE_CYCLE': 2}
+    assert source['cycles'][0]['missing_subframes'] == [2, 3]
+    assert source['cycles'][2]['missing_subframes'] == [1]
+    assert source['frame_status_counts'] == {'CEI_SUBFRAME': 6, status: 1}
+    assert source['frames'][2]['payload_hex'] == invalid[14:-2].hex()
+
+
+@pytest.mark.parametrize('version,words_count', [(1, 10), (2, 9)])
+def test_unsupported_gps_header_interrupts_cycle_but_allows_a_fresh_complete_set(
+        tmp_path, version, words_count):
+    payload = bytearray(PACKETS[0][6:-2])
+    payload[6], payload[4] = version, words_count
+    invalid = packet(bytes(payload[:8 + 4 * words_count]))
+    rows, source = read_sfrbx_issues(write(tmp_path, [
+        PACKETS[0], invalid, *PACKETS[1:3],
+    ]), DAY)
+    assert rows == []
+    assert source['cycle_status_counts'] == {'INCOMPLETE_CYCLE': 2}
+    rows, source = read_sfrbx_issues(write(tmp_path, [
+        PACKETS[0], invalid, *PACKETS[1:3], *PACKETS[:3],
+    ]), DAY)
+    # SF2/SF3 after the interruption can only join the fresh SF1. The old
+    # occurrence remains incomplete; all repeated frames remain visible.
+    assert len(rows) == 1
+    assert source['cycle_status_counts'] == {'DECODED_ISSUE': 1, 'INCOMPLETE_CYCLE': 1}
+    assert source['cycles'][0]['missing_subframes'] == [2, 3]
+    assert source['cycles'][1]['packet_indices'] == {'1': [4], '2': [2, 5], '3': [3, 6]}
+    assert source['frames'][1]['status'] == 'UNSUPPORTED_GPS_HEADER'
 
 
 def test_checksum_damage_is_fail_closed_and_recovery_explicit(tmp_path):

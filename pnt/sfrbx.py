@@ -105,7 +105,8 @@ def read_sfrbx_issues(path, day_gpst, *, recover_corrupt=False):
 
     Same satellite + HOW frame start + uninterrupted occurrence binds a cycle.
     Returning to an old HOW cycle after another cycle starts a new occurrence,
-    preventing stale subframe reuse. Within-cycle order need not be 1/2/3.
+    preventing stale subframe reuse. Invalid GPS frames also end that
+    satellite's active occurrence. Within-cycle order need not be 1/2/3.
     """
     # Validate the caller's date even for files containing no GPS frames.
     date.fromisoformat(day_gpst)
@@ -130,8 +131,10 @@ def read_sfrbx_issues(path, day_gpst, *, recover_corrupt=False):
         entry = {'packet_index': packet_index, 'satellite': f'G{sv:02d}',
                  'header_hex': bytes(payload[:8]).hex(), 'payload_hex': bytes(payload[8:]).hex()}
         frame_log.append(entry)
+        satellite = entry['satellite']
         if version != 2 or words_count != 10 or not 1 <= sv <= 32:
             entry['status'] = 'UNSUPPORTED_GPS_HEADER'
+            current.pop(satellite, None)
             continue
         words = struct.unpack_from('<10I', payload, 8)
         data = b''.join(((word >> 6) & 0xffffff).to_bytes(3, 'big') for word in words)
@@ -141,13 +144,14 @@ def read_sfrbx_issues(path, day_gpst, *, recover_corrupt=False):
                      alert_flag=bits(data, 41, 1), anti_spoof_flag=bits(data, 42, 1))
         if data[0] != 0x8b or subframe not in (1, 2, 3, 4, 5) or how >= 100800:
             entry['status'] = 'INVALID_TLM_HOW'
+            current.pop(satellite, None)
             continue
         start = ((how - subframe) * 6) % 604800
         if start % 30:
             entry['status'] = 'INVALID_FRAME_PHASE'
+            current.pop(satellite, None)
             continue
         entry['frame_start_sow'] = start
-        satellite = entry['satellite']
         if subframe in (4, 5):
             entry['status'] = 'NON_CEI_SUBFRAME'
             if satellite in current and current[satellite]['frame_start_sow'] != start:
