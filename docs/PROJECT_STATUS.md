@@ -43,6 +43,49 @@ varianti della stessa regressione per cercare un risultato positivo: la
 prossima estensione deve motivare un diverso effetto fisico o una topologia
 di riferimenti che lo osservi, prima di valutarne il beneficio P2.
 
+Il [confronto dei messaggi di navigazione]
+(../research/exploratory/PNT_NAVIGATION_WITNESS.md) apre un meccanismo diverso:
+`python -m pnt navigation` confronta la stessa issue GPS dichiarata localmente
+con archivi esterni, mantenendo messaggi mancanti, discordanti e conflitti fra
+fonti. Nel primo controllo software, una modifica comune di 0,954 microsecondi
+dei clock satellitari sposta il clock stimato da codici TXAU reali di 285,905 m,
+ma cambia i residui per satellite di meno di 1 mm. I campi alterati restano
+discordanti rispetto all'archivio esterno. I messaggi locali sono varianti
+**sintetiche** dell'archivio NOAA: questo dimostra un meccanismo e il codice,
+non un beneficio su un attacco RF registrato o a pari falsi allarmi.
+Il [confronto della registrazione JammerTest 2.1.1]
+(../research/exploratory/PNT_NAVIGATION_JAMMERTEST_211.md) aggiunge l'adattatore
+SFRBX GPS L1 C/A: 424 messaggi in 9.387 SFRBX multi-GNSS, due pacchetti
+corrotti esclusi e conteggiati solo con recupero esplicito. Tre cicli completi
+sono decodificabili senza riusare frammenti di altri cicli; 204 restano incompleti.
+G17 e G21 concordano con il NAV NOAA dell'11 settembre 2024. G14 dichiara
+invece il 1 ottobre e non trova la stessa issue nell'archivio del giorno: resta
+evidenza insufficiente, non una discordanza fra campi della stessa issue.
+La modalita UBX conserva l'intero file, anche i messaggi con `toc` fuori giorno;
+la data dichiarata serve soltanto a risolvere l'era della settimana GPS.
+La parita radio resta dichiarata dal ricevitore, non verificata indipendentemente.
+L'episodio aveva gia anomalie locali evidenti: P2 non dimostra ancora beneficio
+aggiuntivo a pari falsi allarmi. Il prossimo passo deve trovare un confronto
+benigno/alterato abbinato che possa misurarlo, prima di moltiplicare analisi su
+questo file. La concordanza dei messaggi non autentica distanze o tempo;
+la provenienza indipendente delle fonti resta da qualificare.
+
+Il [confronto abbinato OBS/NAV](../research/exploratory/PNT_NAVIGATION_COMPARISON.md)
+aggiunge `python -m pnt navigation-compare`: soglie sui soli dati originali
+di calibrazione, controlli locali sui residui e sul passo del clock, e
+testimone esterno legato ai messaggi effettivamente usati. Su 120 epoche
+successive della stazione NYA2, il bias comune sintetico nei messaggi NAV
+lascia 7 superamenti locali come nell'originale, ma differisce dall'archivio
+in tutte le epoche, incluse 113 senza superamenti locali. La deriva comune
+ha 9 superamenti locali e 111 epoche discordanti senza superamenti; il
+peggioramento resta visibile. Alterare invece solo i codici mantenendo il
+NAV produce 74 superamenti locali e nessuna discordanza di messaggio:
+la compatibilita NAV non convalida il segnale. Sono casi software su dati
+gia esposti, con lo stesso archivio come origine delle varianti e testimone;
+non un confronto benigno/attacco fisico, una fonte indipendente qualificata
+o una misura dei falsi allarmi. P2 resta aperto, ma ora il confronto puo
+essere applicato a un caso reale adeguato senza un nuovo esecutore o sigillo.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come

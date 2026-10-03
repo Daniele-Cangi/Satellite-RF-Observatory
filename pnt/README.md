@@ -204,3 +204,129 @@ The [two-window, three-receiver exercise](../research/exploratory/PNT_REFERENCE_
 retains all six comparisons. Unit subtraction worsens each comparison; the
 learned slope gives small improvements and worsenings without a consistent
 advantage. The previous comparison's thresholds and report remain unchanged.
+
+## Decoded navigation witnesses
+
+```console
+python -m pnt navigation 2012-09-14 LOCAL.12n.gz --witness NOAA=EXTERNAL.12n.gz --start 43200 --stop 50400 --output navigation.json
+```
+
+This compares locally declared **decoded navigation messages** with explicitly
+supplied external archives. It accepts plain/gzipped RINEX 2 GPS NAV, using
+the existing block normalizer. It does not require external residuals to
+predict local noise. At least one named `--witness NAME=PATH` is required;
+names and differing file hashes do not certify independent physical sources.
+Identical input hashes and duplicate external content are exposed in coverage.
+
+Messages are matched by satellite, GPST `toc`, continuous week, `toe`, IODE
+and IODC. No nearest-message substitution is performed when that issue is
+missing. All 27 clock/orbit-1..6 fields are retained, including unhealthy
+records, IODC and L2 flags that orbit fitting does not use. Integer fields are
+compared exactly; other fields allow only rounding to the last written decimal
+digit. Duplicate issues must have compatible field intervals. Different
+transmission times and optional derived fit durations are not payload conflicts;
+ionosphere/UTC headers and spare fields are outside this first comparison.
+
+Each local record whose `toc` lies in the requested half-open GPST window is
+retained with its source index, fields and every witness's matching records.
+Outcomes are `COMPATIBLE_WITH_EXTERNAL`, `DIFFERENT_FROM_EXTERNAL`,
+`INSUFFICIENT_EVIDENCE`, `CONFLICTING_LOCAL_RECORDS` or
+`EXTERNAL_RECORD_CONFLICT`. Missing witnesses remain visible; agreement is
+conditional on witnesses that contain that same issue. Conflicting witnesses
+are not resolved by majority voting. Structural/nonfinite/missing required
+fields are input errors rather than silently discarded records. These are
+message diagnostics, not ALLOW/BLOCK or RF-authenticity verdicts.
+
+The [first mechanism exercise](../research/exploratory/PNT_NAVIGATION_WITNESS.md)
+shows why the comparison can add information: a software change in all
+satellite clock biases can enter the local receiver-clock fit while leaving
+geometry almost unchanged, yet differ from external message fields. It uses
+real archived codes with **synthetic local navigation variants**, not a
+recorded RF attack. Unchanged messages can accompany harmful RF manipulation;
+a match does not authenticate pseudoranges, freshness, position or absolute time.
+
+For a receiver's raw UBX recording, select the adapter explicitly:
+
+```console
+python -m pnt navigation 2024-09-11 capture.ubx --local-format ubx --witness NOAA=brdc2550.24n.gz --output navigation-ubx.json
+```
+
+This supports **RXM-SFRBX version 2, GPS L1 C/A LNAV**. Other GNSS/signals
+are counted rather than interpreted as LNAV. It reuses the existing UBX packet
+reader and the same issue/field comparator. It decodes all 27 fields from
+complete subframes 1/2/3 for the same satellite and HOW 30-second cycle, with
+consistent IODE/IODC. Missing pieces are never borrowed from another cycle.
+Repeated frames and conflicts, incomplete cycles, raw GPS payloads and packet
+indices remain in `sources.local`; decoded records link back to their cycle.
+The conservative cycle rule limits coverage when receiver output is sparse.
+
+UBX mode retains **every decoded issue in the file**, including `toc` outside
+the declared day. `--start`/`--stop` windows are unavailable in this mode: the
+message's own time must not hide an anomalous message, and capture time is not
+qualified. The supplied GPST day resolves only the 1024-week era. The v2 report
+has `selection=ALL_DECODED_UBX_ISSUES`, a null window, and counts decoded `toc`
+outside that day. The RINEX v1 contract and its `toc` selection are unchanged.
+
+Bad UBX checksums reject the input by default. `--recover-corrupt` explicitly
+excludes and counts damaged packets; they never become evidence. Receiver
+parity processing is reported by u-blox; the adapter does **not independently
+validate RF parity or authenticate the receiver output**. It strips padding
+and parity from already de-inverted data. Binary scales are exact; semicircle
+conversion uses decimal pi with a numerical bound of 1e-58 rad (or rad/s).
+URA is mapped to ICD nominal metres; unavailable URA/TGD and malformed
+reference times retain an unusable-cycle outcome. RINEX written precision can
+limit a field comparison, especially zero coefficients with coarse exponents.
+
+The [actual JammerTest 2.1.1 comparison](../research/exploratory/PNT_NAVIGATION_JAMMERTEST_211.md)
+retains three complete cycles and 204 incomplete cycles: two complete issues
+match NOAA; a third declares 1 October in an 11 September capture and lacks a
+same-issue witness. This is missing corroboration, not a matched-field conflict,
+qualified attack attribution or measured incremental detection benefit.
+
+## Paired navigation comparison
+
+```console
+python -m pnt navigation-compare 2024-09-11 LOCAL.crx.gz ORIGINAL.n.gz --case altered LOCAL.crx.gz ALTERED.n --witness NOAA=ORIGINAL.n.gz --start 28800 --calibration-stop 30600 --stop 34200 --output comparison.json
+```
+
+Each repeated `--case NAME OBS NAV` supplies an observation file and its
+navigation hypothesis. A case can reuse the original observations or supply
+a retained variant. This supports the same RINEX 3 GPS C1C/C2W observations
+and RINEX 2 GPS NAV as the fixed-site diagnostic. It uses one original antenna
+coordinate in every case; other observations must declare the same receiver
+marker. An explicit `--local-ecef` needs `--position-source`.
+
+Two local scores are the largest minus smallest satellite residual, and the
+absolute fitted-clock change between consecutive 30-second grid epochs.
+Original-only calibration uses the prefix ending at `--calibration-stop`,
+with at least 20 epochs where both scores exist. Default thresholds are the
+95% nearest-rank quantiles; exceedance means strict `>`. The union of the two
+controls has no prescribed combined false-alarm rate. Candidate values and
+later original values never set these thresholds. No gap is bridged for a
+clock step. A partially scored epoch retains its available diagnostic but
+does not enter the paired two-control comparison.
+
+Every requested epoch remains visible. Cases are fitted independently; a
+changed satellite set at this or the preceding epoch makes the comparison
+inconclusive rather than reducing both fits to a passing intersection.
+All NAV records are compared without a `toc` filter. Per-epoch external
+content evidence refers only to source indices used by that local fit;
+unused contradictions cannot create evidence for the scored satellites.
+Missing issues, conflicting records, all-unhealthy inputs, model failures,
+partial controls and unsupported comparisons are retained without fallback.
+`navigation_comparison` retains the complete message evidence separately.
+
+Reports contain the original and each supplied case, hashes, used NAV indices,
+per-satellite residuals, fitted clocks, control scores/thresholds, witness
+outcomes and counts on identical paired support. Counts of external message
+discordance while these local controls stay quiet are **not** RF detections.
+Passing two controls does not establish plausibility under C/N0, Doppler,
+PVT, receiver flags, oscillator specifications or other local checks.
+Matching messages cannot authenticate changed ranges. Absolute time and
+source independence remain unqualified.
+
+The [six-case exercise](../research/exploratory/PNT_NAVIGATION_COMPARISON.md)
+uses already exposed public observations with five supplied software variants.
+It includes both common-clock changes and negative controls; the earlier
+JammerTest result and its report replay are unchanged. A matched physical
+benign/attack recording remains the next P2 evidence requirement.
