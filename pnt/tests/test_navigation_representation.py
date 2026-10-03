@@ -13,7 +13,7 @@ import pytest
 
 from pnt.navigation_representation import compare_fields, field_candidates, qualify_fields, qualify_navigation_records
 from pnt.navigation_witness import inspect_navigation, group_issues
-from pnt.sfrbx import ORBIT_FIELDS, bits, read_sfrbx_issues
+from pnt.sfrbx import ANGULAR_FIELDS, ORBIT_FIELDS, PI, bits, read_sfrbx_issues
 from pnt.tests.test_sfrbx import DAY, FIXTURE, PACKETS, set_bits, write
 from pnt.tests.test_public_rf_navigation import FIXTURE as RF_FIXTURE, replay_monitor_messages
 
@@ -80,6 +80,105 @@ def test_closed_boundaries_and_signed_width_do_not_round_away_ambiguity():
         minimum = Decimal(-2**21) * step
         assert field_candidates('af0_s', (minimum, minimum))['encoded_value'] == -2**21
         assert field_candidates('af0_s', (minimum - step, minimum - step))['candidate_count'] == 0
+
+
+@pytest.mark.parametrize('name', sorted(ANGULAR_FIELDS))
+@pytest.mark.parametrize('sign', [-1, 1])
+def test_tiny_nonzero_angular_intervals_do_not_admit_exact_zero(name, sign):
+    value = Decimal(sign) * Decimal('1.000000000000e-58')
+    half = Decimal('5e-71')
+    result = field_candidates(name, (value - half, value + half))
+    assert result['status'] == 'NO_BROADCAST_VALUE'
+    assert 'encoded_value' not in result
+    zero = field_candidates(name, (Decimal(0), Decimal(0)))
+    assert zero['candidate_count'] == 1 and zero['encoded_value'] == 0
+
+
+@pytest.mark.parametrize('sign', [-1, 1])
+def test_angular_pi_bound_depends_on_encoding_and_does_not_expand_written_interval(sign):
+    with localcontext() as context:
+        context.prec = 160
+        scale = Decimal(2) ** -31
+        low = PI * scale
+        high = (PI + Decimal(1).scaleb(PI.as_tuple().exponent)) * scale
+        if sign == -1:
+            low, high = -high, -low
+        inside = field_candidates('m0_rad', (low, high))
+        assert inside['encoded_value'] == sign
+        below = field_candidates('m0_rad', (low - Decimal('1e-58'), low - Decimal('5e-59')))
+        above = field_candidates('m0_rad', (high + Decimal('5e-59'), high + Decimal('1e-58')))
+        assert below['candidate_count'] == above['candidate_count'] == 0
+
+
+@pytest.mark.parametrize('ura,tgd,expected', [
+    (15, None, ['sv_accuracy_m']),
+    (None, -128, ['tgd_s']),
+    (15, -128, ['sv_accuracy_m', 'tgd_s']),
+])
+@pytest.mark.parametrize('include_later', [False, True])
+def test_ubx_cli_qualification_retains_unavailable_metadata_without_admitting_it(
+        tmp_path, ura, tgd, expected, include_later):
+    changed = PACKETS[0]
+    if ura is not None:
+        changed = set_bits(changed, 60, 4, ura)
+    if tgd is not None:
+        changed = set_bits(changed, 160, 8, tgd)
+    # Include a later usable cycle to check both record-index namespaces.
+    local = write(tmp_path, [changed, *PACKETS[1:6 if include_later else 3]])
+    archive = tmp_path / 'archive.n'
+    archive.write_text(FIXTURE['external_rinex'], encoding='ascii')
+    old = inspect_navigation(local, {'archive': archive}, DAY, local_format='ubx')
+    assert old['sources']['local']['cycle_status_counts'] == (
+        {'DECODED_ISSUE': 1, 'UNUSABLE_ISSUE': 1} if include_later else {'UNUSABLE_ISSUE': 1})
+    assert len(old['records']) == int(include_later)
+    output = tmp_path / 'qualified.json'
+    command = [sys.executable, '-m', 'pnt', 'navigation', DAY, str(local), '--local-format', 'ubx',
+               '--witness', f'archive={archive}', '--qualify-lnav', '--output', str(output)]
+    run = subprocess.run(command, capture_output=True, text=True)
+    assert run.returncode == 0, run.stderr
+    new = json.loads(output.read_bytes())
+    rows = new['lnav_representation']['records']
+    assert len(rows) == 1 + int(include_later)
+    assert rows[0]['local_record_index'] is None and rows[0]['representation_record_index'] == 0
+    assert rows[0]['sfrbx_cycle_index'] == 0
+    if include_later:
+        assert rows[1]['local_record_index'] == 0 and rows[1]['representation_record_index'] == 1
+        assert rows[1]['sfrbx_cycle_index'] == 1
+    assert rows[0]['written_decimal_rejection'] == old['sources']['local']['cycles'][0]['reason']
+    assert rows[0]['status'] == 'REPRESENTATION_UNQUALIFIED'
+    for name in expected:
+        status = 'UNAVAILABLE_ACCURACY' if name == 'sv_accuracy_m' else 'UNAVAILABLE_GROUP_DELAY'
+        assert rows[0]['local_fields'][name]['status'] == status
+        assert rows[0]['fields'][name]['status'] == 'UNQUALIFIED_REPRESENTATION'
+    new['schema'] = new.pop('written_decimal_schema')
+    del new['lnav_representation']
+    assert new == old
+
+
+@pytest.mark.parametrize('offset,length,value', [(48, 8, 12), (216, 16, 65535)])
+def test_retaining_unavailable_metadata_never_bypasses_other_issue_checks(tmp_path, offset, length, value):
+    local = write(tmp_path, [set_bits(PACKETS[0], 60, 4, 15),
+                             set_bits(PACKETS[1], offset, length, value), PACKETS[2]])
+    diagnostic = []
+    old = read_sfrbx_issues(local, DAY)
+    new = read_sfrbx_issues(local, DAY, representation_records=diagnostic)
+    assert new == old
+    assert new[0] == diagnostic == []
+    assert new[1]['cycle_status_counts'] == {'UNUSABLE_ISSUE': 1}
+
+
+@pytest.mark.parametrize('sign', [-1, 1])
+def test_written_rinex_tiny_angle_remains_unqualified_end_to_end(tmp_path, sign):
+    from pnt.navigation_witness import read_issues
+    from pnt.tests.test_navigation_witness import change
+    text = change(FIXTURE['external_rinex'], 1, 3, Decimal(sign) * Decimal('1e-58'))
+    path = tmp_path / 'tiny.n'
+    path.write_text(text, encoding='ascii')
+    rows, _ = read_issues(path)
+    result = qualify_navigation_records(rows, {'same': group_issues(rows)})['records'][0]
+    assert result['status'] == 'REPRESENTATION_UNQUALIFIED'
+    assert result['fields']['m0_rad']['local']['status'] == 'NO_BROADCAST_VALUE'
+    assert result['fields']['m0_rad']['external']['candidate_count'] == 0
 
 
 @pytest.mark.parametrize('name,value,status', [
@@ -199,7 +298,10 @@ def test_public_rf_raw_bits_do_not_inherit_exporter_errors_or_infer_archive_prec
 
 def test_retained_representation_result_replays_from_exact_inputs():
     from pnt.navigation_witness import read_issues
-    path = Path(__file__).resolve().parents[2] / 'research/exploratory/results/pnt_navigation_representation_v1.json.gz'
+    directory = Path(__file__).resolve().parents[2] / 'research/exploratory/results'
+    historical = gzip.decompress((directory / 'pnt_navigation_representation_v1.json.gz').read_bytes())
+    assert hashlib.sha256(historical).hexdigest() == '52d420564c8cef1dcfe7d5c043fbede053b77ea993208e61869f6c20be25d243'
+    path = directory / 'pnt_navigation_representation_v2.json.gz'
     saved = json.loads(gzip.decompress(path.read_bytes()))
     for filename, receipt in saved['inputs'].items():
         data = (Path(__file__).resolve().parents[2] / filename).read_bytes()

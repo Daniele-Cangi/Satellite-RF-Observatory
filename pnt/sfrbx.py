@@ -62,23 +62,28 @@ def reference_week(week, sow, frame_start):
     return week + (1 if delta < -302400 else -1 if delta > 302400 else 0)
 
 
-def decode_issue(satellite, frames, day_gpst, frame_start):
-    """Decode one complete same-cycle set; never borrow a missing subframe."""
+def decode_issue(satellite, frames, day_gpst, frame_start, *, retain_unavailable=False):
+    """Decode one complete same-cycle set; never borrow a missing subframe.
+
+    Diagnostic retention of URA/TGD sentinels does not make them usable. All
+    structural, issue-consistency and reference-time checks still apply.
+    """
     one, two, three = (bytes.fromhex(frames[sf][0]['data_hex']) for sf in (1, 2, 3))
     iodc = bits(one, 70, 2) * 256 + bits(one, 168, 8)
     if not bits(two, 48, 8) == bits(three, 216, 8) == (iodc & 255):
         raise ValueError('inconsistent IODE/IODC')
     ura = bits(one, 60, 4)
-    if ura == 15:
+    if ura == 15 and not retain_unavailable:
         raise ValueError('URA index 15 has no finite accuracy prediction')
     tgd = bits(one, 160, 8, True)
-    if tgd == -128:
+    if tgd == -128 and not retain_unavailable:
         raise ValueError('TGD unavailable sentinel')
     week = continuous_week(bits(one, 48, 10), day_gpst)
     with localcontext() as context:
         context.prec = 80
         values = {'iodc': Decimal(iodc), 'codes_l2': Decimal(bits(one, 58, 2)),
-                  'sv_accuracy_m': URA_METRES[ura], 'sv_health': Decimal(bits(one, 64, 6)),
+                  'sv_accuracy_m': Decimal(8192) if ura == 15 else URA_METRES[ura],
+                  'sv_health': Decimal(bits(one, 64, 6)),
                   'l2_p_flag': Decimal(bits(one, 72, 1)), 'tgd_s': Decimal(tgd) * Decimal(2)**-31,
                   'af2_s_s2': Decimal(bits(one, 192, 8, True)) * Decimal(2)**-55,
                   'af1_s_s': Decimal(bits(one, 200, 16, True)) * Decimal(2)**-43,
@@ -100,13 +105,18 @@ def decode_issue(satellite, frames, day_gpst, frame_start):
             'values': values, 'intervals': intervals, 'toc': toc}
 
 
-def read_sfrbx_issues(path, day_gpst, *, recover_corrupt=False):
+def read_sfrbx_issues(path, day_gpst, *, recover_corrupt=False, representation_records=None):
     """Retain all GPS L1 frames and every cycle outcome, including incomplete sets.
 
     Same satellite + HOW frame start + uninterrupted occurrence binds a cycle.
     Returning to an old HOW cycle after another cycle starts a new occurrence,
     preventing stale subframe reuse. Invalid GPS frames also end that
     satellite's active occurrence. Within-cycle order need not be 1/2/3.
+
+    An optional list collects representation rows, including unavailable
+    metadata, in cycle order. Returned usable records and cycle outcomes stay
+    unchanged. Separate indices bind each diagnostic to its original cycle
+    and, when admitted, its written-decimal comparison record.
     """
     # Validate the caller's date even for files containing no GPS frames.
     date.fromisoformat(day_gpst)
@@ -178,6 +188,7 @@ def read_sfrbx_issues(path, day_gpst, *, recover_corrupt=False):
         elif info['missing_subframes']:
             info['status'] = 'INCOMPLETE_CYCLE'
         else:
+            row = None
             try:
                 row = decode_issue(cycle['satellite'], frames, day_gpst, cycle['frame_start_sow'])
             except ValueError as error:
@@ -186,6 +197,20 @@ def read_sfrbx_issues(path, day_gpst, *, recover_corrupt=False):
                 row.update(index=len(records), sfrbx_cycle_index=cycle['index'])
                 records.append(row)
                 info.update(status='DECODED_ISSUE', local_record_index=row['index'])
+            if representation_records is not None:
+                if row is None:
+                    try:
+                        row = decode_issue(cycle['satellite'], frames, day_gpst,
+                                           cycle['frame_start_sow'], retain_unavailable=True)
+                    except ValueError:
+                        pass  # Structural failures stay unusable, never diagnostic admissions.
+                if row is not None:
+                    diagnostic = dict(row, index=len(representation_records),
+                                      sfrbx_cycle_index=cycle['index'],
+                                      written_decimal_record_index=info.get('local_record_index'))
+                    if info['status'] == 'UNUSABLE_ISSUE':
+                        diagnostic['written_decimal_rejection'] = info['reason']
+                    representation_records.append(diagnostic)
         cycle_log.append(info)
     return records, {
         'file': Path(path).name, 'sha256': hashlib.sha256(content).hexdigest(),

@@ -308,6 +308,14 @@ or repairs exported fields. Unique agreement is conditional representation
 agreement, not source independence, freshness, RF authentication or an allow
 verdict. With the flag absent, v1/v2 output stays unchanged.
 
+The representation profile V2 uses exact rational bounds and a candidate-scaled
+pi interval; it adds no fixed angular tolerance, including around zero.
+For UBX, complete issues with unavailable URA/TGD also receive field diagnostics
+while retaining their original unusable-cycle outcome. These rows have a
+`representation_record_index` and `sfrbx_cycle_index`; `local_record_index` is
+null when the prior comparator rejected the issue, with the reason retained
+as `written_decimal_rejection`. Structural/issue/time checks are still required.
+
 The [exposed RF qualification](../research/exploratory/PNT_NAVIGATION_REPRESENTATION.md)
 retains all five native discrepancies and marks the archived representations
 unqualified. Source/conversion qualification is still needed before measuring

@@ -156,12 +156,14 @@ def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=864
             any(not isinstance(name, str) or not name.strip() or name == 'local' for name in witnesses)):
         raise ValueError('at least one named external navigation witness required; local is reserved')
     context = day_context(date.fromisoformat(day_gpst))
+    representation_records = [] if qualify_lnav and local_format == 'ubx' else None
     if local_format == 'ubx':
         if (start_s, stop_s) != (0, 86400):
             raise ValueError('UBX comparison retains the whole capture; toc windows require RINEX')
         from .sfrbx import read_sfrbx_issues
         local, local_source = read_sfrbx_issues(local_path, day_gpst,
-                                               recover_corrupt=recover_corrupt)
+                                               recover_corrupt=recover_corrupt,
+                                               representation_records=representation_records)
     elif local_format == 'rinex' and not recover_corrupt:
         local, local_source = read_issues(local_path)
     else:
@@ -207,5 +209,6 @@ def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=864
         from .navigation_representation import qualify_navigation_records
         report['written_decimal_schema'] = report['schema']
         report['schema'] = 'pnt-navigation-witness-v3'
-        report['lnav_representation'] = qualify_navigation_records(selected, external)
+        report['lnav_representation'] = qualify_navigation_records(
+            representation_records if representation_records is not None else selected, external)
     return report

@@ -32,8 +32,11 @@ One candidate permits a conditional encoded-value comparison. Zero candidates
 means the stated interval cannot represent a broadcast value. Multiple
 candidates remain ambiguous. Closed boundaries retain ties. No nearest-value
 repair, inferred effective digits, physical tolerance or automatic exporter
-correction is admitted. The fixed numerical bound for Decimal pi conversion
-does not model archive error. This qualifies the representation under these
+correction is admitted. Profile `GPS_LNAV_WRITTEN_INTERVALS_V2` uses exact
+rational candidate bounds and the interval between the decoder's truncated pi
+and its next decimal unit. The conversion uncertainty scales with each encoded
+value; zero remains exactly zero. It never enlarges the written interval by a
+fixed tolerance or models archive error. This qualifies the representation under these
 assumptions, not a provider's truth, source independence, freshness or RF origin.
 
 Conflicting duplicates and contradictory witnesses retain the existing exact
@@ -41,6 +44,14 @@ issue boundary and interval intersection. No majority or nearest-issue fallback.
 Every field remains visible, including uniquely different fields when another
 field is unqualified. `SAME_BROADCAST_FIELDS` requires all 27 fields to resolve
 uniquely; it still does not authenticate pseudoranges or receiver PVT.
+
+UBX qualification also retains complete cycles with unavailable URA/TGD.
+Their field-level diagnostics remain unqualified; the original comparison
+still rejects them as `UNUSABLE_ISSUE`, with its original reason and counts.
+`representation_record_index` orders these diagnostics, `sfrbx_cycle_index`
+binds the raw cycle, and `local_record_index` links the original comparison
+record or is null for a rejected issue. Structural/IODE/reference-time failures
+remain rejected, including when unavailable metadata is also present.
 
 ## Exposed RF result and retained limitations
 
@@ -72,18 +83,30 @@ satellites. No source is silently preferred.
 
 ## Reproduction and decision
 
-The [machine result](results/pnt_navigation_representation_v1.json.gz)
+The [corrected machine result](results/pnt_navigation_representation_v2.json.gz)
 contains exact input hashes, the entire native report and every raw-bit
-qualification. Its uncompressed JSON is 1,126,057 bytes with SHA-256
-`52d420564c8cef1dcfe7d5c043fbede053b77ea993208e61869f6c20be25d243`.
+qualification. Its uncompressed JSON is 1,248,047 bytes with SHA-256
+`bdc5ea137f09b9e6e6022fb206587f99e5e18eaee0cd4e2339de4db6c3002fbf`.
 The native command above reproduces `native_report`. The existing RF test's
 ordered-message replay supplies decoded rows to `qualify_navigation_records`
 for `raw_bits_representation`; regression tests compare both with the saved
 artifact. Existing Git history and replay protect this development result.
 
+The [initial v1 result](results/pnt_navigation_representation_v1.json.gz) remains
+byte-identical (uncompressed SHA-256
+`52d420564c8cef1dcfe7d5c043fbede053b77ea993208e61869f6c20be25d243`), with its
+implementation retained in commit `d8ee5401d99b13e857159207b495f1f8c009f506`.
+Review identified an unsound fixed angular enlargement near zero and missing
+UBX unavailable-metadata diagnostics. V2 records the correction separately;
+the exposed CTTC field counts and all legacy comparison outcomes are unchanged.
+V1's angular candidate logic is superseded and must not be used for new claims.
+
 Tests include one-bit changes in all 20 continuous clock/orbit/delay fields,
 exact integer metadata, signed ranges, ties, coarse zeros, missing issues,
 conflicting sources, unavailable metadata, CLI retention and previous reports.
+Tiny positive/negative RINEX angles, exact zero, nonzero pi boundaries and UBX
+sentinels alone/together are explicit regressions; retaining sentinels cannot
+bypass other issue checks.
 These are receiver-decoded software mutations, not valid RF transmissions.
 
 The next physical prerequisite is an Internet witness that preserves the

@@ -6,7 +6,9 @@ binds nominal URA metres. Unavailable or invalid metadata stays unqualified.
 """
 
 from collections import Counter
-from decimal import Decimal, ROUND_CEILING, ROUND_FLOOR, localcontext
+from decimal import Decimal, localcontext
+from fractions import Fraction
+from math import ceil, floor
 
 from .navigation_witness import FIELDS, INTEGER_FIELDS, group_issues, issue_intervals
 from .sfrbx import ORBIT_FIELDS, PI, URA_METRES
@@ -24,9 +26,10 @@ BINARY_FIELDS.update(af0_s=(22, True, -31, False), af1_s_s=(16, True, -43, False
 def field_candidates(name, interval):
     """Return all feasible encodings as compact bounds, never round to nearest.
 
-    Closed intervals include boundary ties. The fixed 1e-58 enlargement on
-    semicircle fields only bounds the existing decoder's Decimal pi conversion;
-    it is neither a source-dependent uncertainty nor a physical tolerance.
+    Closed intervals include boundary ties. Exact rational arithmetic avoids
+    rounding at integer boundaries. For semicircles, pi lies between the
+    decoder's truncated constant and its next decimal unit; the resulting
+    value interval scales with the candidate, and zero is exactly zero.
     """
     lower, upper = interval
     if not lower.is_finite() or not upper.is_finite():
@@ -35,7 +38,7 @@ def field_candidates(name, interval):
     if lower > upper:
         return dict(result, status='CONFLICTING_REPRESENTATIONS', candidate_count=0)
     with localcontext() as context:
-        context.prec = 80
+        context.prec = 160  # Enough to serialize the finite rational scales exactly.
         if name == 'sv_accuracy_m':
             # 8192 is RINEX's unavailable-accuracy representation, not a
             # finite predicted accuracy or a receiver-exported index in metres.
@@ -47,24 +50,33 @@ def field_candidates(name, interval):
         else:
             if name in INTEGER_FIELDS:
                 minimum, maximum = INTEGER_FIELDS[name]
-                scale, numerical_bound = Decimal(1), Decimal(0)
+                scale_lower = scale_upper = Fraction(1)
+                angular = False
             else:
                 width, signed, power, angular = BINARY_FIELDS[name]
                 minimum = -(1 << (width - 1)) if signed else 0
                 maximum = (1 << (width - int(signed))) - 1
                 if name == 'toe_sow':
                     maximum = 604784 // 16
-                scale = Decimal(2) ** power * (PI if angular else 1)
-                numerical_bound = Decimal('1e-58') if angular else Decimal(0)
-            first = max(Decimal(minimum), (lower - numerical_bound) / scale)
-            last = (upper + numerical_bound) / scale
+                binary_scale = Fraction(2) ** power
+                scale_lower = binary_scale * (Fraction(PI) if angular else 1)
+                scale_upper = (binary_scale * (Fraction(PI) + Fraction(10) ** PI.as_tuple().exponent)
+                               if angular else scale_lower)
+            # Division by a positive scale interval reverses which endpoint
+            # is extremal for negative values. No written interval expansion.
+            first = max(minimum, ceil(min(Fraction(lower) / scale_lower,
+                                          Fraction(lower) / scale_upper)))
+            last = floor(max(Fraction(upper) / scale_lower, Fraction(upper) / scale_upper))
             if maximum is not None:
-                last = min(Decimal(maximum), last)
-            first = int(first.to_integral_value(rounding=ROUND_CEILING))
-            last = int(last.to_integral_value(rounding=ROUND_FLOOR))
+                last = min(maximum, last)
             count = max(0, last - first + 1)
             result.update(candidate_count=count, encoded_bounds=[first, last] if count else None,
-                          scale=str(scale), numerical_bound=str(numerical_bound))
+                          scale=str(Decimal(scale_lower.numerator) / Decimal(scale_lower.denominator)))
+            if angular:
+                result['scale_interval'] = [result['scale'],
+                    str(Decimal(scale_upper.numerator) / Decimal(scale_upper.denominator))]
+            else:
+                result['numerical_bound'] = '0'
             code = first if count == 1 else None
         count = result['candidate_count']
         result['status'] = ('NO_BROADCAST_VALUE' if not count else
@@ -144,8 +156,13 @@ def qualify_navigation_records(selected, external):
             result['status'] = 'CONFLICTING_LOCAL_RECORDS'
         if 'sfrbx_cycle_index' in row:
             result['sfrbx_cycle_index'] = row['sfrbx_cycle_index']
+        if 'written_decimal_record_index' in row:
+            result.update(representation_record_index=row['index'],
+                          local_record_index=row['written_decimal_record_index'])
+        if 'written_decimal_rejection' in row:
+            result['written_decimal_rejection'] = row['written_decimal_rejection']
         outputs.append(result)
-    return {'profile': 'GPS_LNAV_WRITTEN_INTERVALS_V1', 'records': outputs,
+    return {'profile': 'GPS_LNAV_WRITTEN_INTERVALS_V2', 'records': outputs,
             'status_counts': dict(sorted(Counter(row['status'] for row in outputs).items())),
             'limits': [
                 'This qualifies representations under written-decimal rounding, not source truth or RF origin.',
