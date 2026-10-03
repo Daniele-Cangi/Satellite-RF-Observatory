@@ -67,6 +67,14 @@ def navigation_blocks(data):
                 raise ValueError('invalid RINEX 3 GPS navigation epoch') from error
             if prefix != 'G' + prefix[1:3] + epoch.strftime(' %Y %m %d %H %M %S'):
                 raise ValueError('invalid RINEX 3 GPS navigation epoch width')
+            # The shared numeric parser compacts nonempty fields. Reject gaps
+            # before it can shift codes/flags into another model parameter.
+            required = [block[0][23 + i * 19:23 + (i + 1) * 19] for i in range(3)]
+            required += [line[4 + i * 19:4 + (i + 1) * 19]
+                         for line in block[1:7] for i in range(4)]
+            required.append(block[7][4:23])  # Transmission time; fit/spares may be blank.
+            if any(not field.strip() for field in required):
+                raise ValueError('blank required RINEX 3 GPS navigation field')
             yield block
             continue
         values = block[0][:22].split()

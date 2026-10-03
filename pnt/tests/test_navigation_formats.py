@@ -65,3 +65,13 @@ def test_unsupported_or_malformed_rinex3_is_rejected_without_partial_success(kin
         lines.pop()
     with pytest.raises(ValueError):
         list(navigation_blocks(('\n'.join(lines) + '\n').encode('ascii')))
+
+
+@pytest.mark.parametrize('row,column', [(0, i) for i in range(3)] +
+                         [(row, i) for row in range(1, 7) for i in range(4)] + [(7, 0)])
+def test_blank_required_rinex3_fields_cannot_shift_model_inputs(row, column):
+    lines = rinex3(nav_text(constellation())).splitlines()
+    offset = (23 if row == 0 else 4) + column * 19
+    lines[2 + row] = lines[2 + row][:offset] + ' ' * 19 + lines[2 + row][offset + 19:]
+    with pytest.raises(ValueError, match='required RINEX 3 GPS navigation field'):
+        broadcast_navigation(('\n'.join(lines) + '\n').encode('ascii'))

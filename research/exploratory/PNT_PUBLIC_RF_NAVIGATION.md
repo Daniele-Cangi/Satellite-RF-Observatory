@@ -90,12 +90,12 @@ envelope: strip each de-inverted word's six parity bits and supply its 240
 data bits to the existing decoder.
 
 Two exporter defects are directly visible in
-[GNSS-SDR v0.0.21 source](https://github.com/gnss-sdr/gnss-sdr/blob/v0.0.21/src/algorithms/PVT/libs/rinex_printer.cc#L2618-L2626):
+[GNSS-SDR v0.0.21 GPS source](https://github.com/gnss-sdr/gnss-sdr/blob/v0.0.21/src/algorithms/PVT/libs/rinex_printer.cc#L2452-L2460):
 
 - The RINEX L2 P flag is populated from `code_on_L2`, ignoring the separately
   decoded flag. All five RF flags are 0, whereas the native export writes 1.
 - The exporter writes `SV_accuracy`, which the
-  [LNAV decoder](https://github.com/gnss-sdr/gnss-sdr/blob/v0.0.21/src/core/system_parameters/gps_navigation_message.cc#L125-L134)
+  [LNAV decoder](https://github.com/gnss-sdr/gnss-sdr/blob/v0.0.21/src/core/system_parameters/gps_navigation_message.cc#L114-L125)
   stores as a URA index, into the RINEX accuracy-in-metres field. Here index 0
   is exported as 0 metres; the existing ICD nominal mapping and NOAA use 2.
 
