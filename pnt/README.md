@@ -12,7 +12,59 @@ Install `requirements-positioning.txt`, then run from the repository root:
 python -m pnt analyze 2024-09-11 LOCAL.crx.gz brdc2550.24n.gz --reference TRO1=TRO1.crx.gz --reference KIRU=KIRU.crx.gz --start 28800 --stop 29400 --output incident.json
 ```
 
-Inputs are GPS C1C/C2W observations in RINEX 3, plain, gzip or Hatanaka as
+For Android GNSS Logger recordings, a separate observation intake is available:
+
+```console
+python -m pnt android-raw gnss_log.txt --output measurements.json
+```
+
+It reads plain/gzipped logs and identifies **GPS C1C and C5I/Q/X** from both
+frequency and code type. It reconstructs code ranges using exact integer/decimal
+clock arithmetic, preserves every GPS source row, and counts unsupported
+constellations and all unusable/invalid measurements. Clock discontinuity counts,
+code rate, CN0, ADR state/uncertainty and original inter-signal bias fields remain
+available. `adr_usable` checks supplied validity/reset/slip/half-cycle flags and
+field availability; it is not a calibrated phase-quality or continuity bound.
+No smoothing, clock-segment joining, inter-signal bias correction, L1/L5
+combination, RINEX conversion or automatic connection to `analyze` is performed.
+The receiver's **per-row clock solution** supplies GPST; absent fine `BiasNanos`
+uses zero with an explicit flag. Neither this clock nor `utcTimeMillis` is an
+independent event/time witness. Normalization is not a spoofing decision.
+
+These conventions follow Android's [GnssClock]
+(https://developer.android.com/reference/android/location/GnssClock) and
+[GnssMeasurement](https://developer.android.com/reference/android/location/GnssMeasurement)
+API. The [real Pixel 6 fixture](tests/fixtures/android20250730/README.md) retains
+source attribution and the public sample's intake result and limitations.
+
+To connect a **fixed Android receiver with declared antenna coordinates** to
+external observations, use:
+
+```console
+python -m pnt android-analyze 2025-07-30 LOCAL.txt brdc2110.25n.gz --reference A=A.crx.gz --reference B=B.crx.gz --local-ecef X Y Z --position-source "coordinate source and frame" --start 8100 --stop 9480 --output android-incident.json
+```
+
+Replace `X Y Z` with the antenna's numeric ECEF coordinate. This path compares
+**C1C against C1C only**, using the existing broadcast-model clock fits and
+double differences. It does not need C2W, substitute another tracking code or
+reinterpret L5 as L2. GPS single-frequency ionosphere, group delay and receiver
+biases remain **uncorrected nuisances**. These residuals have no qualified
+uncertainty budget or spoofing threshold and must not be compared directly
+with ionosphere-free residuals as if their propagation model were identical.
+
+The closest local measurement to each 30-second GPST grid point is admitted
+only within 1 ms. Its code is unchanged, its offset and original source line
+are recorded, and the model is evaluated at the grid point without motion
+correction. Tied candidates and grids mixing hardware epochs/clock solutions
+are explicitly excluded. Every requested epoch remains in the report,
+including gaps, failed fits, independent local controls and remote disagreement.
+Coordinates are declarations; the tool neither validates a survey nor infers
+the point from the victim's PVT. Receiver-derived GPST is not independent event
+time. This offline command reads already-obtained Internet reference files;
+it does not silently choose or download different witnesses.
+
+The original `analyze`, `compare` and `transfer` inputs are GPS C1C/C2W
+observations in RINEX 3, plain, gzip or Hatanaka as
 supported by the existing decoder. Epochs must follow the 30-second GPST grid
 within the existing 0.001-second tolerance; no resampling, retiming or alternate
 signal fallback is performed. Navigation currently accepts plain or gzipped
