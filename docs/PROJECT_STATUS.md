@@ -7,6 +7,14 @@ confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
 valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
 Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
 
+L'intake [Android Raw](../pnt/README.md) aggiunge l'importazione GPS L1/L5 dai
+log di telefoni, con clock a precisione nanosecondo, identificazione esplicita
+del segnale e conservazione delle misure non utilizzabili. Il campione Pixel 6
+pubblico contiene 11.406 misure GPS normalizzate e 76 tempi non risolti;
+non copre gli attacchi dichiarati e non dimostra rilevamento o beneficio della
+rete. Il confronto con riferimenti esterni resta da implementare e qualificare
+su dati con posizione e cronologia dell'evento adeguatamente documentate.
+
 La [CLI PNT riutilizzabile](../pnt/README.md) ora analizza registrazioni RINEX
 di un sito fisso: controlli locali e abbinati alla rete, doppie differenze,
 clock relativo, disaccordo fra riferimenti e lacune in un unico rapporto.
