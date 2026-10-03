@@ -20,7 +20,32 @@ NAV = FIXTURE.parent / 'gfz20240911/brdc2550.24n.gz'
 
 
 def evidence():
-    return json.loads(gzip.decompress(RESULT.read_bytes()))
+    payload = gzip.decompress(RESULT.read_bytes())
+    assert len(payload) == 38_342_928, 'retained result length mismatch'
+    assert hashlib.sha256(payload).hexdigest() == (
+        '1164dbd845b3717032a8f5db99bc3c17968903503f4537a2299c82e0082238d0'
+    ), 'retained result SHA-256 mismatch'
+    return json.loads(payload)
+
+
+@pytest.mark.parametrize('mutation', ['claim', 'length'])
+def test_retained_result_rejects_changes_outside_numerical_replay(tmp_path, monkeypatch, mutation):
+    import sys
+
+    payload = gzip.decompress(RESULT.read_bytes())
+    if mutation == 'claim':
+        changed = payload.replace(b'Small descriptive later-residual reduction only;',
+                                  b'False descriptive later-residual reduction only;', 1)
+        assert changed != payload and len(changed) == len(payload)
+    else:
+        changed = payload + b'\n'
+    # Both altered payloads remain valid JSON, but neither is the saved evidence.
+    json.loads(changed)
+    altered = tmp_path / 'altered-result.json.gz'
+    altered.write_bytes(gzip.compress(changed, mtime=0))
+    monkeypatch.setattr(sys.modules[__name__], 'RESULT', altered)
+    with pytest.raises(AssertionError, match='retained result'):
+        evidence()
 
 
 def observation_body(data):
