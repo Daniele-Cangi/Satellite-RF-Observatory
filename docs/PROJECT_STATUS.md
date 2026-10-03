@@ -70,6 +70,22 @@ benigno/alterato abbinato che possa misurarlo, prima di moltiplicare analisi su
 questo file. La concordanza dei messaggi non autentica distanze o tempo;
 la provenienza indipendente delle fonti resta da qualificare.
 
+Il [confronto abbinato OBS/NAV](../research/exploratory/PNT_NAVIGATION_COMPARISON.md)
+aggiunge `python -m pnt navigation-compare`: soglie sui soli dati originali
+di calibrazione, controlli locali sui residui e sul passo del clock, e
+testimone esterno legato ai messaggi effettivamente usati. Su 120 epoche
+successive della stazione NYA2, il bias comune sintetico nei messaggi NAV
+lascia 7 superamenti locali come nell'originale, ma differisce dall'archivio
+in tutte le epoche, incluse 113 senza superamenti locali. La deriva comune
+ha 9 superamenti locali e 111 epoche discordanti senza superamenti; il
+peggioramento resta visibile. Alterare invece solo i codici mantenendo il
+NAV produce 74 superamenti locali e nessuna discordanza di messaggio:
+la compatibilita NAV non convalida il segnale. Sono casi software su dati
+gia esposti, con lo stesso archivio come origine delle varianti e testimone;
+non un confronto benigno/attacco fisico, una fonte indipendente qualificata
+o una misura dei falsi allarmi. P2 resta aperto, ma ora il confronto puo
+essere applicato a un caso reale adeguato senza un nuovo esecutore o sigillo.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come

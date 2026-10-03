@@ -8,6 +8,7 @@ from .fixed_site import analyze
 from .benchmark import compare
 from .transfer import reference_transfer
 from .navigation_witness import inspect_navigation
+from .navigation_impact import compare_navigation
 
 
 def main():
@@ -26,6 +27,19 @@ def main():
     nav_check.add_argument('--start', type=int, default=0)
     nav_check.add_argument('--stop', type=int, default=86400)
     nav_check.add_argument('--output', required=True, type=Path)
+    nav_comparison = commands.add_parser('navigation-compare', help='compare paired OBS/NAV cases and local controls')
+    nav_comparison.add_argument('day_gpst')
+    nav_comparison.add_argument('local_rinex', type=Path)
+    nav_comparison.add_argument('navigation', type=Path, help='original RINEX 2 GPS NAV')
+    nav_comparison.add_argument('--case', nargs=3, action='append', required=True, metavar=('NAME', 'OBS', 'NAV'))
+    nav_comparison.add_argument('--witness', dest='reference', action='append', required=True, metavar='NAME=PATH')
+    for flag in ('start', 'calibration-stop', 'stop'):
+        nav_comparison.add_argument('--' + flag, type=int, required=True)
+    nav_comparison.add_argument('--quantile', type=float, default=.95)
+    nav_comparison.add_argument('--minimum-calibration', type=int, default=20)
+    nav_comparison.add_argument('--local-ecef', nargs=3, type=float, metavar=('X', 'Y', 'Z'))
+    nav_comparison.add_argument('--position-source')
+    nav_comparison.add_argument('--output', required=True, type=Path)
     for command in (analysis, comparison, transfer):
         command.add_argument('day_gpst')
         command.add_argument('local_rinex', type=Path)
@@ -57,6 +71,12 @@ def main():
         references[name] = Path(path)
     if args.output.exists():
         parser.error('output already exists; choose a new report path')
+    cases = {}
+    if args.command == 'navigation-compare':
+        for name, observation, navigation in args.case:
+            if not name.strip() or name == 'original' or name in cases:
+                parser.error('cases require distinct nonempty names; original is reserved')
+            cases[name] = (Path(observation), Path(navigation))
     try:
         options = dict(start_s=args.start, stop_s=args.stop)
         if args.command != 'navigation':
@@ -73,6 +93,10 @@ def main():
         if args.command == 'navigation':
             options.update(local_format=args.local_format, recover_corrupt=args.recover_corrupt)
             report = inspect_navigation(args.local_navigation, references, args.day_gpst, **options)
+        elif args.command == 'navigation-compare':
+            options.update(calibration_stop_s=args.calibration_stop, proportion=args.quantile,
+                           minimum_calibration=args.minimum_calibration)
+            report = compare_navigation(args.local_rinex, args.navigation, cases, references, args.day_gpst, **options)
         else:
             function = {'analyze': analyze, 'compare': compare, 'transfer': reference_transfer}[args.command]
             report = function(args.local_rinex, references, args.navigation, args.day_gpst, **options)
@@ -84,6 +108,8 @@ def main():
     summary = (report['original']['evaluation']['status_counts'] if args.command == 'compare' else
                report['evaluation']['status_counts'] if args.command == 'transfer' else
                report['coverage']['status_counts'] if args.command == 'navigation' else
+               {name: case['paired_evaluation']['status_counts'] for name, case in report['cases'].items()}
+               if args.command == 'navigation-compare' else
                report['coverage']['matched_status_counts'])
     print(f"{report['status']}: {summary}; {args.output}")
 

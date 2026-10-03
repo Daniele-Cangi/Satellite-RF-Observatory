@@ -55,22 +55,29 @@ def ionosphere_free(codes):
     return {sv: ALPHA * first + BETA * second for sv, (first, second) in codes.items()}
 
 
+def admit_codes(codes, position, navigation, time_s, context):
+    """Shared per-receiver model admission, with every rejected satellite retained."""
+    admitted, excluded, records = {}, {}, {}
+    for sv, code in sorted(ionosphere_free(codes).items()):
+        try:
+            record = nearest_record(navigation, sv, time_s, context)
+            _, elevation = reference_model(record, code, time_s, position, 0.0, context)
+            if not math.isfinite(elevation) or elevation < MIN_ELEVATION_DEG:
+                raise ValueError('BELOW_ELEVATION_MASK')
+        except ValueError as error:
+            excluded[sv] = str(error)
+            continue
+        admitted[sv], records[sv] = code, record
+    return admitted, excluded, records
+
+
 def evaluate_epoch(time_s, observations, positions, navigation, context):
     """Keep local coverage, matched comparisons and individual remote fits explicit."""
     admitted, excluded, records = {}, {}, {}
     for receiver, codes in observations.items():
-        admitted[receiver], excluded[receiver] = {}, {}
-        for sv, code in sorted(ionosphere_free(codes).items()):
-            try:
-                record = nearest_record(navigation, sv, time_s, context)
-                _, elevation = reference_model(record, code, time_s, positions[receiver], 0.0, context)
-                if not math.isfinite(elevation) or elevation < MIN_ELEVATION_DEG:
-                    raise ValueError('BELOW_ELEVATION_MASK')
-            except ValueError as error:
-                excluded[receiver][sv] = str(error)
-                continue
-            admitted[receiver][sv] = code
-            records[sv] = record
+        admitted[receiver], excluded[receiver], selected = admit_codes(
+            codes, positions[receiver], navigation, time_s, context)
+        records.update(selected)
 
     def fit(receiver, satellites):
         if len(satellites) < MIN_SATELLITES:
