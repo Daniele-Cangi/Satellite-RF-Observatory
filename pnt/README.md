@@ -282,3 +282,51 @@ retains three complete cycles and 204 incomplete cycles: two complete issues
 match NOAA; a third declares 1 October in an 11 September capture and lacks a
 same-issue witness. This is missing corroboration, not a matched-field conflict,
 qualified attack attribution or measured incremental detection benefit.
+
+## Paired navigation comparison
+
+```console
+python -m pnt navigation-compare 2024-09-11 LOCAL.crx.gz ORIGINAL.n.gz --case altered LOCAL.crx.gz ALTERED.n --witness NOAA=ORIGINAL.n.gz --start 28800 --calibration-stop 30600 --stop 34200 --output comparison.json
+```
+
+Each repeated `--case NAME OBS NAV` supplies an observation file and its
+navigation hypothesis. A case can reuse the original observations or supply
+a retained variant. This supports the same RINEX 3 GPS C1C/C2W observations
+and RINEX 2 GPS NAV as the fixed-site diagnostic. It uses one original antenna
+coordinate in every case; other observations must declare the same receiver
+marker. An explicit `--local-ecef` needs `--position-source`.
+
+Two local scores are the largest minus smallest satellite residual, and the
+absolute fitted-clock change between consecutive 30-second grid epochs.
+Original-only calibration uses the prefix ending at `--calibration-stop`,
+with at least 20 epochs where both scores exist. Default thresholds are the
+95% nearest-rank quantiles; exceedance means strict `>`. The union of the two
+controls has no prescribed combined false-alarm rate. Candidate values and
+later original values never set these thresholds. No gap is bridged for a
+clock step. A partially scored epoch retains its available diagnostic but
+does not enter the paired two-control comparison.
+
+Every requested epoch remains visible. Cases are fitted independently; a
+changed satellite set at this or the preceding epoch makes the comparison
+inconclusive rather than reducing both fits to a passing intersection.
+All NAV records are compared without a `toc` filter. Per-epoch external
+content evidence refers only to source indices used by that local fit;
+unused contradictions cannot create evidence for the scored satellites.
+Missing issues, conflicting records, all-unhealthy inputs, model failures,
+partial controls and unsupported comparisons are retained without fallback.
+`navigation_comparison` retains the complete message evidence separately.
+
+Reports contain the original and each supplied case, hashes, used NAV indices,
+per-satellite residuals, fitted clocks, control scores/thresholds, witness
+outcomes and counts on identical paired support. Counts of external message
+discordance while these local controls stay quiet are **not** RF detections.
+Passing two controls does not establish plausibility under C/N0, Doppler,
+PVT, receiver flags, oscillator specifications or other local checks.
+Matching messages cannot authenticate changed ranges. Absolute time and
+source independence remain unqualified.
+
+The [six-case exercise](../research/exploratory/PNT_NAVIGATION_COMPARISON.md)
+uses already exposed public observations with five supplied software variants.
+It includes both common-clock changes and negative controls; the earlier
+JammerTest result and its report replay are unchanged. A matched physical
+benign/attack recording remains the next P2 evidence requirement.

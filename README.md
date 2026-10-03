@@ -36,6 +36,13 @@ adapter now decodes GPS L1 C/A SFRBX and retains incomplete cycles and message
 dates outside the capture day. The [recorded JammerTest comparison](research/exploratory/PNT_NAVIGATION_JAMMERTEST_211.md)
 finds two corroborated issues and one without a same-day archive witness;
 incremental RF detection benefit remains unproven.
+[`python -m pnt navigation-compare`](pnt/README.md#paired-navigation-comparison)
+now compares supplied OBS/NAV cases on the same epochs with original-only
+calibration of residual and clock-step controls. The
+[paired software exercise](research/exploratory/PNT_NAVIGATION_COMPARISON.md)
+retains common-clock message discordance missed by those controls, locally
+obvious changes, and changed ranges that unchanged messages cannot expose.
+It does not qualify RF detection or false-alarm performance.
 
 The existing [general verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md)
 provides a local satellite/day request, estimation and evidence pipeline. A

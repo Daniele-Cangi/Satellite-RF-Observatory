@@ -57,10 +57,10 @@ def navigation_blocks(data):
         yield [prefix + block[0][22:]] + [' ' + line for line in block[1:]]
 
 
-def broadcast_navigation(data):
-    """Adapt RINEX 2 GPS NAV while retaining the original model admission rules."""
-    records, counts = defaultdict(list), Counter()
-    for normalized in navigation_blocks(data):
+def indexed_broadcast_navigation(data, *, require_usable=True):
+    """Admit model records and retain their original NAV indices for evidence binding."""
+    records, counts, indices = defaultdict(list), Counter(), {}
+    for index, normalized in enumerate(navigation_blocks(data)):
         record = parse_gps_record(normalized)
         if any(isinstance(value := getattr(record, field.name), (int, float)) and
                not math.isfinite(value) for field in fields(record)):
@@ -70,10 +70,17 @@ def broadcast_navigation(data):
             counts['unhealthy_or_invalid_records'] += 1
             continue
         records[record.satellite].append(record)
+        indices[id(record)] = index
         counts['admitted_records'] += 1
-    if not records:
+    if require_usable and not records:
         raise ValueError('no usable GPS navigation records')
-    return records, dict(sorted(counts.items()))
+    return records, dict(sorted(counts.items())), indices
+
+
+def broadcast_navigation(data):
+    """Adapt RINEX 2 GPS NAV while retaining the original model admission rules."""
+    records, counts, _ = indexed_broadcast_navigation(data)
+    return records, counts
 
 
 def nearest_record(navigation, satellite, time_s, context):

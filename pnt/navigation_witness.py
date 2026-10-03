@@ -84,36 +84,9 @@ def conflicting_fields(intervals):
     return [name for name, (lower, upper) in intervals.items() if lower > upper]
 
 
-def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=86400,
-                       local_format='rinex', recover_corrupt=False):
-    """Report agreement/discordance on the same issue, never RF authenticity.
-
-    Names declare supplied sources, not independent receivers or authorities.
-    Unmatched issues and contradictory duplicates are retained, not replaced
-    by the closest ephemeris or resolved by a majority vote.
-    """
-    validate_window(start_s, stop_s)
-    if (not isinstance(witnesses, dict) or not witnesses or
-            any(not isinstance(name, str) or not name.strip() or name == 'local' for name in witnesses)):
-        raise ValueError('at least one named external navigation witness required; local is reserved')
-    context = day_context(date.fromisoformat(day_gpst))
-    if local_format == 'ubx':
-        if (start_s, stop_s) != (0, 86400):
-            raise ValueError('UBX comparison retains the whole capture; toc windows require RINEX')
-        from .sfrbx import read_sfrbx_issues
-        local, local_source = read_sfrbx_issues(local_path, day_gpst,
-                                               recover_corrupt=recover_corrupt)
-    elif local_format == 'rinex' and not recover_corrupt:
-        local, local_source = read_issues(local_path)
-    else:
-        raise ValueError('local format must be rinex or ubx; recovery applies only to UBX')
-    selected = (local if local_format == 'ubx' else
-                [row for row in local if start_s <= (row['toc'] - context.day).total_seconds() < stop_s])
+def compare_issue_records(selected, external):
+    """Compare retained decoded issues with grouped witnesses, without time selection."""
     groups = group_issues(selected)
-    sources, external = {'local': local_source}, {}
-    for name, path in sorted(witnesses.items()):
-        records, sources[name] = read_issues(path)
-        external[name] = group_issues(records)
     outputs = []
     for row in selected:
         identity = row['identity']
@@ -167,6 +140,39 @@ def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=864
                         'witnesses': peers})
         if 'sfrbx_cycle_index' in row:
             outputs[-1]['sfrbx_cycle_index'] = row['sfrbx_cycle_index']
+    return outputs
+
+
+def inspect_navigation(local_path, witnesses, day_gpst, *, start_s=0, stop_s=86400,
+                       local_format='rinex', recover_corrupt=False):
+    """Report agreement/discordance on the same issue, never RF authenticity.
+
+    Names declare supplied sources, not independent receivers or authorities.
+    Unmatched issues and contradictory duplicates are retained, not replaced
+    by the closest ephemeris or resolved by a majority vote.
+    """
+    validate_window(start_s, stop_s)
+    if (not isinstance(witnesses, dict) or not witnesses or
+            any(not isinstance(name, str) or not name.strip() or name == 'local' for name in witnesses)):
+        raise ValueError('at least one named external navigation witness required; local is reserved')
+    context = day_context(date.fromisoformat(day_gpst))
+    if local_format == 'ubx':
+        if (start_s, stop_s) != (0, 86400):
+            raise ValueError('UBX comparison retains the whole capture; toc windows require RINEX')
+        from .sfrbx import read_sfrbx_issues
+        local, local_source = read_sfrbx_issues(local_path, day_gpst,
+                                               recover_corrupt=recover_corrupt)
+    elif local_format == 'rinex' and not recover_corrupt:
+        local, local_source = read_issues(local_path)
+    else:
+        raise ValueError('local format must be rinex or ubx; recovery applies only to UBX')
+    selected = (local if local_format == 'ubx' else
+                [row for row in local if start_s <= (row['toc'] - context.day).total_seconds() < stop_s])
+    sources, external = {'local': local_source}, {}
+    for name, path in sorted(witnesses.items()):
+        records, sources[name] = read_issues(path)
+        external[name] = group_issues(records)
+    outputs = compare_issue_records(selected, external)
     report = {'schema': 'pnt-navigation-witness-v1',
             'status': 'NAVIGATION_DIAGNOSTICS_AVAILABLE' if outputs else 'INSUFFICIENT_EVIDENCE',
             'day_gpst': day_gpst, 'window_gpst_s': [start_s, stop_s], 'sources': sources,
