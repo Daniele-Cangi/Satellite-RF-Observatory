@@ -41,13 +41,13 @@ def navigation_blocks(data):
         raise ValueError('incomplete GPS navigation header')
     versions = [line[:60] for line in lines[:stop] if line[60:80].strip() == 'RINEX VERSION / TYPE']
     if len(versions) != 1:
-        raise ValueError('expected one RINEX 2/3 GPS navigation header')
+        raise ValueError('expected one RINEX 2 GPS or RINEX 3 GPS navigation header')
     header = versions[0]
     version = float(header[:9])
     is_v2 = 2 <= version < 3 and 'GPS NAV DATA' in header
     is_v3 = 3 <= version < 4 and header[20:21] == 'N' and header[40:41] == 'G'
     if not (is_v2 or is_v3):
-        raise ValueError('expected one RINEX 2/3 GPS navigation header')
+        raise ValueError('expected one RINEX 2 GPS or RINEX 3 GPS navigation header')
     body = lines[stop + 1:]
     if not body or len(body) % 8:
         raise ValueError('truncated GPS navigation record')
