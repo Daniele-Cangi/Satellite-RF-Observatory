@@ -1,0 +1,51 @@
+{
+  "schema": "gfz-navbit-input-provenance-v1",
+  "accessed_utc": "2026-10-03",
+  "day_gpst": "2024-09-11",
+  "doi": "10.1594/GFZ.ISDC.GNSS/GNSS-GPS-1-NAVBIT",
+  "license": "CC BY 4.0",
+  "license_source": "https://dataservices.gfz.de/10.1594/gfz.isdc.gnss/gnss-gps-1-navbit/gps-ca-navigation-message-data-bits",
+  "attribution": "Rothacher, Markus; Beyerle, Georg (2008): GPS C/A Navigation Message Data Bits. GFZ Data Services.",
+  "archive_url": "https://isdc-data.gfz.de/gnss/GNSS-GPS-1-NAVBIT/y2024/GNSS-GPS-1-NAVBIT+2024_255_A.tar",
+  "archive_sha256": "a50e06b6da62b95f85a55ab5a3eae74b5e67f1c087c0828a2be3e1e3ea5d915b",
+  "archive_bytes": 3348480,
+  "retention": "All three satellites having complete local CEI cycles in the previously exposed JammerTest 2.1.1 capture; entire daily members retained. No field-agreement selection.",
+  "members": [
+    {
+      "file": "NAVBIT-GPS-L1CA-2024-255-14-14400.nc.gz",
+      "sha256": "93a9b69b3a302cb3f4b13caae0c8662d34f218d4cfd465dee1177058588552bb",
+      "bytes": 102499,
+      "netcdf_sha256": "c798f7f9f255a1d6918976ee31a1c29af76f5f17dc4297aebffdb8e3e41c5c32",
+      "netcdf_bytes": 694184
+    },
+    {
+      "file": "NAVBIT-GPS-L1CA-2024-255-17-14400.nc.gz",
+      "sha256": "1afdadc38992dca72bc102ad28c5239b9684c217079ce450261c444815bb4cd3",
+      "bytes": 103631,
+      "netcdf_sha256": "67ea8819ab28a214c285f038b043cd5aa278d382156fa5d2e453368cd5fe0d77",
+      "netcdf_bytes": 694184
+    },
+    {
+      "file": "NAVBIT-GPS-L1CA-2024-255-21-14400.nc.gz",
+      "sha256": "17789cb628dd2bf6cb342251d20cb4b4805a427d3df5b332c41b3cb0b77ef4c8",
+      "bytes": 102701,
+      "netcdf_sha256": "5bbd812c7d0e3742f4ffbfef1fd8a33c468e18980970e8db78b311e7c946dafc",
+      "netcdf_bytes": 694184
+    }
+  ],
+  "archive_regular_members": 32,
+  "noaa": {
+    "file": "brdc2550.24n.gz",
+    "url": "https://noaa-cors-pds.s3.amazonaws.com/rinex/2024/255/brdc2550.24n.gz",
+    "sha256": "ef484bb751743dcb37601112c2a6c0b81c7e738b4cb9f2faf4bfb1fa446aace3",
+    "bytes": 70953
+  },
+  "jammertest": {
+    "source_url": "https://zenodo.org/records/15911589",
+    "license_metadata_url": "https://zenodo.org/api/records/15911589",
+    "license_id": "gpl-3.0-or-later",
+    "attribution": "Sayyaf, Mohammed Issam; Ortiz, Miguel; Renaudin, Valerie (2025): GNSS Dataset Under Jamming, Spoofing, and Meaconing Conditions (JammerTest 2024). Zenodo.",
+    "license_file": "JAMMERTEST_LICENSE.txt",
+    "license_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+  }
+}

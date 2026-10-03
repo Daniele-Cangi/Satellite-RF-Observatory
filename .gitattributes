@@ -111,3 +111,6 @@ research/exploratory/pseudotarget_plan.json -text
 
 # Public RF-derived NAV evidence retains fixed columns and original bytes.
 pnt/tests/fixtures/cttc20130404/** -text whitespace=-blank-at-eol
+
+# Original GFZ member bytes and attributed source-license hashes are portable.
+pnt/tests/fixtures/gfz*/** -text whitespace=-blank-at-eol

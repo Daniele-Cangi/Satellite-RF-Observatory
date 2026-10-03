@@ -327,6 +327,17 @@ fixture intake, not a new CLI adapter. NOAA conflicts and the five incomplete
 local cycles remain visible; source independence and a matched benign/attack
 comparison remain open before measuring detection benefit.
 
+`pnt.gfz_navbit.read_gfz_navbit_issues(path)` now reads one local daily GFZ
+NetCDF-v1 `.nc.gz` member into representation rows and a complete CEI outcome
+trace. It checks parity, slot order, metadata and HOW, retaining mixed issues,
+incomplete cycles and invalid frames. Unavailable URA/TGD stay diagnostic rows
+and require representation qualification; they are not admitted accuracy bounds.
+The [recorded-attack test](../research/exploratory/PNT_GFZ_RECORDED_ATTACK.md)
+finds two matching JammerTest cycles and one missing future-dated issue.
+One match occurs in the provisionally associated attack ramp. Matching NAV
+must not produce an RF authenticity/allow verdict. This API adds no downloader,
+tar extraction or CLI format fallback.
+
 ## Paired navigation comparison
 
 ```console
