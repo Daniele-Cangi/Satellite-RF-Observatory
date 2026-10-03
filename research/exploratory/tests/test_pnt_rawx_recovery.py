@@ -86,3 +86,16 @@ def test_inferred_missing_rawx_packet_restores_capture_grid():
     assert status['inferred_missing_rawx_packets'] == 1
     assert status['last_inferred_capture_gpst_s'] == 28830
     assert not jumps
+
+
+def test_optional_timeline_retains_missing_ticks_and_clock_jumps_without_changing_grid():
+    first = datetime(2024, 9, 11, 8)
+    epochs = [{'receiver_time': time, 'dual': {}}
+              for time in (first, first + timedelta(seconds=0.4), first - timedelta(hours=19))]
+    expected = recovery.capture_grid(epochs, first.date(), infer_missing_packets=True)
+    timeline = []
+    assert recovery.capture_grid(epochs, first.date(), infer_missing_packets=True,
+                                 timeline=timeline) == expected
+    assert [row['capture_tick'] for row in timeline] == [0, 2, 3]
+    assert [row['capture_gpst_s'] for row in timeline] == [28800, 28800.4, 28800.6]
+    assert timeline[-1]['receiver_time'] == epochs[-1]['receiver_time'].isoformat()

@@ -116,11 +116,13 @@ def rawx_epochs(content, corrupt=None):
 
 
 def capture_grid(epochs, day, rate_hz=5, tolerance_s=0.1,
-                 infer_missing_packets=False):
+                 infer_missing_packets=False, timeline=None):
     """Pair by monotonic packet order, retaining receiver-time discontinuities.
 
     An explicitly enabled short, integral receiver-time gap can account for
     missing RAWX packets. Large clock jumps never change the capture order.
+    An optional list retains each inferred tick for associating intervening
+    messages; it does not provide an independent acquisition clock.
     """
     if rate_hz != 5 or not 0 < tolerance_s < 0.1 + 1e-9:
         raise ValueError('unsupported capture cadence or grid tolerance')
@@ -143,6 +145,10 @@ def capture_grid(epochs, day, rate_hz=5, tolerance_s=0.1,
         capture_s = first_s + capture_tick / rate_hz
         if not 0 <= capture_s < 86400:
             raise ValueError('inferred capture time outside selected day')
+        if timeline is not None:
+            timeline.append({'rawx_epoch_index': index, 'capture_tick': capture_tick,
+                             'capture_gpst_s': round(capture_s, 3),
+                             'receiver_time': epoch['receiver_time'].isoformat()})
         if index:
             if abs(delta - 1 / rate_hz) > 1:
                 jumps.append({'capture_gpst_s': round(capture_s, 3),

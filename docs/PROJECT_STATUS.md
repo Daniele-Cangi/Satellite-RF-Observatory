@@ -128,6 +128,17 @@ Resta da trovare la coppia benigno/attacco con NAV locale recuperabile e
 copertura esterna contemporanea: autenticita RF e beneficio P2 non sono
 dimostrati dalla concordanza dei messaggi.
 
+Il [test su una registrazione d'attacco](../research/exploratory/PNT_GFZ_RECORDED_ATTACK.md)
+applica GFZ a JammerTest 2.1.1: due cicli locali concordano su tutti i 54 campi,
+anche G21 nella rampa secondo la cronologia provvisoria; G14 dichiara una issue
+futura e resta senza testimone. Sono ancora tre cicli completi su 207, non una
+misura del tasso di rilevamento. Il nuovo lettore NetCDF riutilizzabile conserva
+tre issue GFZ incoerenti su 8.640 cicli e tutti gli esiti precedenti. La prova
+conferma il limite del solo NAV: concordare durante un evento non autentica RF,
+distanze o posizione. Il beneficio P2 resta aperto e va cercato con osservabili
+geometriche/temporali e un controllo benigno difendibile, senza altre varianti
+amministrative di questo episodio.
+
 Il [primo ciclo esplorativo P0/P1]
 (../research/exploratory/PNT_LOCAL_NETWORK_FEASIBILITY.md) confronta una
 stazione fissa con altre sei su dati GPS gia esposti. Il prototipo mostra come
