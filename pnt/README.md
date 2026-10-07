@@ -37,7 +37,34 @@ These conventions follow Android's [GnssClock]
 API. The [real Pixel 6 fixture](tests/fixtures/android20250730/README.md) retains
 source attribution and the public sample's intake result and limitations.
 
-Inputs are GPS C1C/C2W observations in RINEX 3, plain, gzip or Hatanaka as
+To connect a **fixed Android receiver with declared antenna coordinates** to
+external observations, use:
+
+```console
+python -m pnt android-analyze 2025-07-30 LOCAL.txt brdc2110.25n.gz --reference A=A.crx.gz --reference B=B.crx.gz --local-ecef X Y Z --position-source "coordinate source and frame" --start 8100 --stop 9480 --output android-incident.json
+```
+
+Replace `X Y Z` with the antenna's numeric ECEF coordinate. This path compares
+**C1C against C1C only**, using the existing broadcast-model clock fits and
+double differences. It does not need C2W, substitute another tracking code or
+reinterpret L5 as L2. GPS single-frequency ionosphere, group delay and receiver
+biases remain **uncorrected nuisances**. These residuals have no qualified
+uncertainty budget or spoofing threshold and must not be compared directly
+with ionosphere-free residuals as if their propagation model were identical.
+
+The closest local measurement to each 30-second GPST grid point is admitted
+only within 1 ms. Its code is unchanged, its offset and original source line
+are recorded, and the model is evaluated at the grid point without motion
+correction. Tied candidates and grids mixing hardware epochs/clock solutions
+are explicitly excluded. Every requested epoch remains in the report,
+including gaps, failed fits, independent local controls and remote disagreement.
+Coordinates are declarations; the tool neither validates a survey nor infers
+the point from the victim's PVT. Receiver-derived GPST is not independent event
+time. This offline command reads already-obtained Internet reference files;
+it does not silently choose or download different witnesses.
+
+The original `analyze`, `compare` and `transfer` inputs are GPS C1C/C2W
+observations in RINEX 3, plain, gzip or Hatanaka as
 supported by the existing decoder. Epochs must follow the 30-second GPST grid
 within the existing 0.001-second tolerance; no resampling, retiming or alternate
 signal fallback is performed. Navigation currently accepts plain or gzipped

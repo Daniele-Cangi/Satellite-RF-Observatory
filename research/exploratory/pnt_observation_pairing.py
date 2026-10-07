@@ -77,8 +77,13 @@ def local_codes(stream, day, tolerance_s=0.5):
     return rows, dict(sorted(counts.items()))
 
 
-def reference_codes(content, day):
-    """Read only C1C/C2W from a complete RINEX 3 daily observation file."""
+def reference_codes(content, day, *, signals=('C1C', 'C2W')):
+    """Read explicitly requested GPS codes; preserve historical dual-code defaults."""
+    if (not isinstance(signals, tuple) or not signals or len(set(signals)) != len(signals)
+            or any(not isinstance(code, str) or len(code) != 3 or code[0] != 'C'
+                   or code[1] not in '125' or not code[2].isalpha() for code in signals)):
+        raise ValueError('expected distinct explicit GPS code signals')
+    code_kind = 'dual_code' if signals == ('C1C', 'C2W') else 'requested_code'
     lines = iter(content.splitlines())
     types, system, headers = [], None, {}
     declared_gps_types = None
@@ -108,8 +113,8 @@ def reference_codes(content, day):
         raise ValueError('GPS observation type count mismatch')
     if len(types) != len(set(types)):
         raise ValueError('duplicate GPS observation type')
-    if not {'C1C', 'C2W'} <= set(types):
-        raise ValueError('external GPS C1C/C2W missing')
+    if not set(signals) <= set(types):
+        raise ValueError('external GPS ' + '/'.join(signals) + ' missing')
     time_headers = headers.get('TIME OF FIRST OBS', [])
     if len(time_headers) != 1:
         raise ValueError('exactly one TIME OF FIRST OBS required')
@@ -120,7 +125,7 @@ def reference_codes(content, day):
     clock_headers = headers.get('RCV CLOCK OFFS APPL', ['0'])
     if len(clock_headers) != 1 or int(clock_headers[0]) != 0:
         raise ValueError('external receiver clock correction already applied')
-    indices = types.index('C1C'), types.index('C2W')
+    indices = tuple(types.index(code) for code in signals)
     rows, counts, seen_epochs = {}, Counter(), set()
     for line in lines:
         if not line.startswith('>'):
@@ -163,11 +168,11 @@ def reference_codes(content, day):
             counts['gps_rows'] += 1
             code = [record[3 + 16 * i:3 + 16 * i + 14].strip() for i in indices]
             if not all(code):
-                counts['missing_dual_code'] += 1
+                counts['missing_' + code_kind] += 1
                 continue
             values = tuple(map(float, code))
             if not all(math.isfinite(v) and v > 0 for v in values):
-                counts['invalid_dual_code'] += 1
+                counts['invalid_' + code_kind] += 1
                 continue
             key = round(seconds), satellite
             if key in rows:

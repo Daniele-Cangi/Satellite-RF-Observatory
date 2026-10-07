@@ -10,6 +10,7 @@ from .transfer import reference_transfer
 from .navigation_witness import inspect_navigation
 from .navigation_impact import compare_navigation
 from .android_raw import inspect_android_raw
+from .android_network import analyze_android
 
 
 def write_report(report, output):
@@ -24,6 +25,7 @@ def main():
     android = commands.add_parser('android-raw', help='normalize GPS L1/L5 Android Raw logs; no attack verdict')
     android.add_argument('local_log', type=Path, help='GNSS Logger text, plain or gzip')
     android.add_argument('--output', required=True, type=Path)
+    android_analysis = commands.add_parser('android-analyze', help='GPS L1 Android/remote fixed-site geometry diagnostics')
     analysis = commands.add_parser('analyze', help='report code geometry, relative clock and data gaps')
     comparison = commands.add_parser('compare', help='compare original observations and software code ramps')
     transfer = commands.add_parser('transfer', help='test training-only external residual prediction on later epochs')
@@ -52,16 +54,20 @@ def main():
     nav_comparison.add_argument('--local-ecef', nargs=3, type=float, metavar=('X', 'Y', 'Z'))
     nav_comparison.add_argument('--position-source')
     nav_comparison.add_argument('--output', required=True, type=Path)
-    for command in (analysis, comparison, transfer):
+    for command in (analysis, comparison, transfer, android_analysis):
         command.add_argument('day_gpst')
         command.add_argument('local_rinex', type=Path)
         command.add_argument('navigation', type=Path, help='RINEX 2/3 GPS NAV, plain or gzip')
         command.add_argument('--reference', action='append', required=True, metavar='NAME=PATH')
-        command.add_argument('--local-ecef', nargs=3, type=float, metavar=('X', 'Y', 'Z'))
-        command.add_argument('--position-source', help='source of the explicit antenna ECEF coordinate')
+        command.add_argument('--local-ecef', nargs=3, type=float, metavar=('X', 'Y', 'Z'),
+                             required=command is android_analysis)
+        command.add_argument('--position-source', help='source of the explicit antenna ECEF coordinate',
+                             required=command is android_analysis)
         command.add_argument('--output', required=True, type=Path)
     analysis.add_argument('--start', type=int, default=0, help='inclusive GPST seconds, 30-second grid')
     analysis.add_argument('--stop', type=int, default=86400, help='exclusive GPST seconds, 30-second grid')
+    android_analysis.add_argument('--start', type=int, default=0)
+    android_analysis.add_argument('--stop', type=int, default=86400)
     for flag in ('start', 'train-stop', 'calibration-stop', 'stop'):
         comparison.add_argument('--' + flag, type=int, required=True, help='chronological GPST grid boundary')
     comparison.add_argument('--amplitude', action='append', type=float, help='ramp endpoint in metres; default 2, 5, 10')
@@ -119,7 +125,8 @@ def main():
                            minimum_calibration=args.minimum_calibration)
             report = compare_navigation(args.local_rinex, args.navigation, cases, references, args.day_gpst, **options)
         else:
-            function = {'analyze': analyze, 'compare': compare, 'transfer': reference_transfer}[args.command]
+            function = {'analyze': analyze, 'android-analyze': analyze_android,
+                        'compare': compare, 'transfer': reference_transfer}[args.command]
             report = function(args.local_rinex, references, args.navigation, args.day_gpst, **options)
         write_report(report, args.output)
     except (ValueError, OSError) as error:

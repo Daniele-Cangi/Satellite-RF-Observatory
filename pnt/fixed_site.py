@@ -19,11 +19,11 @@ MIN_SATELLITES = 4
 MIN_ELEVATION_DEG = 10
 
 
-def read_station(path, day, *, position=None, position_source=None):
+def read_station(path, day, *, position=None, position_source=None, signals=('C1C', 'C2W')):
     data = Path(path).read_bytes()
     content = hatanaka.decompress(data, strict=True).decode('ascii')
     identity = station_header(content)
-    codes, counts = reference_codes(content, day)
+    codes, counts = reference_codes(content, day, signals=signals)
     if position is None:
         header = defaultdict(list)
         for line in content.splitlines():
@@ -55,10 +55,10 @@ def ionosphere_free(codes):
     return {sv: ALPHA * first + BETA * second for sv, (first, second) in codes.items()}
 
 
-def admit_codes(codes, position, navigation, time_s, context):
+def admit_codes(codes, position, navigation, time_s, context, *, code_transform=ionosphere_free):
     """Shared per-receiver model admission, with every rejected satellite retained."""
     admitted, excluded, records = {}, {}, {}
-    for sv, code in sorted(ionosphere_free(codes).items()):
+    for sv, code in sorted(code_transform(codes).items()):
         try:
             record = nearest_record(navigation, sv, time_s, context)
             _, elevation = reference_model(record, code, time_s, position, 0.0, context)
@@ -71,12 +71,12 @@ def admit_codes(codes, position, navigation, time_s, context):
     return admitted, excluded, records
 
 
-def evaluate_epoch(time_s, observations, positions, navigation, context):
+def evaluate_epoch(time_s, observations, positions, navigation, context, *, code_transform=ionosphere_free):
     """Keep local coverage, matched comparisons and individual remote fits explicit."""
     admitted, excluded, records = {}, {}, {}
     for receiver, codes in observations.items():
         admitted[receiver], excluded[receiver], selected = admit_codes(
-            codes, positions[receiver], navigation, time_s, context)
+            codes, positions[receiver], navigation, time_s, context, code_transform=code_transform)
         records.update(selected)
 
     def fit(receiver, satellites):
