@@ -9,11 +9,21 @@ from .benchmark import compare
 from .transfer import reference_transfer
 from .navigation_witness import inspect_navigation
 from .navigation_impact import compare_navigation
+from .android_raw import inspect_android_raw
+
+
+def write_report(report, output):
+    serialized = json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + '\n'
+    with output.open('x', encoding='utf-8', newline='\n') as destination:
+        destination.write(serialized)
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
+    android = commands.add_parser('android-raw', help='normalize GPS L1/L5 Android Raw logs; no attack verdict')
+    android.add_argument('local_log', type=Path, help='GNSS Logger text, plain or gzip')
+    android.add_argument('--output', required=True, type=Path)
     analysis = commands.add_parser('analyze', help='report code geometry, relative clock and data gaps')
     comparison = commands.add_parser('compare', help='compare original observations and software code ramps')
     transfer = commands.add_parser('transfer', help='test training-only external residual prediction on later epochs')
@@ -65,14 +75,22 @@ def main():
     transfer.add_argument('--minimum-training', type=int, default=5)
     transfer.add_argument('--minimum-fit-epochs', type=int, default=20)
     args = parser.parse_args()
+    if args.output.exists():
+        parser.error('output already exists; choose a new report path')
+    if args.command == 'android-raw':
+        try:
+            report = inspect_android_raw(args.local_log)
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT input/analysis error: {error}\n')
+        print(f"{report['status']}: {report['coverage']['status_counts']}; {args.output}")
+        return
     references = {}
     for item in args.reference:
         name, separator, path = item.partition('=')
         if not separator or not name.strip() or not path or name in references:
             parser.error('references must be distinct NAME=PATH entries')
         references[name] = Path(path)
-    if args.output.exists():
-        parser.error('output already exists; choose a new report path')
     cases = {}
     if args.command == 'navigation-compare':
         for name, observation, navigation in args.case:
@@ -103,9 +121,7 @@ def main():
         else:
             function = {'analyze': analyze, 'compare': compare, 'transfer': reference_transfer}[args.command]
             report = function(args.local_rinex, references, args.navigation, args.day_gpst, **options)
-        serialized = json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + '\n'
-        with args.output.open('x', encoding='utf-8', newline='\n') as destination:
-            destination.write(serialized)
+        write_report(report, args.output)
     except (ValueError, OSError) as error:
         parser.exit(2, f'PNT input/analysis error: {error}\n')
     summary = (report['original']['evaluation']['status_counts'] if args.command == 'compare' else

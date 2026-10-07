@@ -12,6 +12,31 @@ Install `requirements-positioning.txt`, then run from the repository root:
 python -m pnt analyze 2024-09-11 LOCAL.crx.gz brdc2550.24n.gz --reference TRO1=TRO1.crx.gz --reference KIRU=KIRU.crx.gz --start 28800 --stop 29400 --output incident.json
 ```
 
+For Android GNSS Logger recordings, a separate observation intake is available:
+
+```console
+python -m pnt android-raw gnss_log.txt --output measurements.json
+```
+
+It reads plain/gzipped logs and identifies **GPS C1C and C5I/Q/X** from both
+frequency and code type. It reconstructs code ranges using exact integer/decimal
+clock arithmetic, preserves every GPS source row, and counts unsupported
+constellations and all unusable/invalid measurements. Clock discontinuity counts,
+code rate, CN0, ADR state/uncertainty and original inter-signal bias fields remain
+available. `adr_usable` checks supplied validity/reset/slip/half-cycle flags and
+field availability; it is not a calibrated phase-quality or continuity bound.
+No smoothing, clock-segment joining, inter-signal bias correction, L1/L5
+combination, RINEX conversion or automatic connection to `analyze` is performed.
+The receiver's **per-row clock solution** supplies GPST; absent fine `BiasNanos`
+uses zero with an explicit flag. Neither this clock nor `utcTimeMillis` is an
+independent event/time witness. Normalization is not a spoofing decision.
+
+These conventions follow Android's [GnssClock]
+(https://developer.android.com/reference/android/location/GnssClock) and
+[GnssMeasurement](https://developer.android.com/reference/android/location/GnssMeasurement)
+API. The [real Pixel 6 fixture](tests/fixtures/android20250730/README.md) retains
+source attribution and the public sample's intake result and limitations.
+
 Inputs are GPS C1C/C2W observations in RINEX 3, plain, gzip or Hatanaka as
 supported by the existing decoder. Epochs must follow the 30-second GPST grid
 within the existing 0.001-second tolerance; no resampling, retiming or alternate
