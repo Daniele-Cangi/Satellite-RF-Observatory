@@ -40,6 +40,8 @@ absolute-time verification requires a separate qualified time reference.
 | Command / component | Available behavior |
 |---|---|
 | `python -m pnt analyze` | Fixed-site RINEX geometry, local and matched-network clock fits, double differences and data gaps |
+| `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
+| `python -m pnt android-analyze` | Android L1/C1C compared with external C1C observations at explicit fixed coordinates |
 | `python -m pnt compare` | Development comparison with separate training/calibration/evaluation windows and software code ramps |
 | `python -m pnt transfer` | Training-only prediction of later local residuals from external observations |
 | `python -m pnt navigation` | Decoded GPS navigation comparison against supplied external messages; RINEX and UBX SFRBX inputs |
@@ -51,11 +53,10 @@ See the [PNT command reference](pnt/README.md), [service guide](service/README.m
 and [web archive guide](web/README.md) for formats, options and limitations.
 Public HTTP/browser submission and an operational security service are not delivered.
 
-**In review:** [#182](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/pull/182)
-adds Android GPS L1/L5 Raw intake;
-[#183](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/pull/183) connects
-Android L1/C1C to external fixed-site geometry diagnostics. These commands are
-not yet part of `main`; #183 depends on #182.
+Android GPS L1/L5 intake and the L1/C1C network diagnostic path are available
+on `main`. Android geometry requires explicit fixed antenna coordinates;
+single-frequency ionosphere and signal group delays remain uncorrected
+nuisances. These commands do not issue an authenticated-signal or attack verdict.
 
 ## Quick start
 
