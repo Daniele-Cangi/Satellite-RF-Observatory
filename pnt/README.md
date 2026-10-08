@@ -1,10 +1,63 @@
-# Offline fixed-site PNT diagnostics
+# PNT diagnostics
 
 `python -m pnt analyze` turns one local receiver recording, at least two
 external recordings and a declared broadcast navigation model into one JSON
 report. It is a reusable diagnostic tool for the PNT plan's offline path.
-It does not yet implement a qualified spoofing detector or absolute-time
-verification. No detector threshold, benign label or attack verdict is inferred.
+It does not implement a qualified spoofing detector. A separate read-only NTS
+command provides conditional Internet UTC intervals; no detector threshold,
+benign label or attack verdict is inferred from the GNSS diagnostics.
+
+## Authenticated Internet time witness
+
+`time-probe` checks a bracketed **host wall-clock reading**, without adjusting
+the clock. Install `requirements-positioning.txt` (includes the optional NTS
+transport dependencies), then choose explicit endpoints and uncertainty budgets:
+
+```console
+python -m pnt time-probe --server ptbtime1.ptb.de --server ptbtime2.ptb.de --server-error-ns 1000000 --rate-error-ppm 100 --budget-source "Uncalibrated development assumptions; not certified bounds" --output time-witness.json
+```
+
+Those example budgets are **assumptions**, not measured accuracy or PTB-certified
+bounds. NTP root delay/dispersion are recorded as server-reported fields, not
+substituted for a metrological error bound. PTB describes these endpoints as
+disseminating UTC(PTB) from atomic clocks independently of GPS; both endpoints
+share the same authority. [PTB source description](https://www.ptb.de/cms/en/ptb/fachabteilungen/abt4/fb-44/ag-442/dissemination-of-legal-time/time-dissemination-via-the-internet.html)
+
+The client implements [RFC 8915](https://www.rfc-editor.org/rfc/rfc8915.html):
+TLS 1.3 with platform CA and hostname verification, `ntske/1`, exporter-derived
+AES-SIV keys, authenticated NTPv4, a fresh request identifier and origin echo.
+Every endpoint gets one exchange; failures remain in the report. There is no
+plain-NTP fallback or automatic retry. An existing output file is never replaced.
+Exit code 2 reports all witnesses unavailable (with the failure report saved);
+partial success remains a diagnostic report, never an automatic quorum decision.
+DNS uses the system resolver; the socket timeout is not a total DNS deadline.
+
+UTC bounds use the monotonic send/receive interval and authenticated server
+timestamps, allowing all network delay on either leg. Delaying a packet widens
+uncertainty; it does not justify a symmetric-delay point estimate. Arithmetic
+uses integer nanoseconds. A claim can be `INCONSISTENT_WITH_WITNESS`,
+`NOT_DISTINGUISHABLE` or `INSUFFICIENT_EVIDENCE`, conditional on the declared
+source/oscillator budgets and a trusted collector. Overlap does not authenticate
+a fix or RF origin. See the [method and real transport result]
+(../research/exploratory/PNT_INTERNET_TIME_WITNESS.md).
+
+`pnt.time_witness.compare_claim(exchange, claim, ...)` accepts an independently
+established UTC claim with uncertainty and a monotonic event bracket **inside
+the same exchange**, sharing its collector capture ID. It refuses extrapolation
+or another capture domain. No adapter currently claims that an archived GNSS
+epoch has this association. The NTP era is explicit (`--ntp-era 0`, 1900-2036),
+not chosen from the potentially wrong host calendar; leap-announcement states
+are unsupported and rejected. Certificate verification still requires a
+sufficiently correct bootstrap calendar; an untrusted date is not bypassed.
+
+Session cookies/keys are discarded. Saved timestamps, source metadata and
+response/certificate fingerprints permit arithmetic replay and provenance
+inspection by a trusted collector. They are **not a server-signed forensic
+certificate**: NTS uses symmetric authentication. This channel neither verifies
+historical Yunnan epochs nor demonstrates GNSS spoof detection. Co-captured GNSS
+UTC and an independently supported uncertainty budget remain required.
+
+## Offline GNSS recordings
 
 Install `requirements-positioning.txt`, then run from the repository root:
 
