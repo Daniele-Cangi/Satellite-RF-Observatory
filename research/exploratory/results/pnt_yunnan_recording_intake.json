@@ -1,0 +1,421 @@
+{
+  "scope": "EXPOSED_RECORDING_QUALIFICATION",
+  "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11220923/",
+  "dataset": "https://data.mendeley.com/datasets/nxk9r22wd6/3",
+  "input_sha256": {
+    "receiver_messages.tar.gz": "18cb5e36692422eedb9b0228c3514d49090d76e3472afbfaf8e449dad06de829",
+    "processed_observation12_first_epoch.json": "97784eb6fe448c826e86859b7660e4235bfb953e5171fff1c2bee9a7626fbeff"
+  },
+  "hours": {
+    "12": {
+      "expected_host_seconds": 3600,
+      "rawx_messages": 3600,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 20408,
+        "0:3": 20211,
+        "2:0": 11925,
+        "2:6": 18375,
+        "3:0": 28788,
+        "3:2": 13665,
+        "5:0": 11297,
+        "5:5": 14400,
+        "6:0": 17440,
+        "6:2": 16654
+      },
+      "gps_l1_rows": 20408,
+      "gps_l1_prvalid_rows": 18634,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 1774,
+      "epochs_with_fewer_than_four_valid_gps_l1": 520,
+      "clock_reset_messages": 17,
+      "receiver_date_differs_from_host_messages": 248,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        -127632.207,
+        28801.011
+      ],
+      "message_counts": {
+        "RXM-RAWX": 3600,
+        "NAV-PVT": 3600,
+        "NAV-CLOCK": 3593
+      },
+      "duplicate_start_time_values": {
+        "RXM-RAWX": 0,
+        "NAV-PVT": 0,
+        "NAV-CLOCK": 0
+      },
+      "pvt_clock_shared_host_labels": 3593,
+      "pvt_clock_different_itow_on_same_host_label": 0
+    },
+    "18": {
+      "expected_host_seconds": 3600,
+      "rawx_messages": 3524,
+      "missing_host_seconds": 76,
+      "filename_and_start_time_disagreements": 17,
+      "signal_counts": {
+        "0:0": 20684,
+        "0:3": 11290,
+        "2:0": 16507,
+        "2:6": 18847,
+        "3:0": 27707,
+        "3:2": 17205,
+        "5:0": 14096,
+        "5:5": 14096,
+        "6:0": 18493,
+        "6:2": 18204
+      },
+      "gps_l1_rows": 20684,
+      "gps_l1_prvalid_rows": 20684,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 0,
+      "epochs_with_fewer_than_four_valid_gps_l1": 0,
+      "clock_reset_messages": 0,
+      "receiver_date_differs_from_host_messages": 0,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        28800.996,
+        28801.996
+      ],
+      "message_counts": {
+        "RXM-RAWX": 3524,
+        "NAV-PVT": 3545,
+        "NAV-CLOCK": 3585
+      },
+      "duplicate_start_time_values": {
+        "RXM-RAWX": 7,
+        "NAV-PVT": 4,
+        "NAV-CLOCK": 0
+      },
+      "pvt_clock_shared_host_labels": 3530,
+      "pvt_clock_different_itow_on_same_host_label": 1581
+    }
+  },
+  "table13_windows": {
+    "before_first_table13_attack": {
+      "host_interval_start": "2023-12-21T12:00:00",
+      "host_interval_stop_exclusive": "2023-12-21T12:32:30",
+      "expected_host_seconds": 1950,
+      "rawx_messages": 1950,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 11847,
+        "0:3": 11852,
+        "2:0": 8786,
+        "2:6": 9987,
+        "3:0": 15595,
+        "3:2": 5851,
+        "5:0": 7798,
+        "5:5": 7800,
+        "6:0": 11697,
+        "6:2": 9432
+      },
+      "gps_l1_rows": 11847,
+      "gps_l1_prvalid_rows": 11847,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 0,
+      "epochs_with_fewer_than_four_valid_gps_l1": 0,
+      "clock_reset_messages": 0,
+      "receiver_date_differs_from_host_messages": 0,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        28800.993,
+        28800.993
+      ]
+    },
+    "attack_1": {
+      "host_interval_start": "2023-12-21T12:32:30",
+      "host_interval_stop_exclusive": "2023-12-21T12:37:00",
+      "expected_host_seconds": 270,
+      "rawx_messages": 270,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 1516,
+        "0:3": 1459,
+        "2:0": 14,
+        "2:6": 1603,
+        "3:0": 2160,
+        "3:2": 1073,
+        "5:0": 309,
+        "5:5": 1080,
+        "6:0": 813,
+        "6:2": 1262
+      },
+      "gps_l1_rows": 1516,
+      "gps_l1_prvalid_rows": 1031,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 485,
+      "epochs_with_fewer_than_four_valid_gps_l1": 120,
+      "clock_reset_messages": 7,
+      "receiver_date_differs_from_host_messages": 147,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        -127632.207,
+        28800.993
+      ]
+    },
+    "between_1_2": {
+      "host_interval_start": "2023-12-21T12:37:00",
+      "host_interval_stop_exclusive": "2023-12-21T12:38:41",
+      "expected_host_seconds": 101,
+      "rawx_messages": 101,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 492,
+        "0:3": 505,
+        "2:0": 396,
+        "2:6": 588,
+        "3:0": 808,
+        "3:2": 405,
+        "5:0": 294,
+        "5:5": 404,
+        "6:0": 555,
+        "6:2": 404
+      },
+      "gps_l1_rows": 492,
+      "gps_l1_prvalid_rows": 481,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 11,
+      "epochs_with_fewer_than_four_valid_gps_l1": 8,
+      "clock_reset_messages": 2,
+      "receiver_date_differs_from_host_messages": 0,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        28800.961,
+        28801.011
+      ]
+    },
+    "attack_2": {
+      "host_interval_start": "2023-12-21T12:38:41",
+      "host_interval_stop_exclusive": "2023-12-21T12:41:20",
+      "expected_host_seconds": 159,
+      "rawx_messages": 159,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 893,
+        "0:3": 795,
+        "2:0": 6,
+        "2:6": 878,
+        "3:0": 1271,
+        "3:2": 735,
+        "5:0": 190,
+        "5:5": 636,
+        "6:0": 330,
+        "6:2": 677
+      },
+      "gps_l1_rows": 893,
+      "gps_l1_prvalid_rows": 488,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 405,
+      "epochs_with_fewer_than_four_valid_gps_l1": 96,
+      "clock_reset_messages": 4,
+      "receiver_date_differs_from_host_messages": 61,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        -127260.604,
+        28801.011
+      ]
+    },
+    "between_2_3": {
+      "host_interval_start": "2023-12-21T12:41:20",
+      "host_interval_stop_exclusive": "2023-12-21T12:44:05",
+      "expected_host_seconds": 165,
+      "rawx_messages": 165,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 894,
+        "0:3": 825,
+        "2:0": 668,
+        "2:6": 825,
+        "3:0": 1320,
+        "3:2": 825,
+        "5:0": 439,
+        "5:5": 660,
+        "6:0": 753,
+        "6:2": 769
+      },
+      "gps_l1_rows": 894,
+      "gps_l1_prvalid_rows": 787,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 107,
+      "epochs_with_fewer_than_four_valid_gps_l1": 23,
+      "clock_reset_messages": 1,
+      "receiver_date_differs_from_host_messages": 0,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        28800.961,
+        28800.997
+      ]
+    },
+    "attack_3": {
+      "host_interval_start": "2023-12-21T12:44:05",
+      "host_interval_stop_exclusive": "2023-12-21T12:55:50",
+      "expected_host_seconds": 705,
+      "rawx_messages": 705,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 3661,
+        "0:3": 3525,
+        "2:0": 1668,
+        "2:6": 3494,
+        "3:0": 5637,
+        "3:2": 3526,
+        "5:0": 1720,
+        "5:5": 2820,
+        "6:0": 2497,
+        "6:2": 3238
+      },
+      "gps_l1_rows": 3661,
+      "gps_l1_prvalid_rows": 2987,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 674,
+      "epochs_with_fewer_than_four_valid_gps_l1": 190,
+      "clock_reset_messages": 3,
+      "receiver_date_differs_from_host_messages": 40,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        -126936.619,
+        28800.997
+      ]
+    },
+    "between_3_4": {
+      "host_interval_start": "2023-12-21T12:55:50",
+      "host_interval_stop_exclusive": "2023-12-21T12:57:00",
+      "expected_host_seconds": 70,
+      "rawx_messages": 70,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 350,
+        "0:3": 350,
+        "2:0": 280,
+        "2:6": 280,
+        "3:0": 560,
+        "3:2": 350,
+        "5:0": 210,
+        "5:5": 280,
+        "6:0": 280,
+        "6:2": 233
+      },
+      "gps_l1_rows": 350,
+      "gps_l1_prvalid_rows": 350,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 0,
+      "epochs_with_fewer_than_four_valid_gps_l1": 0,
+      "clock_reset_messages": 0,
+      "receiver_date_differs_from_host_messages": 0,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        28800.996,
+        28800.996
+      ]
+    },
+    "attack_4_partial": {
+      "host_interval_start": "2023-12-21T12:57:00",
+      "host_interval_stop_exclusive": "2023-12-21T13:00:00",
+      "expected_host_seconds": 180,
+      "rawx_messages": 180,
+      "missing_host_seconds": 0,
+      "filename_and_start_time_disagreements": 0,
+      "signal_counts": {
+        "0:0": 755,
+        "0:3": 900,
+        "2:0": 107,
+        "2:6": 720,
+        "3:0": 1437,
+        "3:2": 900,
+        "5:0": 337,
+        "5:5": 720,
+        "6:0": 515,
+        "6:2": 639
+      },
+      "gps_l1_rows": 755,
+      "gps_l1_prvalid_rows": 663,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 92,
+      "epochs_with_fewer_than_four_valid_gps_l1": 83,
+      "clock_reset_messages": 0,
+      "receiver_date_differs_from_host_messages": 0,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        28800.996,
+        28800.996
+      ]
+    },
+    "after_logged_disturbance": {
+      "host_interval_start": "2023-12-21T18:00:00",
+      "host_interval_stop_exclusive": "2023-12-21T19:00:00",
+      "expected_host_seconds": 3600,
+      "rawx_messages": 3524,
+      "missing_host_seconds": 76,
+      "filename_and_start_time_disagreements": 17,
+      "signal_counts": {
+        "0:0": 20684,
+        "0:3": 11290,
+        "2:0": 16507,
+        "2:6": 18847,
+        "3:0": 27707,
+        "3:2": 17205,
+        "5:0": 14096,
+        "5:5": 14096,
+        "6:0": 18493,
+        "6:2": 18204
+      },
+      "gps_l1_rows": 20684,
+      "gps_l1_prvalid_rows": 20684,
+      "gps_l1_flagged_valid_but_invalid_value_rows": 0,
+      "epochs_with_fewer_than_four_valid_gps_l1": 0,
+      "clock_reset_messages": 0,
+      "receiver_date_differs_from_host_messages": 0,
+      "within_existing_1ms_grid_messages": 0,
+      "host_minus_receiver_utc_range_s": [
+        28800.996,
+        28801.996
+      ]
+    }
+  },
+  "processed_pvt_array_lengths": {
+    "recordTime": 3600,
+    "numSV": 3600,
+    "nano": 3600,
+    "lon": 3600,
+    "lat": 3600,
+    "height": 3600,
+    "velN": 3600,
+    "velE": 3600,
+    "velD": 3600,
+    "hMSL": 3600,
+    "hAcc": 3600,
+    "vAcc": 3600,
+    "sAcc": 3600,
+    "gSpeed": 3600,
+    "headMot": 3600,
+    "headAcc": 3600,
+    "ecefX": 3600,
+    "ecefY": 3600,
+    "ecefZ": 3600,
+    "clkB": 3593,
+    "clkD": 3593,
+    "tAcc": 3593,
+    "fAcc": 3593,
+    "gDOP": 3597,
+    "pDOP": 3597,
+    "tDOP": 3597,
+    "vDOP": 3597,
+    "hDOP": 3597,
+    "nDOP": 3597,
+    "eDOP": 3597
+  },
+  "first_epoch_g31_mapping": {
+    "native_phase_cycles": 119555602.08583662,
+    "native_doppler_hz": -911.17236328125,
+    "processed_doMes_G1": 119555602.08583662,
+    "processed_cpMes_G1": -911.17236328125
+  },
+  "limitations": [
+    "Host clock timezone, synchronization and error are not independently qualified.",
+    "Table 13 activity labels are not receiver capture/success labels.",
+    "Before/between/after logged attacks are not certified benign intervals.",
+    "Paper coordinates have no stated independent survey uncertainty.",
+    "No native observation is retimed, rounded or interpolated onto the grid.",
+    "GPS sigId 3 is L2C; it is not relabeled as C2W.",
+    "Network observations, geometry, authenticity, false alarms and benefit are not assessed."
+  ]
+}

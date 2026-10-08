@@ -1,4 +1,4 @@
-# Stato del progetto — 3 ottobre 2026
+# Stato del progetto — 8 ottobre 2026
 
 ## Obiettivo
 
@@ -6,6 +6,16 @@ La direzione attiva e il [piano di sicurezza PNT](PNT_SECURITY_PLAN.md):
 confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
 valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
 Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
+
+La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
+e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
+PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,
+associazioni temporali ambigue nei log e fase/Doppler scambiati nel campione.
+Nessun timestamp nativo entra nella griglia attuale entro 1 ms; nessun dato
+viene ritimato. Il prossimo lavoro utile e risolvere epoche e associazione
+dei messaggi originali, poi ottenere due riferimenti contemporanei e confrontare
+locale/rete sulle stesse epoche. L'accesso BKG fallisce in questa sessione;
+beneficio della rete, falsi allarmi e tempo indipendente restano non dimostrati.
 
 L'intake [Android Raw](../pnt/README.md) aggiunge l'importazione GPS L1/L5 dai
 log di telefoni, con clock a precisione nanosecondo, identificazione esplicita
