@@ -17,11 +17,29 @@ by packet authentication alone. [PTB clock source](https://www.ptb.de/cms/en/ptb
 
 The [saved report](results/pnt_internet_time_v1.json) retains the two successful
 NTS-KE feasibility contacts, two preliminary full exchanges, and the two final
-CLI exchanges. No Internet attempt failed in this development session. The
+CLI exchanges. No failed top-level probe was observed in this development session. The
 initial clock discrepancy was exposed before the interval implementation;
 this is exploratory software qualification, with no prospective claim.
 The retained server UTC corresponds to 8 October 2026 UTC / 9 October locally.
 Collector/runtime provenance and all numerical timestamps are in the JSON.
+
+### Transport correction after PR review
+
+The saved snapshot used the original TCP connector, which could try more than
+one DNS address before succeeding. Address-level failures were not logged;
+their historical count is unknown. The snapshot's statement that no Internet
+attempt failed therefore establishes only successful top-level probes, not
+an absence of failed TCP contacts. Its original bytes and numerical results
+remain unchanged; this is a separate correction to the reporting claim.
+
+The corrected client selects one TCP address and retains a failed connection
+without trying another. If no NTP server is explicitly negotiated, UDP reuses
+the authenticated TCP peer IP, preserving IPv6 scope/flow and the negotiated
+port; an explicit redirect is resolved once. Reports now identify both peers
+and whether redirection was negotiated. Opaque cookies of any length remain
+unchanged at key establishment, with padding only in their NTP extension field.
+Offline regressions cover these cases; no new Internet measurement or adjustment
+to the UTC interval arithmetic, uncertainty budgets or saved result is required.
 
 ## Bound and trust assumptions
 

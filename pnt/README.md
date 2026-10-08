@@ -26,6 +26,11 @@ share the same authority. [PTB source description](https://www.ptb.de/cms/en/ptb
 The client implements [RFC 8915](https://www.rfc-editor.org/rfc/rfc8915.html):
 TLS 1.3 with platform CA and hostname verification, `ntske/1`, exporter-derived
 AES-SIV keys, authenticated NTPv4, a fresh request identifier and origin echo.
+Each hostname uses the first resolved TCP address once; a failed connection is
+retained without trying further addresses. Without a negotiated NTP server, UDP
+uses that actual TCP peer's IP; an authenticated redirect is resolved once.
+Reports record both peers and whether the NTP host was negotiated. Opaque
+cookies are preserved and padded only when constructing the NTP field.
 Every endpoint gets one exchange; failures remain in the report. There is no
 plain-NTP fallback or automatic retry. An existing output file is never replaced.
 Exit code 2 reports all witnesses unavailable (with the failure report saved);

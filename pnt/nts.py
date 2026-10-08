@@ -22,7 +22,7 @@ def _record(kind, body=b'', critical=False):
     return struct.pack('!HH', kind | (0x8000 if critical else 0), len(body)) + body
 
 
-def _ke_parameters(records, server):
+def _ke_parameters(records):
     """Validate the complete, bounded NTS-KE response before using cookies."""
     if len(records) > 65536:
         raise NTSError('NTS-KE response exceeds 64 KiB')
@@ -40,8 +40,6 @@ def _ke_parameters(records, server):
         if kind in (2, 3):
             raise NTSError('NTS-KE server error or warning')
         if kind == 5:
-            if not body or len(body) % 4:
-                raise NTSError('unsupported NTS cookie length')
             cookies.append(body)
         elif kind in (0, 1, 4, 6, 7):
             if kind in seen:
@@ -58,10 +56,10 @@ def _ke_parameters(records, server):
     if not ended or seen.get(1) != b'\x00\x00' or seen.get(4) != b'\x00\x0f' or not cookies:
         raise NTSError('NTPv4 / AES-SIV-256 negotiation incomplete')
     try:
-        hostname = seen.get(6, server.encode('ascii')).decode('ascii')
+        hostname = seen[6].decode('ascii') if 6 in seen else None
     except UnicodeError as error:
         raise NTSError('invalid negotiated NTP hostname') from error
-    if not hostname or any(c.isspace() or ord(c) < 33 for c in hostname):
+    if hostname is not None and (not hostname or any(c.isspace() or ord(c) < 33 for c in hostname)):
         raise NTSError('invalid negotiated NTP hostname')
     port_body = seen.get(7, b'\x00\x7b')
     if len(port_body) != 2 or not (port := int.from_bytes(port_body, 'big')):
@@ -102,7 +100,16 @@ def _key_exchange(server, timeout_s, *, port=4460, ca_file=None):
         store.add_cert(crypto.X509.from_cryptography(x509.load_der_x509_certificate(root)))
     context.set_alpn_protos([b'ntske/1'])
     deadline = time.monotonic() + timeout_s
-    with socket.create_connection((server, port), timeout=timeout_s) as sock:
+    # create_connection() silently tries further DNS addresses after failures.
+    # Select once so an unavailable address remains a failed endpoint attempt.
+    family, socktype, protocol, _, address = socket.getaddrinfo(server, port, type=socket.SOCK_STREAM)[0]
+    with socket.socket(family, socktype, protocol) as sock:
+        sock.settimeout(timeout_s)
+        try:
+            sock.connect(address)
+        except OSError as error:
+            raise NTSError(f'NTS-KE connection to {address} failed: {type(error).__name__}') from error
+        tcp_peer = sock.getpeername()
         sock.setblocking(False)
         connection = SSL.Connection(context, sock)
         connection.set_connect_state()
@@ -130,13 +137,14 @@ def _key_exchange(server, timeout_s, *, port=4460, ca_file=None):
                     break
                 pos += 4 + length
                 if kind & 0x7fff == 0:
-                    hostname, ntp_port, cookie = _ke_parameters(bytes(data), server)
+                    hostname, ntp_port, cookie = _ke_parameters(bytes(data))
                     label = b'EXPORTER-network-time-security'
                     c2s = connection.export_keying_material(label, 32, struct.pack('!HHB', 0, 15, 0))
                     s2c = connection.export_keying_material(label, 32, struct.pack('!HHB', 0, 15, 1))
                     certificate = connection.get_peer_certificate().to_cryptography().public_bytes(
                         Encoding.DER)
-                    return hostname, ntp_port, cookie, c2s, s2c, hashlib.sha256(certificate).hexdigest()
+                    return (hostname, ntp_port, cookie, c2s, s2c,
+                            hashlib.sha256(certificate).hexdigest(), (family, tcp_peer))
 
 
 def _extension(kind, body):
@@ -170,7 +178,10 @@ def _authenticated_extension(prefix, key, plaintext=b''):
 def _request(cookie, key):
     uid, origin = os.urandom(32), os.urandom(8)
     header = bytes([0x23]) + bytes(39) + origin
-    prefix = header + _extension(0x0104, uid) + _extension(0x0204, cookie)
+    # Opaque NTS-KE cookies have no alignment constraint. Pad only the NTP
+    # field (word boundary and 16-byte minimum), preserving every cookie byte.
+    cookie_body = cookie + bytes(max(12, (len(cookie) + 3) // 4 * 4) - len(cookie))
+    prefix = header + _extension(0x0104, uid) + _extension(0x0204, cookie_body)
     return prefix + _authenticated_extension(prefix, key), uid, origin
 
 
@@ -238,13 +249,21 @@ def probe(server, *, timeout_s=5.0, ntp_era=0):
     from service_identity import CertificateError, VerificationError
 
     try:
-        host, port, cookie, c2s, s2c, certificate_hash = _key_exchange(server, timeout_s)
+        host, port, cookie, c2s, s2c, certificate_hash, (tcp_family, tcp_peer) = _key_exchange(server, timeout_s)
     except (SSL.Error, CertificateError, VerificationError, UnicodeError) as error:
         raise NTSError(f'NTS-KE TLS/identity failure: {type(error).__name__}') from error
     request, uid, origin = _request(cookie, c2s)
     # Select one DNS endpoint; an unavailable first endpoint is retained rather
     # than hidden by polling or trying another address for a passing result.
-    family, socktype, protocol, _, address = socket.getaddrinfo(host, port, type=socket.SOCK_DGRAM)[0]
+    host_negotiated = host is not None
+    if host_negotiated:
+        family, socktype, protocol, _, address = socket.getaddrinfo(host, port, type=socket.SOCK_DGRAM)[0]
+    else:
+        # RFC 8915 §4.1.7: no server record means the actual TCP peer's IP,
+        # including IPv6 scope/flow fields, with the negotiated/default UDP port.
+        host = tcp_peer[0]
+        family, socktype, protocol = tcp_family, socket.SOCK_DGRAM, 0
+        address = (tcp_peer[0], port, *tcp_peer[2:])
     with socket.socket(family, socktype, protocol) as sock:
         sock.settimeout(timeout_s)
         sock.connect(address)
@@ -257,6 +276,7 @@ def probe(server, *, timeout_s=5.0, ntp_era=0):
         peer = sock.getpeername()
     result = _response(packet, s2c, uid, origin, ntp_era)
     result.update(server=server, ntp_host=host, ntp_port=port, peer_address=list(peer),
+                  nts_ke_peer_address=list(tcp_peer), ntp_host_negotiated=host_negotiated,
                   authentication='NTS_TLS13_AES_SIV_256', certificate_sha256=certificate_hash,
                   ntp_era=ntp_era, send_monotonic_ns=sent, receive_monotonic_ns=received,
                   claim_start_monotonic_ns=claim_start, claim_end_monotonic_ns=received,
