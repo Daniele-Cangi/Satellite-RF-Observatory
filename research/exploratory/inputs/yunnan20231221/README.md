@@ -38,3 +38,27 @@ attack continues beyond the retained first hour.
 Direct HTTP downloads returned 403 in this environment. Ordinary browser
 download controls worked. Use the dataset's folder navigation and download
 links if a command-line client is rejected; no account or token was needed.
+
+## Contemporary Internet references, acquired 8 October 2026
+
+BKG direct access returned connection resets. The official [ESA bulk-access
+instructions](https://gssc.esa.int/activities/ftp-and-web-access-to-gnss-repository/)
+provide a [web client](https://gssc.esa.int/webftp/login.html), with username
+`anonymous` and empty password. The directory actually inspected was
+`/bkg/gnss/data/daily/2023/355/`. These two original compressed observation files
+were downloaded through its normal controls, without conversion or edits.
+JFNG/CUSV retain their original RINEX station identities and metadata; repository
+code licensing does not relicense third-party station observations.
+
+| Original source | Bytes | SHA-256 |
+|---|---:|---|
+| ESA path above / `JFNG00CHN_R_20233550000_01D_30S_MO.crx.gz` | 2,587,254 | `6bb111c27a9e36f5014526a49c533933edd991bf33f4362cc62311ce8359b0ee` |
+| ESA path above / `CUSV00THA_R_20233550000_01D_30S_MO.crx.gz` | 4,305,971 | `56de5d9ceb3ab5946e1d263ad998205e83a42184d1b0c9ad9e0a48ae5bffb266` |
+| [NOAA daily GPS NAV](https://noaa-cors-pds.s3.amazonaws.com/rinex/2023/355/brdc3550.23n.gz) | 69,821 | `8ea4345a67a0928c270a546c06e213dc4a7d0af884baa5e1c5577ffe396a478a` |
+
+Both stations declare 30-second GPS C1C for the recording day. Their ECEF chord
+distances from the published local coordinate are over 1,200 km; they are not
+close references. Their shared distribution does not qualify independent timing.
+KUNM did not appear in that inspected directory; no absence from other archives
+is inferred. Numerical comparison and all limitations are in the separate
+[native-epoch report](../../PNT_YUNNAN_NATIVE_NETWORK.md).

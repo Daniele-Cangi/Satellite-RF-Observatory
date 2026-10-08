@@ -63,6 +63,51 @@ def test_physical_model_preserves_common_clock_while_differences_cancel_it():
     assert shifted['matched']['local_minus_network_clock_m'] - first['matched']['local_minus_network_clock_m'] == pytest.approx(200., abs=1e-5)
 
 
+def test_native_times_remove_retiming_error_without_modifying_observations():
+    nav = constellation()
+    times = {'local': TIME + .4, 'A': TIME - .3, 'B': TIME + .2}
+    values = {name: observations(nav, time=t)[name] for name, t in times.items()}
+    correct = evaluate_epoch(TIME, values, POSITIONS, nav, day_context(DAY), receiver_times=times)
+    rounded = evaluate_epoch(TIME, values, POSITIONS, nav, day_context(DAY))
+    assert correct['receiver_measurement_gpst_s'] == times
+    assert max(map(abs, correct['matched']['mean_double_difference_residuals_m'].values())) < 1e-5
+    assert max(map(abs, rounded['matched']['mean_double_difference_residuals_m'].values())) > .1
+    for name, expected in (('local', 100.), ('A', 50.), ('B', -20.)):
+        assert correct['matched']['receiver_fits'][name]['clock_m'] == pytest.approx(expected, abs=1e-5)
+
+
+def test_native_times_do_not_share_a_navigation_issue_across_receivers(monkeypatch):
+    from pnt import fixed_site
+    nav = constellation()
+    context = day_context(DAY)
+    for records in nav.values():
+        base = records.pop()
+        records.extend([replace(base, toc_gps=context.day + timedelta(seconds=TIME - 1),
+                                af0_s=1e-5),
+                        replace(base, toc_gps=context.day + timedelta(seconds=TIME + 1),
+                                af0_s=2e-5)])
+    original = fixed_site.fit_clock
+    used = []
+    def record_issues(codes, position, records, time, context):
+        used.append((time, {r.af0_s for r in records.values()}))
+        return original(codes, position, records, time, context)
+    monkeypatch.setattr(fixed_site, 'fit_clock', record_issues)
+    times = {'local': TIME - .25, 'A': TIME + .25, 'B': TIME + .25}
+    result = evaluate_epoch(TIME, observations(nav), POSITIONS, nav, context, receiver_times=times)
+    assert result['matched']['status'] == 'EVALUATED'
+    assert set((t, next(iter(issues))) for t, issues in used) == {
+        (TIME - .25, 1e-5), (TIME + .25, 2e-5)}
+
+
+@pytest.mark.parametrize('times', [{'local': TIME},
+    {'local': float('nan'), 'A': TIME, 'B': TIME},
+    {'local': 86400, 'A': TIME, 'B': TIME}])
+def test_incomplete_or_outside_day_native_times_fail_explicitly(times):
+    nav = constellation()
+    with pytest.raises(ValueError, match='measurement time'):
+        evaluate_epoch(TIME, observations(nav), POSITIONS, nav, day_context(DAY), receiver_times=times)
+
+
 def test_local_satellite_anomaly_is_not_absorbed_into_remote_fit():
     nav = constellation()
     values = observations(nav)
