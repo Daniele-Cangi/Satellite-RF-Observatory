@@ -1,4 +1,4 @@
-# Stato del progetto — 8 ottobre 2026
+# Stato del progetto — 9 ottobre 2026
 
 ## Obiettivo
 
@@ -11,11 +11,17 @@ La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,
 associazioni temporali ambigue nei log e fase/Doppler scambiati nel campione.
-Nessun timestamp nativo entra nella griglia attuale entro 1 ms; nessun dato
-viene ritimato. Il prossimo lavoro utile e risolvere epoche e associazione
-dei messaggi originali, poi ottenere due riferimenti contemporanei e confrontare
-locale/rete sulle stesse epoche. L'accesso BKG fallisce in questa sessione;
-beneficio della rete, falsi allarmi e tempo indipendente restano non dimostrati.
+Nessun timestamp nativo entra nella precedente griglia entro 1 ms.
+Il [confronto alle epoche native](../research/exploratory/PNT_YUNNAN_NATIVE_NETWORK.md)
+ora usa i timestamp originali nel motore condiviso, senza ritimare codici,
+e abbina PVT/clock tramite iTOW. I riferimenti contemporanei JFNG/CUSV sono
+acquisiti dal mirror pubblico ESA: 204/240 epoche sono valutabili sulle stesse
+osservazioni e satelliti. Il combinato riduce il residuo in 91 casi e lo aumenta
+in 113; peggiora la mediana nell'ora dopo i disturbi. Le grandi anomalie locali
+restano visibili. Accesso ai dati e supporto software sono risolti, ma vantaggio
+di rilevamento, falsi allarmi qualificati e tempo indipendente restano aperti.
+Il prossimo passo fisico deve mostrare un'inconsistenza che il controllo locale
+non vede; aggiungere filtri a posteriori a questo campione non lo dimostrerebbe.
 
 L'intake [Android Raw](../pnt/README.md) aggiunge l'importazione GPS L1/L5 dai
 log di telefoni, con clock a precisione nanosecondo, identificazione esplicita

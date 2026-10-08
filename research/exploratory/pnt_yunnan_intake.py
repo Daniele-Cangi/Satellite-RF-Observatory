@@ -82,7 +82,8 @@ def summarize(rows, expected):
     }
 
 
-def run(inputs=INPUTS):
+def load_streams(inputs=INPUTS):
+    """Read retained native bytes by source identity, without joining streams."""
     archive = inputs / 'receiver_messages.tar.gz'
     streams = {hour: {kind: {} for kind in ('RXM-RAWX', 'NAV-PVT', 'NAV-CLOCK')}
                for hour in ('12', '18')}
@@ -100,6 +101,11 @@ def run(inputs=INPUTS):
             if key in streams[hour][kind]:
                 raise ValueError('duplicate source filename within a message stream')
             streams[hour][kind][key] = message
+    return streams, processed_pvt
+
+
+def run(inputs=INPUTS):
+    streams, processed_pvt = load_streams(inputs)
     all_rows, hours = [], {}
     for hour, kinds in streams.items():
         rows = [describe_rawx(message, key) for key, message in sorted(kinds['RXM-RAWX'].items())]
