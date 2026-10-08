@@ -7,6 +7,16 @@ confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
 valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
 Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
 
+Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
+aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
+ritardi simmetrici e confronto in sola lettura con il clock del PC. La prova
+documentata ottiene 2/2 risposte autenticate, intervalli larghi 74,882 e 82,501 ms
+e un clock locale in ritardo rispetto a entrambi. I budget di errore sono
+assunzioni non calibrate; non e una prova di spoofing o una misura GNSS.
+Questo apre il canale che le doppie differenze non osservano. Restano da
+stabilire associazione con UTC GNSS co-acquisito, budget indipendente e beneficio
+su casi benigni/challenge. P2 resta aperta; sito e pilot vengono dopo.
+
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,

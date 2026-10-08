@@ -1,0 +1,4 @@
+# Optional authenticated Internet time transport (RFC 8915).
+pyOpenSSL==26.4.0
+cryptography==50.0.2
+service-identity==26.1.0

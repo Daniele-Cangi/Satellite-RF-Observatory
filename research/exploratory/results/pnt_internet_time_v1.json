@@ -1,0 +1,216 @@
+{
+  "assumptions": {
+    "budget_source": "Uncalibrated development assumptions: server UTC 1 ms; monotonic rate 100 ppm. Not PTB certified bounds.",
+    "calibrated": false,
+    "rate_error_ppm": 100,
+    "server_error_ns": 1000000,
+    "tls_calendar_bootstrap_required": true,
+    "trusted_collector_and_monotonic_counter": true
+  },
+  "attempts": [
+    {
+      "claim": {
+        "capture_id": "dd7de900-5b60-453a-8a6f-8edf4545cabf",
+        "end_monotonic_ns": 48975935887900,
+        "error_ns": 100,
+        "start_monotonic_ns": 48975935882000,
+        "unix_ns": 1791498937306045200
+      },
+      "comparison": {
+        "claim_minus_witness_ns": [
+          -252821942,
+          -177939953
+        ],
+        "conditional_on_declared_budgets": true,
+        "separation_ns": 177939953,
+        "status": "INCONSISTENT_WITH_WITNESS",
+        "witness_interval": {
+          "event_end_monotonic_ns": 48975935887900,
+          "event_start_monotonic_ns": 48975935882000,
+          "lower_unix_ns": 1791498937483985253,
+          "upper_unix_ns": 1791498937558867042,
+          "width_ns": 74881789
+        }
+      },
+      "exchange": {
+        "authentication": "NTS_TLS13_AES_SIV_256",
+        "capture_id": "dd7de900-5b60-453a-8a6f-8edf4545cabf",
+        "certificate_sha256": "244656b8f4d6e058c1a34f636d801fc7a92eff126dc98d7adb50cffaeed4d791",
+        "claim_end_monotonic_ns": 48975935887900,
+        "claim_start_monotonic_ns": 48975935882000,
+        "host_claim_error_ns": 100,
+        "host_claim_unix_ns": 1791498937306045200,
+        "monotonic_resolution_ns": 100,
+        "ntp_era": 0,
+        "ntp_host": "ptbtime1.ptb.de",
+        "ntp_port": 123,
+        "peer_address": [
+          "192.53.103.108",
+          123
+        ],
+        "receive_monotonic_ns": 48975935887900,
+        "response_sha256": "cb44a4019e2d6b3b9dca1273d25d03c38dc818aaa8a4f217a9395012353c0443",
+        "root_delay_raw": 7,
+        "root_dispersion_raw": 1,
+        "send_monotonic_ns": 48975862901200,
+        "server": "ptbtime1.ptb.de",
+        "server_receive_unix_ns": 1791498937484872841,
+        "server_transmit_unix_ns": 1791498937484991355,
+        "stratum": 1
+      },
+      "server": "ptbtime1.ptb.de",
+      "status": "AUTHENTICATED_EXCHANGE"
+    },
+    {
+      "claim": {
+        "capture_id": "26a640f9-0470-4357-b01a-7ab1d0a72ebc",
+        "end_monotonic_ns": 48976495476700,
+        "error_ns": 100,
+        "start_monotonic_ns": 48976495472500,
+        "unix_ns": 1791498937865634200
+      },
+      "comparison": {
+        "claim_minus_witness_ns": [
+          -267547961,
+          -185047075
+        ],
+        "conditional_on_declared_budgets": true,
+        "separation_ns": 185047075,
+        "status": "INCONSISTENT_WITH_WITNESS",
+        "witness_interval": {
+          "event_end_monotonic_ns": 48976495476700,
+          "event_start_monotonic_ns": 48976495472500,
+          "lower_unix_ns": 1791498938050681375,
+          "upper_unix_ns": 1791498938133182061,
+          "width_ns": 82500686
+        }
+      },
+      "exchange": {
+        "authentication": "NTS_TLS13_AES_SIV_256",
+        "capture_id": "26a640f9-0470-4357-b01a-7ab1d0a72ebc",
+        "certificate_sha256": "e2a0ad9e30fddb7d5b35b692159723a1aa96dd3062142456b3795b8638636472",
+        "claim_end_monotonic_ns": 48976495476700,
+        "claim_start_monotonic_ns": 48976495472500,
+        "host_claim_error_ns": 100,
+        "host_claim_unix_ns": 1791498937865634200,
+        "monotonic_resolution_ns": 100,
+        "ntp_era": 0,
+        "ntp_host": "ptbtime2.ptb.de",
+        "ntp_port": 123,
+        "peer_address": [
+          "192.53.103.104",
+          123
+        ],
+        "receive_monotonic_ns": 48976495476700,
+        "response_sha256": "e6a8d257e749fa5fe8256f792d14df29287b3418c6e38a4c88c76b3216e5cd4e",
+        "root_delay_raw": 7,
+        "root_dispersion_raw": 1,
+        "send_monotonic_ns": 48976414960200,
+        "server": "ptbtime2.ptb.de",
+        "server_receive_unix_ns": 1791498938051657307,
+        "server_transmit_unix_ns": 1791498938051685777,
+        "stratum": 1
+      },
+      "server": "ptbtime2.ptb.de",
+      "status": "AUTHENTICATED_EXCHANGE"
+    }
+  ],
+  "claim_source": "HOST_WALL_CLOCK_NOT_GNSS",
+  "collector": {
+    "base_commit": "7f0689ca7771ba37e2361a5eb01f9404b3ae12ff",
+    "dependencies": {
+      "cryptography": "50.0.2",
+      "pyOpenSSL": "26.4.0",
+      "service-identity": "26.1.0"
+    },
+    "implementation": "pnt/nts.py and pnt/time_witness.py in this PR",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "python": "3.13.5"
+  },
+  "limitations": [
+    "Host wall clock only, no co-captured GNSS receiver.",
+    "Server UTC error 1 ms and monotonic rate 100 ppm are uncalibrated assumptions, not PTB-certified accuracy.",
+    "PTB endpoints share an authority; no independence or quorum is inferred between them.",
+    "TLS requires a sufficiently correct bootstrap calendar and trusted platform roots.",
+    "Discarded session secrets: replay checks arithmetic, not third-party cryptographic proof of server origin.",
+    "No inference about RF origin, position, attack attribution or historical Yunnan time."
+  ],
+  "preliminary_transport_exchanges": [
+    {
+      "authentication": "NTS_TLS13_AES_SIV_256",
+      "certificate_sha256": "244656b8f4d6e058c1a34f636d801fc7a92eff126dc98d7adb50cffaeed4d791",
+      "claim_end_monotonic_ns": 48725929660600,
+      "claim_start_monotonic_ns": 48725929655400,
+      "host_claim_error_ns": 100,
+      "host_claim_unix_ns": 1791498687299618200,
+      "monotonic_resolution_ns": 100,
+      "ntp_era": 0,
+      "ntp_host": "ptbtime1.ptb.de",
+      "ntp_port": 123,
+      "peer_address": [
+        "192.53.103.108",
+        123
+      ],
+      "receive_monotonic_ns": 48725929660600,
+      "response_sha256": "44fe75aab1e0572ca6fae053f46be3210c97ac48f3332c7a22aef073f1436cdb",
+      "root_delay_raw": 7,
+      "root_dispersion_raw": 1,
+      "send_monotonic_ns": 48725856465200,
+      "server": "ptbtime1.ptb.de",
+      "server_receive_unix_ns": 1791498687477906836,
+      "server_transmit_unix_ns": 1791498687477946317,
+      "stratum": 1
+    },
+    {
+      "authentication": "NTS_TLS13_AES_SIV_256",
+      "certificate_sha256": "e2a0ad9e30fddb7d5b35b692159723a1aa96dd3062142456b3795b8638636472",
+      "claim_end_monotonic_ns": 48726574290500,
+      "claim_start_monotonic_ns": 48726574287200,
+      "host_claim_error_ns": 100,
+      "host_claim_unix_ns": 1791498687944248600,
+      "monotonic_resolution_ns": 100,
+      "ntp_era": 0,
+      "ntp_host": "ptbtime2.ptb.de",
+      "ntp_port": 123,
+      "peer_address": [
+        "192.53.103.104",
+        123
+      ],
+      "receive_monotonic_ns": 48726574290500,
+      "response_sha256": "f0d8c6f8edc1a9714cf05ce25224602657e28efeb9998b4e658f117df1341858",
+      "root_delay_raw": 7,
+      "root_dispersion_raw": 1,
+      "send_monotonic_ns": 48726494257600,
+      "server": "ptbtime2.ptb.de",
+      "server_receive_unix_ns": 1791498688117654434,
+      "server_transmit_unix_ns": 1791498688117724991,
+      "stratum": 1
+    }
+  ],
+  "prior_access": {
+    "nts_ke_only": [
+      {
+        "alpn": "ntske/1",
+        "response_bytes": 848,
+        "server": "ptbtime1.ptb.de",
+        "tls": "TLSv1.3"
+      },
+      {
+        "alpn": "ntske/1",
+        "response_bytes": 848,
+        "server": "ptbtime2.ptb.de",
+        "tls": "TLSv1.3"
+      }
+    ],
+    "preliminary_note": "Two successful full transport probes below preceded the interval implementation. Exposed development data, no prospective claim. No failed Internet attempts occurred."
+  },
+  "protocol": {
+    "attempts_per_endpoint": 1,
+    "automatic_retries": false,
+    "ntp_era": 0,
+    "timeout_s": 5.0
+  },
+  "regime": "EXPLORATORY_TRANSPORT_QUALIFICATION",
+  "schema": "pnt-internet-time-v1",
+  "status": "CONDITIONAL_TIME_DIAGNOSTIC"
+}
