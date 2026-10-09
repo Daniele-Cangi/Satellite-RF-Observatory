@@ -90,7 +90,7 @@ def rig(monkeypatch):
             time.sleep(.001)
         time.sleep(.01)
         received = time.monotonic_ns()
-        return dict(authentication='NTS_TLS13_AES_SIV_256', send_monotonic_ns=sent,
+        return dict(authentication='NTS_TLS13_AES_SIV_256', server=server, send_monotonic_ns=sent,
                     receive_monotonic_ns=received, server_receive_unix_ns=utc(sent + MS),
                     server_transmit_unix_ns=utc(sent + 2 * MS), monotonic_resolution_ns=1,
                     claim_start_monotonic_ns=received, claim_end_monotonic_ns=received,
@@ -279,7 +279,8 @@ def test_receiver_connection_failure_and_nts_failure_are_both_reported(monkeypat
                                   dict(interval_s=1e-12), dict(max_bytes=0),
                                   dict(epoch_age_min_ns=None), dict(epoch_age_max_ns=-1),
                                   dict(epoch_age_source=''), dict(utc_error_ns=-1),
-                                  dict(utc_error_source=''), dict(server_error_ns=-1)])
+                                  dict(utc_error_source=''), dict(server_error_ns=-1),
+                                  dict(bracket_span_ns=0), dict(bracket_span_ns=True)])
 def test_invalid_configuration_fails_before_any_connection(monkeypatch, change):
     def forbidden(*args, **kwargs):
         pytest.fail('configuration validation must precede network access')
@@ -313,6 +314,26 @@ def test_cli_saves_unknown_age_report_and_never_overwrites(rig, monkeypatch, tmp
     assert error.value.code == 2
     assert output.read_bytes() == saved
     assert rig['calls'] == ['good']
+
+
+def test_live_collector_cli_opt_in_brackets_reuse_the_existing_replay(rig, monkeypatch, tmp_path):
+    output = tmp_path / 'bracket-capture.json'
+    args = cli_args(rig['port'], output) + [
+        '--rounds', '2', '--interval', '.1', '--bracket-span-ns', str(NS),
+        '--epoch-age-min-ns', '0', '--epoch-age-max-ns', str(20 * MS),
+        '--epoch-age-source', 'independent synthetic schedule']
+    monkeypatch.setattr('sys.argv', args)
+    main()
+    report = json.loads(output.read_bytes())
+    assert rig['calls'] == ['good', 'good']
+    assert report['temporal_association']['maximum_span_ns'] == NS
+    assert report['coverage']['receiver_records'] == 4
+    assert report['coverage']['comparisons'] == 8
+    assert report['coverage']['bracket_comparisons'] == 4
+    replay = compare_receiver_capture(report['witness_report'], report['receiver_capture'],
+                                      utc_error_ns=MS, utc_error_source='synthetic', bracket_span_ns=NS)
+    assert replay['records'] == report['records']
+    assert replay['coverage'] == report['coverage']
 
 
 @pytest.mark.parametrize('report_name', ['pnt_concurrent_time_transport_v1.json'])

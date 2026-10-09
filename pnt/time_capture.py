@@ -94,7 +94,8 @@ def collect_receiver_time(servers, *, receiver_host, receiver_port, receiver_sou
                           server_error_ns, rate_error_ppm, budget_source,
                           utc_error_ns, utc_error_source, timeout_s=5.0, ntp_era=0,
                           rounds=1, interval_s=1.0, max_bytes=1048576,
-                          epoch_age_min_ns=None, epoch_age_max_ns=None, epoch_age_source=None):
+                          epoch_age_min_ns=None, epoch_age_max_ns=None, epoch_age_source=None,
+                          bracket_span_ns=None):
     """Collect a declared schedule, then compare all retained records/attempts.
 
     Reads an explicitly configured TCP source without sending receiver commands.
@@ -110,6 +111,8 @@ def collect_receiver_time(servers, *, receiver_host, receiver_port, receiver_sou
         raise ValueError('receiver_port must be <= 65535')
     _integer(utc_error_ns, 'utc_error_ns', 0)
     _text(utc_error_source, 'utc_error_source')
+    if bracket_span_ns is not None:
+        _integer(bracket_span_ns, 'bracket_span_ns', 1)
     _integer(rounds, 'rounds', 1)
     _integer(max_bytes, 'max_bytes', 1)
     if rounds > 1000 or max_bytes > 16 * 1048576:
@@ -189,7 +192,7 @@ def collect_receiver_time(servers, *, receiver_host, receiver_port, receiver_sou
                 if sock is not None:
                     sock.close()
     report = compare_receiver_capture(witness, capture, utc_error_ns=utc_error_ns,
-                                      utc_error_source=utc_error_source)
+                                      utc_error_source=utc_error_source, bracket_span_ns=bracket_span_ns)
     report.update(regime='EXPLORATORY_LIVE_CAPTURE',
                   acquisition=dict(started_monotonic_ns=started, ended_monotonic_ns=time.monotonic_ns(),
                                    interrupted=interrupted, epoch_age_known=bool(age),

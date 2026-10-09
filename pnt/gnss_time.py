@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 import struct
 
 from research.exploratory.pnt_rawx_recovery import ubx_packets
-from .time_witness import _budgets, _integer, compare_claim
+from .time_witness import _budgets, _integer, compare_bracket_claim, compare_claim
 
 
 def _text(value, name):
@@ -57,6 +57,9 @@ def receiver_claim(record, *, utc_error_ns, utc_error_source):
     _text(utc_error_source, 'utc_error_source')
     if not isinstance(record, dict):
         raise ValueError('receiver capture record must be an object')
+    if 'epoch_age_budget_violation' in record:
+        reason = _text(record['epoch_age_budget_violation'], 'epoch_age_budget_violation')
+        raise ValueError(f'known epoch-age budget violation: {reason}')
     packet = bytes.fromhex(_text(record.get('packet_hex'), 'packet_hex'))
     decoded = decode_timeutc(packet)
     capture_id = _text(record.get('capture_id'), 'capture_id')
@@ -72,15 +75,33 @@ def receiver_claim(record, *, utc_error_ns, utc_error_source):
     return claim, decoded
 
 
-def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source):
+def _adjacent_attempt_pairs(attempts):
+    """Use retained order and endpoint names only, including failed attempts."""
+    previous, pairs, unnamed = {}, [], []
+    for index, attempt in enumerate(attempts):
+        server = attempt.get('server')
+        if not isinstance(server, str) or not server.strip():
+            unnamed.append(index)
+            previous.clear()  # An unidentified failure may belong to any endpoint.
+            continue
+        if server in previous:
+            pairs.append(dict(before_attempt_index=previous[server], after_attempt_index=index, server=server))
+        previous[server] = index
+    return pairs, unnamed
+
+
+def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source, bracket_span_ns=None):
     """Replay every supplied receiver record against every retained endpoint.
 
     Reuse compare_claim's causal intervals, capture-domain check and refusal
-    to extrapolate. Endpoints stay separate: no nearest-epoch substitution,
-    quorum, interval intersection, post-fit clock correction or ALLOW verdict.
+    to extrapolate. Optional two-sided brackets add constraints from adjacent
+    attempts at the same endpoint. No failed attempt is skipped; endpoints
+    stay separate, without quorum, post-fit correction or ALLOW verdict.
     """
     _integer(utc_error_ns, 'utc_error_ns', 0)
     _text(utc_error_source, 'utc_error_source')
+    if bracket_span_ns is not None:
+        _integer(bracket_span_ns, 'bracket_span_ns', 1)
     if (not isinstance(witness, dict) or witness.get('schema') != 'pnt-internet-time-v1'
             or not isinstance(witness.get('attempts'), list)
             or not all(isinstance(a, dict) for a in witness['attempts'])
@@ -94,6 +115,8 @@ def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source
         raise ValueError('a pnt-gnss-utc-capture-v1 receiver capture is required')
     _text(capture.get('receiver_source'), 'receiver_source')
     rows, record_counts, comparison_counts = [], Counter(), Counter()
+    pairs, unnamed = _adjacent_attempt_pairs(witness['attempts']) if bracket_span_ns is not None else ([], [])
+    bracket_counts, support = Counter(), Counter()
     for index, record in enumerate(capture['records']):
         row = dict(source_index=index, status='INSUFFICIENT_EVIDENCE', comparisons=[])
         rows.append(row)
@@ -114,8 +137,31 @@ def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source
                 result = compare_claim(attempt['exchange'], claim, **budgets)
             row['comparisons'].append(dict(attempt_index=attempt_index, server=attempt.get('server'), **result))
             comparison_counts[result['status']] += 1
+        if bracket_span_ns is not None:
+            row['bracket_comparisons'] = []
+            for pair in pairs:
+                anchors = [witness['attempts'][pair[name]]
+                           for name in ('before_attempt_index', 'after_attempt_index')]
+                if 'reason' in row:
+                    result = dict(status='INSUFFICIENT_EVIDENCE', reason=row['reason'])
+                elif any(a.get('status') != 'AUTHENTICATED_EXCHANGE'
+                         or not isinstance(a.get('exchange'), dict) for a in anchors):
+                    result = dict(status='INSUFFICIENT_EVIDENCE', reason='no authenticated exchange in a bracket attempt')
+                elif any(a['exchange'].get('server') != pair['server'] for a in anchors):
+                    result = dict(status='INSUFFICIENT_EVIDENCE', reason='bracket endpoint differs from retained attempt')
+                else:
+                    result = compare_bracket_claim(anchors[0]['exchange'], anchors[1]['exchange'], claim,
+                                                   max_span_ns=bracket_span_ns, **budgets)
+                row['bracket_comparisons'].append(dict(**pair, **result))
+                bracket_counts[result['status']] += 1
+            single = any(c['status'] != 'INSUFFICIENT_EVIDENCE' for c in row['comparisons'])
+            bracket = any(c['status'] != 'INSUFFICIENT_EVIDENCE' for c in row['bracket_comparisons'])
+            support['records_with_single_support'] += single
+            support['records_with_bracket_support'] += bracket
+            support['records_with_any_temporal_support'] += single or bracket
     usable = sum(comparison_counts[s] for s in ('NOT_DISTINGUISHABLE', 'INCONSISTENT_WITH_WITNESS'))
-    return dict(schema='pnt-gnss-time-comparison-v1', regime='EXPLORATORY_CAPTURE_REPLAY',
+    usable += sum(bracket_counts[s] for s in ('NOT_DISTINGUISHABLE', 'INCONSISTENT_WITH_WITNESS'))
+    report = dict(schema='pnt-gnss-time-comparison-v1', regime='EXPLORATORY_CAPTURE_REPLAY',
                 status='CONDITIONAL_TIME_DIAGNOSTIC' if usable else 'INSUFFICIENT_EVIDENCE',
                 receiver_capture=capture, witness_report=witness, records=rows,
                 assumptions=dict(**budgets, utc_error_ns=utc_error_ns, utc_error_source=utc_error_source,
@@ -125,3 +171,14 @@ def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source
                               comparisons=sum(comparison_counts.values()),
                               record_status_counts=dict(sorted(record_counts.items())),
                               comparison_status_counts=dict(sorted(comparison_counts.items()))))
+    if bracket_span_ns is not None:
+        report['temporal_association'] = dict(method='ADJACENT_SAME_ENDPOINT_BRACKETS',
+                                             maximum_span_ns=bracket_span_ns, attempt_pairs=pairs,
+                                             unnamed_attempt_indices=unnamed,
+                                             counter_rate_budget_applies_across_span=True)
+        report['coverage'].update(bracket_comparisons=sum(bracket_counts.values()),
+                                  bracket_status_counts=dict(sorted(bracket_counts.items())),
+                                  **{name: support[name] for name in (
+                                      'records_with_single_support', 'records_with_bracket_support',
+                                      'records_with_any_temporal_support')})
+    return report

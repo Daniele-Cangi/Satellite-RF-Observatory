@@ -1,9 +1,10 @@
 import json
+import copy
 
 import pytest
 
 from pnt import time_witness
-from pnt.time_witness import compare_claim, utc_interval
+from pnt.time_witness import compare_bracket_claim, compare_claim, utc_bracket_interval, utc_interval
 
 
 UTC = 1700000000000000000
@@ -154,3 +155,136 @@ def test_cli_report_and_existing_output_guard(monkeypatch, tmp_path):
     with pytest.raises(SystemExit):
         main()
     assert path.read_bytes() == original
+
+
+def anchors(*, forward=MS, backward=97 * MS, rate_ppm=0):
+    first = exchange(forward, backward=backward)
+    second = exchange(backward, backward=forward)
+    for field in ('send_monotonic_ns', 'receive_monotonic_ns'):
+        second[field] += 2_000 * MS
+    for field in ('server_receive_unix_ns', 'server_transmit_unix_ns'):
+        second[field] += 2_000 * MS
+    for record in (first, second):
+        record['server'] = 'same-endpoint'
+        for field in ('send_monotonic_ns', 'receive_monotonic_ns'):
+            record[field] = 1000 + (record[field] - 1000) * (1000000 + rate_ppm) // 1000000
+    return first, second
+
+
+@pytest.mark.parametrize('forward,backward', [(MS, 97 * MS), (97 * MS, MS), (49 * MS, 49 * MS)])
+@pytest.mark.parametrize('rate_ppm', [-100, 0, 100])
+@pytest.mark.parametrize('offset,status', [(0, 'NOT_DISTINGUISHABLE'),
+                                         (1000 * MS, 'INCONSISTENT_WITH_WITNESS'),
+                                         (-1000 * MS, 'INCONSISTENT_WITH_WITNESS')])
+def test_two_sided_bracket_covers_intermediate_epoch_with_asymmetry_and_rate(forward, backward, rate_ppm, offset, status):
+    first, second = anchors(forward=forward, backward=backward, rate_ppm=rate_ppm)
+    candidate = claim(1000 * MS, offset)
+    counter = 1000 + 1000 * MS * (1000000 + rate_ppm) // 1000000
+    candidate.update(start_monotonic_ns=counter - MS, end_monotonic_ns=counter + MS)
+    options = dict(server_error_ns=MS, rate_error_ppm=100)
+    assert compare_claim(first, candidate, **options)['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert compare_claim(second, candidate, **options)['status'] == 'INSUFFICIENT_EVIDENCE'
+    result = compare_bracket_claim(first, second, candidate, max_span_ns=3_000 * MS, **options)
+    assert result['status'] == status
+    if offset:
+        assert result['separation_ns'] > 800 * MS
+    else:
+        assert result['claim_minus_witness_ns'][0] <= 0 <= result['claim_minus_witness_ns'][1]
+    assert result['witness_interval']['width_ns'] < 110 * MS
+
+
+@pytest.mark.parametrize('event', [100 * MS, 100 * MS + 1, 1000 * MS, 2000 * MS - 1, 2000 * MS])
+@pytest.mark.parametrize('biases', [(-MS, MS), (MS, -MS)])
+def test_bracket_bounds_include_true_utc_at_edges_with_independent_server_errors(event, biases):
+    first, second = anchors()
+    for record, bias in zip((first, second), biases):
+        record['server_receive_unix_ns'] += bias
+        record['server_transmit_unix_ns'] += bias
+        record['monotonic_resolution_ns'] = 100
+    candidate = claim(event)
+    result = compare_bracket_claim(first, second, candidate, server_error_ns=MS,
+                                   rate_error_ppm=100, max_span_ns=2100 * MS)
+    assert result['status'] == 'NOT_DISTINGUISHABLE'
+    bounds = result['witness_interval']
+    candidate['unix_ns'] = bounds['upper_unix_ns'] + 1
+    assert compare_bracket_claim(first, second, candidate, server_error_ns=MS,
+                                 rate_error_ppm=100, max_span_ns=2100 * MS)['separation_ns'] == 1
+
+
+@pytest.mark.parametrize('change', ['capture', 'claim_capture', 'server', 'missing_server', 'auth',
+                                  'before_first', 'after_last', 'overlap', 'span', 'processing',
+                                  'step_forward', 'step_backward', 'bad_resolution', 'reversed_event',
+                                  'bad_claim', 'missing_anchor', 'non_object'])
+def test_unusable_brackets_fail_closed_without_a_receiver_fault(change):
+    first, second = anchors()
+    candidate = claim(1000 * MS)
+    span = 3_000 * MS
+    if change == 'capture':
+        second['capture_id'] = 'another-process'
+    elif change == 'claim_capture':
+        candidate['capture_id'] = 'another-process'
+    elif change == 'server':
+        second['server'] = 'different-endpoint'
+    elif change == 'missing_server':
+        del first['server']
+    elif change == 'auth':
+        second['authentication'] = 'PLAIN_NTP'
+    elif change == 'before_first':
+        candidate['start_monotonic_ns'] = first['receive_monotonic_ns'] - 1
+    elif change == 'after_last':
+        candidate['end_monotonic_ns'] = second['send_monotonic_ns'] + 1
+    elif change == 'overlap':
+        second['send_monotonic_ns'] = first['receive_monotonic_ns'] - 1
+    elif change == 'span':
+        span = second['receive_monotonic_ns'] - first['send_monotonic_ns'] - 1
+    elif change == 'processing':
+        second['server_transmit_unix_ns'] += 1000 * MS
+    elif change in ('step_forward', 'step_backward'):
+        for field in ('server_receive_unix_ns', 'server_transmit_unix_ns'):
+            second[field] += (1 if change == 'step_forward' else -1) * 1000 * MS
+    elif change == 'bad_resolution':
+        second['monotonic_resolution_ns'] = True
+    elif change == 'reversed_event':
+        candidate['end_monotonic_ns'] -= 1
+    elif change == 'bad_claim':
+        candidate['error_ns'] = -1
+    elif change == 'missing_anchor':
+        del second['server_receive_unix_ns']
+    else:
+        first = None
+    result = compare_bracket_claim(first, second, candidate, server_error_ns=MS,
+                                   rate_error_ppm=100, max_span_ns=span)
+    assert result['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert 'separation_ns' not in result
+
+
+@pytest.mark.parametrize('span', [0, -1, True, 1.0])
+def test_bracket_span_is_a_positive_explicit_integer(span):
+    first, second = anchors()
+    with pytest.raises(ValueError):
+        compare_bracket_claim(first, second, claim(1000 * MS), server_error_ns=MS,
+                              rate_error_ppm=100, max_span_ns=span)
+
+
+def test_packet_delay_widens_bracket_and_can_hide_a_shift():
+    first, second = anchors()
+    candidate = claim(1000 * MS, 300 * MS)
+    for record in (first, second):
+        record['send_monotonic_ns'] += 1000 * MS
+        record['receive_monotonic_ns'] += 1000 * MS
+    candidate['start_monotonic_ns'] += 1000 * MS
+    candidate['end_monotonic_ns'] += 1000 * MS
+    options = dict(server_error_ns=MS, rate_error_ppm=100, max_span_ns=3_000 * MS)
+    original = compare_bracket_claim(first, second, candidate, **options)
+    assert original['status'] == 'INCONSISTENT_WITH_WITNESS'
+    delayed = copy.deepcopy((first, second))
+    # Only causal send/receive uncertainty changes: server stamps stay intact.
+    delayed[0]['send_monotonic_ns'] -= 400 * MS
+    delayed[1]['send_monotonic_ns'] -= 400 * MS
+    result = compare_bracket_claim(*delayed, candidate, **options)
+    assert result['status'] == 'NOT_DISTINGUISHABLE'
+    assert result['witness_interval']['width_ns'] > original['witness_interval']['width_ns']
+    true_utc = UTC + 1000 * MS
+    bounds = utc_bracket_interval(*delayed, event_start_ns=candidate['start_monotonic_ns'],
+                                  event_end_ns=candidate['end_monotonic_ns'], **options)
+    assert bounds['lower_unix_ns'] <= true_utc <= bounds['upper_unix_ns']

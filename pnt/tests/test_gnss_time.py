@@ -55,6 +55,130 @@ def compare(witness, capture, *, error_ns=MS):
                                     utc_error_source='uncalibrated synthetic UTC budget')
 
 
+def bracket_inputs(offset_ns=0):
+    witness, capture = inputs(offset_ns, backward_ms=17)
+    first = witness['attempts'][0]
+    first['exchange']['server'] = first['server']
+    second = copy.deepcopy(first)
+    for field in ('send_monotonic_ns', 'receive_monotonic_ns',
+                  'server_receive_unix_ns', 'server_transmit_unix_ns'):
+        second['exchange'][field] += 100 * MS
+    witness['attempts'].append(second)
+    return witness, capture
+
+
+def compare_bracket(witness, capture):
+    return compare_receiver_capture(witness, capture, utc_error_ns=MS,
+                                    utc_error_source='uncalibrated synthetic UTC budget', bracket_span_ns=200 * MS)
+
+
+@pytest.mark.parametrize('offset,status', [(0, 'NOT_DISTINGUISHABLE'),
+                                         (NS, 'INCONSISTENT_WITH_WITNESS'),
+                                         (-NS, 'INCONSISTENT_WITH_WITNESS')])
+def test_brackets_add_record_coverage_without_changing_single_exchange_results(offset, status):
+    witness, capture = bracket_inputs(offset)
+    original = copy.deepcopy((witness, capture))
+    single = compare(witness, capture)
+    assert single['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert 'temporal_association' not in single
+    assert 'bracket_comparisons' not in single['records'][0]
+    result = compare_bracket(witness, capture)
+    row = result['records'][0]
+    assert row['comparisons'] == single['records'][0]['comparisons']
+    assert row['bracket_comparisons'][0]['status'] == status
+    assert result['status'] == 'CONDITIONAL_TIME_DIAGNOSTIC'
+    assert result['coverage']['comparisons'] == 2
+    assert result['coverage']['bracket_comparisons'] == 1
+    assert result['coverage']['records_with_single_support'] == 0
+    assert result['coverage']['records_with_bracket_support'] == 1
+    assert result['coverage']['records_with_any_temporal_support'] == 1
+    assert (witness, capture) == original
+    restored = json.loads(json.dumps(result))
+    assert compare_bracket(restored['witness_report'], restored['receiver_capture']) == result
+
+
+def test_adjacent_endpoint_pairs_keep_failures_and_do_not_bridge_them():
+    witness, capture = bracket_inputs()
+    failed = dict(server='synthetic-witness', status='WITNESS_UNAVAILABLE', reason='test failure')
+    witness['attempts'].insert(1, failed)
+    result = compare_bracket(witness, capture)
+    assert result['temporal_association']['attempt_pairs'] == [
+        dict(before_attempt_index=0, after_attempt_index=1, server='synthetic-witness'),
+        dict(before_attempt_index=1, after_attempt_index=2, server='synthetic-witness')]
+    assert result['coverage']['bracket_status_counts'] == {'INSUFFICIENT_EVIDENCE': 2}
+    assert result['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert result['witness_report']['attempts'][1] == failed
+
+
+def test_interleaved_endpoints_stay_separate_and_do_not_vote_on_contradictions():
+    witness, capture = bracket_inputs()
+    other = copy.deepcopy(witness['attempts'])
+    for attempt in other:
+        attempt['server'] = attempt['exchange']['server'] = 'other-endpoint'
+        for field in ('server_receive_unix_ns', 'server_transmit_unix_ns'):
+            attempt['exchange'][field] += NS
+    witness['attempts'] = [witness['attempts'][0], other[0], witness['attempts'][1], other[1]]
+    result = compare_bracket(witness, capture)
+    assert [(p['before_attempt_index'], p['after_attempt_index'])
+            for p in result['temporal_association']['attempt_pairs']] == [(0, 2), (1, 3)]
+    assert [c['status'] for c in result['records'][0]['bracket_comparisons']] == [
+        'NOT_DISTINGUISHABLE', 'INCONSISTENT_WITH_WITNESS']
+    assert result['coverage']['records_with_any_temporal_support'] == 1
+    assert result['status'] == 'CONDITIONAL_TIME_DIAGNOSTIC'
+
+
+@pytest.mark.parametrize('change', ['missing_name', 'bad_name', 'endpoint_mismatch', 'missing_exchange',
+                                  'malformed_record', 'age_violation', 'malformed_age_violation'])
+def test_invalid_bracket_inputs_remain_visible_and_cannot_create_support(change):
+    witness, capture = bracket_inputs()
+    if change in ('missing_name', 'bad_name'):
+        witness['attempts'].insert(1, dict(server=None if change == 'missing_name' else [],
+                                         status='WITNESS_UNAVAILABLE'))
+    elif change == 'endpoint_mismatch':
+        witness['attempts'][0]['exchange']['server'] = 'other-endpoint'
+    elif change == 'missing_exchange':
+        del witness['attempts'][0]['exchange']
+    elif change == 'malformed_record':
+        capture['records'][0] = None
+    else:
+        capture['records'][0]['epoch_age_budget_violation'] = (
+            'independently observed scheduling overrun' if change == 'age_violation' else False)
+    result = compare_bracket(witness, capture)
+    assert result['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert result['coverage']['records_with_any_temporal_support'] == 0
+    assert result['receiver_capture'] == capture
+    assert result['witness_report'] == witness
+    if change in ('missing_name', 'bad_name'):
+        assert result['temporal_association']['attempt_pairs'] == []
+        assert result['temporal_association']['unnamed_attempt_indices'] == [1]
+    else:
+        assert result['coverage']['bracket_status_counts'] == {'INSUFFICIENT_EVIDENCE': 1}
+
+
+def test_cli_optional_brackets_replay_offline_and_keep_single_comparisons(monkeypatch, tmp_path, capsys):
+    from pnt.__main__ import main
+    from pnt import time_witness
+
+    witness, capture = bracket_inputs()
+    paths = [tmp_path / name for name in ('witness.json', 'receiver.json', 'comparison.json')]
+    paths[0].write_text(json.dumps(witness), encoding='utf-8')
+    paths[1].write_text(json.dumps(capture), encoding='utf-8')
+    monkeypatch.setattr(time_witness, 'probe', lambda *a, **k: pytest.fail('offline replay accessed network'))
+    monkeypatch.setattr('sys.argv', ['pnt', 'time-compare', str(paths[0]), str(paths[1]),
+                                   '--utc-error-ns', str(MS), '--utc-error-source', 'test',
+                                   '--bracket-span-ns', str(200 * MS), '--output', str(paths[2])])
+    main()
+    report = json.loads(paths[2].read_bytes())
+    assert report['coverage']['comparison_status_counts'] == {'INSUFFICIENT_EVIDENCE': 2}
+    assert report['coverage']['bracket_status_counts'] == {'NOT_DISTINGUISHABLE': 1}
+    assert report['sources']['witness']['sha256'] == hashlib.sha256(paths[0].read_bytes()).hexdigest()
+    assert 'Bracket comparisons' in capsys.readouterr().out
+    saved = paths[2].read_bytes()
+    with pytest.raises(SystemExit):
+        main()
+    assert paths[2].read_bytes() == saved
+
+
 @pytest.mark.parametrize('offset,status', [(0, 'NOT_DISTINGUISHABLE'),
                                          (NS, 'INCONSISTENT_WITH_WITNESS'),
                                          (-NS, 'INCONSISTENT_WITH_WITNESS')])
