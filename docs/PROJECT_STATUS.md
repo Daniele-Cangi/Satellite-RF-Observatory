@@ -24,8 +24,21 @@ pacchetto. Riusa il confronto temporale esistente; tAcc resta un dato dichiarato
 dal ricevitore, non un budget indipendente. Ogni misura e ogni testimone rimangono
 nel rapporto, comprese associazioni mancanti, ritardi ignoti e fallimenti.
 I test con UTC alterato di un secondo sono sintetici e non chiudono P2.
-Il passo successivo e raccogliere quei timestamp nello stesso collettore,
-con limiti difendibili su ritardo e UTC, prima della prova fisica benigno/challenge.
+`time-capture` ora raccoglie un flusso UBX/TCP e sonde NTS nello stesso processo,
+con un calendario esplicito e un solo contatore monotono. Conserva byte,
+ricevute, errori, limiti raggiunti e tentativi interrotti; riusa il rapporto e
+il replay esistenti. Il ritardo della soluzione resta un parametro indipendente:
+se ignoto, i pacchetti vengono salvati senza produrre un confronto utilizzabile.
+I test di acquisizione usano TCP locale reale con UTC/NTS sintetici, senza
+strumenti. La review Codex della #188 non ha trovato problemi rilevanti.
+La [qualifica con NTS reale e sorgente UTC virtuale](../research/exploratory/PNT_CONCURRENT_TIME_QUALIFICATION.md)
+ottiene 4/4 scambi autenticati e 84 pacchetti ricevuti: solo 3/336 confronti
+rientrano nella finestra ammessa, e anche la baseline del PC e discordante.
+Tre pacchetti superano il ritardo assunto di 20 ms; tutti gli esiti restano
+visibili senza cambiare i budget. L'interoperabilita e verificata, mentre la
+copertura temporale e povera e non si dimostra beneficio su GNSS reale.
+Restano un flusso GNSS reale e limiti difendibili su ritardo e UTC, prima della
+prova fisica benigno/challenge; l'ingresso TCP da solo non prova l'origine RF.
 Nessuna vecchia epoca GNSS viene associata retroattivamente alle sonde NTS.
 
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)

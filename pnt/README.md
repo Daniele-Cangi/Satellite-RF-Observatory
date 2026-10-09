@@ -66,8 +66,9 @@ UTC and an independently supported uncertainty budget remain required.
 ## Receiver UTC and NTS capture association
 
 `time-compare` imports a receiver capture and reuses the same causal interval
-arithmetic. This is **offline replay of collector records**, not a live serial
-collector or a demonstrated GNSS spoofing detector:
+arithmetic. This is **offline replay of collector records**. Concurrent
+acquisition is available through `time-capture` below; neither command is a
+demonstrated GNSS spoofing detector:
 
 ```console
 python -m pnt time-compare time-witness.json receiver-utc.json --utc-error-ns 1000000 --utc-error-source "Uncalibrated development assumption" --output receiver-time.json
@@ -89,9 +90,9 @@ A trusted collector must record packet receipt against the **same host counter**
 as NTS. Matching IDs only checks the supplied association; the importer cannot
 prove that those tags were captured honestly or on the same machine/boot.
 Do not copy an ID from a later NTS report onto a historical GNSS recording.
-The current `time-probe` still captures only the host clock; receiver capture
-plumbing remains a separate integration task. `receiver_claim` is reusable by
-that collector once it establishes these receipts and bounds.
+`time-probe` still captures only the host clock. The `time-capture` collector
+below records receiver receipts on that same counter and reuses `receiver_claim`;
+solution-age bounds still require independent support.
 
 UTC belongs to the **navigation solution epoch**, not the time when the host
 receives the packet. The adapter derives its monotonic event bracket as:
@@ -129,6 +130,82 @@ conversion, one-second shifts, asymmetric delay, latency, source conflicts,
 missing evidence and unchanged arithmetic replay. These qualify the software;
 they do not demonstrate RF attack detection, real receiver timing uncertainty
 or improvement at equal false-alarm rates. Historical reports stay unchanged.
+
+## Concurrent receiver UTC and NTS collection
+
+`time-capture` reads a **pure UBX stream from an explicit TCP endpoint** while
+sampling NTS in the same process. It sends no receiver commands, changes no
+clock, and needs no new dependencies beyond the existing NTS environment.
+The source can be an existing receiver's TCP forwarder or a software source;
+identify its origin/configuration honestly. A local TCP fixture is supported
+for development without instruments. TCP does not authenticate the receiver or
+establish whether a stream is live: forwarding an old recording remains replay.
+
+For an already configured source on localhost port 5000:
+
+```console
+python -m pnt time-capture --receiver-host 127.0.0.1 --receiver-port 5000 --receiver-source "Describe the existing receiver and forwarder" --server ptbtime1.ptb.de --rounds 10 --interval 1 --server-error-ns 1000000 --rate-error-ppm 100 --budget-source "Uncalibrated development assumptions" --utc-error-ns 1000000 --utc-error-source "Uncalibrated development assumption" --output utc-capture.json
+```
+
+This command retains packets but deliberately leaves solution age unknown:
+the report is `INSUFFICIENT_EVIDENCE` and exit code 2 preserves the data.
+To enable comparison, supply **all three** `--epoch-age-min-ns`,
+`--epoch-age-max-ns`, and `--epoch-age-source` options. Bounds must cover
+solution-to-final-byte **userspace read completion**, including receiver
+processing, serialization, the forwarder, network queues, OS buffering,
+scheduling and conversion to host-counter units. Example development flags
+`--epoch-age-min-ns 0 --epoch-age-max-ns 20000000 --epoch-age-source
+"Uncalibrated illustrative 0-20 ms assumption"` are not a measured receiver
+bound. Neither arrival order nor UTC agreement justifies them. Enlarging age
+uncertainty can make every solution fall outside the NTS capture; that remains
+insufficient evidence, without extrapolation or choosing a smaller bound.
+
+Each declared round samples every listed hostname once, sequentially, using the
+existing authenticated transport. Round starts have fixed offsets on the host
+counter; a slow round starts subsequent work late, without replacing, skipping
+or retrying its failures. `--interval` is a start schedule, not an accuracy or
+whole-operation deadline. TCP connects to the first resolved address once;
+there is no reconnection or alternative-address fallback. NTS socket timeout
+and DNS limitations are the same as `time-probe`.
+
+The collector uses [Python's `monotonic_ns`](https://docs.python.org/3/library/time.html#time.monotonic_ns)
+for both paths. For each nonblocking read, timestamps bracket the read itself;
+waiting for readiness happens before the bracket. A fragmented packet uses
+the read that supplied its final byte. Several packets returned together have
+the same receipt bracket and may have different unknown upstream ages.
+Receipts are not antenna, UART or kernel arrival timestamps. The run generates
+one fresh capture ID, binds it to all its NTS exchanges and receiver records,
+and performs no historical timestamp reassignment.
+
+The single JSON reuses `pnt-gnss-time-comparison-v1`, with regime
+`EXPLORATORY_LIVE_CAPTURE`, original receiver and witness records embedded,
+every record/attempt comparison, and acquisition metadata. Raw read chunks,
+their receipt brackets and a SHA-256 of the exact collected byte stream are
+retained. Other UBX messages stay in those chunks with verified packet counts.
+Malformed framing/checksums stop parsing, without resynchronization; unread or
+unparsed observations are not claimed as evaluated. Corrupt/incomplete UTC
+packets and pending bytes remain visible. Byte retention defaults to 1 MiB
+(`--max-bytes`, up to 16 MiB); 4096 read chunks is a second memory limit.
+EOF, source failure, truncation and reached limits are explicit in `stream`.
+Valid partial results remain separate from these acquisition failures.
+Interruption during the NTS schedule saves retained inputs and marks the
+interrupted/unstarted attempts, with CLI exit code 130. Existing outputs are
+never overwritten.
+
+Arithmetic replay uses the existing `compare_receiver_capture` function on
+the embedded `witness_report` and `receiver_capture`, with the recorded UTC
+budget. No new verifier, authority or replay protocol is introduced. All
+budgets remain explicit and uncalibrated here. Acquisition tests combine real
+loopback TCP reads with synthetic NTS timestamps and UTC packets; they verify
+collection and failure behavior without establishing physical accuracy, RF
+authenticity or P2 detection benefit. Co-captured **real** receiver data and
+defensible latency/error budgets remain necessary for the physical comparison.
+
+The [live transport qualification](../research/exploratory/PNT_CONCURRENT_TIME_QUALIFICATION.md)
+retains four authenticated real NTS exchanges and a virtual UTC stream. Only
+3/336 pairs are evaluable; the host baseline is also inconsistent, and three
+packets violate the assumed age budget. These failures remain visible. This
+verifies interoperability, not benign/challenge performance or GNSS detection.
 
 ## Offline GNSS recordings
 

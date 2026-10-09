@@ -85,18 +85,14 @@ def compare_claim(exchange, claim, *, server_error_ns, rate_error_ppm):
                 claim_minus_witness_ns=[offset_lower, offset_upper], separation_ns=gap)
 
 
-def collect(servers, *, server_error_ns, rate_error_ppm, budget_source, timeout_s=5.0, ntp_era=0):
-    """Observe listed endpoints once, retaining every success and failure.
-
-    Probe the host clock only. A GNSS adapter must independently establish its
-    UTC scale, timestamp semantics and capture association before using this API.
-    """
+def _new_report(servers, *, server_error_ns, rate_error_ppm, budget_source, timeout_s, ntp_era):
+    """Shared report and validation for host probes and receiver co-capture."""
     _budgets(server_error_ns, rate_error_ppm)
     if not budget_source.strip() or not servers or len(set(servers)) != len(servers):
         raise ValueError('nonempty budget source and distinct explicit servers required')
     if not math.isfinite(timeout_s) or timeout_s <= 0 or type(ntp_era) is not int or ntp_era < 0:
         raise ValueError('positive finite timeout and nonnegative integer NTP era required')
-    report = dict(schema='pnt-internet-time-v1', regime='EXPLORATORY_TRANSPORT_QUALIFICATION',
+    return dict(schema='pnt-internet-time-v1', regime='EXPLORATORY_TRANSPORT_QUALIFICATION',
                   status='CONDITIONAL_TIME_DIAGNOSTIC',
                   assumptions=dict(server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm,
                                    budget_source=budget_source, calibrated=False,
@@ -105,23 +101,39 @@ def collect(servers, *, server_error_ns, rate_error_ppm, budget_source, timeout_
                   protocol=dict(timeout_s=timeout_s, ntp_era=ntp_era,
                                 attempts_per_endpoint=1, automatic_retries=False),
                   claim_source='HOST_WALL_CLOCK_NOT_GNSS', attempts=[])
+
+
+def _observe_attempt(attempt, *, server_error_ns, rate_error_ppm, timeout_s, ntp_era, capture_id=None):
+    """Update an already retained attempt; never retry or replace a failure."""
+    try:
+        exchange = probe(attempt['server'], timeout_s=timeout_s, ntp_era=ntp_era)
+    except ImportError:
+        attempt['reason'] = 'MISSING_OPTIONAL_NTS_DEPENDENCIES'
+        return
+    except (NTSError, OSError) as error:
+        attempt['reason'] = str(error) if isinstance(error, NTSError) else type(error).__name__
+        return
+    exchange['capture_id'] = capture_id if capture_id is not None else str(uuid.uuid4())
+    claim = dict(capture_id=exchange['capture_id'], unix_ns=exchange['host_claim_unix_ns'],
+                 error_ns=exchange['host_claim_error_ns'],
+                 start_monotonic_ns=exchange['claim_start_monotonic_ns'],
+                 end_monotonic_ns=exchange['claim_end_monotonic_ns'])
+    attempt.update(status='AUTHENTICATED_EXCHANGE', exchange=exchange, claim=claim,
+                   comparison=compare_claim(exchange, claim, server_error_ns=server_error_ns,
+                                            rate_error_ppm=rate_error_ppm))
+
+
+def collect(servers, *, server_error_ns, rate_error_ppm, budget_source, timeout_s=5.0, ntp_era=0):
+    """Observe listed endpoints once, retaining every success and failure.
+
+    Probe the host clock only. A GNSS adapter must independently establish its
+    UTC scale, timestamp semantics and capture association before using this API.
+    """
+    report = _new_report(servers, server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm,
+                         budget_source=budget_source, timeout_s=timeout_s, ntp_era=ntp_era)
     for server in servers:
         attempt = dict(server=server, status='WITNESS_UNAVAILABLE')
         report['attempts'].append(attempt)
-        try:
-            exchange = probe(server, timeout_s=timeout_s, ntp_era=ntp_era)
-        except ImportError:
-            attempt['reason'] = 'MISSING_OPTIONAL_NTS_DEPENDENCIES'
-            continue
-        except (NTSError, OSError) as error:
-            attempt['reason'] = str(error) if isinstance(error, NTSError) else type(error).__name__
-            continue
-        exchange['capture_id'] = str(uuid.uuid4())
-        claim = dict(capture_id=exchange['capture_id'], unix_ns=exchange['host_claim_unix_ns'],
-                     error_ns=exchange['host_claim_error_ns'],
-                     start_monotonic_ns=exchange['claim_start_monotonic_ns'],
-                     end_monotonic_ns=exchange['claim_end_monotonic_ns'])
-        attempt.update(status='AUTHENTICATED_EXCHANGE', exchange=exchange, claim=claim,
-                       comparison=compare_claim(exchange, claim, server_error_ns=server_error_ns,
-                                                rate_error_ppm=rate_error_ppm))
+        _observe_attempt(attempt, server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm,
+                         timeout_s=timeout_s, ntp_era=ntp_era)
     return report
