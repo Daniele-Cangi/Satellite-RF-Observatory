@@ -1,4 +1,4 @@
-"""CLI for offline diagnostics of a fixed GPS receiver."""
+"""PNT diagnostics: offline GNSS analysis and read-only Internet time probes."""
 
 import argparse
 import json
@@ -22,6 +22,14 @@ def write_report(report, output):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
+    time_probe = commands.add_parser('time-probe', help='read-only NTS time witness; no GNSS authenticity verdict')
+    time_probe.add_argument('--server', action='append', required=True, help='explicit NTS-KE hostname')
+    time_probe.add_argument('--server-error-ns', type=int, required=True, help='declared server UTC error budget')
+    time_probe.add_argument('--rate-error-ppm', type=int, required=True, help='declared monotonic rate error budget')
+    time_probe.add_argument('--budget-source', required=True, help='provenance or explicit uncalibrated assumption')
+    time_probe.add_argument('--timeout', type=float, default=5.0, help='per-stage socket timeout, seconds')
+    time_probe.add_argument('--ntp-era', type=int, default=0, help='explicit era; 0 covers 1900-2036')
+    time_probe.add_argument('--output', required=True, type=Path)
     android = commands.add_parser('android-raw', help='normalize GPS L1/L5 Android Raw logs; no attack verdict')
     android.add_argument('local_log', type=Path, help='GNSS Logger text, plain or gzip')
     android.add_argument('--output', required=True, type=Path)
@@ -83,6 +91,21 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output already exists; choose a new report path')
+    if args.command == 'time-probe':
+        from .time_witness import collect
+
+        try:
+            report = collect(args.server, server_error_ns=args.server_error_ns,
+                             rate_error_ppm=args.rate_error_ppm, budget_source=args.budget_source,
+                             timeout_s=args.timeout, ntp_era=args.ntp_era)
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT time input/output error: {error}\n')
+        count = sum(a['status'] == 'AUTHENTICATED_EXCHANGE' for a in report['attempts'])
+        print(f"{count}/{len(report['attempts'])} authenticated exchanges; {args.output}")
+        if not count:
+            parser.exit(2, 'No authenticated time witness; failures retained in report\n')
+        return
     if args.command == 'android-raw':
         try:
             report = inspect_android_raw(args.local_log)

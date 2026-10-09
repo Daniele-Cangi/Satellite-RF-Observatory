@@ -71,13 +71,21 @@ def admit_codes(codes, position, navigation, time_s, context, *, code_transform=
     return admitted, excluded, records
 
 
-def evaluate_epoch(time_s, observations, positions, navigation, context, *, code_transform=ionosphere_free):
+def evaluate_epoch(time_s, observations, positions, navigation, context, *,
+                   code_transform=ionosphere_free, receiver_times=None):
     """Keep local coverage, matched comparisons and individual remote fits explicit."""
+    # Native measurements need not fall on the same grid. Evaluate their actual
+    # tags, including navigation selection, rather than retiming their codes.
+    times = {name: time_s for name in observations} if receiver_times is None else dict(receiver_times)
+    if (set(times) != set(observations) or
+            any(isinstance(t, bool) or not isinstance(t, (int, float)) or
+                not math.isfinite(t) or not 0 <= t < 86400 for t in times.values())):
+        raise ValueError('one finite within-day measurement time required per receiver')
     admitted, excluded, records = {}, {}, {}
     for receiver, codes in observations.items():
-        admitted[receiver], excluded[receiver], selected = admit_codes(
-            codes, positions[receiver], navigation, time_s, context, code_transform=code_transform)
-        records.update(selected)
+        admitted[receiver], excluded[receiver], records[receiver] = admit_codes(
+            codes, positions[receiver], navigation, times[receiver], context,
+            code_transform=code_transform)
 
     def fit(receiver, satellites):
         if len(satellites) < MIN_SATELLITES:
@@ -85,8 +93,8 @@ def evaluate_epoch(time_s, observations, positions, navigation, context, *, code
                     'reason': 'fewer than four admitted satellites'}
         try:
             values = {sv: admitted[receiver][sv] for sv in sorted(satellites)}
-            model_records = {sv: records[sv] for sv in values}
-            result = fit_clock(values, positions[receiver], model_records, time_s, context)
+            model_records = {sv: records[receiver][sv] for sv in values}
+            result = fit_clock(values, positions[receiver], model_records, times[receiver], context)
         except ValueError as error:
             return {'status': 'MODEL_FAILED', 'satellites': sorted(satellites), 'reason': str(error)}
         return {'status': 'EVALUATED', 'satellites': sorted(satellites), **result}
@@ -128,8 +136,11 @@ def evaluate_epoch(time_s, observations, positions, navigation, context, *, code
                          reference_disagreement=disagreement)
         else:
             joint['status'] = 'MODEL_FAILED'
-    return {'gpst_s': time_s, 'source_code_satellites': {name: sorted(codes) for name, codes in observations.items()},
-            'excluded_satellites': excluded, 'standalone_receiver_fits': standalone, 'matched': joint}
+    result = {'gpst_s': time_s, 'source_code_satellites': {name: sorted(codes) for name, codes in observations.items()},
+              'excluded_satellites': excluded, 'standalone_receiver_fits': standalone, 'matched': joint}
+    if receiver_times is not None:
+        result['receiver_measurement_gpst_s'] = times
+    return result
 
 
 def validate_window(start_s, stop_s):

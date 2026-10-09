@@ -1,4 +1,4 @@
-# Stato del progetto — 3 ottobre 2026
+# Stato del progetto — 9 ottobre 2026
 
 ## Obiettivo
 
@@ -6,6 +6,32 @@ La direzione attiva e il [piano di sicurezza PNT](PNT_SECURITY_PLAN.md):
 confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
 valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
 Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
+
+Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
+aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
+ritardi simmetrici e confronto in sola lettura con il clock del PC. La prova
+documentata ottiene 2/2 risposte autenticate, intervalli larghi 74,882 e 82,501 ms
+e un clock locale in ritardo rispetto a entrambi. I budget di errore sono
+assunzioni non calibrate; non e una prova di spoofing o una misura GNSS.
+Questo apre il canale che le doppie differenze non osservano. Restano da
+stabilire associazione con UTC GNSS co-acquisito, budget indipendente e beneficio
+su casi benigni/challenge. P2 resta aperta; sito e pilot vengono dopo.
+
+La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
+e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
+PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,
+associazioni temporali ambigue nei log e fase/Doppler scambiati nel campione.
+Nessun timestamp nativo entra nella precedente griglia entro 1 ms.
+Il [confronto alle epoche native](../research/exploratory/PNT_YUNNAN_NATIVE_NETWORK.md)
+ora usa i timestamp originali nel motore condiviso, senza ritimare codici,
+e abbina PVT/clock tramite iTOW. I riferimenti contemporanei JFNG/CUSV sono
+acquisiti dal mirror pubblico ESA: 204/240 epoche sono valutabili sulle stesse
+osservazioni e satelliti. Il combinato riduce il residuo in 91 casi e lo aumenta
+in 113; peggiora la mediana nell'ora dopo i disturbi. Le grandi anomalie locali
+restano visibili. Accesso ai dati e supporto software sono risolti, ma vantaggio
+di rilevamento, falsi allarmi qualificati e tempo indipendente restano aperti.
+Il prossimo passo fisico deve mostrare un'inconsistenza che il controllo locale
+non vede; aggiungere filtri a posteriori a questo campione non lo dimostrerebbe.
 
 L'intake [Android Raw](../pnt/README.md) aggiunge l'importazione GPS L1/L5 dai
 log di telefoni, con clock a precisione nanosecondo, identificazione esplicita
