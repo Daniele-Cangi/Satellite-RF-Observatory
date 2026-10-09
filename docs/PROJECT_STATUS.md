@@ -75,6 +75,16 @@ benigno/challenge restano aperti. Nessuna autenticazione RF o convalida della
 posizione e dichiarata; P2 resta aperta. Dettagli ed errori conservati sono
 descritti nella guida Android; nessun acquisto di sensori.
 
+Il [replay di sensibilita UTC](../pnt/README.md#receiver-utc-offset-sensitivity)
+ora misura il limite del confronto su quella registrazione reale, spostando
+solo l'UTC decodificato con budget e associazione invariati. Scarti software di
+entrambi i segni di 1 e 10 ms restano indistinguibili nelle 32 epoche supportate;
+50, 100 e 1.000 ms risultano discordanti. Le altre 54 epoche restano insufficienti;
+con associazione ignota lo restano tutte le 86. La griglia e esplorativa su dati
+gia esposti, senza simulazione RF o stima dei falsi allarmi. Il risultato
+definisce cosa questa raccolta puo distinguere; il passo utile resta la qualifica
+indipendente dei budget e una prova benigno/challenge, non altre soglie adattate.
+
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,
