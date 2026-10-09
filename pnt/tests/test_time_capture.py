@@ -1,4 +1,5 @@
 from contextlib import closing
+import copy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -383,3 +384,59 @@ def test_retained_concurrent_captures_replay_and_preserve_qualification_failures
     assert counts == qualification['variant_comparison_status_counts']
     # Producer packets beyond capture end are retained, not promoted to measurements.
     assert len(qualification['source_packets']) >= len(captured['records'])
+
+
+def test_retained_bracket_replay_preserves_inputs_budgets_and_known_age_failures(monkeypatch):
+    monkeypatch.setattr(time_witness, 'probe', lambda *a, **k: pytest.fail('offline replay accessed network'))
+    folder = Path(__file__).resolve().parents[2] / 'research/exploratory/results'
+    original_bytes = (folder / 'pnt_concurrent_time_transport_v1.json').read_bytes()
+    assert hashlib.sha256(original_bytes).hexdigest() == '9afddab9cd9fc73e9fdf02de0f2e4e13085afac0c9bbb2dc8e06c4627e1efb42'
+    original = json.loads(original_bytes)
+    report = json.loads((folder / 'pnt_temporal_bracket_replay_v1.json').read_bytes())
+    qualification = report['qualification']
+    assert qualification['source_report']['sha256'] == hashlib.sha256(original_bytes).hexdigest()
+    assert qualification['scope'] == 'EXPLORATORY_EXPOSED_CAPTURE_BRACKET_REPLAY'
+    assert qualification['prior_exposure'] is True
+    assert qualification['new_acquisition'] is qualification['real_gnss_measurements'] is False
+    assert qualification['rf_attack'] is qualification['independently_benign_baseline'] is False
+    assert qualification['original_coverage'] == original['coverage']
+    assert qualification['marked_age_budget_violations'] == original['qualification']['observed_age_budget_violations']
+    assert hashlib.sha256(qualification['driver_source'].encode()).hexdigest() == qualification['driver_sha256']
+    assert report['witness_report'] == original['witness_report']
+    assert report['assumptions'] == original['assumptions']
+    assert report['temporal_association']['maximum_span_ns'] == 2 * NS
+
+    expected_capture = copy.deepcopy(original['receiver_capture'])
+    for violation in qualification['marked_age_budget_violations']:
+        index = violation['source_index']
+        expected_capture['records'][index]['epoch_age_budget_violation'] = (
+            'independent source/receipt brackets exceed the retained 0-20 ms age assumption')
+        row = report['records'][index]
+        assert row['status'] == 'INSUFFICIENT_EVIDENCE'
+        assert 'known epoch-age budget violation' in row['reason']
+        assert all(c['status'] == 'INSUFFICIENT_EVIDENCE' for c in row['comparisons'] + row['bracket_comparisons'])
+    assert report['receiver_capture'] == expected_capture  # Exact packets, receipts, age bounds and stream.
+    replay = compare_receiver_capture(report['witness_report'], expected_capture,
+                                      utc_error_ns=report['assumptions']['utc_error_ns'],
+                                      utc_error_source=report['assumptions']['utc_error_source'],
+                                      bracket_span_ns=report['temporal_association']['maximum_span_ns'])
+    for key in ('records', 'coverage', 'assumptions', 'temporal_association'):
+        assert replay[key] == report[key]
+    assert report['coverage']['receiver_records'] == 84
+    assert report['coverage']['records_with_single_support'] == 3
+    assert report['coverage']['records_with_any_temporal_support'] == 45
+    assert report['coverage']['comparison_status_counts'] == original['coverage']['comparison_status_counts']
+
+    counts, support = {}, {}
+    for source, row in zip(original['qualification']['source_packets'], report['records']):
+        variant = source['variant']
+        variant_counts = counts.setdefault(variant, {})
+        variant_support = support.setdefault(variant, dict(records=0, supported_records=0))
+        variant_support['records'] += 1
+        variant_support['supported_records'] += any(
+            c['status'] != 'INSUFFICIENT_EVIDENCE' for c in row['comparisons'] + row['bracket_comparisons'])
+        for comparison in row['bracket_comparisons']:
+            status = comparison['status']
+            variant_counts[status] = variant_counts.get(status, 0) + 1
+    assert counts == qualification['variant_bracket_status_counts']
+    assert support == qualification['variant_record_support']

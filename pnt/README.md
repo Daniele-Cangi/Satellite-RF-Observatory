@@ -85,6 +85,7 @@ and a `records` array. Each record contains:
 | `receipt_start_monotonic_ns`, `receipt_end_monotonic_ns` | Bracket containing receipt of that packet, on the NTS collector's counter |
 | `epoch_age_min_monotonic_ns`, `epoch_age_max_monotonic_ns` | Independent bounds on solution-to-receipt age, expressed in that counter's nanoseconds |
 | `epoch_age_source` | Provenance or explicit development assumption for the age bounds |
+| `epoch_age_budget_violation` (optional) | Nonempty reason when independent evidence already shows the age assumption failed; the record stays insufficient |
 
 A trusted collector must record packet receipt against the **same host counter**
 as NTS. Matching IDs only checks the supplied association; the importer cannot
@@ -106,7 +107,9 @@ The age interval must cover receiver processing, serialization, buffering and
 collector scheduling, including its conversion to host-counter units and
 timestamp uncertainty. Neither packet order, wall-clock agreement nor receiver
 UTC/iTOW supplies this independent bound. Unknown age is unavailable evidence;
-there is no zero-latency default or extrapolation beyond the NTS exchange.
+there is no zero-latency default. The default comparison requires the event
+inside one NTS exchange. Known age-budget failures must remain unavailable;
+absence of a violation marker does not certify an uncalibrated age assumption.
 
 The adapter follows [u-blox UBX-20033631 R05, section 3.15.22.1]
 (https://content.u-blox.com/sites/default/files/ZED-F9T-10B_InterfaceDescription_UBX-20033631.pdf):
@@ -120,9 +123,9 @@ The supplied UTC-error budget stays explicit and uncalibrated by the importer.
 
 Every receiver record is compared separately with every retained NTS attempt.
 Unavailable witnesses, unmatched IDs, stale epochs and missing metadata remain
-visible with their denominators. No nearest observation, interval intersection,
-quorum or positive authentication decision is substituted. The CLI saves exact
-input-file hashes and refuses output replacement; exit code 2 also saves the
+visible with their denominators. No nearest observation, cross-endpoint interval
+intersection, quorum or positive authentication decision is substituted.
+The CLI saves exact input-file hashes and refuses output replacement; exit code 2 also saves the
 report when no associated comparison is possible.
 
 Offline tests use synthetic UBX frames and NTS timestamps to check signed UTC
@@ -130,6 +133,49 @@ conversion, one-second shifts, asymmetric delay, latency, source conflicts,
 missing evidence and unchanged arithmetic replay. These qualify the software;
 they do not demonstrate RF attack detection, real receiver timing uncertainty
 or improvement at equal false-alarm rates. Historical reports stay unchanged.
+
+## UTC between adjacent NTS exchanges
+
+`time-compare` and `time-capture` accept optional `--bracket-span-ns N`.
+The API equivalent is `compare_receiver_capture(..., bracket_span_ns=N)`.
+Without it, existing report fields and single-exchange arithmetic stay unchanged.
+This adds comparison between **two adjacent attempts at the same configured
+endpoint**, on the same capture counter. The entire receiver solution bracket
+must lie after the earlier exchange's receive and before the later one's send.
+The complete outer send-to-receive span must be at most `N` counter ns.
+
+For an already retained, honestly associated capture, an illustrative two-second
+maximum is explicit (it is not a calibrated counter or receiver bound):
+
+```console
+python -m pnt time-compare witness.json receiver.json --utc-error-ns 1000000 --utc-error-source "Uncalibrated development assumption" --bracket-span-ns 2000000000 --output NEW.json
+```
+
+`utc_bracket_interval` transports the causal UTC interval at the earlier receive
+forward, and the one at the later send backward. Elapsed-time bounds round
+outward using the declared rate budget and counter resolution. It intersects
+these constraints from **one endpoint**, without assuming symmetric delay.
+The server UTC budget applies at both anchors; the counter-rate budget must hold
+throughout the entire span, a stronger assumption than one short exchange.
+An inconsistent anchor pair, excessive span, different capture domain or missing anchor remains
+`INSUFFICIENT_EVIDENCE`, rather than a receiver-fault verdict. No event outside
+the two exchanges is supported by one-sided extrapolation.
+
+Pairing uses retained attempt order and configured names, never receiver UTC,
+residuals or best RTT. Failures participate in adjacency: two successes cannot
+bridge a failed intervening attempt. An unnamed attempt breaks the pending
+chains because its endpoint cannot be established. Every record is still
+compared with every single attempt and every planned pair. Different endpoints
+remain separate; shared PTB endpoints do not establish independent authorities.
+
+The existing schema adds `temporal_association`, per-record
+`bracket_comparisons`, separate bracket counts and record-level coverage counts.
+It retains the original single-exchange comparisons and denominators. Replay
+uses the same function with the recorded `maximum_span_ns`; no new replay
+protocol or evidence seal is needed. Network delay can still hide a time fault,
+and overlap never authenticates GNSS. The
+[exposed-capture replay](../research/exploratory/PNT_TEMPORAL_BRACKET_REPLAY.md)
+records coverage and known age failures separately from the original outcome.
 
 ## Concurrent receiver UTC and NTS collection
 
@@ -194,8 +240,8 @@ never overwritten.
 
 Arithmetic replay uses the existing `compare_receiver_capture` function on
 the embedded `witness_report` and `receiver_capture`, with the recorded UTC
-budget. No new verifier, authority or replay protocol is introduced. All
-budgets remain explicit and uncalibrated here. Acquisition tests combine real
+budget and optional bracket span above. No new verifier, authority or replay
+protocol is introduced. All budgets remain explicit and uncalibrated here. Acquisition tests combine real
 loopback TCP reads with synthetic NTS timestamps and UTC packets; they verify
 collection and failure behavior without establishing physical accuracy, RF
 authenticity or P2 detection benefit. Co-captured **real** receiver data and
