@@ -17,6 +17,17 @@ Questo apre il canale che le doppie differenze non osservano. Restano da
 stabilire associazione con UTC GNSS co-acquisito, budget indipendente e beneficio
 su casi benigni/challenge. P2 resta aperta; sito e pilot vengono dopo.
 
+L'[adattatore UTC del ricevitore](../pnt/README.md#receiver-utc-and-nts-capture-association)
+aggiunge `time-compare`: decodifica UBX-NAV-TIMEUTC e usa ricevute sul contatore
+NTS con un intervallo esplicito fra epoca della soluzione e ricezione del
+pacchetto. Riusa il confronto temporale esistente; tAcc resta un dato dichiarato
+dal ricevitore, non un budget indipendente. Ogni misura e ogni testimone rimangono
+nel rapporto, comprese associazioni mancanti, ritardi ignoti e fallimenti.
+I test con UTC alterato di un secondo sono sintetici e non chiudono P2.
+Il passo successivo e raccogliere quei timestamp nello stesso collettore,
+con limiti difendibili su ritardo e UTC, prima della prova fisica benigno/challenge.
+Nessuna vecchia epoca GNSS viene associata retroattivamente alle sonde NTS.
+
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,

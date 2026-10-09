@@ -49,8 +49,9 @@ a fix or RF origin. See the [method and real transport result]
 `pnt.time_witness.compare_claim(exchange, claim, ...)` accepts an independently
 established UTC claim with uncertainty and a monotonic event bracket **inside
 the same exchange**, sharing its collector capture ID. It refuses extrapolation
-or another capture domain. No adapter currently claims that an archived GNSS
-epoch has this association. The NTP era is explicit (`--ntp-era 0`, 1900-2036),
+or another capture domain. The receiver UTC adapter below requires independent
+capture receipts; an archived GNSS epoch alone has no such association.
+The NTP era is explicit (`--ntp-era 0`, 1900-2036),
 not chosen from the potentially wrong host calendar; leap-announcement states
 are unsupported and rejected. Certificate verification still requires a
 sufficiently correct bootstrap calendar; an untrusted date is not bypassed.
@@ -61,6 +62,73 @@ inspection by a trusted collector. They are **not a server-signed forensic
 certificate**: NTS uses symmetric authentication. This channel neither verifies
 historical Yunnan epochs nor demonstrates GNSS spoof detection. Co-captured GNSS
 UTC and an independently supported uncertainty budget remain required.
+
+## Receiver UTC and NTS capture association
+
+`time-compare` imports a receiver capture and reuses the same causal interval
+arithmetic. This is **offline replay of collector records**, not a live serial
+collector or a demonstrated GNSS spoofing detector:
+
+```console
+python -m pnt time-compare time-witness.json receiver-utc.json --utc-error-ns 1000000 --utc-error-source "Uncalibrated development assumption" --output receiver-time.json
+```
+
+The receiver JSON has schema `pnt-gnss-utc-capture-v1`, a nonempty
+`receiver_source` identifying the receiver/configuration or synthetic origin,
+and a `records` array. Each record contains:
+
+| Field | Meaning |
+|---|---|
+| `packet_hex` | One entire UBX-NAV-TIMEUTC packet, including header and checksum, encoded as hex |
+| `capture_id` | Collector identity shared with the associated NTS exchange |
+| `receipt_start_monotonic_ns`, `receipt_end_monotonic_ns` | Bracket containing receipt of that packet, on the NTS collector's counter |
+| `epoch_age_min_monotonic_ns`, `epoch_age_max_monotonic_ns` | Independent bounds on solution-to-receipt age, expressed in that counter's nanoseconds |
+| `epoch_age_source` | Provenance or explicit development assumption for the age bounds |
+
+A trusted collector must record packet receipt against the **same host counter**
+as NTS. Matching IDs only checks the supplied association; the importer cannot
+prove that those tags were captured honestly or on the same machine/boot.
+Do not copy an ID from a later NTS report onto a historical GNSS recording.
+The current `time-probe` still captures only the host clock; receiver capture
+plumbing remains a separate integration task. `receiver_claim` is reusable by
+that collector once it establishes these receipts and bounds.
+
+UTC belongs to the **navigation solution epoch**, not the time when the host
+receives the packet. The adapter derives its monotonic event bracket as:
+
+```text
+solution start = receipt start - maximum age
+solution end   = receipt end   - minimum age
+```
+
+The age interval must cover receiver processing, serialization, buffering and
+collector scheduling, including its conversion to host-counter units and
+timestamp uncertainty. Neither packet order, wall-clock agreement nor receiver
+UTC/iTOW supplies this independent bound. Unknown age is unavailable evidence;
+there is no zero-latency default or extrapolation beyond the NTS exchange.
+
+The adapter follows [u-blox UBX-20033631 R05, section 3.15.22.1]
+(https://content.u-blox.com/sites/default/files/ZED-F9T-10B_InterfaceDescription_UBX-20033631.pdf):
+20-byte NAV-TIMEUTC payload, checksum, valid UTC/week/TOW flags, calendar and
+signed fractional nanoseconds. It converts UTC directly to integer Unix ns;
+no GPST-to-UTC offset is guessed from the host clock. Leap-second calendars,
+invalid frames and unsupported fields remain `INSUFFICIENT_EVIDENCE`.
+The receiver's `tAcc` and UTC-standard code remain metadata. They establish
+neither independence nor authenticity; **tAcc never sets the comparison budget**.
+The supplied UTC-error budget stays explicit and uncalibrated by the importer.
+
+Every receiver record is compared separately with every retained NTS attempt.
+Unavailable witnesses, unmatched IDs, stale epochs and missing metadata remain
+visible with their denominators. No nearest observation, interval intersection,
+quorum or positive authentication decision is substituted. The CLI saves exact
+input-file hashes and refuses output replacement; exit code 2 also saves the
+report when no associated comparison is possible.
+
+Offline tests use synthetic UBX frames and NTS timestamps to check signed UTC
+conversion, one-second shifts, asymmetric delay, latency, source conflicts,
+missing evidence and unchanged arithmetic replay. These qualify the software;
+they do not demonstrate RF attack detection, real receiver timing uncertainty
+or improvement at equal false-alarm rates. Historical reports stay unchanged.
 
 ## Offline GNSS recordings
 
