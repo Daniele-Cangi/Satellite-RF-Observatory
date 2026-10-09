@@ -24,13 +24,26 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     time_probe = commands.add_parser('time-probe', help='read-only NTS time witness; no GNSS authenticity verdict')
-    time_probe.add_argument('--server', action='append', required=True, help='explicit NTS-KE hostname')
-    time_probe.add_argument('--server-error-ns', type=int, required=True, help='declared server UTC error budget')
-    time_probe.add_argument('--rate-error-ppm', type=int, required=True, help='declared monotonic rate error budget')
-    time_probe.add_argument('--budget-source', required=True, help='provenance or explicit uncalibrated assumption')
-    time_probe.add_argument('--timeout', type=float, default=5.0, help='per-stage socket timeout, seconds')
-    time_probe.add_argument('--ntp-era', type=int, default=0, help='explicit era; 0 covers 1900-2036')
-    time_probe.add_argument('--output', required=True, type=Path)
+    time_capture = commands.add_parser('time-capture', help='co-capture UBX/TCP and NTS; conditional UTC diagnostic')
+    for command in (time_probe, time_capture):
+        command.add_argument('--server', action='append', required=True, help='explicit NTS-KE hostname')
+        command.add_argument('--server-error-ns', type=int, required=True, help='declared server UTC error budget')
+        command.add_argument('--rate-error-ppm', type=int, required=True, help='declared monotonic rate error budget')
+        command.add_argument('--budget-source', required=True, help='provenance or explicit uncalibrated assumption')
+        command.add_argument('--timeout', type=float, default=5.0, help='per-stage socket timeout, seconds')
+        command.add_argument('--ntp-era', type=int, default=0, help='explicit era; 0 covers 1900-2036')
+        command.add_argument('--output', required=True, type=Path)
+    time_capture.add_argument('--receiver-host', required=True, help='explicit live UBX/TCP source; no file replay')
+    time_capture.add_argument('--receiver-port', type=int, required=True)
+    time_capture.add_argument('--receiver-source', required=True, help='receiver/forwarder configuration and provenance')
+    time_capture.add_argument('--rounds', type=int, default=1, help='declared NTS sampling rounds; no automatic retries')
+    time_capture.add_argument('--interval', type=float, default=1.0, help='seconds between scheduled round starts')
+    time_capture.add_argument('--max-bytes', type=int, default=1048576, help='receiver byte retention limit')
+    time_capture.add_argument('--epoch-age-min-ns', type=int, help='solution-to-userspace-receipt bound, host-counter ns')
+    time_capture.add_argument('--epoch-age-max-ns', type=int)
+    time_capture.add_argument('--epoch-age-source', help='independent qualification or explicit uncalibrated assumption')
+    time_capture.add_argument('--utc-error-ns', type=int, required=True, help='declared receiver UTC error budget; not tAcc')
+    time_capture.add_argument('--utc-error-source', required=True)
     time_compare = commands.add_parser('time-compare', help='compare captured UBX receiver UTC with NTS; offline replay')
     time_compare.add_argument('witness_report', type=Path, help='existing pnt-internet-time-v1 JSON')
     time_compare.add_argument('receiver_capture', type=Path, help='UTC packets and same-counter receipt/age bounds')
@@ -117,6 +130,28 @@ def main():
         print(f"{report['status']}: {report['coverage']['comparison_status_counts']}; {args.output}")
         if report['status'] == 'INSUFFICIENT_EVIDENCE':
             parser.exit(2, 'No associated receiver UTC comparison; failures retained in report\n')
+        return
+    if args.command == 'time-capture':
+        from .time_capture import collect_receiver_time
+
+        try:
+            report = collect_receiver_time(
+                args.server, receiver_host=args.receiver_host, receiver_port=args.receiver_port,
+                receiver_source=args.receiver_source, server_error_ns=args.server_error_ns,
+                rate_error_ppm=args.rate_error_ppm, budget_source=args.budget_source,
+                utc_error_ns=args.utc_error_ns, utc_error_source=args.utc_error_source,
+                timeout_s=args.timeout, ntp_era=args.ntp_era, rounds=args.rounds,
+                interval_s=args.interval, max_bytes=args.max_bytes,
+                epoch_age_min_ns=args.epoch_age_min_ns, epoch_age_max_ns=args.epoch_age_max_ns,
+                epoch_age_source=args.epoch_age_source)
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT time capture/output error: {error}\n')
+        print(f"{report['status']}: {report['coverage']['comparison_status_counts']}; {args.output}")
+        if report['acquisition']['interrupted']:
+            parser.exit(130, 'Capture interrupted; retained data and attempt outcomes saved\n')
+        if report['status'] == 'INSUFFICIENT_EVIDENCE':
+            parser.exit(2, 'No associated receiver UTC comparison; capture and failures saved\n')
         return
     if args.command == 'time-probe':
         from .time_witness import collect
