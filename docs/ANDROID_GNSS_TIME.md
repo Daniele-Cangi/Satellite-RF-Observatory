@@ -257,3 +257,11 @@ rapporti coincide con il replay originale, esclusi i metadati CLI delle sorgenti
 Il risultato orienta la prossima prova: qualificare indipendentemente
 l'associazione temporale e gli altri budget, poi misurare ripetibilita, copertura
 e beneficio benigno/challenge. Ripetere la stessa griglia non colmerebbe P2.
+
+Il [confronto abbinato locale/NTS](../research/exploratory/PNT_PHONE_PAIRED_TIME.md)
+ora distingue scarti costanti e salti introdotti durante il log. Lo scarto
+costante di ±100 ms produce discordanza NTS in 145 righe/25 epoche che il
+controllo locale relativo lascia passare. I piccoli salti mostrano invece
+casi visibili solo localmente. L'originale ha gia 51 discordanze locali/9 epoche
+sotto i budget assunti, di cui 38 righe/7 epoche abbinate: nessun tasso di falsi
+allarmi o beneficio RF e qualificato. La nuova informazione non chiude P2.

@@ -269,3 +269,4 @@ research/exploratory/results/*
 !research/exploratory/results/pnt_concurrent_time_transport_v1.json
 !research/exploratory/results/pnt_temporal_bracket_replay_v1.json
 !research/exploratory/results/pnt_phone_time_sensitivity_v1.json
+!research/exploratory/results/pnt_phone_paired_time_v1.json

@@ -50,6 +50,10 @@ def main():
     time_sensitivity.add_argument('comparison_report', type=Path, help='existing receiver UTC/NTS comparison JSON')
     time_sensitivity.add_argument('--offset-ns', action='append', type=int, required=True,
                                   help='explicit signed software UTC offset; zero control is always included')
+    time_sensitivity.add_argument('--local-counter-resolution-ns', type=int,
+                                  help='opt in to local elapsed-clock control; explicit counter tick bound')
+    time_sensitivity.add_argument('--onset-monotonic-ns', type=int,
+                                  help='apply offset only from this reported event midpoint; default whole capture')
     time_sensitivity.add_argument('--output', required=True, type=Path)
     android_compare = commands.add_parser('android-time-compare', help='offline same-phone GNSS clock/NTS comparison')
     android_compare.add_argument('witness_report', type=Path)
@@ -131,7 +135,9 @@ def main():
 
         try:
             comparison_bytes = args.comparison_report.read_bytes()
-            report = assess_time_sensitivity(json.loads(comparison_bytes), args.offset_ns)
+            report = assess_time_sensitivity(json.loads(comparison_bytes), args.offset_ns,
+                                              local_counter_resolution_ns=args.local_counter_resolution_ns,
+                                              onset_monotonic_ns=args.onset_monotonic_ns)
             report['source'] = dict(path=str(args.comparison_report),
                                   sha256=hashlib.sha256(comparison_bytes).hexdigest())
             write_report(report, args.output)
@@ -140,6 +146,8 @@ def main():
         print(f"{report['status']}; {args.output}")
         for case in report['offset_cases']:
             print(f"Offset {case['utc_claim_offset_ns']} ns: {case['record_pattern_counts']}")
+            if args.local_counter_resolution_ns is not None:
+                print(f"Paired local/external: {case['paired_pattern_counts']}")
         if report['status'] == 'INSUFFICIENT_EVIDENCE':
             parser.exit(2, 'No associated receiver UTC comparison; all offset cases remain insufficient\n')
         return
