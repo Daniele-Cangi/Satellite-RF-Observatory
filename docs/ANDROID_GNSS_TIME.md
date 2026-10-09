@@ -49,6 +49,15 @@ si puo clonare `main` al posto del branch indicato.
 3. Dopo la fine delle sonde, fermare il logger ed esportare il file originale.
    Trasferire al PC quel file e `phone-nts.json`, mantenendo anche gli originali.
 
+Il cavo non e necessario durante la raccolta: GNSS Logger e NTS girano sul
+telefono, che puo usare il Wi-Fi. Per il controllo dal PC, Android 11+ offre
+[debug wireless con abbinamento](https://developer.android.com/tools/adb#wireless-android11)
+sulla stessa rete; una connessione USB iniziale puo preparare l'ambiente.
+Verificare il collegamento wireless prima di scollegare il cavo; un cambio rete
+puo disattivare il debug e cambiare IP/porta. Il PC controlla le app e recupera i
+file, senza fornire il contatore alle sonde. Al termine fermare le app di raccolta
+e i servizi temporanei e disattivare il debug wireless usato per la sessione.
+
 ```sh
 python -m pnt android-time-probe --server ptbtime1.ptb.de --server ptbtime2.ptb.de --collector-source "Samsung; GNSS Logger e Termux sullo stesso telefono e avvio" --rounds 10 --interval 3 --server-error-ns 1000000 --rate-error-ppm 100 --budget-source "Assunzioni di sviluppo non calibrate; non limiti certificati" --output phone-nts.json
 ```
@@ -161,3 +170,39 @@ Originali NTS/GNSS ed errori sono conservati localmente, non pubblicati come
 corpus di qualifica. La ricezione indoor non e qualificata: serve una nuova
 registrazione con cielo visibile, senza associare le nuove misure alle vecchie
 sonde. Compatibilita effettiva dei timestamp e confronto GNSS/NTS restano aperti.
+
+## Raccolta esterna via Wi-Fi del 10 ottobre 2026
+
+Una nuova registrazione, sullo stesso dispositivo e codice, con telefono fermo
+all'esterno secondo la dichiarazione dell'utente e senza USB, produce 1.897
+righe Raw. Il canale GNSS/NTS reale e ora percorso: i valori clock necessari
+sono presenti nelle righe GPS utilizzabili. Gli input restano privati sul
+telefono e PC; questo resoconto non e un corpus pubblico di qualifica.
+
+| Copertura conservata | Risultato |
+|---|---|
+| Intake GPS | 479 righe normalizzate, 86 epoche clock distinte |
+| Altre costellazioni | 1.418 righe contate come non supportate |
+| Sonde NTS, 10 round/3 s | 13/20 autenticate; 7 timeout conservati; durata 44,222 s |
+| GPS nella finestra NTS con associazione assunta | 262 righe, 44 epoche; 217 righe fuori finestra restano insufficienti |
+| Confronti dentro singoli scambi | 0/9.580 utilizzabili |
+| Confronti fra tentativi consecutivi dello stesso endpoint | 183/8.622 `NOT_DISTINGUISHABLE`; 8.439 insufficienti |
+| Righe GPS con supporto temporale | 183/479, corrispondenti a 32/86 epoche distinte |
+
+Prima di esaminare i nuovi valori sono stati dichiarati gli stessi budget di
+sviluppo: errore server 1 ms, deriva 100 ppm, errore UTC GNSS 1 ms e bracket
+massimo 15 s. Il primo replay mantiene ignoto il limite di associazione fra
+GNSS e CLOCK_BOOTTIME: tutti i confronti restano insufficienti, con uscita 2.
+Un secondo replay separato usa l'assunzione esplicita di associazione di 1 ms,
+gia dichiarata, e produce la copertura della tabella. Non e un limite misurato o
+calibrato. Le 32 epoche distinte non sono 32 campioni statisticamente indipendenti.
+
+I 183 intervalli utilizzabili sono larghi 40,548--58,437 ms: la compatibilita non
+certifica l'accuratezza del clock, l'origine RF o una prestazione di rilevamento.
+I 13 confronti con il clock del **sistema Android** rimangono
+discordanti, separati dagli intervalli NTS di 361,543--432,124 ms; il clock GNSS
+e una sorgente diversa. Nessuna soglia o finestra e stata adattata al risultato.
+Entrambi i rapporti si riproducono esattamente con il replay esistente; gli
+hash degli input originali coincidono con quelli dell'involucro CLI.
+Restano da qualificare i budget e dimostrare il beneficio su benigno/challenge;
+P2 e aperta e questa e una diagnostica esplorativa condizionale.
