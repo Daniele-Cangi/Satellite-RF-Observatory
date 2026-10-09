@@ -23,6 +23,14 @@ def _budgets(server_error_ns, rate_error_ppm):
         raise ValueError('rate_error_ppm must be below one million')
 
 
+def _elapsed_bounds(delta, resolution, rate_error_ppm):
+    """Outward integer bounds; rate budget holds throughout the elapsed time."""
+    lower = max(0, delta - 2 * resolution) * 1000000 // (1000000 + rate_error_ppm)
+    numerator = (delta + 2 * resolution) * 1000000
+    denominator = 1000000 - rate_error_ppm
+    return lower, (numerator + denominator - 1) // denominator
+
+
 def utc_interval(exchange, *, event_start_ns, event_end_ns, server_error_ns, rate_error_ppm):
     """UTC bound for an event bracket wholly inside this exchange's capture.
 
@@ -49,9 +57,7 @@ def utc_interval(exchange, *, event_start_ns, event_end_ns, server_error_ns, rat
     def upper_elapsed(delta):
         # Each endpoint can be quantized by one counter resolution. Integer
         # arithmetic avoids loss of precision at modern Unix ns (~10**18).
-        numerator = (delta + 2 * resolution) * 1000000
-        denominator = 1000000 - rate_error_ppm
-        return (numerator + denominator - 1) // denominator
+        return _elapsed_bounds(delta, resolution, rate_error_ppm)[1]
 
     if transmitted - received > upper_elapsed(r - s) + 2 * server_error_ns:
         raise ValueError('server processing time exceeds the complete exchange')
@@ -63,6 +69,67 @@ def utc_interval(exchange, *, event_start_ns, event_end_ns, server_error_ns, rat
                 event_start_monotonic_ns=a, event_end_monotonic_ns=b)
 
 
+def utc_bracket_interval(before, after, *, event_start_ns, event_end_ns,
+                         server_error_ns, rate_error_ppm, max_span_ns):
+    """Bound an event between two same-endpoint exchanges, without symmetry.
+
+    Propagate the causal UTC intervals at the earlier receive and later send
+    using counter-rate bounds, then intersect their constraints. Server UTC
+    bounds apply at both anchors; the rate budget holds across the entire span.
+    No one-sided holdover or mixing
+    endpoints; incompatible anchors are insufficient evidence, not a GNSS fault.
+    """
+    _budgets(server_error_ns, rate_error_ppm)
+    _integer(max_span_ns, 'max_span_ns', 1)
+    if not isinstance(before, dict) or not isinstance(after, dict):
+        raise ValueError('two authenticated exchange objects are required')
+    capture_id, server = before.get('capture_id'), before.get('server')
+    if not isinstance(capture_id, str) or not capture_id.strip() or after.get('capture_id') != capture_id:
+        raise ValueError('bracket anchors do not share a capture domain')
+    if not isinstance(server, str) or not server.strip() or after.get('server') != server:
+        raise ValueError('bracket anchors must use the same configured NTS endpoint')
+    r1 = _integer(before['receive_monotonic_ns'], 'earlier receive_monotonic_ns', 0)
+    s2 = _integer(after['send_monotonic_ns'], 'later send_monotonic_ns', r1)
+    a = _integer(event_start_ns, 'event_start_ns', r1)
+    b = _integer(event_end_ns, 'event_end_ns', a)
+    if b > s2:
+        raise ValueError('event is not wholly between the two exchanges; no extrapolation')
+    options = dict(server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm)
+    first = utc_interval(before, event_start_ns=r1, event_end_ns=r1, **options)
+    last = utc_interval(after, event_start_ns=s2, event_end_ns=s2, **options)
+    if after['receive_monotonic_ns'] - before['send_monotonic_ns'] > max_span_ns:
+        raise ValueError('complete bracket span exceeds max_span_ns')
+    resolution = max(before['monotonic_resolution_ns'], after['monotonic_resolution_ns'])
+
+    def elapsed(delta):
+        return _elapsed_bounds(delta, resolution, rate_error_ppm)
+
+    minimum, maximum = elapsed(s2 - r1)
+    if (last['lower_unix_ns'] > first['upper_unix_ns'] + maximum
+            or last['upper_unix_ns'] < first['lower_unix_ns'] + minimum):
+        raise ValueError('bracket anchors contradict the declared UTC/counter budgets')
+    lower = max(first['lower_unix_ns'] + elapsed(a - r1)[0],
+                last['lower_unix_ns'] - elapsed(s2 - a)[1])
+    upper = min(first['upper_unix_ns'] + elapsed(b - r1)[1],
+                last['upper_unix_ns'] - elapsed(s2 - b)[0])
+    if lower > upper:
+        raise ValueError('inconsistent bracket time interval')
+    return dict(lower_unix_ns=lower, upper_unix_ns=upper, width_ns=upper - lower,
+                event_start_monotonic_ns=a, event_end_monotonic_ns=b)
+
+
+def _compare_interval(interval, claim):
+    utc = _integer(claim['unix_ns'], 'claim unix_ns')
+    error = _integer(claim['error_ns'], 'claim error_ns', 0)
+    # Signed interval for claimant minus witness UTC, including claim error.
+    offset_lower = utc - error - interval['upper_unix_ns']
+    offset_upper = utc + error - interval['lower_unix_ns']
+    gap = max(0, offset_lower, -offset_upper)
+    return dict(status='INCONSISTENT_WITH_WITNESS' if gap else 'NOT_DISTINGUISHABLE',
+                conditional_on_declared_budgets=True, witness_interval=interval,
+                claim_minus_witness_ns=[offset_lower, offset_upper], separation_ns=gap)
+
+
 def compare_claim(exchange, claim, *, server_error_ns, rate_error_ppm):
     """Check a co-captured UTC claim. Overlap never authenticates GNSS or a fix."""
     _budgets(server_error_ns, rate_error_ppm)
@@ -72,17 +139,28 @@ def compare_claim(exchange, claim, *, server_error_ns, rate_error_ppm):
         interval = utc_interval(exchange, event_start_ns=claim['start_monotonic_ns'],
                                 event_end_ns=claim['end_monotonic_ns'],
                                 server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm)
-        utc = _integer(claim['unix_ns'], 'claim unix_ns')
-        error = _integer(claim['error_ns'], 'claim error_ns', 0)
+        return _compare_interval(interval, claim)
     except (KeyError, ValueError) as error:
         return dict(status='INSUFFICIENT_EVIDENCE', reason=str(error))
-    # Signed interval for claimant minus witness UTC, including claim error.
-    offset_lower = utc - error - interval['upper_unix_ns']
-    offset_upper = utc + error - interval['lower_unix_ns']
-    gap = max(0, offset_lower, -offset_upper)
-    return dict(status='INCONSISTENT_WITH_WITNESS' if gap else 'NOT_DISTINGUISHABLE',
-                conditional_on_declared_budgets=True, witness_interval=interval,
-                claim_minus_witness_ns=[offset_lower, offset_upper], separation_ns=gap)
+
+
+def compare_bracket_claim(before, after, claim, *, server_error_ns, rate_error_ppm, max_span_ns):
+    """Compare one claim with its two retained anchors; never choose anchors here."""
+    _budgets(server_error_ns, rate_error_ppm)
+    _integer(max_span_ns, 'max_span_ns', 1)
+    try:
+        if not all(isinstance(value, dict) for value in (before, after, claim)):
+            raise ValueError('bracket anchors and claim must be objects')
+        if not before.get('capture_id') or claim.get('capture_id') != before['capture_id']:
+            raise ValueError('claim and bracket do not share a capture domain')
+        interval = utc_bracket_interval(before, after,
+                                        event_start_ns=claim['start_monotonic_ns'],
+                                        event_end_ns=claim['end_monotonic_ns'],
+                                        server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm,
+                                        max_span_ns=max_span_ns)
+        return _compare_interval(interval, claim)
+    except (KeyError, ValueError) as error:
+        return dict(status='INSUFFICIENT_EVIDENCE', reason=str(error))
 
 
 def _new_report(servers, *, server_error_ns, rate_error_ppm, budget_source, timeout_s, ntp_era):

@@ -35,8 +35,17 @@ La [qualifica con NTS reale e sorgente UTC virtuale](../research/exploratory/PNT
 ottiene 4/4 scambi autenticati e 84 pacchetti ricevuti: solo 3/336 confronti
 rientrano nella finestra ammessa, e anche la baseline del PC e discordante.
 Tre pacchetti superano il ritardo assunto di 20 ms; tutti gli esiti restano
-visibili senza cambiare i budget. L'interoperabilita e verificata, mentre la
-copertura temporale e povera e non si dimostra beneficio su GNSS reale.
+visibili senza cambiare i budget. L'interoperabilita e verificata; questa prova
+storica conserva la sua copertura limitata e non dimostra beneficio su GNSS reale.
+L'[estensione fra scambi NTS consecutivi](../research/exploratory/PNT_TEMPORAL_BRACKET_REPLAY.md)
+aggiunge l'opzione `--bracket-span-ns`: stessa sorgente e contatore, limite
+esplicito sull'intero intervallo e budget di deriva validi anche fra gli scambi.
+Nel replay esplorativo degli stessi dati, la copertura passa da 3 a 45/84
+pacchetti, equivalenti a 15 epoche virtuali nei tre casi software. I tre ritardi
+fuori budget rimangono insufficienti; i 57 confronti fra scambi utilizzabili
+sono discordanti, anche per la baseline. Nessun nuovo dato GNSS, guadagno di
+rilevamento o falso allarme qualificato viene dichiarato. Gli esiti originali
+e i confronti con singolo scambio restano conservati, senza nuovi sigilli.
 Restano un flusso GNSS reale e limiti difendibili su ritardo e UTC, prima della
 prova fisica benigno/challenge; l'ingresso TCP da solo non prova l'origine RF.
 Nessuna vecchia epoca GNSS viene associata retroattivamente alle sonde NTS.

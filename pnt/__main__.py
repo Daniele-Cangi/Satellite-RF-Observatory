@@ -50,6 +50,9 @@ def main():
     time_compare.add_argument('--utc-error-ns', type=int, required=True, help='declared GNSS UTC error budget; not tAcc')
     time_compare.add_argument('--utc-error-source', required=True, help='independent qualification or explicit assumption')
     time_compare.add_argument('--output', required=True, type=Path)
+    for command in (time_compare, time_capture):
+        command.add_argument('--bracket-span-ns', type=int,
+                             help='opt in to adjacent same-endpoint UTC brackets; maximum complete span in counter ns')
     android = commands.add_parser('android-raw', help='normalize GPS L1/L5 Android Raw logs; no attack verdict')
     android.add_argument('local_log', type=Path, help='GNSS Logger text, plain or gzip')
     android.add_argument('--output', required=True, type=Path)
@@ -119,7 +122,8 @@ def main():
             capture_bytes = args.receiver_capture.read_bytes()
             report = compare_receiver_capture(json.loads(witness_bytes), json.loads(capture_bytes),
                                               utc_error_ns=args.utc_error_ns,
-                                              utc_error_source=args.utc_error_source)
+                                              utc_error_source=args.utc_error_source,
+                                              bracket_span_ns=args.bracket_span_ns)
             report['sources'] = {
                 name: dict(path=str(path), sha256=hashlib.sha256(content).hexdigest())
                 for name, path, content in [('witness', args.witness_report, witness_bytes),
@@ -128,6 +132,8 @@ def main():
         except (ValueError, OSError) as error:
             parser.exit(2, f'PNT time input/output error: {error}\n')
         print(f"{report['status']}: {report['coverage']['comparison_status_counts']}; {args.output}")
+        if args.bracket_span_ns is not None:
+            print(f"Bracket comparisons: {report['coverage']['bracket_status_counts']}")
         if report['status'] == 'INSUFFICIENT_EVIDENCE':
             parser.exit(2, 'No associated receiver UTC comparison; failures retained in report\n')
         return
@@ -143,11 +149,13 @@ def main():
                 timeout_s=args.timeout, ntp_era=args.ntp_era, rounds=args.rounds,
                 interval_s=args.interval, max_bytes=args.max_bytes,
                 epoch_age_min_ns=args.epoch_age_min_ns, epoch_age_max_ns=args.epoch_age_max_ns,
-                epoch_age_source=args.epoch_age_source)
+                epoch_age_source=args.epoch_age_source, bracket_span_ns=args.bracket_span_ns)
             write_report(report, args.output)
         except (ValueError, OSError) as error:
             parser.exit(2, f'PNT time capture/output error: {error}\n')
         print(f"{report['status']}: {report['coverage']['comparison_status_counts']}; {args.output}")
+        if args.bracket_span_ns is not None:
+            print(f"Bracket comparisons: {report['coverage']['bracket_status_counts']}")
         if report['acquisition']['interrupted']:
             parser.exit(130, 'Capture interrupted; retained data and attempt outcomes saved\n')
         if report['status'] == 'INSUFFICIENT_EVIDENCE':
