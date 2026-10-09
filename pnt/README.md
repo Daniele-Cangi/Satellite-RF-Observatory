@@ -201,6 +201,12 @@ collection and failure behavior without establishing physical accuracy, RF
 authenticity or P2 detection benefit. Co-captured **real** receiver data and
 defensible latency/error budgets remain necessary for the physical comparison.
 
+The [live transport qualification](../research/exploratory/PNT_CONCURRENT_TIME_QUALIFICATION.md)
+retains four authenticated real NTS exchanges and a virtual UTC stream. Only
+3/336 pairs are evaluable; the host baseline is also inconsistent, and three
+packets violate the assumed age budget. These failures remain visible. This
+verifies interoperability, not benign/challenge performance or GNSS detection.
+
 ## Offline GNSS recordings
 
 Install `requirements-positioning.txt`, then run from the repository root:

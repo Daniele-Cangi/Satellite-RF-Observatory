@@ -2,6 +2,7 @@ from contextlib import closing
 from datetime import datetime, timezone
 import hashlib
 import json
+from pathlib import Path
 import queue
 import socket
 import struct
@@ -312,3 +313,52 @@ def test_cli_saves_unknown_age_report_and_never_overwrites(rig, monkeypatch, tmp
     assert error.value.code == 2
     assert output.read_bytes() == saved
     assert rig['calls'] == ['good']
+
+
+@pytest.mark.parametrize('report_name', ['pnt_concurrent_time_transport_v1.json'])
+def test_retained_concurrent_captures_replay_and_preserve_qualification_failures(report_name, monkeypatch):
+    def forbidden(*args, **kwargs):
+        pytest.fail('saved-capture replay must remain offline')
+
+    monkeypatch.setattr(time_witness, 'probe', forbidden)
+    path = Path(__file__).resolve().parents[2] / 'research/exploratory/results' / report_name
+    report = json.loads(path.read_bytes())
+    qualification = report['qualification']
+    captured, witness = report['receiver_capture'], report['witness_report']
+    replay = compare_receiver_capture(witness, captured,
+                                      utc_error_ns=report['assumptions']['utc_error_ns'],
+                                      utc_error_source=report['assumptions']['utc_error_source'])
+    assert replay['records'] == report['records']
+    assert replay['coverage'] == report['coverage']
+    assert replay['assumptions'] == report['assumptions']
+    raw_stream = b''.join(bytes.fromhex(c['hex']) for c in captured['stream']['chunks'])
+    assert hashlib.sha256(raw_stream).hexdigest() == captured['stream']['sha256']
+    assert len(raw_stream) == captured['stream']['bytes_received']
+    assert raw_stream == b''.join(bytes.fromhex(r['packet_hex']) for r in captured['records'])
+    assert hashlib.sha256(qualification['driver_source'].encode('utf-8')).hexdigest() == qualification['driver_sha256']
+    assert qualification['real_gnss_measurements'] is False
+    assert qualification['rf_attack'] is False
+    assert qualification['independently_benign_baseline'] is False
+    assert qualification['scope'] == 'EXPLORATORY_LIVE_NTS_SYNTHETIC_RECEIVER_INTEROPERABILITY'
+
+    violations, mismatches, counts = [], [], {}
+    for index, record in enumerate(captured['records']):
+        source = qualification['source_packets'][index]
+        variant = source['variant']
+        if record['packet_hex'] != source['packet_hex']:
+            mismatches.append(index)
+            variant = 'UNASSIGNED_SOURCE_RECORD'
+        else:
+            minimum = record['receipt_start_monotonic_ns'] - source['epoch_end_monotonic_ns']
+            maximum = record['receipt_end_monotonic_ns'] - source['epoch_start_monotonic_ns']
+            if minimum < record['epoch_age_min_monotonic_ns'] or maximum > record['epoch_age_max_monotonic_ns']:
+                violations.append(dict(source_index=index, observed_age_min_ns=minimum, observed_age_max_ns=maximum))
+        status_counts = counts.setdefault(variant, {})
+        for comparison in report['records'][index]['comparisons']:
+            status = comparison['status']
+            status_counts[status] = status_counts.get(status, 0) + 1
+    assert violations == qualification['observed_age_budget_violations']
+    assert mismatches == qualification['source_record_mismatches']
+    assert counts == qualification['variant_comparison_status_counts']
+    # Producer packets beyond capture end are retained, not promoted to measurements.
+    assert len(qualification['source_packets']) >= len(captured['records'])

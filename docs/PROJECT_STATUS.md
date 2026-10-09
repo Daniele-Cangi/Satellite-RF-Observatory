@@ -31,6 +31,12 @@ il replay esistenti. Il ritardo della soluzione resta un parametro indipendente:
 se ignoto, i pacchetti vengono salvati senza produrre un confronto utilizzabile.
 I test di acquisizione usano TCP locale reale con UTC/NTS sintetici, senza
 strumenti. La review Codex della #188 non ha trovato problemi rilevanti.
+La [qualifica con NTS reale e sorgente UTC virtuale](../research/exploratory/PNT_CONCURRENT_TIME_QUALIFICATION.md)
+ottiene 4/4 scambi autenticati e 84 pacchetti ricevuti: solo 3/336 confronti
+rientrano nella finestra ammessa, e anche la baseline del PC e discordante.
+Tre pacchetti superano il ritardo assunto di 20 ms; tutti gli esiti restano
+visibili senza cambiare i budget. L'interoperabilita e verificata, mentre la
+copertura temporale e povera e non si dimostra beneficio su GNSS reale.
 Restano un flusso GNSS reale e limiti difendibili su ritardo e UTC, prima della
 prova fisica benigno/challenge; l'ingresso TCP da solo non prova l'origine RF.
 Nessuna vecchia epoca GNSS viene associata retroattivamente alle sonde NTS.
