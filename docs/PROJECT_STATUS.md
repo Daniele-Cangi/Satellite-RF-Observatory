@@ -50,6 +50,17 @@ Restano un flusso GNSS reale e limiti difendibili su ritardo e UTC, prima della
 prova fisica benigno/challenge; l'ingresso TCP da solo non prova l'origine RF.
 Nessuna vecchia epoca GNSS viene associata retroattivamente alle sonde NTS.
 
+Il [percorso Android sullo stesso telefono](ANDROID_GNSS_TIME.md) aggiunge
+`android-time-probe` in Termux con CLOCK_BOOTTIME e `android-time-compare` sui
+campi clock di GNSS Logger. Riusa acquisizione NTS, intervalli e replay esistenti;
+le dipendenze geometriche non servono per il confronto temporale. Associazione
+a telefono/avvio, GPS-UTC esterno e budget restano espliciti; timestamp assenti o
+associazione temporale ignota rimangono insufficienti. I test sono sintetici,
+anche quando usano il campione Raw pubblico. Il prossimo passo e una breve
+registrazione sul Samsung disponibile, insieme alle sonde NTS dello stesso
+telefono: nessun acquisto di sensori. Compatibilita del timestamp e qualifica
+dei limiti restano da verificare sul dispositivo reale; P2 resta aperta.
+
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,

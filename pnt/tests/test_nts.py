@@ -250,11 +250,12 @@ def test_first_tcp_address_failure_is_retained_without_trying_the_next(monkeypat
     assert '192.0.2.10' in failure['reason'] and 'ConnectionRefusedError' in failure['reason']
 
 
+@pytest.mark.parametrize('boottime', [False, True])
 @pytest.mark.parametrize('tcp_family,tcp_peer,negotiated_host', [
     (socket.AF_INET, ('192.0.2.10', 4460), None),
     (socket.AF_INET6, ('fe80::1234', 4460, 7, 12), None),
     (socket.AF_INET, ('192.0.2.10', 4460), 'redirect.example')])
-def test_udp_uses_tcp_peer_unless_authenticated_negotiation_redirects(monkeypatch, tcp_family, tcp_peer, negotiated_host):
+def test_udp_uses_tcp_peer_unless_authenticated_negotiation_redirects(monkeypatch, tcp_family, tcp_peer, negotiated_host, boottime):
     contacts, resolutions, sockets = [], [], []
     udp_peer = ((tcp_peer[0], 8123, *tcp_peer[2:]) if negotiated_host is None else ('192.0.2.20', 8123))
     monkeypatch.setattr(nts, '_key_exchange', lambda *a, **k:
@@ -296,7 +297,23 @@ def test_udp_uses_tcp_peer_unless_authenticated_negotiation_redirects(monkeypatc
         return ReplySocket()
 
     monkeypatch.setattr(nts.socket, 'socket', create_socket)
-    result = nts.probe('multi.example')
+    options = {}
+    if boottime:
+        ticks = iter([100, 200, 300])
+        monkeypatch.setattr(nts.time, 'CLOCK_BOOTTIME', 7, raising=False)
+        monkeypatch.setattr(nts.time, 'clock_getres', lambda clock_id: 2e-9, raising=False)
+        monkeypatch.setattr(nts.time, 'clock_gettime_ns', lambda clock_id: next(ticks), raising=False)
+        monkeypatch.setattr(nts.time, 'monotonic_ns', lambda: pytest.fail('wrong capture clock'))
+        options['clock_id'] = 7
+    result = nts.probe('multi.example', **options)
+    if boottime:
+        assert result['counter_clock'] == 'CLOCK_BOOTTIME'
+        assert result['monotonic_resolution_ns'] == 2
+        assert result['send_monotonic_ns'] == 100
+        assert result['claim_start_monotonic_ns'] == 200
+        assert result['receive_monotonic_ns'] == result['claim_end_monotonic_ns'] == 300
+    else:
+        assert 'counter_clock' not in result
     assert contacts == [udp_peer]
     assert sockets[0][0] == (tcp_family if negotiated_host is None else socket.AF_INET)
     assert resolutions == ([] if negotiated_host is None else [('redirect.example', 8123)])

@@ -7,7 +7,6 @@ The output reuses the receiver comparison report and its arithmetic replay.
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 import hashlib
-import math
 import select
 import socket
 import threading
@@ -16,7 +15,7 @@ import uuid
 
 from research.exploratory.pnt_rawx_recovery import ubx_packets
 from .gnss_time import _text, compare_receiver_capture
-from .time_witness import _integer, _new_report, _observe_attempt
+from .time_witness import _integer, _new_report, _sample_schedule, _sampling_interval_ns
 
 
 def _read_receiver(sock, capture, stop, *, max_bytes):
@@ -113,15 +112,10 @@ def collect_receiver_time(servers, *, receiver_host, receiver_port, receiver_sou
     _text(utc_error_source, 'utc_error_source')
     if bracket_span_ns is not None:
         _integer(bracket_span_ns, 'bracket_span_ns', 1)
-    _integer(rounds, 'rounds', 1)
+    _sampling_interval_ns(rounds, interval_s)
     _integer(max_bytes, 'max_bytes', 1)
-    if rounds > 1000 or max_bytes > 16 * 1048576:
-        raise ValueError('at most 1000 rounds and 16 MiB per capture')
-    if not math.isfinite(interval_s) or not 0 < interval_s <= 60:
-        raise ValueError('interval_s must be finite, positive and <= 60')
-    interval_ns = round(interval_s * 10**9)
-    if not interval_ns:
-        raise ValueError('interval_s must be at least one counter nanosecond')
+    if max_bytes > 16 * 1048576:
+        raise ValueError('at most 16 MiB per capture')
     age = {}
     if any(v is not None for v in (epoch_age_min_ns, epoch_age_max_ns, epoch_age_source)):
         _integer(epoch_age_min_ns, 'epoch_age_min_ns', 0)
@@ -137,12 +131,8 @@ def collect_receiver_time(servers, *, receiver_host, receiver_port, receiver_sou
                                status='RECEIVER_UNAVAILABLE', max_bytes=max_bytes,
                                max_chunks=4096, receiver_commands_sent=0,
                                origin_authenticated=False, reconnects=0))
-    witness['protocol'].update(rounds=rounds, interval_s=interval_s,
-                               attempts_per_endpoint=rounds, schedule='ROUND_START_OFFSETS',
-                               missed_schedule='START_LATE_WITHOUT_REPLACEMENT')
     witness['capture_id'] = capture_id
     stop, sock, reader = threading.Event(), None, None
-    interrupted = False
     with ThreadPoolExecutor(max_workers=1) as pool:
         try:
             # Select one resolved address once, retaining connection failure.
@@ -156,33 +146,9 @@ def collect_receiver_time(servers, *, receiver_host, receiver_port, receiver_sou
             reader = pool.submit(_read_receiver, sock, capture, stop, max_bytes=max_bytes)
         except OSError as error:
             capture['stream']['reason'] = type(error).__name__
-        started = time.monotonic_ns()
         try:
-            for round_index in range(rounds):
-                scheduled = started + round_index * interval_ns
-                for server_index, server in enumerate(servers):
-                    attempt = dict(server=server, round_index=round_index,
-                                   scheduled_round_start_monotonic_ns=scheduled,
-                                   status='NOT_ATTEMPTED')
-                    witness['attempts'].append(attempt)
-                    if interrupted:
-                        attempt['reason'] = 'CAPTURE_INTERRUPTED'
-                        continue
-                    try:
-                        if server_index == 0:
-                            delay_ns = scheduled - time.monotonic_ns()
-                            if delay_ns > 0:
-                                time.sleep(delay_ns / 10**9)
-                        attempt.update(status='WITNESS_UNAVAILABLE',
-                                       started_monotonic_ns=time.monotonic_ns())
-                        _observe_attempt(attempt, server_error_ns=server_error_ns,
-                                         rate_error_ppm=rate_error_ppm, timeout_s=timeout_s,
-                                         ntp_era=ntp_era, capture_id=capture_id)
-                    except KeyboardInterrupt:
-                        interrupted = True
-                        attempt['reason'] = 'CAPTURE_INTERRUPTED'
-                    finally:
-                        attempt['finished_monotonic_ns'] = time.monotonic_ns()
+            acquisition = _sample_schedule(witness, servers, rounds=rounds, interval_s=interval_s,
+                                           capture_id=capture_id)
         finally:
             stop.set()
             try:
@@ -193,8 +159,7 @@ def collect_receiver_time(servers, *, receiver_host, receiver_port, receiver_sou
                     sock.close()
     report = compare_receiver_capture(witness, capture, utc_error_ns=utc_error_ns,
                                       utc_error_source=utc_error_source, bracket_span_ns=bracket_span_ns)
-    report.update(regime='EXPLORATORY_LIVE_CAPTURE',
-                  acquisition=dict(started_monotonic_ns=started, ended_monotonic_ns=time.monotonic_ns(),
-                                   interrupted=interrupted, epoch_age_known=bool(age),
-                                   clock=time.get_clock_info('monotonic').implementation))
+    acquisition.update(ended_monotonic_ns=time.monotonic_ns(), epoch_age_known=bool(age),
+                       clock=time.get_clock_info('monotonic').implementation)
+    report.update(regime='EXPLORATORY_LIVE_CAPTURE', acquisition=acquisition)
     return report

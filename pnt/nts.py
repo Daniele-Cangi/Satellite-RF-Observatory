@@ -244,7 +244,17 @@ def _response(packet, key, uid, origin, era):
                 response_sha256=hashlib.sha256(packet).hexdigest())
 
 
-def probe(server, *, timeout_s=5.0, ntp_era=0):
+def _capture_counter(clock_id=None):
+    """Default monotonic counter or explicit Android/Linux suspend-aware clock."""
+    if clock_id is None:
+        return time.monotonic_ns, max(1, math.ceil(time.get_clock_info('monotonic').resolution * 1e9)), None
+    if type(clock_id) is not int or clock_id != getattr(time, 'CLOCK_BOOTTIME', None):
+        raise ValueError('explicit CLOCK_BOOTTIME is unavailable or unsupported; no clock fallback')
+    resolution = max(1, math.ceil(time.clock_getres(clock_id) * 1e9))
+    return lambda: time.clock_gettime_ns(clock_id), resolution, 'CLOCK_BOOTTIME'
+
+
+def probe(server, *, timeout_s=5.0, ntp_era=0, clock_id=None):
     """One authenticated exchange, paired with a bracketed host UTC reading.
 
     Bounds use monotonic time, not the potentially wrong host wall clock.
@@ -252,6 +262,7 @@ def probe(server, *, timeout_s=5.0, ntp_era=0):
     """
     if not math.isfinite(timeout_s) or timeout_s <= 0 or type(ntp_era) is not int or ntp_era < 0:
         raise ValueError('positive finite timeout and nonnegative integer NTP era required')
+    counter, resolution, counter_name = _capture_counter(clock_id)
     from OpenSSL import SSL
     from service_identity import CertificateError, VerificationError
 
@@ -274,12 +285,12 @@ def probe(server, *, timeout_s=5.0, ntp_era=0):
     with socket.socket(family, socktype, protocol) as sock:
         sock.settimeout(timeout_s)
         sock.connect(address)
-        sent = time.monotonic_ns()
+        sent = counter()
         sock.send(request)
         packet = sock.recv(65536)
-        claim_start = time.monotonic_ns()
+        claim_start = counter()
         host_utc = time.time_ns()
-        received = time.monotonic_ns()
+        received = counter()
         peer = sock.getpeername()
     result = _response(packet, s2c, uid, origin, ntp_era)
     result.update(server=server, ntp_host=host, ntp_port=port, peer_address=list(peer),
@@ -288,6 +299,8 @@ def probe(server, *, timeout_s=5.0, ntp_era=0):
                   ntp_era=ntp_era, send_monotonic_ns=sent, receive_monotonic_ns=received,
                   claim_start_monotonic_ns=claim_start, claim_end_monotonic_ns=received,
                   host_claim_unix_ns=host_utc,
-                  monotonic_resolution_ns=max(1, math.ceil(time.get_clock_info('monotonic').resolution * 1e9)),
+                  monotonic_resolution_ns=resolution,
                   host_claim_error_ns=max(1, math.ceil(time.get_clock_info('time').resolution * 1e9)))
+    if counter_name is not None:
+        result['counter_clock'] = counter_name
     return result

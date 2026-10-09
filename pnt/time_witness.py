@@ -5,9 +5,10 @@ authentication, not an independently verifiable signature on a saved report.
 """
 
 import math
+import time
 import uuid
 
-from .nts import NTSError, probe
+from .nts import NTSError, _capture_counter, probe
 
 
 def _integer(value, name, minimum=None):
@@ -88,6 +89,8 @@ def utc_bracket_interval(before, after, *, event_start_ns, event_end_ns,
         raise ValueError('bracket anchors do not share a capture domain')
     if not isinstance(server, str) or not server.strip() or after.get('server') != server:
         raise ValueError('bracket anchors must use the same configured NTS endpoint')
+    if before.get('counter_clock') != after.get('counter_clock'):
+        raise ValueError('bracket anchors use different counter clocks')
     r1 = _integer(before['receive_monotonic_ns'], 'earlier receive_monotonic_ns', 0)
     s2 = _integer(after['send_monotonic_ns'], 'later send_monotonic_ns', r1)
     a = _integer(event_start_ns, 'event_start_ns', r1)
@@ -136,6 +139,8 @@ def compare_claim(exchange, claim, *, server_error_ns, rate_error_ppm):
     try:
         if not exchange.get('capture_id') or claim.get('capture_id') != exchange['capture_id']:
             raise ValueError('claim and exchange do not share a capture domain')
+        if exchange.get('counter_clock') != claim.get('counter_clock'):
+            raise ValueError('claim and exchange use different counter clocks')
         interval = utc_interval(exchange, event_start_ns=claim['start_monotonic_ns'],
                                 event_end_ns=claim['end_monotonic_ns'],
                                 server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm)
@@ -153,6 +158,8 @@ def compare_bracket_claim(before, after, claim, *, server_error_ns, rate_error_p
             raise ValueError('bracket anchors and claim must be objects')
         if not before.get('capture_id') or claim.get('capture_id') != before['capture_id']:
             raise ValueError('claim and bracket do not share a capture domain')
+        if before.get('counter_clock') != claim.get('counter_clock'):
+            raise ValueError('claim and bracket use different counter clocks')
         interval = utc_bracket_interval(before, after,
                                         event_start_ns=claim['start_monotonic_ns'],
                                         event_end_ns=claim['end_monotonic_ns'],
@@ -181,10 +188,14 @@ def _new_report(servers, *, server_error_ns, rate_error_ppm, budget_source, time
                   claim_source='HOST_WALL_CLOCK_NOT_GNSS', attempts=[])
 
 
-def _observe_attempt(attempt, *, server_error_ns, rate_error_ppm, timeout_s, ntp_era, capture_id=None):
+def _observe_attempt(attempt, *, server_error_ns, rate_error_ppm, timeout_s, ntp_era,
+                     capture_id=None, clock_id=None):
     """Update an already retained attempt; never retry or replace a failure."""
     try:
-        exchange = probe(attempt['server'], timeout_s=timeout_s, ntp_era=ntp_era)
+        options = dict(timeout_s=timeout_s, ntp_era=ntp_era)
+        if clock_id is not None:
+            options['clock_id'] = clock_id
+        exchange = probe(attempt['server'], **options)
     except ImportError:
         attempt['reason'] = 'MISSING_OPTIONAL_NTS_DEPENDENCIES'
         return
@@ -196,6 +207,8 @@ def _observe_attempt(attempt, *, server_error_ns, rate_error_ppm, timeout_s, ntp
                  error_ns=exchange['host_claim_error_ns'],
                  start_monotonic_ns=exchange['claim_start_monotonic_ns'],
                  end_monotonic_ns=exchange['claim_end_monotonic_ns'])
+    if 'counter_clock' in exchange:
+        claim['counter_clock'] = exchange['counter_clock']
     attempt.update(status='AUTHENTICATED_EXCHANGE', exchange=exchange, claim=claim,
                    comparison=compare_claim(exchange, claim, server_error_ns=server_error_ns,
                                             rate_error_ppm=rate_error_ppm))
@@ -215,3 +228,50 @@ def collect(servers, *, server_error_ns, rate_error_ppm, budget_source, timeout_
         _observe_attempt(attempt, server_error_ns=server_error_ns, rate_error_ppm=rate_error_ppm,
                          timeout_s=timeout_s, ntp_era=ntp_era)
     return report
+
+
+def _sampling_interval_ns(rounds, interval_s):
+    _integer(rounds, 'rounds', 1)
+    if rounds > 1000 or not math.isfinite(interval_s) or not 0 < interval_s <= 60:
+        raise ValueError('at most 1000 rounds; interval_s must be finite, positive and <= 60')
+    interval_ns = round(interval_s * 10**9)
+    if not interval_ns:
+        raise ValueError('interval_s must be at least one counter nanosecond')
+    return interval_ns
+
+
+def _sample_schedule(report, servers, *, rounds, interval_s, capture_id, clock_id=None):
+    """Shared declared schedule, preserving interruption and every failed attempt."""
+    interval_ns = _sampling_interval_ns(rounds, interval_s)
+    counter, _, _ = _capture_counter(clock_id)
+    report['protocol'].update(rounds=rounds, interval_s=interval_s, attempts_per_endpoint=rounds,
+                              schedule='ROUND_START_OFFSETS', missed_schedule='START_LATE_WITHOUT_REPLACEMENT')
+    started, interrupted = counter(), False
+    for round_index in range(rounds):
+        scheduled = started + round_index * interval_ns
+        for server_index, server in enumerate(servers):
+            attempt = dict(server=server, round_index=round_index,
+                           scheduled_round_start_monotonic_ns=scheduled, status='NOT_ATTEMPTED')
+            report['attempts'].append(attempt)
+            if interrupted:
+                attempt['reason'] = 'CAPTURE_INTERRUPTED'
+                continue
+            try:
+                if server_index == 0:
+                    delay_ns = scheduled - counter()
+                    if delay_ns > 0:
+                        time.sleep(delay_ns / 10**9)
+                attempt.update(status='WITNESS_UNAVAILABLE', started_monotonic_ns=counter())
+                options = dict(server_error_ns=report['assumptions']['server_error_ns'],
+                               rate_error_ppm=report['assumptions']['rate_error_ppm'],
+                               timeout_s=report['protocol']['timeout_s'], ntp_era=report['protocol']['ntp_era'],
+                               capture_id=capture_id)
+                if clock_id is not None:
+                    options['clock_id'] = clock_id
+                _observe_attempt(attempt, **options)
+            except KeyboardInterrupt:
+                interrupted = True
+                attempt['reason'] = 'CAPTURE_INTERRUPTED'
+            finally:
+                attempt['finished_monotonic_ns'] = counter()
+    return dict(started_monotonic_ns=started, ended_monotonic_ns=counter(), interrupted=interrupted)

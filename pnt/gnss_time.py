@@ -8,7 +8,6 @@ from collections import Counter
 from datetime import datetime, timezone
 import struct
 
-from research.exploratory.pnt_rawx_recovery import ubx_packets
 from .time_witness import _budgets, _integer, compare_bracket_claim, compare_claim
 
 
@@ -26,6 +25,8 @@ def decode_timeutc(packet):
     authentication or a bound on error. Leap seconds are not mapped to POSIX.
     Layout: u-blox UBX-20033631 R05, section 3.15.22.1.
     """
+    from research.exploratory.pnt_rawx_recovery import ubx_packets
+
     if len(packet) != 28 or packet[:6] != b'\xb5\x62\x01\x21\x14\x00':
         raise ValueError('one complete 20-byte UBX-NAV-TIMEUTC payload is required')
     _, _, payload = next(ubx_packets(packet))
@@ -46,12 +47,13 @@ def decode_timeutc(packet):
 
 
 def receiver_claim(record, *, utc_error_ns, utc_error_source):
-    """Convert packet receipt to a solution-epoch bracket in the same counter.
+    """Adapt UBX receipt or an Android clock epoch to the witness counter.
 
     The independently supplied age interval covers solution-to-receipt latency
     (receiver processing, serialization, buffering and collector scheduling).
     Its units are host monotonic-counter nanoseconds, not receiver time. Never
-    infer it from the receiver UTC, iTOW, tAcc or a fitted offset.
+    infer it from the receiver UTC, iTOW, tAcc or a fitted offset. Android
+    clock epochs require their own explicit GNSS/boottime alignment bound.
     """
     _integer(utc_error_ns, 'utc_error_ns', 0)
     _text(utc_error_source, 'utc_error_source')
@@ -60,6 +62,12 @@ def receiver_claim(record, *, utc_error_ns, utc_error_source):
     if 'epoch_age_budget_violation' in record:
         reason = _text(record['epoch_age_budget_violation'], 'epoch_age_budget_violation')
         raise ValueError(f'known epoch-age budget violation: {reason}')
+    if record.get('source_format') == 'ANDROID_RAW_CLOCK':
+        from .android_time import android_clock_claim
+
+        return android_clock_claim(record, utc_error_ns=utc_error_ns, utc_error_source=utc_error_source)
+    if record.get('source_format') not in (None, 'UBX_NAV_TIMEUTC'):
+        raise ValueError('unsupported receiver UTC source_format')
     packet = bytes.fromhex(_text(record.get('packet_hex'), 'packet_hex'))
     decoded = decode_timeutc(packet)
     capture_id = _text(record.get('capture_id'), 'capture_id')
