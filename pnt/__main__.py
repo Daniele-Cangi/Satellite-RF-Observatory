@@ -1,6 +1,7 @@
 """PNT diagnostics: offline GNSS analysis and read-only Internet time probes."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -30,6 +31,12 @@ def main():
     time_probe.add_argument('--timeout', type=float, default=5.0, help='per-stage socket timeout, seconds')
     time_probe.add_argument('--ntp-era', type=int, default=0, help='explicit era; 0 covers 1900-2036')
     time_probe.add_argument('--output', required=True, type=Path)
+    time_compare = commands.add_parser('time-compare', help='compare captured UBX receiver UTC with NTS; offline replay')
+    time_compare.add_argument('witness_report', type=Path, help='existing pnt-internet-time-v1 JSON')
+    time_compare.add_argument('receiver_capture', type=Path, help='UTC packets and same-counter receipt/age bounds')
+    time_compare.add_argument('--utc-error-ns', type=int, required=True, help='declared GNSS UTC error budget; not tAcc')
+    time_compare.add_argument('--utc-error-source', required=True, help='independent qualification or explicit assumption')
+    time_compare.add_argument('--output', required=True, type=Path)
     android = commands.add_parser('android-raw', help='normalize GPS L1/L5 Android Raw logs; no attack verdict')
     android.add_argument('local_log', type=Path, help='GNSS Logger text, plain or gzip')
     android.add_argument('--output', required=True, type=Path)
@@ -91,6 +98,26 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output already exists; choose a new report path')
+    if args.command == 'time-compare':
+        from .gnss_time import compare_receiver_capture
+
+        try:
+            witness_bytes = args.witness_report.read_bytes()
+            capture_bytes = args.receiver_capture.read_bytes()
+            report = compare_receiver_capture(json.loads(witness_bytes), json.loads(capture_bytes),
+                                              utc_error_ns=args.utc_error_ns,
+                                              utc_error_source=args.utc_error_source)
+            report['sources'] = {
+                name: dict(path=str(path), sha256=hashlib.sha256(content).hexdigest())
+                for name, path, content in [('witness', args.witness_report, witness_bytes),
+                                            ('receiver', args.receiver_capture, capture_bytes)]}
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT time input/output error: {error}\n')
+        print(f"{report['status']}: {report['coverage']['comparison_status_counts']}; {args.output}")
+        if report['status'] == 'INSUFFICIENT_EVIDENCE':
+            parser.exit(2, 'No associated receiver UTC comparison; failures retained in report\n')
+        return
     if args.command == 'time-probe':
         from .time_witness import collect
 
