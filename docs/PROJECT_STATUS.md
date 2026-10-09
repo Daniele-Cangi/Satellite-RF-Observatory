@@ -56,10 +56,16 @@ campi clock di GNSS Logger. Riusa acquisizione NTS, intervalli e replay esistent
 le dipendenze geometriche non servono per il confronto temporale. Associazione
 a telefono/avvio, GPS-UTC esterno e budget restano espliciti; timestamp assenti o
 associazione temporale ignota rimangono insufficienti. I test sono sintetici,
-anche quando usano il campione Raw pubblico. Il prossimo passo e una breve
-registrazione sul Samsung disponibile, insieme alle sonde NTS dello stesso
-telefono: nessun acquisto di sensori. Compatibilita del timestamp e qualifica
-dei limiti restano da verificare sul dispositivo reale; P2 resta aperta.
+anche quando usano il campione Raw pubblico. La prima verifica sul Galaxy S21
+FE SM-G990B, Android 16, risolve l'installazione con pin Android espliciti e
+ottiene 204 test passati sul telefono e 20/20 scambi NTS autenticati. I 20
+confronti con il clock del sistema Android restano discordanti sotto budget
+non calibrati. La registrazione indoor non contiene misure Raw: l'intake
+rifiuta il file, senza confronto GNSS. Il prossimo passo e ripetere la raccolta
+simultanea con cielo visibile, usando nuove sonde; nessun acquisto di sensori.
+Compatibilita effettiva del timestamp e qualifica dei limiti restano da
+verificare sul dispositivo reale; P2 resta aperta. Dettagli ed errori conservati
+sono descritti nella guida Android.
 
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,

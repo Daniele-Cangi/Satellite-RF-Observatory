@@ -10,7 +10,11 @@ non un'autenticazione RF, una convalida della posizione o una prova di attacco.
 Installare [GNSS Logger di Google](https://developer.android.com/develop/sensors-and-location/sensors/gnss)
 e [Termux da F-Droid](https://f-droid.org/en/packages/com.termux/).
 La [guida ufficiale Termux](https://github.com/termux/termux-app#installation)
-descrive installazione e compatibilita. In Termux:
+descrive installazione e compatibilita. E disponibile anche il
+[fork ufficiale su Google Play](https://play.google.com/store/apps/details?id=com.termux),
+verificato su Galaxy S21 FE (SM-G990B), Android 16, con Termux
+`googleplay.2026.06.21` e Python 3.13.13. Se Android rifiuta un APK, usare un
+canale ufficiale compatibile senza disattivare la verifica delle app. In Termux:
 
 ```sh
 pkg update
@@ -24,8 +28,15 @@ python -m pnt android-time-probe --help
 ```
 
 Il pacchetto Termux `python-cryptography` fornisce la libreria nativa; il venv
-la riusa. I pin restano quelli del progetto: se le versioni installate non sono
-compatibili, conservare l'errore senza allentare i pin. Per questo percorso non
+la riusa. I pin distinguono esplicitamente le piattaforme: Python con
+`sys.platform == "android"` usa `cryptography==48.0.1` e `pyOpenSSL==26.2.0`,
+una coppia supportata da [pyOpenSSL](https://www.pyopenssl.org/en/latest/changelog.html).
+Gli altri runtime conservano `cryptography==50.0.2` e `pyOpenSSL==26.4.0`.
+`service-identity==26.1.0` resta comune. Il tentativo con i soli pin desktop
+sul telefono si e fermato nel backend Rust della compilazione di cryptography;
+non ha prodotto un'acquisizione NTS. Se le versioni native installate non sono
+compatibili con i pin del proprio runtime, conservare l'errore senza allentarli
+o tentare un fallback automatico. Per questo percorso non
 servono NumPy, SciPy, Hatanaka o le dipendenze del motore geometrico. Dopo il merge
 si puo clonare `main` al posto del branch indicato.
 
@@ -118,8 +129,35 @@ collettore; SHA-256 e autenticazione simmetrica NTS non costituiscono una firma
 forense trasferibile del server.
 
 I test usano trasporto sintetico e un campione Raw pubblico gia esposto. La
-prima acquisizione su questo Samsung, la qualifica dei limiti e il beneficio
-benigno/challenge restano da verificare. Riferimenti tecnici:
+qualifica dei limiti e il beneficio benigno/challenge restano da verificare.
+Riferimenti tecnici:
 [GnssClock](https://developer.android.com/reference/android/location/GnssClock),
 [SystemClock](https://developer.android.com/reference/android/os/SystemClock) e
 [formato GNSS Logger](https://github.com/google/gps-measurement-tools/blob/master/LOGGING_FORMAT.md).
+
+## Verifica sul dispositivo del 9 ottobre 2026
+
+Sul Galaxy S21 FE sopra indicato, con GNSS Logger `v3.1.1.3`, i 204 test esistenti
+di NTS, testimone temporale, Android Raw e clock Android passano sia in Termux
+sia su Windows. Il primo trasferimento dei test mancava del rapporto storico
+usato da un replay: 203 test passarono e uno falli per file assente. Trasferito
+anche quell'input invariato, passano tutti; entrambi i log restano conservati.
+Sul telefono `pip check` non rileva dipendenze incompatibili. Rimangono due
+avvisi di deprecazione relativi al caricamento dei certificati del trust store.
+
+La prova esplorativa all'interno usa il codice `8571827`, con i pin Android
+espliciti sopra, e il comando di 10 round/3 s: **20/20 scambi NTS autenticati**,
+10 per ciascun endpoint PTB, in circa 27,7 s. I 20 confronti con il **clock del
+sistema Android** sono discordanti sotto i budget di sviluppo dichiarati:
+separazione dagli intervalli fra 436,213 e 439,934 ms. Non sono confronti GNSS,
+limiti calibrati o una diagnosi della causa.
+
+Il file originale `gnss_log_2026_10_09_23_41_35.txt` contiene solo l'intestazione,
+senza misure Raw o fix; Android registra zero eventi GNSS measurement per
+l'app. `android-raw` termina con codice 2 e `no Android Raw measurements`,
+senza rapporto numerico. La presenza di `ChipsetElapsedRealtimeNanos` nel nome
+delle colonne non dimostra che il telefono ne fornisca valori utilizzabili.
+Originali NTS/GNSS ed errori sono conservati localmente, non pubblicati come
+corpus di qualifica. La ricezione indoor non e qualificata: serve una nuova
+registrazione con cielo visibile, senza associare le nuove misure alle vecchie
+sonde. Compatibilita effettiva dei timestamp e confronto GNSS/NTS restano aperti.
