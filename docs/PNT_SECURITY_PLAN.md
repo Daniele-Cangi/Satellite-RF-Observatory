@@ -218,19 +218,40 @@ causa probabile e attribuzione dell'attaccante; quest'ultima non deriva dal fit.
 | P4 — Pilota con flussi | Raccolta contemporanea, allarmi osservati dall'operatore e gestione di lacune/ritardi | Latenza, disponibilità e falsi allarmi compatibili con il caso d'uso scelto |
 | P5 — Integrazione | API/SIEM, policy del sito, documentazione e interfaccia | Evidenza sufficiente per la promessa specifica; autorizzazione al deployment |
 
-P2 produce già un confronto riproducibile tra osservazioni locali e due
-riferimenti esterni, inclusa la verifica che le stazioni non si annullino nella
-mediana. La capacità dimostrata per ora è un **rapporto riproducibile di
-contesto indipendente per un episodio offline**. Il beneficio di rilevamento
-rispetto ai controlli locali e l'autenticazione di posizione/tempo non sono
-dimostrati. La prossima prova per una rivendicazione più forte richiede un
-controllo benigno abbinato e un
-attacco con controlli locali plausibili, oltre a riferimenti contemporanei e
-tempo/verità indipendenti. I risultati e il vaglio delle fonti sono nello
-[stato del progetto](PROJECT_STATUS.md); non aprire P3 per compensare l'assenza
-di questi dati. La [specifica minima della registrazione]
-(../research/exploratory/PNT_P2_RECORDING_DECISION.md) e la qualifica di un
-ulteriore candidato esposto rendono esplicito quali osservazioni mancano.
+### Traguardi verificabili e uscita dalle prove senza manipolazione
+
+Il traguardo software è un flusso reale acquisizione -> confronto -> dossier
+riproducibile. È raggiunto per la diagnostica temporale del telefono, entro le
+assunzioni documentate. La sensibilità a offset software è un secondo risultato
+di sviluppo; non dimostra rilevamento di un attacco RF. Una registrazione senza
+manipolazione introdotta non è automaticamente una baseline benigna certificata.
+
+Il traguardo P2 più forte richiede un confronto abbinato che possa fallire:
+
+- challenge documentata, riferimenti contemporanei e verità/tempo indipendenti;
+- beneficio del combinato rispetto a controlli locali ragionevoli sugli stessi
+  eventi, senza ottenere il vantaggio aumentando i falsi allarmi o escludendo
+  i casi peggiori;
+- esiti su periodi benigni e challenge, comprese mancate rilevazioni, lacune,
+  copertura e tempo alla rilevazione, con budget giustificati;
+- conclusione limitata al caso e al tipo di manipolazione osservati. Una
+  challenge numerica resta un test ibrido e non chiude la validazione RF.
+
+La conferma P3 usa dati esclusi dallo sviluppo e criteri fissati prima del
+reveal. Non la si apre per compensare dati o limiti indipendenti mancanti.
+Le ulteriori raccolte senza manipolazione servono solo a risolvere una mancanza
+nominata, come associazione temporale, budget o falsi allarmi; il loro numero
+non prova il beneficio di sicurezza. Il prossimo confronto utile abbina baseline
+e challenge. Se non è valutabile, dichiarare quale osservabile manca; se è
+valutabile ma non mostra beneficio, registrare il risultato negativo e
+restringere la promessa o cambiare il canale osservato, senza prolungare la
+stessa prova alla ricerca di un successo.
+
+La capacità P2 dimostrata oggi resta un **rapporto riproducibile di contesto
+indipendente per un episodio offline**. Risultati e vaglio delle fonti sono
+nello [stato del progetto](PROJECT_STATUS.md); la
+[specifica minima della registrazione](../research/exploratory/PNT_P2_RECORDING_DECISION.md)
+descrive le osservazioni mancanti per il confronto fisico più forte.
 
 ### Primo ciclo di lavoro: P0 e P1
 

@@ -85,6 +85,14 @@ gia esposti, senza simulazione RF o stima dei falsi allarmi. Il risultato
 definisce cosa questa raccolta puo distinguere; il passo utile resta la qualifica
 indipendente dei budget e una prova benigno/challenge, non altre soglie adattate.
 
+Il [criterio di avanzamento](PNT_SECURITY_PLAN.md#traguardi-verificabili-e-uscita-dalle-prove-senza-manipolazione)
+distingue il flusso software reale, già percorso, dal beneficio di sicurezza
+ancora da dimostrare. Le raccolte senza manipolazione hanno uno scopo solo se
+risolvono un limite nominato. Per il prossimo traguardo serve un confronto
+abbinato baseline/challenge con controlli locali ragionevoli, non un'altra
+compatibilità isolata; un esito negativo o non valutabile comporta una decisione
+esplicita sul canale o sulla promessa del progetto.
+
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,
