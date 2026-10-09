@@ -19,7 +19,7 @@ canale ufficiale compatibile senza disattivare la verifica delle app. In Termux:
 ```sh
 pkg update
 pkg install python python-cryptography git
-git clone --branch feat/android-gnss-time-capture https://github.com/Daniele-Cangi/Satellite-RF-Observatory.git
+git clone https://github.com/Daniele-Cangi/Satellite-RF-Observatory.git
 cd Satellite-RF-Observatory
 python -m venv --system-site-packages .venv-time
 . .venv-time/bin/activate
@@ -37,8 +37,7 @@ sul telefono si e fermato nel backend Rust della compilazione di cryptography;
 non ha prodotto un'acquisizione NTS. Se le versioni native installate non sono
 compatibili con i pin del proprio runtime, conservare l'errore senza allentarli
 o tentare un fallback automatico. Per questo percorso non
-servono NumPy, SciPy, Hatanaka o le dipendenze del motore geometrico. Dopo il merge
-si puo clonare `main` al posto del branch indicato.
+servono NumPy, SciPy, Hatanaka o le dipendenze del motore geometrico.
 
 ## 2. Una registrazione breve, sullo stesso telefono e avvio
 
@@ -206,3 +205,55 @@ Entrambi i rapporti si riproducono esattamente con il replay esistente; gli
 hash degli input originali coincidono con quelli dell'involucro CLI.
 Restano da qualificare i budget e dimostrare il beneficio su benigno/challenge;
 P2 e aperta e questa e una diagnostica esplorativa condizionale.
+
+## Sensibilita agli scarti UTC software
+
+Il replay esplorativo della stessa registrazione del 10 ottobre usa ora
+`time-sensitivity`: sposta solo l'UTC decodificato del ricevitore, conservando
+contatore, associazione, intervalli NTS, budget e fallimenti. Non modifica
+`TimeNanos`, codici satellitari o pacchetti originali e non simula un attacco RF.
+La griglia di sviluppo e stata scelta dopo aver esposto la baseline: zero e
+gli scarti di entrambi i segni di 1, 10, 50, 100 e 1.000 ms. Non sono nuove
+soglie di rilevamento o una conferma prospettica.
+
+| Scarto aggiunto all'UTC | Righe compatibili | Righe discordanti | Epoche clock supportate |
+|---|---:|---:|---:|
+| 0 | 183 | 0 | 32 |
+| -1 ms / +1 ms, ciascuno | 183 | 0 | 32 |
+| -10 ms / +10 ms, ciascuno | 183 | 0 | 32 |
+| -50 ms / +50 ms, ciascuno | 0 | 183 | 32 |
+| -100 ms / +100 ms, ciascuno | 0 | 183 | 32 |
+| -1 s / +1 s, ciascuno | 0 | 183 | 32 |
+
+In ciascun caso **296/479 righe, 54/86 epoche**, restano insufficienti;
+9.580/9.580 confronti con singolo scambio e 8.439/8.622 bracket restano
+insufficienti. I sette timeout rimangono nel replay e non vengono aggirati.
+I due endpoint PTB restano separati; appartengono alla stessa autorita e non
+formano un quorum indipendente. Il replay con associazione ignota lascia
+**479/479 righe e 86/86 epoche insufficienti per tutti gli scarti**, senza
+un fallback verso l'assunzione di 1 ms.
+
+Gli intervalli compatibili forniscono anche il limite esatto di questo caso:
+ogni scarto aggiunto da **-15,809030 a +17,515728 ms**, estremi inclusi, resta
+indistinguibile in tutti i 183 confronti utilizzabili. Uno scarto inferiore a
+-34,704281 ms o superiore a +32,430833 ms e discordante in tutti. Fra questi
+limiti l'esito dipende dal confronto specifico. Sono limiti condizionali su
+questo input e questi budget, non accuratezza GNSS, sensibilita universale o
+tassi di rilevamento. La precisione numerica degli estremi non calibra i budget.
+
+Il [riepilogo aggregato](../research/exploratory/results/pnt_phone_time_sensitivity_v1.json)
+conserva conteggi per scarto ed endpoint, epoche distinte, budget e hash degli
+input e rapporti privati. Non pubblica fix o coordinate e non costituisce un
+benchmark pubblico riproducibile senza quegli input. Gli originali e i due
+nuovi rapporti completi restano nel fascicolo locale. Con i file conservati:
+
+```console
+python -m pnt time-sensitivity phone-time-outdoor-01-development-alignment.json --offset-ns -1000000000 --offset-ns -100000000 --offset-ns -50000000 --offset-ns -10000000 --offset-ns -1000000 --offset-ns 1000000 --offset-ns 10000000 --offset-ns 50000000 --offset-ns 100000000 --offset-ns 1000000000 --output phone-time-sensitivity-development-v1.json
+```
+
+Ripetere con `phone-time-outdoor-01-unknown-alignment.json` e un nuovo output
+conserva tutti gli esiti insufficienti con uscita 2. La baseline di entrambi i
+rapporti coincide con il replay originale, esclusi i metadati CLI delle sorgenti.
+Il risultato orienta la prossima prova: qualificare indipendentemente
+l'associazione temporale e gli altri budget, poi misurare ripetibilita, copertura
+e beneficio benigno/challenge. Ripetere la stessa griglia non colmerebbe P2.

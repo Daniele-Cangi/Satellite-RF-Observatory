@@ -22,6 +22,37 @@ file-receipt or PC-clock substitution. Reported Android uncertainties are not
 independent hard bounds. Rows can repeat the same clock epoch. No real phone
 qualification or RF authenticity result is claimed by the synthetic tests.
 
+## Receiver UTC offset sensitivity
+
+After `time-compare` or `android-time-compare`, use the retained comparison to
+measure which **software offsets of the decoded UTC claim** remain compatible:
+
+```console
+python -m pnt time-sensitivity comparison.json --offset-ns -10000000 --offset-ns 10000000 --offset-ns -50000000 --offset-ns 50000000 --output sensitivity.json
+```
+
+The command is offline. Android replay needs only the standard library; UBX
+replay currently uses the parser dependencies in `requirements-positioning.txt`.
+It recomputes the baseline from retained witness/capture inputs and the original budgets and
+association settings, ignoring saved verdicts. It always includes zero as a
+control, changes no source bytes or event counters and uses the existing UTC
+interval comparison. Unknown alignment, failed attempts and unsupported rows
+remain insufficient for every offset. Existing outputs are never overwritten;
+an entirely unsupported baseline saves all cases and exits with code 2.
+
+The report retains the baseline, per-endpoint counts, every record's membership
+in each descriptive pattern and an inclusive compatible-shift interval for
+each usable comparison. If the original claim-minus-witness interval is
+`[lo, hi]`, the compatible added shift is exactly `[-hi, -lo]`; one nanosecond
+outside it separates the intervals. `MIXED` keeps endpoint disagreement visible;
+there is no voting or aggregate authenticity verdict. Offsets within an
+interval remain invisible to this check. Rows and distinct clock epochs are
+not independent trials. This is sensitivity under declared assumptions, not an
+RF attack simulation, false-alarm calibration or detector performance estimate.
+
+The [real phone recording](../docs/ANDROID_GNSS_TIME.md#sensibilita-agli-scarti-utc-software)
+shows both separated offsets and the invisible range; original logs stay private.
+
 ## Authenticated Internet time witness
 
 `time-probe` checks a bracketed **host wall-clock reading**, without adjusting

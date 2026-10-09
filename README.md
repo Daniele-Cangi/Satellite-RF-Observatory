@@ -41,6 +41,7 @@ absolute-time verification requires a separate qualified time reference.
 |---|---|
 | `python -m pnt analyze` | Fixed-site RINEX geometry, local and matched-network clock fits, double differences and data gaps |
 | `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
+| `python -m pnt time-sensitivity` | Offline receiver UTC offset sensitivity with fixed budgets and visible unsupported cases |
 | `python -m pnt android-analyze` | Android L1/C1C compared with external C1C observations at explicit fixed coordinates |
 | `python -m pnt compare` | Development comparison with separate training/calibration/evaluation windows and software code ramps |
 | `python -m pnt transfer` | Training-only prediction of later local residuals from external observations |
@@ -94,6 +95,7 @@ For your own recordings, follow the [input requirements](pnt/README.md).
 |---|---|
 | Do network residuals improve local prediction? | Mixed results on distant references; small improvements on nearby WegenerNet references. No demonstrated security benefit at matched false-alarm rates. |
 | Does agreement with archived navigation authenticate local RF? | No. Navigation fields can agree during a recorded attack; missing issues and conflicts remain visible. |
+| Can Internet time distinguish receiver UTC offsets? | On one real phone capture, software offsets of ±10 ms remain invisible and ±50 ms separate under uncalibrated budgets. This is conditional sensitivity, not RF authentication. |
 | Can the inverse research estimate a satellite without fitting its target orbit? | One conditional G14 event reached its declared milestone. Other events retain their failures or uncertainty limits. This is separate from qualifying a cyber detector. |
 
 Detailed outcomes, numerical results and next physical questions live in

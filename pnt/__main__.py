@@ -46,6 +46,11 @@ def main():
     time_compare.add_argument('--utc-error-ns', type=int, required=True, help='declared GNSS UTC error budget; not tAcc')
     time_compare.add_argument('--utc-error-source', required=True, help='independent qualification or explicit assumption')
     time_compare.add_argument('--output', required=True, type=Path)
+    time_sensitivity = commands.add_parser('time-sensitivity', help='offline decoded UTC offset sensitivity; no RF attack simulation')
+    time_sensitivity.add_argument('comparison_report', type=Path, help='existing receiver UTC/NTS comparison JSON')
+    time_sensitivity.add_argument('--offset-ns', action='append', type=int, required=True,
+                                  help='explicit signed software UTC offset; zero control is always included')
+    time_sensitivity.add_argument('--output', required=True, type=Path)
     android_compare = commands.add_parser('android-time-compare', help='offline same-phone GNSS clock/NTS comparison')
     android_compare.add_argument('witness_report', type=Path)
     android_compare.add_argument('local_log', type=Path, help='GNSS Logger Raw text, plain or gzip')
@@ -121,6 +126,23 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output already exists; choose a new report path')
+    if args.command == 'time-sensitivity':
+        from .time_sensitivity import assess_time_sensitivity
+
+        try:
+            comparison_bytes = args.comparison_report.read_bytes()
+            report = assess_time_sensitivity(json.loads(comparison_bytes), args.offset_ns)
+            report['source'] = dict(path=str(args.comparison_report),
+                                  sha256=hashlib.sha256(comparison_bytes).hexdigest())
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT time sensitivity input/output error: {error}\n')
+        print(f"{report['status']}; {args.output}")
+        for case in report['offset_cases']:
+            print(f"Offset {case['utc_claim_offset_ns']} ns: {case['record_pattern_counts']}")
+        if report['status'] == 'INSUFFICIENT_EVIDENCE':
+            parser.exit(2, 'No associated receiver UTC comparison; all offset cases remain insufficient\n')
+        return
     if args.command == 'android-time-compare':
         from .android_raw import inspect_android_raw
         from .android_time import compare_android_time
