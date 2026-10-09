@@ -91,6 +91,13 @@ def _key_exchange(server, timeout_s, *, port=4460, ca_file=None):
 
     context = SSL.Context(SSL.TLS_CLIENT_METHOD)
     context.set_min_proto_version(SSL.TLS1_3_VERSION)
+    # Explicit exclusions also bind CodeQL's pyOpenSSL model, which does not
+    # yet recognize set_min_proto_version(). Keep the TLS 1.3 floor above.
+    context.set_options(SSL.OP_NO_SSLv2)
+    context.set_options(SSL.OP_NO_SSLv3)
+    context.set_options(SSL.OP_NO_TLSv1)
+    context.set_options(SSL.OP_NO_TLSv1_1)
+    context.set_options(SSL.OP_NO_TLSv1_2)
     context.set_verify(SSL.VERIFY_PEER, lambda conn, cert, errno, depth, valid: bool(valid))
     # Use Python's platform trust store, including Windows roots. ca_file is an
     # explicit alternative trust root for loopback tests, never a bypass.
