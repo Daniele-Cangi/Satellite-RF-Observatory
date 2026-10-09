@@ -1,4 +1,8 @@
 # Optional authenticated Internet time transport (RFC 8915).
-pyOpenSSL==26.4.0
-cryptography==50.0.2
+pyOpenSSL==26.4.0; sys_platform != "android"
+cryptography==50.0.2; sys_platform != "android"
+# Termux Google Play Python reports "android" and supplies native cryptography.
+# Keep the supported pair explicit; no Rust build or unpinned fallback on-phone.
+pyOpenSSL==26.2.0; sys_platform == "android"
+cryptography==48.0.1; sys_platform == "android"
 service-identity==26.1.0

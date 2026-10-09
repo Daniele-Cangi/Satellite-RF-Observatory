@@ -7,11 +7,27 @@ It does not implement a qualified spoofing detector. A separate read-only NTS
 command provides conditional Internet UTC intervals; no detector threshold,
 benign label or attack verdict is inferred from the GNSS diagnostics.
 
+## Android phone GNSS clock and Internet time
+
+`android-time-probe` runs in Termux on the GNSS Logger phone while it records
+Raw data. It uses explicit suspend-aware `CLOCK_BOOTTIME`, retains every declared
+NTS attempt and requires only `requirements-pnt-time.txt`. `android-time-compare`
+then adapts the clock fields to the existing receiver UTC comparison and replay,
+also runnable offline on a PC without geometry dependencies. Follow the
+[phone setup and acquisition guide](../docs/ANDROID_GNSS_TIME.md).
+
+Same-phone/boot association, external GPS-UTC conversion and error budgets are
+explicit. Unknown GNSS/counter alignment remains insufficient; there is no
+file-receipt or PC-clock substitution. Reported Android uncertainties are not
+independent hard bounds. Rows can repeat the same clock epoch. No real phone
+qualification or RF authenticity result is claimed by the synthetic tests.
+
 ## Authenticated Internet time witness
 
 `time-probe` checks a bracketed **host wall-clock reading**, without adjusting
-the clock. Install `requirements-positioning.txt` (includes the optional NTS
-transport dependencies), then choose explicit endpoints and uncertainty budgets:
+the clock. Install `requirements-pnt-time.txt` for time-only use, or
+`requirements-positioning.txt` for the full geometry toolset, then choose
+explicit endpoints and uncertainty budgets:
 
 ```console
 python -m pnt time-probe --server ptbtime1.ptb.de --server ptbtime2.ptb.de --server-error-ns 1000000 --rate-error-ppm 100 --budget-source "Uncalibrated development assumptions; not certified bounds" --output time-witness.json

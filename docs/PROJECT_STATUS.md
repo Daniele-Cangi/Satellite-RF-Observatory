@@ -1,4 +1,4 @@
-# Stato del progetto — 9 ottobre 2026
+# Stato del progetto — 10 ottobre 2026
 
 ## Obiettivo
 
@@ -49,6 +49,31 @@ e i confronti con singolo scambio restano conservati, senza nuovi sigilli.
 Restano un flusso GNSS reale e limiti difendibili su ritardo e UTC, prima della
 prova fisica benigno/challenge; l'ingresso TCP da solo non prova l'origine RF.
 Nessuna vecchia epoca GNSS viene associata retroattivamente alle sonde NTS.
+
+Il [percorso Android sullo stesso telefono](ANDROID_GNSS_TIME.md) aggiunge
+`android-time-probe` in Termux con CLOCK_BOOTTIME e `android-time-compare` sui
+campi clock di GNSS Logger. Riusa acquisizione NTS, intervalli e replay esistenti;
+le dipendenze geometriche non servono per il confronto temporale. Associazione
+a telefono/avvio, GPS-UTC esterno e budget restano espliciti; timestamp assenti o
+associazione temporale ignota rimangono insufficienti. I test sono sintetici,
+anche quando usano il campione Raw pubblico. La prima verifica sul Galaxy S21
+FE SM-G990B, Android 16, risolve l'installazione con pin Android espliciti e
+ottiene 204 test passati sul telefono e 20/20 scambi NTS autenticati. I 20
+confronti con il clock del sistema Android restano discordanti sotto budget
+non calibrati. La registrazione indoor non contiene misure Raw: l'intake
+rifiuta il file, senza confronto GNSS. Una nuova raccolta esterna senza USB,
+via Wi-Fi, ottiene 1.897 Raw, 479 GPS normalizzate e 13/20 NTS autenticati;
+i sette timeout e le 1.418 righe di altre costellazioni restano contati.
+Con l'assunzione di associazione temporale di 1 ms dichiarata prima dei valori,
+183 righe GPS, corrispondenti a 32 delle 86 epoche clock distinte, sono
+compatibili negli intervalli fra scambi NTS consecutivi dello stesso endpoint.
+Nessuna riga ha supporto dentro un singolo scambio. Con associazione ignota il
+rapporto resta insufficiente; il clock di sistema Android rimane discordante.
+Timestamp e interoperabilita GNSS/NTS reali sono verificati su questo caso,
+con replay esatto; qualifica indipendente dei budget e beneficio
+benigno/challenge restano aperti. Nessuna autenticazione RF o convalida della
+posizione e dichiarata; P2 resta aperta. Dettagli ed errori conservati sono
+descritti nella guida Android; nessun acquisto di sensori.
 
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,

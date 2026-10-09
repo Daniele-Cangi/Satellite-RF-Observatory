@@ -5,14 +5,6 @@ import hashlib
 import json
 from pathlib import Path
 
-from .fixed_site import analyze
-from .benchmark import compare
-from .transfer import reference_transfer
-from .navigation_witness import inspect_navigation
-from .navigation_impact import compare_navigation
-from .android_raw import inspect_android_raw
-from .android_network import analyze_android
-
 
 def write_report(report, output):
     serialized = json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + '\n'
@@ -25,7 +17,8 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     time_probe = commands.add_parser('time-probe', help='read-only NTS time witness; no GNSS authenticity verdict')
     time_capture = commands.add_parser('time-capture', help='co-capture UBX/TCP and NTS; conditional UTC diagnostic')
-    for command in (time_probe, time_capture):
+    android_probe = commands.add_parser('android-time-probe', help='NTS collection on the GNSS Logger phone')
+    for command in (time_probe, time_capture, android_probe):
         command.add_argument('--server', action='append', required=True, help='explicit NTS-KE hostname')
         command.add_argument('--server-error-ns', type=int, required=True, help='declared server UTC error budget')
         command.add_argument('--rate-error-ppm', type=int, required=True, help='declared monotonic rate error budget')
@@ -33,6 +26,9 @@ def main():
         command.add_argument('--timeout', type=float, default=5.0, help='per-stage socket timeout, seconds')
         command.add_argument('--ntp-era', type=int, default=0, help='explicit era; 0 covers 1900-2036')
         command.add_argument('--output', required=True, type=Path)
+    android_probe.add_argument('--collector-source', required=True, help='phone/configuration provenance')
+    android_probe.add_argument('--rounds', type=int, default=10, help='declared rounds; every failure retained')
+    android_probe.add_argument('--interval', type=float, default=3.0, help='seconds between scheduled round starts')
     time_capture.add_argument('--receiver-host', required=True, help='explicit live UBX/TCP source; no file replay')
     time_capture.add_argument('--receiver-port', type=int, required=True)
     time_capture.add_argument('--receiver-source', required=True, help='receiver/forwarder configuration and provenance')
@@ -50,7 +46,18 @@ def main():
     time_compare.add_argument('--utc-error-ns', type=int, required=True, help='declared GNSS UTC error budget; not tAcc')
     time_compare.add_argument('--utc-error-source', required=True, help='independent qualification or explicit assumption')
     time_compare.add_argument('--output', required=True, type=Path)
-    for command in (time_compare, time_capture):
+    android_compare = commands.add_parser('android-time-compare', help='offline same-phone GNSS clock/NTS comparison')
+    android_compare.add_argument('witness_report', type=Path)
+    android_compare.add_argument('local_log', type=Path, help='GNSS Logger Raw text, plain or gzip')
+    android_compare.add_argument('--association-source', required=True, help='asserted same phone and boot; not fitted to UTC')
+    android_compare.add_argument('--gps-utc-offset-seconds', type=int, required=True, help='external time-scale conversion')
+    android_compare.add_argument('--time-scale-source', required=True)
+    android_compare.add_argument('--utc-error-ns', type=int, required=True, help='declared GNSS UTC bound; not reported sigma')
+    android_compare.add_argument('--utc-error-source', required=True)
+    android_compare.add_argument('--epoch-alignment-error-ns', type=int, help='independent GNSS/CLOCK_BOOTTIME association bound')
+    android_compare.add_argument('--epoch-alignment-source')
+    android_compare.add_argument('--output', required=True, type=Path)
+    for command in (time_compare, time_capture, android_compare):
         command.add_argument('--bracket-span-ns', type=int,
                              help='opt in to adjacent same-endpoint UTC brackets; maximum complete span in counter ns')
     android = commands.add_parser('android-raw', help='normalize GPS L1/L5 Android Raw logs; no attack verdict')
@@ -114,6 +121,49 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output already exists; choose a new report path')
+    if args.command == 'android-time-compare':
+        from .android_raw import inspect_android_raw
+        from .android_time import compare_android_time
+
+        try:
+            witness_bytes = args.witness_report.read_bytes()
+            raw = inspect_android_raw(args.local_log)
+            report = compare_android_time(
+                json.loads(witness_bytes), raw,
+                association_source=args.association_source, gps_utc_offset_seconds=args.gps_utc_offset_seconds,
+                time_scale_source=args.time_scale_source, utc_error_ns=args.utc_error_ns,
+                utc_error_source=args.utc_error_source, epoch_alignment_error_ns=args.epoch_alignment_error_ns,
+                epoch_alignment_source=args.epoch_alignment_source, bracket_span_ns=args.bracket_span_ns)
+            report['sources'] = {
+                'witness': dict(path=str(args.witness_report), sha256=hashlib.sha256(witness_bytes).hexdigest()),
+                'receiver': dict(path=str(args.local_log), sha256=raw['source']['sha256'])}
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT Android time input/output error: {error}\n')
+        print(f"{report['status']}: {report['coverage']['comparison_status_counts']}; {args.output}")
+        if args.bracket_span_ns is not None:
+            print(f"Bracket comparisons: {report['coverage']['bracket_status_counts']}")
+        if report['status'] == 'INSUFFICIENT_EVIDENCE':
+            parser.exit(2, 'No associated Android UTC comparison; failures retained in report\n')
+        return
+    if args.command == 'android-time-probe':
+        from .android_time import collect_android_time
+
+        try:
+            report = collect_android_time(
+                args.server, collector_source=args.collector_source, server_error_ns=args.server_error_ns,
+                rate_error_ppm=args.rate_error_ppm, budget_source=args.budget_source,
+                timeout_s=args.timeout, ntp_era=args.ntp_era, rounds=args.rounds, interval_s=args.interval)
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT Android time input/output error: {error}\n')
+        count = sum(a['status'] == 'AUTHENTICATED_EXCHANGE' for a in report['attempts'])
+        print(f"{count}/{len(report['attempts'])} authenticated exchanges; {args.output}")
+        if report['acquisition']['interrupted']:
+            parser.exit(130, 'Capture interrupted; all attempt outcomes saved\n')
+        if not count:
+            parser.exit(2, 'No authenticated time witness; failures retained in report\n')
+        return
     if args.command == 'time-compare':
         from .gnss_time import compare_receiver_capture
 
@@ -177,6 +227,8 @@ def main():
             parser.exit(2, 'No authenticated time witness; failures retained in report\n')
         return
     if args.command == 'android-raw':
+        from .android_raw import inspect_android_raw
+
         try:
             report = inspect_android_raw(args.local_log)
             write_report(report, args.output)
@@ -210,16 +262,26 @@ def main():
             options.update(train_stop_s=args.train_stop, minimum_training=args.minimum_training,
                            minimum_fit_epochs=args.minimum_fit_epochs)
         if args.command == 'navigation':
+            from .navigation_witness import inspect_navigation
+
             options.update(local_format=args.local_format, recover_corrupt=args.recover_corrupt,
                            qualify_lnav=args.qualify_lnav)
             report = inspect_navigation(args.local_navigation, references, args.day_gpst, **options)
         elif args.command == 'navigation-compare':
+            from .navigation_impact import compare_navigation
+
             options.update(calibration_stop_s=args.calibration_stop, proportion=args.quantile,
                            minimum_calibration=args.minimum_calibration)
             report = compare_navigation(args.local_rinex, args.navigation, cases, references, args.day_gpst, **options)
         else:
-            function = {'analyze': analyze, 'android-analyze': analyze_android,
-                        'compare': compare, 'transfer': reference_transfer}[args.command]
+            if args.command == 'analyze':
+                from .fixed_site import analyze as function
+            elif args.command == 'android-analyze':
+                from .android_network import analyze_android as function
+            elif args.command == 'compare':
+                from .benchmark import compare as function
+            else:
+                from .transfer import reference_transfer as function
             report = function(args.local_rinex, references, args.navigation, args.day_gpst, **options)
         write_report(report, args.output)
     except (ValueError, OSError) as error:
