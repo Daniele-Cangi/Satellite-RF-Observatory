@@ -46,7 +46,7 @@ absolute-time verification requires a separate qualified time reference.
 
 | Command / component | Available behavior |
 |---|---|
-| [PNT Clock Collector](pnt/android-collector/README.md) | Same-app GNSS + NTS acquisition, native clock metadata, retained failures and session ZIP export; Android 10+ development APK |
+| [PNT Clock Collector](pnt/android-collector/README.md) | Same-app GNSS + NTS acquisition, live reception/clock/endpoint diagnostics, retained failures and session ZIP export; Android 10+ development APK |
 | `python -m pnt analyze` | Fixed-site RINEX geometry, local and matched-network clock fits, double differences and data gaps |
 | `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
 | `python -m pnt time-probe` / `android-time-probe` | Authenticated Internet time acquisition with declared assumptions; the Android command uses the phone's CLOCK_BOOTTIME |
@@ -79,6 +79,10 @@ NTS** outdoors with Internet access. Keep the app visible, then use **Export
 last session** after the schedule finishes or after pressing Stop. The ZIP
 contains the original Raw CSV and NTS JSON, including failed and unattempted
 slots. Extract it on a PC for intake and replay.
+
+The live panel shows actual Raw reception, missing timing fields, clock count
+changes and NTS failures. It distinguishes acquisition problems from a timing
+comparison, which remains **NOT ASSESSED** in the app.
 
 The app does not assign a security verdict or invent timing bounds. Its NTS
 transport report intentionally leaves unqualified budgets and counter resolution
@@ -134,9 +138,9 @@ Synthetic exercises test software mechanisms; they are not measured RF
 detection performance. Closed results remain unchanged.
 
 The [Android workflow](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
-now delivers autonomous GNSS/NTS acquisition. The next increments are
-live acquisition-quality diagnostics and an export-to-analysis-to-phone report
-workflow using the existing engine. Timing qualification and a documented
+now delivers autonomous GNSS/NTS acquisition and live acquisition diagnostics.
+The next increment is an export-to-analysis-to-phone report workflow using
+the existing engine. Timing qualification and a documented
 benign/challenge comparison remain necessary to establish security benefit.
 Website and deployment work follow that physical demonstration.
 

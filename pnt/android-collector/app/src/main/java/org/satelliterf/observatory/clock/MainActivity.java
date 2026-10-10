@@ -41,6 +41,8 @@ import java.util.zip.ZipOutputStream;
 public final class MainActivity extends Activity {
     private static final int LOCATION_PERMISSION = 1;
     private static final int EXPORT_FILE = 2;
+    private static final List<String> NTS_SERVERS = Arrays.asList("ptbtime1.ptb.de", "ptbtime2.ptb.de");
+    private static final int NTS_ROUNDS = 10;
     private LocationManager locations;
     private CaptureLog log;
     private File latestFile;
@@ -51,11 +53,19 @@ public final class MainActivity extends Activity {
     private String gnssTerminal;
     private final Handler ui = new Handler(Looper.getMainLooper());
     private TextView status;
+    private TextView details;
+    private AcquisitionDiagnostics diagnostics;
+    private long stoppedCounter;
     private Button startButton;
     private Button stopButton;
     private Button exportButton;
-    private long missingEpochs;
-    private long missingUncertainties;
+    private final Runnable refreshDiagnostics = new Runnable() {
+        @Override public void run() {
+            if (log == null) return;
+            renderDiagnostics();
+            ui.postDelayed(this, 1000L);
+        }
+    };
 
     private final LocationListener locationListener = new LocationListener() {
         @Override public void onLocationChanged(Location ignored) {
@@ -80,9 +90,8 @@ public final class MainActivity extends Activity {
                 }
                 long readEnd = SystemClock.elapsedRealtimeNanos();
                 log.event(start, readEnd, clock, rows);
-                if (!event.getClock().hasElapsedRealtimeNanos()) missingEpochs++;
-                if (!event.getClock().hasElapsedRealtimeUncertaintyNanos()) missingUncertainties++;
-                recordingStatus();
+                diagnostics.gnss(start, clock, rows);
+                renderDiagnostics();
             } catch (IOException | RuntimeException error) {
                 fail(error);
             }
@@ -108,6 +117,9 @@ public final class MainActivity extends Activity {
         startButton = button(layout, "Start GNSS + NTS", v -> requestStart());
         stopButton = button(layout, "Stop recording", v -> stop("USER_STOPPED"));
         exportButton = button(layout, "Export last session", v -> export());
+        details = new TextView(this);
+        details.setTextSize(16);
+        layout.addView(details);
         ScrollView scroll = new ScrollView(this);
         scroll.addView(layout);
         setContentView(scroll);
@@ -187,7 +199,8 @@ public final class MainActivity extends Activity {
                 try { output.close(); } catch (IOException closing) { error.addSuppressed(closing); }
                 throw error;
             }
-            missingEpochs = missingUncertainties = 0;
+            diagnostics = new AcquisitionDiagnostics(NTS_SERVERS, NTS_ROUNDS * NTS_SERVERS.size());
+            stoppedCounter = 0;
             ntsAuthenticated = ntsUnavailable = 0;
             gnssTerminal = null;
             // Handler API avoids the Android R pre-QPR1 Executor callback issue.
@@ -196,15 +209,23 @@ public final class MainActivity extends Activity {
             locations.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 0f, locationListener, Looper.getMainLooper());
             File ntsFile = new File(getFilesDir(), "pnt-nts-" + id + ".json");
             NtsCapture capture = new NtsCapture(ntsFile.toPath(), id, file.getName(), metadata,
-                Arrays.asList("ptbtime1.ptb.de", "ptbtime2.ptb.de"), 10, 3000000000L,
+                NTS_SERVERS, NTS_ROUNDS, 3000000000L,
                 SystemClock::elapsedRealtimeNanos, () -> new NtsClient(SystemClock::elapsedRealtimeNanos),
                 new NtsCapture.Listener() {
+                    @Override public void attemptCompleted(String server, String state, String reason) {
+                        ui.post(() -> {
+                            if (latestFile != file) return;
+                            diagnostics.ntsAttempt(server, state, reason);
+                        });
+                    }
                     @Override public void updated(int authenticated, int unavailable) {
                         ui.post(() -> {
                             if (latestFile != file) return;
                             ntsAuthenticated = authenticated;
                             ntsUnavailable = unavailable;
+                            diagnostics.ntsProgress(authenticated, unavailable);
                             if (log != null) recordingStatus();
+                            else renderDiagnostics();
                         });
                     }
                     @Override public void finished(String error) {
@@ -216,6 +237,7 @@ public final class MainActivity extends Activity {
                             else show(gnss + "NTS authenticated: " + ntsAuthenticated + "/20"
                                 + "\nUnavailable attempts: " + ntsUnavailable
                                 + "\nNo timing precision or GNSS authenticity assessed. Export the session.");
+                            renderDiagnostics();
                             buttons();
                         });
                     }
@@ -225,6 +247,7 @@ public final class MainActivity extends Activity {
             capture.start();
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             recordingStatus();
+            ui.post(refreshDiagnostics);
             buttons();
         } catch (IOException | RuntimeException error) { fail(error); }
     }
@@ -244,6 +267,8 @@ public final class MainActivity extends Activity {
         if (ntsCapture != null) ntsCapture.cancel(reason);
         CaptureLog closing = log;
         log = null; // Late queued callbacks cannot append to a closed file.
+        ui.removeCallbacks(refreshDiagnostics);
+        if (closing != null) stoppedCounter = SystemClock.elapsedRealtimeNanos();
         String errors = "";
         try { locations.unregisterGnssMeasurementsCallback(callback); }
         catch (RuntimeException error) { errors += "\nUnregister failed: " + error; }
@@ -254,7 +279,7 @@ public final class MainActivity extends Activity {
                 try { closing.comment("CleanupError", errors); }
                 catch (IOException error) { errors += "\nCleanup error write failed: " + error; }
             }
-            try { closing.finish(reason, SystemClock.elapsedRealtimeNanos()); }
+            try { closing.finish(reason, stoppedCounter); }
             catch (IOException error) { errors += "\nTerminal write failed: " + error; }
             try { closing.close(); }
             catch (IOException error) { errors += "\nFile close failed: " + error; }
@@ -262,6 +287,7 @@ public final class MainActivity extends Activity {
             show(gnssTerminal);
         }
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        renderDiagnostics();
         buttons();
         return errors;
     }
@@ -309,11 +335,14 @@ public final class MainActivity extends Activity {
     private boolean busy() { return log != null || (ntsCapture != null && !ntsCapture.isFinished()); }
     private void recordingStatus() {
         show("Recording GNSS + NTS; keep the app visible. No Termux or PC required."
-            + "\nCallbacks: " + (log == null ? 0 : log.eventCount()) + "\nRaw rows: " + (log == null ? 0 : log.rowCount())
-            + "\nEpoch absent: " + missingEpochs + "\nAlignment uncertainty absent: " + missingUncertainties
             + "\nNTS authenticated: " + ntsAuthenticated + "/20; unavailable: " + ntsUnavailable
-            + "\n10 rounds / 3 s; PTB endpoints share one authority. NTP era: 0."
-            + "\nNo timing budget or security verdict assigned.");
+            + "\n10 rounds / 3 s; PTB endpoints share one authority. NTP era: 0.");
+        renderDiagnostics();
+    }
+    private void renderDiagnostics() {
+        if (diagnostics == null) return;
+        details.setText(diagnostics.render(log == null ? stoppedCounter : SystemClock.elapsedRealtimeNanos(),
+            log != null, ntsCapture != null && !ntsCapture.isFinished()));
     }
     private void show(String text) {
         status.setText(text + (latestFile == null ? "" : "\nFile: " + latestFile.getName()));

@@ -222,8 +222,10 @@ La base è [PNT Clock Collector](../pnt/android-collector/README.md), implementa
 nella [PR #196](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/pull/196):
 registra misure e metadati nativi. La versione 0.2 implementa A1 con NTS nello
 stesso processo e un export ZIP; l'analisi resta sul PC. Il trasporto NTS non
-assegna budget o risoluzione del contatore: la diagnostica A2 e l'integrazione
-del rapporto A3 restano da realizzare. La prova indoor verifica il trasporto
+assegna budget o risoluzione del contatore. La versione 0.3 implementa A2 con
+ricezione Raw effettiva, campi temporali mancanti, discontinuità e risultati NTS
+per endpoint; il confronto resta non valutato. L'integrazione del rapporto A3
+resta da realizzare. La prova indoor verifica il trasporto
 e conserva zero Raw GNSS, senza dichiarare una nuova qualifica scientifica.
 
 | Priorità | Consegna | Criterio di completamento software |

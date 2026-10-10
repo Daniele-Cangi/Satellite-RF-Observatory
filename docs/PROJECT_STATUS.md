@@ -11,7 +11,11 @@ La [roadmap operativa Android](PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefo
 porta ora il telefono al centro del flusso: A1 raccoglie GNSS/NTS nella stessa
 app senza Termux o controllo dal PC; A2 mostra stato e limiti; A3 esporta la
 sessione e rende consultabile il rapporto del motore condiviso. A1 e implementata
-nel raccoglitore 0.2; A2 e l'integrazione del rapporto A3 restano pianificate.
+nel raccoglitore 0.2; la versione 0.3 implementa A2 con callback/Raw effettivi,
+satelliti distinti, età dell'ultimo callback, campi temporali mancanti o invalidi,
+cambi del contatore di discontinuità e risultati NTS per endpoint. I fallimenti
+cumulativi restano visibili; il confronto resta non valutato e i budget non
+qualificati. L'integrazione del rapporto A3 resta da realizzare.
 La base GNSS della PR #196 conserva il suo formato; NTS ora gira nell'app,
 mentre l'analisi resta sul PC. Primo obiettivo: nessun intervento tecnico
 durante la raccolta. Qualifica temporale e beneficio
