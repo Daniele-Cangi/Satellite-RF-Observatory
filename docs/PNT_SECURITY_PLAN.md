@@ -1,8 +1,9 @@
 # Sicurezza PNT: verifica esterna e analisi degli incidenti
 
-Piano di sviluppo del 26 settembre 2026. Direzione richiesta dall'utente;
-architettura proposta, ancora da dimostrare. Questo documento sostituisce le
-priorità di prodotto precedenti. Esperimenti conclusi, risultati e criteri
+Piano di sviluppo del 26 settembre 2026; roadmap operativa aggiornata il
+10 ottobre 2026 con l'app Android come ingresso principale. Direzione richiesta
+dall'utente; architettura proposta, ancora da dimostrare. Questo documento
+sostituisce le priorità di prodotto precedenti. Esperimenti conclusi, risultati e criteri
 storici conservano il loro significato originale.
 
 ## Obiettivo e primo utilizzatore
@@ -21,8 +22,9 @@ datacenter, telecomunicazioni o altri impianti. Navi, droni e posizione mobile
 richiedono in seguito un riferimento di moto indipendente e una nuova validazione.
 
 Il prodotto iniziale è un'analisi offline di una registrazione locale abbinata
-a dati esterni contemporanei. Il successivo pilota osserva gli allarmi senza
-comandare gli impianti. Il sito segue la dimostrazione del beneficio fisico.
+a dati esterni contemporanei, con l'app Android come percorso di acquisizione
+prioritario. Il successivo pilota osserva gli allarmi senza comandare gli
+impianti. Il sito segue la dimostrazione del beneficio fisico.
 
 Il vincolo economico è riusare ricevitori esistenti, protocolli aperti e reti
 pubbliche. Vanno comunque misurati costi di accesso, calcolo, archiviazione e
@@ -209,6 +211,61 @@ causa probabile e attribuzione dell'attaccante; quest'ultima non deriva dal fit.
 
 ## Consegne e decisioni
 
+### Roadmap operativa: dal telefono al rapporto
+
+Il telefono diventa il ricevitore locale di sviluppo e l'app il punto d'ingresso
+del flusso generale. Il primo caso resta fermo; i controlli geometrici richiedono
+coordinate note da una fonte distinta dal fix sotto esame. Il motore condiviso
+rimane utilizzabile anche con altri ricevitori.
+
+La base è [PNT Clock Collector](../pnt/android-collector/README.md), implementato
+nella [PR #196](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/pull/196):
+registra misure e metadati nativi, ma oggi NTS gira separatamente in Termux e
+l'analisi si esegue sul PC. L'app autonoma descritta qui è ancora da realizzare.
+
+| Priorità | Consegna | Criterio di completamento software |
+|---|---|---|
+| A1 — Raccolta autonoma | Un comando nell'app avvia GNSS e NTS concorrenti sullo stesso telefono, con il medesimo contatore monotono e sessione/avvio identificati | Raccolta senza Termux, PC, cavo o debug Wi-Fi; originali, tentativi NTS falliti, lacune e chiusura conservati; nessun timestamp GNSS sostituito con l'ora della callback |
+| A2 — Diagnostica durante la prova | Stato di ricezione, discontinuità, disponibilità NTS, campi mancanti e limiti del confronto | L'operatore distingue acquisizione in corso, dati insufficienti ed errori; la buona ricezione o un server autenticato non diventano un verdetto di autenticità |
+| A3 — Rapporto ed esportazione | Una sessione esportabile alimenta il motore PNT esistente e il rapporto torna consultabile sul telefono | Input originali e risultati riproducibili, stesso esito nel replay, errori e controlli non eseguiti visibili; nessun nuovo motore o formato di verdetto parallelo |
+
+Per A3 l'elaborazione iniziale resta sul PC: export/import esplicito precede
+l'eventuale collegamento a un servizio configurato dall'utente. Quando serve
+l'integrazione, riusare coda, worker e dossier esistenti; non presumere che il
+servizio locale sia già un'API pubblica. Nessun upload automatico dei dati grezzi.
+Il porting dei controlli sul telefono segue un bisogno misurato.
+
+Il primo traguardo operativo è **registrare dal telefono e ottenere un rapporto
+completo senza interventi tecnici durante la raccolta**. La prima versione può
+richiedere l'app visibile; raccolta a schermo spento e sorveglianza continua sono
+estensioni successive, con gestione esplicita del ciclo di vita e dei consumi.
+L'assenza di Internet permette di conservare GNSS, ma non un confronto NTS valido.
+
+A1–A3 sono lavoro di ingegneria con test riutilizzabili e CI Linux/Windows.
+Non richiedono nuove autorità, sigilli o preregistrazioni e non chiudono P2/P3.
+Le verifiche del client NTS devono preservare autenticazione, provenienza,
+intervalli temporali ed errori del percorso esistente; un'eventuale implementazione
+Android deve essere confrontata con quel comportamento, senza fallback a NTP
+non autenticato. Review mirata per modifiche crittografiche o ai verdetti;
+nessuna review scientifica aggiuntiva per la sola interfaccia.
+
+In parallelo si qualifica il limite temporale utile al caso d'uso: definire
+l'errore dannoso da distinguere e giustificare l'associazione GNSS/contatore e
+gli errori del riferimento, prima del confronto benigno/challenge. I circa
+7 ms dichiarati dal ricevitore non sono un limite indipendente; il budget
+storico di 1 ms resta non qualificato. L'app non lo corregge automaticamente.
+Ulteriori raccolte devono risolvere un limite nominato, senza allargare soglie
+dopo il reveal o ripetere prove equivalenti per cercare un esito migliore.
+
+Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
+locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,
+mancate rilevazioni e copertura. Se il canale non distingue l'errore utile,
+restringere la promessa o scegliere un'altra osservabile. La conferma su dati
+esclusi, il pilota e infine il sito seguono i criteri P2–P5 sotto; l'app non
+autentica universalmente l'RF e non dimostra da sola una posizione corretta.
+
+### Traguardi scientifici e integrazione
+
 | Passo | Consegna concreta | Condizione per avanzare |
 |---|---|---|
 | P0 — Dati e caso d'uso | Contratto minimo del ricevitore fisso, fonti candidate e mappa degli errori osservabili | Almeno un percorso concreto per associare vittima e riferimenti contemporanei; limiti del tempo espliciti |
@@ -253,7 +310,7 @@ nello [stato del progetto](PROJECT_STATUS.md); la
 [specifica minima della registrazione](../research/exploratory/PNT_P2_RECORDING_DECISION.md)
 descrive le osservazioni mancanti per il confronto fisico più forte.
 
-### Primo ciclo di lavoro: P0 e P1
+### Ciclo iniziale P0/P1: piano del 26 settembre
 
 1. Usare un ricevitore del corpus esposto come vittima di sviluppo e gli altri
    come riferimenti, documentando che non è un incidente cyber dimostrato.

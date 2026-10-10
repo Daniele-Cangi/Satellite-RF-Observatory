@@ -105,9 +105,13 @@ Detailed outcomes, numerical results and next physical questions live in
 Synthetic exercises test software mechanisms; they are not measured RF
 detection performance. Closed results remain unchanged.
 
-The next research priority is a documented benign/challenge recording that
-can measure the added value of external evidence. Website and deployment work
-follow that physical demonstration.
+The next delivery priority is an [autonomous Android acquisition and reporting
+workflow](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto):
+GNSS and authenticated Internet time collected in one app, with the existing
+analysis engine and replay. This is planned work; the native collector is its
+first component. Timing qualification and a documented benign/challenge
+comparison remain necessary to establish security benefit. Website and
+deployment work follow that physical demonstration.
 
 ## Documentation
 
