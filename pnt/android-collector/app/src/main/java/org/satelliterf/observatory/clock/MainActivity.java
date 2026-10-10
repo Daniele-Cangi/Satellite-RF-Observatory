@@ -43,6 +43,7 @@ import java.util.zip.ZipOutputStream;
 public final class MainActivity extends Activity {
     private static final int LOCATION_PERMISSION = 1;
     private static final int EXPORT_FILE = 2;
+    private static final int IMPORT_REPORT = 3;
     private static final List<String> NTS_SERVERS = Arrays.asList("ptbtime1.ptb.de", "ptbtime2.ptb.de");
     private static final int NTS_ROUNDS = 10;
     private LocationManager locations;
@@ -61,6 +62,9 @@ public final class MainActivity extends Activity {
     private Button startButton;
     private Button stopButton;
     private Button exportButton;
+    private Button reportButton;
+    private TextView reportDetails;
+    private boolean reportLoading;
     private final Runnable refreshDiagnostics = new Runnable() {
         @Override public void run() {
             if (log == null) return;
@@ -119,9 +123,13 @@ public final class MainActivity extends Activity {
         startButton = button(layout, "Start GNSS + NTS", v -> requestStart());
         stopButton = button(layout, "Stop recording", v -> stop("USER_STOPPED"));
         exportButton = button(layout, "Export last session", v -> export());
+        reportButton = button(layout, "Open PC report", v -> importReport());
         details = new TextView(this);
         details.setTextSize(16);
         layout.addView(details);
+        reportDetails = new TextView(this);
+        reportDetails.setTextSize(16);
+        layout.addView(reportDetails);
         ScrollView scroll = new ScrollView(this);
         scroll.addView(layout);
         setContentView(scroll);
@@ -138,6 +146,10 @@ public final class MainActivity extends Activity {
         show("PNT Clock Collector\nGNSS + authenticated Internet time; no authenticity decision."
             + (latestFile == null ? "" : "\nPrevious file retained; completion not checked."));
         buttons();
+        try {
+            var lastReport = SessionReport.latest(getFilesDir().toPath());
+            if (lastReport != null) loadReport(lastReport.toFile(), null);
+        } catch (IOException error) { show("Retained report unavailable: " + error + "\nOriginals retained."); }
         // Insets keep controls reachable on Android's edge-to-edge display.
         if (Build.VERSION.SDK_INT >= 30) {
             layout.setOnApplyWindowInsetsListener((view, insets) -> {
@@ -308,19 +320,59 @@ public final class MainActivity extends Activity {
         startActivityForResult(intent, EXPORT_FILE);
     }
 
+    private void importReport() {
+        if (busy() || reportLoading) return;
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/json");
+        startActivityForResult(intent, IMPORT_REPORT);
+    }
+
+    private void loadReport(File retained, Uri document) {
+        reportLoading = true;
+        buttons();
+        new Thread(() -> {
+            try (InputStream input = retained == null ? getContentResolver().openInputStream(document)
+                    : Files.newInputStream(retained.toPath())) {
+                if (input == null) throw new IOException("No report input stream");
+                SessionReport report = SessionReport.read(input, getFilesDir().toPath());
+                if (retained == null) {
+                    report.retain(getFilesDir().toPath());
+                }
+                ui.post(() -> {
+                    reportDetails.setText(report.text);
+                    reportLoading = false;
+                    buttons();
+                });
+            } catch (IOException | RuntimeException error) {
+                ui.post(() -> {
+                    show("PC report could not be opened: " + error + "\nOriginal recordings and earlier reports retained.");
+                    reportLoading = false;
+                    buttons();
+                });
+            }
+        }, "pnt-report-import").start();
+    }
+
     @Override protected void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
-        if (request != EXPORT_FILE || result != RESULT_OK || data == null || data.getData() == null) return;
+        if ((request != EXPORT_FILE && request != IMPORT_REPORT) || result != RESULT_OK
+                || data == null || data.getData() == null) return;
         try {
             Uri requested = data.getData();
             boolean granted = checkUriPermission(requested, android.os.Process.myPid(), android.os.Process.myUid(),
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED;
-            String validated = ExportDestination.validate(requested.toString(), granted,
+                request == EXPORT_FILE ? Intent.FLAG_GRANT_WRITE_URI_PERMISSION : Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                == PackageManager.PERMISSION_GRANTED;
+            String validated = DocumentDestination.validate(requested.toString(), granted,
                 DocumentsContract.isDocumentUri(this, requested)).toString();
             if (!validated.equals(requested.toString())) {
                 throw new SecurityException("Validated destination differs from the granted URI");
             }
             Uri destination = Uri.parse(validated);
+            if (request == IMPORT_REPORT) {
+                loadReport(null, destination);
+                return;
+            }
             try (OutputStream output = getContentResolver().openOutputStream(destination, "wt")) {
                 if (output == null) throw new IOException("No export stream");
                 try (ZipOutputStream zip = new ZipOutputStream(output)) {
@@ -337,13 +389,14 @@ public final class MainActivity extends Activity {
                 }
                 show("Session exported. Private originals retained. Check both terminals before treating it as complete.");
             }
-        } catch (IOException | RuntimeException error) { show("Export failed; original retained: " + error); }
+        } catch (IOException | RuntimeException error) { show("Document operation failed; originals retained: " + error); }
     }
 
     private void buttons() {
-        startButton.setEnabled(!busy());
+        startButton.setEnabled(!busy() && !reportLoading);
         stopButton.setEnabled(log != null);
-        exportButton.setEnabled(!busy() && latestFile != null);
+        exportButton.setEnabled(!busy() && !reportLoading && latestFile != null);
+        reportButton.setEnabled(!busy() && !reportLoading);
     }
     private boolean busy() { return log != null || (ntsCapture != null && !ntsCapture.isFinished()); }
     private void recordingStatus() {

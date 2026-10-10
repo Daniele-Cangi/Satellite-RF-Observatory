@@ -135,11 +135,20 @@ def inspect_android_raw(path):
     Ambiguous headers or truncated rows reject the whole input.
     """
     path = Path(path)
-    data = path.read_bytes()
+    return inspect_android_raw_bytes(path.read_bytes(), path.name)
+
+
+def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture_id=None):
+    """Shared intake for retained files and ZIP members; no archive extraction.
+
+    Empty native sessions can be reported explicitly, while the ordinary Raw
+    command retains its rejection of recordings without measurements.
+    """
     decoded = gzip.decompress(data) if data.startswith(b'\x1f\x8b') else data
     text = decoded.decode('utf-8-sig')
     header, comments, records = None, [], []
-    counts, constellations, ignored = Counter(), Counter(), Counter()
+    counts, constellations, ignored, native_events = Counter(), Counter(), Counter(), Counter()
+    native_windows = {}
     for line, content in enumerate(text.splitlines(), 1):
         if not content.strip():
             continue
@@ -160,6 +169,17 @@ def inspect_android_raw(path):
         if header is None or len(fields) != len(header):
             raise ValueError(f'line {line}: Raw row without header or incorrect field count')
         values = dict(zip(header, fields))
+        if expected_capture_id is not None and values.get('CaptureId') != expected_capture_id:
+            raise ValueError(f'line {line}: Raw capture ID differs from the session')
+        if expected_capture_id is not None:
+            event = _integer(values, 'EventIndex')
+            if event < 1:
+                raise ValueError(f'line {line}: invalid native EventIndex')
+            native_events[str(event)] += 1
+            window = [_integer(values, 'CallbackStartElapsedRealtimeNanos'),
+                      _integer(values, 'CallbackReadEndElapsedRealtimeNanos')]
+            if native_windows.setdefault(str(event), window) != window:
+                raise ValueError(f'line {line}: native Raw rows disagree on their callback window')
         counts['raw_rows'] += 1
         constellations[values['ConstellationType']] += 1
         try:
@@ -179,11 +199,13 @@ def inspect_android_raw(path):
                    'status': 'INVALID_GPS_MEASUREMENT', 'reason': str(error)}
         records.append(row)
         counts[row['status']] += 1
-    if header is None or not counts['raw_rows']:
+    if header is None or (not counts['raw_rows'] and not allow_empty):
         raise ValueError('no Android Raw measurements')
-    return {
+    if allow_empty:
+        counts['raw_rows'] += 0
+    report = {
         'schema': 'pnt-android-raw-v1', 'status': 'OBSERVATION_INTAKE_ONLY',
-        'source': {'name': path.name, 'size_bytes': len(data),
+        'source': {'name': name, 'size_bytes': len(data),
                    'sha256': hashlib.sha256(data).hexdigest(),
                    'decoded_sha256': hashlib.sha256(decoded).hexdigest(),
                    'comments': comments, 'columns': header},
@@ -203,3 +225,7 @@ def inspect_android_raw(path):
              'independent_event_timing', 'network_benefit'), 'NOT_ASSESSED'),
         'records': records,
     }
+    if expected_capture_id is not None:
+        report['source']['native_event_row_counts'] = dict(sorted(native_events.items()))
+        report['source']['native_event_callback_windows'] = dict(sorted(native_windows.items()))
+    return report

@@ -15,7 +15,12 @@ nel raccoglitore 0.2; la versione 0.3 implementa A2 con callback/Raw effettivi,
 satelliti distinti, età dell'ultimo callback, campi temporali mancanti o invalidi,
 cambi del contatore di discontinuità e risultati NTS per endpoint. I fallimenti
 cumulativi restano visibili; il confronto resta non valutato e i budget non
-qualificati. L'integrazione del rapporto A3 resta da realizzare.
+qualificati. La versione 0.4 implementa A3 con `android-session`: ZIP ->
+rapporto PC -> **Open PC report**. Gli hash vengono confrontati con gli originali
+privati; input mancanti, parziali, fallimenti e controlli non eseguiti restano
+visibili. Senza budget il rapporto resta insufficiente; solo assunzioni esplicite
+attivano il confronto e replay esistenti. L'app si affida al calcolo PC, senza
+un nuovo motore, firma forense o upload. La qualifica temporale resta aperta.
 La base GNSS della PR #196 conserva il suo formato; NTS ora gira nell'app,
 mentre l'analisi resta sul PC. Primo obiettivo: nessun intervento tecnico
 durante la raccolta. Qualifica temporale e beneficio

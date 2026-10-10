@@ -23,7 +23,8 @@ The Android app turns an existing phone into a measurement collector: one
 button records native GNSS measurements and authenticated Internet time (NTS),
 then exports both originals in a ZIP. Collection needs Internet and sky view,
 with the app visible; it needs no Termux, PC or USB cable. Analysis and replay
-currently run in the existing Python engine on a PC.
+run in the existing Python engine on a PC; version 0.4 returns its report to
+the phone through an explicit document import.
 
 The first use case is a **fixed GPS receiver at independently known coordinates**.
 The active goal is to establish whether external observations add useful
@@ -46,7 +47,8 @@ absolute-time verification requires a separate qualified time reference.
 
 | Command / component | Available behavior |
 |---|---|
-| [PNT Clock Collector](pnt/android-collector/README.md) | Same-app GNSS + NTS acquisition, live reception/clock/endpoint diagnostics, retained failures and session ZIP export; Android 10+ development APK |
+| [PNT Clock Collector](pnt/android-collector/README.md) | Same-app GNSS + NTS, live diagnostics, session ZIP export and input-bound PC report import; Android 10+ development APK |
+| `python -m pnt android-session` | Native session ZIP to a phone-readable report; missing budgets remain insufficient, explicit analysis reuses the existing time engine |
 | `python -m pnt analyze` | Fixed-site RINEX geometry, local and matched-network clock fits, double differences and data gaps |
 | `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
 | `python -m pnt time-probe` / `android-time-probe` | Authenticated Internet time acquisition with declared assumptions; the Android command uses the phone's CLOCK_BOOTTIME |
@@ -78,11 +80,24 @@ Install the development APK, grant precise Location, and press **Start GNSS +
 NTS** outdoors with Internet access. Keep the app visible, then use **Export
 last session** after the schedule finishes or after pressing Stop. The ZIP
 contains the original Raw CSV and NTS JSON, including failed and unattempted
-slots. Extract it on a PC for intake and replay.
+slots. Transfer it to a PC and create a report:
+
+```console
+python -m pip install -r requirements-pnt-time.txt
+python -m pnt android-session pnt-session-<id>.zip --output phone-report.json
+```
+
+With no analysis assumptions, this writes an **INSUFFICIENT_EVIDENCE** report
+and exits with code **2**. Copy the JSON to the phone and press **Open PC report**:
+the app checks its input hashes against retained originals and shows coverage,
+failures, assumptions and controls not run. The
+[reporting guide](pnt/android-collector/README.md#zip-to-pc-report-to-phone)
+explains conditional analysis and replay; no upload or on-device solver is added.
 
 The live panel shows actual Raw reception, missing timing fields, clock count
 changes and NTS failures. It distinguishes acquisition problems from a timing
-comparison, which remains **NOT ASSESSED** in the app.
+comparison, which remains **NOT ASSESSED** during acquisition. Imported PC
+results appear separately, labeled with their session and trust limits.
 
 The app does not assign a security verdict or invent timing bounds. Its NTS
 transport report intentionally leaves unqualified budgets and counter resolution

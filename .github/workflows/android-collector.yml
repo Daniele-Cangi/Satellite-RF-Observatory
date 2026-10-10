@@ -41,7 +41,7 @@ jobs:
           PNT_COLLECTOR_FIXTURE: pnt/android-collector/app/build/synthetic-collector.txt
           PNT_NTS_CAPTURE_FIXTURE: pnt/android-collector/app/build/synthetic-nts.json
           PNT_ANDROID_NTS_INTEGRATION: '1'
-        run: python -m pytest pnt/tests/test_android_collector.py pnt/tests/test_android_nts.py -q
+        run: python -m pytest pnt/tests/test_android_collector.py pnt/tests/test_android_session.py pnt/tests/test_android_nts.py -q
       - uses: actions/upload-artifact@v4
         if: always()
         with:
