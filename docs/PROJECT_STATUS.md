@@ -116,7 +116,20 @@ indipendente di associazione di 1 ms resta non qualificato. Tutte le 51
 discordanze/9 epoche, le esclusioni e i precedenti risultati sono invariati.
 Il prossimo incremento utile riguarda i metadati di acquisizione sul telefono,
 senza ricavare un nuovo budget dall'accordo osservato o ripetere la stessa
-challenge. Nessuna nuova acquisizione e iniziata.
+challenge. La diagnosi usa soltanto gli input originali.
+
+Il [PNT Clock Collector Android](../pnt/android-collector/README.md) raccoglie
+ora quei metadati nello stesso intake/replay. La [prova esterna sul telefono](../research/exploratory/PNT_PHONE_NATIVE_CLOCK_METADATA.md)
+conserva 141 callback, 3.199 Raw e 13/20 NTS autenticati, con sette fallimenti.
+L'incertezza nativa e disponibile in tutte le callback: circa **7 ms al 68%**,
+piu ampia dell'assunzione di sviluppo di 1 ms, che rimane invariata e non
+qualificata. Con quel budget, 316/1.463 righe GPS (30/140 epoche) hanno supporto
+NTS compatibile; il controllo locale conserva 137 discordanze/13 epoche.
+Con associazione ignota tutte le righe restano insufficienti. Quattro rapporti
+si riproducono esattamente; gli originali e la prova indoor vuota restano
+conservati. APK, test Java, lint e 656 test PNT verificati; CI Android
+Linux/Windows aggiunta senza ridurre quella Python. Nessun campo dichiarato
+o ritardo della callback diventa un budget indipendente; P2 resta aperta.
 
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,

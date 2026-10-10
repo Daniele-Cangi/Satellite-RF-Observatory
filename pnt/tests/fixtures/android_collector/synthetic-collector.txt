@@ -1,0 +1,15 @@
+# Format,pnt-android-clock-collector-v1
+# CaptureId,synthetic-ci
+# Metadata,Evidence,SYNTHETIC_ONLY
+# UncertaintySemantics,"ElapsedRealtimeUncertaintyNanos: receiver estimate, 68% confidence; not a hard bound"
+# TimingSemantics,callback entry and end of API reads; not RF arrival or file-write time
+# Raw,CaptureId,EventIndex,CallbackStartElapsedRealtimeNanos,CallbackReadEndElapsedRealtimeNanos,TimeNanos,LeapSecond,TimeUncertaintyNanos,FullBiasNanos,BiasNanos,BiasUncertaintyNanos,DriftNanosPerSecond,DriftUncertaintyNanosPerSecond,HardwareClockDiscontinuityCount,ChipsetElapsedRealtimeNanos,ElapsedRealtimeUncertaintyNanos,HasElapsedRealtimeNanos,HasElapsedRealtimeUncertaintyNanos,HasTimeUncertaintyNanos,HasFullBiasNanos,HasBiasNanos,HasBiasUncertaintyNanos,HasLeapSecond,HasDriftNanosPerSecond,HasDriftUncertaintyNanosPerSecond,Svid,ConstellationType,TimeOffsetNanos,State,ReceivedSvTimeNanos,ReceivedSvTimeUncertaintyNanos,Cn0DbHz,PseudorangeRateMetersPerSecond,PseudorangeRateUncertaintyMetersPerSecond,AccumulatedDeltaRangeState,AccumulatedDeltaRangeMeters,AccumulatedDeltaRangeUncertaintyMeters,CarrierFrequencyHz,CodeType,SnrInDb,AgcDb
+# Event,1,123456790012346,123456790012401,2,9007199254741003,,,-1400000000000000000,0.25,,,,7,123456789012345,,true,false,,,,,,,
+Raw,synthetic-ci,1,123456790012346,123456790012401,9007199254741003,,,-1400000000000000000,0.25,,,,7,123456789012345,,true,false,,,,,,,,1,1,0.0,9,20000000000,,,,,,,,1.57542E9,C,,
+Raw,synthetic-ci,1,123456790012346,123456790012401,9007199254741003,,,-1400000000000000000,0.25,,,,7,123456789012345,,true,false,,,,,,,,1,1,0.0,9,20000000000,,,,,,,,1.57542E9,C,,
+# Event,2,123456791012346,123456791012401,1,9007199254741003,,,-1400000000000000000,0.25,,,,7,,,false,false,,,,,,,
+Raw,synthetic-ci,2,123456791012346,123456791012401,9007199254741003,,,-1400000000000000000,0.25,,,,7,,,false,false,,,,,,,,1,1,0.0,9,20000000000,,,,,,,,1.57542E9,C,,
+# Event,3,123456792012346,123456792012401,1,9007199254741003,,,-1400000000000000000,0.25,,,,7,123456789012345,,true,false,,,,,,,
+Raw,synthetic-ci,3,123456792012346,123456792012401,9007199254741003,,,-1400000000000000000,0.25,,,,7,123456789012345,,true,false,,,,,,,,1,6,0.0,9,20000000000,,,,,,,,1.57542E9,C,,
+# Event,4,123456793012346,123456793012401,0,9007199254741003,,,-1400000000000000000,0.25,,,,7,,,false,false,,,,,,,
+# Terminal,USER_STOPPED,123456794012345,4,4

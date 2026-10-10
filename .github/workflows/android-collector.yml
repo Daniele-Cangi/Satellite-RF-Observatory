@@ -1,0 +1,50 @@
+name: Android clock collector
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  collector:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.5'
+      - run: python -m pip install -r requirements-pnt-time.txt pytest
+      - name: Build, unit tests and Android lint
+        if: runner.os != 'Windows'
+        working-directory: pnt/android-collector
+        run: ./gradlew --no-daemon -PsourceRevision=${{ github.sha }} testDebugUnitTest assembleDebug lintDebug
+      - name: Build, unit tests and Android lint (Windows)
+        if: runner.os == 'Windows'
+        working-directory: pnt/android-collector
+        run: .\gradlew.bat --no-daemon -PsourceRevision=${{ github.sha }} testDebugUnitTest assembleDebug lintDebug
+      - name: Test generated CSV with existing Python intake and replay
+        env:
+          PNT_COLLECTOR_FIXTURE: pnt/android-collector/app/build/synthetic-collector.txt
+        run: python -m pytest pnt/tests/test_android_collector.py -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-collector-${{ matrix.os }}
+          path: |
+            pnt/android-collector/app/build/outputs/apk/debug/*.apk
+            pnt/android-collector/app/build/reports/
+          if-no-files-found: ignore

@@ -1,4 +1,6 @@
 # Receipt artifacts are byte-addressed evidence; never normalize line endings.
+pnt/android-collector/gradlew text eol=lf
+pnt/tests/fixtures/android_collector/*.txt text eol=lf
 research/exploratory/*.py -text
 research/exploratory/results/*.json -text
 research/exploratory/inputs/** -text -whitespace

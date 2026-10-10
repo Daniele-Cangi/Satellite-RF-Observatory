@@ -271,3 +271,4 @@ research/exploratory/results/*
 !research/exploratory/results/pnt_phone_time_sensitivity_v1.json
 !research/exploratory/results/pnt_phone_paired_time_v1.json
 !research/exploratory/results/pnt_phone_clock_diagnostics_v1.json
+!research/exploratory/results/pnt_phone_native_clock_metadata_v1.json
