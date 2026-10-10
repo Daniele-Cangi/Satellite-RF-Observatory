@@ -18,7 +18,10 @@ compute a timing/security verdict on the phone.
    No other app is required. Do not reboot during acquisition.
 3. The app stops after ten rounds against `ptbtime1.ptb.de` and
    `ptbtime2.ptb.de`, or when you press **Stop recording**. Round starts are
-   scheduled three seconds apart; slow network attempts can extend the session.
+   scheduled three seconds apart. Version 0.4.2 runs the endpoints separately:
+   a timeout at one does not hold up the other. Each endpoint has one active
+   request at most and starts at least three seconds apart, including late
+   rounds. Slow network attempts can extend the session; all twenty slots remain.
 4. Press **Export last session**, then save the ZIP using Android's document
    picker. It contains the original `pnt-clock-<id>.txt` and
    `pnt-nts-<id>.json`. Transfer the ZIP to the PC without modifying either
@@ -67,6 +70,18 @@ in the report. Unknown legacy schedules remain insufficient. These are
 consistency checks on trusted collector declarations, not tamper-proof attestation.
 Cache writes publish a complete report only after a sibling pending file is
 renamed; an interrupted pending write cannot hide an earlier valid report.
+
+Version 0.4.2 declares `execution: INDEPENDENT_ENDPOINTS_SPACED` in the existing
+NTS protocol. The slot list stays in round/endpoint order, irrespective of
+completion order. The PC checks each endpoint's non-overlapping attempt prefix,
+minimum start spacing, original round offsets and complete slot/terminal totals.
+Late slots start without replacement, retries or compressed catch-up. This mode
+requires declared collector version 0.4.2; older or unknown versions cannot opt
+into it. Historical reports retain the original global serial checks.
+Checkpoint writes and progress updates are serialized; Stop closes every active
+probe, wakes both schedules and waits for their completion before the final
+terminal. The existing comparison/replay still uses adjacent attempts at the
+same endpoint, retaining failures rather than bridging them.
 
 The `pnt-android-session-report-v1` JSON is a presentation envelope containing
 the existing intake and, when requested, the unchanged
@@ -153,7 +168,7 @@ All twenty planned slots are retained. Each completion checkpoints the JSON
 with authenticated exchanges, failures and unattempted slots; orderly stop
 adds its terminal. Certificates/response hashes and public peer addresses are
 recorded, while session keys/cookies are not exported. Stop closes active sockets
-and interrupts scheduled waits. Socket operations have five-second stage
+and wakes scheduled waits. Socket operations have five-second stage
 timeouts; Android DNS resolution is OS-managed and can delay final stop. The
 client checks cancellation/deadlines after resolution before connecting.
 

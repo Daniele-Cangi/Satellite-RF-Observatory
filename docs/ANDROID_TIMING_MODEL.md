@@ -114,4 +114,8 @@ ipotetico di 25 ms: il contributo esterno si ripete sui 47/117 gruppi clock
 comuni, senza discordanze originali nei controlli valutabili. I 70 gruppi
 insufficienti e i 16 timeout NTS restano visibili. Questa osservazione risolve
 la domanda condizionale in quel blocco; i limiti fisici sopra restano aperti.
-La prossima correzione riguarda la copertura del calendario NTS sotto timeout.
+Il raccoglitore 0.4.2 separa i due endpoint NTS e conserva una distanza minima
+fra gli avvii dello stesso endpoint, senza comprimere i tentativi dopo un ritardo.
+Slot, fallimenti e cancellazioni restano verificabili nell'intake esistente;
+la valutazione conclusa non cambia. Una nuova prova deve misurare l'eventuale
+guadagno di copertura, usando il profilo dichiarato e conservando gli insufficienti.

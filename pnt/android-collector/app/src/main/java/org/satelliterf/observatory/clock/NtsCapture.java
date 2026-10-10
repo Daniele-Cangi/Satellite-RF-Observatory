@@ -37,7 +37,11 @@ final class NtsCapture {
     private final List<Map<String, Object>> attempts = new ArrayList<>();
     private final long started;
     private final Thread worker;
-    private volatile Probe active;
+    private final List<Thread> endpoints = new ArrayList<>();
+    // Report mutations, checkpoints, progress and active probes share this monitor.
+    private final Map<Integer, Probe> active = new LinkedHashMap<>();
+    private int authenticated, unavailable;
+    private String fatal;
     private volatile String stopReason;
     private volatile boolean finished;
 
@@ -67,7 +71,8 @@ final class NtsCapture {
         report.put("protocol", map("timeout_s", 5.0, "ntp_era", 0, "automatic_retries", false,
             "endpoints", new ArrayList<>(servers), "planned_attempts", rounds * servers.size(), "interval_ns", intervalNs,
             "rounds", rounds, "interval_s", intervalNs / 1e9, "attempts_per_endpoint", rounds,
-            "schedule", "ROUND_START_OFFSETS", "missed_schedule", "START_LATE_WITHOUT_REPLACEMENT"));
+            "schedule", "ROUND_START_OFFSETS", "missed_schedule", "START_LATE_WITHOUT_REPLACEMENT",
+            "execution", "INDEPENDENT_ENDPOINTS_SPACED"));
         for (int round = 0; round < rounds; round++) for (String server : servers) {
             attempts.add(map("server", server, "round_index", round,
                 "scheduled_round_start_monotonic_ns", started + round * intervalNs,
@@ -78,6 +83,12 @@ final class NtsCapture {
             "interrupted", false, "state", "IN_PROGRESS"));
         Files.createFile(file); // A new capture can never overwrite an earlier session.
         save();
+        for (int index = 0; index < servers.size(); index++) {
+            final int endpoint = index;
+            Thread thread = new Thread(() -> runEndpoint(endpoint, servers.size()), "pnt-nts-endpoint-" + index);
+            thread.setDaemon(true);
+            endpoints.add(thread);
+        }
         worker = new Thread(this::run, "pnt-nts-capture");
         worker.setDaemon(true);
     }
@@ -86,13 +97,16 @@ final class NtsCapture {
     synchronized void cancel(String reason) {
         if (finished || stopReason != null) return;
         stopReason = reason;
-        Probe probe = active;
-        if (probe != null) {
-            try { probe.close(); } catch (IOException ignored) { /* Worker retains interruption/failure. */ }
+        for (Probe probe : active.values()) {
+            try { probe.close(); } catch (IOException | RuntimeException ignored) { /* Worker retains interruption/failure. */ }
         }
         // An interrupt left pending by socket I/O also aborts Files.write().
         // Wake schedule waits without poisoning the final evidence checkpoint.
         notifyAll();
+    }
+    private synchronized void fail(Exception error) {
+        if (fatal == null) fatal = error.getClass().getSimpleName();
+        cancel("STORAGE_OR_COLLECTOR_FAILED");
     }
     private synchronized void awaitSchedule(long scheduled) throws InterruptedException {
         while (stopReason == null) {
@@ -101,54 +115,77 @@ final class NtsCapture {
             wait(delay / 1000000L, (int) (delay % 1000000L));
         }
     }
-    private void run() {
-        int authenticated = 0, unavailable = 0;
-        String fatal = null;
+    private void runEndpoint(int endpoint, int endpointCount) {
+        long nextStart = started;
         try {
-            for (Map<String, Object> attempt : attempts) {
-                if (stopReason != null) { attempt.put("reason", "CAPTURE_INTERRUPTED"); continue; }
-                long scheduled = (Long) attempt.get("scheduled_round_start_monotonic_ns");
-                try { awaitSchedule(scheduled); }
-                catch (InterruptedException error) {
-                    stopReason = "COLLECTOR_INTERRUPTED";
-                    attempt.put("reason", "CAPTURE_INTERRUPTED");
-                    continue;
+            for (int index = endpoint; index < attempts.size(); index += endpointCount) {
+                Map<String, Object> attempt = attempts.get(index);
+                synchronized (this) {
+                    long scheduled = (Long) attempt.get("scheduled_round_start_monotonic_ns");
+                    awaitSchedule(Math.max(scheduled, nextStart));
+                    if (stopReason != null) return;
+                    long attemptStart = counter.getAsLong();
+                    // No catch-up burst after a late round; no retry or replacement slot.
+                    nextStart = attemptStart + intervalNs;
+                    attempt.put("status", "WITNESS_UNAVAILABLE");
+                    attempt.put("reason", "ATTEMPT_IN_PROGRESS");
+                    attempt.put("started_monotonic_ns", attemptStart);
+                    save(); // Retain the attempted slot before opening the endpoint.
                 }
-                if (stopReason != null) { attempt.put("reason", "CAPTURE_INTERRUPTED"); continue; }
-                attempt.put("status", "WITNESS_UNAVAILABLE");
-                attempt.put("reason", "ATTEMPT_IN_PROGRESS");
-                attempt.put("started_monotonic_ns", counter.getAsLong());
-                save(); // Retain the attempted slot before opening the endpoint.
                 Probe probe = null;
+                Map<String, Object> exchange = null;
+                String reason = null, cleanupError = null;
                 try {
                     probe = factory.create();
-                    active = probe;
-                    if (stopReason != null) { probe.close(); throw new IOException("CAPTURE_INTERRUPTED"); }
-                    Map<String, Object> exchange = probe.probe((String) attempt.get("server"), 4460, 5000, 0);
-                    exchange.put("capture_id", report.get("capture_id"));
-                    attempt.put("status", "AUTHENTICATED_EXCHANGE");
-                    attempt.put("exchange", exchange);
-                    attempt.remove("reason");
-                    authenticated++;
+                    synchronized (this) {
+                        if (stopReason != null) throw new IOException("CAPTURE_INTERRUPTED");
+                        active.put(endpoint, probe);
+                    }
+                    exchange = probe.probe((String) attempt.get("server"), 4460, 5000, 0);
                 } catch (Exception | LinkageError error) {
-                    attempt.put("reason", stopReason != null ? "CAPTURE_INTERRUPTED" : error.getClass().getSimpleName()
-                        + (error.getMessage() == null ? "" : ": " + error.getMessage()));
-                    unavailable++;
+                    reason = stopReason != null ? "CAPTURE_INTERRUPTED" : error.getClass().getSimpleName()
+                        + (error.getMessage() == null ? "" : ": " + error.getMessage());
                 } finally {
-                    active = null;
                     if (probe != null) {
                         try { probe.close(); }
-                        catch (IOException error) { attempt.put("cleanup_error", error.getClass().getSimpleName()); }
+                        catch (IOException | RuntimeException error) { cleanupError = error.getClass().getSimpleName(); }
                     }
-                    attempt.put("finished_monotonic_ns", counter.getAsLong());
                 }
-                save();
-                listener.attemptCompleted((String) attempt.get("server"), (String) attempt.get("status"), (String) attempt.get("reason"));
-                listener.updated(authenticated, unavailable);
+                synchronized (this) {
+                    active.remove(endpoint);
+                    if (exchange != null) {
+                        exchange.put("capture_id", report.get("capture_id"));
+                        attempt.put("status", "AUTHENTICATED_EXCHANGE");
+                        attempt.put("exchange", exchange);
+                        attempt.remove("reason");
+                        authenticated++;
+                    } else {
+                        attempt.put("reason", reason);
+                        unavailable++;
+                    }
+                    if (cleanupError != null) attempt.put("cleanup_error", cleanupError);
+                    attempt.put("finished_monotonic_ns", counter.getAsLong());
+                    save();
+                    listener.attemptCompleted((String) attempt.get("server"), (String) attempt.get("status"), (String) attempt.get("reason"));
+                    listener.updated(authenticated, unavailable);
+                }
             }
+        } catch (InterruptedException error) {
+            cancel("COLLECTOR_INTERRUPTED");
         } catch (IOException | RuntimeException error) {
-            fatal = error.getClass().getSimpleName();
-        } finally {
+            fail(error);
+        }
+    }
+    private void run() {
+        for (Thread endpoint : endpoints) endpoint.start();
+        for (Thread endpoint : endpoints) {
+            boolean joined = false;
+            while (!joined) {
+                try { endpoint.join(); joined = true; }
+                catch (InterruptedException error) { cancel("COLLECTOR_INTERRUPTED"); }
+            }
+        }
+        synchronized (this) {
             String reason = fatal != null ? "STORAGE_OR_COLLECTOR_FAILED" : stopReason != null ? stopReason : "SCHEDULE_COMPLETED";
             for (Map<String, Object> attempt : attempts) {
                 if ("NOT_ATTEMPTED".equals(attempt.get("status"))) attempt.put("reason", reason);
@@ -160,8 +197,8 @@ final class NtsCapture {
                 "authenticated_exchanges", authenticated, "unavailable_attempts", unavailable));
             try { save(); } catch (IOException | RuntimeException error) { fatal = error.getClass().getSimpleName(); }
             finished = true;
-            listener.finished(fatal);
         }
+        listener.finished(fatal);
     }
     private void save() throws IOException {
         Path pending = file.resolveSibling(file.getFileName() + ".pending");
