@@ -167,15 +167,38 @@ def test_partial_clock_groups_and_missing_identity_never_vote_or_disappear():
     assert zero['methods']['local']['clock_groups']['MIXED_ROW_OUTCOMES'] == 1
 
 
-@pytest.mark.parametrize('change', ['capture_id', 'raw_hash'])
+@pytest.mark.parametrize('change', ['capture_id', 'raw_hash', 'raw_hash_uppercase'])
 def test_duplicate_captures_cannot_be_counted_twice(change):
     first, second = session('first'), session('second')
     if change == 'capture_id':
         second['receiver_capture']['capture_id'] = first['receiver_capture']['capture_id']
     else:
         second['receiver_capture']['android_intake']['source']['sha256'] = first['receiver_capture']['android_intake']['source']['sha256']
+        if change == 'raw_hash_uppercase':
+            second['receiver_capture']['android_intake']['source']['sha256'] = second['receiver_capture']['android_intake']['source']['sha256'].upper()
     with pytest.raises(ValueError, match='duplicate'):
         aggregate([first, second])
+
+
+@pytest.mark.parametrize('raw_hash', ['', 'g' * 64, 'a' * 63, 'a' * 65, 'a' * 63 + '\n', True, 64])
+def test_supplied_raw_hash_must_be_a_complete_hexadecimal_sha256(raw_hash):
+    source = session('invalid-hash')
+    source['receiver_capture']['android_intake']['source']['sha256'] = raw_hash
+    with pytest.raises(ValueError, match='Raw source hash'):
+        aggregate([source])
+
+
+def test_raw_hash_canonicalization_only_changes_the_duplicate_key_not_provenance():
+    first, second = session('uppercase-hash'), session('unknown-hash')
+    source = first['receiver_capture']['android_intake']['source']
+    source['sha256'] = source['sha256'].upper()
+    del second['receiver_capture']['android_intake']['source']['sha256']
+    before = copy.deepcopy([first, second])
+    report = aggregate([first, second])
+    assert report['totals']['sessions'] == 2
+    assert [first, second] == before
+    for original, retained in zip(before, report['sessions']):
+        assert retained['sensitivity']['baseline']['receiver_capture']['android_intake'] == original['receiver_capture']['android_intake']
 
 
 @pytest.mark.parametrize('change', ['server_error_ns', 'rate_error_ppm', 'utc_error_ns', 'alignment', 'bracket', 'resolution'])
@@ -270,6 +293,36 @@ def test_native_reports_without_admitted_comparisons_abort_instead_of_dropping_t
         envelope['issues'] = ['Raw terminal inconsistent']
     with pytest.raises(ValueError, match='no admitted comparison'):
         aggregate([session('normal'), envelope])
+
+
+@pytest.mark.parametrize('issue_fields', [
+    {}, {'issues': None}, {'issues': False}, {'issues': {}}, {'issues': ''}, {'issues': 0}, {'issues': ()},
+], ids=['missing', 'null', 'false', 'object', 'string', 'number', 'tuple'])
+def test_native_reports_require_an_explicit_empty_issue_list(issue_fields):
+    envelope = dict(schema='pnt-android-session-report-v1', comparison=session('invalid-ledger'), **issue_fields)
+    before = copy.deepcopy(envelope)
+    with pytest.raises(ValueError, match='no admitted comparison'):
+        assess_time_sensitivity(envelope, [NS])
+    with pytest.raises(ValueError, match='no admitted comparison'):
+        aggregate([session('normal'), envelope])
+    assert envelope == before
+
+
+@pytest.mark.parametrize('multiple', [False, True])
+def test_cli_missing_native_issue_list_aborts_without_output(monkeypatch, tmp_path, multiple):
+    from pnt.__main__ import main
+
+    native, normal, output = tmp_path / 'native.json', tmp_path / 'normal.json', tmp_path / 'output.json'
+    native.write_text(json.dumps(dict(schema='pnt-android-session-report-v1', comparison=session('no-ledger'))),
+                      encoding='utf-8')
+    normal.write_text(json.dumps(session('normal')), encoding='utf-8')
+    paths = [normal, native] if multiple else [native]
+    monkeypatch.setattr('sys.argv', ['pnt', 'time-sensitivity', *map(str, paths), '--offset-ns', str(NS),
+        '--local-counter-resolution-ns', '1', '--output', str(output)])
+    with pytest.raises(SystemExit) as error:
+        main()
+    assert error.value.code == 2
+    assert not output.exists()
 
 
 @pytest.mark.parametrize('extra', [[], ['--onset-monotonic-ns', '0'], ['--android-clock-diagnostics']])

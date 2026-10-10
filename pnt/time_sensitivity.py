@@ -2,6 +2,7 @@
 
 from collections import Counter
 from datetime import datetime, timedelta, timezone
+import re
 
 from .gnss_time import compare_receiver_capture
 from .time_witness import _compare_interval, _elapsed_bounds, _integer
@@ -179,7 +180,8 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
     they never change comparison support, budgets or software cases.
     """
     if isinstance(comparison, dict) and comparison.get('schema') == 'pnt-android-session-report-v1':
-        if comparison.get('issues') or not isinstance(comparison.get('comparison'), dict):
+        issues = comparison.get('issues')
+        if not isinstance(issues, list) or issues or not isinstance(comparison.get('comparison'), dict):
             raise ValueError('Android session report has no admitted comparison; retain its intake/budget issues')
         comparison = comparison['comparison']
     if (not isinstance(comparison, dict)
@@ -440,8 +442,11 @@ def assess_time_sensitivity_sessions(comparisons, offsets_ns, *, local_counter_r
         intake = capture.get('android_intake')
         source = intake.get('source') if isinstance(intake, dict) else None
         raw_hash = source.get('sha256') if isinstance(source, dict) else None
-        if raw_hash is not None and (not isinstance(raw_hash, str) or not raw_hash.strip()):
-            raise ValueError('Raw source hash must be a nonempty string when supplied')
+        if raw_hash is not None:
+            if not isinstance(raw_hash, str) or not re.fullmatch(r'[0-9a-fA-F]{64}', raw_hash):
+                raise ValueError('Raw source hash must be a 64-digit hexadecimal SHA-256 when supplied')
+            # Canonicalize the identity key only; retained source text is unchanged.
+            raw_hash = raw_hash.lower()
         if capture_id in ids or (raw_hash is not None and raw_hash in raw_hashes):
             raise ValueError('duplicate capture ID or Raw source hash; not an additional session')
         ids.add(capture_id)

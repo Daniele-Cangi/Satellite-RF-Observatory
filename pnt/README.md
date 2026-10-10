@@ -139,8 +139,9 @@ python -m pnt time-sensitivity first-session-report.json second-session-report.j
 `--session-summary` requests this format for a single input. An explicit local
 counter resolution is required; step onsets and component diagnostics remain
 single-session options. A single input without the flag retains the existing
-sensitivity format. Native reports without a comparison, or with intake issues,
-abort the command; they are never silently dropped. Analyze the original ZIP
+sensitivity format. Native reports require an admitted comparison and an explicit
+empty `issues` list; otherwise the command aborts without silently dropping them.
+Analyze the original ZIP
 with explicit options first when a conditional comparison is intended.
 
 The `pnt-gnss-time-session-summary-v1` presentation contains every session's
@@ -149,6 +150,8 @@ for PC analysis; phone import uses the per-session `android-session` reports.
 Numerical timing settings must agree wherever observed; an empty capture or failed NTS session
 remains in the report without filling its missing settings from another session.
 Duplicate capture IDs or known Raw source hashes cannot count as extra sessions.
+Supplied Raw hashes must be 64-digit hexadecimal SHA-256 digests; equivalent
+hexadecimal casing is treated as one identity without changing retained source text.
 These identity checks assume trusted reports and do not attest hardware origin.
 
 Each method has counts over all records and over a **fixed common denominator**:
