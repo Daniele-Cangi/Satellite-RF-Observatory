@@ -1,0 +1,337 @@
+{
+  "analysis_profile": {
+    "analysis_options": {
+      "association_source": "Same installed native app process/session and declared boot metadata; trusted collector assertion, not hardware attestation",
+      "bracket_span_ns": 15000000000,
+      "budget_source": "Fixed uncalibrated development assumptions for this conditional evaluation; no independently qualified server or oscillator bounds",
+      "counter_resolution_source": "Explicit unqualified 1 ns assumption; API units and NTS agreement do not establish effective resolution",
+      "epoch_alignment_error_ns": 25000000,
+      "epoch_alignment_source": "Predeclared unqualified 25 ms engineering assumption, one quarter of the 100 ms software challenge; not independent calibration or a bound derived from these evaluation observations",
+      "gps_utc_offset_seconds": 18,
+      "monotonic_resolution_ns": 1,
+      "rate_error_ppm": 100,
+      "server_error_ns": 1000000,
+      "time_scale_source": "IERS Leap_Second.dat, Bulletin C72, checked 2026-10-10: TAI-UTC 37 s minus GPS TAI offset 19 s; October 2026 only, no leap crossing",
+      "utc_error_ns": 1000000,
+      "utc_error_source": "Fixed unqualified 1 ms receiver UTC assumption; no receiver uncertainty or residual used as a bound"
+    },
+    "local_counter_resolution_ns": 1,
+    "source": "research/exploratory/android_time_session_evaluation_v1.json",
+    "unchanged_from_closed_evaluation": true,
+    "utc_claim_offsets_ns": [
+      -100000000,
+      100000000
+    ]
+  },
+  "callbacks": 39,
+  "capture_id": "70d77ad7-c2d2-494b-ae19-18775ef9b31a",
+  "collector": {
+    "android_version": 16,
+    "apk_sha256": "b263a6e24bbcca2da343aebd9a28b40fdd86f10ae54de8c300a97135c4397fc6",
+    "declared_source_revision": "e28f4cbb6f740e4dbe341fa22c892ec3f01c838f",
+    "device": "SM-G990B",
+    "version": "0.4.2"
+  },
+  "date": "2026-10-11",
+  "date_timezone": "Europe/Paris",
+  "duration_seconds": 39.118169412,
+  "endpoints": {
+    "ptbtime1.ptb.de": {
+      "authentication_receives_seconds": [
+        0.448,
+        8.696,
+        11.697,
+        14.716,
+        39.097
+      ],
+      "failure_reasons": {
+        "SocketTimeoutException: Poll timed out": 5
+      },
+      "minimum_attempt_start_spacing_ms": 3001.526874,
+      "status_counts": {
+        "AUTHENTICATED_EXCHANGE": 5,
+        "WITNESS_UNAVAILABLE": 5
+      }
+    },
+    "ptbtime2.ptb.de": {
+      "authentication_receives_seconds": [
+        0.444,
+        3.388,
+        6.369,
+        9.369,
+        12.365,
+        15.363,
+        29.053,
+        32.081
+      ],
+      "failure_reasons": {
+        "SocketTimeoutException: Poll timed out": 2
+      },
+      "minimum_attempt_start_spacing_ms": 3001.460051,
+      "status_counts": {
+        "AUTHENTICATED_EXCHANGE": 8,
+        "WITNESS_UNAVAILABLE": 2
+      }
+    }
+  },
+  "engine_revision": "e28f4cbb6f740e4dbe341fa22c892ec3f01c838f",
+  "historical_comparison": {
+    "authenticated_exchanges": 44,
+    "common_clock_groups": 47,
+    "interpretation": "Descriptive comparison of different sessions, not paired A/B or evidence of a causal or stable coverage gain",
+    "planned_attempts": 60,
+    "reference": "research/exploratory/results/pnt_android_session_evaluation_v1.json",
+    "reported_clock_groups": 117
+  },
+  "intake_issues": [],
+  "limits": {
+    "calibrated": false,
+    "full_replay_requires_private_inputs": true,
+    "held_out_confirmation": false,
+    "independent_endpoint_authorities": false,
+    "inputs_private": true,
+    "qualified_coverage_gain": false,
+    "rf_attack_simulation": false,
+    "verified_benign_originals": false
+  },
+  "outcome": "Native timeout isolation and spacing observed; conditional +/-100 ms sensitivity retained on 18/39 common clock groups. Seven timeouts and 21 insufficient combined groups remain; no causal coverage gain or P2/P3 closure.",
+  "overlapping_cross_endpoint_attempt_pairs": 9,
+  "protocol": {
+    "automatic_retries": false,
+    "endpoints": [
+      "ptbtime1.ptb.de",
+      "ptbtime2.ptb.de"
+    ],
+    "execution": "INDEPENDENT_ENDPOINTS_SPACED",
+    "interval_ns": 3000000000,
+    "missed_schedule": "START_LATE_WITHOUT_REPLACEMENT",
+    "planned_attempts": 20,
+    "rounds": 10
+  },
+  "question": "Measure available same-endpoint NTS support with independent spaced endpoints; compare descriptively with historical 0.4.1 coverage, not a causal A/B estimate",
+  "raw_status_counts": {
+    "NORMALIZED": 372,
+    "UNSUPPORTED_CONSTELLATION": 747,
+    "raw_rows": 1119
+  },
+  "regime": "EXPLORATORY_ENGINEERING_COVERAGE_TRIAL",
+  "selection": {
+    "conditions": "User confirmed stationary outdoors, sky view, Internet and unlocked visible app",
+    "maximum_session_seconds": 120,
+    "no_replacement": true,
+    "rule": "One first session initiated for this trial; retain missing, partial or insufficient capture without replacement",
+    "sessions": 1,
+    "start_issued_at_utc": "2026-10-10T22:08:10.257286+00:00"
+  },
+  "sources": {
+    "archive": {
+      "name": "session.zip",
+      "sha256": "7337cc26aa12c185a0ba4d2228241cd625204e7be850a42a8432f5a400d96618",
+      "size_bytes": 447433
+    },
+    "originals": [
+      {
+        "name": "pnt-clock-70d77ad7-c2d2-494b-ae19-18775ef9b31a.txt",
+        "phone_sha256_after": "fbde21b3e2dd240a106f2b1f319d0ceb293f4bba75b8d8e18eb7ed44fd37889a",
+        "phone_sha256_before": "fbde21b3e2dd240a106f2b1f319d0ceb293f4bba75b8d8e18eb7ed44fd37889a",
+        "sha256": "fbde21b3e2dd240a106f2b1f319d0ceb293f4bba75b8d8e18eb7ed44fd37889a",
+        "size_bytes": 429694
+      },
+      {
+        "name": "pnt-nts-70d77ad7-c2d2-494b-ae19-18775ef9b31a.json",
+        "phone_sha256_after": "2c4dbe850df9524c31d87b9d840ae8bb3cd97cf903583ca137d7384db3e2357c",
+        "phone_sha256_before": "2c4dbe850df9524c31d87b9d840ae8bb3cd97cf903583ca137d7384db3e2357c",
+        "sha256": "2c4dbe850df9524c31d87b9d840ae8bb3cd97cf903583ca137d7384db3e2357c",
+        "size_bytes": 17367
+      }
+    ],
+    "private_native_report_sha256": "154b1f3f9782d038e394594e5ce9d4351741ad3fbc74efbbfcddaeb65a8510f9",
+    "private_sensitivity_summary_sha256": "19e1a617737dd2a8d28ab38ae5bf185901440e84100284c6682152bffa84b7f9"
+  },
+  "summary": {
+    "common_clock_groups": 18,
+    "common_records": 167,
+    "offset_cases": [
+      {
+        "methods": {
+          "combined": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 21,
+              "NOT_DISTINGUISHABLE": 18
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 18
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 167
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 205,
+              "NOT_DISTINGUISHABLE": 167
+            }
+          },
+          "external": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 20,
+              "NOT_DISTINGUISHABLE": 19
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 18
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 167
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 204,
+              "NOT_DISTINGUISHABLE": 168
+            }
+          },
+          "local": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 1,
+              "NOT_DISTINGUISHABLE": 38
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 18
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 167
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 1,
+              "NOT_DISTINGUISHABLE": 371
+            }
+          }
+        },
+        "utc_claim_offset_ns": 0
+      },
+      {
+        "methods": {
+          "combined": {
+            "clock_groups": {
+              "INCONSISTENT": 18,
+              "INSUFFICIENT_EVIDENCE": 21
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 18
+            },
+            "common_records": {
+              "INCONSISTENT": 167
+            },
+            "records": {
+              "INCONSISTENT": 167,
+              "INSUFFICIENT_EVIDENCE": 205
+            }
+          },
+          "external": {
+            "clock_groups": {
+              "INCONSISTENT": 19,
+              "INSUFFICIENT_EVIDENCE": 20
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 18
+            },
+            "common_records": {
+              "INCONSISTENT": 167
+            },
+            "records": {
+              "INCONSISTENT": 168,
+              "INSUFFICIENT_EVIDENCE": 204
+            }
+          },
+          "local": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 1,
+              "NOT_DISTINGUISHABLE": 38
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 18
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 167
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 1,
+              "NOT_DISTINGUISHABLE": 371
+            }
+          }
+        },
+        "utc_claim_offset_ns": -100000000
+      },
+      {
+        "methods": {
+          "combined": {
+            "clock_groups": {
+              "INCONSISTENT": 18,
+              "INSUFFICIENT_EVIDENCE": 21
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 18
+            },
+            "common_records": {
+              "INCONSISTENT": 167
+            },
+            "records": {
+              "INCONSISTENT": 167,
+              "INSUFFICIENT_EVIDENCE": 205
+            }
+          },
+          "external": {
+            "clock_groups": {
+              "INCONSISTENT": 19,
+              "INSUFFICIENT_EVIDENCE": 20
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 18
+            },
+            "common_records": {
+              "INCONSISTENT": 167
+            },
+            "records": {
+              "INCONSISTENT": 168,
+              "INSUFFICIENT_EVIDENCE": 204
+            }
+          },
+          "local": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 1,
+              "NOT_DISTINGUISHABLE": 38
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 18
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 167
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 1,
+              "NOT_DISTINGUISHABLE": 371
+            }
+          }
+        },
+        "utc_claim_offset_ns": 100000000
+      }
+    ],
+    "receiver_records": 372,
+    "reported_clock_groups": 39,
+    "sessions": 1,
+    "unidentified_records": 0,
+    "witness_status_counts": {
+      "AUTHENTICATED_EXCHANGE": 13,
+      "WITNESS_UNAVAILABLE": 7
+    }
+  },
+  "terminal_reason": "SCHEDULE_COMPLETED",
+  "trial_id": "android-nts-coverage-v1",
+  "verification": {
+    "cli_source_receipt_verified": true,
+    "existing_comparison_exact_replay": true,
+    "existing_summary_payload_exact_replay": true,
+    "helper_failure_retained": "First helper compared CLI envelope with API payload and failed because CLI adds sources receipts. Replayed payload exactly and checked that receipt separately; no input, threshold, result or collection changed.",
+    "native_intake_exit_code": 0,
+    "notes_prepared_before_start": true,
+    "old_originals_preserved": 27,
+    "parameters_changed_after_collection": false,
+    "sensitivity_exit_code": 0
+  }
+}

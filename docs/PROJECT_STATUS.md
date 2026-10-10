@@ -1,4 +1,4 @@
-# Stato del progetto — 10 ottobre 2026
+# Stato del progetto — 11 ottobre 2026
 
 ## Obiettivo
 
@@ -38,10 +38,10 @@ Motore e app restano invariati; P2/P3 rimangono aperte.
 La [decisione sul modello temporale Android](ANDROID_TIMING_MODEL.md) non trova
 nelle API/HAL consultate un massimo indipendente per l'associazione del Galaxy;
 monotonia del contatore e autenticazione NTS non qualificano gli altri budget.
-Il passo successivo è una valutazione empirica condizionale su sessioni separate,
+Quella decisione ha motivato la valutazione empirica condizionale su sessioni separate,
 con log originali e challenge software abbinati, riusando confronto e replay.
 Gli allarmi sull'originale restano visibili e non diventano falsi allarmi
-certificati. Nessun nuovo dato acquisito, budget adottato o P2/P3 chiusa.
+certificati. La decisione non ha adottato budget né chiuso P2/P3.
 
 Il [riepilogo multi-sessione](../pnt/README.md#compare-multiple-android-sessions)
 è ora disponibile nello stesso `time-sensitivity`: replay per sessione,
@@ -62,8 +62,19 @@ NTS: un timeout non blocca l'altro server e i tentativi dello stesso endpoint
 restano distanziati, senza recuperi compressi. Tutti gli slot restano nel file,
 anche dopo arresto o errore; checkpoint e progressi sono serializzati. L'intake
 controlla il nuovo protocollo per endpoint e conserva i controlli seriali sui
-file storici. I test sono sintetici; il guadagno di copertura sul telefono
-deve ancora essere misurato con una nuova prova, senza cambiare questa valutazione.
+file storici, senza cambiare questa valutazione conclusa.
+
+La [prova outdoor del raccoglitore 0.4.2](../research/exploratory/PNT_ANDROID_NTS_COVERAGE.md)
+osserva l'isolamento dei timeout su una sessione reale: 13/20 scambi NTS
+autenticati, sette timeout e 18/39 gruppi comuni. Gli scarti ±100 ms sono
+discordanti per esterno/combinato su tutti i 18 gruppi; il locale resta invariato
+e gli originali valutabili non mostrano discordanza. Restano 21 gruppi
+insufficienti. Il 46,2% comune contro il precedente 40,2% non dimostra un guadagno
+stabile; gli scambi autenticati scendono dal 73,3% storico al 65,0%. Non è un
+confronto A/B. Hash e replay sono verificati, i 27 originali precedenti preservati;
+input completi privati e riepilogo pubblico. Il prossimo quesito è la deriva
+graduale dell'UTC decodificato e il ritardo di rilevazione sui dati già esposti,
+senza una nuova matrice di budget. Qualifica temporale e P2/P3 restano aperte.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
