@@ -283,9 +283,12 @@ separa i calendari degli endpoint senza recuperi compressi. La
 osserva l'isolamento dei timeout: 13/20 scambi autenticati e 18/39 gruppi comuni,
 conservando sette timeout e 21 gruppi insufficienti. Una sola sessione non
 dimostra un guadagno stabile; non si reinterpretano gli esiti precedenti né
-si promuovono i budget a limiti fisici. Il prossimo quesito è la deriva graduale
-dell'UTC decodificato e il ritardo di rilevazione sui dati già esposti, riusando
-confronto e replay invece di ripetere gli scarti costanti.
+si promuovono i budget a limiti fisici. La
+[prova di deriva ±5 ms/s](../research/exploratory/PNT_ANDROID_TIME_DRIFT.md)
+sulle quattro sessioni esposte mostra risultati misti: anche il locale rileva
+la deriva, e un'epoca discordante anteriore non prova un allarme più rapido
+quando la rete richiede ricevute successive. Il prossimo quesito è la
+disponibilità causale delle prove, usando prefissi del replay esistente.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,

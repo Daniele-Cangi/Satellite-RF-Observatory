@@ -46,17 +46,20 @@ def main():
     time_compare.add_argument('--utc-error-ns', type=int, required=True, help='declared GNSS UTC error budget; not tAcc')
     time_compare.add_argument('--utc-error-source', required=True, help='independent qualification or explicit assumption')
     time_compare.add_argument('--output', required=True, type=Path)
-    time_sensitivity = commands.add_parser('time-sensitivity', help='offline decoded UTC offset sensitivity; no RF attack simulation')
+    time_sensitivity = commands.add_parser('time-sensitivity', help='offline decoded UTC offset/drift sensitivity; no RF attack simulation')
     time_sensitivity.add_argument('comparison_report', type=Path, nargs='+',
                                   help='receiver UTC/NTS comparison or analyzed Android session JSON(s)')
     time_sensitivity.add_argument('--session-summary', action='store_true',
                                   help='summarize Android sessions with one timing profile; requires local counter resolution')
-    time_sensitivity.add_argument('--offset-ns', action='append', type=int, required=True,
-                                  help='explicit signed software UTC offset; zero control is always included')
+    perturbation = time_sensitivity.add_mutually_exclusive_group(required=True)
+    perturbation.add_argument('--offset-ns', action='append', type=int,
+                              help='explicit signed software UTC offset; zero control is always included')
+    perturbation.add_argument('--drift-ppm', action='append', type=int,
+                              help='signed software UTC drift, integer ppm (1000 = 1 ms/s); zero control included')
     time_sensitivity.add_argument('--local-counter-resolution-ns', type=int,
                                   help='opt in to local elapsed-clock control; explicit counter tick bound')
     time_sensitivity.add_argument('--onset-monotonic-ns', type=int,
-                                  help='apply offset only from this reported event midpoint; default whole capture')
+                                  help='offset step or drift onset at this reported midpoint; drift default first admitted epoch')
     time_sensitivity.add_argument('--android-clock-diagnostics', action='store_true',
                                   help='decompose original Android clocks; requires local counter resolution; no fitting')
     time_sensitivity.add_argument('--output', required=True, type=Path)
@@ -163,10 +166,10 @@ def main():
         try:
             if args.session_summary or len(args.comparison_report) > 1:
                 if args.onset_monotonic_ns is not None or args.android_clock_diagnostics:
-                    raise ValueError('session summary uses whole-capture offsets; run step/component diagnostics separately')
+                    raise ValueError('session summary uses per-session origins; run explicit onset/component diagnostics separately')
                 contents = [path.read_bytes() for path in args.comparison_report]
-                report = assess_time_sensitivity_sessions([load_json(data) for data in contents], args.offset_ns,
-                    local_counter_resolution_ns=args.local_counter_resolution_ns)
+                report = assess_time_sensitivity_sessions([load_json(data) for data in contents], args.offset_ns or (),
+                    local_counter_resolution_ns=args.local_counter_resolution_ns, drift_rates_ppm=args.drift_ppm)
                 report['sources'] = [dict(path=str(path), sha256=hashlib.sha256(data).hexdigest())
                                      for path, data in zip(args.comparison_report, contents)]
                 write_report(report, args.output)
@@ -176,10 +179,11 @@ def main():
                 return
             path = args.comparison_report[0]
             comparison_bytes = path.read_bytes()
-            report = assess_time_sensitivity(load_json(comparison_bytes), args.offset_ns,
+            report = assess_time_sensitivity(load_json(comparison_bytes), args.offset_ns or (),
                                               local_counter_resolution_ns=args.local_counter_resolution_ns,
                                               onset_monotonic_ns=args.onset_monotonic_ns,
-                                              android_clock_diagnostics=args.android_clock_diagnostics)
+                                              android_clock_diagnostics=args.android_clock_diagnostics,
+                                              drift_rates_ppm=args.drift_ppm)
             report['source'] = dict(path=str(path),
                                   sha256=hashlib.sha256(comparison_bytes).hexdigest())
             write_report(report, args.output)
@@ -187,11 +191,13 @@ def main():
             parser.exit(2, f'PNT time sensitivity input/output error: {error}\n')
         print(f"{report['status']}; {args.output}")
         for case in report['offset_cases']:
-            print(f"Offset {case['utc_claim_offset_ns']} ns: {case['record_pattern_counts']}")
+            label = (f"Drift {case['utc_claim_drift_ppm']} ppm" if 'utc_claim_drift_ppm' in case else
+                     f"Offset {case['utc_claim_offset_ns']} ns")
+            print(f"{label}: {case['record_pattern_counts']}")
             if args.local_counter_resolution_ns is not None:
                 print(f"Paired local/external: {case['paired_pattern_counts']}")
         if report['status'] == 'INSUFFICIENT_EVIDENCE':
-            parser.exit(2, 'No associated receiver UTC comparison; all offset cases remain insufficient\n')
+            parser.exit(2, 'No associated receiver UTC comparison; all software cases remain insufficient\n')
         return
     if args.command == 'android-time-compare':
         from .android_raw import inspect_android_raw

@@ -72,9 +72,18 @@ e gli originali valutabili non mostrano discordanza. Restano 21 gruppi
 insufficienti. Il 46,2% comune contro il precedente 40,2% non dimostra un guadagno
 stabile; gli scambi autenticati scendono dal 73,3% storico al 65,0%. Non è un
 confronto A/B. Hash e replay sono verificati, i 27 originali precedenti preservati;
-input completi privati e riepilogo pubblico. Il prossimo quesito è la deriva
-graduale dell'UTC decodificato e il ritardo di rilevazione sui dati già esposti,
-senza una nuova matrice di budget. Qualifica temporale e P2/P3 restano aperte.
+input completi privati e riepilogo pubblico. Qualifica temporale e P2/P3 restano aperte.
+
+La [prova di deriva graduale](../research/exploratory/PNT_ANDROID_TIME_DRIFT.md)
+riusa queste quattro sessioni già esposte con ±5 ms/s e lo stesso profilo:
+65/156 gruppi comuni, 91 insufficienti nel combinato e 23 timeout conservati.
+Il locale distingue già la deriva sul proprio supporto; la rete separa alcune
+epoche prima e altre dopo, con ricevute successive e un gruppo inconclusivo
+per ciascun segno. Non è dimostrato un allarme operativo più rapido. Il comando
+`time-sensitivity --drift-ppm` conserva conteggi e prime nuove discordanze
+su supporto proprio/comune; i replay costanti precedenti restano identici.
+Il prossimo limite da misurare è la disponibilità causale delle prove, con
+prefissi temporali del replay esistente. Nessun budget qualificato o P2/P3 chiusa.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere

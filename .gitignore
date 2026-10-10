@@ -275,3 +275,4 @@ research/exploratory/results/*
 !research/exploratory/results/pnt_native_time_budget_envelope_v1.json
 !research/exploratory/results/pnt_android_session_evaluation_v1.json
 !research/exploratory/results/pnt_android_nts_coverage_v1.json
+!research/exploratory/results/pnt_android_time_drift_v1.json

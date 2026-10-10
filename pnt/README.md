@@ -137,7 +137,7 @@ python -m pnt time-sensitivity first-session-report.json second-session-report.j
 ```
 
 `--session-summary` requests this format for a single input. An explicit local
-counter resolution is required; step onsets and component diagnostics remain
+counter resolution is required; explicit step/drift onsets and component diagnostics remain
 single-session options. A single input without the flag retains the existing
 sensitivity format. Native reports require an admitted comparison and an explicit
 empty `issues` list; otherwise the command aborts without silently dropping them.
@@ -170,6 +170,41 @@ Original-log inconsistencies remain visible in the zero case; they are not
 verified false alarms. Totals do not establish detection rates, population
 coverage, budget qualification or held-out/RF confirmation. This implements the
 software comparison step in the [timing-model decision](../docs/ANDROID_TIMING_MODEL.md).
+
+### Gradual UTC drift
+
+Use `--drift-ppm` instead of `--offset-ns` to apply a signed linear change to
+decoded receiver UTC, with an unchanged zero control. Integer ppm means
+1000 ppm = 1 ms/s; this software rate is separate from the existing counter
+rate-error budget. For example, ±5000 ppm reaches ±100 ms after 20 seconds:
+
+```console
+python -m pnt time-sensitivity first-session-report.json second-session-report.json --drift-ppm -5000 --drift-ppm 5000 --local-counter-resolution-ns 1 --output drift-summary.json
+```
+
+The origin is each session's first admitted reported event midpoint, without
+joining counter domains. A single input can use `--onset-monotonic-ns` for an
+explicit origin; `--session-summary` uses each session's default origin. Before
+onset the shift is zero; afterward its magnitude is integer-truncated toward
+zero from `abs(ppm) * elapsed_ns / 1000000`, then signed. No input bytes, receipt
+counters, time association, segment boundaries, uncertainties or NTS failures
+change. The same shifted claims feed the existing local and external controls.
+No rate is fitted and no missing support is manufactured. Constant/step
+commands retain their previous output when drift is not requested.
+
+Drift summaries add the rate to each case and `first_new_inconsistency` over
+own and fixed common support. A detection here requires every row of the clock
+group to change from original `NOT_DISTINGUISHABLE` to `INCONSISTENT` for that
+method; mixed groups and original alarms remain visible, without becoming new
+detections. A missing detection is `null`, including insufficient cases.
+`reported_epoch_elapsed_ns` indexes the first newly inconsistent epoch;
+`latest_used_nts_receive_elapsed_ns` retains the latest NTS receipt used for
+that offline verdict (absent for the local method). Two-sided brackets can use
+later receipts: these numbers are **not live alert latency** or physical RF
+onset. Full replay and all original/perturbed counts remain in the same report.
+The [four-session development study](../research/exploratory/PNT_ANDROID_TIME_DRIFT.md)
+retains mixed results, missing coverage and later NTS receipts; it establishes
+no faster live alert or qualified RF protection.
 
 ## Authenticated Internet time witness
 
