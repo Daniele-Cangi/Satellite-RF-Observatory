@@ -315,6 +315,9 @@ public final class MainActivity extends Activity {
             boolean granted = checkUriPermission(requested, android.os.Process.myPid(), android.os.Process.myUid(),
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED;
             Uri destination = Uri.parse(ExportDestination.validate(requested.toString(), granted).toString());
+            if (!destination.equals(requested)) {
+                throw new SecurityException("Validated destination differs from the granted URI");
+            }
             try (OutputStream output = getContentResolver().openOutputStream(destination, "wt")) {
                 if (output == null) throw new IOException("No export stream");
                 try (ZipOutputStream zip = new ZipOutputStream(output)) {
