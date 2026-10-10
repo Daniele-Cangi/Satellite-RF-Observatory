@@ -314,10 +314,11 @@ public final class MainActivity extends Activity {
             Uri requested = data.getData();
             boolean granted = checkUriPermission(requested, android.os.Process.myPid(), android.os.Process.myUid(),
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED;
-            Uri destination = Uri.parse(ExportDestination.validate(requested.toString(), granted).toString());
-            if (!destination.equals(requested)) {
+            String validated = ExportDestination.validate(requested.toString(), granted).toString();
+            if (!validated.equals(requested.toString())) {
                 throw new SecurityException("Validated destination differs from the granted URI");
             }
+            Uri destination = Uri.parse(validated);
             try (OutputStream output = getContentResolver().openOutputStream(destination, "wt")) {
                 if (output == null) throw new IOException("No export stream");
                 try (ZipOutputStream zip = new ZipOutputStream(output)) {
