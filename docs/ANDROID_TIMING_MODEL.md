@@ -69,10 +69,12 @@ metadati, non una calibrazione indipendente del bersaglio sotto esame.
 
 ## Prossima consegna, senza un'altra matrice di budget
 
-Riusare `android-session`, il controllo locale, `time-sensitivity` e il replay.
-Il prossimo incremento software rende confrontabili più sessioni con una
-configurazione esplicita: risultato originale, ±100 ms di alterazione dell'UTC
-decodificato, confronto locale/rete/combinato e denominatori comuni. Conservare
+Il [riepilogo di più sessioni](../pnt/README.md#compare-multiple-android-sessions)
+è implementato in `time-sensitivity`, riusando `android-session`, controllo
+locale e replay. Richiede impostazioni numeriche compatibili ed esplicite:
+risultato originale, alterazioni dell'UTC decodificato, confronto
+locale/rete/combinato e denominatori comuni. Per la prossima valutazione usare
+la challenge ±100 ms già descritta, senza una nuova matrice di budget. Conservare
 ogni sessione, gruppo clock non valutabile e slot NTS fallito o non eseguito;
 riportare anche la copertura propria di ciascun metodo. Un gruppo clock
 non è automaticamente una prova indipendente.

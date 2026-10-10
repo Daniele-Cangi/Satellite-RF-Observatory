@@ -47,7 +47,10 @@ def main():
     time_compare.add_argument('--utc-error-source', required=True, help='independent qualification or explicit assumption')
     time_compare.add_argument('--output', required=True, type=Path)
     time_sensitivity = commands.add_parser('time-sensitivity', help='offline decoded UTC offset sensitivity; no RF attack simulation')
-    time_sensitivity.add_argument('comparison_report', type=Path, help='existing receiver UTC/NTS comparison JSON')
+    time_sensitivity.add_argument('comparison_report', type=Path, nargs='+',
+                                  help='receiver UTC/NTS comparison or analyzed Android session JSON(s)')
+    time_sensitivity.add_argument('--session-summary', action='store_true',
+                                  help='summarize Android sessions with one timing profile; requires local counter resolution')
     time_sensitivity.add_argument('--offset-ns', action='append', type=int, required=True,
                                   help='explicit signed software UTC offset; zero control is always included')
     time_sensitivity.add_argument('--local-counter-resolution-ns', type=int,
@@ -154,15 +157,30 @@ def main():
             parser.exit(2, 'No usable timing comparison; retained inputs and reasons are in the report\n')
         return
     if args.command == 'time-sensitivity':
-        from .time_sensitivity import assess_time_sensitivity
+        from .time_sensitivity import assess_time_sensitivity, assess_time_sensitivity_sessions
+        from .android_session import load_json
 
         try:
-            comparison_bytes = args.comparison_report.read_bytes()
-            report = assess_time_sensitivity(json.loads(comparison_bytes), args.offset_ns,
+            if args.session_summary or len(args.comparison_report) > 1:
+                if args.onset_monotonic_ns is not None or args.android_clock_diagnostics:
+                    raise ValueError('session summary uses whole-capture offsets; run step/component diagnostics separately')
+                contents = [path.read_bytes() for path in args.comparison_report]
+                report = assess_time_sensitivity_sessions([load_json(data) for data in contents], args.offset_ns,
+                    local_counter_resolution_ns=args.local_counter_resolution_ns)
+                report['sources'] = [dict(path=str(path), sha256=hashlib.sha256(data).hexdigest())
+                                     for path, data in zip(args.comparison_report, contents)]
+                write_report(report, args.output)
+                print(f"{report['status']}; {report['totals']['sessions']} sessions; {args.output}")
+                if report['status'] == 'INSUFFICIENT_EVIDENCE':
+                    parser.exit(2, 'No common local/external support; per-session evidence retained\n')
+                return
+            path = args.comparison_report[0]
+            comparison_bytes = path.read_bytes()
+            report = assess_time_sensitivity(load_json(comparison_bytes), args.offset_ns,
                                               local_counter_resolution_ns=args.local_counter_resolution_ns,
                                               onset_monotonic_ns=args.onset_monotonic_ns,
                                               android_clock_diagnostics=args.android_clock_diagnostics)
-            report['source'] = dict(path=str(args.comparison_report),
+            report['source'] = dict(path=str(path),
                                   sha256=hashlib.sha256(comparison_bytes).hexdigest())
             write_report(report, args.output)
         except (ValueError, OSError) as error:

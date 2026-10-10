@@ -127,6 +127,50 @@ unchanged. The [phone diagnosis](../research/exploratory/PNT_PHONE_CLOCK_DIAGNOS
 identifies the hardware-clock/counter relation as the dominant observed term,
 while its physical cause and an independent association bound remain unresolved.
 
+### Compare multiple Android sessions
+
+Pass several existing comparison reports, or analyzed `android-session` reports
+with an admitted embedded comparison, to the same offline command:
+
+```console
+python -m pnt time-sensitivity first-session-report.json second-session-report.json --offset-ns -100000000 --offset-ns 100000000 --local-counter-resolution-ns 1 --output session-summary.json
+```
+
+`--session-summary` requests this format for a single input. An explicit local
+counter resolution is required; step onsets and component diagnostics remain
+single-session options. A single input without the flag retains the existing
+sensitivity format. Native reports require an admitted comparison and an explicit
+empty `issues` list; otherwise the command aborts without silently dropping them.
+Analyze the original ZIP
+with explicit options first when a conditional comparison is intended.
+
+The `pnt-gnss-time-session-summary-v1` presentation contains every session's
+unchanged paired replay and summary before descriptive totals. The summary is
+for PC analysis; phone import uses the per-session `android-session` reports.
+Numerical timing settings must agree wherever observed; an empty capture or failed NTS session
+remains in the report without filling its missing settings from another session.
+Duplicate capture IDs or known Raw source hashes cannot count as extra sessions.
+Supplied Raw hashes must be 64-digit hexadecimal SHA-256 digests; equivalent
+hexadecimal casing is treated as one identity without changing retained source text.
+These identity checks assume trusted reports and do not attest hardware origin.
+
+Each method has counts over all records and over a **fixed common denominator**:
+the zero case's records with non-insufficient local and external support.
+These are GPS receiver-clock records in the current adapter; the full baseline
+also retains intake coverage of other constellations and unusable Raw data.
+Disagreement remains on that denominator as `INCONCLUSIVE`; an offset cannot
+select a different subset. The combined summary maps the existing paired
+patterns and requires both methods; it has no fallback to one method or endpoint
+vote. Counts also use groups with identical reported native clock fields.
+Groups with different row outcomes stay `MIXED_ROW_OUTCOMES`; missing group
+identity has separate record indices/counts. A common group requires all its
+rows on the common denominator. None of these groups are independent trials.
+
+Original-log inconsistencies remain visible in the zero case; they are not
+verified false alarms. Totals do not establish detection rates, population
+coverage, budget qualification or held-out/RF confirmation. This implements the
+software comparison step in the [timing-model decision](../docs/ANDROID_TIMING_MODEL.md).
+
 ## Authenticated Internet time witness
 
 `time-probe` checks a bracketed **host wall-clock reading**, without adjusting
