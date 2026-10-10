@@ -108,7 +108,64 @@ def _paired_pattern(local_status, external_pattern):
             'EXTERNAL_ONLY_INCONSISTENT' if external else 'NEITHER_INCONSISTENT')
 
 
-def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_ns=None, onset_monotonic_ns=None):
+def _android_clock_diagnostics(baseline, local):
+    """Decompose original admitted clocks using the existing local anchors.
+
+    Reuse decoded GPST and integer parsing; no new time conversion, fitting,
+    budget or verdict. Optional receiver uncertainty fields remain raw metadata.
+    A hardware-clock/counter mismatch cannot identify which side is inaccurate.
+    """
+    from .android_raw import _integer as raw_integer
+
+    fields = ('TimeUncertaintyNanos', 'BiasUncertaintyNanos', 'DriftNanosPerSecond',
+              'DriftUncertaintyNanosPerSecond', 'ElapsedRealtimeUncertaintyNanos',
+              'ChipsetElapsedRealtimeUncertaintyNanos')
+    records, clocks, epochs = [], {}, set()
+    for row, check in zip(baseline['records'], local):
+        index = row['source_index']
+        source = baseline['receiver_capture']['records'][index]
+        result = dict(source_index=index, status='UNAVAILABLE', original_local_status=check['status'])
+        records.append(result)
+        if source.get('source_format') != 'ANDROID_RAW_CLOCK':
+            result['reason'] = 'not an Android Raw clock record'
+            continue
+        values = source.get('source_values')
+        if isinstance(values, dict):
+            result['receiver_reported_metadata'] = {name: values.get(name) for name in fields}
+        if 'claim' not in row:
+            result['reason'] = row['reason']
+            continue
+        decoded = row['receiver_utc']
+        hardware = raw_integer(values, 'TimeNanos')
+        full_bias = raw_integer(values, 'FullBiasNanos')
+        gpst = decoded['receiver_gpst_floor_ns']
+        counter = decoded['chipset_elapsed_realtime_ns']
+        clocks[index] = dict(hardware_time_ns=hardware, full_bias_ns=full_bias,
+                             integer_bias_ns=hardware - full_bias - gpst,
+                             counter_ns=counter, receiver_utc_ns=row['claim']['unix_ns'],
+                             gps_utc_offset_ns=decoded['gps_utc_offset_seconds'] * 10**9)
+        epochs.add((row['claim']['capture_id'], counter, gpst, decoded['hardware_clock_discontinuity_count']))
+        result['status'] = 'ADMITTED_CLOCK_METADATA_ONLY'
+    for result, check in zip(records, local):
+        index, anchor = result['source_index'], check.get('anchor_source_index')
+        if index not in clocks or anchor is None or check['status'] == 'INSUFFICIENT_EVIDENCE':
+            continue
+        current, first = clocks[index], clocks[anchor]
+        changes = {name: current[name] - first[name] for name in current}
+        result.update(status='COMPONENT_DECOMPOSITION', anchor_source_index=anchor,
+                      changes_ns=changes,
+                      receiver_minus_counter_change_ns=changes['receiver_utc_ns'] - changes['counter_ns'],
+                      hardware_minus_counter_change_ns=changes['hardware_time_ns'] - changes['counter_ns'])
+    return dict(scope='ORIGINAL_ADMITTED_ANDROID_CLOCKS',
+                status_counts=dict(sorted(Counter(row['status'] for row in records).items())),
+                distinct_admitted_clock_epochs=len(epochs),
+                uses_existing_local_anchors=True, software_offsets_applied=False,
+                reported_uncertainties_used_as_bounds=False, budgets_fitted=False,
+                cause_attributed=False, records_are_not_independent_samples=True, records=records)
+
+
+def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_ns=None,
+                            onset_monotonic_ns=None, android_clock_diagnostics=False):
     """Replay retained inputs, then shift only decoded UTC against fixed intervals.
 
     This measures conditional interval separation, not RF spoofing performance.
@@ -118,6 +175,8 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
     are counted separately and never vote. Zero is always included as a control.
     Optional local continuity and a step at a declared counter midpoint reuse
     this replay, with no independent absolute-time claim for the local channel.
+    Optional Android component diagnostics describe original admitted clocks;
+    they never change comparison support, budgets or software cases.
     """
     if (not isinstance(comparison, dict)
             or comparison.get('schema') != 'pnt-gnss-time-comparison-v1'
@@ -135,6 +194,10 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
         _integer(local_counter_resolution_ns, 'local_counter_resolution_ns', 1)
     if onset_monotonic_ns is not None:
         _integer(onset_monotonic_ns, 'onset_monotonic_ns', 0)
+    if type(android_clock_diagnostics) is not bool:
+        raise ValueError('android_clock_diagnostics must be a boolean')
+    if android_clock_diagnostics and local_counter_resolution_ns is None:
+        raise ValueError('Android clock diagnostics require the explicit local counter resolution')
     span = None
     if 'temporal_association' in comparison:
         association = comparison['temporal_association']
@@ -233,6 +296,8 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
                                        absolute_utc_origin='UNKNOWN', no_reanchor_on_inconsistency=True,
                                        independent_local_absolute_utc_control='NOT_EVALUATED',
                                        paired_patterns_are_descriptive=True)
+    if android_clock_diagnostics:
+        report['android_clock_diagnostics'] = _android_clock_diagnostics(baseline, cases[0]['local_comparisons'])
     if onset_monotonic_ns is not None:
         report['perturbation_profile'] = dict(mode='STEP_BY_REPORTED_EVENT_MIDPOINT',
                                               onset_monotonic_ns=onset_monotonic_ns)

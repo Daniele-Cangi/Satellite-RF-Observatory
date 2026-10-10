@@ -51,6 +51,138 @@ def calendar_epoch_inputs(start, utc_elapsed_ns, counter_elapsed_ns):
     return witness, capture
 
 
+def android_epoch_comparison():
+    """Three synthetic epochs with tiny bias changes and a 10 ms counter mismatch."""
+    from pnt.tests.test_android_time import inputs as android_inputs, compare as android_compare
+
+    witness, raw, _, _ = android_inputs(bracket=True)
+    original = raw['records'][0]
+    raw['records'] = []
+    for index in range(3):
+        row = copy.deepcopy(original)
+        row['source_line'] += index
+        values = row['source_values']
+        values['TimeNanos'] = str(int(values['TimeNanos']) + index * NS)
+        values['FullBiasNanos'] = str(int(values['FullBiasNanos']) + index * 100)
+        values['BiasNanos'] = '0.25'
+        values['ChipsetElapsedRealtimeNanos'] = str(int(values['ChipsetElapsedRealtimeNanos']) + index * NS + (10 * MS if index else 0))
+        raw['records'].append(row)
+    witness['acquisition']['ended_monotonic_ns'] += NS
+    return android_compare(witness, raw, bracket_span_ns=200 * MS)
+
+
+def test_android_clock_diagnostics_decompose_original_integer_clocks_without_changing_verdicts():
+    baseline = android_epoch_comparison()
+    original = copy.deepcopy(baseline)
+    options = dict(local_counter_resolution_ns=1, onset_monotonic_ns=baseline['records'][1]['receiver_utc']['chipset_elapsed_realtime_ns'])
+    plain = assess_time_sensitivity(baseline, [100 * MS], **options)
+    report = assess_time_sensitivity(baseline, [100 * MS], android_clock_diagnostics=True, **options)
+    assert {k: v for k, v in report.items() if k != 'android_clock_diagnostics'} == plain
+    diagnostic = report['android_clock_diagnostics']
+    assert diagnostic['status_counts'] == {'ADMITTED_CLOCK_METADATA_ONLY': 1, 'COMPONENT_DECOMPOSITION': 2}
+    assert diagnostic['distinct_admitted_clock_epochs'] == 3
+    assert diagnostic['budgets_fitted'] is diagnostic['reported_uncertainties_used_as_bounds'] is diagnostic['cause_attributed'] is False
+    second = diagnostic['records'][1]
+    assert second['changes_ns'] == dict(hardware_time_ns=NS, full_bias_ns=100, integer_bias_ns=0,
+                                       counter_ns=NS + 10 * MS, receiver_utc_ns=NS - 100, gps_utc_offset_ns=0)
+    assert second['receiver_minus_counter_change_ns'] == -10 * MS - 100
+    assert second['hardware_minus_counter_change_ns'] == -10 * MS
+    assert second['original_local_status'] == 'INCONSISTENT_LOCAL_CONTINUITY'
+    assert second['anchor_source_index'] == 0
+    other_cases = assess_time_sensitivity(baseline, [-NS, NS], local_counter_resolution_ns=1,
+                                          android_clock_diagnostics=True)
+    assert other_cases['android_clock_diagnostics'] == diagnostic
+    assert baseline == original
+
+
+@pytest.mark.parametrize('change', ['hardware_segment', 'invalid_clock', 'unknown_alignment'])
+def test_android_clock_diagnostics_reuse_admission_and_segment_breaks(change):
+    baseline = android_epoch_comparison()
+    capture = baseline['receiver_capture']
+    if change == 'hardware_segment':
+        for row in capture['records'][1:]:
+            row['source_values']['HardwareClockDiscontinuityCount'] = '99'
+    elif change == 'invalid_clock':
+        capture['records'][1]['source_values']['ChipsetElapsedRealtimeNanos'] = ''
+    else:
+        for row in capture['records']:
+            row['epoch_alignment_error_ns'] = row['epoch_alignment_source'] = None
+    report = assess_time_sensitivity(baseline, [NS], local_counter_resolution_ns=1,
+                                     android_clock_diagnostics=True)
+    diagnostic = report['android_clock_diagnostics']
+    rows = diagnostic['records']
+    assert len(rows) == 3
+    if change == 'hardware_segment':
+        assert rows[1]['status'] == 'ADMITTED_CLOCK_METADATA_ONLY'
+        assert rows[2]['anchor_source_index'] == 1
+        assert rows[2]['changes_ns']['counter_ns'] == NS
+    elif change == 'invalid_clock':
+        assert rows[1]['status'] == 'UNAVAILABLE'
+        assert rows[2]['status'] == 'ADMITTED_CLOCK_METADATA_ONLY'
+        assert diagnostic['distinct_admitted_clock_epochs'] == 2
+    else:
+        assert diagnostic['status_counts'] == {'UNAVAILABLE': 3}
+        assert diagnostic['distinct_admitted_clock_epochs'] == 0
+        assert report['offset_cases'][0]['paired_pattern_counts']['INSUFFICIENT_EVIDENCE'] == 3
+
+
+def test_receiver_uncertainty_metadata_never_changes_control_budgets_or_support():
+    baseline = android_epoch_comparison()
+    original = assess_time_sensitivity(baseline, [NS], local_counter_resolution_ns=1, android_clock_diagnostics=True)
+    for row in baseline['receiver_capture']['records']:
+        row['source_values'].update(ElapsedRealtimeUncertaintyNanos='1e1000',
+                                    ChipsetElapsedRealtimeUncertaintyNanos='0', DriftUncertaintyNanosPerSecond='NaN')
+    report = assess_time_sensitivity(baseline, [NS], local_counter_resolution_ns=1, android_clock_diagnostics=True)
+    assert report['offset_cases'] == original['offset_cases']
+    assert report['baseline']['assumptions'] == original['baseline']['assumptions']
+    assert report['compatible_shift_intervals'] == original['compatible_shift_intervals']
+    assert report['android_clock_diagnostics']['records'][1]['receiver_reported_metadata']['ElapsedRealtimeUncertaintyNanos'] == '1e1000'
+
+
+def test_android_diagnostics_do_not_interpret_ubx_as_android_clock_components():
+    report = assess_time_sensitivity(compare_bracket(*multi_epoch_inputs()), [NS], local_counter_resolution_ns=1,
+                                     android_clock_diagnostics=True)
+    assert report['android_clock_diagnostics']['status_counts'] == {'UNAVAILABLE': 3}
+    assert all(row['reason'] == 'not an Android Raw clock record' for row in report['android_clock_diagnostics']['records'])
+
+
+@pytest.mark.parametrize('options', [dict(android_clock_diagnostics=1), dict(android_clock_diagnostics='yes'),
+                                    dict(android_clock_diagnostics=True)])
+def test_android_diagnostics_require_boolean_opt_in_and_local_resolution(options):
+    with pytest.raises(ValueError):
+        assess_time_sensitivity(compare(*inputs()), [NS], **options)
+
+
+@pytest.mark.parametrize('available', [False, True])
+def test_cli_android_diagnostics_are_offline_replayable_and_keep_unavailable_inputs(monkeypatch, tmp_path, available):
+    from pnt.__main__ import main
+
+    baseline = android_epoch_comparison()
+    if not available:
+        for row in baseline['receiver_capture']['records']:
+            row['epoch_alignment_error_ns'] = row['epoch_alignment_source'] = None
+    source, output = tmp_path / 'comparison.json', tmp_path / 'diagnostics.json'
+    source.write_text(json.dumps(baseline), encoding='utf-8')
+    monkeypatch.setattr('pnt.time_witness.probe', lambda *a, **k: pytest.fail('clock diagnostics accessed the network'))
+    monkeypatch.setattr('sys.argv', ['pnt', 'time-sensitivity', str(source), '--offset-ns', '0',
+                                   '--local-counter-resolution-ns', '1', '--android-clock-diagnostics', '--output', str(output)])
+    if available:
+        main()
+    else:
+        with pytest.raises(SystemExit) as error:
+            main()
+        assert error.value.code == 2
+    report = json.loads(output.read_text(encoding='utf-8'))
+    assert report['source']['sha256'] == hashlib.sha256(source.read_bytes()).hexdigest()
+    assert assess_time_sensitivity(report['baseline'], [0], local_counter_resolution_ns=1,
+                                    android_clock_diagnostics=True) == {k: v for k, v in report.items() if k != 'source'}
+    assert report['android_clock_diagnostics']['distinct_admitted_clock_epochs'] == (3 if available else 0)
+    saved = output.read_bytes()
+    with pytest.raises(SystemExit):
+        main()
+    assert output.read_bytes() == saved
+
+
 @pytest.mark.parametrize('start,utc_elapsed_ns,counter_elapsed_ns', [
     # Actual inserted leap: no second=60 packet is present in the capture.
     (datetime(2016, 12, 31, 23, 59, 59, tzinfo=timezone.utc), [0, NS, 2 * NS], [0, 2 * NS, 3 * NS]),
@@ -438,7 +570,7 @@ from pnt.time_sensitivity import assess_time_sensitivity
 from pnt.__main__ import main
 main()
 """
-    options = ['--local-counter-resolution-ns', '1', '--onset-monotonic-ns', '0'] if paired else []
+    options = ['--local-counter-resolution-ns', '1', '--onset-monotonic-ns', '0', '--android-clock-diagnostics'] if paired else []
     result = subprocess.run([sys.executable, '-c', script, 'time-sensitivity', str(source),
                              '--offset-ns', str(NS), '--output', str(output), *options], text=True, capture_output=True)
     assert result.returncode == 0, result.stderr
@@ -446,6 +578,8 @@ main()
     assert report['offset_cases'][1]['bracket_status_counts'] == {'INCONSISTENT_WITH_WITNESS': 8}
     if paired:
         assert report['offset_cases'][1]['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 8}
+        assert report['android_clock_diagnostics']['status_counts'] == {'ADMITTED_CLOCK_METADATA_ONLY': 8}
+        assert report['android_clock_diagnostics']['distinct_admitted_clock_epochs'] == 1
 
 
 @pytest.mark.parametrize('available', [False, True])
