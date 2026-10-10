@@ -43,6 +43,14 @@ con log originali e challenge software abbinati, riusando confronto e replay.
 Gli allarmi sull'originale restano visibili e non diventano falsi allarmi
 certificati. Nessun nuovo dato acquisito, budget adottato o P2/P3 chiusa.
 
+Il [riepilogo multi-sessione](../pnt/README.md#compare-multiple-android-sessions)
+è ora disponibile nello stesso `time-sensitivity`: replay per sessione,
+originali e scarti software, conteggi locale/rete/combinato su supporto comune
+fisso, copertura propria e gruppi clock dichiarati. Sessioni vuote e NTS fallito
+restano nel riepilogo; duplicati e profili numerici incompatibili non vengono
+conteggiati insieme. I test sono sintetici; la valutazione empirica su sessioni
+separate e la qualifica fisica restano da eseguire. Nessun budget adottato.
+
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
 ritardi simmetrici e confronto in sola lettura con il clock del PC. La prova

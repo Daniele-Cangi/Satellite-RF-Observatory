@@ -178,6 +178,10 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
     Optional Android component diagnostics describe original admitted clocks;
     they never change comparison support, budgets or software cases.
     """
+    if isinstance(comparison, dict) and comparison.get('schema') == 'pnt-android-session-report-v1':
+        if comparison.get('issues') or not isinstance(comparison.get('comparison'), dict):
+            raise ValueError('Android session report has no admitted comparison; retain its intake/budget issues')
+        comparison = comparison['comparison']
     if (not isinstance(comparison, dict)
             or comparison.get('schema') != 'pnt-gnss-time-comparison-v1'
             or not isinstance(comparison.get('assumptions'), dict)):
@@ -304,3 +308,184 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
     elif local_counter_resolution_ns is not None:
         report['perturbation_profile'] = dict(mode='WHOLE_CAPTURE_CONSTANT')
     return report
+
+
+_CLOCK_FIELDS = ('ChipsetElapsedRealtimeNanos', 'TimeNanos', 'FullBiasNanos',
+                 'BiasNanos', 'HardwareClockDiscontinuityCount')
+_METHODS = ('local', 'external', 'combined')
+_COHERENT_PAIRED = {'BOTH_INCONSISTENT', 'LOCAL_ONLY_INCONSISTENT',
+                    'EXTERNAL_ONLY_INCONSISTENT', 'NEITHER_INCONSISTENT'}
+
+
+def _session_profile(baseline):
+    """Compare numerical assumptions, retaining each session's provenance text."""
+    capture = baseline['receiver_capture']
+    records = capture['records']
+    if any(r.get('source_format') != 'ANDROID_RAW_CLOCK' for r in records):
+        raise ValueError('session summaries currently require Android Raw clock captures')
+    profile = {name: baseline['assumptions'][name]
+               for name in ('server_error_ns', 'rate_error_ppm', 'utc_error_ns')}
+    profile['bracket_span_ns'] = baseline.get('temporal_association', {}).get('maximum_span_ns')
+    profile['counter_clock'] = capture.get('counter_clock')
+    for name in ('epoch_alignment_error_ns', 'gps_utc_offset_seconds'):
+        values = set()
+        for record in records:
+            value = record.get(name)
+            if value is not None and type(value) is not int:
+                raise ValueError(f'invalid {name} in the session profile')
+            values.add(value)
+        if len(values) > 1:
+            raise ValueError(f'session has multiple {name} values; no shared profile')
+        if values:
+            profile[name] = next(iter(values))
+    resolutions = {
+        a['exchange'].get('monotonic_resolution_ns') for a in baseline['witness_report']['attempts']
+        if isinstance(a.get('exchange'), dict) and a.get('status') == 'AUTHENTICATED_EXCHANGE'} - {None}
+    if any(type(value) is not int or value < 1 for value in resolutions):
+        raise ValueError('invalid NTS counter resolution in the session profile')
+    if resolutions:
+        profile['nts_counter_resolutions_ns'] = sorted(resolutions)
+    return profile
+
+
+def _method_outcomes(case, total):
+    local = ['INSUFFICIENT_EVIDENCE'] * total
+    external, combined = list(local), list(local)
+    for row in case['local_comparisons']:
+        local[row['source_index']] = ('INCONSISTENT' if row['status'] == 'INCONSISTENT_LOCAL_CONTINUITY'
+                                     else row['status'])
+    for pattern, indices in case['record_indices_by_pattern'].items():
+        outcome = {'ALL_INCONSISTENT': 'INCONSISTENT', 'ALL_NOT_DISTINGUISHABLE': 'NOT_DISTINGUISHABLE',
+                   'MIXED': 'INCONCLUSIVE', 'INSUFFICIENT_EVIDENCE': 'INSUFFICIENT_EVIDENCE'}[pattern]
+        for index in indices:
+            external[index] = outcome
+    for pattern, indices in case['paired_record_indices_by_pattern'].items():
+        outcome = ('NOT_DISTINGUISHABLE' if pattern == 'NEITHER_INCONSISTENT' else
+                   'INCONSISTENT' if pattern in _COHERENT_PAIRED else
+                   'INCONCLUSIVE' if pattern == 'EXTERNAL_DISAGREEMENT' else 'INSUFFICIENT_EVIDENCE')
+        for index in indices:
+            combined[index] = outcome
+    return dict(local=local, external=external, combined=combined)
+
+
+def _outcome_counts(values):
+    return dict(sorted(Counter(values).items()))
+
+
+def _summarize_session(sensitivity):
+    baseline = sensitivity['baseline']
+    records = baseline['receiver_capture']['records']
+    groups, unidentified = {}, []
+    for index, record in enumerate(records):
+        values = record.get('source_values')
+        if not isinstance(values, dict):
+            values = {}
+        key = tuple(values.get(name) for name in _CLOCK_FIELDS)
+        if all(isinstance(value, str) and value.strip() for value in key):
+            groups.setdefault(key, []).append(index)
+        else:
+            unidentified.append(index)
+    group_indices = list(groups.values())
+    original = _method_outcomes(sensitivity['offset_cases'][0], len(records))
+    # Admission only: endpoint disagreement remains on this denominator. No
+    # selection by alarm outcome, and no new support selected for a challenge.
+    common = [i for i in range(len(records))
+              if all(original[m][i] != 'INSUFFICIENT_EVIDENCE' for m in ('local', 'external'))]
+    common_set = set(common)
+    common_groups = [i for i, indices in enumerate(group_indices) if set(indices) <= common_set]
+    cases = []
+    for case in sensitivity['offset_cases']:
+        methods = _method_outcomes(case, len(records))
+        counts = {}
+        for method, values in methods.items():
+            group_values = []
+            for indices in group_indices:
+                outcomes = {values[i] for i in indices}
+                group_values.append(next(iter(outcomes)) if len(outcomes) == 1 else 'MIXED_ROW_OUTCOMES')
+            counts[method] = dict(records=_outcome_counts(values),
+                                  common_records=_outcome_counts(values[i] for i in common),
+                                  clock_groups=_outcome_counts(group_values),
+                                  common_clock_groups=_outcome_counts(group_values[i] for i in common_groups))
+        cases.append(dict(utc_claim_offset_ns=case['utc_claim_offset_ns'], methods=counts))
+    return dict(receiver_records=len(records), reported_clock_groups=len(group_indices),
+                clock_group_record_indices=group_indices, unidentified_record_indices=unidentified,
+                common_record_indices=common, common_clock_group_indices=common_groups,
+                witness_status_counts=_outcome_counts(
+                    a['status'] if isinstance(a.get('status'), str) and a['status'].strip()
+                    else 'MISSING_OR_INVALID_STATUS' for a in baseline['witness_report']['attempts']),
+                offset_cases=cases)
+
+
+def assess_time_sensitivity_sessions(comparisons, offsets_ns, *, local_counter_resolution_ns):
+    """Descriptive multi-session aggregation of the existing paired replay.
+
+    Whole-capture offsets only. Do not join counter domains, fit a budget or
+    interpret original-log alarms as verified false alarms. Full per-session
+    replays retain every failure; duplicate capture IDs/known Raw hashes cannot
+    count as additional sessions. Metadata groups and sessions are not IID trials.
+    """
+    _integer(local_counter_resolution_ns, 'local_counter_resolution_ns', 1)
+    comparisons, offsets = list(comparisons), list(offsets_ns)
+    if not comparisons:
+        raise ValueError('at least one comparison session is required')
+    sessions, ids, raw_hashes, profile = [], set(), set(), None
+    for comparison in comparisons:
+        sensitivity = assess_time_sensitivity(comparison, offsets,
+                                              local_counter_resolution_ns=local_counter_resolution_ns)
+        baseline = sensitivity['baseline']
+        capture = baseline['receiver_capture']
+        capture_id = capture.get('capture_id')
+        if not isinstance(capture_id, str) or not capture_id.strip():
+            raise ValueError('session capture_id is required; no invented session identity')
+        intake = capture.get('android_intake')
+        source = intake.get('source') if isinstance(intake, dict) else None
+        raw_hash = source.get('sha256') if isinstance(source, dict) else None
+        if raw_hash is not None and (not isinstance(raw_hash, str) or not raw_hash.strip()):
+            raise ValueError('Raw source hash must be a nonempty string when supplied')
+        if capture_id in ids or (raw_hash is not None and raw_hash in raw_hashes):
+            raise ValueError('duplicate capture ID or Raw source hash; not an additional session')
+        ids.add(capture_id)
+        if raw_hash is not None:
+            raw_hashes.add(raw_hash)
+        current = _session_profile(baseline)
+        if profile is not None and any(profile[k] != current[k] for k in profile.keys() & current.keys()):
+            raise ValueError('sessions do not share the same numerical timing profile; no pooling')
+        # A capture with no rows or authenticated NTS exchange does not observe
+        # every setting. Retain it without assigning other sessions' missing values.
+        profile = dict(profile or {}, **current)
+        sessions.append(dict(capture_id=capture_id, sensitivity=sensitivity,
+                             summary=_summarize_session(sensitivity)))
+    totals = dict(sessions=len(sessions), receiver_records=0, reported_clock_groups=0,
+                  unidentified_records=0, common_records=0, common_clock_groups=0,
+                  witness_status_counts={}, offset_cases=[])
+    for case in sessions[0]['summary']['offset_cases']:
+        totals['offset_cases'].append(dict(utc_claim_offset_ns=case['utc_claim_offset_ns'],
+            methods={m: {unit: {} for unit in ('records', 'common_records', 'clock_groups', 'common_clock_groups')}
+                     for m in _METHODS}))
+    for session in sessions:
+        summary = session['summary']
+        for name in ('receiver_records', 'reported_clock_groups'):
+            totals[name] += summary[name]
+        for target, source in (('unidentified_records', 'unidentified_record_indices'),
+                               ('common_records', 'common_record_indices'),
+                               ('common_clock_groups', 'common_clock_group_indices')):
+            totals[target] += len(summary[source])
+        totals['witness_status_counts'] = dict(Counter(totals['witness_status_counts'])
+                                              + Counter(summary['witness_status_counts']))
+        for total, case in zip(totals['offset_cases'], summary['offset_cases']):
+            for method in _METHODS:
+                for unit, counts in case['methods'][method].items():
+                    total['methods'][method][unit] = dict(Counter(total['methods'][method][unit]) + Counter(counts))
+    return dict(schema='pnt-gnss-time-session-summary-v1', regime='EXPLORATORY_SOFTWARE_PERTURBATION',
+                status='CONDITIONAL_TIME_DIAGNOSTIC' if totals['common_records'] else 'INSUFFICIENT_EVIDENCE',
+                timing_profile=dict(profile, local_counter_resolution_ns=local_counter_resolution_ns),
+                assumptions=dict(calibrated=False, verified_benign_originals=False, rf_attack_simulation=False,
+                                 held_out_evaluation=False, sessions_and_clock_groups_are_not_independent_trials=True),
+                rules=dict(perturbation='WHOLE_CAPTURE_DECODED_UTC_ONLY',
+                           combined='EXISTING_PAIRED_PATTERN_REQUIRES_BOTH_METHODS',
+                           disagreement='INCONCLUSIVE_WITHOUT_ENDPOINT_VOTE',
+                           common_support='ZERO_CASE_NON_INSUFFICIENT_LOCAL_AND_EXTERNAL_FIXED_FOR_ALL_OFFSETS',
+                           clock_groups='IDENTICAL_REPORTED_CLOCK_FIELDS; MIXED_ROW_OUTCOMES_NEVER_VOTE',
+                           profile='MATCH_OBSERVED_SETTINGS_WITHOUT_FILLING_MISSING_SESSION_VALUES',
+                           totals='DESCRIPTIVE_SUMS_WITHOUT_PERFORMANCE_OR_POPULATION_ESTIMATE'),
+                sessions=sessions, totals=totals)
