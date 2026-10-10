@@ -32,9 +32,17 @@ def native_witness():
     witness['capture_context'].update(capture_id=ID, gnss_file=RAW_NAME, gnss_acquired_by_this_command=True)
     witness['acquisition'].update(state='FINISHED', terminal_reason='USER_STOPPED')
     witness['assumptions'].update(server_error_ns=None, rate_error_ppm=None, calibrated=False)
-    for attempt in witness['attempts']:
+    witness['protocol'] = dict(endpoints=['synthetic-server'], rounds=2, attempts_per_endpoint=2,
+        planned_attempts=2, interval_ns=1, interval_s=1e-9, schedule='ROUND_START_OFFSETS', automatic_retries=False)
+    for index, attempt in enumerate(witness['attempts']):
+        attempt.update(round_index=index, scheduled_round_start_monotonic_ns=
+                       witness['acquisition']['started_monotonic_ns'] + index)
+        if attempt['status'] == 'FAILED':
+            attempt['status'] = 'WITNESS_UNAVAILABLE'
         if 'exchange' in attempt:
             attempt['exchange'].update(capture_id=ID, monotonic_resolution_ns=None)
+    witness['terminal'] = dict(reason='USER_STOPPED', counter_ns=witness['acquisition']['ended_monotonic_ns'],
+        authenticated_exchanges=1, unavailable_attempts=1)
     return witness
 
 
@@ -54,10 +62,10 @@ def test_default_report_preserves_originals_unknown_budgets_and_every_failure(tm
     report = inspect_android_session(path)
     assert report['status'] == 'INSUFFICIENT_EVIDENCE'
     assert report['comparison'] is None and report['analysis_options'] is None
-    assert report['intake'] == inspect_android_raw_bytes(raw, RAW_NAME)
+    assert report['intake'] == inspect_android_raw_bytes(raw, RAW_NAME, expected_capture_id=ID)
     assert report['witness_report'] == witness
     assert witness['attempts'][0]['exchange']['monotonic_resolution_ns'] is None
-    assert report['witness_status_counts'] == {'AUTHENTICATED_EXCHANGE': 1, 'FAILED': 1}
+    assert report['witness_status_counts'] == {'AUTHENTICATED_EXCHANGE': 1, 'WITNESS_UNAVAILABLE': 1}
     assert len(report['sources']['members']) == 2
     assert report['sources']['archive']['sha256'] == hashlib.sha256(path.read_bytes()).hexdigest()
     assert report['sources']['members'][0]['sha256'] == hashlib.sha256(raw).hexdigest()
@@ -160,6 +168,87 @@ def test_native_zip_does_not_bypass_its_size_limit_with_nested_gzip(tmp_path):
     result = inspect_android_session(path, analysis_options=ANALYSIS)
     assert result['comparison'] is None
     assert result['intake'] is None and 'nested gzip' in result['issues'][0]
+
+
+@pytest.mark.parametrize('change', ['drop_slot', 'round', 'scheduled_start', 'terminal_count'])
+def test_deleted_failed_nts_slots_and_altered_schedule_accounting_never_compare(tmp_path, change):
+    witness = native_witness()
+    if change == 'drop_slot':
+        witness['attempts'].pop()  # Remove exactly the failed slot, leaving a good exchange.
+    elif change == 'round':
+        witness['attempts'][1]['round_index'] = 0
+    elif change == 'scheduled_start':
+        witness['attempts'][1]['scheduled_round_start_monotonic_ns'] += 1
+    else:
+        witness['terminal']['unavailable_attempts'] = 0
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert result['comparison'] is None and result['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert any('accounting' in issue or 'slot' in issue for issue in result['issues'])
+    assert result['witness_report'] == witness  # Corrupt/incomplete data remains visible.
+
+
+@pytest.mark.parametrize('change', ['drop_row', 'drop_event', 'event_total', 'row_total'])
+def test_raw_terminal_and_per_event_counts_cannot_conceal_removed_observations(tmp_path, change):
+    lines = FIXTURE.read_text().splitlines()
+    if change == 'drop_row':
+        lines.remove(next(line for line in lines if line.startswith('Raw,')))
+    elif change == 'drop_event':
+        lines.remove(next(line for line in lines if line.startswith('# Event,')))
+    else:
+        i = next(i for i, line in enumerate(lines) if line.startswith('# Terminal,'))
+        parts = lines[i].split(',')
+        parts[3 if change == 'event_total' else 4] = '3'
+        lines[i] = ','.join(parts)
+    path, _, _ = archive(tmp_path, raw=('\n'.join(lines) + '\n').encode())
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert result['intake'] is not None and result['comparison'] is None
+    assert any('accounting' in issue for issue in result['issues'])
+
+
+def test_legacy_fixed_endpoint_contract_detects_an_entire_deleted_unattempted_endpoint(tmp_path):
+    witness = native_witness()
+    endpoints = ['ptbtime1.ptb.de', 'ptbtime2.ptb.de']
+    witness['protocol'].update(endpoints=endpoints, planned_attempts=4)
+    witness['capture_context']['metadata'] = dict(Version='0.3.0')
+    original = copy.deepcopy(witness['attempts'][0])
+    attempts = []
+    for round_index in range(2):
+        for server in endpoints:
+            slot = copy.deepcopy(original)
+            slot.update(server=server, round_index=round_index,
+                        scheduled_round_start_monotonic_ns=witness['acquisition']['started_monotonic_ns'] + round_index)
+            slot['exchange']['server'] = server
+            if server == endpoints[1]:
+                slot.update(status='NOT_ATTEMPTED', reason='USER_STOPPED')
+                del slot['exchange']
+            attempts.append(slot)
+    witness['attempts'] = attempts
+    witness['terminal'].update(authenticated_exchanges=2, unavailable_attempts=0)
+    del witness['protocol']['endpoints']
+    del witness['protocol']['planned_attempts']
+    path, _, _ = archive(tmp_path, witness=witness)
+    intact = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert intact['comparison'] is not None and 'legacy 0.3.0' in intact['format_notes'][0]
+    witness['attempts'] = [a for a in attempts if a['status'] == 'AUTHENTICATED_EXCHANGE']
+    path, _, _ = archive(tmp_path, witness=witness)
+    incomplete = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert incomplete['comparison'] is None
+    assert any('slot accounting' in issue for issue in incomplete['issues'])
+
+
+def test_java_generated_native_schedule_is_consumed_without_rewriting_metadata(tmp_path):
+    raw_path, nts_path = os.environ.get('PNT_COLLECTOR_FIXTURE'), os.environ.get('PNT_NTS_CAPTURE_FIXTURE')
+    if raw_path is None or nts_path is None:
+        pytest.skip('Native producers run in the Android collector matrix')
+    witness = json.loads(Path(nts_path).read_text())
+    path, _, _ = archive(tmp_path, raw=Path(raw_path).read_bytes(), witness=witness)
+    report = inspect_android_session(path)
+    assert report['witness_report'] == witness
+    assert len(report['issues']) == 1 and 'not been supplied' in report['issues'][0]
+    assert report['format_notes'] == ['NTS schedule bound by protocol.endpoints']
+    assert witness['protocol']['planned_attempts'] == len(witness['attempts']) == 4
+    assert witness['protocol']['interval_ns'] == 1
 
 
 def test_cli_retains_insufficient_report_and_does_not_overwrite(tmp_path):

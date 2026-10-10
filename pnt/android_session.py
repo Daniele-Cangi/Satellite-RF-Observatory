@@ -6,6 +6,7 @@ are the existing gnss_time comparison, with explicit uncalibrated assumptions.
 from collections import Counter
 import copy
 import csv
+from decimal import Decimal, InvalidOperation
 import hashlib
 import io
 import json
@@ -28,6 +29,7 @@ REQUIRED_OPTIONS = {
     'gps_utc_offset_seconds', 'time_scale_source', 'utc_error_ns', 'utc_error_source',
 }
 OPTIONAL_OPTIONS = {'epoch_alignment_error_ns', 'epoch_alignment_source', 'bracket_span_ns'}
+LEGACY_FIXED_PTB_VERSIONS = {'0.2.0', '0.3.0', '0.3.1', '0.4.0'}
 
 
 def load_json(data):
@@ -85,6 +87,99 @@ def _source(name, data):
     return dict(name=name, size_bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
 
 
+def _comment_integer(value):
+    if not isinstance(value, str) or not re.fullmatch(r'[0-9]+', value):
+        raise ValueError('native terminal/event count must be a nonnegative integer')
+    return int(value)
+
+
+def _raw_terminal(raw, comments):
+    terminals = [r for r in comments if r[:1] == ['Terminal']]
+    if len(terminals) != 1 or len(terminals[0]) != 5:
+        raise ValueError('Raw terminal missing or ambiguous; partial recording retained')
+    _, reason, stop, event_count, row_count = terminals[0]
+    _text(reason, 'Raw terminal reason')
+    _comment_integer(stop)
+    events = [r for r in comments if r[:1] == ['Event']]
+    if (_comment_integer(event_count) != len(events)
+            or _comment_integer(row_count) != raw['coverage']['status_counts']['raw_rows']):
+        raise ValueError('Raw terminal accounting differs from retained events/Raw rows')
+    actual = raw['source']['native_event_row_counts']
+    declared_total = 0
+    for index, event in enumerate(events, 1):
+        if (len(event) < 5 or _comment_integer(event[1]) != index
+                or _comment_integer(event[4]) != actual.get(str(index), 0)):
+            raise ValueError('Raw event accounting differs from retained Raw rows')
+        _comment_integer(event[2])
+        _comment_integer(event[3])
+        declared_total += _comment_integer(event[4])
+    if declared_total != _comment_integer(row_count):
+        raise ValueError('Raw event totals differ from terminal accounting')
+    return reason
+
+
+def _nts_schedule(witness):
+    protocol = witness.get('protocol')
+    if not isinstance(protocol, dict):
+        raise ValueError('NTS declared protocol/schedule is missing')
+    rounds = _integer(protocol.get('rounds'), 'NTS rounds', 1)
+    if _integer(protocol.get('attempts_per_endpoint'), 'NTS attempts_per_endpoint', 1) != rounds:
+        raise ValueError('NTS attempts_per_endpoint differs from rounds')
+    if protocol.get('schedule') != 'ROUND_START_OFFSETS' or protocol.get('automatic_retries') is not False:
+        raise ValueError('unsupported NTS schedule/retry declaration')
+    endpoints = protocol.get('endpoints')
+    source = 'protocol.endpoints'
+    if endpoints is None:
+        metadata = witness['capture_context'].get('metadata', {})
+        version = metadata.get('Version') if isinstance(metadata, dict) else None
+        if version not in LEGACY_FIXED_PTB_VERSIONS:
+            raise ValueError('NTS endpoint set not declared; unknown legacy collector version')
+        endpoints = ['ptbtime1.ptb.de', 'ptbtime2.ptb.de']
+        source = f'legacy {version} fixed PTB endpoint declaration (trusted metadata, not attestation)'
+    if (not isinstance(endpoints, list) or not 1 <= len(endpoints) <= 4
+            or not all(isinstance(s, str) and s.strip() for s in endpoints)
+            or len(set(endpoints)) != len(endpoints)):
+        raise ValueError('invalid NTS endpoint declaration')
+    interval = protocol.get('interval_ns')
+    if interval is None:
+        try:
+            decimal = Decimal(str(protocol.get('interval_s'))) * 10**9
+            if not decimal.is_finite() or decimal != decimal.to_integral_value():
+                raise ValueError('NTS interval_s is not an exact integer nanosecond declaration')
+            interval = int(decimal)
+        except InvalidOperation as error:
+            raise ValueError('invalid NTS interval declaration') from error
+    _integer(interval, 'NTS interval_ns', 1)
+    attempts = witness['attempts']
+    planned = rounds * len(endpoints)
+    if len(attempts) != planned or _integer(protocol.get('planned_attempts', planned), 'NTS planned_attempts', 1) != planned:
+        raise ValueError('NTS slot accounting differs from the declared complete schedule')
+    acquisition = witness['acquisition']
+    start = _integer(acquisition.get('started_monotonic_ns'), 'NTS acquisition start', 0)
+    end = _integer(acquisition.get('ended_monotonic_ns'), 'NTS acquisition end', start)
+    for index, attempt in enumerate(attempts):
+        if (attempt.get('server') != endpoints[index % len(endpoints)]
+                or type(attempt.get('round_index')) is not int or attempt['round_index'] != index // len(endpoints)
+                or type(attempt.get('scheduled_round_start_monotonic_ns')) is not int
+                or attempt['scheduled_round_start_monotonic_ns'] != start + index // len(endpoints) * interval
+                or attempt['status'] not in {'AUTHENTICATED_EXCHANGE', 'WITNESS_UNAVAILABLE', 'NOT_ATTEMPTED'}):
+            raise ValueError('NTS retained slot differs from its declared endpoint/round/schedule')
+        if attempt['status'] == 'AUTHENTICATED_EXCHANGE':
+            exchange = attempt.get('exchange')
+            if (not isinstance(exchange, dict) or exchange.get('capture_id') != witness['capture_id']
+                    or exchange.get('counter_clock') != 'CLOCK_BOOTTIME' or exchange.get('server') != attempt['server']):
+                raise ValueError('NTS authenticated exchange differs from its retained slot/capture domain')
+    terminal = witness.get('terminal')
+    totals = Counter(a['status'] for a in attempts)
+    if not isinstance(terminal, dict) or terminal.get('reason') != acquisition['terminal_reason']:
+        raise ValueError('NTS terminal accounting missing or inconsistent')
+    if (_integer(terminal.get('counter_ns'), 'NTS terminal counter', 0) != end
+            or _integer(terminal.get('authenticated_exchanges'), 'NTS authenticated total', 0) != totals['AUTHENTICATED_EXCHANGE']
+            or _integer(terminal.get('unavailable_attempts'), 'NTS unavailable total', 0) != totals['WITNESS_UNAVAILABLE']):
+        raise ValueError('NTS terminal accounting differs from retained attempt statuses')
+    return source
+
+
 def inspect_android_session(path, *, analysis_options=None):
     """Retain missing/partial/unusable captures; never invent a timing bound.
 
@@ -124,6 +219,7 @@ def inspect_android_session(path, *, analysis_options=None):
     if set(members) - {raw_name, nts_name}:
         raise ValueError('Raw and NTS filenames identify different sessions')
     issues, raw, witness, comparison = [], None, None, None
+    format_notes = []
     raw_terminal = None
     try:
         if members[raw_name].startswith(b'\x1f\x8b'):
@@ -135,11 +231,10 @@ def inspect_android_session(path, *, analysis_options=None):
             raise ValueError('native collector format marker is required')
         if [r for r in comments if r[:1] == ['CaptureId']] != [['CaptureId', capture_id]]:
             raise ValueError('Raw metadata differs from the filename capture ID')
-        terminals = [r for r in comments if r[:1] == ['Terminal']]
-        if len(terminals) == 1 and len(terminals[0]) == 5:
-            raw_terminal = terminals[0][1]
-        else:
-            issues.append('Raw terminal missing or ambiguous; partial recording retained')
+        try:
+            raw_terminal = _raw_terminal(raw, comments)
+        except ValueError as error:
+            issues.append(str(error))
         if not raw['coverage']['status_counts']['raw_rows']:
             issues.append('No Android Raw measurements; no GNSS time comparison')
     except (ValueError, UnicodeError, csv.Error, OSError) as error:
@@ -169,6 +264,11 @@ def inspect_android_session(path, *, analysis_options=None):
             if (not isinstance(acquisition, dict) or acquisition.get('state') != 'FINISHED'
                     or not isinstance(acquisition.get('terminal_reason'), str)):
                 issues.append('NTS terminal missing; last partial checkpoint retained')
+            else:
+                try:
+                    format_notes.append('NTS schedule bound by ' + _nts_schedule(witness))
+                except ValueError as error:
+                    issues.append(str(error))
         except (ValueError, UnicodeError, RecursionError) as error:
             witness = None
             issues.append(f'NTS intake failed: {error}')
@@ -198,6 +298,7 @@ def inspect_android_session(path, *, analysis_options=None):
                              members=[_source(n, data) for n, data in sorted(members.items())]),
                 intake=raw, witness_report=witness, comparison=comparison,
                 analysis_options=copy.deepcopy(analysis_options), issues=issues,
+                format_notes=format_notes,
                 terminals=dict(raw=raw_terminal, nts=witness.get('acquisition') if witness else None),
                 witness_status_counts=dict(sorted(Counter(a.get('status', 'MISSING_STATUS')
                     for a in witness['attempts']).items())) if witness else {},

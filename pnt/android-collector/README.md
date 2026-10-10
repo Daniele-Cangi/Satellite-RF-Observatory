@@ -58,6 +58,16 @@ Valid report bytes are retained privately; reopening the app rechecks the latest
 report against its originals. Import does not change the selected recording,
 start acquisition or upload data.
 
+Version 0.4.1 checks Raw terminal totals and per-event row counts, and reconciles
+every NTS endpoint/round/scheduled slot and terminal count before comparison.
+Its acquisition protocol records endpoints, planned attempts and the exact
+integer interval. For the known 0.2.0/0.3.0/0.3.1/0.4.0 native apps, the intake
+uses their documented fixed PTB endpoint pair and labels this format compatibility
+in the report. Unknown legacy schedules remain insufficient. These are
+consistency checks on trusted collector declarations, not tamper-proof attestation.
+Cache writes publish a complete report only after a sibling pending file is
+renamed; an interrupted pending write cannot hide an earlier valid report.
+
 The `pnt-android-session-report-v1` JSON is a presentation envelope containing
 the existing intake and, when requested, the unchanged
 `pnt-gnss-time-comparison-v1` result. It is not a parallel scientific verdict

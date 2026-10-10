@@ -65,6 +65,7 @@ final class NtsCapture {
         report.put("assumptions", map("server_error_ns", null, "rate_error_ppm", null, "budget_source", null,
             "calibrated", false, "trusted_collector_and_monotonic_counter", true, "tls_calendar_bootstrap_required", true));
         report.put("protocol", map("timeout_s", 5.0, "ntp_era", 0, "automatic_retries", false,
+            "endpoints", new ArrayList<>(servers), "planned_attempts", rounds * servers.size(), "interval_ns", intervalNs,
             "rounds", rounds, "interval_s", intervalNs / 1e9, "attempts_per_endpoint", rounds,
             "schedule", "ROUND_START_OFFSETS", "missed_schedule", "START_LATE_WITHOUT_REPLACEMENT"));
         for (int round = 0; round < rounds; round++) for (String server : servers) {

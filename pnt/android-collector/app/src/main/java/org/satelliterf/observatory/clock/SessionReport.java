@@ -13,6 +13,9 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
@@ -31,6 +34,26 @@ final class SessionReport {
     private SessionReport(byte[] original, String text) {
         this.original = original;
         this.text = text;
+    }
+
+    Path retain(Path directory) throws IOException {
+        Path complete = directory.resolve("pnt-report-" + java.util.UUID.randomUUID() + ".json");
+        Path pending = complete.resolveSibling(complete.getFileName() + ".pending");
+        Files.write(pending, original, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+        try { Files.move(pending, complete, StandardCopyOption.ATOMIC_MOVE); }
+        catch (AtomicMoveNotSupportedException error) { Files.move(pending, complete); }
+        return complete;
+    }
+
+    static Path latest(Path directory) throws IOException {
+        Path latest = null;
+        try (var files = Files.newDirectoryStream(directory, "pnt-report-*.json")) {
+            for (Path file : files) {
+                if (Files.isRegularFile(file) && (latest == null
+                        || Files.getLastModifiedTime(file).compareTo(Files.getLastModifiedTime(latest)) > 0)) latest = file;
+            }
+        }
+        return latest;
     }
 
     static SessionReport read(InputStream input, Path directory) throws IOException {
@@ -135,6 +158,10 @@ final class SessionReport {
         JsonArray issues = report.getAsJsonArray("issues");
         for (JsonElement issue : issues) text.append("- ").append(display(issue)).append('\n');
         if (issues.size() == 0) text.append("None reported.\n");
+        JsonArray formatNotes = report.getAsJsonArray("format_notes");
+        if (formatNotes != null) for (JsonElement note : formatNotes) {
+            text.append("\nFormat compatibility: ").append(display(note)).append('\n');
+        }
         text.append("\nControls not performed: RF authenticity, position accuracy, spoofing attribution, ")
             .append("geometry, network benefit and independent budget qualification.\n");
         for (JsonElement limit : report.getAsJsonArray("limits")) text.append("- ").append(display(limit)).append('\n');

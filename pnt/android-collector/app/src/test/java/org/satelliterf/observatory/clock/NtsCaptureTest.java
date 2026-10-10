@@ -33,7 +33,7 @@ public final class NtsCaptureTest {
         AtomicInteger calls = new AtomicInteger();
         List<String> notifications = new java.util.ArrayList<>();
         CountDownLatch done = new CountDownLatch(1);
-        NtsCapture capture = new NtsCapture(path, "synthetic-ci", "synthetic-collector.txt",
+        NtsCapture capture = new NtsCapture(path, "synthetic-ci", "pnt-clock-synthetic-ci.txt",
             Map.of("SourceRevision", "SYNTHETIC_ONLY"), List.of("synthetic-a", "synthetic-b"), 2, 1,
             () -> counter.addAndGet(100000000L), () -> new NtsCapture.Probe() {
                 public Map<String, Object> probe(String server, int port, int timeout, int era) throws Exception {

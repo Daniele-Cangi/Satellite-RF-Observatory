@@ -147,7 +147,7 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
     decoded = gzip.decompress(data) if data.startswith(b'\x1f\x8b') else data
     text = decoded.decode('utf-8-sig')
     header, comments, records = None, [], []
-    counts, constellations, ignored = Counter(), Counter(), Counter()
+    counts, constellations, ignored, native_events = Counter(), Counter(), Counter(), Counter()
     for line, content in enumerate(text.splitlines(), 1):
         if not content.strip():
             continue
@@ -170,6 +170,11 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
         values = dict(zip(header, fields))
         if expected_capture_id is not None and values.get('CaptureId') != expected_capture_id:
             raise ValueError(f'line {line}: Raw capture ID differs from the session')
+        if expected_capture_id is not None:
+            event = _integer(values, 'EventIndex')
+            if event < 1:
+                raise ValueError(f'line {line}: invalid native EventIndex')
+            native_events[str(event)] += 1
         counts['raw_rows'] += 1
         constellations[values['ConstellationType']] += 1
         try:
@@ -193,7 +198,7 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
         raise ValueError('no Android Raw measurements')
     if allow_empty:
         counts['raw_rows'] += 0
-    return {
+    report = {
         'schema': 'pnt-android-raw-v1', 'status': 'OBSERVATION_INTAKE_ONLY',
         'source': {'name': name, 'size_bytes': len(data),
                    'sha256': hashlib.sha256(data).hexdigest(),
@@ -215,3 +220,6 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
              'independent_event_timing', 'network_benefit'), 'NOT_ASSESSED'),
         'records': records,
     }
+    if expected_capture_id is not None:
+        report['source']['native_event_row_counts'] = dict(sorted(native_events.items()))
+    return report

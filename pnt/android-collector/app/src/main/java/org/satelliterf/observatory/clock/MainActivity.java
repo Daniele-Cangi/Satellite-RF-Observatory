@@ -146,12 +146,10 @@ public final class MainActivity extends Activity {
         show("PNT Clock Collector\nGNSS + authenticated Internet time; no authenticity decision."
             + (latestFile == null ? "" : "\nPrevious file retained; completion not checked."));
         buttons();
-        File[] reports = getFilesDir().listFiles((dir, name) -> name.startsWith("pnt-report-") && name.endsWith(".json"));
-        File lastReport = null;
-        if (reports != null) for (File file : reports) {
-            if (lastReport == null || file.lastModified() > lastReport.lastModified()) lastReport = file;
-        }
-        if (lastReport != null) loadReport(lastReport, null);
+        try {
+            var lastReport = SessionReport.latest(getFilesDir().toPath());
+            if (lastReport != null) loadReport(lastReport.toFile(), null);
+        } catch (IOException error) { show("Retained report unavailable: " + error + "\nOriginals retained."); }
         // Insets keep controls reachable on Android's edge-to-edge display.
         if (Build.VERSION.SDK_INT >= 30) {
             layout.setOnApplyWindowInsetsListener((view, insets) -> {
@@ -339,8 +337,7 @@ public final class MainActivity extends Activity {
                 if (input == null) throw new IOException("No report input stream");
                 SessionReport report = SessionReport.read(input, getFilesDir().toPath());
                 if (retained == null) {
-                    File copy = new File(getFilesDir(), "pnt-report-" + UUID.randomUUID() + ".json");
-                    Files.write(copy.toPath(), report.original, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+                    report.retain(getFilesDir().toPath());
                 }
                 ui.post(() -> {
                     reportDetails.setText(report.text);

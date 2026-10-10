@@ -109,4 +109,19 @@ public final class SessionReportTest {
             assertTrue(loaded.text.contains("RF authenticity"));
         }
     }
+
+    @Test public void interruptedCacheWriteCannotShadowThePreviousCompleteReport() throws Exception {
+        Path dir = Files.createTempDirectory("report-cache-test");
+        SessionReport loaded = read(report(dir), dir);
+        Path complete = loaded.retain(dir);
+        Files.write(dir.resolve("pnt-report-interrupted.json.pending"), new byte[]{'{', 'x'});
+        assertEquals(complete, SessionReport.latest(dir));
+        try (InputStream input = Files.newInputStream(SessionReport.latest(dir))) {
+            assertArrayEquals(loaded.original, SessionReport.read(input, dir).original);
+        }
+        Path another = loaded.retain(dir);
+        assertNotEquals(complete, another);
+        assertArrayEquals(loaded.original, Files.readAllBytes(complete));
+        assertArrayEquals(loaded.original, Files.readAllBytes(another));
+    }
 }
