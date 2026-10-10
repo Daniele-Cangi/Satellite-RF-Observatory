@@ -7,21 +7,17 @@ import java.net.URISyntaxException;
 final class ExportDestination {
     private ExportDestination() {}
 
-    static URI validate(String value, boolean explicitWriteGrant) {
+    static URI validate(String value, boolean explicitWriteGrant, boolean documentUri) {
         final URI destination;
         try { destination = new URI(value); }
         catch (URISyntaxException error) { throw new SecurityException("Invalid export URI", error); }
         if (!"content".equals(destination.getScheme()) || destination.getAuthority() == null
-                || destination.getPath() == null || !explicitWriteGrant) {
+                || destination.getRawPath() == null || destination.getRawPath().isEmpty()
+                || destination.getRawPath().equals("/") || !explicitWriteGrant || !documentUri) {
             throw new SecurityException("Export requires a content document with an explicit write grant");
         }
-        // Decode and normalize before rejecting references to Android private storage.
-        final String path;
-        try { path = new URI(null, null, destination.getPath(), null).normalize().getPath(); }
-        catch (URISyntaxException error) { throw new SecurityException("Invalid export path", error); }
-        if (path.equals("/..") || path.startsWith("/../") || path.equals("/data") || path.startsWith("/data/")) {
-            throw new SecurityException("Private export destination rejected");
-        }
-        return destination; // Preserve the provider's URI, including opaque document IDs.
+        // Android validates the DocumentsProvider envelope. Its document ID is opaque:
+        // encoded slashes/dots are provider data, never a local filesystem path.
+        return destination;
     }
 }

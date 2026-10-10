@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.provider.DocumentsContract;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -314,7 +315,8 @@ public final class MainActivity extends Activity {
             Uri requested = data.getData();
             boolean granted = checkUriPermission(requested, android.os.Process.myPid(), android.os.Process.myUid(),
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED;
-            String validated = ExportDestination.validate(requested.toString(), granted).toString();
+            String validated = ExportDestination.validate(requested.toString(), granted,
+                DocumentsContract.isDocumentUri(this, requested)).toString();
             if (!validated.equals(requested.toString())) {
                 throw new SecurityException("Validated destination differs from the granted URI");
             }
