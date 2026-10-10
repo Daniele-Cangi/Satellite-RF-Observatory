@@ -4,12 +4,16 @@ import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 /** Append-only Raw CSV understood by the existing Python intake. No clock fitting. */
 final class CaptureLog implements Closeable {
-    static final List<String> CLOCK_FIELDS = List.of(
+    // List.of requires Android API 30. Keep runtime initialization on API 29
+    // without adding core-library desugaring to this platform-only collector.
+    static final List<String> CLOCK_FIELDS = Collections.unmodifiableList(Arrays.asList(
         "TimeNanos", "LeapSecond", "TimeUncertaintyNanos", "FullBiasNanos",
         "BiasNanos", "BiasUncertaintyNanos", "DriftNanosPerSecond",
         "DriftUncertaintyNanosPerSecond", "HardwareClockDiscontinuityCount",
@@ -17,13 +21,13 @@ final class CaptureLog implements Closeable {
         "HasElapsedRealtimeNanos", "HasElapsedRealtimeUncertaintyNanos",
         "HasTimeUncertaintyNanos", "HasFullBiasNanos", "HasBiasNanos",
         "HasBiasUncertaintyNanos", "HasLeapSecond", "HasDriftNanosPerSecond",
-        "HasDriftUncertaintyNanosPerSecond");
-    static final List<String> MEASUREMENT_FIELDS = List.of(
+        "HasDriftUncertaintyNanosPerSecond"));
+    static final List<String> MEASUREMENT_FIELDS = Collections.unmodifiableList(Arrays.asList(
         "Svid", "ConstellationType", "TimeOffsetNanos", "State", "ReceivedSvTimeNanos",
         "ReceivedSvTimeUncertaintyNanos", "Cn0DbHz", "PseudorangeRateMetersPerSecond",
         "PseudorangeRateUncertaintyMetersPerSecond", "AccumulatedDeltaRangeState",
         "AccumulatedDeltaRangeMeters", "AccumulatedDeltaRangeUncertaintyMeters",
-        "CarrierFrequencyHz", "CodeType", "SnrInDb", "AgcDb");
+        "CarrierFrequencyHz", "CodeType", "SnrInDb", "AgcDb"));
     private final BufferedWriter writer;
     private final String captureId;
     private long events;
