@@ -220,8 +220,11 @@ rimane utilizzabile anche con altri ricevitori.
 
 La base è [PNT Clock Collector](../pnt/android-collector/README.md), implementato
 nella [PR #196](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/pull/196):
-registra misure e metadati nativi, ma oggi NTS gira separatamente in Termux e
-l'analisi si esegue sul PC. L'app autonoma descritta qui è ancora da realizzare.
+registra misure e metadati nativi. La versione 0.2 implementa A1 con NTS nello
+stesso processo e un export ZIP; l'analisi resta sul PC. Il trasporto NTS non
+assegna budget o risoluzione del contatore: la diagnostica A2 e l'integrazione
+del rapporto A3 restano da realizzare. La prova indoor verifica il trasporto
+e conserva zero Raw GNSS, senza dichiarare una nuova qualifica scientifica.
 
 | Priorità | Consegna | Criterio di completamento software |
 |---|---|---|

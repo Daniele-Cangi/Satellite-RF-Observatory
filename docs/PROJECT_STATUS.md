@@ -10,10 +10,11 @@ Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
 La [roadmap operativa Android](PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
 porta ora il telefono al centro del flusso: A1 raccoglie GNSS/NTS nella stessa
 app senza Termux o controllo dal PC; A2 mostra stato e limiti; A3 esporta la
-sessione e rende consultabile il rapporto del motore condiviso. Queste consegne
-sono pianificate, non ancora disponibili. Il raccoglitore nativo della PR #196
-è la base già implementata; NTS e analisi restano separati. Primo obiettivo:
-nessun intervento tecnico durante la raccolta. Qualifica temporale e beneficio
+sessione e rende consultabile il rapporto del motore condiviso. A1 e implementata
+nel raccoglitore 0.2; A2 e l'integrazione del rapporto A3 restano pianificate.
+La base GNSS della PR #196 conserva il suo formato; NTS ora gira nell'app,
+mentre l'analisi resta sul PC. Primo obiettivo: nessun intervento tecnico
+durante la raccolta. Qualifica temporale e beneficio
 benigno/challenge restano necessari per P2; sito e deployment vengono dopo.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
@@ -139,6 +140,19 @@ si riproducono esattamente; gli originali e la prova indoor vuota restano
 conservati. APK, test Java, lint e 656 test PNT verificati; CI Android
 Linux/Windows aggiunta senza ridurre quella Python. Nessun campo dichiarato
 o ritardo della callback diventa un budget indipendente; P2 resta aperta.
+
+Il raccoglitore 0.2 aggiunge il primo incremento dell'app autonoma: GNSS e
+NTS nello stesso processo/contatore, calendario esplicito, arresto e ZIP con
+entrambi gli originali. Non servono Termux o PC durante la raccolta. TLS 1.3,
+identita del server, ALPN e AES-SIV sono verificati anche con un server locale
+Python indipendente dal client Java, compresi casi rifiutati e timeout.
+La prima prova indoor sul Galaxy ottiene 10/20 scambi autenticati, dieci timeout
+e zero Raw GNSS; entrambi i terminali e tutti i tentativi restano conservati.
+E una verifica del trasporto, non una baseline GNSS o una nuova qualifica P2.
+Il rapporto non assegna budget UTC/deriva o risoluzione del contatore: restano
+ignoti e non autorizzano un confronto qualificato. Diagnosi live di qualita e
+integrazione del rapporto Python sono i prossimi incrementi; gli esperimenti
+e i budget precedenti restano invariati.
 
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,

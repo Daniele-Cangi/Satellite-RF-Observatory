@@ -36,10 +36,12 @@ jobs:
         if: runner.os == 'Windows'
         working-directory: pnt/android-collector
         run: .\gradlew.bat --no-daemon -PsourceRevision=${{ github.sha }} testDebugUnitTest assembleDebug lintDebug
-      - name: Test generated CSV with existing Python intake and replay
+      - name: Test native outputs, Python replay and local TLS/NTS interoperability
         env:
           PNT_COLLECTOR_FIXTURE: pnt/android-collector/app/build/synthetic-collector.txt
-        run: python -m pytest pnt/tests/test_android_collector.py -q
+          PNT_NTS_CAPTURE_FIXTURE: pnt/android-collector/app/build/synthetic-nts.json
+          PNT_ANDROID_NTS_INTEGRATION: '1'
+        run: python -m pytest pnt/tests/test_android_collector.py pnt/tests/test_android_nts.py -q
       - uses: actions/upload-artifact@v4
         if: always()
         with:
