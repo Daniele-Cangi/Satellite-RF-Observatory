@@ -9,6 +9,7 @@ import pytest
 from pnt.android_raw import inspect_android_raw
 from pnt.android_time import GPS_UNIX_EPOCH_NS, compare_android_time
 from pnt.gnss_time import compare_receiver_capture
+from pnt import nts
 
 
 FIXTURE = Path(__file__).parent / 'fixtures/android_collector/synthetic-collector.txt'
@@ -44,6 +45,41 @@ def test_java_generated_output_matches_checked_in_synthetic_fixture():
     if generated is None:
         pytest.skip('Java producer comparison runs in Android collector CI')
     assert Path(generated).read_bytes() == FIXTURE.read_bytes()
+
+
+def test_shared_protocol_vectors_match_the_existing_python_client():
+    data = json.loads(FIXTURE.with_name('nts-vectors.json').read_text())
+    for case in data['responses']:
+        arguments = (bytes.fromhex(case['packet']), bytes.fromhex(case.get('key', data['key'])),
+                     bytes.fromhex(case.get('uid', data['uid'])), bytes.fromhex(data['origin']), 0)
+        if case['accepted']:
+            assert nts._response(*arguments)['server_receive_unix_ns'] == 1700000000000000000
+        else:
+            with pytest.raises(nts.NTSError):
+                nts._response(*arguments)
+    for case in data['negotiations']:
+        if case['accepted']:
+            assert nts._ke_parameters(bytes.fromhex(case['packet']))[:2] == (None, 123)
+        else:
+            with pytest.raises(nts.NTSError):
+                nts._ke_parameters(bytes.fromhex(case['packet']))
+
+
+def test_native_transport_does_not_invent_budgets_or_counter_resolution():
+    generated = os.environ.get('PNT_NTS_CAPTURE_FIXTURE')
+    if generated is None:
+        pytest.skip('Native report producer comparison runs in Android collector CI')
+    report = json.loads(Path(generated).read_text())
+    assert report['capture_context']['counter_clock'] == 'CLOCK_BOOTTIME'
+    assert report['claim_source'] == 'NO_HOST_WALL_CLOCK_CLAIM'
+    assert len(report['attempts']) == 4
+    assert [a['status'] for a in report['attempts']].count('AUTHENTICATED_EXCHANGE') == 3
+    assert report['assumptions']['server_error_ns'] is None
+    assert report['assumptions']['rate_error_ppm'] is None
+    assert all(a['exchange']['monotonic_resolution_ns'] is None
+               for a in report['attempts'] if 'exchange' in a)
+    with pytest.raises(ValueError, match='server_error_ns'):
+        compare_android_time(report, inspect_android_raw(FIXTURE), **OPTIONS)
 
 
 def test_existing_intake_retains_clock_metadata_empty_events_and_all_raw_accounting():
