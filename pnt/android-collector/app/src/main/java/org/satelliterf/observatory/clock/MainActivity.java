@@ -8,6 +8,7 @@ import android.location.GnssMeasurementsEvent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Build;
 import android.os.Handler;
@@ -309,21 +310,27 @@ public final class MainActivity extends Activity {
     @Override protected void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
         if (request != EXPORT_FILE || result != RESULT_OK || data == null || data.getData() == null) return;
-        try (OutputStream output = getContentResolver().openOutputStream(data.getData(), "wt")) {
-            if (output == null) throw new IOException("No export stream");
-            try (ZipOutputStream zip = new ZipOutputStream(output)) {
-                for (File file : Arrays.asList(latestFile, latestNtsFile)) {
-                    if (file == null) continue; // Legacy/partial sessions remain exportable.
-                    zip.putNextEntry(new ZipEntry(file.getName()));
-                    try (InputStream input = Files.newInputStream(file.toPath())) {
-                        byte[] buffer = new byte[8192];
-                        int count;
-                        while ((count = input.read(buffer)) != -1) zip.write(buffer, 0, count);
+        try {
+            Uri requested = data.getData();
+            boolean granted = checkUriPermission(requested, android.os.Process.myPid(), android.os.Process.myUid(),
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == PackageManager.PERMISSION_GRANTED;
+            Uri destination = Uri.parse(ExportDestination.validate(requested.toString(), granted).toString());
+            try (OutputStream output = getContentResolver().openOutputStream(destination, "wt")) {
+                if (output == null) throw new IOException("No export stream");
+                try (ZipOutputStream zip = new ZipOutputStream(output)) {
+                    for (File file : Arrays.asList(latestFile, latestNtsFile)) {
+                        if (file == null) continue; // Legacy/partial sessions remain exportable.
+                        zip.putNextEntry(new ZipEntry(file.getName()));
+                        try (InputStream input = Files.newInputStream(file.toPath())) {
+                            byte[] buffer = new byte[8192];
+                            int count;
+                            while ((count = input.read(buffer)) != -1) zip.write(buffer, 0, count);
+                        }
+                        zip.closeEntry();
                     }
-                    zip.closeEntry();
                 }
+                show("Session exported. Private originals retained. Check both terminals before treating it as complete.");
             }
-            show("Session exported. Private originals retained. Check both terminals before treating it as complete.");
         } catch (IOException | RuntimeException error) { show("Export failed; original retained: " + error); }
     }
 

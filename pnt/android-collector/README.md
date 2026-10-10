@@ -36,6 +36,9 @@ There is no automatic restart, fallback to callback time or overwrite of an
 earlier recording. Files use unique capture IDs in private app storage. Export
 copies the last session through Android's document picker; originals stay
 in app storage. Do not uninstall or clear app data before transferring files.
+Export requires a `content://` destination with an explicit Android write grant;
+direct filesystem destinations and decoded, normalized `/data` paths are rejected
+before opening the output. Version 0.3.1 adds this export validation.
 The debug build also permits `adb shell run-as org.satelliterf.observatory.clock
 ls files` and copying retained files through `adb exec-out run-as ... cat ...`.
 Copy binary output without PowerShell's text redirection/re-encoding.
