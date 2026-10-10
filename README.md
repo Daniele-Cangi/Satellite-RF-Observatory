@@ -53,7 +53,7 @@ absolute-time verification requires a separate qualified time reference.
 | `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
 | `python -m pnt time-probe` / `android-time-probe` | Authenticated Internet time acquisition with declared assumptions; the Android command uses the phone's CLOCK_BOOTTIME |
 | `python -m pnt android-time-compare` | GNSS UTC versus same-phone NTS with explicit association and error budgets; missing bounds remain insufficient |
-| `python -m pnt time-sensitivity` | Offline receiver UTC offset sensitivity with fixed budgets and visible unsupported cases |
+| `python -m pnt time-sensitivity` | Paired local/external UTC offset sensitivity, including multiple Android sessions with fixed budgets and visible unsupported cases |
 | `python -m pnt android-analyze` | Android L1/C1C compared with external C1C observations at explicit fixed coordinates |
 | `python -m pnt compare` | Development comparison with separate training/calibration/evaluation windows and software code ramps |
 | `python -m pnt transfer` | Training-only prediction of later local residuals from external observations |
@@ -143,6 +143,7 @@ For your own recordings, follow the [input requirements](pnt/README.md).
 | Does agreement with archived navigation authenticate local RF? | No. Navigation fields can agree during a recorded attack; missing issues and conflicts remain visible. |
 | Can Internet time distinguish receiver UTC offsets? | On one real phone capture, software offsets of ±10 ms remain invisible and ±50 ms separate under uncalibrated budgets. This is conditional sensitivity, not RF authentication. |
 | Does the native clock metadata qualify the phone's time association? | No. The reported alignment uncertainty is about 7 ms at 68% confidence on one outdoor capture; the earlier 1 ms assumption remains unqualified. |
+| Does conditional external UTC sensitivity repeat on new phone sessions? | [Three predeclared sessions](research/exploratory/PNT_ANDROID_SESSION_EVALUATION.md) distinguish ±100 ms software offsets on 47/117 reported clock groups, with no original-log inconsistency on evaluable support. The other 70 groups and 16/60 NTS timeouts remain visible; timing budgets and RF protection remain unqualified. |
 | Can the inverse research estimate a satellite without fitting its target orbit? | One conditional G14 event reached its declared milestone. Other events retain their failures or uncertainty limits. This is separate from qualifying a cyber detector. |
 
 Detailed outcomes, numerical results and next physical questions live in
@@ -153,10 +154,11 @@ Synthetic exercises test software mechanisms; they are not measured RF
 detection performance. Closed results remain unchanged.
 
 The [Android workflow](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
-now delivers autonomous GNSS/NTS acquisition and live acquisition diagnostics.
-The next increment is an export-to-analysis-to-phone report workflow using
-the existing engine. Timing qualification and a documented
-benign/challenge comparison remain necessary to establish security benefit.
+now delivers autonomous GNSS/NTS acquisition, live diagnostics and the
+export-to-analysis-to-phone report workflow using the existing engine.
+The next engineering increment addresses NTS coverage under endpoint timeouts.
+Independent timing qualification and verified benign/RF challenge evidence
+remain necessary to establish operational security benefit.
 Website and deployment work follow that physical demonstration.
 
 ## Documentation

@@ -265,7 +265,7 @@ I circa 7 ms stimati al 68% e il budget storico di 1 ms restano distinti;
 nessun budget è qualificato o promosso nell'app. Per la garanzia fisica serve
 ancora giustificare associazione, contatore ed errori del riferimento.
 
-Il prossimo incremento riusa confronto e replay per valutare il rilevatore
+Il riepilogo multi-sessione riusa confronto e replay per valutare il rilevatore
 condizionale su sessioni separate, con originali e challenge UTC software di
 ±100 ms abbinati. Prima di aprire i dati di valutazione fissare profilo di
 assunzioni, selezione e regola di allarme; conservare tutti i casi insufficienti.
@@ -274,6 +274,12 @@ baseline certificate. Questa valutazione empirica non sostituisce la qualifica
 indipendente, il confronto fisico benigno/challenge o P3. Ulteriori raccolte
 devono risolvere un limite nominato, senza adattare soglie agli esiti o ripetere
 prove equivalenti per cercare un risultato migliore.
+
+La [valutazione di tre sessioni nuove](../research/exploratory/PNT_ANDROID_SESSION_EVALUATION.md)
+ha soddisfatto il criterio condizionale su 47/117 gruppi clock, conservando
+i 70 gruppi insufficienti e i 16 timeout su 60 slot NTS. Il prossimo intervento
+è sulla copertura della raccolta sequenziale sotto timeout, senza reinterpretare
+questo esito o promuovere i budget a limiti fisici.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,

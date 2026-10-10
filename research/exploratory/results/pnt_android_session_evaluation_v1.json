@@ -1,0 +1,838 @@
+{
+  "acquisition_deviations": [
+    "First session ended automatically and the screen locked during the pause; it was unlocked before session 2. Screen timeout changed temporarily to keep the app visible, then restored after session 3. No recording, schedule, analysis profile or selected capture was replaced."
+  ],
+  "assumptions": {
+    "calibrated": false,
+    "held_out_evaluation": false,
+    "rf_attack_simulation": false,
+    "sessions_and_clock_groups_are_not_independent_trials": true,
+    "verified_benign_originals": false
+  },
+  "claim": "Conditional advantage repeated in this three-session set only; no physical budget qualification, independent-trial rate or RF confirmation",
+  "date": "2026-10-10",
+  "engine_revision": "a2fc757c1e654f56efe075115aa0b2bc33af00bf",
+  "evaluation_id": "android-time-session-evaluation-v1",
+  "full_replay_requires_private_inputs": true,
+  "inputs_private": true,
+  "plan": {
+    "commit": "035aa0aac0eb9705eb524349d5588ad517cf00f2",
+    "path": "research/exploratory/android_time_session_evaluation_v1.json"
+  },
+  "predeclared_condition_met_in_all_sessions": true,
+  "private_summary_sha256": "afbe19e7cbf4d9b29afba3be5014394509bfbf234e2da47bdc1b8d94a5cc6325",
+  "regime": "PREDECLARED_CONDITIONAL_SOFTWARE_EVALUATION",
+  "rules": {
+    "clock_groups": "IDENTICAL_REPORTED_CLOCK_FIELDS; MIXED_ROW_OUTCOMES_NEVER_VOTE",
+    "combined": "EXISTING_PAIRED_PATTERN_REQUIRES_BOTH_METHODS",
+    "common_support": "ZERO_CASE_NON_INSUFFICIENT_LOCAL_AND_EXTERNAL_FIXED_FOR_ALL_OFFSETS",
+    "disagreement": "INCONCLUSIVE_WITHOUT_ENDPOINT_VOTE",
+    "perturbation": "WHOLE_CAPTURE_DECODED_UTC_ONLY",
+    "profile": "MATCH_OBSERVED_SETTINGS_WITHOUT_FILLING_MISSING_SESSION_VALUES",
+    "totals": "DESCRIPTIVE_SUMS_WITHOUT_PERFORMANCE_OR_POPULATION_ESTIMATE"
+  },
+  "same_declared_boot_count_and_collector_revision": true,
+  "sessions": [
+    {
+      "archive": {
+        "name": "session-1.zip",
+        "sha256": "3d85a5b8de53145c8eb4b08906ecde88282854870aa40cd34c17876c4f38f412",
+        "size_bytes": 568313
+      },
+      "capture_id": "dec04301-030e-4db8-b22b-1569967ab65f",
+      "collector_declared_source_revision": "1322d20e82edf2aaa8f8b8c08f0c933c62491cef",
+      "common_clock_groups": 3,
+      "common_records": 30,
+      "duration_seconds": 48.886882,
+      "issues": [],
+      "native_report_sha256": "41f4a76db24e3506cb2b46b3e3d6d609661b6e70b9ff4ac36a7c771a48056ec2",
+      "normalized_gps_records": 474,
+      "nts_terminal": "SCHEDULE_COMPLETED",
+      "offset_cases": [
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 45,
+                "NOT_DISTINGUISHABLE": 3
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 3
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 444,
+                "NOT_DISTINGUISHABLE": 30
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 45,
+                "NOT_DISTINGUISHABLE": 3
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 3
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 444,
+                "NOT_DISTINGUISHABLE": 30
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 47
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 3
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 9,
+                "NOT_DISTINGUISHABLE": 465
+              }
+            }
+          },
+          "utc_claim_offset_ns": 0
+        },
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INCONSISTENT": 3,
+                "INSUFFICIENT_EVIDENCE": 45
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 3
+              },
+              "common_records": {
+                "INCONSISTENT": 30
+              },
+              "records": {
+                "INCONSISTENT": 30,
+                "INSUFFICIENT_EVIDENCE": 444
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INCONSISTENT": 3,
+                "INSUFFICIENT_EVIDENCE": 45
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 3
+              },
+              "common_records": {
+                "INCONSISTENT": 30
+              },
+              "records": {
+                "INCONSISTENT": 30,
+                "INSUFFICIENT_EVIDENCE": 444
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 47
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 3
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 9,
+                "NOT_DISTINGUISHABLE": 465
+              }
+            }
+          },
+          "utc_claim_offset_ns": -100000000
+        },
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INCONSISTENT": 3,
+                "INSUFFICIENT_EVIDENCE": 45
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 3
+              },
+              "common_records": {
+                "INCONSISTENT": 30
+              },
+              "records": {
+                "INCONSISTENT": 30,
+                "INSUFFICIENT_EVIDENCE": 444
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INCONSISTENT": 3,
+                "INSUFFICIENT_EVIDENCE": 45
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 3
+              },
+              "common_records": {
+                "INCONSISTENT": 30
+              },
+              "records": {
+                "INCONSISTENT": 30,
+                "INSUFFICIENT_EVIDENCE": 444
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 47
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 3
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 9,
+                "NOT_DISTINGUISHABLE": 465
+              }
+            }
+          },
+          "utc_claim_offset_ns": 100000000
+        }
+      ],
+      "predeclared_condition_met": true,
+      "raw_callbacks": 48,
+      "raw_rows": 1445,
+      "raw_terminal": "SCHEDULE_COMPLETED",
+      "reported_clock_groups": 48,
+      "slot": 1,
+      "sources": [
+        {
+          "name": "pnt-clock-dec04301-030e-4db8-b22b-1569967ab65f.txt",
+          "sha256": "129dd1d767819b7bf0a27e3d5d7f99550fffdd17e68b84f1b66596b83946d3d3",
+          "size_bytes": 551415
+        },
+        {
+          "name": "pnt-nts-dec04301-030e-4db8-b22b-1569967ab65f.json",
+          "sha256": "275a28873d48852f189deb8e4694b1d70d4b8c9cc882d6ecab58d43978ea8224",
+          "size_bytes": 16526
+        }
+      ],
+      "unidentified_records": 0,
+      "unsupported_constellation_rows": 971,
+      "witness_status_counts": {
+        "AUTHENTICATED_EXCHANGE": 12,
+        "WITNESS_UNAVAILABLE": 8
+      }
+    },
+    {
+      "archive": {
+        "name": "session-2.zip",
+        "sha256": "b8d792f71c9948e0e144bdf3468e9c33f9732a3f745c4d67cc086176059131b2",
+        "size_bytes": 349746
+      },
+      "capture_id": "7b848583-1770-4d28-8554-ffeee90464bd",
+      "collector_declared_source_revision": "1322d20e82edf2aaa8f8b8c08f0c933c62491cef",
+      "common_clock_groups": 18,
+      "common_records": 167,
+      "duration_seconds": 32.067063,
+      "issues": [],
+      "native_report_sha256": "bd0e7464b86aed0d42760c60d1684a606991a0daff35e507d24e7858a1eb7470",
+      "normalized_gps_records": 285,
+      "nts_terminal": "SCHEDULE_COMPLETED",
+      "offset_cases": [
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 13,
+                "NOT_DISTINGUISHABLE": 18
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 18
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 167
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 118,
+                "NOT_DISTINGUISHABLE": 167
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 12,
+                "NOT_DISTINGUISHABLE": 19
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 18
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 167
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 110,
+                "NOT_DISTINGUISHABLE": 175
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 18
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 167
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 8,
+                "NOT_DISTINGUISHABLE": 277
+              }
+            }
+          },
+          "utc_claim_offset_ns": 0
+        },
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INCONSISTENT": 18,
+                "INSUFFICIENT_EVIDENCE": 13
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 18
+              },
+              "common_records": {
+                "INCONSISTENT": 167
+              },
+              "records": {
+                "INCONSISTENT": 167,
+                "INSUFFICIENT_EVIDENCE": 118
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INCONSISTENT": 19,
+                "INSUFFICIENT_EVIDENCE": 12
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 18
+              },
+              "common_records": {
+                "INCONSISTENT": 167
+              },
+              "records": {
+                "INCONSISTENT": 175,
+                "INSUFFICIENT_EVIDENCE": 110
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 18
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 167
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 8,
+                "NOT_DISTINGUISHABLE": 277
+              }
+            }
+          },
+          "utc_claim_offset_ns": -100000000
+        },
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INCONSISTENT": 18,
+                "INSUFFICIENT_EVIDENCE": 13
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 18
+              },
+              "common_records": {
+                "INCONSISTENT": 167
+              },
+              "records": {
+                "INCONSISTENT": 167,
+                "INSUFFICIENT_EVIDENCE": 118
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INCONSISTENT": 19,
+                "INSUFFICIENT_EVIDENCE": 12
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 18
+              },
+              "common_records": {
+                "INCONSISTENT": 167
+              },
+              "records": {
+                "INCONSISTENT": 175,
+                "INSUFFICIENT_EVIDENCE": 110
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 30
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 18
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 167
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 8,
+                "NOT_DISTINGUISHABLE": 277
+              }
+            }
+          },
+          "utc_claim_offset_ns": 100000000
+        }
+      ],
+      "predeclared_condition_met": true,
+      "raw_callbacks": 32,
+      "raw_rows": 856,
+      "raw_terminal": "SCHEDULE_COMPLETED",
+      "reported_clock_groups": 31,
+      "slot": 2,
+      "sources": [
+        {
+          "name": "pnt-clock-7b848583-1770-4d28-8554-ffeee90464bd.txt",
+          "sha256": "c71cf8fdf83c5ce5486015e634f906d14611df5ce8b5eafe25bc85cf0224fe96",
+          "size_bytes": 330454
+        },
+        {
+          "name": "pnt-nts-7b848583-1770-4d28-8554-ffeee90464bd.json",
+          "sha256": "525c40ecb9317997a431cf6af68e30a601c129c53214aae4ce208e4177a3738d",
+          "size_bytes": 18920
+        }
+      ],
+      "unidentified_records": 0,
+      "unsupported_constellation_rows": 571,
+      "witness_status_counts": {
+        "AUTHENTICATED_EXCHANGE": 15,
+        "WITNESS_UNAVAILABLE": 5
+      }
+    },
+    {
+      "archive": {
+        "name": "session-3.zip",
+        "sha256": "eed992147378b1364c6152d4fe08f579b6438772a4ef6da373d65c68f461b9a2",
+        "size_bytes": 391809
+      },
+      "capture_id": "ec2f67a6-397a-40a3-a0d1-51a706a499ae",
+      "collector_declared_source_revision": "1322d20e82edf2aaa8f8b8c08f0c933c62491cef",
+      "common_clock_groups": 26,
+      "common_records": 196,
+      "duration_seconds": 38.082122,
+      "issues": [],
+      "native_report_sha256": "dcc8c8ca88cf1fa9ec05cfffe273c5399c15f3ce4de37fad8450074f2c0caff6",
+      "normalized_gps_records": 315,
+      "nts_terminal": "SCHEDULE_COMPLETED",
+      "offset_cases": [
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 12,
+                "NOT_DISTINGUISHABLE": 26
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 26
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 196
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 119,
+                "NOT_DISTINGUISHABLE": 196
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 11,
+                "NOT_DISTINGUISHABLE": 27
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 26
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 196
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 115,
+                "NOT_DISTINGUISHABLE": 200
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 37
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 26
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 196
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 4,
+                "NOT_DISTINGUISHABLE": 311
+              }
+            }
+          },
+          "utc_claim_offset_ns": 0
+        },
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INCONSISTENT": 26,
+                "INSUFFICIENT_EVIDENCE": 12
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 26
+              },
+              "common_records": {
+                "INCONSISTENT": 196
+              },
+              "records": {
+                "INCONSISTENT": 196,
+                "INSUFFICIENT_EVIDENCE": 119
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INCONSISTENT": 27,
+                "INSUFFICIENT_EVIDENCE": 11
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 26
+              },
+              "common_records": {
+                "INCONSISTENT": 196
+              },
+              "records": {
+                "INCONSISTENT": 200,
+                "INSUFFICIENT_EVIDENCE": 115
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 37
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 26
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 196
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 4,
+                "NOT_DISTINGUISHABLE": 311
+              }
+            }
+          },
+          "utc_claim_offset_ns": -100000000
+        },
+        {
+          "methods": {
+            "combined": {
+              "clock_groups": {
+                "INCONSISTENT": 26,
+                "INSUFFICIENT_EVIDENCE": 12
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 26
+              },
+              "common_records": {
+                "INCONSISTENT": 196
+              },
+              "records": {
+                "INCONSISTENT": 196,
+                "INSUFFICIENT_EVIDENCE": 119
+              }
+            },
+            "external": {
+              "clock_groups": {
+                "INCONSISTENT": 27,
+                "INSUFFICIENT_EVIDENCE": 11
+              },
+              "common_clock_groups": {
+                "INCONSISTENT": 26
+              },
+              "common_records": {
+                "INCONSISTENT": 196
+              },
+              "records": {
+                "INCONSISTENT": 200,
+                "INSUFFICIENT_EVIDENCE": 115
+              }
+            },
+            "local": {
+              "clock_groups": {
+                "INSUFFICIENT_EVIDENCE": 1,
+                "NOT_DISTINGUISHABLE": 37
+              },
+              "common_clock_groups": {
+                "NOT_DISTINGUISHABLE": 26
+              },
+              "common_records": {
+                "NOT_DISTINGUISHABLE": 196
+              },
+              "records": {
+                "INSUFFICIENT_EVIDENCE": 4,
+                "NOT_DISTINGUISHABLE": 311
+              }
+            }
+          },
+          "utc_claim_offset_ns": 100000000
+        }
+      ],
+      "predeclared_condition_met": true,
+      "raw_callbacks": 38,
+      "raw_rows": 963,
+      "raw_terminal": "SCHEDULE_COMPLETED",
+      "reported_clock_groups": 38,
+      "slot": 3,
+      "sources": [
+        {
+          "name": "pnt-clock-ec2f67a6-397a-40a3-a0d1-51a706a499ae.txt",
+          "sha256": "581df1414b5d491104bbbb088f636040e62f64bead9f0ac0fbb33811d53597d0",
+          "size_bytes": 370921
+        },
+        {
+          "name": "pnt-nts-ec2f67a6-397a-40a3-a0d1-51a706a499ae.json",
+          "sha256": "24cf54f6fa8ac6b596ec86d6747bb05e82c86cb280287f4effe5925f18180ad7",
+          "size_bytes": 20516
+        }
+      ],
+      "unidentified_records": 0,
+      "unsupported_constellation_rows": 648,
+      "witness_status_counts": {
+        "AUTHENTICATED_EXCHANGE": 17,
+        "WITNESS_UNAVAILABLE": 3
+      }
+    }
+  ],
+  "timing_profile": {
+    "bracket_span_ns": 15000000000,
+    "counter_clock": "CLOCK_BOOTTIME",
+    "epoch_alignment_error_ns": 25000000,
+    "gps_utc_offset_seconds": 18,
+    "local_counter_resolution_ns": 1,
+    "nts_counter_resolutions_ns": [
+      1
+    ],
+    "rate_error_ppm": 100,
+    "server_error_ns": 1000000,
+    "utc_error_ns": 1000000
+  },
+  "totals": {
+    "common_clock_groups": 47,
+    "common_records": 393,
+    "offset_cases": [
+      {
+        "methods": {
+          "combined": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 70,
+              "NOT_DISTINGUISHABLE": 47
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 47
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 393
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 681,
+              "NOT_DISTINGUISHABLE": 393
+            }
+          },
+          "external": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 68,
+              "NOT_DISTINGUISHABLE": 49
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 47
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 393
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 669,
+              "NOT_DISTINGUISHABLE": 405
+            }
+          },
+          "local": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 3,
+              "NOT_DISTINGUISHABLE": 114
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 47
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 393
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 21,
+              "NOT_DISTINGUISHABLE": 1053
+            }
+          }
+        },
+        "utc_claim_offset_ns": 0
+      },
+      {
+        "methods": {
+          "combined": {
+            "clock_groups": {
+              "INCONSISTENT": 47,
+              "INSUFFICIENT_EVIDENCE": 70
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 47
+            },
+            "common_records": {
+              "INCONSISTENT": 393
+            },
+            "records": {
+              "INCONSISTENT": 393,
+              "INSUFFICIENT_EVIDENCE": 681
+            }
+          },
+          "external": {
+            "clock_groups": {
+              "INCONSISTENT": 49,
+              "INSUFFICIENT_EVIDENCE": 68
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 47
+            },
+            "common_records": {
+              "INCONSISTENT": 393
+            },
+            "records": {
+              "INCONSISTENT": 405,
+              "INSUFFICIENT_EVIDENCE": 669
+            }
+          },
+          "local": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 3,
+              "NOT_DISTINGUISHABLE": 114
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 47
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 393
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 21,
+              "NOT_DISTINGUISHABLE": 1053
+            }
+          }
+        },
+        "utc_claim_offset_ns": -100000000
+      },
+      {
+        "methods": {
+          "combined": {
+            "clock_groups": {
+              "INCONSISTENT": 47,
+              "INSUFFICIENT_EVIDENCE": 70
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 47
+            },
+            "common_records": {
+              "INCONSISTENT": 393
+            },
+            "records": {
+              "INCONSISTENT": 393,
+              "INSUFFICIENT_EVIDENCE": 681
+            }
+          },
+          "external": {
+            "clock_groups": {
+              "INCONSISTENT": 49,
+              "INSUFFICIENT_EVIDENCE": 68
+            },
+            "common_clock_groups": {
+              "INCONSISTENT": 47
+            },
+            "common_records": {
+              "INCONSISTENT": 393
+            },
+            "records": {
+              "INCONSISTENT": 405,
+              "INSUFFICIENT_EVIDENCE": 669
+            }
+          },
+          "local": {
+            "clock_groups": {
+              "INSUFFICIENT_EVIDENCE": 3,
+              "NOT_DISTINGUISHABLE": 114
+            },
+            "common_clock_groups": {
+              "NOT_DISTINGUISHABLE": 47
+            },
+            "common_records": {
+              "NOT_DISTINGUISHABLE": 393
+            },
+            "records": {
+              "INSUFFICIENT_EVIDENCE": 21,
+              "NOT_DISTINGUISHABLE": 1053
+            }
+          }
+        },
+        "utc_claim_offset_ns": 100000000
+      }
+    ],
+    "receiver_records": 1074,
+    "reported_clock_groups": 117,
+    "sessions": 3,
+    "unidentified_records": 0,
+    "witness_status_counts": {
+      "AUTHENTICATED_EXCHANGE": 44,
+      "WITNESS_UNAVAILABLE": 16
+    }
+  },
+  "verification": {
+    "all_inputs_hashed_before_numeric_decode": true,
+    "multi_session_replay_matches_saved_report": true,
+    "native_and_summary_cli_exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "original_phone_transfer_hashes_match": true,
+    "three_native_comparisons_replayed_exactly": true
+  }
+}

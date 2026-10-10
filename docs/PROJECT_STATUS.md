@@ -48,8 +48,17 @@ Il [riepilogo multi-sessione](../pnt/README.md#compare-multiple-android-sessions
 originali e scarti software, conteggi locale/rete/combinato su supporto comune
 fisso, copertura propria e gruppi clock dichiarati. Sessioni vuote e NTS fallito
 restano nel riepilogo; duplicati e profili numerici incompatibili non vengono
-conteggiati insieme. I test sono sintetici; la valutazione empirica su sessioni
-separate e la qualifica fisica restano da eseguire. Nessun budget adottato.
+conteggiati insieme. I test automatici sono sintetici; la qualifica fisica
+resta aperta. Nessun budget adottato nell'app.
+
+La [prima valutazione su tre sessioni nuove](../research/exploratory/PNT_ANDROID_SESSION_EVALUATION.md)
+è conclusa, con profilo e regole fissati prima della raccolta: sugli stessi
+47/117 gruppi clock ammessi, ±100 ms producono discordanza esterna/combinata,
+mentre il locale resta invariato; nessuna discordanza originale nei controlli
+valutabili. Restano visibili 70 gruppi insufficienti e 16/60 slot NTS falliti.
+Questo risolve la domanda condizionale in quel blocco, non qualifica i 25 ms
+ipotetici o P2/P3. Il prossimo incremento migliora la copertura della raccolta
+NTS sotto timeout, mantenendo calendario, cancellazione e fallimenti verificabili.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
