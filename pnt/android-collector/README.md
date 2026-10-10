@@ -2,7 +2,8 @@
 
 A foreground research app that records native GNSS measurements and
 authenticated Internet time together. Version 0.2 removes the need for Termux,
-a PC or USB during acquisition. It retains the existing Raw format and Python
+a PC or USB during acquisition; version 0.3 adds live acquisition diagnostics.
+It retains the existing Raw format and Python
 intake/replay. It does not adjust the device clock, authenticate local RF or
 assign a timing/security verdict.
 
@@ -38,6 +39,31 @@ in app storage. Do not uninstall or clear app data before transferring files.
 The debug build also permits `adb shell run-as org.satelliterf.observatory.clock
 ls files` and copying retained files through `adb exec-out run-as ... cat ...`.
 Copy binary output without PowerShell's text redirection/re-encoding.
+
+## Live acquisition diagnostics
+
+Below the recording controls, the app shows actual measurement callbacks, Raw
+rows and distinct satellites in the latest callback, with GPS counted separately.
+Multiple signals from the same satellite count as separate rows, not satellites.
+Empty callbacks remain visible. Last callback age refreshes once per second while
+recording; after stopping it shows age at stop. This is a reception indicator,
+not RF arrival time, a stale-data admission threshold or a native epoch replacement.
+
+The panel reports missing/invalid native epoch, alignment uncertainty and FullBias
+fields, plus hardware clock discontinuity count changes. The receiver's reported
+alignment uncertainty remains a **68% estimate, not a qualified bound**, even when
+reported as zero. Clock changes are observations without a cause or attack attribution.
+The legacy `onStatusChanged` readiness notification is retained in the log but
+does not establish reception; actual Raw callbacks determine the displayed state.
+
+NTS progress retains cumulative failures and pending/unattempted slots, with the
+latest completed result per endpoint. Long failure messages are shortened on
+screen; full reasons and every attempt stay in the original JSON. Diagnostics
+summarize existing snapshots/checkpoints without changing either file format.
+They reset for each new recording; reopening the app retains files without
+reconstructing a checked summary of earlier sessions. Timing comparison stays
+**NOT ASSESSED**, budgets and counter resolution unqualified, including after
+successful reception and NTS authentication. No security verdict is added.
 
 ## Authenticated time transport and retention
 
@@ -140,6 +166,7 @@ smoke-tested on Galaxy S21 FE / Android 16; the minimum API remains 29, without
 claiming device testing across every supported Android version.
 
 Sources: [GnssClock](https://developer.android.com/reference/android/location/GnssClock),
+[callback status semantics](https://developer.android.com/reference/android/location/GnssMeasurementsEvent.Callback#onStatusChanged(int)),
 [measurement callbacks](https://developer.android.com/reference/android/location/LocationManager#registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback,%20android.os.Handler)),
 [elapsed realtime](https://developer.android.com/reference/android/os/SystemClock#elapsedRealtimeNanos()),
 [AGP 8.13 compatibility](https://developer.android.com/build/releases/agp-8-13-0-release-notes),

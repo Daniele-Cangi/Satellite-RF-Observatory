@@ -31,6 +31,7 @@ public final class NtsCaptureTest {
         Files.deleteIfExists(path); // Test output only; production uses exclusive creation.
         AtomicLong counter = new AtomicLong(123456789012345L - 1000000000L);
         AtomicInteger calls = new AtomicInteger();
+        List<String> notifications = new java.util.ArrayList<>();
         CountDownLatch done = new CountDownLatch(1);
         NtsCapture capture = new NtsCapture(path, "synthetic-ci", "synthetic-collector.txt",
             Map.of("SourceRevision", "SYNTHETIC_ONLY"), List.of("synthetic-a", "synthetic-b"), 2, 1,
@@ -46,11 +47,28 @@ public final class NtsCaptureTest {
                         "monotonic_resolution_ns", null);
                 }
                 public void close() {}
-            }, listener(done));
+            }, new NtsCapture.Listener() {
+                public void attemptCompleted(String server, String status, String reason) {
+                    // UI notifications must describe a completed, already-retained attempt.
+                    try {
+                        JsonObject saved = JsonParser.parseString(new String(Files.readAllBytes(path), StandardCharsets.UTF_8)).getAsJsonObject();
+                        JsonObject attempt = saved.getAsJsonArray("attempts").get(notifications.size()).getAsJsonObject();
+                        assertEquals(server, attempt.get("server").getAsString());
+                        assertEquals(status, attempt.get("status").getAsString());
+                        assertTrue(attempt.has("finished_monotonic_ns"));
+                    } catch (IOException error) { throw new AssertionError(error); }
+                    notifications.add(status + ":" + reason);
+                }
+                public void updated(int authenticated, int unavailable) {}
+                public void finished(String error) { done.countDown(); }
+            });
         capture.start();
         assertTrue(done.await(5, TimeUnit.SECONDS));
         JsonObject report = JsonParser.parseString(new String(Files.readAllBytes(path), StandardCharsets.UTF_8)).getAsJsonObject();
         assertEquals(4, calls.get());
+        assertEquals(4, notifications.size());
+        assertEquals("AUTHENTICATED_EXCHANGE:null", notifications.get(0));
+        assertEquals("WITNESS_UNAVAILABLE:IOException: synthetic timeout", notifications.get(1));
         assertEquals(4, report.getAsJsonArray("attempts").size());
         assertEquals(3, report.getAsJsonObject("terminal").get("authenticated_exchanges").getAsInt());
         assertEquals("WITNESS_UNAVAILABLE", report.getAsJsonArray("attempts").get(1).getAsJsonObject().get("status").getAsString());

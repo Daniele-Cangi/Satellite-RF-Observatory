@@ -25,6 +25,7 @@ final class NtsCapture {
     interface Listener {
         void updated(int authenticated, int unavailable);
         void finished(String error);
+        default void attemptCompleted(String server, String status, String reason) {}
     }
     private static final Gson JSON = new GsonBuilder().serializeNulls().create();
     private final Path file;
@@ -141,6 +142,7 @@ final class NtsCapture {
                     attempt.put("finished_monotonic_ns", counter.getAsLong());
                 }
                 save();
+                listener.attemptCompleted((String) attempt.get("server"), (String) attempt.get("status"), (String) attempt.get("reason"));
                 listener.updated(authenticated, unavailable);
             }
         } catch (IOException | RuntimeException error) {
