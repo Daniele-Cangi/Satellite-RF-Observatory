@@ -116,7 +116,17 @@ indipendente di associazione di 1 ms resta non qualificato. Tutte le 51
 discordanze/9 epoche, le esclusioni e i precedenti risultati sono invariati.
 Il prossimo incremento utile riguarda i metadati di acquisizione sul telefono,
 senza ricavare un nuovo budget dall'accordo osservato o ripetere la stessa
-challenge. Nessuna nuova acquisizione e iniziata.
+challenge. La diagnosi usa soltanto gli input originali.
+
+Il [PNT Clock Collector Android](../pnt/android-collector/README.md) prepara
+quel passo: conserva l'incertezza nativa dell'epoca GNSS e i flag di presenza,
+oltre ai contatori della callback, nello stesso intake/replay. APK, test Java,
+lint e integrazione sintetica sono verificati; la prova funzionale indoor sul
+Galaxy S21 FE installa e avvia l'app ma non riceve callback GNSS. Il file vuoto
+di misure resta conservato, con terminale esplicito, senza un confronto UTC.
+La disponibilita effettiva dei nuovi campi richiede cielo visibile. CI Android
+Linux/Windows aggiunta, senza ridurre quella Python. Nessun campo dichiarato
+o ritardo della callback diventa un budget indipendente; P2 resta aperta.
 
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,

@@ -22,6 +22,12 @@ file-receipt or PC-clock substitution. Reported Android uncertainties are not
 independent hard bounds. Rows can repeat the same clock epoch. No real phone
 qualification or RF authenticity result is claimed by the synthetic tests.
 
+For native GNSS epoch-alignment uncertainty and callback counters, use the
+optional [PNT Clock Collector Android app](android-collector/README.md).
+Its CSV uses the same intake/UTC adapter/replay; missing native epochs never
+fall back to callback timing. Reported 68% uncertainty is retained as metadata,
+not fitted into the error budgets.
+
 ## Receiver UTC offset sensitivity
 
 After `time-compare` or `android-time-compare`, use the retained comparison to

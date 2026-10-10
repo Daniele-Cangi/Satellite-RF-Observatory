@@ -75,6 +75,19 @@ clock del telefono: GNSS Logger registra separatamente il clock GNSS. La
 [implementazione AOSP](https://android.googlesource.com/platform/system/core/+/refs/heads/main/libutils/SystemClock.cpp)
 esplicita il collegamento tra elapsed realtime e CLOCK_BOOTTIME.
 
+### Metadati temporali aggiuntivi
+
+Per raccogliere l'incertezza dell'epoca GNSS omessa dal log 3.1.1.3, usare
+il [PNT Clock Collector](../pnt/android-collector/README.md) al posto di GNSS
+Logger. Il piccolo APK registra `GnssClock` con i flag di disponibilita,
+`ElapsedRealtimeUncertaintyNanos` e i contatori all'ingresso della callback e
+dopo le letture API. Mantiene lo stesso formato Raw e percorso NTS/replay.
+Tenere il raccoglitore visibile, anche in schermo diviso con Termux: quando
+l'app viene nascosta chiude la sessione esplicitamente. Timestamp assenti,
+callback vuote, errori e file parziali restano visibili. La confidenza Android
+del 68% non diventa un limite indipendente; il ritardo della callback non
+qualifica da solo l'associazione. Nessun budget o risultato storico cambia.
+
 ## 3. Importazione e confronto sul PC
 
 Per prima cosa importare il log, senza attribuirgli un esito scientifico:
