@@ -144,7 +144,7 @@ For your own recordings, follow the [input requirements](pnt/README.md).
 | Can Internet time distinguish receiver UTC offsets? | On one real phone capture, software offsets of ±10 ms remain invisible and ±50 ms separate under uncalibrated budgets. This is conditional sensitivity, not RF authentication. |
 | Does the native clock metadata qualify the phone's time association? | No. The reported alignment uncertainty is about 7 ms at 68% confidence on one outdoor capture; the earlier 1 ms assumption remains unqualified. |
 | Does conditional external UTC sensitivity repeat on new phone sessions? | [Three predeclared sessions](research/exploratory/PNT_ANDROID_SESSION_EVALUATION.md) distinguish ±100 ms software offsets on 47/117 reported clock groups, with no original-log inconsistency on evaluable support. The other 70 groups and 16/60 NTS timeouts remain visible; timing budgets and RF protection remain unqualified. |
-| Does Internet time detect gradual drift earlier than the local control? | [Four exposed sessions at ±5 ms/s](research/exploratory/PNT_ANDROID_TIME_DRIFT.md) show mixed first inconsistent epochs. Later NTS receipts and partial coverage prevent a claim of faster operational alerts. |
+| Does Internet time detect gradual drift earlier than the local control? | [Receipt-gated replay of four exposed sessions](research/exploratory/PNT_ANDROID_TIME_AVAILABILITY.md) shows earlier external evidence for some ±5 ms/s ramps, later or simultaneous evidence for others. This is conditional input availability; operational alert latency remains unmeasured. |
 | Can the inverse research estimate a satellite without fitting its target orbit? | One conditional G14 event reached its declared milestone. Other events retain their failures or uncertainty limits. This is separate from qualifying a cyber detector. |
 
 Detailed outcomes, numerical results and next physical questions live in
@@ -163,8 +163,10 @@ failure and preventing compressed catch-up after timeouts. An
 timeout isolation, 13/20 authenticated exchanges and conditional ±100 ms
 sensitivity on 18/39 common clock groups. The other 21 groups remain insufficient;
 this single trial does not establish a stable coverage gain. The gradual-drift
-study now distinguishes reported-epoch sensitivity from later NTS evidence;
-the next question is when the result is causally available, using existing replay.
+study now distinguishes reported epochs from actual input availability using
+native callback and NTS completion receipts. Its mixed result supports a
+conditional session monitor with revisable outcomes; actual alert delivery
+remains to be measured.
 Independent timing qualification and verified benign/RF challenge evidence
 remain necessary to establish operational security benefit.
 Website and deployment work follow that physical demonstration.

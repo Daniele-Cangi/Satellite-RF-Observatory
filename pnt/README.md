@@ -242,6 +242,8 @@ group is evaluable. Inputs, failures and the full offline results remain in the
 report. This measures **conditional input availability**, not processing,
 storage, operator-alert latency or physical attack onset. Budgets remain
 unqualified, collector receipts trusted, and RF authenticity unassessed.
+The [four-session input-availability study](../research/exploratory/PNT_ANDROID_TIME_AVAILABILITY.md)
+retains mixed timing, later inconclusive evidence and unchanged offline totals.
 
 ## Authenticated Internet time witness
 

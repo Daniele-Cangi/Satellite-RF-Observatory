@@ -125,5 +125,9 @@ guadagno stabile o qualifica i budget. La
 [deriva software ±5 ms/s](../research/exploratory/PNT_ANDROID_TIME_DRIFT.md)
 sui quattro rapporti già esposti è distinguibile anche dal locale. Le prime
 epoche esterne possono precederlo, ma le ricevute NTS successive non dimostrano
-una minore latenza live. Il prossimo quesito è la disponibilità causale delle
-prove, riusando il replay e mantenendo gli stessi budget non qualificati.
+una minore latenza live. La
+[disponibilità ricostruita degli input](../research/exploratory/PNT_ANDROID_TIME_AVAILABILITY.md)
+usa ora callback GNSS e completamenti NTS: anche questo risultato resta misto,
+con un allarme combinato successivamente inconclusivo. Si conservano gli stessi
+budget non qualificati e tutti gli esiti finali; la consegna effettiva del
+risultato resta da misurare nel monitor condizionale di sessione.
