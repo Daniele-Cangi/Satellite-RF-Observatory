@@ -99,19 +99,24 @@ def _raw_terminal(raw, comments):
         raise ValueError('Raw terminal missing or ambiguous; partial recording retained')
     _, reason, stop, event_count, row_count = terminals[0]
     _text(reason, 'Raw terminal reason')
-    _comment_integer(stop)
+    stop = _comment_integer(stop)
     events = [r for r in comments if r[:1] == ['Event']]
     if (_comment_integer(event_count) != len(events)
             or _comment_integer(row_count) != raw['coverage']['status_counts']['raw_rows']):
         raise ValueError('Raw terminal accounting differs from retained events/Raw rows')
     actual = raw['source']['native_event_row_counts']
-    declared_total = 0
+    windows = raw['source']['native_event_callback_windows']
+    declared_total, previous_end = 0, 0
     for index, event in enumerate(events, 1):
         if (len(event) < 5 or _comment_integer(event[1]) != index
                 or _comment_integer(event[4]) != actual.get(str(index), 0)):
             raise ValueError('Raw event accounting differs from retained Raw rows')
-        _comment_integer(event[2])
-        _comment_integer(event[3])
+        start, read_end = _comment_integer(event[2]), _comment_integer(event[3])
+        if not previous_end <= start <= read_end <= stop:
+            raise ValueError('Raw event counters contradict callback ordering or terminal counter')
+        if str(index) in windows and windows[str(index)] != [start, read_end]:
+            raise ValueError('Raw row callback window differs from its declared event')
+        previous_end = read_end
         declared_total += _comment_integer(event[4])
     if declared_total != _comment_integer(row_count):
         raise ValueError('Raw event totals differ from terminal accounting')

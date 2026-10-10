@@ -148,6 +148,7 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
     text = decoded.decode('utf-8-sig')
     header, comments, records = None, [], []
     counts, constellations, ignored, native_events = Counter(), Counter(), Counter(), Counter()
+    native_windows = {}
     for line, content in enumerate(text.splitlines(), 1):
         if not content.strip():
             continue
@@ -175,6 +176,10 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
             if event < 1:
                 raise ValueError(f'line {line}: invalid native EventIndex')
             native_events[str(event)] += 1
+            window = [_integer(values, 'CallbackStartElapsedRealtimeNanos'),
+                      _integer(values, 'CallbackReadEndElapsedRealtimeNanos')]
+            if native_windows.setdefault(str(event), window) != window:
+                raise ValueError(f'line {line}: native Raw rows disagree on their callback window')
         counts['raw_rows'] += 1
         constellations[values['ConstellationType']] += 1
         try:
@@ -222,4 +227,5 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
     }
     if expected_capture_id is not None:
         report['source']['native_event_row_counts'] = dict(sorted(native_events.items()))
+        report['source']['native_event_callback_windows'] = dict(sorted(native_windows.items()))
     return report

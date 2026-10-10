@@ -210,6 +210,42 @@ def test_raw_terminal_and_per_event_counts_cannot_conceal_removed_observations(t
     assert any('accounting' in issue for issue in result['issues'])
 
 
+@pytest.mark.parametrize('change', ['terminal_before_events', 'end_before_start', 'overlap',
+                                   'empty_event_after_terminal', 'row_window_mismatch', 'inconsistent_rows'])
+def test_native_raw_callback_windows_must_match_rows_and_finish_before_terminal(tmp_path, change):
+    lines = FIXTURE.read_text().splitlines()
+    if change == 'terminal_before_events':
+        i = next(i for i, line in enumerate(lines) if line.startswith('# Terminal,'))
+        parts = lines[i].split(',')
+        parts[2] = '0'
+    elif change in {'row_window_mismatch', 'inconsistent_rows'}:
+        indices = [i for i, line in enumerate(lines) if line.startswith('Raw,synthetic-ci,1,')]
+        for i in indices if change == 'row_window_mismatch' else indices[:1]:
+            parts = lines[i].split(',')
+            parts[3] = str(int(parts[3]) + 1)
+            lines[i] = ','.join(parts)
+        parts = None
+    else:
+        event_id = {'end_before_start': 1, 'overlap': 2, 'empty_event_after_terminal': 4}[change]
+        i = next(i for i, line in enumerate(lines) if line.startswith(f'# Event,{event_id},'))
+        parts = lines[i].split(',')
+        if change == 'end_before_start':
+            parts[3] = str(int(parts[2]) - 1)
+        elif change == 'overlap':
+            previous = next(line for line in lines if line.startswith('# Event,1,')).split(',')
+            parts[2] = str(int(previous[3]) - 1)
+        else:
+            terminal = next(line for line in lines if line.startswith('# Terminal,')).split(',')
+            parts[3] = str(int(terminal[2]) + 1)
+    if parts is not None:
+        lines[i] = ','.join(parts)
+    path, _, _ = archive(tmp_path, raw=('\n'.join(lines) + '\n').encode())
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert result['comparison'] is None and result['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert any('callback' in issue for issue in result['issues'])
+    assert result['witness_report'] is not None
+
+
 def test_legacy_fixed_endpoint_contract_detects_an_entire_deleted_unattempted_endpoint(tmp_path):
     witness = native_witness()
     endpoints = ['ptbtime1.ptb.de', 'ptbtime2.ptb.de']
