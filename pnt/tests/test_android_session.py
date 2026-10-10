@@ -400,6 +400,17 @@ def test_independent_endpoints_keep_retained_order_failures_and_existing_replay(
         utc_error_ns=ANALYSIS['utc_error_ns'], utc_error_source=ANALYSIS['utc_error_source']) == comparison
 
 
+@pytest.mark.parametrize('version', ['0.2.0', '0.3.0', '0.3.1', '0.4.0', '0.4.1', None, '', '0.4.3'])
+def test_independent_execution_cannot_override_a_historical_or_unknown_collector(tmp_path, version):
+    witness = independent_witness()
+    witness['capture_context']['metadata'] = {} if version is None else dict(Version=version)
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert result['comparison'] is None
+    assert any('collector version' in issue for issue in result['issues'])
+    assert result['witness_report'] == witness  # Rejected evidence is still retained.
+
+
 def test_independent_stop_can_leave_different_endpoint_prefix_lengths(tmp_path):
     witness = independent_witness()
     for slot in witness['attempts'][1::2]:

@@ -75,8 +75,9 @@ Version 0.4.2 declares `execution: INDEPENDENT_ENDPOINTS_SPACED` in the existing
 NTS protocol. The slot list stays in round/endpoint order, irrespective of
 completion order. The PC checks each endpoint's non-overlapping attempt prefix,
 minimum start spacing, original round offsets and complete slot/terminal totals.
-Late slots start without replacement, retries or compressed catch-up. Historical
-reports without this declaration retain the original global serial checks.
+Late slots start without replacement, retries or compressed catch-up. This mode
+requires declared collector version 0.4.2; older or unknown versions cannot opt
+into it. Historical reports retain the original global serial checks.
 Checkpoint writes and progress updates are serialized; Stop closes every active
 probe, wakes both schedules and waits for their completion before the final
 terminal. The existing comparison/replay still uses adjacent attempts at the

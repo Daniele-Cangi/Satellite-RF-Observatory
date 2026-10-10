@@ -36,7 +36,8 @@ public final class NtsCaptureTest {
         Map<String, Integer> completed = new java.util.HashMap<>();
         CountDownLatch done = new CountDownLatch(1);
         NtsCapture capture = new NtsCapture(path, "synthetic-ci", "pnt-clock-synthetic-ci.txt",
-            Map.of("SourceRevision", "SYNTHETIC_ONLY"), List.of("synthetic-a", "synthetic-b"), 2, 1,
+            Map.of("Version", BuildConfig.VERSION_NAME, "SourceRevision", "SYNTHETIC_ONLY"),
+            List.of("synthetic-a", "synthetic-b"), 2, 1,
             () -> counter.addAndGet(100000000L), () -> new NtsCapture.Probe() {
                 public Map<String, Object> probe(String server, int port, int timeout, int era) throws Exception {
                     calls.incrementAndGet();
