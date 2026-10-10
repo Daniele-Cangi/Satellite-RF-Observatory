@@ -164,11 +164,23 @@ def _nts_schedule(witness):
                 or attempt['scheduled_round_start_monotonic_ns'] != start + index // len(endpoints) * interval
                 or attempt['status'] not in {'AUTHENTICATED_EXCHANGE', 'WITNESS_UNAVAILABLE', 'NOT_ATTEMPTED'}):
             raise ValueError('NTS retained slot differs from its declared endpoint/round/schedule')
+        if attempt['status'] == 'NOT_ATTEMPTED':
+            if any(key in attempt for key in ('started_monotonic_ns', 'finished_monotonic_ns', 'exchange')):
+                raise ValueError('NTS unattempted slot contains active attempt/exchange data')
+        else:
+            attempt_start = _integer(attempt.get('started_monotonic_ns'), 'NTS attempt start', start)
+            attempt_end = _integer(attempt.get('finished_monotonic_ns'), 'NTS attempt end', attempt_start)
+            if attempt_end > end:
+                raise ValueError('NTS attempt lies outside the declared acquisition window')
         if attempt['status'] == 'AUTHENTICATED_EXCHANGE':
             exchange = attempt.get('exchange')
             if (not isinstance(exchange, dict) or exchange.get('capture_id') != witness['capture_id']
                     or exchange.get('counter_clock') != 'CLOCK_BOOTTIME' or exchange.get('server') != attempt['server']):
                 raise ValueError('NTS authenticated exchange differs from its retained slot/capture domain')
+            sent = _integer(exchange.get('send_monotonic_ns'), 'NTS exchange send', attempt_start)
+            received = _integer(exchange.get('receive_monotonic_ns'), 'NTS exchange receive', sent)
+            if received > attempt_end:
+                raise ValueError('NTS exchange lies outside its declared attempt/acquisition window')
     terminal = witness.get('terminal')
     totals = Counter(a['status'] for a in attempts)
     if not isinstance(terminal, dict) or terminal.get('reason') != acquisition['terminal_reason']:

@@ -34,9 +34,13 @@ def native_witness():
     witness['assumptions'].update(server_error_ns=None, rate_error_ppm=None, calibrated=False)
     witness['protocol'] = dict(endpoints=['synthetic-server'], rounds=2, attempts_per_endpoint=2,
         planned_attempts=2, interval_ns=1, interval_s=1e-9, schedule='ROUND_START_OFFSETS', automatic_retries=False)
+    exchange = witness['attempts'][0]['exchange']
     for index, attempt in enumerate(witness['attempts']):
         attempt.update(round_index=index, scheduled_round_start_monotonic_ns=
                        witness['acquisition']['started_monotonic_ns'] + index)
+        attempt.update(started_monotonic_ns=exchange['send_monotonic_ns'] if index == 0
+                       else exchange['receive_monotonic_ns'] + 1,
+                       finished_monotonic_ns=exchange['receive_monotonic_ns'] + index * 1000)
         if attempt['status'] == 'FAILED':
             attempt['status'] = 'WITNESS_UNAVAILABLE'
         if 'exchange' in attempt:
@@ -222,6 +226,8 @@ def test_legacy_fixed_endpoint_contract_detects_an_entire_deleted_unattempted_en
             if server == endpoints[1]:
                 slot.update(status='NOT_ATTEMPTED', reason='USER_STOPPED')
                 del slot['exchange']
+                del slot['started_monotonic_ns']
+                del slot['finished_monotonic_ns']
             attempts.append(slot)
     witness['attempts'] = attempts
     witness['terminal'].update(authenticated_exchanges=2, unavailable_attempts=0)
@@ -249,6 +255,31 @@ def test_java_generated_native_schedule_is_consumed_without_rewriting_metadata(t
     assert report['format_notes'] == ['NTS schedule bound by protocol.endpoints']
     assert witness['protocol']['planned_attempts'] == len(witness['attempts']) == 4
     assert witness['protocol']['interval_ns'] == 1
+
+
+@pytest.mark.parametrize('change', ['end_inside_exchange', 'exchange_before_capture',
+                                   'exchange_after_attempt', 'failed_attempt_after_capture', 'unattempted_with_timestamps'])
+def test_impossible_attempt_and_exchange_windows_remain_insufficient(tmp_path, change):
+    witness = native_witness()
+    good, failed = witness['attempts']
+    if change == 'end_inside_exchange':
+        end = good['exchange']['receive_monotonic_ns'] - 1
+        witness['acquisition']['ended_monotonic_ns'] = end
+        witness['terminal']['counter_ns'] = end
+    elif change == 'exchange_before_capture':
+        good['exchange']['send_monotonic_ns'] = witness['acquisition']['started_monotonic_ns'] - 1
+    elif change == 'exchange_after_attempt':
+        good['finished_monotonic_ns'] = good['exchange']['receive_monotonic_ns'] - 1
+    elif change == 'failed_attempt_after_capture':
+        failed['finished_monotonic_ns'] = witness['acquisition']['ended_monotonic_ns'] + 1
+    else:
+        failed['status'] = 'NOT_ATTEMPTED'
+        witness['terminal']['unavailable_attempts'] = 0
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert result['status'] == 'INSUFFICIENT_EVIDENCE' and result['comparison'] is None
+    assert result['issues']
+    assert result['witness_report'] == witness
 
 
 def test_cli_retains_insufficient_report_and_does_not_overwrite(tmp_path):
