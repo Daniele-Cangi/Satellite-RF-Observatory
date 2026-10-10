@@ -1,0 +1,58 @@
+{
+  "evaluation_id": "android-time-session-evaluation-v1",
+  "regime": "PREDECLARED_CONDITIONAL_SOFTWARE_EVALUATION",
+  "engine_revision": "a2fc757c1e654f56efe075115aa0b2bc33af00bf",
+  "question": "Does external UTC add sensitivity to a constant decoded-UTC offset on three new sessions without adding original-log alarms on common support?",
+  "device": {
+    "model": "SM-G990B",
+    "android_version": 16,
+    "collector_version": "0.4.1",
+    "originals_private": true
+  },
+  "selection": {
+    "sessions": 3,
+    "rule": "First three capture IDs initiated for this evaluation after this plan is committed, in initiation order; no replacement by reception, NTS success or result",
+    "conditions": "Stationary outdoors with sky view and Internet; same installed collector, no reboot; keep app visible",
+    "schedule": "Existing native ten rounds, three-second round-start spacing, both PTB endpoints; no new schedule or retries",
+    "pause_between_sessions_seconds": 15,
+    "maximum_session_wall_seconds": 120,
+    "deadline_action": "Stop the existing app session, retain its terminal and all planned slots, count it as incomplete; never start a replacement",
+    "interruption_action": "Retain every started or partial session; do not replace an interrupted, missing or invalid input",
+    "value_access": "Transport state, filenames and metadata may be read during collection; copy and hash all originals before numeric PC decoding; analyze only after the three slots have terminated"
+  },
+  "analysis_options": {
+    "server_error_ns": 1000000,
+    "rate_error_ppm": 100,
+    "budget_source": "Fixed uncalibrated development assumptions for this conditional evaluation; no independently qualified server or oscillator bounds",
+    "monotonic_resolution_ns": 1,
+    "counter_resolution_source": "Explicit unqualified 1 ns assumption; API units and NTS agreement do not establish effective resolution",
+    "association_source": "Same installed native app process/session and declared boot metadata; trusted collector assertion, not hardware attestation",
+    "gps_utc_offset_seconds": 18,
+    "time_scale_source": "IERS Leap_Second.dat, Bulletin C72, checked 2026-10-10: TAI-UTC 37 s minus GPS TAI offset 19 s; October 2026 only, no leap crossing",
+    "utc_error_ns": 1000000,
+    "utc_error_source": "Fixed unqualified 1 ms receiver UTC assumption; no receiver uncertainty or residual used as a bound",
+    "epoch_alignment_error_ns": 25000000,
+    "epoch_alignment_source": "Predeclared unqualified 25 ms engineering assumption, one quarter of the 100 ms software challenge; not independent calibration or a bound derived from these evaluation observations",
+    "bracket_span_ns": 15000000000
+  },
+  "sensitivity": {
+    "utc_claim_offsets_ns": [-100000000, 100000000],
+    "local_counter_resolution_ns": 1,
+    "mode": "WHOLE_CAPTURE_DECODED_UTC_ONLY",
+    "support": "Existing zero-case common local/external support fixed for all offsets; require all member rows for a common clock group",
+    "rules": "Existing paired patterns; no endpoint vote, one-method fallback, clock-domain stitching, fitting or new detector"
+  },
+  "metrics": [
+    "Per-session completion/intake issues and every NTS status including unattempted slots",
+    "All GPS receiver records, reported clock groups, unidentified records and common support",
+    "Original and each offset: local, external and combined own/common record/group outcome counts",
+    "Original-log alarms retained without verified-benign or false-alarm labels; disagreements, mixed rows and missing support kept separate"
+  ],
+  "interpretation": {
+    "evaluable": "All three planned sessions retained, schedule completed with admitted comparison and at least one common reported clock group each",
+    "conditional_advantage_repeated": "In every session: no inconclusive or mixed common groups in any case; each sign gives external and combined INCONSISTENT on every common group; local counts stay equal to zero; zero-case combined INCONSISTENT does not exceed local INCONSISTENT",
+    "otherwise": "Report non-repetition or non-evaluability with all sessions and cases; no parameter tuning, new offset grid or passing replacement in this evaluation",
+    "claims": "Three-session conditional observation only; originals not verified benign, sessions/groups not independent trials, no population rate, qualified timing budget, RF attack, ALLOW/BLOCK or P2/P3 closure",
+    "prior_development": "Design informed by already exposed phone studies; those inputs are excluded from these three evaluation slots"
+  }
+}
