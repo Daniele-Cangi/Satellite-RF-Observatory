@@ -88,7 +88,16 @@ final class NtsCapture {
         if (probe != null) {
             try { probe.close(); } catch (IOException ignored) { /* Worker retains interruption/failure. */ }
         }
-        worker.interrupt();
+        // An interrupt left pending by socket I/O also aborts Files.write().
+        // Wake schedule waits without poisoning the final evidence checkpoint.
+        notifyAll();
+    }
+    private synchronized void awaitSchedule(long scheduled) throws InterruptedException {
+        while (stopReason == null) {
+            long delay = scheduled - counter.getAsLong();
+            if (delay <= 0) return;
+            wait(delay / 1000000L, (int) (delay % 1000000L));
+        }
     }
     private void run() {
         int authenticated = 0, unavailable = 0;
@@ -97,12 +106,11 @@ final class NtsCapture {
             for (Map<String, Object> attempt : attempts) {
                 if (stopReason != null) { attempt.put("reason", "CAPTURE_INTERRUPTED"); continue; }
                 long scheduled = (Long) attempt.get("scheduled_round_start_monotonic_ns");
-                if (scheduled > counter.getAsLong()) {
-                    long delay = scheduled - counter.getAsLong();
-                    if (delay > 0) {
-                        try { Thread.sleep(delay / 1000000L, (int) (delay % 1000000L)); }
-                        catch (InterruptedException error) { attempt.put("reason", "CAPTURE_INTERRUPTED"); continue; }
-                    }
+                try { awaitSchedule(scheduled); }
+                catch (InterruptedException error) {
+                    stopReason = "COLLECTOR_INTERRUPTED";
+                    attempt.put("reason", "CAPTURE_INTERRUPTED");
+                    continue;
                 }
                 if (stopReason != null) { attempt.put("reason", "CAPTURE_INTERRUPTED"); continue; }
                 attempt.put("status", "WITNESS_UNAVAILABLE");

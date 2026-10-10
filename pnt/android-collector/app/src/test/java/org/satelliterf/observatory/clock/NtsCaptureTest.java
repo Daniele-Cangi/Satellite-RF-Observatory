@@ -13,6 +13,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.LockSupport;
 import static org.junit.Assert.*;
 
 public final class NtsCaptureTest {
@@ -79,5 +82,60 @@ public final class NtsCaptureTest {
         assertEquals("CAPTURE_INTERRUPTED", report.getAsJsonArray("attempts").get(0).getAsJsonObject().get("reason").getAsString());
         assertEquals("NOT_ATTEMPTED", report.getAsJsonArray("attempts").get(1).getAsJsonObject().get("status").getAsString());
         assertTrue(report.getAsJsonObject("acquisition").get("interrupted").getAsBoolean());
+    }
+    @Test public void socketStyleCancellationCannotInterruptTheFinalFileCheckpoint() throws Exception {
+        Path path = Files.createTempDirectory("pnt-socket-cancel-test").resolve("nts.json");
+        AtomicBoolean closed = new AtomicBoolean(), released = new AtomicBoolean(), interrupted = new AtomicBoolean();
+        AtomicReference<String> storageError = new AtomicReference<>();
+        CountDownLatch entered = new CountDownLatch(1), done = new CountDownLatch(1);
+        NtsCapture capture = new NtsCapture(path, "socket-cancel", "gnss.txt", Map.of(),
+            List.of("a", "b"), 2, 1, System::nanoTime, () -> new NtsCapture.Probe() {
+                public Map<String, Object> probe(String server, int port, int timeout, int era) throws Exception {
+                    entered.countDown();
+                    while (!released.get()) LockSupport.parkNanos(500000);
+                    // Native socket closure can throw without consuming an interrupt.
+                    interrupted.set(Thread.currentThread().isInterrupted());
+                    throw new IOException("socket closed");
+                }
+                public void close() { closed.set(true); }
+            }, new NtsCapture.Listener() {
+                public void updated(int authenticated, int unavailable) {}
+                public void finished(String error) { storageError.set(error); done.countDown(); }
+            });
+        capture.start();
+        assertTrue(entered.await(5, TimeUnit.SECONDS));
+        capture.cancel("USER_STOPPED");
+        assertTrue(closed.get());
+        released.set(true);
+        assertTrue(done.await(5, TimeUnit.SECONDS));
+        assertFalse(interrupted.get());
+        assertNull(storageError.get());
+        JsonObject report = JsonParser.parseString(new String(Files.readAllBytes(path), StandardCharsets.UTF_8)).getAsJsonObject();
+        assertEquals("FINISHED", report.getAsJsonObject("acquisition").get("state").getAsString());
+        assertEquals("USER_STOPPED", report.getAsJsonObject("terminal").get("reason").getAsString());
+        assertEquals(4, report.getAsJsonArray("attempts").size());
+    }
+    @Test public void cancelWakesScheduledWaitWithoutWaitingForTheNextRound() throws Exception {
+        Path path = Files.createTempDirectory("pnt-schedule-cancel-test").resolve("nts.json");
+        CountDownLatch firstRound = new CountDownLatch(1), done = new CountDownLatch(1);
+        NtsCapture capture = new NtsCapture(path, "schedule-cancel", "gnss.txt", Map.of(),
+            List.of("a", "b"), 2, 60000000000L, System::nanoTime, () -> new NtsCapture.Probe() {
+                public Map<String, Object> probe(String server, int port, int timeout, int era) {
+                    return NtsCapture.map("authentication", NtsClient.AUTHENTICATION);
+                }
+                public void close() {}
+            }, new NtsCapture.Listener() {
+                public void updated(int authenticated, int unavailable) {
+                    if (authenticated == 2) firstRound.countDown();
+                }
+                public void finished(String error) { done.countDown(); }
+            });
+        capture.start();
+        assertTrue(firstRound.await(5, TimeUnit.SECONDS));
+        capture.cancel("USER_STOPPED");
+        assertTrue(done.await(5, TimeUnit.SECONDS));
+        JsonObject report = JsonParser.parseString(new String(Files.readAllBytes(path), StandardCharsets.UTF_8)).getAsJsonObject();
+        assertEquals(2, report.getAsJsonObject("terminal").get("authenticated_exchanges").getAsInt());
+        assertEquals("NOT_ATTEMPTED", report.getAsJsonArray("attempts").get(2).getAsJsonObject().get("status").getAsString());
     }
 }
