@@ -224,8 +224,12 @@ registra misure e metadati nativi. La versione 0.2 implementa A1 con NTS nello
 stesso processo e un export ZIP; l'analisi resta sul PC. Il trasporto NTS non
 assegna budget o risoluzione del contatore. La versione 0.3 implementa A2 con
 ricezione Raw effettiva, campi temporali mancanti, discontinuità e risultati NTS
-per endpoint; il confronto resta non valutato. L'integrazione del rapporto A3
-resta da realizzare. La prova indoor verifica il trasporto
+per endpoint; il confronto durante la raccolta resta non valutato. La versione
+0.4 implementa A3: ZIP -> rapporto PC -> import esplicito nell'app, con hash
+degli originali, fallimenti, parziali e controlli non eseguiti. Il rapporto senza
+budget resta insufficiente; le assunzioni esplicite riusano il motore e replay
+esistenti. Il telefono non ricalcola né autentica i risultati PC.
+La prova indoor verifica il trasporto
 e conserva zero Raw GNSS, senza dichiarare una nuova qualifica scientifica.
 
 | Priorità | Consegna | Criterio di completamento software |

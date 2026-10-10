@@ -5,12 +5,16 @@ interroga un testimone UTC Internet autenticato. Non servono un ricevitore ester
 root o un APK del progetto. Il risultato e una diagnostica temporale condizionale,
 non un'autenticazione RF, una convalida della posizione o una prova di attacco.
 
-Per la nuova acquisizione autonoma usare il [PNT Clock Collector 0.2](../pnt/android-collector/README.md):
+Per la nuova acquisizione autonoma usare il [PNT Clock Collector](../pnt/android-collector/README.md):
 un pulsante raccoglie GNSS e NTS nello stesso processo, senza Termux o PC,
 ed esporta gli originali in uno ZIP. Il rapporto NTS conserva i tentativi ma
 lascia ignoti budget e risoluzione effettiva del contatore: il confronto Python
 li richiede esplicitamente e rifiuta un uso diretto come evidenza qualificata.
-L'integrazione del rapporto analizzato e il prossimo incremento. I passaggi
+La versione 0.4 aggiunge `python -m pnt android-session session.zip --output
+phone-report.json` e **Open PC report** nell'app. Senza assunzioni esplicite
+scrive un rapporto insufficiente (uscita 2), con tentativi, lacune e controlli
+non eseguiti. Il telefono abbina gli hash agli originali conservati; si affida
+al calcolo PC, senza un secondo solver. I passaggi
 seguenti conservano il percorso GNSS Logger/Termux usato nei risultati storici
 e i suoi budget condizionali; non si applicano automaticamente al nuovo ZIP.
 

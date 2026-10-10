@@ -2,10 +2,11 @@
 
 A foreground research app that records native GNSS measurements and
 authenticated Internet time together. Version 0.2 removes the need for Termux,
-a PC or USB during acquisition; version 0.3 adds live acquisition diagnostics.
+a PC or USB during acquisition; version 0.3 adds live acquisition diagnostics,
+and version 0.4 imports the existing engine's PC report.
 It retains the existing Raw format and Python
 intake/replay. It does not adjust the device clock, authenticate local RF or
-assign a timing/security verdict.
+compute a timing/security verdict on the phone.
 
 ## Record and export
 
@@ -20,16 +21,73 @@ assign a timing/security verdict.
    scheduled three seconds apart; slow network attempts can extend the session.
 4. Press **Export last session**, then save the ZIP using Android's document
    picker. It contains the original `pnt-clock-<id>.txt` and
-   `pnt-nts-<id>.json`. Extract it on the PC and import the Raw file with
-   `python -m pnt android-raw`. Keep the JSON alongside it.
+   `pnt-nts-<id>.json`. Transfer the ZIP to the PC without modifying either
+   original, then follow the reporting steps below.
 
 This is transport acquisition. Server error, counter drift and effective
 counter resolution remain **unknown**, never inferred from nanosecond API units
 or observed agreement. Consequently the JSON is not yet a qualified
 `android-time-compare` input; that command fails closed without its required
-budgets. The next reporting increment must make analysis assumptions explicit
-and reuse the existing engine/replay. The [Android guide](../../docs/ANDROID_GNSS_TIME.md)
+budgets. The session report makes missing assumptions explicit and reuses the
+existing engine/replay. The [Android guide](../../docs/ANDROID_GNSS_TIME.md)
 retains the earlier GNSS Logger/Termux conditional workflow separately.
+
+## ZIP to PC report to phone
+
+On the PC, from the repository root:
+
+```console
+python -m pip install -r requirements-pnt-time.txt
+python -m pnt android-session pnt-session-<id>.zip --output phone-report.json
+```
+
+The default command writes an **INSUFFICIENT_EVIDENCE** report and exits with
+code **2**. This is an expected usable report: timing assumptions are unknown,
+so no numerical comparison runs. It includes the existing Raw intake, original
+NTS attempts, failures, unattempted slots, terminal/partial status and reasons.
+Empty recordings remain reportable; the ordinary `android-raw` command still
+rejects them. Invalid ZIP names, duplicate members and mixed capture IDs are
+rejected; no archive member is extracted. Inputs/reports are limited to 32 MiB,
+without truncation or overwriting an existing output.
+
+Copy `phone-report.json` to the phone's Downloads and press **Open PC report**.
+The system picker requires an explicit read grant. The app checks the report's
+member names, byte counts and SHA-256 against originals retained in its private
+storage before displaying it. A changed or different recording is rejected.
+Valid report bytes are retained privately; reopening the app rechecks the latest
+report against its originals. Import does not change the selected recording,
+start acquisition or upload data.
+
+The `pnt-android-session-report-v1` JSON is a presentation envelope containing
+the existing intake and, when requested, the unchanged
+`pnt-gnss-time-comparison-v1` result. It is not a parallel scientific verdict
+format. Hash matching binds inputs; **PC arithmetic is trusted, not independently
+replayed or authenticated by the phone**. Exact replay uses the embedded existing
+comparison's `witness_report`, `receiver_capture`, UTC budget/source and optional
+`temporal_association.maximum_span_ns` with `compare_receiver_capture`.
+The Raw/NTS files in the ZIP are the source originals; the analysis copy never
+overwrites their unknown assumptions or counter resolution.
+
+To request a conditional numerical comparison, supply `--analysis-options
+options.json`. No budget has a default; all are labeled uncalibrated:
+
+| Required key | Meaning |
+|---|---|
+| `server_error_ns`, `rate_error_ppm`, `budget_source` | Explicit server UTC and monotonic rate assumptions, with provenance |
+| `monotonic_resolution_ns`, `counter_resolution_source` | Effective counter tick bound and its independent source; API units do not establish it |
+| `association_source` | Same device/boot assertion and provenance; not hardware attestation |
+| `gps_utc_offset_seconds`, `time_scale_source` | External conversion valid for the recording, without crossing a leap second |
+| `utc_error_ns`, `utc_error_source` | Receiver UTC bound and source, distinct from reported uncertainty |
+
+Optional `epoch_alignment_error_ns` and `epoch_alignment_source` must be
+supplied together. If absent, comparison records remain insufficient using the
+existing engine. Optional `bracket_span_ns` enables its adjacent same-endpoint
+brackets, retaining failed attempts. Missing/unclosed originals prevent a
+comparison; failures and all originals remain visible. Do not choose bounds
+from observed agreement. The app displays supplied assumptions and comparison
+counts; overlap is not RF authentication, an accurate position or an ALLOW
+decision. Geometry, attack attribution, network benefit and independent budget
+qualification remain unperformed.
 
 The app stops with an `ACTIVITY_STOPPED` terminal when hidden.
 There is no automatic restart, fallback to callback time or overwrite of an

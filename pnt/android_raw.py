@@ -135,7 +135,15 @@ def inspect_android_raw(path):
     Ambiguous headers or truncated rows reject the whole input.
     """
     path = Path(path)
-    data = path.read_bytes()
+    return inspect_android_raw_bytes(path.read_bytes(), path.name)
+
+
+def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture_id=None):
+    """Shared intake for retained files and ZIP members; no archive extraction.
+
+    Empty native sessions can be reported explicitly, while the ordinary Raw
+    command retains its rejection of recordings without measurements.
+    """
     decoded = gzip.decompress(data) if data.startswith(b'\x1f\x8b') else data
     text = decoded.decode('utf-8-sig')
     header, comments, records = None, [], []
@@ -160,6 +168,8 @@ def inspect_android_raw(path):
         if header is None or len(fields) != len(header):
             raise ValueError(f'line {line}: Raw row without header or incorrect field count')
         values = dict(zip(header, fields))
+        if expected_capture_id is not None and values.get('CaptureId') != expected_capture_id:
+            raise ValueError(f'line {line}: Raw capture ID differs from the session')
         counts['raw_rows'] += 1
         constellations[values['ConstellationType']] += 1
         try:
@@ -179,11 +189,13 @@ def inspect_android_raw(path):
                    'status': 'INVALID_GPS_MEASUREMENT', 'reason': str(error)}
         records.append(row)
         counts[row['status']] += 1
-    if header is None or not counts['raw_rows']:
+    if header is None or (not counts['raw_rows'] and not allow_empty):
         raise ValueError('no Android Raw measurements')
+    if allow_empty:
+        counts['raw_rows'] += 0
     return {
         'schema': 'pnt-android-raw-v1', 'status': 'OBSERVATION_INTAKE_ONLY',
-        'source': {'name': path.name, 'size_bytes': len(data),
+        'source': {'name': name, 'size_bytes': len(data),
                    'sha256': hashlib.sha256(data).hexdigest(),
                    'decoded_sha256': hashlib.sha256(decoded).hexdigest(),
                    'comments': comments, 'columns': header},

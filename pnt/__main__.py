@@ -74,6 +74,10 @@ def main():
     android = commands.add_parser('android-raw', help='normalize GPS L1/L5 Android Raw logs; no attack verdict')
     android.add_argument('local_log', type=Path, help='GNSS Logger text, plain or gzip')
     android.add_argument('--output', required=True, type=Path)
+    session = commands.add_parser('android-session', help='native Android ZIP to a phone-readable report; existing engine')
+    session.add_argument('session_zip', type=Path)
+    session.add_argument('--analysis-options', type=Path, help='explicit uncalibrated budgets and GPS-UTC sources; no defaults')
+    session.add_argument('--output', required=True, type=Path)
     android_analysis = commands.add_parser('android-analyze', help='GPS L1 Android/remote fixed-site geometry diagnostics')
     analysis = commands.add_parser('analyze', help='report code geometry, relative clock and data gaps')
     comparison = commands.add_parser('compare', help='compare original observations and software code ramps')
@@ -132,6 +136,23 @@ def main():
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output already exists; choose a new report path')
+    if args.command == 'android-session':
+        from .android_session import MAX_REPORT_BYTES, inspect_android_session, load_json
+
+        try:
+            options = load_json(args.analysis_options.read_bytes()) if args.analysis_options else None
+            report = inspect_android_session(args.session_zip, analysis_options=options)
+            if len(json.dumps(report, indent=2, sort_keys=True, allow_nan=False).encode('utf-8')) >= MAX_REPORT_BYTES:
+                raise ValueError('phone-readable report exceeds 32 MiB; originals retained, no truncation')
+            write_report(report, args.output)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT Android session input/output error: {error}\n')
+        print(f"{report['status']}; {args.output}")
+        for issue in report['issues']:
+            print(issue)
+        if report['status'] == 'INSUFFICIENT_EVIDENCE':
+            parser.exit(2, 'No usable timing comparison; retained inputs and reasons are in the report\n')
+        return
     if args.command == 'time-sensitivity':
         from .time_sensitivity import assess_time_sensitivity
 

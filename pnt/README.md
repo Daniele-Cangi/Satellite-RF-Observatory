@@ -9,6 +9,13 @@ benign label or attack verdict is inferred from the GNSS diagnostics.
 
 ## Android phone GNSS clock and Internet time
 
+For the native app's ZIP, use `python -m pnt android-session session.zip --output
+phone-report.json`. It retains intake, NTS failures and incomplete sessions;
+without explicit `--analysis-options`, it writes an insufficient report with
+exit code 2. Version 0.4 of the app imports it against its retained source
+hashes. [Reporting and explicit assumptions](android-collector/README.md#zip-to-pc-report-to-phone)
+reuse the existing comparison and replay; the phone does not verify PC arithmetic.
+
 `android-time-probe` runs in Termux on the GNSS Logger phone while it records
 Raw data. It uses explicit suspend-aware `CLOCK_BOOTTIME`, retains every declared
 NTS attempt and requires only `requirements-pnt-time.txt`. `android-time-compare`
