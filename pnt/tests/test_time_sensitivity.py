@@ -1,6 +1,7 @@
 """Interval limits and retained failures, using synthetic UTC/NTS cases."""
 
 import copy
+from datetime import datetime, timezone
 import hashlib
 import json
 import subprocess
@@ -8,7 +9,7 @@ import sys
 
 import pytest
 
-from pnt.tests.test_gnss_time import MS, NS, COUNTER, inputs, compare, bracket_inputs, compare_bracket, utc_packet
+from pnt.tests.test_gnss_time import MS, NS, UTC, COUNTER, inputs, compare, bracket_inputs, compare_bracket, utc_packet
 from pnt.time_sensitivity import assess_time_sensitivity
 from pnt.time_witness import compare_claim
 
@@ -31,6 +32,90 @@ def multi_epoch_inputs():
             attempts.append(attempt)
     witness['attempts'], capture['records'] = attempts, records
     return witness, capture
+
+
+def calendar_epoch_inputs(start, utc_elapsed_ns, counter_elapsed_ns):
+    """Synthetic decoded calendars and independently scheduled counter epochs."""
+    witness, capture = multi_epoch_inputs()
+    calendar_offset = int((start - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()) * NS - UTC
+    for index, record in enumerate(capture['records']):
+        record['packet_hex'] = utc_packet(calendar_offset + utc_elapsed_ns[index]).hex()
+        for name in ('receipt_start_monotonic_ns', 'receipt_end_monotonic_ns'):
+            record[name] += counter_elapsed_ns[index] - index * NS
+    for index, attempt in enumerate(witness['attempts']):
+        epoch_index = index // 2
+        for name in ('send_monotonic_ns', 'receive_monotonic_ns'):
+            attempt['exchange'][name] += counter_elapsed_ns[epoch_index] - epoch_index * NS
+        for name in ('server_receive_unix_ns', 'server_transmit_unix_ns'):
+            attempt['exchange'][name] += calendar_offset + utc_elapsed_ns[epoch_index] - epoch_index * NS
+    return witness, capture
+
+
+@pytest.mark.parametrize('start,utc_elapsed_ns,counter_elapsed_ns', [
+    # Actual inserted leap: no second=60 packet is present in the capture.
+    (datetime(2016, 12, 31, 23, 59, 59, tzinfo=timezone.utc), [0, NS, 2 * NS], [0, 2 * NS, 3 * NS]),
+    # Synthetic negative leap and future insertion: no historical table is assumed.
+    (datetime(2040, 3, 31, 23, 59, 58, tzinfo=timezone.utc), [0, 2 * NS, 3 * NS], [0, NS, 2 * NS]),
+    (datetime(2040, 6, 30, 23, 59, 59, tzinfo=timezone.utc), [0, NS, 2 * NS], [0, 2 * NS, 3 * NS]),
+    # Even an ordinary month end is conservatively unqualified without a leap table.
+    (datetime(2026, 9, 30, 23, 59, 59, tzinfo=timezone.utc), [0, NS, 2 * NS], [0, NS, 2 * NS])])
+def test_possible_leap_boundary_breaks_local_segment_without_a_leap_packet(start, utc_elapsed_ns, counter_elapsed_ns):
+    baseline = compare_bracket(*calendar_epoch_inputs(start, utc_elapsed_ns, counter_elapsed_ns))
+    original = copy.deepcopy(baseline)
+    report = assess_time_sensitivity(baseline, [-2 * NS, 2 * NS], local_counter_resolution_ns=1)
+    for case in report['offset_cases']:
+        local = case['local_comparisons']
+        assert [row['status'] for row in local] == ['INSUFFICIENT_EVIDENCE', 'INSUFFICIENT_EVIDENCE', 'NOT_DISTINGUISHABLE']
+        assert 'UTC month boundary' in local[1]['reason']
+        assert local[2]['anchor_source_index'] == 1
+        assert 1 in case['paired_record_indices_by_pattern']['INSUFFICIENT_EVIDENCE']
+    assert baseline == original
+
+
+def test_ordinary_midnight_keeps_continuity_and_does_not_hide_a_clock_step():
+    start = datetime(2026, 10, 10, 23, 59, 59, tzinfo=timezone.utc)
+    baseline = compare_bracket(*calendar_epoch_inputs(start, [0, NS, 2 * NS], [0, NS, 2 * NS]))
+    report = assess_time_sensitivity(baseline, [100 * MS], local_counter_resolution_ns=1,
+                                     onset_monotonic_ns=COUNTER + NS)
+    assert report['offset_cases'][0]['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 1, 'NOT_DISTINGUISHABLE': 2}
+    local = report['offset_cases'][1]['local_comparisons']
+    assert all(row['status'] == 'INCONSISTENT_LOCAL_CONTINUITY' and row['anchor_source_index'] == 0 for row in local[1:])
+
+
+def test_software_step_cannot_create_a_month_boundary_to_escape_the_local_control():
+    start = datetime(2026, 9, 30, 23, 59, 58, tzinfo=timezone.utc)
+    elapsed = [0, 200 * MS, 400 * MS]
+    baseline = compare_bracket(*calendar_epoch_inputs(start, elapsed, elapsed))
+    report = assess_time_sensitivity(baseline, [2 * NS], local_counter_resolution_ns=1,
+                                     onset_monotonic_ns=COUNTER + 200 * MS)
+    assert report['offset_cases'][0]['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 1, 'NOT_DISTINGUISHABLE': 2}
+    local = report['offset_cases'][1]['local_comparisons']
+    assert all(row['status'] == 'INCONSISTENT_LOCAL_CONTINUITY' and row['anchor_source_index'] == 0 for row in local[1:])
+
+
+def test_utc_error_touching_month_boundary_is_unqualified_with_nanosecond_precision():
+    from pnt.time_sensitivity import _local_elapsed_checks
+
+    boundary = 1483228800 * NS  # 2017-01-01T00:00:00Z.
+    offsets = [-100 * NS, -1, 100 * NS, 101 * NS]
+    claims = [dict(capture_id='same', counter_clock='synthetic-counter', source='synthetic',
+                   unix_ns=boundary + value, error_ns=1,
+                   start_monotonic_ns=value + 100 * NS, end_monotonic_ns=value + 100 * NS) for value in offsets]
+    rows = [dict(source_index=index, receiver_utc={}, claim=claim) for index, claim in enumerate(claims)]
+    local = _local_elapsed_checks(rows, claims, counter_resolution_ns=1, rate_error_ppm=0)
+    assert local[1]['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert 'UTC uncertainty' in local[1]['reason']
+    assert local[2]['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert local[3]['status'] == 'NOT_DISTINGUISHABLE'
+    assert local[3]['anchor_source_index'] == 2
+
+
+def test_reordered_counter_is_not_hidden_by_a_calendar_boundary():
+    start = datetime(2026, 9, 30, 23, 59, 59, tzinfo=timezone.utc)
+    baseline = compare_bracket(*calendar_epoch_inputs(start, [0, NS, 2 * NS], [0, NS, 500 * MS]))
+    local = assess_time_sensitivity(baseline, [0], local_counter_resolution_ns=1)['offset_cases'][0]['local_comparisons']
+    assert local[2]['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert 'reordered receiver counter' in local[2]['reason']
 
 
 @pytest.mark.parametrize('offset', [-100 * MS, 100 * MS])

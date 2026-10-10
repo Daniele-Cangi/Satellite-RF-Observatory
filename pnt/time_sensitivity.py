@@ -1,6 +1,7 @@
 """Offline sensitivity of decoded receiver UTC claims to software offsets."""
 
 from collections import Counter
+from datetime import datetime, timedelta, timezone
 
 from .gnss_time import compare_receiver_capture
 from .time_witness import _compare_interval, _elapsed_bounds, _integer
@@ -9,14 +10,31 @@ from .time_witness import _compare_interval, _elapsed_bounds, _integer
 KINDS = ('comparisons', 'bracket_comparisons')
 
 
+def _utc_month_span(claim):
+    """Calendar domains of the original UTC interval, without float rounding.
+
+    Leap seconds can occur at UTC month ends (RFC 3339 section 5.7). Without
+    a qualified leap table, local POSIX continuity cannot bridge that boundary,
+    even when no second=60 record survived. Do not infer a leap from residuals.
+    """
+    epoch = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    months = []
+    for value in (claim['unix_ns'] - claim['error_ns'], claim['unix_ns'] + claim['error_ns']):
+        instant = epoch + timedelta(seconds=value // 10**9)
+        months.append((instant.year, instant.month))
+    return months
+
+
 def _local_elapsed_checks(rows, claims, *, counter_resolution_ns, rate_error_ppm):
     """Fixed segment-anchor continuity; no external UTC or exchange inputs.
 
     A shared UTC origin is unobservable. Anchor error and current-claim error
     both propagate, with the same declared counter-rate/association bounds.
     Never reanchor to an inconsistent claim. Invalid records, changed capture
-    domains, explicit hardware discontinuities and reordered counters break a
-    segment and remain visible. Repeated anchor epochs add no elapsed evidence.
+    domains, explicit hardware discontinuities, reordered counters and possible
+    leap-second boundaries break a segment and remain visible. Boundary checks
+    use original claims so perturbations cannot change admission or segmentation.
+    Repeated anchor epochs add no elapsed evidence.
     """
     results, anchor, domain, previous_epoch = [], None, None, None
     for row, claim in zip(rows, claims):
@@ -34,11 +52,27 @@ def _local_elapsed_checks(rows, claims, *, counter_resolution_ns, rate_error_ppm
             anchor, domain, previous_epoch = None, None, None
             continue
         previous_epoch = epoch
+        try:
+            # Public replay rows retain the unshifted claim; standalone helper
+            # callers may supply only their original claims.
+            months = _utc_month_span(row.get('claim', claim))
+        except (OverflowError, ValueError):
+            result['reason'] = 'UTC calendar outside supported range; segment broken'
+            anchor, domain, previous_epoch = None, None, None
+            continue
+        if months[0] != months[1]:
+            result['reason'] = 'UTC uncertainty crosses a possible leap-second boundary; segment broken'
+            anchor, domain, previous_epoch = None, None, None
+            continue
         if anchor is None or domain != current_domain:
-            anchor, domain = (row['source_index'], claim), current_domain
+            anchor, domain = (row['source_index'], claim, months[0]), current_domain
             result['reason'] = 'segment anchor; no elapsed-time comparison'
             continue
-        index, first = anchor
+        index, first, first_month = anchor
+        if first_month != months[0]:
+            anchor = (row['source_index'], claim, months[0])
+            result['reason'] = 'UTC month boundary; leap-second continuity not qualified; new segment anchor'
+            continue
         result['anchor_source_index'] = index
         if (claim['start_monotonic_ns'] == first['start_monotonic_ns']
                 and claim['end_monotonic_ns'] == first['end_monotonic_ns']

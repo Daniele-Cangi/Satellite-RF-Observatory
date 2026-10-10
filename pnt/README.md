@@ -73,6 +73,17 @@ anchor epochs provide no elapsed comparison; a contradictory repeated reading
 is still compared. No independent local absolute-UTC witness is supplied by
 this control, and it does not represent every possible local detector.
 
+POSIX UTC is not continuous across a leap second. Without a qualified leap
+table, this local control conservatively starts a new segment at **every UTC
+month boundary**, including ordinary month ends, and cannot evaluate continuity
+across it. An original UTC error interval touching both months breaks the
+segment as insufficient evidence. This also handles missing second=60 records,
+future insertions and possible deletions; ordinary midnight within a month does
+not break continuity. Calendar checks use unshifted claims, so software offsets
+cannot change segmentation or erase a step by creating a calendar boundary.
+No discontinuity is inferred from residuals or repaired by fitting. See
+[RFC 3339 section 5.7](https://www.rfc-editor.org/rfc/rfc3339#section-5.7).
+
 Add `--onset-monotonic-ns COUNTER_VALUE` to apply each offset only at or after
 that **reported event midpoint**, creating a step instead of a whole-capture
 offset. This indexes software claims, not the physical onset of an RF event.
