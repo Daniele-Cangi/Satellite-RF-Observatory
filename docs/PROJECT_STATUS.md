@@ -26,6 +26,15 @@ mentre l'analisi resta sul PC. Primo obiettivo: nessun intervento tecnico
 durante la raccolta. Qualifica temporale e beneficio
 benigno/challenge restano necessari per P2; sito e deployment vengono dopo.
 
+La [matrice del margine temporale nativo](../research/exploratory/PNT_NATIVE_TIME_BUDGET_ENVELOPE.md)
+riusa la sessione A3 già esposta: ±100 ms di scarto software restano discordanti
+per NTS nei 12/14 gruppi clock abbinati, nei casi ipotetici di associazione
+1/10/25/50 ms. I due gruppi insufficienti e le cinque discordanze locali
+dell'originale con 1 ms restano visibili. Con associazione ignota tutto resta
+insufficiente. Nessun budget è scelto o qualificato; il margine di sviluppo
+motiva un modello temporale indipendente, non altre ripetizioni della matrice.
+Motore e app restano invariati; P2/P3 rimangono aperte.
+
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
 ritardi simmetrici e confronto in sola lettura con il clock del PC. La prova
