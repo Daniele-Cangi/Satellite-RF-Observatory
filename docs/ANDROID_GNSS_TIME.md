@@ -112,6 +112,15 @@ periodo indicato, da [verificare alla data della registrazione](https://hpiers.o
 Il campo `LeapSecond` del ricevitore non sostituisce questa fonte; non si
 supportano intervalli che attraversano un secondo intercalare.
 
+Per scomporre il clock originale senza modificare il confronto, aggiungere
+`--android-clock-diagnostics` e `--local-counter-resolution-ns` a
+`time-sensitivity`, anche con il solo `--offset-ns 0`. La
+[diagnosi del telefono](../research/exploratory/PNT_PHONE_CLOCK_DIAGNOSTICS.md)
+trova scarti di millisecondi fra clock hardware e contatore, con correzioni
+di conversione al massimo di 235 ns. Le incertezze riportate restano metadati:
+la diagnostica non calibra il budget di associazione, non cambia i verdetti
+e non attribuisce il fenomeno a un attacco.
+
 L'epoca di confronto e `ChipsetElapsedRealtimeNanos` piu/minus il limite esplicito
 di associazione GNSS/contatore. Deve rientrare interamente nella finestra della
 raccolta NTS. L'associazione a telefono e avvio e una dichiarazione del

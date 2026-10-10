@@ -99,6 +99,21 @@ local-only inconsistencies on original data and cases where local continuity
 separates a step that NTS cannot. It does not establish matched false-alarm rates
 or qualified RF detection.
 
+`--android-clock-diagnostics` also records a decomposition of the **original**
+admitted Android clocks, using the zero case's existing local anchors. It needs
+`--local-counter-resolution-ns`; `--offset-ns 0` is enough for diagnosis alone.
+The optional `android_clock_diagnostics` section retains every record, admission
+failure and segment break. For an existing elapsed comparison it reports changes
+in `TimeNanos`, `FullBiasNanos`, the integer fine-bias correction, GPS-UTC offset,
+receiver UTC and the Android counter. Differences use integer ns; the fine-bias
+term is the decoder's existing ceiling, with its rounding margin unchanged.
+Raw uncertainty/drift metadata stays descriptive and never sets a bound. No
+cause, calibration or new verdict is inferred, and software challenge offsets
+do not enter these original-clock diagnostics. Without the flag, output remains
+unchanged. The [phone diagnosis](../research/exploratory/PNT_PHONE_CLOCK_DIAGNOSTICS.md)
+identifies the hardware-clock/counter relation as the dominant observed term,
+while its physical cause and an independent association bound remain unresolved.
+
 ## Authenticated Internet time witness
 
 `time-probe` checks a bracketed **host wall-clock reading**, without adjusting

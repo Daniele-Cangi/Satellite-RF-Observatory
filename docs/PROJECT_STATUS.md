@@ -106,6 +106,18 @@ Il limite da risolvere e ora identificato nel clock relativo/associazione e
 nei budget dell'originale; con associazione ignota tutti gli esiti restano
 insufficienti. Nessuna nuova raccolta RF o conferma P3 e iniziata.
 
+La [diagnosi dei clock Android](../research/exploratory/PNT_PHONE_CLOCK_DIAGNOSTICS.md)
+ora scompone lo scarto originale nel replay esistente. La relazione fra
+`TimeNanos` e contatore Android varia da -9,025255 a +3,283083 ms, mentre la
+correzione FullBias/fine-bias varia al massimo di 235 ns. Il termine dominante
+e identificato nei timestamp registrati, senza attribuire la causa fisica.
+Il log non conserva l'incertezza di allineamento elapsed-realtime; il limite
+indipendente di associazione di 1 ms resta non qualificato. Tutte le 51
+discordanze/9 epoche, le esclusioni e i precedenti risultati sono invariati.
+Il prossimo incremento utile riguarda i metadati di acquisizione sul telefono,
+senza ricavare un nuovo budget dall'accordo osservato o ripetere la stessa
+challenge. Nessuna nuova acquisizione e iniziata.
+
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,

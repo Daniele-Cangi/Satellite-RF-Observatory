@@ -54,6 +54,8 @@ def main():
                                   help='opt in to local elapsed-clock control; explicit counter tick bound')
     time_sensitivity.add_argument('--onset-monotonic-ns', type=int,
                                   help='apply offset only from this reported event midpoint; default whole capture')
+    time_sensitivity.add_argument('--android-clock-diagnostics', action='store_true',
+                                  help='decompose original Android clocks; requires local counter resolution; no fitting')
     time_sensitivity.add_argument('--output', required=True, type=Path)
     android_compare = commands.add_parser('android-time-compare', help='offline same-phone GNSS clock/NTS comparison')
     android_compare.add_argument('witness_report', type=Path)
@@ -137,7 +139,8 @@ def main():
             comparison_bytes = args.comparison_report.read_bytes()
             report = assess_time_sensitivity(json.loads(comparison_bytes), args.offset_ns,
                                               local_counter_resolution_ns=args.local_counter_resolution_ns,
-                                              onset_monotonic_ns=args.onset_monotonic_ns)
+                                              onset_monotonic_ns=args.onset_monotonic_ns,
+                                              android_clock_diagnostics=args.android_clock_diagnostics)
             report['source'] = dict(path=str(args.comparison_report),
                                   sha256=hashlib.sha256(comparison_bytes).hexdigest())
             write_report(report, args.output)
