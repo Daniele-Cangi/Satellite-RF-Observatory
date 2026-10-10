@@ -35,6 +35,14 @@ insufficiente. Nessun budget è scelto o qualificato; il margine di sviluppo
 motiva un modello temporale indipendente, non altre ripetizioni della matrice.
 Motore e app restano invariati; P2/P3 rimangono aperte.
 
+La [decisione sul modello temporale Android](ANDROID_TIMING_MODEL.md) non trova
+nelle API/HAL consultate un massimo indipendente per l'associazione del Galaxy;
+monotonia del contatore e autenticazione NTS non qualificano gli altri budget.
+Il passo successivo è una valutazione empirica condizionale su sessioni separate,
+con log originali e challenge software abbinati, riusando confronto e replay.
+Gli allarmi sull'originale restano visibili e non diventano falsi allarmi
+certificati. Nessun nuovo dato acquisito, budget adottato o P2/P3 chiusa.
+
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
 ritardi simmetrici e confronto in sola lettura con il clock del PC. La prova

@@ -258,13 +258,22 @@ Android deve essere confrontata con quel comportamento, senza fallback a NTP
 non autenticato. Review mirata per modifiche crittografiche o ai verdetti;
 nessuna review scientifica aggiuntiva per la sola interfaccia.
 
-In parallelo si qualifica il limite temporale utile al caso d'uso: definire
-l'errore dannoso da distinguere e giustificare l'associazione GNSS/contatore e
-gli errori del riferimento, prima del confronto benigno/challenge. I circa
-7 ms dichiarati dal ricevitore non sono un limite indipendente; il budget
-storico di 1 ms resta non qualificato. L'app non lo corregge automaticamente.
-Ulteriori raccolte devono risolvere un limite nominato, senza allargare soglie
-dopo il reveal o ripetere prove equivalenti per cercare un esito migliore.
+La [decisione sul modello temporale Android](ANDROID_TIMING_MODEL.md) chiude
+la ricerca iniziale del contratto: nelle fonti consultate non è disponibile
+un massimo indipendente per l'associazione GNSS/contatore del Galaxy.
+I circa 7 ms stimati al 68% e il budget storico di 1 ms restano distinti;
+nessun budget è qualificato o promosso nell'app. Per la garanzia fisica serve
+ancora giustificare associazione, contatore ed errori del riferimento.
+
+Il prossimo incremento riusa confronto e replay per valutare il rilevatore
+condizionale su sessioni separate, con originali e challenge UTC software di
+±100 ms abbinati. Prima di aprire i dati di valutazione fissare profilo di
+assunzioni, selezione e regola di allarme; conservare tutti i casi insufficienti.
+Gli allarmi sui log senza alterazione introdotta non sono falsi allarmi su
+baseline certificate. Questa valutazione empirica non sostituisce la qualifica
+indipendente, il confronto fisico benigno/challenge o P3. Ulteriori raccolte
+devono risolvere un limite nominato, senza adattare soglie agli esiti o ripetere
+prove equivalenti per cercare un risultato migliore.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,
