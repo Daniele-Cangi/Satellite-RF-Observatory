@@ -206,6 +206,45 @@ The [four-session development study](../research/exploratory/PNT_ANDROID_TIME_DR
 retains mixed results, missing coverage and later NTS receipts; it establishes
 no faster live alert or qualified RF protection.
 
+### When timing evidence was available
+
+Add `--evidence-availability` to the same `time-sensitivity` command, with
+`--local-counter-resolution-ns`. It supports constant/step offsets and drift,
+including multi-session summaries; existing output is unchanged without it.
+For example:
+
+```console
+python -m pnt time-sensitivity first-session-report.json second-session-report.json --drift-ppm -5000 --drift-ppm 5000 --local-counter-resolution-ns 1 --evidence-availability --output availability-summary.json
+```
+
+The optional `evidence_availability` section gates the existing replay by native
+Android `CallbackReadEndElapsedRealtimeNanos` and NTS `finished_monotonic_ns`
+on the same asserted `CLOCK_BOOTTIME` capture domain. Network receipt alone
+does not establish completed authentication. Missing or invalid receipts stay
+unknown: there is no fallback to the GNSS epoch or NTS receive time. Unknown
+receiver receipts break local segments; reordered callback receipts are rejected.
+Admission also waits until the declared event window ends, rather than using a
+future terminal acquisition bound. Each local check conservatively waits for
+the preceding received rows; concurrent NTS endpoints need only their own
+completed bracket attempts. Failed slots still break adjacency.
+
+These are prefixes of the existing fixed intervals and local segment checks,
+not another detector. Per-clock-group histories retain every outcome change,
+including later disagreement. `first_new_inconsistency` requires the original
+prefix to be `NOT_DISTINGUISHABLE` when the altered prefix is `INCONSISTENT`;
+an original alarm never becomes a new detection. `available_elapsed_ns` is
+relative to the declared step/drift origin, or the first known receiver
+availability for constant offsets. Missing detections remain `null`.
+
+Full group membership and fixed common support are retrospective descriptive
+denominators, not online selection. All members must be received before a whole
+group is evaluable. Inputs, failures and the full offline results remain in the
+report. This measures **conditional input availability**, not processing,
+storage, operator-alert latency or physical attack onset. Budgets remain
+unqualified, collector receipts trusted, and RF authenticity unassessed.
+The [four-session input-availability study](../research/exploratory/PNT_ANDROID_TIME_AVAILABILITY.md)
+retains mixed timing, later inconclusive evidence and unchanged offline totals.
+
 ## Authenticated Internet time witness
 
 `time-probe` checks a bracketed **host wall-clock reading**, without adjusting

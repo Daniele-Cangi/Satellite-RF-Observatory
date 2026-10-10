@@ -82,8 +82,15 @@ epoche prima e altre dopo, con ricevute successive e un gruppo inconclusivo
 per ciascun segno. Non è dimostrato un allarme operativo più rapido. Il comando
 `time-sensitivity --drift-ppm` conserva conteggi e prime nuove discordanze
 su supporto proprio/comune; i replay costanti precedenti restano identici.
-Il prossimo limite da misurare è la disponibilità causale delle prove, con
-prefissi temporali del replay esistente. Nessun budget qualificato o P2/P3 chiusa.
+La [disponibilità delle prove](../research/exploratory/PNT_ANDROID_TIME_AVAILABILITY.md)
+è ora ricostruita con callback GNSS e completamento NTS: su supporto comune la
+rete precede il locale in tre coppie sessione/segno, segue in tre e due sono
+simultanee. Sul supporto proprio il locale precede nelle altre cinque coppie;
+non sono prove indipendenti. Un allarme combinato diventa inconclusivo con
+un'altra prova esterna e resta visibile. I conteggi finali e i vecchi replay
+sono identici; 783 test PNT passano. Il prossimo passo è il monitor condizionale
+di sessione con esiti revisionabili, misurando la consegna effettiva del risultato.
+Nessun budget qualificato, latenza live misurata o P2/P3 chiusa.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere

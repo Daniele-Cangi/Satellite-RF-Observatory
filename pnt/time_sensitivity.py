@@ -167,7 +167,7 @@ def _android_clock_diagnostics(baseline, local):
 
 def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resolution_ns=None,
                             onset_monotonic_ns=None, android_clock_diagnostics=False,
-                            drift_rates_ppm=None):
+                            drift_rates_ppm=None, evidence_availability=False):
     """Replay retained inputs, then shift only decoded UTC against fixed intervals.
 
     This measures conditional interval separation, not RF spoofing performance.
@@ -220,6 +220,10 @@ def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resoluti
         raise ValueError('android_clock_diagnostics must be a boolean')
     if android_clock_diagnostics and local_counter_resolution_ns is None:
         raise ValueError('Android clock diagnostics require the explicit local counter resolution')
+    if type(evidence_availability) is not bool:
+        raise ValueError('evidence_availability must be a boolean')
+    if evidence_availability and local_counter_resolution_ns is None:
+        raise ValueError('evidence availability requires the explicit local counter resolution')
     span = None
     if 'temporal_association' in comparison:
         association = comparison['temporal_association']
@@ -347,6 +351,8 @@ def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resoluti
                                               onset_monotonic_ns=onset_monotonic_ns)
     elif local_counter_resolution_ns is not None:
         report['perturbation_profile'] = dict(mode='WHOLE_CAPTURE_CONSTANT')
+    if evidence_availability:
+        report['evidence_availability'] = _evidence_availability(report)
     return report
 
 
@@ -504,8 +510,210 @@ def _first_drift_epochs(sensitivity, case, original, methods, groups, common_gro
     return result
 
 
+def _evidence_availability(sensitivity):
+    """Receipt-gated prefixes of existing intervals, with no new time model.
+
+    Immutable budgets/adjacency make each external interval depend only on its
+    receiver row and one/two completed attempts. Cache that interval, then gate
+    it by those receipts. Local checks reuse the segment helper; unknown receipt
+    rows break continuity. Ordered callback receipts and the preceding rows'
+    availability prevent a future row from supplying a local anchor/boundary.
+    Histories retain reversals/disagreement, not just a favourable first alarm.
+    This reconstructs input availability, not execution/alert latency.
+    """
+    from .android_raw import _integer as raw_integer
+
+    baseline = sensitivity['baseline']
+    capture, witness = baseline['receiver_capture'], baseline['witness_report']
+    if capture.get('counter_clock') != 'CLOCK_BOOTTIME':
+        raise ValueError('evidence availability requires Android CLOCK_BOOTTIME receipts')
+    if not isinstance(capture.get('capture_id'), str) or not capture['capture_id'].strip():
+        raise ValueError('evidence availability requires a capture ID')
+    summary = _summarize_session(sensitivity)
+    records, rows = capture['records'], baseline['records']
+    receiver_receipts, attempt_receipts = [], []
+    previous = None
+    for index, (record, row) in enumerate(zip(records, rows)):
+        receipt = dict(source_index=index, available_monotonic_ns=None)
+        receiver_receipts.append(receipt)
+        try:
+            if record.get('source_format') != 'ANDROID_RAW_CLOCK':
+                raise ValueError('not an Android Raw callback')
+            values = record.get('source_values')
+            if (not isinstance(values, dict) or values.get('CaptureId') != capture.get('capture_id')
+                    or record.get('capture_id') != capture.get('capture_id')
+                    or record.get('counter_clock') != 'CLOCK_BOOTTIME'):
+                raise ValueError('missing or mismatched native callback/capture domain')
+            if any(not isinstance(values.get(name), str) for name in
+                   ('CallbackStartElapsedRealtimeNanos', 'CallbackReadEndElapsedRealtimeNanos')):
+                raise ValueError('native callback receipt fields must retain their Raw text')
+            start = raw_integer(values, 'CallbackStartElapsedRealtimeNanos')
+            end = raw_integer(values, 'CallbackReadEndElapsedRealtimeNanos')
+            acquired = _integer(record.get('acquisition_start_monotonic_ns'), 'acquisition start', 0)
+            terminal = _integer(record.get('acquisition_end_monotonic_ns'), 'acquisition end', acquired)
+            if not acquired <= start <= end <= terminal:
+                raise ValueError('callback receipt lies outside the acquisition window')
+        except ValueError as error:
+            receipt['reason'] = str(error)
+            continue
+        if previous is not None and end < previous:
+            raise ValueError('callback receipts are reordered; no causal local-prefix reconstruction')
+        previous = end
+        # Conservative prefix admission: never use the terminal acquisition
+        # bound to admit a claim whose declared event window still extends past T.
+        receipt.update(callback_read_end_monotonic_ns=end,
+                       available_monotonic_ns=max(end, row.get('claim', {}).get('end_monotonic_ns', end)))
+    acquisition = witness.get('acquisition', {})
+    context = witness.get('capture_context', {})
+    if not isinstance(acquisition, dict) or not isinstance(context, dict):
+        raise ValueError('NTS acquisition and capture context must be objects')
+    for index, attempt in enumerate(witness['attempts']):
+        receipt = dict(attempt_index=index, server=attempt.get('server'), status=attempt.get('status'),
+                       available_monotonic_ns=None)
+        attempt_receipts.append(receipt)
+        try:
+            if attempt.get('status') == 'NOT_ATTEMPTED':
+                raise ValueError('retained slot was not attempted')
+            if (context.get('counter_clock') != 'CLOCK_BOOTTIME'
+                    or context.get('capture_id') != capture.get('capture_id')
+                    or witness.get('capture_id') != capture.get('capture_id')):
+                raise ValueError('NTS completion receipt has no shared capture/counter domain')
+            acquired = _integer(acquisition.get('started_monotonic_ns'), 'NTS acquisition start', 0)
+            terminal = _integer(acquisition.get('ended_monotonic_ns'), 'NTS acquisition end', acquired)
+            start = _integer(attempt.get('started_monotonic_ns'), 'NTS attempt start', acquired)
+            end = _integer(attempt.get('finished_monotonic_ns'), 'NTS attempt completion', start)
+            if end > terminal:
+                raise ValueError('NTS completion lies outside the acquisition window')
+            if attempt.get('status') == 'AUTHENTICATED_EXCHANGE':
+                exchange = attempt.get('exchange', {})
+                if not isinstance(exchange, dict):
+                    raise ValueError('authenticated attempt has no exchange object')
+                sent = _integer(exchange.get('send_monotonic_ns'), 'NTS send', start)
+                received = _integer(exchange.get('receive_monotonic_ns'), 'NTS receive', sent)
+                if received > end:
+                    raise ValueError('NTS completion precedes receipt/authentication')
+            receipt['available_monotonic_ns'] = end
+        except ValueError as error:
+            receipt['reason'] = str(error)
+    ready = [r['available_monotonic_ns'] for r in receiver_receipts]
+    local_ready, previous = [], 0
+    for instant in ready:
+        if instant is not None:
+            previous = max(previous, instant)
+        local_ready.append(previous if instant is not None else None)
+    origin = sensitivity.get('perturbation_profile', {}).get('onset_monotonic_ns')
+    if origin is None:
+        origin = min((t for t in ready if t is not None), default=0)
+    # Adjacency remains that of the retained ledger, including failed/future
+    # slots. A missing completion never falls back to the exchange receive time.
+    dependencies = [[] for _ in records]
+    for index, row in enumerate(rows):
+        if ready[index] is None:
+            continue
+        for kind in KINDS:
+            for check in row.get(kind, []):
+                if check['status'] == 'INSUFFICIENT_EVIDENCE':
+                    continue
+                anchors = ([check['attempt_index']] if kind == 'comparisons' else
+                           [check['before_attempt_index'], check['after_attempt_index']])
+                times = [attempt_receipts[a]['available_monotonic_ns'] for a in anchors]
+                if all(t is not None for t in times):
+                    dependencies[index].append((max(ready[index], *times), check['witness_interval']))
+    cases, zero_histories = [], None
+    groups = summary['clock_group_record_indices']
+    common = set(summary['common_clock_group_indices'])  # Offline descriptive denominator only.
+    for case in sensitivity['offset_cases']:
+        claims, local_rows = [], []
+        for index, row in enumerate(rows):
+            claim = row.get('claim') if ready[index] is not None else None
+            claims.append(dict(claim, unix_ns=claim['unix_ns'] + case['applied_offset_ns_by_record'][index])
+                          if claim is not None else None)
+            local_rows.append(row if claim is not None else dict(source_index=index,
+                              reason=row.get('reason', 'receiver callback availability unknown')))
+        local = _local_elapsed_checks(local_rows, claims,
+            counter_resolution_ns=sensitivity['local_control']['counter_resolution_ns'],
+            rate_error_ppm=baseline['assumptions']['rate_error_ppm'])
+        checks = [[(t, _compare_interval(interval, claims[i])['status']) for t, interval in deps]
+                  for i, deps in enumerate(dependencies)]
+        histories = []
+        first = {scope: {m: None for m in _METHODS} for scope in ('own_support', 'common_support')}
+        final = {scope: {m: [] for m in _METHODS} for scope in first}
+        for group_index, members in enumerate(groups):
+            history = {m: [] for m in _METHODS}
+            histories.append(dict(clock_group_index=group_index, methods=history))
+            complete = all(ready[i] is not None for i in members)
+            times = set()
+            if complete:
+                times.update(ready[i] for i in members)
+                times.update(local_ready[i] for i in members)
+                times.update(t for i in members for t, _ in checks[i])
+            for instant in sorted(times):
+                values = {m: [] for m in _METHODS}
+                for i in members:
+                    loc = (local[i]['status'] if local_ready[i] <= instant else 'INSUFFICIENT_EVIDENCE')
+                    loc = 'INCONSISTENT' if loc == 'INCONSISTENT_LOCAL_CONTINUITY' else loc
+                    statuses = {s for t, s in checks[i] if t <= instant}
+                    ext = ('INSUFFICIENT_EVIDENCE' if ready[i] > instant or not statuses else
+                           'NOT_DISTINGUISHABLE' if statuses == {'NOT_DISTINGUISHABLE'} else
+                           'INCONSISTENT' if statuses == {'INCONSISTENT_WITH_WITNESS'} else 'INCONCLUSIVE')
+                    pair = ('INSUFFICIENT_EVIDENCE' if 'INSUFFICIENT_EVIDENCE' in (loc, ext) else
+                            'INCONCLUSIVE' if ext == 'INCONCLUSIVE' else
+                            'INCONSISTENT' if 'INCONSISTENT' in (loc, ext) else 'NOT_DISTINGUISHABLE')
+                    for method, outcome in zip(_METHODS, (loc, ext, pair)):
+                        values[method].append(outcome)
+                for method in _METHODS:
+                    distinct = set(values[method])
+                    outcome = (next(iter(distinct)) if len(distinct) == 1 else 'MIXED_ROW_OUTCOMES')
+                    if any(ready[i] > instant for i in members):
+                        outcome = 'INSUFFICIENT_EVIDENCE'  # No partially received whole clock group.
+                    if not history[method] or history[method][-1]['outcome'] != outcome:
+                        history[method].append(dict(available_elapsed_ns=instant - origin, outcome=outcome))
+            for method in _METHODS:
+                transitions = history[method]
+                final_outcome = transitions[-1]['outcome'] if transitions else 'INSUFFICIENT_EVIDENCE'
+                final['own_support'][method].append(final_outcome)
+                if group_index in common:
+                    final['common_support'][method].append(final_outcome)
+                if zero_histories is None:
+                    continue
+                originals = zero_histories[group_index]['methods'][method]
+                instants = sorted({t['available_elapsed_ns'] for t in transitions + originals})
+                for elapsed in instants:
+                    current = [t['outcome'] for t in transitions if t['available_elapsed_ns'] <= elapsed]
+                    if not current or current[-1] != 'INCONSISTENT':
+                        continue
+                    before = [t['outcome'] for t in originals if t['available_elapsed_ns'] <= elapsed]
+                    if not before or before[-1] != 'NOT_DISTINGUISHABLE':
+                        continue
+                    for scope in ('own_support', 'common_support') if group_index in common else ('own_support',):
+                        if first[scope][method] is None or elapsed < first[scope][method]['available_elapsed_ns']:
+                            first[scope][method] = dict(clock_group_index=group_index, available_elapsed_ns=elapsed)
+                    break
+        result = dict(utc_claim_offset_ns=case['utc_claim_offset_ns'], clock_group_transitions=histories,
+                      first_new_inconsistency=first,
+                      final_clock_group_outcomes={s: {m: _outcome_counts(v) for m, v in methods.items()}
+                                                  for s, methods in final.items()})
+        if 'utc_claim_drift_ppm' in case:
+            result['utc_claim_drift_ppm'] = case['utc_claim_drift_ppm']
+        cases.append(result)
+        if zero_histories is None:
+            zero_histories = histories
+    return dict(method='RECEIPT_GATED_EXISTING_REPLAY_PREFIXES', counter_clock='CLOCK_BOOTTIME',
+                reference_monotonic_ns=origin, receiver_receipts=receiver_receipts,
+                attempt_receipts=attempt_receipts,
+                unknown_receiver_receipts=sum(t is None for t in ready),
+                unknown_attempt_completion_receipts=sum(a['available_monotonic_ns'] is None for a in attempt_receipts),
+                clock_group_record_indices=groups, common_clock_group_indices=sorted(common),
+                offset_cases=cases,
+                assumptions=dict(trusted_collector_receipts=True, input_availability_only=True,
+                    execution_and_alert_latency_measured=False, no_receive_time_fallback=True,
+                    failed_attempts_break_adjacency=True, unknown_receiver_receipts_break_local_segments=True,
+                    common_support_is_offline_descriptive_selection=True, full_group_membership_is_retrospective=True,
+                    unchanged_budgets_and_external_intervals=True, endpoint_vote=False))
+
+
 def assess_time_sensitivity_sessions(comparisons, offsets_ns=(), *, local_counter_resolution_ns,
-                                     drift_rates_ppm=None):
+                                     drift_rates_ppm=None, evidence_availability=False):
     """Descriptive multi-session aggregation of the existing paired replay.
 
     Whole-capture offsets or drift from each session's first admitted epoch.
@@ -523,7 +731,8 @@ def assess_time_sensitivity_sessions(comparisons, offsets_ns=(), *, local_counte
     sessions, ids, raw_hashes, profile = [], set(), set(), None
     for comparison in comparisons:
         sensitivity = assess_time_sensitivity(comparison, offsets,
-            local_counter_resolution_ns=local_counter_resolution_ns, drift_rates_ppm=drift_rates_ppm)
+            local_counter_resolution_ns=local_counter_resolution_ns, drift_rates_ppm=drift_rates_ppm,
+            evidence_availability=evidence_availability)
         baseline = sensitivity['baseline']
         capture = baseline['receiver_capture']
         capture_id = capture.get('capture_id')

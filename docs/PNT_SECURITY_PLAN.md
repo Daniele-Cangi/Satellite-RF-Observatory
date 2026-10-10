@@ -287,8 +287,14 @@ si promuovono i budget a limiti fisici. La
 [prova di deriva ±5 ms/s](../research/exploratory/PNT_ANDROID_TIME_DRIFT.md)
 sulle quattro sessioni esposte mostra risultati misti: anche il locale rileva
 la deriva, e un'epoca discordante anteriore non prova un allarme più rapido
-quando la rete richiede ricevute successive. Il prossimo quesito è la
-disponibilità causale delle prove, usando prefissi del replay esistente.
+quando la rete richiede ricevute successive. La
+[ricostruzione per prefissi](../research/exploratory/PNT_ANDROID_TIME_AVAILABILITY.md)
+considera ora callback GNSS e autenticazioni NTS completate: l'esterno ha prove
+prima in alcune rampe, dopo o insieme al locale in altre. Conserva un allarme
+combinato successivamente inconclusivo e tutti i conteggi finali precedenti.
+La disponibilità degli input è distinta dalla latenza dell'allarme. Il passo
+successivo è un monitor condizionale di sessione che riusi il motore e aggiorni
+esplicitamente gli esiti con nuove prove, misurando la consegna del risultato.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,

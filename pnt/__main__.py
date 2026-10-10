@@ -62,6 +62,8 @@ def main():
                                   help='offset step or drift onset at this reported midpoint; drift default first admitted epoch')
     time_sensitivity.add_argument('--android-clock-diagnostics', action='store_true',
                                   help='decompose original Android clocks; requires local counter resolution; no fitting')
+    time_sensitivity.add_argument('--evidence-availability', action='store_true',
+                                  help='receipt-gated prefixes of the same replay; Android callback/NTS completion times required')
     time_sensitivity.add_argument('--output', required=True, type=Path)
     android_compare = commands.add_parser('android-time-compare', help='offline same-phone GNSS clock/NTS comparison')
     android_compare.add_argument('witness_report', type=Path)
@@ -169,7 +171,8 @@ def main():
                     raise ValueError('session summary uses per-session origins; run explicit onset/component diagnostics separately')
                 contents = [path.read_bytes() for path in args.comparison_report]
                 report = assess_time_sensitivity_sessions([load_json(data) for data in contents], args.offset_ns or (),
-                    local_counter_resolution_ns=args.local_counter_resolution_ns, drift_rates_ppm=args.drift_ppm)
+                    local_counter_resolution_ns=args.local_counter_resolution_ns, drift_rates_ppm=args.drift_ppm,
+                    evidence_availability=args.evidence_availability)
                 report['sources'] = [dict(path=str(path), sha256=hashlib.sha256(data).hexdigest())
                                      for path, data in zip(args.comparison_report, contents)]
                 write_report(report, args.output)
@@ -183,7 +186,8 @@ def main():
                                               local_counter_resolution_ns=args.local_counter_resolution_ns,
                                               onset_monotonic_ns=args.onset_monotonic_ns,
                                               android_clock_diagnostics=args.android_clock_diagnostics,
-                                              drift_rates_ppm=args.drift_ppm)
+                                              drift_rates_ppm=args.drift_ppm,
+                                              evidence_availability=args.evidence_availability)
             report['source'] = dict(path=str(path),
                                   sha256=hashlib.sha256(comparison_bytes).hexdigest())
             write_report(report, args.output)
