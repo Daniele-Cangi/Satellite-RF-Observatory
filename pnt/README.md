@@ -53,6 +53,52 @@ RF attack simulation, false-alarm calibration or detector performance estimate.
 The [real phone recording](../docs/ANDROID_GNSS_TIME.md#sensibilita-agli-scarti-utc-software)
 shows both separated offsets and the invisible range; original logs stay private.
 
+### Paired local continuity and external UTC checks
+
+Opt in to a receiver-only elapsed-clock control with an explicit counter tick
+bound. It uses the same admitted receiver epochs and declared counter-rate and
+UTC/association budgets, without reading external UTC or exchange outcomes:
+
+```console
+python -m pnt time-sensitivity comparison.json --offset-ns -100000000 --offset-ns 100000000 --local-counter-resolution-ns 1 --output paired-constant.json
+```
+
+The first epoch in each capture/counter/hardware-continuity segment anchors an
+unknown UTC origin. Later UTC intervals are predicted from elapsed counter time,
+propagating both epochs' error bounds and counter quantization. A constant UTC
+offset shifts both anchor and observations and cannot change this relative
+check. Invalid records, reordered counters and domain/discontinuity changes
+break the segment visibly. Inconsistency does not trigger reanchoring. Repeated
+anchor epochs provide no elapsed comparison; a contradictory repeated reading
+is still compared. No independent local absolute-UTC witness is supplied by
+this control, and it does not represent every possible local detector.
+
+POSIX UTC is not continuous across a leap second. Without a qualified leap
+table, this local control conservatively starts a new segment at **every UTC
+month boundary**, including ordinary month ends, and cannot evaluate continuity
+across it. An original UTC error interval touching both months breaks the
+segment as insufficient evidence. This also handles missing second=60 records,
+future insertions and possible deletions; ordinary midnight within a month does
+not break continuity. Calendar checks use unshifted claims, so software offsets
+cannot change segmentation or erase a step by creating a calendar boundary.
+No discontinuity is inferred from residuals or repaired by fitting. See
+[RFC 3339 section 5.7](https://www.rfc-editor.org/rfc/rfc3339#section-5.7).
+
+Add `--onset-monotonic-ns COUNTER_VALUE` to apply each offset only at or after
+that **reported event midpoint**, creating a step instead of a whole-capture
+offset. This indexes software claims, not the physical onset of an RF event.
+The same shifted claims feed both controls. Optional report fields retain each
+applied offset and local comparison, paired record memberships and transitions
+from zero to each case. Missing support and conflicting endpoints have separate
+patterns; neither becomes a regular verdict or an endpoint vote. Baseline
+inconsistencies remain distinct from newly introduced ones. Without either new
+option, the existing sensitivity output is unchanged.
+
+The [phone comparison](../research/exploratory/PNT_PHONE_PAIRED_TIME.md) retains
+local-only inconsistencies on original data and cases where local continuity
+separates a step that NTS cannot. It does not establish matched false-alarm rates
+or qualified RF detection.
+
 ## Authenticated Internet time witness
 
 `time-probe` checks a bracketed **host wall-clock reading**, without adjusting

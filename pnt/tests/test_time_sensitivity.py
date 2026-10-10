@@ -1,6 +1,7 @@
 """Interval limits and retained failures, using synthetic UTC/NTS cases."""
 
 import copy
+from datetime import datetime, timezone
 import hashlib
 import json
 import subprocess
@@ -8,9 +9,267 @@ import sys
 
 import pytest
 
-from pnt.tests.test_gnss_time import MS, NS, inputs, compare, bracket_inputs, compare_bracket
+from pnt.tests.test_gnss_time import MS, NS, UTC, COUNTER, inputs, compare, bracket_inputs, compare_bracket, utc_packet
 from pnt.time_sensitivity import assess_time_sensitivity
 from pnt.time_witness import compare_claim
+
+
+def multi_epoch_inputs():
+    """Three synthetic UTC epochs, each inside an adjacent NTS bracket."""
+    witness, capture = bracket_inputs()
+    records, attempts = [], []
+    for seconds in range(3):
+        record = copy.deepcopy(capture['records'][0])
+        record['packet_hex'] = utc_packet(seconds * NS).hex()
+        for name in ('receipt_start_monotonic_ns', 'receipt_end_monotonic_ns'):
+            record[name] += seconds * NS
+        records.append(record)
+        for original in witness['attempts']:
+            attempt = copy.deepcopy(original)
+            for name in ('send_monotonic_ns', 'receive_monotonic_ns',
+                         'server_receive_unix_ns', 'server_transmit_unix_ns'):
+                attempt['exchange'][name] += seconds * NS
+            attempts.append(attempt)
+    witness['attempts'], capture['records'] = attempts, records
+    return witness, capture
+
+
+def calendar_epoch_inputs(start, utc_elapsed_ns, counter_elapsed_ns):
+    """Synthetic decoded calendars and independently scheduled counter epochs."""
+    witness, capture = multi_epoch_inputs()
+    calendar_offset = int((start - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()) * NS - UTC
+    for index, record in enumerate(capture['records']):
+        record['packet_hex'] = utc_packet(calendar_offset + utc_elapsed_ns[index]).hex()
+        for name in ('receipt_start_monotonic_ns', 'receipt_end_monotonic_ns'):
+            record[name] += counter_elapsed_ns[index] - index * NS
+    for index, attempt in enumerate(witness['attempts']):
+        epoch_index = index // 2
+        for name in ('send_monotonic_ns', 'receive_monotonic_ns'):
+            attempt['exchange'][name] += counter_elapsed_ns[epoch_index] - epoch_index * NS
+        for name in ('server_receive_unix_ns', 'server_transmit_unix_ns'):
+            attempt['exchange'][name] += calendar_offset + utc_elapsed_ns[epoch_index] - epoch_index * NS
+    return witness, capture
+
+
+@pytest.mark.parametrize('start,utc_elapsed_ns,counter_elapsed_ns', [
+    # Actual inserted leap: no second=60 packet is present in the capture.
+    (datetime(2016, 12, 31, 23, 59, 59, tzinfo=timezone.utc), [0, NS, 2 * NS], [0, 2 * NS, 3 * NS]),
+    # Synthetic negative leap and future insertion: no historical table is assumed.
+    (datetime(2040, 3, 31, 23, 59, 58, tzinfo=timezone.utc), [0, 2 * NS, 3 * NS], [0, NS, 2 * NS]),
+    (datetime(2040, 6, 30, 23, 59, 59, tzinfo=timezone.utc), [0, NS, 2 * NS], [0, 2 * NS, 3 * NS]),
+    # Even an ordinary month end is conservatively unqualified without a leap table.
+    (datetime(2026, 9, 30, 23, 59, 59, tzinfo=timezone.utc), [0, NS, 2 * NS], [0, NS, 2 * NS])])
+def test_possible_leap_boundary_breaks_local_segment_without_a_leap_packet(start, utc_elapsed_ns, counter_elapsed_ns):
+    baseline = compare_bracket(*calendar_epoch_inputs(start, utc_elapsed_ns, counter_elapsed_ns))
+    original = copy.deepcopy(baseline)
+    report = assess_time_sensitivity(baseline, [-2 * NS, 2 * NS], local_counter_resolution_ns=1)
+    for case in report['offset_cases']:
+        local = case['local_comparisons']
+        assert [row['status'] for row in local] == ['INSUFFICIENT_EVIDENCE', 'INSUFFICIENT_EVIDENCE', 'NOT_DISTINGUISHABLE']
+        assert 'UTC month boundary' in local[1]['reason']
+        assert local[2]['anchor_source_index'] == 1
+        assert 1 in case['paired_record_indices_by_pattern']['INSUFFICIENT_EVIDENCE']
+    assert baseline == original
+
+
+def test_ordinary_midnight_keeps_continuity_and_does_not_hide_a_clock_step():
+    start = datetime(2026, 10, 10, 23, 59, 59, tzinfo=timezone.utc)
+    baseline = compare_bracket(*calendar_epoch_inputs(start, [0, NS, 2 * NS], [0, NS, 2 * NS]))
+    report = assess_time_sensitivity(baseline, [100 * MS], local_counter_resolution_ns=1,
+                                     onset_monotonic_ns=COUNTER + NS)
+    assert report['offset_cases'][0]['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 1, 'NOT_DISTINGUISHABLE': 2}
+    local = report['offset_cases'][1]['local_comparisons']
+    assert all(row['status'] == 'INCONSISTENT_LOCAL_CONTINUITY' and row['anchor_source_index'] == 0 for row in local[1:])
+
+
+def test_software_step_cannot_create_a_month_boundary_to_escape_the_local_control():
+    start = datetime(2026, 9, 30, 23, 59, 58, tzinfo=timezone.utc)
+    elapsed = [0, 200 * MS, 400 * MS]
+    baseline = compare_bracket(*calendar_epoch_inputs(start, elapsed, elapsed))
+    report = assess_time_sensitivity(baseline, [2 * NS], local_counter_resolution_ns=1,
+                                     onset_monotonic_ns=COUNTER + 200 * MS)
+    assert report['offset_cases'][0]['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 1, 'NOT_DISTINGUISHABLE': 2}
+    local = report['offset_cases'][1]['local_comparisons']
+    assert all(row['status'] == 'INCONSISTENT_LOCAL_CONTINUITY' and row['anchor_source_index'] == 0 for row in local[1:])
+
+
+def test_utc_error_touching_month_boundary_is_unqualified_with_nanosecond_precision():
+    from pnt.time_sensitivity import _local_elapsed_checks
+
+    boundary = 1483228800 * NS  # 2017-01-01T00:00:00Z.
+    offsets = [-100 * NS, -1, 100 * NS, 101 * NS]
+    claims = [dict(capture_id='same', counter_clock='synthetic-counter', source='synthetic',
+                   unix_ns=boundary + value, error_ns=1,
+                   start_monotonic_ns=value + 100 * NS, end_monotonic_ns=value + 100 * NS) for value in offsets]
+    rows = [dict(source_index=index, receiver_utc={}, claim=claim) for index, claim in enumerate(claims)]
+    local = _local_elapsed_checks(rows, claims, counter_resolution_ns=1, rate_error_ppm=0)
+    assert local[1]['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert 'UTC uncertainty' in local[1]['reason']
+    assert local[2]['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert local[3]['status'] == 'NOT_DISTINGUISHABLE'
+    assert local[3]['anchor_source_index'] == 2
+
+
+def test_reordered_counter_is_not_hidden_by_a_calendar_boundary():
+    start = datetime(2026, 9, 30, 23, 59, 59, tzinfo=timezone.utc)
+    baseline = compare_bracket(*calendar_epoch_inputs(start, [0, NS, 2 * NS], [0, NS, 500 * MS]))
+    local = assess_time_sensitivity(baseline, [0], local_counter_resolution_ns=1)['offset_cases'][0]['local_comparisons']
+    assert local[2]['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert 'reordered receiver counter' in local[2]['reason']
+
+
+@pytest.mark.parametrize('offset', [-100 * MS, 100 * MS])
+def test_constant_offset_is_locally_unobservable_but_external_control_separates(offset):
+    baseline = compare_bracket(*multi_epoch_inputs())
+    original = copy.deepcopy(baseline)
+    report = assess_time_sensitivity(baseline, [offset], local_counter_resolution_ns=1)
+    zero, shifted = report['offset_cases']
+    assert zero['paired_pattern_counts']['NEITHER_INCONSISTENT'] == 2
+    assert shifted['paired_pattern_counts']['EXTERNAL_ONLY_INCONSISTENT'] == 2
+    assert shifted['paired_record_indices_by_pattern']['INSUFFICIENT_EVIDENCE'] == [0]
+    assert shifted['record_pattern_counts']['ALL_INCONSISTENT'] == 3
+    assert dict(baseline_pattern='NEITHER_INCONSISTENT', case_pattern='EXTERNAL_ONLY_INCONSISTENT', records=2) in shifted['paired_transition_counts']
+    # Absolute offsets cannot alter a relative-clock measurement, even its gap.
+    assert shifted['local_comparisons'][1]['claim_minus_local_prediction_ns'] == zero['local_comparisons'][1]['claim_minus_local_prediction_ns']
+    assert shifted['local_comparisons'][2]['separation_ns'] == zero['local_comparisons'][2]['separation_ns'] == 0
+    assert report['local_control']['absolute_utc_origin'] == 'UNKNOWN'
+    assert baseline == original
+
+
+def test_step_is_visible_to_both_controls_without_reanchoring_after_the_jump():
+    baseline = compare_bracket(*multi_epoch_inputs())
+    onset = COUNTER + NS + 50 * MS  # Exactly the second reported event midpoint.
+    report = assess_time_sensitivity(baseline, [100 * MS], local_counter_resolution_ns=1,
+                                     onset_monotonic_ns=onset)
+    case = report['offset_cases'][1]
+    assert case['applied_offset_ns_by_record'] == [0, 100 * MS, 100 * MS]
+    assert case['paired_record_indices_by_pattern']['BOTH_INCONSISTENT'] == [1, 2]
+    assert case['local_comparisons'][2]['anchor_source_index'] == 0
+    assert case['local_comparisons'][2]['separation_ns'] > 90 * MS
+    assert report['perturbation_profile']['onset_monotonic_ns'] == onset
+
+
+@pytest.mark.parametrize('offset,pattern,external', [
+    (-10 * MS, 'LOCAL_ONLY_INCONSISTENT', 'ALL_NOT_DISTINGUISHABLE'),
+    (10 * MS, 'BOTH_INCONSISTENT', 'ALL_INCONSISTENT')])
+def test_small_steps_retain_asymmetric_external_limits_and_local_only_cases(offset, pattern, external):
+    baseline = compare_bracket(*multi_epoch_inputs())
+    report = assess_time_sensitivity(baseline, [offset], local_counter_resolution_ns=1,
+                                     onset_monotonic_ns=COUNTER + NS)
+    case = report['offset_cases'][1]
+    assert case['paired_record_indices_by_pattern'][pattern] == [1, 2]
+    assert case['record_indices_by_pattern'][external] == ([0, 1, 2] if offset < 0 else [1, 2])
+
+
+def test_bad_initial_anchor_retains_local_only_disagreement_on_unchanged_later_epochs():
+    witness, capture = multi_epoch_inputs()
+    capture['records'][0]['packet_hex'] = utc_packet(NS).hex()
+    report = assess_time_sensitivity(compare_bracket(witness, capture), [0], local_counter_resolution_ns=1)
+    case = report['offset_cases'][0]
+    assert case['paired_record_indices_by_pattern']['LOCAL_ONLY_INCONSISTENT'] == [1, 2]
+    assert case['record_indices_by_pattern']['ALL_INCONSISTENT'] == [0]
+    assert case['local_comparisons'][1]['anchor_source_index'] == 0
+    assert dict(baseline_pattern='LOCAL_ONLY_INCONSISTENT', case_pattern='LOCAL_ONLY_INCONSISTENT', records=2) in case['paired_transition_counts']
+
+
+def test_local_control_does_not_use_external_time_or_authentication_status():
+    witness, capture = multi_epoch_inputs()
+    baseline = compare_bracket(witness, capture)
+    reference = assess_time_sensitivity(baseline, [100 * MS], local_counter_resolution_ns=1)
+    for attempt in witness['attempts']:
+        attempt['status'] = 'WITNESS_UNAVAILABLE'
+        attempt['reason'] = 'synthetic outage'
+        del attempt['exchange']
+    missing = assess_time_sensitivity(compare_bracket(witness, capture), [100 * MS], local_counter_resolution_ns=1)
+    for original, outage in zip(reference['offset_cases'], missing['offset_cases']):
+        assert original['local_comparisons'] == outage['local_comparisons']
+        assert outage['paired_pattern_counts']['INSUFFICIENT_EVIDENCE'] == 3
+    assert missing['status'] == 'INSUFFICIENT_EVIDENCE'
+
+
+def test_external_disagreement_cannot_be_counted_as_external_only_gain():
+    witness, capture = multi_epoch_inputs()
+    for original in list(witness['attempts']):
+        other = copy.deepcopy(original)
+        other['server'] = other['exchange']['server'] = 'conflicting-endpoint'
+        for name in ('server_receive_unix_ns', 'server_transmit_unix_ns'):
+            other['exchange'][name] += NS
+        witness['attempts'].append(other)
+    report = assess_time_sensitivity(compare_bracket(witness, capture), [0], local_counter_resolution_ns=1)
+    assert report['offset_cases'][0]['paired_record_indices_by_pattern']['EXTERNAL_DISAGREEMENT'] == [1, 2]
+    assert report['offset_cases'][0]['paired_pattern_counts']['EXTERNAL_ONLY_INCONSISTENT'] == 0
+
+
+@pytest.mark.parametrize('change', ['invalid_record', 'different_capture', 'reordered_counter'])
+def test_local_quality_boundaries_break_the_segment_visibly(change):
+    witness, capture = multi_epoch_inputs()
+    if change == 'invalid_record':
+        capture['records'][1] = {}
+    elif change == 'different_capture':
+        capture['records'][1]['capture_id'] = 'different-boot'
+    else:
+        capture['records'][1], capture['records'][2] = capture['records'][2], capture['records'][1]
+    report = assess_time_sensitivity(compare_bracket(witness, capture), [0], local_counter_resolution_ns=1)
+    local = report['offset_cases'][0]['local_comparisons']
+    assert local[2]['status'] == 'INSUFFICIENT_EVIDENCE'
+    if change == 'reordered_counter':
+        assert 'reordered' in local[2]['reason']
+    else:
+        assert 'anchor' in local[2]['reason']
+
+
+def test_hardware_discontinuity_and_repeated_epoch_do_not_manufacture_elapsed_support():
+    from pnt.tests.test_android_time import inputs as android_inputs, compare as android_compare
+
+    witness, raw, _, _ = android_inputs(bracket=True)
+    report = assess_time_sensitivity(android_compare(witness, raw, bracket_span_ns=200 * MS),
+                                     [NS], local_counter_resolution_ns=1)
+    assert report['offset_cases'][1]['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 8}
+    baseline = compare_bracket(*multi_epoch_inputs())
+    # The pure local control consumes decoded receiver metadata, never NTS.
+    from pnt.time_sensitivity import _local_elapsed_checks
+    rows = baseline['records']
+    for index, row in enumerate(rows):
+        row['receiver_utc']['hardware_clock_discontinuity_count'] = index
+    local = _local_elapsed_checks(rows, [r['claim'] for r in rows], counter_resolution_ns=1, rate_error_ppm=100)
+    assert all(r['status'] == 'INSUFFICIENT_EVIDENCE' for r in local)
+
+
+@pytest.mark.parametrize('options', [dict(local_counter_resolution_ns=0), dict(local_counter_resolution_ns=True),
+                                    dict(onset_monotonic_ns=-1), dict(onset_monotonic_ns=1.5)])
+def test_invalid_local_or_step_parameters_rejected(options):
+    with pytest.raises(ValueError):
+        assess_time_sensitivity(compare(*inputs()), [NS], **options)
+
+
+def test_local_interval_edges_include_error_of_both_epochs_and_counter_quantization():
+    from pnt.time_sensitivity import _local_elapsed_checks
+
+    rows = [dict(source_index=i, receiver_utc={}) for i in range(2)]
+    claims = [dict(capture_id='synthetic', counter_clock='synthetic-counter', source='synthetic',
+                   unix_ns=1000, error_ns=7, start_monotonic_ns=0, end_monotonic_ns=0),
+              dict(capture_id='synthetic', counter_clock='synthetic-counter', source='synthetic',
+                   unix_ns=2021, error_ns=10, start_monotonic_ns=1000, end_monotonic_ns=1000)]
+    check = _local_elapsed_checks(rows, claims, counter_resolution_ns=2, rate_error_ppm=0)
+    assert check[1]['local_predicted_utc_interval']['upper_unix_ns'] == 2011
+    assert check[1]['status'] == 'NOT_DISTINGUISHABLE'  # Claim lower edge touches 2011.
+    claims[1]['unix_ns'] += 1
+    check = _local_elapsed_checks(rows, claims, counter_resolution_ns=2, rate_error_ppm=0)
+    assert check[1]['status'] == 'INCONSISTENT_LOCAL_CONTINUITY'
+    assert check[1]['separation_ns'] == 1
+
+
+def test_overlapping_epoch_brackets_allow_negative_physical_elapsed_time():
+    from pnt.time_sensitivity import _local_elapsed_checks
+
+    rows = [dict(source_index=i, receiver_utc={}) for i in range(2)]
+    claims = [dict(capture_id='synthetic', counter_clock='synthetic-counter', source='synthetic',
+                   unix_ns=1000, error_ns=0, start_monotonic_ns=100, end_monotonic_ns=200),
+              dict(capture_id='synthetic', counter_clock='synthetic-counter', source='synthetic',
+                   unix_ns=970, error_ns=0, start_monotonic_ns=150, end_monotonic_ns=250)]
+    check = _local_elapsed_checks(rows, claims, counter_resolution_ns=1, rate_error_ppm=0)
+    assert check[1]['local_predicted_utc_interval']['lower_unix_ns'] == 948
+    assert check[1]['status'] == 'NOT_DISTINGUISHABLE'
 
 
 @pytest.mark.parametrize('bracket', [False, True])
@@ -102,11 +361,12 @@ def test_android_unknown_alignment_remains_insufficient_at_every_offset():
     witness, raw, _, _ = android_inputs(bracket=True)
     baseline = android_compare(witness, raw, epoch_alignment_error_ns=None,
                                epoch_alignment_source=None, bracket_span_ns=200 * MS)
-    report = assess_time_sensitivity(baseline, [-NS, NS])
+    report = assess_time_sensitivity(baseline, [-NS, NS], local_counter_resolution_ns=1)
     assert report['baseline'] == baseline
     for case in report['offset_cases']:
         assert case['record_pattern_counts']['INSUFFICIENT_EVIDENCE'] == 8
         assert case['bracket_status_counts'] == {'INSUFFICIENT_EVIDENCE': 8}
+        assert case['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 8}
 
 
 @pytest.mark.parametrize('offsets', [[], [True], [1.5], [1, 1]])
@@ -160,7 +420,8 @@ def test_cli_offline_hashes_failure_reports_and_refuses_overwrite(monkeypatch, t
     assert output.read_bytes() == original
 
 
-def test_android_time_sensitivity_runs_with_only_standard_library(tmp_path):
+@pytest.mark.parametrize('paired', [False, True])
+def test_android_time_sensitivity_runs_with_only_standard_library(tmp_path, paired):
     from pnt.tests.test_android_time import inputs as android_inputs, compare as android_compare
 
     witness, raw, _, _ = android_inputs(bracket=True)
@@ -177,8 +438,47 @@ from pnt.time_sensitivity import assess_time_sensitivity
 from pnt.__main__ import main
 main()
 """
+    options = ['--local-counter-resolution-ns', '1', '--onset-monotonic-ns', '0'] if paired else []
     result = subprocess.run([sys.executable, '-c', script, 'time-sensitivity', str(source),
-                             '--offset-ns', str(NS), '--output', str(output)], text=True, capture_output=True)
+                             '--offset-ns', str(NS), '--output', str(output), *options], text=True, capture_output=True)
     assert result.returncode == 0, result.stderr
     report = json.loads(output.read_text(encoding='utf-8'))
     assert report['offset_cases'][1]['bracket_status_counts'] == {'INCONSISTENT_WITH_WITNESS': 8}
+    if paired:
+        assert report['offset_cases'][1]['local_status_counts'] == {'INSUFFICIENT_EVIDENCE': 8}
+
+
+@pytest.mark.parametrize('available', [False, True])
+def test_cli_paired_step_is_offline_replayable_and_retains_unknown_alignment(monkeypatch, tmp_path, available):
+    from pnt.__main__ import main
+    from pnt import time_witness
+
+    witness, capture = multi_epoch_inputs()
+    if not available:
+        for record in capture['records']:
+            del record['capture_id']
+    baseline = compare_bracket(witness, capture)
+    source, output = tmp_path / 'comparison.json', tmp_path / 'paired.json'
+    source.write_text(json.dumps(baseline), encoding='utf-8')
+    onset = COUNTER + NS
+    monkeypatch.setattr(time_witness, 'probe', lambda *a, **k: pytest.fail('offline paired test accessed network'))
+    monkeypatch.setattr('sys.argv', ['pnt', 'time-sensitivity', str(source), '--offset-ns', str(100 * MS),
+                                   '--local-counter-resolution-ns', '1', '--onset-monotonic-ns', str(onset),
+                                   '--output', str(output)])
+    if available:
+        main()
+    else:
+        with pytest.raises(SystemExit) as error:
+            main()
+        assert error.value.code == 2
+    report = json.loads(output.read_text(encoding='utf-8'))
+    assert assess_time_sensitivity(report['baseline'], [100 * MS], local_counter_resolution_ns=1,
+                                    onset_monotonic_ns=onset) == {k: v for k, v in report.items() if k != 'source'}
+    if available:
+        assert report['offset_cases'][1]['paired_pattern_counts']['BOTH_INCONSISTENT'] == 2
+    else:
+        assert report['offset_cases'][1]['paired_pattern_counts']['INSUFFICIENT_EVIDENCE'] == 3
+    original = output.read_bytes()
+    with pytest.raises(SystemExit):
+        main()
+    assert output.read_bytes() == original

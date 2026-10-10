@@ -93,6 +93,19 @@ abbinato baseline/challenge con controlli locali ragionevoli, non un'altra
 compatibilità isolata; un esito negativo o non valutabile comporta una decisione
 esplicita sul canale o sulla promessa del progetto.
 
+Il [primo confronto abbinato locale/NTS](../research/exploratory/PNT_PHONE_PAIRED_TIME.md)
+e ora eseguito come test software esplorativo sul log gia esposto. Scarti
+costanti di ±100 ms sono discordanti per NTS in 145 righe/25 epoche che la
+continuita locale lascia passare; i salti durante il log mostrano anche il
+vantaggio del controllo locale, senza guadagno NTS sui piccoli scarti di 10 ms.
+L'originale ha gia 51 discordanze locali/9 epoche sotto i budget assunti, delle
+quali 38 righe/7 epoche abbinate. Sono mantenute nelle transizioni e non
+eliminate con una nuova soglia. Il contributo informativo condizionale e
+verificato, ma vantaggio a pari falsi allarmi e validazione RF restano aperti.
+Il limite da risolvere e ora identificato nel clock relativo/associazione e
+nei budget dell'originale; con associazione ignota tutti gli esiti restano
+insufficienti. Nessuna nuova raccolta RF o conferma P3 e iniziata.
+
 La [registrazione pubblica Yunnan del giorno d'attacco](../research/exploratory/PNT_YUNNAN_RECORDING_INTAKE.md)
 e ora disponibile offline: due ore di messaggi originali, 7124 RAWX,
 PVT e clock conservati. La qualifica trova salti della data GNSS, lacune,

@@ -1,0 +1,1559 @@
+{
+  "base_commit": "b742f1af36c09c77be6b0feaa6be8660095d5517",
+  "calibrated": false,
+  "cases": {
+    "constant-development": {
+      "assumptions": {
+        "calibrated": false,
+        "rate_error_ppm": 100,
+        "receiver_tAcc_used_as_error_bound": false,
+        "server_error_ns": 1000000,
+        "trusted_collector_and_capture_receipts": true,
+        "utc_error_ns": 1000000,
+        "utc_error_source": "Predeclared uncalibrated development assumption"
+      },
+      "baseline_coverage": {
+        "bracket_comparisons": 8622,
+        "bracket_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 8439,
+          "NOT_DISTINGUISHABLE": 183
+        },
+        "comparison_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 9580
+        },
+        "comparisons": 9580,
+        "receiver_records": 479,
+        "record_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 217,
+          "UTC_CLAIM_AVAILABLE": 262
+        },
+        "records_with_any_temporal_support": 183,
+        "records_with_bracket_support": 183,
+        "records_with_single_support": 0,
+        "witness_attempts": 20
+      },
+      "distinct_clock_epochs": 86,
+      "local_control": {
+        "absolute_utc_origin": "UNKNOWN",
+        "counter_resolution_ns": 1,
+        "independent_local_absolute_utc_control": "NOT_EVALUATED",
+        "method": "ELAPSED_UTC_FROM_SEGMENT_ANCHOR",
+        "no_reanchor_on_inconsistency": true,
+        "paired_patterns_are_descriptive": true,
+        "rate_error_ppm": 100,
+        "uses_external_utc_or_exchanges": false
+      },
+      "local_report": {
+        "name": "phone-time-paired-constant-development-v2.json",
+        "sha256": "1a512a781e2e779db6fffff812ad97bd9a639f6f39aa34d2aebe1e4249744862"
+      },
+      "offset_cases": [
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 183
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 77
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 51,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 205
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 7,
+            "NEITHER_INCONSISTENT": 25
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 38,
+            "NEITHER_INCONSISTENT": 145
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 7,
+              "records": 38
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 25,
+              "records": 145
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 183,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 0,
+          "shifted_distinct_clock_epochs": 0,
+          "utc_claim_offset_ns": 0
+        },
+        {
+          "bracket_status_counts": {
+            "INCONSISTENT_WITH_WITNESS": 183,
+            "INSUFFICIENT_EVIDENCE": 8439
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INCONSISTENT_WITH_WITNESS": 106,
+                "INSUFFICIENT_EVIDENCE": 4205
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INCONSISTENT_WITH_WITNESS": 77,
+                "INSUFFICIENT_EVIDENCE": 4234
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 51,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 205
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 7,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 25,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 38,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 145,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "BOTH_INCONSISTENT",
+              "distinct_clock_epochs": 7,
+              "records": 38
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "EXTERNAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 25,
+              "records": 145
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 183,
+            "ALL_NOT_DISTINGUISHABLE": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 262,
+          "shifted_distinct_clock_epochs": 44,
+          "utc_claim_offset_ns": -100000000
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 183
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 77
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 51,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 205
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 7,
+            "NEITHER_INCONSISTENT": 25
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 38,
+            "NEITHER_INCONSISTENT": 145
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 7,
+              "records": 38
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 25,
+              "records": 145
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 183,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 262,
+          "shifted_distinct_clock_epochs": 44,
+          "utc_claim_offset_ns": -10000000
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 183
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 77
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 51,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 205
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 7,
+            "NEITHER_INCONSISTENT": 25
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 38,
+            "NEITHER_INCONSISTENT": 145
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 7,
+              "records": 38
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 25,
+              "records": 145
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 183,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 262,
+          "shifted_distinct_clock_epochs": 44,
+          "utc_claim_offset_ns": 10000000
+        },
+        {
+          "bracket_status_counts": {
+            "INCONSISTENT_WITH_WITNESS": 183,
+            "INSUFFICIENT_EVIDENCE": 8439
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INCONSISTENT_WITH_WITNESS": 106,
+                "INSUFFICIENT_EVIDENCE": 4205
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INCONSISTENT_WITH_WITNESS": 77,
+                "INSUFFICIENT_EVIDENCE": 4234
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 51,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 205
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 7,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 25,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 38,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 145,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "BOTH_INCONSISTENT",
+              "distinct_clock_epochs": 7,
+              "records": 38
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "EXTERNAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 25,
+              "records": 145
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 183,
+            "ALL_NOT_DISTINGUISHABLE": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 262,
+          "shifted_distinct_clock_epochs": 44,
+          "utc_claim_offset_ns": 100000000
+        }
+      ],
+      "original_local_inconsistency": {
+        "distinct_clock_epochs": 9,
+        "records": 51,
+        "separation_ns_range": [
+          340481,
+          3324667
+        ]
+      },
+      "perturbation_profile": {
+        "mode": "WHOLE_CAPTURE_CONSTANT"
+      },
+      "receiver_records": 479,
+      "source": {
+        "name": "phone-time-outdoor-01-development-alignment.json",
+        "sha256": "0f1749e5cc6e31dd59296e56e411a1006bfc784415878386fa3c328fc0c3faa7"
+      },
+      "status": "CONDITIONAL_TIME_DIAGNOSTIC",
+      "temporal_association": {
+        "maximum_span_ns": 15000000000,
+        "method": "ADJACENT_SAME_ENDPOINT_BRACKETS"
+      }
+    },
+    "step-development": {
+      "assumptions": {
+        "calibrated": false,
+        "rate_error_ppm": 100,
+        "receiver_tAcc_used_as_error_bound": false,
+        "server_error_ns": 1000000,
+        "trusted_collector_and_capture_receipts": true,
+        "utc_error_ns": 1000000,
+        "utc_error_source": "Predeclared uncalibrated development assumption"
+      },
+      "baseline_coverage": {
+        "bracket_comparisons": 8622,
+        "bracket_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 8439,
+          "NOT_DISTINGUISHABLE": 183
+        },
+        "comparison_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 9580
+        },
+        "comparisons": 9580,
+        "receiver_records": 479,
+        "record_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 217,
+          "UTC_CLAIM_AVAILABLE": 262
+        },
+        "records_with_any_temporal_support": 183,
+        "records_with_bracket_support": 183,
+        "records_with_single_support": 0,
+        "witness_attempts": 20
+      },
+      "distinct_clock_epochs": 86,
+      "local_control": {
+        "absolute_utc_origin": "UNKNOWN",
+        "counter_resolution_ns": 1,
+        "independent_local_absolute_utc_control": "NOT_EVALUATED",
+        "method": "ELAPSED_UTC_FROM_SEGMENT_ANCHOR",
+        "no_reanchor_on_inconsistency": true,
+        "paired_patterns_are_descriptive": true,
+        "rate_error_ppm": 100,
+        "uses_external_utc_or_exchanges": false
+      },
+      "local_report": {
+        "name": "phone-time-paired-step-development-v2.json",
+        "sha256": "bff0feed8f170e10cac90675fdda019d27761f1c050c92b793bfa988dc6d5157"
+      },
+      "offset_cases": [
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 183
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 77
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 51,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 205
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 7,
+            "NEITHER_INCONSISTENT": 25
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 38,
+            "NEITHER_INCONSISTENT": 145
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 7,
+              "records": 38
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 25,
+              "records": 145
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 183,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 0,
+          "shifted_distinct_clock_epochs": 0,
+          "utc_claim_offset_ns": 0
+        },
+        {
+          "bracket_status_counts": {
+            "INCONSISTENT_WITH_WITNESS": 65,
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 118
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INCONSISTENT_WITH_WITNESS": 65,
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 12
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 170,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 86
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 11,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 6,
+            "NEITHER_INCONSISTENT": 15
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 65,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 32,
+            "NEITHER_INCONSISTENT": 86
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "BOTH_INCONSISTENT",
+              "distinct_clock_epochs": 1,
+              "records": 6
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 6,
+              "records": 32
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "BOTH_INCONSISTENT",
+              "distinct_clock_epochs": 10,
+              "records": 59
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 15,
+              "records": 86
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 65,
+            "ALL_NOT_DISTINGUISHABLE": 118,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 138,
+          "shifted_distinct_clock_epochs": 22,
+          "utc_claim_offset_ns": -100000000
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 183
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 77
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 151,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 105
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 17,
+            "NEITHER_INCONSISTENT": 15
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 97,
+            "NEITHER_INCONSISTENT": 86
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 7,
+              "records": 38
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 10,
+              "records": 59
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 15,
+              "records": 86
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 183,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 138,
+          "shifted_distinct_clock_epochs": 22,
+          "utc_claim_offset_ns": -10000000
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 183
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 77
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 98,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 158
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 14,
+            "NEITHER_INCONSISTENT": 18
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 79,
+            "NEITHER_INCONSISTENT": 104
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 6,
+              "records": 32
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 1,
+              "records": 6
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 8,
+              "records": 47
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 17,
+              "records": 98
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 183,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 138,
+          "shifted_distinct_clock_epochs": 22,
+          "utc_claim_offset_ns": 10000000
+        },
+        {
+          "bracket_status_counts": {
+            "INCONSISTENT_WITH_WITNESS": 65,
+            "INSUFFICIENT_EVIDENCE": 8439,
+            "NOT_DISTINGUISHABLE": 118
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4205,
+                "NOT_DISTINGUISHABLE": 106
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INCONSISTENT_WITH_WITNESS": 65,
+                "INSUFFICIENT_EVIDENCE": 4234,
+                "NOT_DISTINGUISHABLE": 12
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INCONSISTENT_LOCAL_CONTINUITY": 170,
+            "INSUFFICIENT_EVIDENCE": 223,
+            "NOT_DISTINGUISHABLE": 86
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 11,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 54,
+            "LOCAL_ONLY_INCONSISTENT": 6,
+            "NEITHER_INCONSISTENT": 15
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 65,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "LOCAL_ONLY_INCONSISTENT": 32,
+            "NEITHER_INCONSISTENT": 86
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 54,
+              "records": 296
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "BOTH_INCONSISTENT",
+              "distinct_clock_epochs": 1,
+              "records": 6
+            },
+            {
+              "baseline_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "case_pattern": "LOCAL_ONLY_INCONSISTENT",
+              "distinct_clock_epochs": 6,
+              "records": 32
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "BOTH_INCONSISTENT",
+              "distinct_clock_epochs": 10,
+              "records": 59
+            },
+            {
+              "baseline_pattern": "NEITHER_INCONSISTENT",
+              "case_pattern": "NEITHER_INCONSISTENT",
+              "distinct_clock_epochs": 15,
+              "records": 86
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 65,
+            "ALL_NOT_DISTINGUISHABLE": 118,
+            "INSUFFICIENT_EVIDENCE": 296,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 138,
+          "shifted_distinct_clock_epochs": 22,
+          "utc_claim_offset_ns": 100000000
+        }
+      ],
+      "original_local_inconsistency": {
+        "distinct_clock_epochs": 9,
+        "records": 51,
+        "separation_ns_range": [
+          340481,
+          3324667
+        ]
+      },
+      "perturbation_profile": {
+        "mode": "STEP_BY_REPORTED_EVENT_MIDPOINT",
+        "onset_monotonic_ns": 447980759069112
+      },
+      "receiver_records": 479,
+      "source": {
+        "name": "phone-time-outdoor-01-development-alignment.json",
+        "sha256": "0f1749e5cc6e31dd59296e56e411a1006bfc784415878386fa3c328fc0c3faa7"
+      },
+      "status": "CONDITIONAL_TIME_DIAGNOSTIC",
+      "temporal_association": {
+        "maximum_span_ns": 15000000000,
+        "method": "ADJACENT_SAME_ENDPOINT_BRACKETS"
+      }
+    },
+    "step-unknown": {
+      "assumptions": {
+        "calibrated": false,
+        "rate_error_ppm": 100,
+        "receiver_tAcc_used_as_error_bound": false,
+        "server_error_ns": 1000000,
+        "trusted_collector_and_capture_receipts": true,
+        "utc_error_ns": 1000000,
+        "utc_error_source": "Predeclared uncalibrated development assumption"
+      },
+      "baseline_coverage": {
+        "bracket_comparisons": 8622,
+        "bracket_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 8622
+        },
+        "comparison_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 9580
+        },
+        "comparisons": 9580,
+        "receiver_records": 479,
+        "record_status_counts": {
+          "INSUFFICIENT_EVIDENCE": 479
+        },
+        "records_with_any_temporal_support": 0,
+        "records_with_bracket_support": 0,
+        "records_with_single_support": 0,
+        "witness_attempts": 20
+      },
+      "distinct_clock_epochs": 86,
+      "local_control": {
+        "absolute_utc_origin": "UNKNOWN",
+        "counter_resolution_ns": 1,
+        "independent_local_absolute_utc_control": "NOT_EVALUATED",
+        "method": "ELAPSED_UTC_FROM_SEGMENT_ANCHOR",
+        "no_reanchor_on_inconsistency": true,
+        "paired_patterns_are_descriptive": true,
+        "rate_error_ppm": 100,
+        "uses_external_utc_or_exchanges": false
+      },
+      "local_report": {
+        "name": "phone-time-paired-step-unknown-v2.json",
+        "sha256": "52fe889006fa811df8cad866e4a7187760af6b02c5917b864540006c270858ff"
+      },
+      "offset_cases": [
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8622
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 479
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 86,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 86,
+              "records": 479
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 0,
+          "shifted_distinct_clock_epochs": 0,
+          "utc_claim_offset_ns": 0
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8622
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 479
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 86,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 86,
+              "records": 479
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 0,
+          "shifted_distinct_clock_epochs": 0,
+          "utc_claim_offset_ns": -100000000
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8622
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 479
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 86,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 86,
+              "records": 479
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 0,
+          "shifted_distinct_clock_epochs": 0,
+          "utc_claim_offset_ns": -10000000
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8622
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 479
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 86,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 86,
+              "records": 479
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 0,
+          "shifted_distinct_clock_epochs": 0,
+          "utc_claim_offset_ns": 10000000
+        },
+        {
+          "bracket_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 8622
+          },
+          "comparison_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 9580
+          },
+          "endpoint_status_counts": [
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4790
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime1.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            },
+            {
+              "comparison_kind": "bracket_comparisons",
+              "server": "ptbtime2.ptb.de",
+              "status_counts": {
+                "INSUFFICIENT_EVIDENCE": 4311
+              }
+            }
+          ],
+          "local_status_counts": {
+            "INSUFFICIENT_EVIDENCE": 479
+          },
+          "paired_distinct_clock_epochs": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 86,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_pattern_counts": {
+            "BOTH_INCONSISTENT": 0,
+            "EXTERNAL_DISAGREEMENT": 0,
+            "EXTERNAL_ONLY_INCONSISTENT": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "LOCAL_ONLY_INCONSISTENT": 0,
+            "NEITHER_INCONSISTENT": 0
+          },
+          "paired_transitions": [
+            {
+              "baseline_pattern": "INSUFFICIENT_EVIDENCE",
+              "case_pattern": "INSUFFICIENT_EVIDENCE",
+              "distinct_clock_epochs": 86,
+              "records": 479
+            }
+          ],
+          "record_pattern_counts": {
+            "ALL_INCONSISTENT": 0,
+            "ALL_NOT_DISTINGUISHABLE": 0,
+            "INSUFFICIENT_EVIDENCE": 479,
+            "MIXED": 0
+          },
+          "shifted_admitted_records": 0,
+          "shifted_distinct_clock_epochs": 0,
+          "utc_claim_offset_ns": 100000000
+        }
+      ],
+      "original_local_inconsistency": {
+        "distinct_clock_epochs": 0,
+        "records": 0,
+        "separation_ns_range": null
+      },
+      "perturbation_profile": {
+        "mode": "STEP_BY_REPORTED_EVENT_MIDPOINT",
+        "onset_monotonic_ns": 447980759069112
+      },
+      "receiver_records": 479,
+      "source": {
+        "name": "phone-time-outdoor-01-unknown-alignment.json",
+        "sha256": "5598cd4d2e2514aaedbdb966ed8ff2a09e699f6e23891fe77f7be38ac7a37059"
+      },
+      "status": "INSUFFICIENT_EVIDENCE",
+      "temporal_association": {
+        "maximum_span_ns": 15000000000,
+        "method": "ADJACENT_SAME_ENDPOINT_BRACKETS"
+      }
+    }
+  },
+  "implementation": "pnt/time_sensitivity.py in the accompanying change",
+  "independent_local_absolute_utc_control": "NOT_EVALUATED",
+  "independent_samples": false,
+  "measured_false_alarm_rates": false,
+  "original_recording_label": "NO_INTRODUCED_MANIPULATION_NOT_CERTIFIED_BENIGN",
+  "private_inputs": true,
+  "public_replay_available": false,
+  "raw_source": {
+    "name": "gnss_log_2026_10_10_00_00_57.txt",
+    "sha256": "bc71c7a99079f06442f2199c3a4b7cb0a1790f8d1d9e9fe8825924bb76090bfd"
+  },
+  "recording_date": "2026-10-10",
+  "regime": "EXPLORATORY_SOFTWARE_PERTURBATION",
+  "rf_attack_simulation": false,
+  "schema": "pnt-phone-paired-time-summary-v1",
+  "witness_attempts": {
+    "AUTHENTICATED_EXCHANGE": 13,
+    "WITNESS_UNAVAILABLE": 7
+  },
+  "witness_source": {
+    "name": "phone-nts-outdoor-01.json",
+    "sha256": "350a6c0b4f71495de35676e191378c996069329ad5c89d0803cf88cfc8f3f651"
+  }
+}
