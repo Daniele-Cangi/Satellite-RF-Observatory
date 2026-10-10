@@ -88,6 +88,13 @@ callback vuote, errori e file parziali restano visibili. La confidenza Android
 del 68% non diventa un limite indipendente; il ritardo della callback non
 qualifica da solo l'associazione. Nessun budget o risultato storico cambia.
 
+La [prima prova con questo raccoglitore](../research/exploratory/PNT_PHONE_NATIVE_CLOCK_METADATA.md)
+trova l'incertezza nativa in 141/141 callback: circa 7 ms con confidenza del
+68%, superiore all'assunzione di sviluppo di 1 ms. Il replay mantiene
+quest'ultima solo come caso condizionale; con associazione ignota resta
+insufficiente. I nuovi metadati chiariscono il limite, senza calibrare un
+budget dal risultato o sostituire l'epoca GNSS con quella della callback.
+
 ## 3. Importazione e confronto sul PC
 
 Per prima cosa importare il log, senza attribuirgli un esito scientifico:

@@ -40,7 +40,8 @@ Copy binary output without PowerShell's text redirection/re-encoding.
   as a receiver estimate with **68% confidence**; it is not an independent or
   deterministic bound. Missing optional fields stay blank, never zero-filled.
 - Callback index, `SystemClock.elapsedRealtimeNanos()` at callback entry and
-  after reading clock/measurement getters, **before serialization or file I/O**.
+  after reading/copying clock and measurement fields, **before CSV formatting
+  or file I/O**. Snapshot construction includes converting native values to strings.
   These delimit app work; they do not measure RF arrival, interrupt time or the
   entire callback duration. Their difference from the native epoch is
   diagnostic, not a calibrated association error.

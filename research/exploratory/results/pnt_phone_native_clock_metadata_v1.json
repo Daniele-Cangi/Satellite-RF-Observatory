@@ -1,0 +1,159 @@
+{
+  "RF_authenticity_assessed": false,
+  "admitted_clock_epochs": 47,
+  "budgets_before_reveal": {
+    "counter_resolution_ns": 1,
+    "development_epoch_alignment_error_ns": 1000000,
+    "gps_utc_offset_seconds": 18,
+    "max_bracket_span_ns": 15000000000,
+    "rate_error_ppm": 100,
+    "receiver_utc_error_ns": 1000000,
+    "server_error_ns": 1000000
+  },
+  "budgets_fitted": false,
+  "callback_lags_are_not_alignment_bounds": true,
+  "callback_minus_native_epoch_ns_range": [
+    519580260,
+    666168385
+  ],
+  "callback_read_duration_ns_range": [
+    340521,
+    2949063
+  ],
+  "callbacks": 141,
+  "cause_attributed": false,
+  "collector_apk_sha256": "669c6790d3df237f825a9f84e3eff4803b08e306e14779fb452252a285022eb2",
+  "collector_source_revision": "cce5b79246e50ce6989f3b78f80b82f5680c07cd",
+  "component_status_counts": {
+    "ADMITTED_CLOCK_METADATA_ONLY": 10,
+    "COMPONENT_DECOMPOSITION": 486,
+    "UNAVAILABLE": 967
+  },
+  "conclusion": "Native reported alignment uncertainty is about 7ms, wider than the unchanged 1ms development assumption. This motivates qualifying the timing model, not enlarging the budget to make this capture pass. P2 remains open.",
+  "date": "2026-10-10",
+  "development_alignment_coverage": {
+    "bracket_comparisons": 26334,
+    "bracket_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 26030,
+      "NOT_DISTINGUISHABLE": 304
+    },
+    "comparison_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 29248,
+      "NOT_DISTINGUISHABLE": 12
+    },
+    "comparisons": 29260,
+    "receiver_records": 1463,
+    "record_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 967,
+      "UTC_CLAIM_AVAILABLE": 496
+    },
+    "records_with_any_temporal_support": 316,
+    "records_with_bracket_support": 304,
+    "records_with_single_support": 12,
+    "witness_attempts": 20
+  },
+  "device": "Galaxy S21 FE SM-G990B; Android 16/API 36",
+  "empty_callbacks": 0,
+  "hardware_minus_counter_change_ns_range": [
+    -10285721,
+    2555376
+  ],
+  "independent_timing_qualified": false,
+  "local_inconsistent_distinct_clock_epochs": 13,
+  "local_status_counts": {
+    "INCONSISTENT_LOCAL_CONTINUITY": 137,
+    "INSUFFICIENT_EVIDENCE": 977,
+    "NOT_DISTINGUISHABLE": 349
+  },
+  "native_epoch_available_callbacks": 141,
+  "native_uncertainty_available_callbacks": 141,
+  "negative_callback_lags": 0,
+  "nts_acquisition_duration_ns": 46301065086,
+  "nts_attempt_status_counts": {
+    "AUTHENTICATED_EXCHANGE": 13,
+    "WITNESS_UNAVAILABLE": 7
+  },
+  "nts_endpoints_share_ptb_authority": true,
+  "nts_failed_attempt_indices": [
+    3,
+    5,
+    6,
+    7,
+    11,
+    13,
+    15
+  ],
+  "nts_source_revision": "8571827fb5d48866565cc81df4fda20c8da4c10e",
+  "original_case_paired_patterns": {
+    "BOTH_INCONSISTENT": 0,
+    "EXTERNAL_DISAGREEMENT": 0,
+    "EXTERNAL_ONLY_INCONSISTENT": 0,
+    "INSUFFICIENT_EVIDENCE": 1147,
+    "LOCAL_ONLY_INCONSISTENT": 74,
+    "NEITHER_INCONSISTENT": 242
+  },
+  "original_case_record_patterns": {
+    "ALL_INCONSISTENT": 0,
+    "ALL_NOT_DISTINGUISHABLE": 316,
+    "INSUFFICIENT_EVIDENCE": 1147,
+    "MIXED": 0
+  },
+  "paired_local_only_inconsistent_distinct_clock_epochs": 7,
+  "public_summary_is_not_a_public_replay_corpus": true,
+  "raw_gps_distinct_recorded_clock_epochs": 140,
+  "raw_inputs_private": true,
+  "raw_intake": {
+    "constellation_counts": {
+      "1": 1463,
+      "3": 906,
+      "4": 11,
+      "5": 819
+    },
+    "ignored_record_counts": {},
+    "status_counts": {
+      "NORMALIZED": 1463,
+      "UNSUPPORTED_CONSTELLATION": 1736,
+      "raw_rows": 3199
+    }
+  },
+  "receiver_minus_counter_change_ns_range": [
+    -10286180,
+    2554784
+  ],
+  "regime": "EXPLORATORY_INSTRUMENTATION_DIAGNOSIS",
+  "replay_verified_reports": 4,
+  "reported_elapsed_realtime_uncertainty_ns_range": [
+    "7001176.0",
+    "7001243.0"
+  ],
+  "reported_uncertainties_used_as_bounds": false,
+  "reported_uncertainty_confidence_percent": 68,
+  "schema": "pnt-phone-native-clock-metadata-v1",
+  "source_hashes": {
+    "native-clock-diagnostics-01.json": "9f0ca9f6faa305dee7afb37b54a4e7c3d825dfbd4271924125f1c3bd77f19725",
+    "native-clock-raw-01.json": "8ea9f004c7aae38ddc262e68781894ab52ccf990826ffb8e8e1baa66c80621f5",
+    "native-clock-time-development-01.json": "b34b15dcc1d7a9af04f319b0a3c71f41b7f141435c4c8ca27257b74cc848a713",
+    "native-clock-time-unknown-01.json": "a4ff6da55b5b082a6b598fbdfcfdef73b3b38d9c4cadf373afd3ee938da34844",
+    "phone-nts-native-clock-01.json": "6cef60c799d1f3ff595a2c218dd023d267f20c6548e2398660a411e202db5f57",
+    "pnt-clock-88f38553-fc34-4f56-9c46-96c1d218a103.txt": "1093feb71931c37b3be33ba84ca9880b4c5a3e5d1904fb7272a5d2d72847ad37"
+  },
+  "temporal_support_distinct_clock_epochs": 30,
+  "unknown_alignment_coverage": {
+    "bracket_comparisons": 26334,
+    "bracket_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 26334
+    },
+    "comparison_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 29260
+    },
+    "comparisons": 29260,
+    "receiver_records": 1463,
+    "record_status_counts": {
+      "INSUFFICIENT_EVIDENCE": 1463
+    },
+    "records_with_any_temporal_support": 0,
+    "records_with_bracket_support": 0,
+    "records_with_single_support": 0,
+    "witness_attempts": 20
+  }
+}
