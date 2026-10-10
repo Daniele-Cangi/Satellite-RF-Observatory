@@ -1,7 +1,7 @@
 # Sicurezza PNT: verifica esterna e analisi degli incidenti
 
 Piano di sviluppo del 26 settembre 2026; roadmap operativa aggiornata il
-10 ottobre 2026 con l'app Android come ingresso principale. Direzione richiesta
+11 ottobre 2026 con l'app Android come ingresso principale. Direzione richiesta
 dall'utente; architettura proposta, ancora da dimostrare. Questo documento
 sostituisce le priorità di prodotto precedenti. Esperimenti conclusi, risultati e criteri
 storici conservano il loro significato originale.
@@ -277,9 +277,15 @@ prove equivalenti per cercare un risultato migliore.
 
 La [valutazione di tre sessioni nuove](../research/exploratory/PNT_ANDROID_SESSION_EVALUATION.md)
 ha soddisfatto il criterio condizionale su 47/117 gruppi clock, conservando
-i 70 gruppi insufficienti e i 16 timeout su 60 slot NTS. Il prossimo intervento
-è sulla copertura della raccolta sequenziale sotto timeout, senza reinterpretare
-questo esito o promuovere i budget a limiti fisici.
+i 70 gruppi insufficienti e i 16 timeout su 60 slot NTS. Il raccoglitore 0.4.2
+separa i calendari degli endpoint senza recuperi compressi. La
+[prova reale successiva](../research/exploratory/PNT_ANDROID_NTS_COVERAGE.md)
+osserva l'isolamento dei timeout: 13/20 scambi autenticati e 18/39 gruppi comuni,
+conservando sette timeout e 21 gruppi insufficienti. Una sola sessione non
+dimostra un guadagno stabile; non si reinterpretano gli esiti precedenti né
+si promuovono i budget a limiti fisici. Il prossimo quesito è la deriva graduale
+dell'UTC decodificato e il ritardo di rilevazione sui dati già esposti, riusando
+confronto e replay invece di ripetere gli scarti costanti.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,

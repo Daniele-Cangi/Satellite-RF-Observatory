@@ -157,8 +157,12 @@ The [Android workflow](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-
 now delivers autonomous GNSS/NTS acquisition, live diagnostics and the
 export-to-analysis-to-phone report workflow using the existing engine.
 Collector 0.4.2 schedules the NTS endpoints separately, retaining every slot and
-failure and preventing compressed catch-up after timeouts. Automated checks
-verify acquisition behavior; improved physical coverage still needs a new trial.
+failure and preventing compressed catch-up after timeouts. An
+[outdoor phone trial](research/exploratory/PNT_ANDROID_NTS_COVERAGE.md) observes
+timeout isolation, 13/20 authenticated exchanges and conditional ±100 ms
+sensitivity on 18/39 common clock groups. The other 21 groups remain insufficient;
+this single trial does not establish a stable coverage gain. The next question
+is gradual decoded-UTC drift and detection delay on already exposed data.
 Independent timing qualification and verified benign/RF challenge evidence
 remain necessary to establish operational security benefit.
 Website and deployment work follow that physical demonstration.

@@ -117,5 +117,11 @@ la domanda condizionale in quel blocco; i limiti fisici sopra restano aperti.
 Il raccoglitore 0.4.2 separa i due endpoint NTS e conserva una distanza minima
 fra gli avvii dello stesso endpoint, senza comprimere i tentativi dopo un ritardo.
 Slot, fallimenti e cancellazioni restano verificabili nell'intake esistente;
-la valutazione conclusa non cambia. Una nuova prova deve misurare l'eventuale
-guadagno di copertura, usando il profilo dichiarato e conservando gli insufficienti.
+la valutazione conclusa non cambia. La
+[prova reale dell'11 ottobre](../research/exploratory/PNT_ANDROID_NTS_COVERAGE.md)
+osserva l'isolamento dei timeout e 18/39 gruppi comuni con lo stesso profilo,
+conservando 21 insufficienti e sette timeout su venti slot. Non dimostra un
+guadagno stabile o qualifica i budget. Il prossimo quesito è la deriva graduale
+dell'UTC decodificato e il ritardo di rilevazione, sviluppati sui dati già esposti
+con il confronto e replay esistenti. Non servono altre ripetizioni equivalenti
+degli scarti costanti per cercare un esito migliore.
