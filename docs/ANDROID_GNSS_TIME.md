@@ -5,6 +5,15 @@ interroga un testimone UTC Internet autenticato. Non servono un ricevitore ester
 root o un APK del progetto. Il risultato e una diagnostica temporale condizionale,
 non un'autenticazione RF, una convalida della posizione o una prova di attacco.
 
+Per la nuova acquisizione autonoma usare il [PNT Clock Collector 0.2](../pnt/android-collector/README.md):
+un pulsante raccoglie GNSS e NTS nello stesso processo, senza Termux o PC,
+ed esporta gli originali in uno ZIP. Il rapporto NTS conserva i tentativi ma
+lascia ignoti budget e risoluzione effettiva del contatore: il confronto Python
+li richiede esplicitamente e rifiuta un uso diretto come evidenza qualificata.
+L'integrazione del rapporto analizzato e il prossimo incremento. I passaggi
+seguenti conservano il percorso GNSS Logger/Termux usato nei risultati storici
+e i suoi budget condizionali; non si applicano automaticamente al nuovo ZIP.
+
 ## 1. Preparazione sul telefono
 
 Installare [GNSS Logger di Google](https://developer.android.com/develop/sensors-and-location/sensors/gnss)
@@ -82,7 +91,8 @@ il [PNT Clock Collector](../pnt/android-collector/README.md) al posto di GNSS
 Logger. Il piccolo APK registra `GnssClock` con i flag di disponibilita,
 `ElapsedRealtimeUncertaintyNanos` e i contatori all'ingresso della callback e
 dopo le letture API. Mantiene lo stesso formato Raw e percorso NTS/replay.
-Tenere il raccoglitore visibile, anche in schermo diviso con Termux: quando
+La versione 0.1 usata nel rapporto storico richiedeva NTS in Termux; la 0.2
+raccoglie NTS direttamente. Tenere il raccoglitore visibile: quando
 l'app viene nascosta chiude la sessione esplicitamente. Timestamp assenti,
 callback vuote, errori e file parziali restano visibili. La confidenza Android
 del 68% non diventa un limite indipendente; il ritardo della callback non

@@ -1,34 +1,70 @@
 # PNT Clock Collector (Android 10+)
 
-A small foreground app for the next clock diagnosis on the phone. Google GNSS
-Logger remains sufficient for the first intake, but the installed 3.1.1.3 log
-did not include GNSS epoch-alignment uncertainty. This collector records the
-missing observables without changing NTS, the Python comparison or its budgets.
-It uses Android platform APIs and has no runtime library or network dependency.
+A foreground research app that records native GNSS measurements and
+authenticated Internet time together. Version 0.2 removes the need for Termux,
+a PC or USB during acquisition. It retains the existing Raw format and Python
+intake/replay. It does not adjust the device clock, authenticate local RF or
+assign a timing/security verdict.
 
 ## Record and export
 
 1. Install the debug APK below on the recording phone. Enable Location and grant
    **precise** location to PNT Clock Collector.
-2. Press **Start recording** outdoors with sky view. Keep the app visible; it
-   holds the screen on. Use split screen with Termux, or the already configured
-   remote Termux access, to run the same-phone `android-time-probe` from the
-   [Android guide](../../docs/ANDROID_GNSS_TIME.md). A USB cable is not required
-   for collection. Do not reboot between GNSS and NTS acquisition.
-3. Press **Stop recording**, then **Export last file**. Preserve the original
-   GNSS file and NTS JSON. Import the exported file with `python -m pnt android-raw`
-   and use `android-time-compare` and its existing replay as before. Same-phone,
-   same-boot association remains an explicit caller assertion.
+2. With Internet access and sky view, press **Start GNSS + NTS**. Keep the app
+   visible; it holds the screen on. GNSS callbacks and NTS use the same
+   `SystemClock.elapsedRealtimeNanos()` / CLOCK_BOOTTIME counter and capture ID.
+   No other app is required. Do not reboot during acquisition.
+3. The app stops after ten rounds against `ptbtime1.ptb.de` and
+   `ptbtime2.ptb.de`, or when you press **Stop recording**. Round starts are
+   scheduled three seconds apart; slow network attempts can extend the session.
+4. Press **Export last session**, then save the ZIP using Android's document
+   picker. It contains the original `pnt-clock-<id>.txt` and
+   `pnt-nts-<id>.json`. Extract it on the PC and import the Raw file with
+   `python -m pnt android-raw`. Keep the JSON alongside it.
 
-The app stops with an `ACTIVITY_STOPPED` terminal when hidden, including when
-Termux takes the whole screen; it does not pretend to collect in the background.
+This is transport acquisition. Server error, counter drift and effective
+counter resolution remain **unknown**, never inferred from nanosecond API units
+or observed agreement. Consequently the JSON is not yet a qualified
+`android-time-compare` input; that command fails closed without its required
+budgets. The next reporting increment must make analysis assumptions explicit
+and reuse the existing engine/replay. The [Android guide](../../docs/ANDROID_GNSS_TIME.md)
+retains the earlier GNSS Logger/Termux conditional workflow separately.
+
+The app stops with an `ACTIVITY_STOPPED` terminal when hidden.
 There is no automatic restart, fallback to callback time or overwrite of an
 earlier recording. Files use unique capture IDs in private app storage. Export
-copies the selected last file through Android's document picker; originals stay
+copies the last session through Android's document picker; originals stay
 in app storage. Do not uninstall or clear app data before transferring files.
 The debug build also permits `adb shell run-as org.satelliterf.observatory.clock
 ls files` and copying retained files through `adb exec-out run-as ... cat ...`.
 Copy binary output without PowerShell's text redirection/re-encoding.
+
+## Authenticated time transport and retention
+
+The native client requires TLS 1.3, platform certificate trust, endpoint identity
+and `ntske/1` ALPN before deriving separate client/server RFC 8915 exporter keys.
+Conscrypt provides TLS/exporters; Cryptomator's `siv-mode` provides AES-SIV-256.
+The UDP exchange authenticates the NTP header, request identifier, origin,
+nonce and cookie framing. No plain NTP fallback or address retry is attempted.
+If NTS-KE does not negotiate another hostname, UDP uses its actual TCP peer.
+The explicit NTP era is 0; there is no host-calendar era inference or wall-clock
+comparison. TLS certificate validity still needs a plausible device calendar;
+NTS does not solve its own calendar bootstrap.
+
+All twenty planned slots are retained. Each completion checkpoints the JSON
+with authenticated exchanges, failures and unattempted slots; orderly stop
+adds its terminal. Certificates/response hashes and public peer addresses are
+recorded, while session keys/cookies are not exported. Stop closes active sockets
+and interrupts scheduled waits. Socket operations have five-second stage
+timeouts; Android DNS resolution is OS-managed and can delay final stop. The
+client checks cancellation/deadlines after resolution before connecting.
+
+The two PTB endpoints share one authority; they are not independent clock roots.
+Same-app association is provenance, not hardware attestation. Sudden process
+termination can leave the last checkpoint in progress and a Raw file without
+a terminal. Retain those partials; neither file alone proves completeness.
+The network sends NTS protocol requests, never the collected GNSS file. There
+is no upload service or public API.
 
 ## Observables and limits
 
@@ -45,6 +81,9 @@ Copy binary output without PowerShell's text redirection/re-encoding.
   These delimit app work; they do not measure RF arrival, interrupt time or the
   entire callback duration. Their difference from the native epoch is
   diagnostic, not a calibrated association error.
+- Session source revision, version/device/SDK, start counter and Android boot
+  count (`-1` if unavailable). They describe collection, without proving a
+  trustworthy receiver or independently bounding its clock.
 - Every delivered Raw measurement, including non-GPS constellations and
   unsupported signals. Native long integers are decimal strings without float
   conversion. No coordinate, fix, Android wall-clock UTC or inferred bound is
@@ -87,12 +126,23 @@ build, not a Play Store release. Use the same local debug signing key to update 
 installed build without clearing its data.
 
 Linux/Windows collector CI builds, runs Java unit tests and Android lint, checks
-the generated synthetic CSV against the fixture, then exercises the existing
-Python intake/UTC adapter/replay. Existing Python Linux/Windows CI is preserved.
+the synthetic CSV/JSON with Python intake/UTC adapter/replay, then runs the native
+client against local Python TLS/NTS servers. Shared synthetic vectors cover
+tampering, replay, framing and negotiation. Loopback cases cover valid exchange,
+wrong identity, untrusted certificate, missing ALPN, TLS 1.2, altered UDP and
+timeout. Existing Python Linux/Windows CI is preserved.
 This checks engineering behavior; device API availability and physical bounds
 still require acquisition/qualification on the actual phone.
+
+Dependencies: Conscrypt 2.7.0 (Apache 2.0), `siv-mode` 1.6.1 (MIT), Gson 2.13.2
+(Apache 2.0). Native TLS libraries increase APK size. The debug APK has been
+smoke-tested on Galaxy S21 FE / Android 16; the minimum API remains 29, without
+claiming device testing across every supported Android version.
 
 Sources: [GnssClock](https://developer.android.com/reference/android/location/GnssClock),
 [measurement callbacks](https://developer.android.com/reference/android/location/LocationManager#registerGnssMeasurementsCallback(android.location.GnssMeasurementsEvent.Callback,%20android.os.Handler)),
 [elapsed realtime](https://developer.android.com/reference/android/os/SystemClock#elapsedRealtimeNanos()),
-[AGP 8.13 compatibility](https://developer.android.com/build/releases/agp-8-13-0-release-notes).
+[AGP 8.13 compatibility](https://developer.android.com/build/releases/agp-8-13-0-release-notes),
+[RFC 8915](https://www.rfc-editor.org/rfc/rfc8915.html),
+[Conscrypt](https://github.com/google/conscrypt),
+[siv-mode 1.6.1](https://github.com/cryptomator/siv-mode/tree/1.6.1).
