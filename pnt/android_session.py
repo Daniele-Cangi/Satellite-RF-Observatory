@@ -157,6 +157,7 @@ def _nts_schedule(witness):
     acquisition = witness['acquisition']
     start = _integer(acquisition.get('started_monotonic_ns'), 'NTS acquisition start', 0)
     end = _integer(acquisition.get('ended_monotonic_ns'), 'NTS acquisition end', start)
+    previous_end, unattempted = start, False
     for index, attempt in enumerate(attempts):
         if (attempt.get('server') != endpoints[index % len(endpoints)]
                 or type(attempt.get('round_index')) is not int or attempt['round_index'] != index // len(endpoints)
@@ -165,13 +166,19 @@ def _nts_schedule(witness):
                 or attempt['status'] not in {'AUTHENTICATED_EXCHANGE', 'WITNESS_UNAVAILABLE', 'NOT_ATTEMPTED'}):
             raise ValueError('NTS retained slot differs from its declared endpoint/round/schedule')
         if attempt['status'] == 'NOT_ATTEMPTED':
+            unattempted = True
             if any(key in attempt for key in ('started_monotonic_ns', 'finished_monotonic_ns', 'exchange')):
                 raise ValueError('NTS unattempted slot contains active attempt/exchange data')
         else:
+            if unattempted:
+                raise ValueError('NTS attempted slots must form a prefix before unattempted slots')
             attempt_start = _integer(attempt.get('started_monotonic_ns'), 'NTS attempt start', start)
             attempt_end = _integer(attempt.get('finished_monotonic_ns'), 'NTS attempt end', attempt_start)
+            if attempt_start < max(previous_end, attempt['scheduled_round_start_monotonic_ns']):
+                raise ValueError('NTS attempt precedes its schedule or the preceding attempt end')
             if attempt_end > end:
                 raise ValueError('NTS attempt lies outside the declared acquisition window')
+            previous_end = attempt_end
         if attempt['status'] == 'AUTHENTICATED_EXCHANGE':
             exchange = attempt.get('exchange')
             if (not isinstance(exchange, dict) or exchange.get('capture_id') != witness['capture_id']

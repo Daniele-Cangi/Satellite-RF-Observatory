@@ -223,20 +223,20 @@ def test_legacy_fixed_endpoint_contract_detects_an_entire_deleted_unattempted_en
             slot.update(server=server, round_index=round_index,
                         scheduled_round_start_monotonic_ns=witness['acquisition']['started_monotonic_ns'] + round_index)
             slot['exchange']['server'] = server
-            if server == endpoints[1]:
+            if attempts:  # Native cancellation retains an unattempted suffix, never resumes.
                 slot.update(status='NOT_ATTEMPTED', reason='USER_STOPPED')
                 del slot['exchange']
                 del slot['started_monotonic_ns']
                 del slot['finished_monotonic_ns']
             attempts.append(slot)
     witness['attempts'] = attempts
-    witness['terminal'].update(authenticated_exchanges=2, unavailable_attempts=0)
+    witness['terminal'].update(authenticated_exchanges=1, unavailable_attempts=0)
     del witness['protocol']['endpoints']
     del witness['protocol']['planned_attempts']
     path, _, _ = archive(tmp_path, witness=witness)
     intact = inspect_android_session(path, analysis_options=ANALYSIS)
     assert intact['comparison'] is not None and 'legacy 0.3.0' in intact['format_notes'][0]
-    witness['attempts'] = [a for a in attempts if a['status'] == 'AUTHENTICATED_EXCHANGE']
+    witness['attempts'] = [a for a in attempts if a['server'] == endpoints[0]]
     path, _, _ = archive(tmp_path, witness=witness)
     incomplete = inspect_android_session(path, analysis_options=ANALYSIS)
     assert incomplete['comparison'] is None
@@ -279,6 +279,52 @@ def test_impossible_attempt_and_exchange_windows_remain_insufficient(tmp_path, c
     result = inspect_android_session(path, analysis_options=ANALYSIS)
     assert result['status'] == 'INSUFFICIENT_EVIDENCE' and result['comparison'] is None
     assert result['issues']
+    assert result['witness_report'] == witness
+
+
+@pytest.mark.parametrize('change', ['before_schedule', 'overlapping_attempt',
+                                   'duplicate_exchange', 'resumed_after_unattempted'])
+def test_schedule_and_sequential_attempt_order_cannot_duplicate_or_resume_evidence(tmp_path, change):
+    witness = native_witness()
+    good, failed = witness['attempts']
+    if change == 'before_schedule':
+        interval = failed['started_monotonic_ns'] - witness['acquisition']['started_monotonic_ns'] + 1
+        witness['protocol'].update(interval_ns=interval, interval_s=interval / 1e9)
+        failed['scheduled_round_start_monotonic_ns'] = witness['acquisition']['started_monotonic_ns'] + interval
+    elif change == 'overlapping_attempt':
+        failed['started_monotonic_ns'] = good['finished_monotonic_ns'] - 1
+    elif change == 'duplicate_exchange':
+        duplicate = copy.deepcopy(good)
+        duplicate.update(round_index=failed['round_index'],
+                         scheduled_round_start_monotonic_ns=failed['scheduled_round_start_monotonic_ns'])
+        witness['attempts'][1] = duplicate
+        witness['terminal'].update(authenticated_exchanges=2, unavailable_attempts=0)
+    else:
+        good.clear()
+        good.update(server='synthetic-server', round_index=0, status='NOT_ATTEMPTED', reason='USER_STOPPED',
+                    scheduled_round_start_monotonic_ns=witness['acquisition']['started_monotonic_ns'])
+        witness['terminal']['authenticated_exchanges'] = 0
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert result['status'] == 'INSUFFICIENT_EVIDENCE' and result['comparison'] is None
+    assert any('precedes' in issue or 'prefix' in issue for issue in result['issues'])
+    assert result['witness_report'] == witness
+
+
+def test_early_stop_retains_future_unattempted_slots_without_rejecting_valid_prefix(tmp_path):
+    witness = native_witness()
+    good, failed = witness['attempts']
+    witness['acquisition']['ended_monotonic_ns'] = good['finished_monotonic_ns']
+    witness['terminal'].update(counter_ns=good['finished_monotonic_ns'], unavailable_attempts=0)
+    interval = good['finished_monotonic_ns'] - witness['acquisition']['started_monotonic_ns'] + 1
+    witness['protocol'].update(interval_ns=interval, interval_s=interval / 1e9)
+    failed.clear()
+    failed.update(server='synthetic-server', round_index=1, status='NOT_ATTEMPTED', reason='USER_STOPPED',
+                  scheduled_round_start_monotonic_ns=witness['acquisition']['started_monotonic_ns'] + interval)
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert not result['issues'] and result['comparison'] is not None
+    assert result['witness_status_counts'] == {'AUTHENTICATED_EXCHANGE': 1, 'NOT_ATTEMPTED': 1}
     assert result['witness_report'] == witness
 
 
