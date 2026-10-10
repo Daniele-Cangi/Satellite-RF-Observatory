@@ -107,3 +107,11 @@ dichiarato, oltre al riferimento per benigno/challenge. Quando queste evidenze
 diventano disponibili, si riapre quella specifica qualifica. Nel frattempo
 si sviluppa e misura il rilevatore condizionale, senza altre raccolte equivalenti
 finalizzate soltanto a far concordare il clock.
+
+La [valutazione successiva su tre nuove sessioni](../research/exploratory/PNT_ANDROID_SESSION_EVALUATION.md)
+ha soddisfatto il criterio fissato prima della raccolta, con il solo profilo
+ipotetico di 25 ms: il contributo esterno si ripete sui 47/117 gruppi clock
+comuni, senza discordanze originali nei controlli valutabili. I 70 gruppi
+insufficienti e i 16 timeout NTS restano visibili. Questa osservazione risolve
+la domanda condizionale in quel blocco; i limiti fisici sopra restano aperti.
+La prossima correzione riguarda la copertura del calendario NTS sotto timeout.

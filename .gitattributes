@@ -121,3 +121,7 @@ pnt/tests/fixtures/gfz*/** -text whitespace=-blank-at-eol
 
 # Public WegenerNet sources, converted RINEX columns and provenance bytes.
 pnt/tests/fixtures/wegener20240911/** -text whitespace=-blank-at-eol,-blank-at-eof
+
+# Keep the predeclared Android evaluation and its closed public summary byte-exact.
+research/exploratory/android_time_session_evaluation_v1.json -text
+research/exploratory/results/pnt_android_session_evaluation_v1.json -text
