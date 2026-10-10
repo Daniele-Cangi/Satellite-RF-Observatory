@@ -133,7 +133,8 @@ Detailed outcomes, numerical results and next physical questions live in
 Synthetic exercises test software mechanisms; they are not measured RF
 detection performance. Closed results remain unchanged.
 
-The app now delivers autonomous GNSS/NTS acquisition. The next increments are
+The [Android workflow](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
+now delivers autonomous GNSS/NTS acquisition. The next increments are
 live acquisition-quality diagnostics and an export-to-analysis-to-phone report
 workflow using the existing engine. Timing qualification and a documented
 benign/challenge comparison remain necessary to establish security benefit.

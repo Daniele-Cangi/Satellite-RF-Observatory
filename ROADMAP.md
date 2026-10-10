@@ -1,5 +1,11 @@
 # Roadmap: satellite-first predictive observation
 
+This file preserves the historical forward-orbit roadmap and its outcomes.
+Current development follows the [PNT security plan and Android app roadmap](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto),
+updated on 10 October 2026. See [project status](docs/PROJECT_STATUS.md) for
+delivered work and open scientific limits; the historical gates below do not
+define the current product backlog.
+
 ## North Star
 
 The project has one scientific question:

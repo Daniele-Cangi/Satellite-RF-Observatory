@@ -7,6 +7,16 @@ confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
 valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
 Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
 
+La [roadmap operativa Android](PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
+porta ora il telefono al centro del flusso: A1 raccoglie GNSS/NTS nella stessa
+app senza Termux o controllo dal PC; A2 mostra stato e limiti; A3 esporta la
+sessione e rende consultabile il rapporto del motore condiviso. A1 e implementata
+nel raccoglitore 0.2; A2 e l'integrazione del rapporto A3 restano pianificate.
+La base GNSS della PR #196 conserva il suo formato; NTS ora gira nell'app,
+mentre l'analisi resta sul PC. Primo obiettivo: nessun intervento tecnico
+durante la raccolta. Qualifica temporale e beneficio
+benigno/challenge restano necessari per P2; sito e deployment vengono dopo.
+
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
 ritardi simmetrici e confronto in sola lettura con il clock del PC. La prova
