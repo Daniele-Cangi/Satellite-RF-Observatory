@@ -364,6 +364,87 @@ def test_early_stop_retains_future_unattempted_slots_without_rejecting_valid_pre
     assert result['witness_report'] == witness
 
 
+def independent_witness():
+    witness = native_witness()
+    witness['capture_context']['metadata'] = dict(Version='0.4.2')
+    witness['protocol'].update(endpoints=['slow', 'fast'], planned_attempts=6, rounds=3,
+        attempts_per_endpoint=3, interval_ns=200_000_000, interval_s=0.2,
+        execution='INDEPENDENT_ENDPOINTS_SPACED', missed_schedule='START_LATE_WITHOUT_REPLACEMENT')
+    start = witness['acquisition']['started_monotonic_ns']
+    good, failed = witness['attempts']
+    slots = []
+    for round_index, slow_offset in enumerate([500_000_000, 1_100_000_000, 1_300_000_000]):
+        for server, offset in [('slow', slow_offset), ('fast', round_index * 200_000_000)]:
+            slot = copy.deepcopy(good if round_index == 0 and server == 'slow' else failed)
+            slot.update(server=server, round_index=round_index,
+                scheduled_round_start_monotonic_ns=start + round_index * 200_000_000,
+                started_monotonic_ns=start + offset, finished_monotonic_ns=start + offset + 10_000_000)
+            if 'exchange' in slot:
+                slot['exchange']['server'] = server
+                slot['finished_monotonic_ns'] = slot['exchange']['receive_monotonic_ns']
+            slots.append(slot)
+    witness['attempts'] = slots
+    witness['terminal'].update(authenticated_exchanges=1, unavailable_attempts=5)
+    return witness
+
+
+def test_independent_endpoints_keep_retained_order_failures_and_existing_replay(tmp_path):
+    witness = independent_witness()
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert not result['issues'] and result['comparison'] is not None
+    assert result['witness_report'] == witness
+    assert result['witness_status_counts'] == {'AUTHENTICATED_EXCHANGE': 1, 'WITNESS_UNAVAILABLE': 5}
+    comparison = result['comparison']
+    assert compare_receiver_capture(comparison['witness_report'], comparison['receiver_capture'],
+        utc_error_ns=ANALYSIS['utc_error_ns'], utc_error_source=ANALYSIS['utc_error_source']) == comparison
+
+
+def test_independent_stop_can_leave_different_endpoint_prefix_lengths(tmp_path):
+    witness = independent_witness()
+    for slot in witness['attempts'][1::2]:
+        for key in ['started_monotonic_ns', 'finished_monotonic_ns', 'exchange']:
+            slot.pop(key, None)
+        slot.update(status='NOT_ATTEMPTED', reason='USER_STOPPED')
+    witness['terminal']['unavailable_attempts'] = 2
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert not result['issues'] and result['comparison'] is not None
+    assert result['witness_report'] == witness
+    assert result['witness_status_counts']['NOT_ATTEMPTED'] == 3
+
+
+@pytest.mark.parametrize('change', ['same_endpoint_overlap', 'compressed_catch_up', 'resume_endpoint',
+    'missing_execution', 'unknown_execution', 'missing_endpoints', 'wrong_late_rule', 'dropped_slot'])
+def test_independent_execution_rejects_weakened_or_impossible_schedule(tmp_path, change):
+    witness = independent_witness()
+    slots = witness['attempts']
+    if change == 'same_endpoint_overlap':
+        slots[2]['started_monotonic_ns'] = slots[0]['finished_monotonic_ns'] - 1
+    elif change == 'compressed_catch_up':
+        slots[4]['started_monotonic_ns'] = slots[2]['started_monotonic_ns'] + 199_999_999
+    elif change == 'resume_endpoint':
+        for key in ['started_monotonic_ns', 'finished_monotonic_ns', 'exchange']:
+            slots[1].pop(key, None)
+        slots[1]['status'] = 'NOT_ATTEMPTED'
+        witness['terminal']['unavailable_attempts'] -= 1
+    elif change == 'missing_execution':
+        del witness['protocol']['execution']
+    elif change == 'unknown_execution':
+        witness['protocol']['execution'] = 'FALLBACK_TO_PARALLEL'
+    elif change == 'missing_endpoints':
+        del witness['protocol']['endpoints']
+    elif change == 'wrong_late_rule':
+        witness['protocol']['missed_schedule'] = 'REPLACE_FAILED_SLOT'
+    else:
+        slots.pop()
+        witness['terminal']['unavailable_attempts'] -= 1
+    path, _, _ = archive(tmp_path, witness=witness)
+    result = inspect_android_session(path, analysis_options=ANALYSIS)
+    assert result['issues'] and result['comparison'] is None
+    assert result['witness_report'] == witness
+
+
 def test_cli_retains_insufficient_report_and_does_not_overwrite(tmp_path):
     path, _, _ = archive(tmp_path)
     report_path = tmp_path / 'pc-report.json'

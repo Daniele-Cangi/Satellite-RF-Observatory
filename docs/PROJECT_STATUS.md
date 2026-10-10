@@ -57,8 +57,13 @@ La [prima valutazione su tre sessioni nuove](../research/exploratory/PNT_ANDROID
 mentre il locale resta invariato; nessuna discordanza originale nei controlli
 valutabili. Restano visibili 70 gruppi insufficienti e 16/60 slot NTS falliti.
 Questo risolve la domanda condizionale in quel blocco, non qualifica i 25 ms
-ipotetici o P2/P3. Il prossimo incremento migliora la copertura della raccolta
-NTS sotto timeout, mantenendo calendario, cancellazione e fallimenti verificabili.
+ipotetici o P2/P3. Il raccoglitore 0.4.2 separa ora i calendari dei due endpoint
+NTS: un timeout non blocca l'altro server e i tentativi dello stesso endpoint
+restano distanziati, senza recuperi compressi. Tutti gli slot restano nel file,
+anche dopo arresto o errore; checkpoint e progressi sono serializzati. L'intake
+controlla il nuovo protocollo per endpoint e conserva i controlli seriali sui
+file storici. I test sono sintetici; il guadagno di copertura sul telefono
+deve ancora essere misurato con una nuova prova, senza cambiare questa valutazione.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere

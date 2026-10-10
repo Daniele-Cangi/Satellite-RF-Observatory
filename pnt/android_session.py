@@ -132,11 +132,20 @@ def _nts_schedule(witness):
         raise ValueError('NTS attempts_per_endpoint differs from rounds')
     if protocol.get('schedule') != 'ROUND_START_OFFSETS' or protocol.get('automatic_retries') is not False:
         raise ValueError('unsupported NTS schedule/retry declaration')
+    execution = protocol.get('execution')
+    if execution not in (None, 'INDEPENDENT_ENDPOINTS_SPACED'):
+        raise ValueError('unsupported NTS execution declaration')
+    independent = execution == 'INDEPENDENT_ENDPOINTS_SPACED'
+    metadata = witness['capture_context'].get('metadata', {})
+    version = metadata.get('Version') if isinstance(metadata, dict) else None
+    if version == '0.4.2' and not independent:
+        raise ValueError('collector 0.4.2 requires its NTS execution declaration')
+    if independent and (protocol.get('endpoints') is None
+                        or protocol.get('missed_schedule') != 'START_LATE_WITHOUT_REPLACEMENT'):
+        raise ValueError('independent NTS execution requires explicit endpoints and late-slot semantics')
     endpoints = protocol.get('endpoints')
     source = 'protocol.endpoints'
     if endpoints is None:
-        metadata = witness['capture_context'].get('metadata', {})
-        version = metadata.get('Version') if isinstance(metadata, dict) else None
         if version not in LEGACY_FIXED_PTB_VERSIONS:
             raise ValueError('NTS endpoint set not declared; unknown legacy collector version')
         endpoints = ['ptbtime1.ptb.de', 'ptbtime2.ptb.de']
@@ -162,7 +171,9 @@ def _nts_schedule(witness):
     acquisition = witness['acquisition']
     start = _integer(acquisition.get('started_monotonic_ns'), 'NTS acquisition start', 0)
     end = _integer(acquisition.get('ended_monotonic_ns'), 'NTS acquisition end', start)
-    previous_end, unattempted = start, False
+    # Old native files remain globally serial. New files may overlap different
+    # endpoints, but each endpoint keeps its own ordered prefix and spacing.
+    previous_ends, previous_starts, unattempted = {}, {}, set()
     for index, attempt in enumerate(attempts):
         if (attempt.get('server') != endpoints[index % len(endpoints)]
                 or type(attempt.get('round_index')) is not int or attempt['round_index'] != index // len(endpoints)
@@ -171,19 +182,23 @@ def _nts_schedule(witness):
                 or attempt['status'] not in {'AUTHENTICATED_EXCHANGE', 'WITNESS_UNAVAILABLE', 'NOT_ATTEMPTED'}):
             raise ValueError('NTS retained slot differs from its declared endpoint/round/schedule')
         if attempt['status'] == 'NOT_ATTEMPTED':
-            unattempted = True
+            unattempted.add(attempt['server'] if independent else None)
             if any(key in attempt for key in ('started_monotonic_ns', 'finished_monotonic_ns', 'exchange')):
                 raise ValueError('NTS unattempted slot contains active attempt/exchange data')
         else:
-            if unattempted:
+            key = attempt['server'] if independent else None
+            if key in unattempted:
                 raise ValueError('NTS attempted slots must form a prefix before unattempted slots')
             attempt_start = _integer(attempt.get('started_monotonic_ns'), 'NTS attempt start', start)
             attempt_end = _integer(attempt.get('finished_monotonic_ns'), 'NTS attempt end', attempt_start)
-            if attempt_start < max(previous_end, attempt['scheduled_round_start_monotonic_ns']):
+            earliest = max(previous_ends.get(key, start), attempt['scheduled_round_start_monotonic_ns'])
+            if independent and key in previous_starts:
+                earliest = max(earliest, previous_starts[key] + interval)
+            if attempt_start < earliest:
                 raise ValueError('NTS attempt precedes its schedule or the preceding attempt end')
             if attempt_end > end:
                 raise ValueError('NTS attempt lies outside the declared acquisition window')
-            previous_end = attempt_end
+            previous_ends[key], previous_starts[key] = attempt_end, attempt_start
         if attempt['status'] == 'AUTHENTICATED_EXCHANGE':
             exchange = attempt.get('exchange')
             if (not isinstance(exchange, dict) or exchange.get('capture_id') != witness['capture_id']

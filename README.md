@@ -156,7 +156,9 @@ detection performance. Closed results remain unchanged.
 The [Android workflow](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
 now delivers autonomous GNSS/NTS acquisition, live diagnostics and the
 export-to-analysis-to-phone report workflow using the existing engine.
-The next engineering increment addresses NTS coverage under endpoint timeouts.
+Collector 0.4.2 schedules the NTS endpoints separately, retaining every slot and
+failure and preventing compressed catch-up after timeouts. Automated checks
+verify acquisition behavior; improved physical coverage still needs a new trial.
 Independent timing qualification and verified benign/RF challenge evidence
 remain necessary to establish operational security benefit.
 Website and deployment work follow that physical demonstration.
