@@ -165,8 +165,9 @@ def _android_clock_diagnostics(baseline, local):
                 cause_attributed=False, records_are_not_independent_samples=True, records=records)
 
 
-def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_ns=None,
-                            onset_monotonic_ns=None, android_clock_diagnostics=False):
+def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resolution_ns=None,
+                            onset_monotonic_ns=None, android_clock_diagnostics=False,
+                            drift_rates_ppm=None):
     """Replay retained inputs, then shift only decoded UTC against fixed intervals.
 
     This measures conditional interval separation, not RF spoofing performance.
@@ -178,6 +179,9 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
     this replay, with no independent absolute-time claim for the local channel.
     Optional Android component diagnostics describe original admitted clocks;
     they never change comparison support, budgets or software cases.
+    Signed integer drift rates change decoded UTC only, starting at an explicit
+    onset or the first admitted event midpoint. Integer shifts truncate toward
+    zero; no float epoch arithmetic, fit, budget change or live latency claim.
     """
     if isinstance(comparison, dict) and comparison.get('schema') == 'pnt-android-session-report-v1':
         issues = comparison.get('issues')
@@ -189,13 +193,25 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
             or not isinstance(comparison.get('assumptions'), dict)):
         raise ValueError('an existing pnt-gnss-time-comparison-v1 report is required')
     offsets = list(offsets_ns)
-    if not offsets:
+    if drift_rates_ppm is not None and offsets:
+        raise ValueError('choose constant/step offsets or drift rates, not both')
+    if drift_rates_ppm is None and not offsets:
         raise ValueError('at least one explicit UTC claim offset is required')
     for offset in offsets:
         _integer(offset, 'UTC claim offset')
     if len(set(offsets)) != len(offsets):
         raise ValueError('UTC claim offsets must be distinct')
     offsets = [0] + [offset for offset in offsets if offset != 0]
+    rates = None
+    if drift_rates_ppm is not None:
+        rates = list(drift_rates_ppm)
+        if not rates:
+            raise ValueError('at least one explicit UTC claim drift rate is required')
+        for rate in rates:
+            _integer(rate, 'UTC claim drift rate ppm')
+        if len(set(rates)) != len(rates):
+            raise ValueError('UTC claim drift rates must be distinct')
+        rates = [0] + [rate for rate in rates if rate != 0]
     if local_counter_resolution_ns is not None:
         _integer(local_counter_resolution_ns, 'local_counter_resolution_ns', 1)
     if onset_monotonic_ns is not None:
@@ -216,6 +232,15 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
         comparison.get('witness_report'), comparison.get('receiver_capture'),
         utc_error_ns=assumptions.get('utc_error_ns'),
         utc_error_source=assumptions.get('utc_error_source'), bracket_span_ns=span)
+    drift_origin = onset_monotonic_ns
+    if rates is not None:
+        domains = {(r['claim']['capture_id'], r['claim'].get('counter_clock'))
+                   for r in baseline['records'] if 'claim' in r}
+        if len(domains) > 1:
+            raise ValueError('drift requires one reported capture/counter domain; no joined origin')
+        if drift_origin is None:
+            drift_origin = min(((r['claim']['start_monotonic_ns'] + r['claim']['end_monotonic_ns']) // 2
+                                for r in baseline['records'] if 'claim' in r), default=None)
     windows = []
     for row in baseline['records']:
         for kind in KINDS:
@@ -225,7 +250,8 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
                     windows.append(dict(source_index=row['source_index'], comparison_kind=kind,
                                         comparison_index=index, compatible_shift_ns=[-upper, -lower]))
     cases, baseline_paired = [], None
-    for offset in offsets:
+    specifications = [(offset, 0) for offset in offsets] if rates is None else [(0, rate) for rate in rates]
+    for offset, rate in specifications:
         counts = {kind: Counter() for kind in KINDS}
         endpoints = {}
         patterns = {name: [] for name in ('INSUFFICIENT_EVIDENCE', 'ALL_NOT_DISTINGUISHABLE',
@@ -235,7 +261,11 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
             claim, applied = None, None
             if 'claim' in row:
                 midpoint = (row['claim']['start_monotonic_ns'] + row['claim']['end_monotonic_ns']) // 2
-                applied = offset if onset_monotonic_ns is None or midpoint >= onset_monotonic_ns else 0
+                if rates is None:
+                    applied = offset if onset_monotonic_ns is None or midpoint >= onset_monotonic_ns else 0
+                else:
+                    elapsed = max(0, midpoint - drift_origin)
+                    applied = (1 if rate >= 0 else -1) * (abs(rate) * elapsed // 1000000)
                 claim = dict(row['claim'], unix_ns=row['claim']['unix_ns'] + applied)
             claims.append(claim)
             applied_offsets.append(applied)
@@ -263,7 +293,9 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
                                     for (kind, server), count in endpoints.items()],
             record_pattern_counts={name: len(indices) for name, indices in patterns.items()},
             record_indices_by_pattern=patterns))
-        if onset_monotonic_ns is not None or local_counter_resolution_ns is not None:
+        if rates is not None:
+            cases[-1]['utc_claim_drift_ppm'] = rate
+        if rates is not None or onset_monotonic_ns is not None or local_counter_resolution_ns is not None:
             cases[-1]['applied_offset_ns_by_record'] = applied_offsets
         if local_counter_resolution_ns is not None:
             local = _local_elapsed_checks(baseline['records'], claims,
@@ -304,7 +336,13 @@ def assess_time_sensitivity(comparison, offsets_ns, *, local_counter_resolution_
                                        paired_patterns_are_descriptive=True)
     if android_clock_diagnostics:
         report['android_clock_diagnostics'] = _android_clock_diagnostics(baseline, cases[0]['local_comparisons'])
-    if onset_monotonic_ns is not None:
+    if rates is not None:
+        report['perturbation_profile'] = dict(mode='LINEAR_DRIFT_BY_REPORTED_EVENT_MIDPOINT',
+            onset_monotonic_ns=drift_origin,
+            onset_source='EXPLICIT_COUNTER' if onset_monotonic_ns is not None else 'FIRST_ADMITTED_EVENT_MIDPOINT',
+            rounding='SIGNED_INTEGER_TRUNCATION_TOWARD_ZERO',
+            clock_domains_joined=False, physical_rf_onset_known=False)
+    elif onset_monotonic_ns is not None:
         report['perturbation_profile'] = dict(mode='STEP_BY_REPORTED_EVENT_MIDPOINT',
                                               onset_monotonic_ns=onset_monotonic_ns)
     elif local_counter_resolution_ns is not None:
@@ -409,6 +447,10 @@ def _summarize_session(sensitivity):
                                   clock_groups=_outcome_counts(group_values),
                                   common_clock_groups=_outcome_counts(group_values[i] for i in common_groups))
         cases.append(dict(utc_claim_offset_ns=case['utc_claim_offset_ns'], methods=counts))
+        if 'utc_claim_drift_ppm' in case:
+            cases[-1]['utc_claim_drift_ppm'] = case['utc_claim_drift_ppm']
+            cases[-1]['first_new_inconsistency'] = _first_drift_epochs(
+                sensitivity, case, original, methods, group_indices, common_groups)
     return dict(receiver_records=len(records), reported_clock_groups=len(group_indices),
                 clock_group_record_indices=group_indices, unidentified_record_indices=unidentified,
                 common_record_indices=common, common_clock_group_indices=common_groups,
@@ -418,22 +460,70 @@ def _summarize_session(sensitivity):
                 offset_cases=cases)
 
 
-def assess_time_sensitivity_sessions(comparisons, offsets_ns, *, local_counter_resolution_ns):
+def _first_drift_epochs(sensitivity, case, original, methods, groups, common_groups):
+    """First wholly ND -> inconsistent group, retaining NTS look-ahead metadata.
+
+    This is offline event-time separation, not the time an online alert fired.
+    Missing/mixed groups and original alarms are never promoted to detections.
+    """
+    baseline = sensitivity['baseline']
+    origin = sensitivity['perturbation_profile']['onset_monotonic_ns']
+    result = {scope: {method: None for method in _METHODS} for scope in ('own_support', 'common_support')}
+    if origin is None:
+        return result
+    for scope, indices in (('own_support', range(len(groups))), ('common_support', common_groups)):
+        for method in _METHODS:
+            candidates = []
+            for group_index in indices:
+                members = groups[group_index]
+                if not all(original[method][i] == 'NOT_DISTINGUISHABLE'
+                           and methods[method][i] == 'INCONSISTENT' for i in members):
+                    continue
+                epochs = {(baseline['records'][i]['claim']['start_monotonic_ns']
+                           + baseline['records'][i]['claim']['end_monotonic_ns']) // 2 for i in members}
+                if len(epochs) != 1:
+                    continue  # No single reported event time for this metadata group.
+                epoch = next(iter(epochs))
+                receipts = []
+                if method != 'local':
+                    for i in members:
+                        for kind in KINDS:
+                            for check in baseline['records'][i].get(kind, []):
+                                if check['status'] == 'INSUFFICIENT_EVIDENCE':
+                                    continue
+                                anchors = ([check['attempt_index']] if kind == 'comparisons' else
+                                           [check['before_attempt_index'], check['after_attempt_index']])
+                                receipts.extend(baseline['witness_report']['attempts'][a]['exchange']['receive_monotonic_ns']
+                                                for a in anchors)
+                candidates.append((epoch, group_index, dict(clock_group_index=group_index,
+                    reported_epoch_elapsed_ns=epoch - origin,
+                    applied_offset_ns=case['applied_offset_ns_by_record'][members[0]],
+                    latest_used_nts_receive_elapsed_ns=max(receipts) - origin if receipts else None)))
+            if candidates:
+                result[scope][method] = min(candidates, key=lambda candidate: candidate[:2])[2]
+    return result
+
+
+def assess_time_sensitivity_sessions(comparisons, offsets_ns=(), *, local_counter_resolution_ns,
+                                     drift_rates_ppm=None):
     """Descriptive multi-session aggregation of the existing paired replay.
 
-    Whole-capture offsets only. Do not join counter domains, fit a budget or
+    Whole-capture offsets or drift from each session's first admitted epoch.
+    Do not join counter domains, fit a budget or
     interpret original-log alarms as verified false alarms. Full per-session
     replays retain every failure; duplicate capture IDs/known Raw hashes cannot
     count as additional sessions. Metadata groups and sessions are not IID trials.
     """
     _integer(local_counter_resolution_ns, 'local_counter_resolution_ns', 1)
     comparisons, offsets = list(comparisons), list(offsets_ns)
+    if drift_rates_ppm is not None:
+        drift_rates_ppm = list(drift_rates_ppm)
     if not comparisons:
         raise ValueError('at least one comparison session is required')
     sessions, ids, raw_hashes, profile = [], set(), set(), None
     for comparison in comparisons:
         sensitivity = assess_time_sensitivity(comparison, offsets,
-                                              local_counter_resolution_ns=local_counter_resolution_ns)
+            local_counter_resolution_ns=local_counter_resolution_ns, drift_rates_ppm=drift_rates_ppm)
         baseline = sensitivity['baseline']
         capture = baseline['receiver_capture']
         capture_id = capture.get('capture_id')
@@ -467,6 +557,8 @@ def assess_time_sensitivity_sessions(comparisons, offsets_ns, *, local_counter_r
         totals['offset_cases'].append(dict(utc_claim_offset_ns=case['utc_claim_offset_ns'],
             methods={m: {unit: {} for unit in ('records', 'common_records', 'clock_groups', 'common_clock_groups')}
                      for m in _METHODS}))
+        if 'utc_claim_drift_ppm' in case:
+            totals['offset_cases'][-1]['utc_claim_drift_ppm'] = case['utc_claim_drift_ppm']
     for session in sessions:
         summary = session['summary']
         for name in ('receiver_records', 'reported_clock_groups'):
@@ -481,7 +573,7 @@ def assess_time_sensitivity_sessions(comparisons, offsets_ns, *, local_counter_r
             for method in _METHODS:
                 for unit, counts in case['methods'][method].items():
                     total['methods'][method][unit] = dict(Counter(total['methods'][method][unit]) + Counter(counts))
-    return dict(schema='pnt-gnss-time-session-summary-v1', regime='EXPLORATORY_SOFTWARE_PERTURBATION',
+    report = dict(schema='pnt-gnss-time-session-summary-v1', regime='EXPLORATORY_SOFTWARE_PERTURBATION',
                 status='CONDITIONAL_TIME_DIAGNOSTIC' if totals['common_records'] else 'INSUFFICIENT_EVIDENCE',
                 timing_profile=dict(profile, local_counter_resolution_ns=local_counter_resolution_ns),
                 assumptions=dict(calibrated=False, verified_benign_originals=False, rf_attack_simulation=False,
@@ -494,3 +586,7 @@ def assess_time_sensitivity_sessions(comparisons, offsets_ns, *, local_counter_r
                            profile='MATCH_OBSERVED_SETTINGS_WITHOUT_FILLING_MISSING_SESSION_VALUES',
                            totals='DESCRIPTIVE_SUMS_WITHOUT_PERFORMANCE_OR_POPULATION_ESTIMATE'),
                 sessions=sessions, totals=totals)
+    if drift_rates_ppm is not None:
+        report['rules']['perturbation'] = 'DECODED_UTC_LINEAR_DRIFT_FROM_EACH_SESSION_FIRST_ADMITTED_MIDPOINT'
+        report['rules']['detection_timing'] = 'FIRST_NEW_INCONSISTENT_REPORTED_EPOCH; NTS_RECEIPTS_RETAINED; NOT_LIVE_ALERT_LATENCY'
+    return report
