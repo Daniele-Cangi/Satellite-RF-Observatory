@@ -127,7 +127,7 @@ final class NtsClient implements NtsCapture.Probe {
             check();
             boolean negotiated = parameters.host != null;
             long udpDeadline = counter.getAsLong() + timeoutMs * 1000000L;
-            InetAddress udpAddress = negotiated ? InetAddress.getAllByName(parameters.host)[0] : tcpPeer;
+            InetAddress udpAddress = negotiated ? InetAddress.getAllByName(resolutionHost(parameters.host))[0] : tcpPeer;
             remaining(udpDeadline);
             Request request = request(parameters.cookie, c2s);
             long sent, received;
@@ -173,6 +173,18 @@ final class NtsClient implements NtsCapture.Probe {
         final int port;
         final byte[] cookie;
         KeParameters(String host, int port, byte[] cookie) { this.host = host; this.port = port; this.cookie = cookie; }
+    }
+    // RFC 8915 section 4.1.7: DNS names are absolute; IP literals stay literals.
+    static String resolutionHost(String host) throws IOException {
+        if (host.indexOf('%') >= 0) throw new IOException("NTS negotiated IPv6 zone identifiers are forbidden");
+        if (host.indexOf(':') >= 0) return host;
+        if (host.matches("[0-9]{1,3}(\\.[0-9]{1,3}){3}")) {
+            for (String octet : host.split("\\.")) {
+                if (Integer.parseInt(octet) > 255) throw new IOException("Invalid negotiated IPv4 address");
+            }
+            return host;
+        }
+        return host.endsWith(".") ? host : host + ".";
     }
     static KeParameters parseKe(byte[] bytes) throws IOException {
         if (bytes.length > 65536) throw new IOException("NTS-KE exceeds 64 KiB");

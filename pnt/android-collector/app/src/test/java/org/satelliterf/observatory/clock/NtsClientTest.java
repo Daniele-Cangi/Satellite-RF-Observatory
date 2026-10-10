@@ -84,6 +84,19 @@ public final class NtsClientTest {
         assertEquals(4294967296000000000L, NtsClient.timestamp(stamp, 0, 1) - NtsClient.timestamp(stamp, 0, 0));
         assertThrows(IOException.class, () -> NtsClient.timestamp(new byte[8], 0, 0));
     }
+    @Test public void negotiatedNamesAreAbsoluteWithoutChangingIpLiterals() throws Exception {
+        NtsClient.KeParameters negotiated = NtsClient.parseKe(NtsClient.concat(
+            NtsClient.record(1, new byte[2], true), NtsClient.record(4, new byte[]{0, 15}, false),
+            NtsClient.record(5, new byte[16], false),
+            NtsClient.record(6, "time.example".getBytes(StandardCharsets.US_ASCII), false),
+            NtsClient.record(0, new byte[0], true)));
+        assertEquals("time.example.", NtsClient.resolutionHost(negotiated.host));
+        assertEquals("time.example.", NtsClient.resolutionHost("time.example."));
+        assertEquals("127.0.0.1", NtsClient.resolutionHost("127.0.0.1"));
+        assertEquals("2001:db8::1", NtsClient.resolutionHost("2001:db8::1"));
+        assertThrows(IOException.class, () -> NtsClient.resolutionHost("fe80::1%wlan0"));
+        assertThrows(IOException.class, () -> NtsClient.resolutionHost("127.0.0.999"));
+    }
     @Test public void realTlsLoopbackEnforcesIdentityAlpnAndTlsFloor() throws Exception {
         String config = System.getenv("PNT_NTS_LOOPBACK_CONFIG");
         org.junit.Assume.assumeNotNull(config);
@@ -108,7 +121,7 @@ public final class NtsClientTest {
                 if (test.get("accepted").getAsBoolean()) {
                     Map<String, Object> result = client.probe("127.0.0.1", port, 2000, 0);
                     assertEquals(NtsClient.AUTHENTICATION, result.get("authentication"));
-                    assertEquals(false, result.get("ntp_host_negotiated"));
+                    assertEquals(test.has("negotiated_host"), result.get("ntp_host_negotiated"));
                     assertEquals(1700000000000000000L, result.get("server_receive_unix_ns"));
                     assertNull(result.get("monotonic_resolution_ns"));
                 } else assertThrows(test.get("name").getAsString(), IOException.class,

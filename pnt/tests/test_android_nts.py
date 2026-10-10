@@ -77,6 +77,7 @@ def test_java_tls_identity_exporter_keys_udp_authentication_and_timeout(tmp_path
                 assert request == record(1, b'\0\0', True) + record(4, b'\0\x0f') + record(0, critical=True)
                 response = (record(1, b'\0\0', True) + record(4, b'\0\x0f')
                             + record(5, bytes(16)) + record(7, struct.pack('!H', udp.getsockname()[1]))
+                            + (record(6, b'127.0.0.1') if mode == 'valid_negotiated' else b'')
                             + record(0, critical=True))
                 # Fragmented application reads exercise native readFully().
                 for chunk in (response[:3], response[3:]):
@@ -113,13 +114,13 @@ def test_java_tls_identity_exporter_keys_udp_authentication_and_timeout(tmp_path
                 reply = reply[:-1] + bytes([reply[-1] ^ 1])
             udp.sendto(reply, peer)
         except (SSL.Error, OSError):
-            if mode in ('valid', 'tampered_udp', 'silent_udp'):
+            if mode in ('valid', 'valid_negotiated', 'tampered_udp', 'silent_udp'):
                 errors.append(mode + ': unexpected server I/O failure')
         except Exception as error:
             errors.append(f'{mode}: {type(error).__name__}: {error}')
 
     try:
-        for mode in ('valid', 'untrusted', 'wrong_identity', 'missing_alpn', 'legacy_tls',
+        for mode in ('valid', 'valid_negotiated', 'untrusted', 'wrong_identity', 'missing_alpn', 'legacy_tls',
                      'tampered_udp', 'silent_udp'):
             context = SSL.Context(SSL.TLS_SERVER_METHOD)
             context.set_min_proto_version(SSL.TLS1_3_VERSION)
@@ -140,7 +141,9 @@ def test_java_tls_identity_exporter_keys_udp_authentication_and_timeout(tmp_path
             udp.settimeout(5)
             servers.extend((listener, udp))
             cases.append(dict(name=mode, port=listener.getsockname()[1],
-                              trusted=mode != 'untrusted', accepted=mode == 'valid'))
+                              trusted=mode != 'untrusted', accepted=mode in ('valid', 'valid_negotiated')))
+            if mode == 'valid_negotiated':
+                cases[-1]['negotiated_host'] = '127.0.0.1'
             thread = threading.Thread(target=serve, args=(mode, listener, udp, context), daemon=True)
             threads.append(thread)
             thread.start()
@@ -157,7 +160,7 @@ def test_java_tls_identity_exporter_keys_udp_authentication_and_timeout(tmp_path
             thread.join(timeout=6)
         assert not any(thread.is_alive() for thread in threads)
         assert not errors, errors
-        assert received == ['valid', 'tampered_udp', 'silent_udp']
+        assert received == ['valid', 'valid_negotiated', 'tampered_udp', 'silent_udp']
     finally:
         for server in servers:
             server.close()
