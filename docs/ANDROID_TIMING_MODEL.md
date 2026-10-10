@@ -121,7 +121,9 @@ la valutazione conclusa non cambia. La
 [prova reale dell'11 ottobre](../research/exploratory/PNT_ANDROID_NTS_COVERAGE.md)
 osserva l'isolamento dei timeout e 18/39 gruppi comuni con lo stesso profilo,
 conservando 21 insufficienti e sette timeout su venti slot. Non dimostra un
-guadagno stabile o qualifica i budget. Il prossimo quesito è la deriva graduale
-dell'UTC decodificato e il ritardo di rilevazione, sviluppati sui dati già esposti
-con il confronto e replay esistenti. Non servono altre ripetizioni equivalenti
-degli scarti costanti per cercare un esito migliore.
+guadagno stabile o qualifica i budget. La
+[deriva software ±5 ms/s](../research/exploratory/PNT_ANDROID_TIME_DRIFT.md)
+sui quattro rapporti già esposti è distinguibile anche dal locale. Le prime
+epoche esterne possono precederlo, ma le ricevute NTS successive non dimostrano
+una minore latenza live. Il prossimo quesito è la disponibilità causale delle
+prove, riusando il replay e mantenendo gli stessi budget non qualificati.

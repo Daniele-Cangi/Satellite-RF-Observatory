@@ -202,6 +202,9 @@ detections. A missing detection is `null`, including insufficient cases.
 that offline verdict (absent for the local method). Two-sided brackets can use
 later receipts: these numbers are **not live alert latency** or physical RF
 onset. Full replay and all original/perturbed counts remain in the same report.
+The [four-session development study](../research/exploratory/PNT_ANDROID_TIME_DRIFT.md)
+retains mixed results, missing coverage and later NTS receipts; it establishes
+no faster live alert or qualified RF protection.
 
 ## Authenticated Internet time witness
 
