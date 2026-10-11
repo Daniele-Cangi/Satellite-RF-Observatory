@@ -184,6 +184,9 @@ def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resoluti
     zero; no float epoch arithmetic, fit, budget change or live latency claim.
     """
     if isinstance(comparison, dict) and comparison.get('schema') == 'pnt-android-session-report-v1':
+        if 'snapshot' in comparison and (not isinstance(comparison['snapshot'], dict)
+                or comparison['snapshot'].get('session_complete') is not True):
+            raise ValueError('ongoing file snapshot is not a closed Android session report; use its explicit prefix comparison')
         issues = comparison.get('issues')
         if not isinstance(issues, list) or issues or not isinstance(comparison.get('comparison'), dict):
             raise ValueError('Android session report has no admitted comparison; retain its intake/budget issues')

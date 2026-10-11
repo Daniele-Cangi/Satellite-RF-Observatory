@@ -3,13 +3,17 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 
-def write_report(report, output):
+def write_report(report, output, *, durable=False):
     serialized = json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + '\n'
     with output.open('x', encoding='utf-8', newline='\n') as destination:
         destination.write(serialized)
+        if durable:
+            destination.flush()
+            os.fsync(destination.fileno())
 
 
 def main():
@@ -86,6 +90,14 @@ def main():
     session.add_argument('session_zip', type=Path)
     session.add_argument('--analysis-options', type=Path, help='explicit uncalibrated budgets and GPS-UTC sources; no defaults')
     session.add_argument('--output', required=True, type=Path)
+    monitor = commands.add_parser('android-monitor', help='conditional PC monitor of growing native GNSS/NTS files')
+    monitor.add_argument('local_log', type=Path)
+    monitor.add_argument('witness_report', type=Path)
+    monitor.add_argument('--analysis-options', type=Path, help='explicit uncalibrated assumptions; no defaults')
+    monitor.add_argument('--local-counter-resolution-ns', required=True, type=int)
+    monitor.add_argument('--duration-s', type=float, default=60)
+    monitor.add_argument('--poll-interval-s', type=float, default=.5)
+    monitor.add_argument('--output-directory', required=True, type=Path, help='new private directory for snapshots and revisions')
     android_analysis = commands.add_parser('android-analyze', help='GPS L1 Android/remote fixed-site geometry diagnostics')
     analysis = commands.add_parser('analyze', help='report code geometry, relative clock and data gaps')
     comparison = commands.add_parser('compare', help='compare original observations and software code ramps')
@@ -142,8 +154,34 @@ def main():
     transfer.add_argument('--minimum-training', type=int, default=5)
     transfer.add_argument('--minimum-fit-epochs', type=int, default=20)
     args = parser.parse_args()
-    if args.output.exists():
+    if args.command != 'android-monitor' and args.output.exists():
         parser.error('output already exists; choose a new report path')
+    if args.command == 'android-monitor':
+        from .android_session import load_json
+        from .session_monitor import monitor_android_files
+
+        try:
+            options = load_json(args.analysis_options.read_bytes()) if args.analysis_options else None
+            print('Conditional uncalibrated PC file monitor; no RF authentication or phone alert latency.', flush=True)
+
+            def show_update(receipt):
+                print(f"Update {receipt['update_index']}: {receipt['status']}; "
+                    f"result {args.output_directory / receipt['result']}; "
+                    f"outcomes {receipt['record_outcome_counts']}; revised records {receipt['revised_records']}; "
+                    f"PC processing {receipt['total_pc_processing_ns']/1e6:.3f} ms", flush=True)
+                for issue in receipt['issue_messages']:
+                    print(issue, flush=True)
+
+            summary = monitor_android_files(args.local_log, args.witness_report, args.output_directory,
+                analysis_options=options, local_counter_resolution_ns=args.local_counter_resolution_ns,
+                duration_s=args.duration_s, poll_interval_s=args.poll_interval_s,
+                on_update=show_update)
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT Android monitor error: {error}\n')
+        print(f"{summary['stop_reason']}; {args.output_directory}")
+        if not summary['session_complete'] or summary['status'] == 'INSUFFICIENT_EVIDENCE':
+            parser.exit(2, 'Partial/insufficient session retained; no complete timing result\n')
+        return
     if args.command == 'android-session':
         from .android_session import MAX_REPORT_BYTES, inspect_android_session, load_json
 

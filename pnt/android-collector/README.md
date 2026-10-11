@@ -37,6 +37,11 @@ retains the earlier GNSS Logger/Termux conditional workflow separately.
 
 ## ZIP to PC report to phone
 
+The separate [conditional PC monitor](../README.md#conditional-pc-session-monitor)
+can analyze growing native files once they are available on the PC and retain
+revisions. It does not add live transfer or result delivery to this app; the
+ZIP/report workflow below remains the supported phone interface.
+
 On the PC, from the repository root:
 
 ```console

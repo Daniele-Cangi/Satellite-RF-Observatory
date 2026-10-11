@@ -35,6 +35,58 @@ Its CSV uses the same intake/UTC adapter/replay; missing native epochs never
 fall back to callback timing. Reported 68% uncertainty is retained as metadata,
 not fitted into the error budgets.
 
+## Conditional PC session monitor
+
+`android-monitor` watches one native `pnt-clock-<id>.txt` / `pnt-nts-<id>.json`
+pair already available on the PC, including files growing during acquisition.
+It uses the existing intake, UTC comparison and zero-control local/external
+engine. It does not collect from the phone or upload results; the current
+Android app still exports a ZIP after recording. A live file transport is a
+separate integration step.
+
+```console
+python -m pnt android-monitor pnt-clock-<id>.txt pnt-nts-<id>.json --analysis-options options.json --local-counter-resolution-ns 1 --duration-s 60 --poll-interval-s 0.5 --output-directory monitor-run
+```
+
+Use the [explicit analysis-options format](android-collector/README.md#zip-to-pc-report-to-phone).
+The `1` ns resolution above is an explicit unqualified example, not a device
+bound. No budgets are inferred or tuned. Omitting analysis options retains
+insufficient snapshots and reasons. Each run requires a **new output directory**;
+existing outputs and original input files are never overwritten.
+
+Ongoing input is a distinct intake mode: complete Raw callback blocks and
+completed NTS attempts may contribute before session terminals exist. An active
+attempt is retained as unavailable, never treated as authenticated. The last
+phone counter actually recorded bounds admission; PC read time is not used as
+the GNSS epoch or mapped onto the phone clock. Closed-ZIP terminal checks stay
+unchanged. Partial callback writes, malformed/missing files, rewritten Raw
+history or changed completed NTS slots clear the current comparison to
+**INSUFFICIENT_EVIDENCE**, with reasons. Polling can recover when consistent
+input returns; earlier results remain visible.
+
+The terminal prints per-record local/external/combined outcome counts and
+revisions. Each changed observed state creates `update-00001/`, etc., containing
+the exact read source bytes and `result.json`; `options.json` retains the fixed
+analysis settings. `updates.jsonl` records the PC input-read, analysis and
+result-publication durations. Publication is sampled after flushing the result
+file; the counter is **PC_MONOTONIC**, separate from phone `CLOCK_BOOTTIME`.
+These are processing timings on the PC, not phone-to-operator alert latency.
+Intermediate states between polls are not observed.
+
+An inconsistency can later become inconclusive when another external witness
+arrives. All observed per-record changes are retained; there is no permanent
+alarm latch or endpoint vote. A snapshot is not a closed scientific outcome.
+No decoded-UTC challenge is injected, and retrospective group/common-support
+selection is not used for the monitor. Recompute a retained snapshot with
+`inspect_android_session_files` and the same existing zero-control engine.
+Monitor results are PC diagnostic files, not phone-import report envelopes.
+
+The foreground command stops when both native terminals are observed, at the
+duration limit, or on Ctrl-C. It writes `summary.json`; a partial or insufficient
+session exits with code **2**. It does not stop the phone collector. A completed
+conditional result still has uncalibrated assumptions and no RF authenticity,
+spoofing attribution or ALLOW/BLOCK claim.
+
 ## Receiver UTC offset sensitivity
 
 After `time-compare` or `android-time-compare`, use the retained comparison to
