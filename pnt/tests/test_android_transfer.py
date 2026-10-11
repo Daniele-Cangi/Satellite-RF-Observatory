@@ -34,8 +34,14 @@ def receiver(tmp_path):
         assert not thread.is_alive()
 
 
-def request(server, config, *, raw=None, witness=None, token=None, capture_id='synthetic-monitor', headers=None):
+def client_context(server):
     context = ssl.create_default_context(cafile=str(server.directory/'server-cert.pem'))
+    context.minimum_version = ssl.TLSVersion.TLSv1_2
+    return context
+
+
+def request(server, config, *, raw=None, witness=None, token=None, capture_id='synthetic-monitor', headers=None):
+    context = client_context(server)
     client = http.client.HTTPSConnection('127.0.0.1', server.server_port, context=context, timeout=10)
     body = raw+json.dumps(witness).encode() if raw is not None else None
     fields = dict(Authorization='Bearer '+(token if token is not None else config['token']))
@@ -127,7 +133,7 @@ def test_truncated_tls_upload_never_publishes_partial_pair(receiver):
             rejected.set()
 
     server.event = observed
-    context = ssl.create_default_context(cafile=str(server.directory/'server-cert.pem'))
+    context = client_context(server)
     with context.wrap_socket(socket.create_connection(('127.0.0.1', server.server_port)), server_hostname='127.0.0.1') as client:
         headers = ('POST /snapshot HTTP/1.1\r\nHost: 127.0.0.1\r\n'
             f"Authorization: Bearer {config['token']}\r\n"
@@ -143,7 +149,7 @@ def test_truncated_tls_upload_never_publishes_partial_pair(receiver):
 
 def test_incomplete_headers_cannot_hold_receiver_past_its_deadline(receiver):
     server, config = receiver
-    context = ssl.create_default_context(cafile=str(server.directory/'server-cert.pem'))
+    context = client_context(server)
     server.deadline = time.monotonic()+.5
     with context.wrap_socket(socket.create_connection(('127.0.0.1', server.server_port)), server_hostname='127.0.0.1') as client:
         client.settimeout(2)
