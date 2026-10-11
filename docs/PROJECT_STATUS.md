@@ -88,9 +88,36 @@ rete precede il locale in tre coppie sessione/segno, segue in tre e due sono
 simultanee. Sul supporto proprio il locale precede nelle altre cinque coppie;
 non sono prove indipendenti. Un allarme combinato diventa inconclusivo con
 un'altra prova esterna e resta visibile. I conteggi finali e i vecchi replay
-sono identici; 783 test PNT passano. Il prossimo passo è il monitor condizionale
-di sessione con esiti revisionabili, misurando la consegna effettiva del risultato.
+sono identici; quella modifica supera 783 test PNT.
 Nessun budget qualificato, latenza live misurata o P2/P3 chiusa.
+
+Il [monitor condizionale PC](../pnt/README.md#conditional-pc-session-monitor)
+aggiunge `android-monitor` sui file nativi disponibili durante la sessione:
+riusa intake, confronto e controllo locale/esterno esistenti, conserva ogni
+snapshot osservato e le revisioni per record. Tentativi ancora attivi, input
+parziali o mancanti e modifiche della storia non lasciano un vecchio esito
+come risultato corrente. Misura lettura, elaborazione e pubblicazione del file
+risultato sul contatore PC; non associa i contatori PC/telefono. I terminali
+del formato ZIP chiuso restano obbligatori. Il trasporto dei file durante
+l'acquisizione e la consegna del risultato al telefono sono il prossimo
+incremento di prodotto; la latenza operatore e il beneficio di sicurezza
+restano da misurare.
+
+Verifica software: **805 test PNT passano**, cinque integrazioni restano
+saltate come nel baseline. I confronti sui file completi delle quattro sessioni
+reali già esposte sono identici ai rapporti precedenti; i replay storici con
+scarti costanti e deriva restano invariati. Una consegna ricostruita e accelerata
+di copie della sessione 0.4.2 produce tre aggiornamenti parziali e quello finale,
+con circa 270–729 ms di lettura/elaborazione/pubblicazione sul PC in questa prova.
+È una verifica ingegneristica sul PC, non una nuova raccolta o latenza live del
+telefono; input e output completi restano privati. Il test sintetico conserva
+anche il passaggio discordante -> inconclusivo con una nuova prova esterna.
+Il costruttore condiviso della claim esclude ora una riga la cui epoca, anche
+con il budget di associazione dichiarato, sia interamente successiva al proprio
+callback completato: nuove ricevute NTS o terminali non possono renderla valida.
+Riga e motivo restano nel rapporto; le altre righe rimangono utilizzabili.
+Un callback ritardato o una sovrapposizione entro il budget non riducono né
+spostano l'intervallo dell'epoca. Il controllo opera anche nel replay esistente.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere

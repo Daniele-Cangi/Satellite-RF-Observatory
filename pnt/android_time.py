@@ -68,6 +68,18 @@ def android_clock_claim(record, *, utc_error_ns, utc_error_source):
     end = epoch + alignment
     acquired_start = _integer(record.get('acquisition_start_monotonic_ns'), 'acquisition start', 0)
     acquired_end = _integer(record.get('acquisition_end_monotonic_ns'), 'acquisition end', acquired_start)
+    callback_fields = ('CallbackStartElapsedRealtimeNanos', 'CallbackReadEndElapsedRealtimeNanos')
+    if any(name in values for name in callback_fields):
+        if any(not isinstance(values.get(name), str) for name in callback_fields):
+            raise ValueError('Android callback counters must retain both original Raw strings')
+        callback_start, callback_end = (_raw_integer(values, name) for name in callback_fields)
+        if not 0 <= callback_start <= callback_end:
+            raise ValueError('Android callback counters are negative or reordered')
+        # The reported epoch may differ from the actual event within the explicit
+        # alignment budget. Only a wholly future event contradicts receipt; do
+        # not clip the claim, infer a tighter bound, or substitute callback time.
+        if start > callback_end:
+            raise ValueError('Android epoch lies wholly after its completed callback under the declared alignment budget')
     if start < acquired_start or end > acquired_end:
         raise ValueError('Android epoch is outside the retained phone acquisition window')
     hardware_time = _raw_integer(values, 'TimeNanos')

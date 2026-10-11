@@ -292,9 +292,14 @@ quando la rete richiede ricevute successive. La
 considera ora callback GNSS e autenticazioni NTS completate: l'esterno ha prove
 prima in alcune rampe, dopo o insieme al locale in altre. Conserva un allarme
 combinato successivamente inconclusivo e tutti i conteggi finali precedenti.
-La disponibilità degli input è distinta dalla latenza dell'allarme. Il passo
-successivo è un monitor condizionale di sessione che riusi il motore e aggiorni
-esplicitamente gli esiti con nuove prove, misurando la consegna del risultato.
+La disponibilità degli input è distinta dalla latenza dell'allarme. Il primo
+[monitor condizionale](../pnt/README.md#conditional-pc-session-monitor) opera
+sui file nativi già disponibili sul PC, riusa il motore e aggiorna gli esiti
+con nuove prove. Conserva gli input letti, i fallimenti e le revisioni, senza
+trasformare un allarme successivamente inconclusivo in una decisione irrevocabile.
+Misura elaborazione e pubblicazione sul PC; il trasporto durante la raccolta
+e la consegna effettiva al telefono restano il prossimo passo. Queste durate
+non sono latenza GNSS -> allarme operatore né qualifica dei budget.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,

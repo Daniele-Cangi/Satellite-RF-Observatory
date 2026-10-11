@@ -93,13 +93,18 @@ def _comment_integer(value):
     return int(value)
 
 
-def _raw_terminal(raw, comments):
+def _raw_terminal(raw, comments, *, allow_in_progress=False):
     terminals = [r for r in comments if r[:1] == ['Terminal']]
-    if len(terminals) != 1 or len(terminals[0]) != 5:
+    if not terminals and allow_in_progress:
+        reason, stop = None, None
+        event_count = str(len([r for r in comments if r[:1] == ['Event']]))
+        row_count = str(raw['coverage']['status_counts']['raw_rows'])
+    elif len(terminals) != 1 or len(terminals[0]) != 5:
         raise ValueError('Raw terminal missing or ambiguous; partial recording retained')
-    _, reason, stop, event_count, row_count = terminals[0]
-    _text(reason, 'Raw terminal reason')
-    stop = _comment_integer(stop)
+    else:
+        _, reason, stop, event_count, row_count = terminals[0]
+        _text(reason, 'Raw terminal reason')
+        stop = _comment_integer(stop)
     events = [r for r in comments if r[:1] == ['Event']]
     if (_comment_integer(event_count) != len(events)
             or _comment_integer(row_count) != raw['coverage']['status_counts']['raw_rows']):
@@ -112,7 +117,7 @@ def _raw_terminal(raw, comments):
                 or _comment_integer(event[4]) != actual.get(str(index), 0)):
             raise ValueError('Raw event accounting differs from retained Raw rows')
         start, read_end = _comment_integer(event[2]), _comment_integer(event[3])
-        if not previous_end <= start <= read_end <= stop:
+        if not previous_end <= start <= read_end or (stop is not None and read_end > stop):
             raise ValueError('Raw event counters contradict callback ordering or terminal counter')
         if str(index) in windows and windows[str(index)] != [start, read_end]:
             raise ValueError('Raw row callback window differs from its declared event')
@@ -123,7 +128,7 @@ def _raw_terminal(raw, comments):
     return reason
 
 
-def _nts_schedule(witness):
+def _nts_schedule(witness, *, allow_in_progress=False):
     protocol = witness.get('protocol')
     if not isinstance(protocol, dict):
         raise ValueError('NTS declared protocol/schedule is missing')
@@ -172,10 +177,16 @@ def _nts_schedule(witness):
         raise ValueError('NTS slot accounting differs from the declared complete schedule')
     acquisition = witness['acquisition']
     start = _integer(acquisition.get('started_monotonic_ns'), 'NTS acquisition start', 0)
-    end = _integer(acquisition.get('ended_monotonic_ns'), 'NTS acquisition end', start)
+    ongoing = allow_in_progress and acquisition.get('state') == 'IN_PROGRESS'
+    if ongoing:
+        if acquisition.get('ended_monotonic_ns') is not None or 'terminal' in witness:
+            raise ValueError('ongoing NTS checkpoint contains a terminal/end counter')
+        end = None
+    else:
+        end = _integer(acquisition.get('ended_monotonic_ns'), 'NTS acquisition end', start)
     # Old native files remain globally serial. New files may overlap different
     # endpoints, but each endpoint keeps its own ordered prefix and spacing.
-    previous_ends, previous_starts, unattempted = {}, {}, set()
+    previous_ends, previous_starts, unattempted, active = {}, {}, set(), set()
     for index, attempt in enumerate(attempts):
         if (attempt.get('server') != endpoints[index % len(endpoints)]
                 or type(attempt.get('round_index')) is not int or attempt['round_index'] != index // len(endpoints)
@@ -189,18 +200,26 @@ def _nts_schedule(witness):
                 raise ValueError('NTS unattempted slot contains active attempt/exchange data')
         else:
             key = attempt['server'] if independent else None
-            if key in unattempted:
+            if key in unattempted or key in active:
                 raise ValueError('NTS attempted slots must form a prefix before unattempted slots')
             attempt_start = _integer(attempt.get('started_monotonic_ns'), 'NTS attempt start', start)
-            attempt_end = _integer(attempt.get('finished_monotonic_ns'), 'NTS attempt end', attempt_start)
+            in_flight = (ongoing and attempt['status'] == 'WITNESS_UNAVAILABLE'
+                         and attempt.get('reason') == 'ATTEMPT_IN_PROGRESS'
+                         and 'finished_monotonic_ns' not in attempt and 'exchange' not in attempt)
+            attempt_end = (None if in_flight else
+                           _integer(attempt.get('finished_monotonic_ns'), 'NTS attempt end', attempt_start))
             earliest = max(previous_ends.get(key, start), attempt['scheduled_round_start_monotonic_ns'])
             if independent and key in previous_starts:
                 earliest = max(earliest, previous_starts[key] + interval)
             if attempt_start < earliest:
                 raise ValueError('NTS attempt precedes its schedule or the preceding attempt end')
-            if attempt_end > end:
+            if end is not None and attempt_end > end:
                 raise ValueError('NTS attempt lies outside the declared acquisition window')
-            previous_ends[key], previous_starts[key] = attempt_end, attempt_start
+            if in_flight:
+                active.add(key)
+            else:
+                previous_ends[key] = attempt_end
+            previous_starts[key] = attempt_start
         if attempt['status'] == 'AUTHENTICATED_EXCHANGE':
             exchange = attempt.get('exchange')
             if (not isinstance(exchange, dict) or exchange.get('capture_id') != witness['capture_id']
@@ -210,6 +229,8 @@ def _nts_schedule(witness):
             received = _integer(exchange.get('receive_monotonic_ns'), 'NTS exchange receive', sent)
             if received > attempt_end:
                 raise ValueError('NTS exchange lies outside its declared attempt/acquisition window')
+    if ongoing:
+        return source
     terminal = witness.get('terminal')
     totals = Counter(a['status'] for a in attempts)
     if not isinstance(terminal, dict) or terminal.get('reason') != acquisition['terminal_reason']:
@@ -259,9 +280,48 @@ def inspect_android_session(path, *, analysis_options=None):
     nts_name = f'pnt-nts-{capture_id}.json'
     if set(members) - {raw_name, nts_name}:
         raise ValueError('Raw and NTS filenames identify different sessions')
+    return _inspect_android_members(members, capture_id, analysis_options=analysis_options,
+        sources=dict(archive=_source(path.name, archive),
+                     members=[_source(n, data) for n, data in sorted(members.items())]))
+
+
+def _read_native_files(raw_path, nts_path):
+    """Read bounded native file snapshots once; do not extract or acquire data."""
+    raw_path, nts_path = Path(raw_path), Path(nts_path)
+    match = MEMBER.fullmatch(raw_path.name)
+    if match is None or match[1] != 'clock' or match[3] != 'txt':
+        raise ValueError('a native pnt-clock-<id>.txt filename is required')
+    capture_id = match[2]
+    if nts_path.name != f'pnt-nts-{capture_id}.json':
+        raise ValueError('Raw and NTS filenames identify different sessions')
+    members = {}
+    for path in (raw_path, nts_path):
+        try:
+            with path.open('rb') as stream:
+                data = stream.read(MAX_ARCHIVE_BYTES + 1)
+        except FileNotFoundError:
+            if path == nts_path:
+                continue
+            raise
+        members[path.name] = data
+    if sum(len(data) for data in members.values()) > MAX_ARCHIVE_BYTES:
+        raise ValueError('native file snapshot exceeds the 32 MiB input limit')
+    return members, capture_id
+
+
+def inspect_android_session_files(raw_path, nts_path, *, analysis_options=None):
+    """Explicit ongoing-file intake; the closed ZIP contract remains unchanged."""
+    _options(analysis_options)
+    members, capture_id = _read_native_files(raw_path, nts_path)
+    return _inspect_android_members(members, capture_id, analysis_options=analysis_options,
+        sources=dict(members=[_source(n, data) for n, data in sorted(members.items())]), allow_in_progress=True)
+
+
+def _inspect_android_members(members, capture_id, *, analysis_options, sources, allow_in_progress=False):
+    raw_name, nts_name = f'pnt-clock-{capture_id}.txt', f'pnt-nts-{capture_id}.json'
     issues, raw, witness, comparison = [], None, None, None
     format_notes = []
-    raw_terminal = None
+    raw_terminal, raw_valid, nts_valid, snapshot_end = None, False, False, None
     try:
         if members[raw_name].startswith(b'\x1f\x8b'):
             raise ValueError('native ZIP Raw must be plain UTF-8, without nested gzip expansion')
@@ -273,7 +333,8 @@ def inspect_android_session(path, *, analysis_options=None):
         if [r for r in comments if r[:1] == ['CaptureId']] != [['CaptureId', capture_id]]:
             raise ValueError('Raw metadata differs from the filename capture ID')
         try:
-            raw_terminal = _raw_terminal(raw, comments)
+            raw_terminal = _raw_terminal(raw, comments, allow_in_progress=allow_in_progress)
+            raw_valid = True
         except ValueError as error:
             issues.append(str(error))
         if not raw['coverage']['status_counts']['raw_rows']:
@@ -302,12 +363,14 @@ def inspect_android_session(path, *, analysis_options=None):
             if not isinstance(witness.get('assumptions'), dict):
                 raise ValueError('NTS assumptions must retain the original unknown budgets')
             acquisition = witness.get('acquisition', {})
-            if (not isinstance(acquisition, dict) or acquisition.get('state') != 'FINISHED'
-                    or not isinstance(acquisition.get('terminal_reason'), str)):
+            ongoing = allow_in_progress and isinstance(acquisition, dict) and acquisition.get('state') == 'IN_PROGRESS'
+            if (not isinstance(acquisition, dict) or not ongoing and (acquisition.get('state') != 'FINISHED'
+                    or not isinstance(acquisition.get('terminal_reason'), str))):
                 issues.append('NTS terminal missing; last partial checkpoint retained')
             else:
                 try:
-                    format_notes.append('NTS schedule bound by ' + _nts_schedule(witness))
+                    format_notes.append('NTS schedule bound by ' + _nts_schedule(witness, allow_in_progress=ongoing))
+                    nts_valid = True
                 except ValueError as error:
                     issues.append(str(error))
         except (ValueError, UnicodeError, RecursionError) as error:
@@ -319,6 +382,15 @@ def inspect_android_session(path, *, analysis_options=None):
     elif not issues:
         # Derived analysis input, never overwrite the retained acquisition.
         prepared = copy.deepcopy(witness)
+        if allow_in_progress and prepared['acquisition']['state'] == 'IN_PROGRESS':
+            # The latest counter actually present in these files is an admission
+            # frontier, never a fabricated terminal or a PC/phone clock mapping.
+            counters = [prepared['acquisition']['started_monotonic_ns']]
+            counters.extend(_comment_integer(event[3]) for event in comments if event[:1] == ['Event'])
+            for attempt in prepared['attempts']:
+                counters.extend(attempt[k] for k in ('started_monotonic_ns', 'finished_monotonic_ns') if k in attempt)
+            snapshot_end = max(counters)
+            prepared['acquisition']['ended_monotonic_ns'] = snapshot_end
         prepared.setdefault('assumptions', {}).update(
             server_error_ns=analysis_options['server_error_ns'], rate_error_ppm=analysis_options['rate_error_ppm'],
             budget_source=analysis_options['budget_source'], calibrated=False)
@@ -332,11 +404,10 @@ def inspect_android_session(path, *, analysis_options=None):
             comparison = compare_android_time(prepared, raw, **options)
         except (ValueError, KeyError, TypeError) as error:
             issues.append(f'Timing comparison not run: {error}')
-    return dict(schema='pnt-android-session-report-v1', regime='EXPLORATORY_SESSION_REPORT',
+    report = dict(schema='pnt-android-session-report-v1', regime='EXPLORATORY_SESSION_REPORT',
                 status=comparison['status'] if comparison else 'INSUFFICIENT_EVIDENCE',
                 capture_id=capture_id, processor=_processor(),
-                sources=dict(archive=_source(path.name, archive),
-                             members=[_source(n, data) for n, data in sorted(members.items())]),
+                sources=sources,
                 intake=raw, witness_report=witness, comparison=comparison,
                 analysis_options=copy.deepcopy(analysis_options), issues=issues,
                 format_notes=format_notes,
@@ -349,3 +420,15 @@ def inspect_android_session(path, *, analysis_options=None):
                         'All supplied budgets remain explicit uncalibrated assumptions; receiver 68% estimates are not bounds.',
                         'PC analysis is trusted; phone import checks input identity, not the arithmetic or a server signature.',
                         'PTB endpoints share one authority; no independent quorum or ALLOW/BLOCK decision.'])
+    if allow_in_progress:
+        report['regime'] = 'EXPLORATORY_FILE_SNAPSHOT_DIAGNOSTIC'
+        report['snapshot'] = dict(raw_events_valid=raw_valid, nts_schedule_valid=nts_valid,
+            session_complete=raw_valid and nts_valid and raw_terminal is not None
+                             and witness['acquisition']['state'] == 'FINISHED',
+            admission_frontier_monotonic_ns=snapshot_end,
+            frontier_source='LATEST_RECORDED_PHONE_COUNTER' if snapshot_end is not None else None,
+            active_nts_attempt_indices=[i for i, a in enumerate(witness['attempts'])
+                if a.get('reason') == 'ATTEMPT_IN_PROGRESS' and 'finished_monotonic_ns' not in a] if nts_valid else [],
+            terminal_synthesized=False, pc_phone_clock_mapping=False)
+        report['processor']['command'] = 'python -m pnt android-monitor'
+    return report
