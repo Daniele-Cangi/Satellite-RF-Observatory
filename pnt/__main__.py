@@ -98,6 +98,13 @@ def main():
     monitor.add_argument('--duration-s', type=float, default=60)
     monitor.add_argument('--poll-interval-s', type=float, default=.5)
     monitor.add_argument('--output-directory', required=True, type=Path, help='new private directory for snapshots and revisions')
+    receiver = commands.add_parser('android-serve', help='explicit private LAN HTTPS input to the existing PC monitor')
+    receiver.add_argument('--bind', required=True, help='specific private LAN IPv4 or loopback address')
+    receiver.add_argument('--port', type=int, default=8443)
+    receiver.add_argument('--duration-s', type=float, default=120)
+    receiver.add_argument('--analysis-options', type=Path, help='explicit uncalibrated assumptions; no defaults')
+    receiver.add_argument('--local-counter-resolution-ns', required=True, type=int)
+    receiver.add_argument('--output-directory', required=True, type=Path, help='new private directory; contains credentials and data')
     android_analysis = commands.add_parser('android-analyze', help='GPS L1 Android/remote fixed-site geometry diagnostics')
     analysis = commands.add_parser('analyze', help='report code geometry, relative clock and data gaps')
     comparison = commands.add_parser('compare', help='compare original observations and software code ramps')
@@ -154,8 +161,35 @@ def main():
     transfer.add_argument('--minimum-training', type=int, default=5)
     transfer.add_argument('--minimum-fit-epochs', type=int, default=20)
     args = parser.parse_args()
-    if args.command != 'android-monitor' and args.output.exists():
+    if args.command in ('android-monitor', 'android-serve'):
+        def show_update(receipt):
+            folder = args.output_directory/'monitor' if args.command == 'android-serve' else args.output_directory
+            print(f"Update {receipt['update_index']}: {receipt['status']}; "
+                f"result {folder / receipt['result']}; "
+                f"outcomes {receipt['record_outcome_counts']}; revised records {receipt['revised_records']}; "
+                f"PC processing {receipt['total_pc_processing_ns']/1e6:.3f} ms", flush=True)
+            for issue in receipt['issue_messages']:
+                print(issue, flush=True)
+
+    if args.command not in ('android-monitor', 'android-serve') and args.output.exists():
         parser.error('output already exists; choose a new report path')
+    if args.command == 'android-serve':
+        from .android_session import load_json
+        from .android_transfer import serve_android
+
+        try:
+            options = load_json(args.analysis_options.read_bytes()) if args.analysis_options else None
+            summary = serve_android(args.output_directory, args.bind, args.port, analysis_options=options,
+                local_counter_resolution_ns=args.local_counter_resolution_ns, duration_s=args.duration_s, on_update=show_update,
+                on_ready=lambda path: print(f'Private HTTPS receiver ready. Import {path} on the phone; '
+                    'protect this credential file. No acquisition or upload starts automatically.', flush=True))
+        except (ValueError, OSError) as error:
+            parser.exit(2, f'PNT Android receiver error: {error}\n')
+        print(f"{summary['stop_reason']}; received {summary['accepted_snapshots']} snapshots; "
+              f"rejected {summary['rejected_requests']} requests; {args.output_directory}")
+        if not summary['monitor'] or summary['monitor']['status'] == 'INSUFFICIENT_EVIDENCE':
+            parser.exit(2, 'No usable conditional comparison; private transport and monitor records retained\n')
+        return
     if args.command == 'android-monitor':
         from .android_session import load_json
         from .session_monitor import monitor_android_files
@@ -163,14 +197,6 @@ def main():
         try:
             options = load_json(args.analysis_options.read_bytes()) if args.analysis_options else None
             print('Conditional uncalibrated PC file monitor; no RF authentication or phone alert latency.', flush=True)
-
-            def show_update(receipt):
-                print(f"Update {receipt['update_index']}: {receipt['status']}; "
-                    f"result {args.output_directory / receipt['result']}; "
-                    f"outcomes {receipt['record_outcome_counts']}; revised records {receipt['revised_records']}; "
-                    f"PC processing {receipt['total_pc_processing_ns']/1e6:.3f} ms", flush=True)
-                for issue in receipt['issue_messages']:
-                    print(issue, flush=True)
 
             summary = monitor_android_files(args.local_log, args.witness_report, args.output_directory,
                 analysis_options=options, local_counter_resolution_ns=args.local_counter_resolution_ns,

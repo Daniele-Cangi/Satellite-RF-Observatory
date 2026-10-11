@@ -51,7 +51,7 @@ final class CaptureLog implements Closeable {
         writer.flush();
     }
 
-    void event(long start, long readEnd, Map<String, String> clock,
+    synchronized void event(long start, long readEnd, Map<String, String> clock,
                List<Map<String, String>> measurements) throws IOException {
         if (terminal) throw new IOException("capture already terminated");
         long index = ++events;
@@ -71,7 +71,7 @@ final class CaptureLog implements Closeable {
         writer.flush();
     }
 
-    void comment(String... values) throws IOException {
+    synchronized void comment(String... values) throws IOException {
         if (terminal) throw new IOException("capture already terminated");
         writer.write("# ");
         for (int i = 0; i < values.length; i++) {
@@ -82,7 +82,7 @@ final class CaptureLog implements Closeable {
         writer.flush();
     }
 
-    void finish(String reason, long stopCounter) throws IOException {
+    synchronized void finish(String reason, long stopCounter) throws IOException {
         if (terminal) return;
         comment("Terminal", reason, Long.toString(stopCounter),
                 Long.toString(events), Long.toString(rows));
@@ -91,7 +91,14 @@ final class CaptureLog implements Closeable {
 
     long eventCount() { return events; }
     long rowCount() { return rows; }
-    @Override public void close() throws IOException { writer.close(); }
+    @Override public synchronized void close() throws IOException { writer.close(); }
+
+    synchronized byte[] snapshot(java.nio.file.Path file) throws IOException {
+        // Complete callback writes and this copy share the same lock. Network I/O does not.
+        try (var input = java.nio.file.Files.newInputStream(file)) {
+            return PcConnection.readLimited(input, PcConnection.MAX_SNAPSHOT);
+        }
+    }
 
     static String csv(String value) {
         if (value == null) return "";

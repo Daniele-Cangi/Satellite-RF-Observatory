@@ -98,10 +98,14 @@ snapshot osservato e le revisioni per record. Tentativi ancora attivi, input
 parziali o mancanti e modifiche della storia non lasciano un vecchio esito
 come risultato corrente. Misura lettura, elaborazione e pubblicazione del file
 risultato sul contatore PC; non associa i contatori PC/telefono. I terminali
-del formato ZIP chiuso restano obbligatori. Il trasporto dei file durante
-l'acquisizione e la consegna del risultato al telefono sono il prossimo
-incremento di prodotto; la latenza operatore e il beneficio di sicurezza
-restano da misurare.
+del formato ZIP chiuso restano obbligatori. Il raccoglitore **0.5.0** aggiunge
+il [collegamento HTTPS privato](../pnt/android-collector/README.md#private-pc-connection):
+configurazione esplicita e invio facoltativo delle copie native durante la raccolta
+allo stesso monitor, senza cambiare il motore. La prova di connessione non avvia
+GNSS né trasmette registrazioni. Credenziale e certificato dedicati proteggono
+il trasporto; non attestano le misure. L'app conserva i fallimenti e mostra
+ricevute di trasporto. La consegna degli esiti numerici al telefono è il prossimo
+incremento; latenza operatore e beneficio di sicurezza restano da misurare.
 
 Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni

@@ -94,6 +94,11 @@ final class NtsCapture {
     }
     void start() { worker.start(); }
     boolean isFinished() { return finished; }
+    synchronized byte[] snapshot() throws IOException {
+        try (var input = Files.newInputStream(file)) {
+            return PcConnection.readLimited(input, PcConnection.MAX_SNAPSHOT);
+        }
+    }
     synchronized void cancel(String reason) {
         if (finished || stopReason != null) return;
         stopReason = reason;

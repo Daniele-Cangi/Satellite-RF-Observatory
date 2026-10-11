@@ -40,9 +40,9 @@ not fitted into the error budgets.
 `android-monitor` watches one native `pnt-clock-<id>.txt` / `pnt-nts-<id>.json`
 pair already available on the PC, including files growing during acquisition.
 It uses the existing intake, UTC comparison and zero-control local/external
-engine. It does not collect from the phone or upload results; the current
-Android app still exports a ZIP after recording. A live file transport is a
-separate integration step.
+engine. It does not itself collect from the phone or upload results. The
+optional [private HTTPS connection](android-collector/README.md#private-pc-connection)
+feeds this same monitor during recording; ZIP export remains available.
 
 ```console
 python -m pnt android-monitor pnt-clock-<id>.txt pnt-nts-<id>.json --analysis-options options.json --local-counter-resolution-ns 1 --duration-s 60 --poll-interval-s 0.5 --output-directory monitor-run
