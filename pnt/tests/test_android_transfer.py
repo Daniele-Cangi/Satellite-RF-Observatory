@@ -272,6 +272,45 @@ def test_unwritable_invalidation_summary_fails_instead_of_returning_old_result(r
     assert not (server.monitor.output/'summary.json').exists()
 
 
+def test_closed_native_transfer_stops_without_inventing_analysis_budgets(tmp_path):
+    directory = tmp_path/'unqualified-run'
+    _, _, raw, witness = native_data()
+    from socket import socket
+    with socket() as probe:
+        probe.bind(('127.0.0.1', 0))
+        port = probe.getsockname()[1]
+    sent = []
+    def ready(path):
+        config = json.loads(path.read_bytes())
+        def upload():
+            context = ssl.create_default_context(cafile=str(directory/'server-cert.pem'))
+            context.minimum_version = ssl.TLSVersion.TLSv1_2
+            client = http.client.HTTPSConnection('127.0.0.1', port, context=context, timeout=5)
+            try:
+                nts = json.dumps(witness).encode()
+                client.request('POST', '/snapshot', raw+nts, {
+                    'Authorization': 'Bearer '+config['token'], 'X-PNT-Capture-Id': witness['capture_id'],
+                    'X-PNT-Raw-Bytes': str(len(raw)), 'Content-Type': 'application/octet-stream'})
+                response = client.getresponse()
+                sent.append((response.status, json.loads(response.read())))
+            finally:
+                client.close()
+        worker = threading.Thread(target=upload, daemon=True)
+        workers.append(worker)
+        worker.start()
+    workers = []
+    started = time.monotonic()
+    summary = serve_android(directory, '127.0.0.1', port, duration_s=5, on_ready=ready, local_counter_resolution_ns=1)
+    workers[0].join(5)
+    assert not workers[0].is_alive() and time.monotonic()-started < 5
+    assert sent[0][0] == 200 and sent[0][1]['session_complete']
+    assert summary['stop_reason'] == 'SESSION_TERMINALS_OBSERVED'
+    assert summary['monitor']['session_complete']
+    assert summary['monitor']['status'] == 'INSUFFICIENT_EVIDENCE'
+    result = json.loads((directory/'monitor'/summary['monitor']['last_result']).read_bytes())
+    assert result['record_outcomes'] == {} and result['issues']
+
+
 @pytest.mark.skipif(os.environ.get('PNT_ANDROID_NTS_INTEGRATION') != '1',
                    reason='Native HTTPS transport integration runs in collector Linux/Windows CI')
 def test_native_java_https_client_credentials_identity_and_transfer_worker(receiver, tmp_path):

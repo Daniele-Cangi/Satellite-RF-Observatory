@@ -86,6 +86,7 @@ class AndroidSessionMonitor:
             raise ValueError('monitor is closed')
         started = time.monotonic_ns()
         members, report, outcomes, issues, read_end = {}, None, {}, [], None
+        session_complete = False
         input_fingerprint = None
         try:
             members, capture_id = _read_native_files(self.raw_path, self.nts_path)
@@ -97,6 +98,9 @@ class AndroidSessionMonitor:
                 sources=dict(members=[_source(n, b) for n, b in sorted(members.items())]), allow_in_progress=True)
             history_issues = self._history_issues(members, report)
             issues = report['issues'] + history_issues
+            # Native completion is independent of whether optional analysis
+            # budgets were supplied. Rewritten history still cannot close it.
+            session_complete = report['snapshot']['session_complete'] and not history_issues
             if not issues and report['comparison'] is not None:
                 # Zero control is the existing paired engine, without a challenge
                 # or retrospective common/group selection for the live monitor.
@@ -115,6 +119,7 @@ class AndroidSessionMonitor:
                 read_end = time.monotonic_ns()
             issues.append(f'Snapshot unavailable: {error}')
             outcomes = {}
+            session_complete = False
         fingerprint = (tuple((name, hashlib.sha256(data).hexdigest()) for name, data in sorted(members.items())),
                        tuple(issues))
         if fingerprint == self.last_fingerprint:
@@ -134,7 +139,7 @@ class AndroidSessionMonitor:
                 stream.write(data)
         update = dict(schema='pnt-android-session-monitor-update-v1', regime='EXPLORATORY_FILE_SNAPSHOT_DIAGNOSTIC',
             update_index=next_update, status=report['status'] if report and not issues else 'INSUFFICIENT_EVIDENCE',
-            session_complete=bool(report and not issues and report['snapshot']['session_complete']),
+            session_complete=bool(session_complete),
             capture_id=report['capture_id'] if report else None,
             processor=report['processor'] if report else None,
             source_members=[_source(n, b) for n, b in sorted(members.items())],

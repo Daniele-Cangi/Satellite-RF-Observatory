@@ -89,6 +89,9 @@ clears the current numerical result. Limits are 32 MiB per pair, 128 MiB receive
 per run and 256 authenticated snapshot requests; existing output directories are
 refused. It stops at the duration limit, interrupt, storage failure or both valid
 session terminals. A network error never changes or restarts local acquisition.
+Native session completion is independent of optional timing-analysis budgets:
+a valid closed pair stops the receiver even when its analysis is insufficient.
+Rewritten history or invalid native terminals still cannot close the session.
 An admission/publication storage failure stops the receiver and invalidates its
 current monitor result: the final summary is insufficient with no current result
 pointer, while prior snapshots remain historical evidence. If the summary itself
