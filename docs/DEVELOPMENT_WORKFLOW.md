@@ -35,9 +35,11 @@ checkpoint. Do not normalize frozen sources or update expected hashes to hide
 a checkout conversion. Preserve the original byte stream and pin its Git
 attributes instead.
 
-The active delivery objective is in [PNT_SECURITY_PLAN.md](PNT_SECURITY_PLAN.md)
-and root AGENTS.md. [GENERAL_VERIFICATION_WORKFLOW.md](GENERAL_VERIFICATION_WORKFLOW.md)
-describes the reusable satellite-request foundation. The preserved
-[SCIENTIFIC_ROADMAP.md](SCIENTIFIC_ROADMAP.md) retains the inverse research
-requirements. Public deployment, prospective acquisition and physical
-qualification remain separate from Git integration.
+The ecosystem objectives and each area's current gaps are in
+[PROJECT_STATUS.md](PROJECT_STATUS.md) and root [AGENTS.md](../AGENTS.md).
+[PNT_SECURITY_PLAN.md](PNT_SECURITY_PLAN.md) covers PNT/Android;
+[SCIENTIFIC_ROADMAP.md](SCIENTIFIC_ROADMAP.md) retains independent reconstruction
+requirements and its original protocols; [ROADMAP.md](../ROADMAP.md) retains
+forward/RF questions and outcomes. [GENERAL_VERIFICATION_WORKFLOW.md](GENERAL_VERIFICATION_WORKFLOW.md)
+describes the reusable request foundation. Public deployment, prospective
+acquisition and physical qualification remain separate from Git integration.

@@ -1,8 +1,8 @@
 # Satellite RF Observatory
 
-**Android GNSS acquisition, external time checks and reproducible evidence for PNT security research.**
+**Open satellite research: orbital reconstruction, RF observation, PNT diagnostics and Android acquisition.**
 
-[![PNT tests](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/positioning-tests.yml/badge.svg?branch=main)](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/positioning-tests.yml)
+[![Positioning & PNT tests](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/positioning-tests.yml/badge.svg?branch=main)](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/positioning-tests.yml)
 [![Android app](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/android-collector.yml/badge.svg?branch=main)](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/android-collector.yml)
 [![Offline experiments](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/live-instrument-tests.yml/badge.svg?branch=main)](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/live-instrument-tests.yml)
 [![Web archive](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/positioning-archive.yml/badge.svg?branch=main)](https://github.com/Daniele-Cangi/Satellite-RF-Observatory/actions/workflows/positioning-archive.yml)
@@ -10,69 +10,62 @@
 [![License: Apache 2.0](docs/assets/badges/license.svg)](LICENSE)
 [![Status: Research prototype](docs/assets/badges/research.svg)](docs/PROJECT_STATUS.md)
 
-[Quick start](#quick-start) · [Capabilities](#capabilities) · [Evidence](#current-evidence) · [Documentation](#documentation)
+[Research areas](#research-areas) · [Quick start](#quick-start) · [Capabilities](#capabilities) · [Evidence](#current-evidence) · [Documentation](#documentation)
 
 ## What this project does
 
-Satellite RF Observatory compares a local receiver's GNSS observations with
-external receiver recordings obtained through the Internet. It produces
-geometry and clock diagnostics, exposes missing or conflicting evidence, and
-retains source hashes for reproducible incident analysis.
+Satellite RF Observatory is an open research ecosystem for checking what
+satellite observations can establish about geometry, motion and receiver time.
+It develops independent orbital reconstruction, tests declared orbital
+predictions against RF observations, and compares local GNSS measurements with
+external observations for PNT incident analysis. An Android app supplies native
+GNSS measurements and authenticated Internet time to the research workflow.
 
-The Android app turns an existing phone into a measurement collector: one
-button records native GNSS measurements and authenticated Internet time (NTS),
-then exports both originals in a ZIP. Collection needs Internet and sky view,
-with the app visible; it needs no Termux, PC or USB cable. Analysis and replay
-run in the existing Python engine on a PC; version 0.4 returns its report to
-the phone through an explicit document import.
+These areas share parsing, provenance, qualification, replay and request
+infrastructure where appropriate. Each keeps its own physical model, evidence
+requirements and advancement criteria. Completing an app workflow does not
+confirm an orbit or validate a spoofing detector.
 
-The first use case is a **fixed GPS receiver at independently known coordinates**.
-The active goal is to establish whether external observations add useful
-security evidence beyond sensible local controls.
+## Research areas
 
-```text
-Local GNSS log + external observations + declared broadcast navigation
-                 ↓
-        Local and matched-network diagnostics
-                 ↓
-       JSON evidence, source hashes and coverage gaps
-```
+| Area | Question and implementation | Current boundary / next scientific step |
+|---|---|---|
+| **Orbital reconstruction** | Can position and motion be estimated without fitting the target's orbit? [Positioning](positioning/README.md), [kinematic research](research/kinematic/README.md) and [scientific roadmap](docs/SCIENTIFIC_ROADMAP.md) | Historical conditional snapshots and synthetic motion results exist. Real interval work still needs an independent constraint on station/code bias or a geometry/model that identifies it, with a defensible total-error envelope. |
+| **RF observation and orbital prediction** | Does a declared orbital geometry predict held-out observations better than frozen alternatives? [Forward roadmap](ROADMAP.md) and [experiment reports](experiments/orbital_discriminability/) | A closed DRAO GNSS phase event supports a narrow orbital-model preference. Independent identity, distributed confirmation and general raw-RF capability remain unestablished. Further research needs an identifiable observable and adequate measurement timing. |
+| **PNT security research** | Do external geometry/time observations add useful evidence beyond reasonable local controls? [PNT tools](pnt/README.md) and [PNT plan](docs/PNT_SECURITY_PLAN.md) | Offline diagnostics and replay are available for a fixed GPS receiver. Added physical security benefit and prospective detection performance remain open. |
+| **Android acquisition** | Can an existing phone acquire GNSS/NTS, export originals and display the PC analysis? [PNT Clock Collector](pnt/android-collector/README.md) | The experimental software cycle is implemented, including optional private LAN monitoring. Timing qualification and physical attack validation remain separate research tasks. |
 
-**Current scope:** a foreground Android collector, offline research tools and
-a conditional PC file monitor, with no qualified spoofing verdict or
-operational timing protection. Regular remote receivers do not authenticate
-the RF received locally. Double differences cancel common receiver-clock terms;
-absolute-time verification requires a separate qualified time reference.
+The areas can advance independently. The
+[project status](docs/PROJECT_STATUS.md#ecosistema-e-stato-dei-verticali)
+records their results, gaps and next decisions. The website remains a later
+delivery step; the existing web archive preserves historical evidence.
 
 ## Capabilities
 
-| Command / component | Available behavior |
+| Component / commands | Available behavior |
 |---|---|
-| [PNT Clock Collector](pnt/android-collector/README.md) | Same-app GNSS + NTS, live diagnostics, session ZIP export and input-bound PC report import; Android 10+ development APK |
-| `python -m pnt android-session` | Native session ZIP to a phone-readable report; missing budgets remain insufficient, explicit analysis reuses the existing time engine |
-| `python -m pnt android-monitor` | Growing native files on the PC to revisable local/external results; source snapshots and measured PC publication times retained |
-| `python -m pnt android-serve` | Explicit private LAN HTTPS transfer from the Android app into that same monitor; opt-in upload and retained failures |
-| `python -m pnt analyze` | Fixed-site RINEX geometry, local and matched-network clock fits, double differences and data gaps |
-| `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
-| `python -m pnt time-probe` / `android-time-probe` | Authenticated Internet time acquisition with declared assumptions; the Android command uses the phone's CLOCK_BOOTTIME |
-| `python -m pnt android-time-compare` | GNSS UTC versus same-phone NTS with explicit association and error budgets; missing bounds remain insufficient |
-| `python -m pnt time-sensitivity` | Paired local/external UTC sensitivity, including Android Raw clock/transmit-TOW challenges with unchanged parsed pseudoranges |
-| `python -m pnt android-analyze` | Android L1/C1C compared with external C1C observations at explicit fixed coordinates |
-| `python -m pnt compare` | Development comparison with separate training/calibration/evaluation windows and software code ramps |
-| `python -m pnt transfer` | Training-only prediction of later local residuals from external observations |
-| `python -m pnt navigation` | Decoded GPS navigation comparison against supplied external messages; RINEX and UBX SFRBX inputs |
-| `python -m pnt navigation-compare` | Paired OBS/NAV cases evaluated on identical support with original-only calibration |
-| `python -m service` | Trusted local request queue, worker and evidence retrieval for the general verification workflow |
-| Experimental web archive | Read-only historical results and evidence downloads; no solver runs in the browser |
+| `python -m positioning plan / run / status / dossier` | Historical GPS snapshot requests, independent target-state fitting, conditional uncertainty, excluded checks and explicit failed outcomes; see the [positioning guide](positioning/README.md) for command syntax |
+| [Kinematic research](research/kinematic/README.md) | Experimental code/range-rate and phase-interval models, observability and error-budget studies; real-data qualification is incomplete |
+| [RF and orbital experiments](experiments/orbital_discriminability/) | Versioned geometry, observer, held-out orbital/null and capability studies; follow the relevant plan and access boundary |
+| [PNT Clock Collector](pnt/android-collector/README.md) | Foreground GNSS + NTS acquisition, diagnostics, ZIP export, input-bound PC report import and optional private HTTPS monitoring; Android 10+ development APK |
+| `python -m pnt android-session / android-monitor / android-serve` | Session reports, revisable PC analysis and opt-in private LAN transfer using the existing monitor |
+| `python -m pnt analyze / android-raw / android-analyze` | Fixed-site geometry, clock fits, double differences, Android GPS L1/L5 intake and an L1/C1C network path |
+| `python -m pnt time-probe / android-time-probe / android-time-compare / time-sensitivity` | Authenticated Internet time acquisition and conditional timing diagnostics with declared assumptions and insufficient-evidence outcomes |
+| `python -m pnt compare / transfer / navigation / navigation-compare` | Development comparisons, training-only residual prediction and decoded GPS navigation consistency |
+| `python -m service` / [web archive](web/README.md) | Trusted local request queue, worker and evidence retrieval; read-only historical web results |
 
-See the [PNT command reference](pnt/README.md), [service guide](service/README.md)
-and [web archive guide](web/README.md) for formats, options and limitations.
-Public HTTP/browser submission and an operational security service are not delivered.
+Slash-separated names above list separate commands. See the
+[PNT command reference](pnt/README.md) and [service guide](service/README.md)
+for arguments and limits. Public HTTP/browser submission and an operational
+security service are not delivered.
 
-Android GPS L1/L5 intake and the L1/C1C network diagnostic path are available
-on `main`. Android geometry requires explicit fixed antenna coordinates;
-single-frequency ionosphere and signal group delays remain uncorrected
-nuisances. These commands do not issue an authenticated-signal or attack verdict.
+**Scientific scope:** a historical position is conditional evidence, not live
+tracking or a general accuracy guarantee. Model-consistent remote observations
+do not authenticate RF received locally. Double differences cancel common
+receiver-clock terms; absolute-time verification needs a qualified time
+reference. Android geometry needs explicit fixed coordinates; uncorrected
+single-frequency propagation and signal delays remain nuisances. No qualified
+spoofing verdict or operational timing protection is currently delivered.
 
 ## Quick start
 
@@ -140,74 +133,79 @@ For your own recordings, follow the [input requirements](pnt/README.md).
 
 ## Current evidence
 
+### Orbital reconstruction
+
+The [G14 DOY246 event](experiments/positioning_g14_doy246_network/OUTCOME.md)
+met its declared criteria with 31.017 m observed external 3D error and a
+5,755.157 m prospective conditional radius. This single event is not a general
+accuracy or coverage guarantee. Other events retain uncertainty failures or
+insufficient measurements.
+
+[Real G12 interval work](research/exploratory/REAL_TARGET_INTERVAL.md) fits code
+and phase without the target orbit: phase improves position in 3/5 accepted
+cases and worsens it in 2/5; 15/20 phase cases remain rejected. The
+[bias-identifiability study](research/exploratory/REAL_TARGET_BIAS_IDENTIFIABILITY.md)
+explains why phase increments leave an absolute station-bias/position mode
+unresolved. Synthetic motion results do not close this physical gap.
+
+### RF observation and declared orbital prediction
+
+The closed [DRAO labelled-forward event](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md)
+predictively preferred frozen orbital geometry over both frozen alternatives
+on a real held-out GNSS phase interval, with no held-out refit. Its scope is
+one labelled station and six model-conditioned tracks. It does not establish
+independent satellite identity, distributed confirmation or orbit determination.
+The [forward roadmap](ROADMAP.md) also retains failed acquisition and
+non-discriminative routes; those outcomes remain closed.
+
+### PNT diagnostics
+
 The [Android Raw clock challenge](research/exploratory/PNT_ANDROID_RAW_CLOCK_CHALLENGE.md)
-shifts GPS reception and transmit time together by �100 ms, preserving all
+shifts GPS reception and transmit time together by +/-100 ms, preserving all
 1,446 parsed GPS pseudoranges. NTS distinguishes both shifts on 65/156 common
-clock groups while local elapsed continuity stays unchanged. This reuses exposed
-data and uncalibrated assumptions; 91 insufficient groups and 23 NTS timeouts
-remain visible. It establishes software consistency benefit, not RF authenticity
-or qualified timing accuracy.
+clock groups while local elapsed continuity stays unchanged. It uses exposed
+data and uncalibrated assumptions; 91 insufficient groups and 23/80 NTS timeouts
+remain visible. This demonstrates conditional software consistency benefit.
 
-An explicit [callback receipt diagnostic](research/exploratory/PNT_ANDROID_CAUSAL_RECEIPT.md)
-can test impossible future GNSS claims without a finite chipset alignment budget.
-On the same recordings it leaves +/-100 ms invisible: conditional receipt margins
-are 554.5-632.3 ms. Past claims remain unbounded; this mode does not replace the
-previous comparison or qualify physical detection.
+The [callback receipt diagnostic](research/exploratory/PNT_ANDROID_CAUSAL_RECEIPT.md)
+reduces alignment assumptions for impossible future claims, but leaves the same
++/-100 ms challenges invisible. Conditional receipt margins are 554.5-632.3 ms;
+past claims remain unbounded.
 
-| Question | What the evidence supports |
-|---|---|
-| Do network residuals improve local prediction? | Mixed results on distant references; small improvements on nearby WegenerNet references. No demonstrated security benefit at matched false-alarm rates. |
-| Does agreement with archived navigation authenticate local RF? | No. Navigation fields can agree during a recorded attack; missing issues and conflicts remain visible. |
-| Can Internet time distinguish receiver UTC offsets? | On one real phone capture, software offsets of ±10 ms remain invisible and ±50 ms separate under uncalibrated budgets. This is conditional sensitivity, not RF authentication. |
-| Does the native clock metadata qualify the phone's time association? | No. The reported alignment uncertainty is about 7 ms at 68% confidence on one outdoor capture; the earlier 1 ms assumption remains unqualified. |
-| Does conditional external UTC sensitivity repeat on new phone sessions? | [Three predeclared sessions](research/exploratory/PNT_ANDROID_SESSION_EVALUATION.md) distinguish ±100 ms software offsets on 47/117 reported clock groups, with no original-log inconsistency on evaluable support. The other 70 groups and 16/60 NTS timeouts remain visible; timing budgets and RF protection remain unqualified. |
-| Does Internet time detect gradual drift earlier than the local control? | [Receipt-gated replay of four exposed sessions](research/exploratory/PNT_ANDROID_TIME_AVAILABILITY.md) shows earlier external evidence for some ±5 ms/s ramps, later or simultaneous evidence for others. This is conditional input availability; operational alert latency remains unmeasured. |
-| Can the inverse research estimate a satellite without fitting its target orbit? | One conditional G14 event reached its declared milestone. Other events retain their failures or uncertainty limits. This is separate from qualifying a cyber detector. |
+The [JammerTest 2025 comparison](research/exploratory/PNT_JAMMERTEST_2025_COHERENT.md)
+uses a physical recording and contemporaneous remote references. The anomaly
+is already evident locally; added network detection benefit is not demonstrated.
+Its [clock-source audit](research/exploratory/PNT_JAMMERTEST_2025_CLOCK_SOURCE.md)
+finds no documented independent UTC association in the inspected recording.
+The [path without further Finnish data](docs/PNT_SECURITY_PLAN.md#avanzare-senza-ulteriori-dati-dalla-finlandia)
+keeps diagnostic delivery independent of that reply while retaining the physical
+requirements for stronger security claims.
 
-Detailed outcomes, numerical results and next physical questions live in
-[project status](docs/PROJECT_STATUS.md), the
-[PNT security plan](docs/PNT_SECURITY_PLAN.md) and the
-[scientific roadmap](docs/SCIENTIFIC_ROADMAP.md).
-Synthetic exercises test software mechanisms; they are not measured RF
-detection performance. Closed results remain unchanged.
+### Android workflow
 
-The [Android workflow](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
-now delivers autonomous GNSS/NTS acquisition, live diagnostics and the
-export-to-analysis-to-phone report workflow using the existing engine.
-Collector 0.4.2 schedules the NTS endpoints separately, retaining every slot and
-failure and preventing compressed catch-up after timeouts. An
-[outdoor phone trial](research/exploratory/PNT_ANDROID_NTS_COVERAGE.md) observes
-timeout isolation, 13/20 authenticated exchanges and conditional ±100 ms
-sensitivity on 18/39 common clock groups. The other 21 groups remain insufficient;
-this single trial does not establish a stable coverage gain. The gradual-drift
-study now distinguishes reported epochs from actual input availability using
-native callback and NTS completion receipts. The
-[conditional session monitor](pnt/README.md#conditional-pc-session-monitor)
-reuses the engine on growing native files available on the PC, retaining result
-revisions and measuring PC processing/publication. Collector 0.5.0 adds an
-optional [private HTTPS connection](pnt/android-collector/README.md#private-pc-connection)
-that supplies native snapshots during recording. Collector 0.6.0 returns the
-existing monitor's local/external/combined counts and revisions to the phone,
-binds them to uploaded snapshot hashes and labels prior results historical after
-failure. Phone request/receipt/UI-text durations remain separate from PC
-processing; neither establishes physical GNSS-to-operator alert latency.
-Independent timing qualification and verified benign/RF challenge evidence
-remain necessary to establish operational security benefit.
-Website and deployment work follow that physical demonstration.
+Collector 0.6.0 implements acquisition -> original ZIP -> PC analysis ->
+input-bound result on the phone, plus optional private HTTPS monitoring with
+retained revisions and failures. [Outdoor trials](research/exploratory/PNT_ANDROID_NTS_COVERAGE.md)
+support acquisition and conditional replay; they do not establish a stable
+coverage gain or physical attack protection. PC processing and phone UI timings
+remain separate from GNSS-to-operator alert latency.
+
+Detailed evidence and gaps live in [project status](docs/PROJECT_STATUS.md).
+Synthetic exercises, software challenges and exploratory replays retain their
+original status; closed experimental results remain unchanged.
 
 ## Documentation
 
 | Start here | Purpose |
 |---|---|
-| [PNT security plan](docs/PNT_SECURITY_PLAN.md) | Active objective, evidence requirements and product direction |
-| [Project status](docs/PROJECT_STATUS.md) | Current results, failures and remaining work |
-| [PNT tools](pnt/README.md) | Offline diagnostic commands and signal/time conventions |
-| [Android app](pnt/android-collector/README.md) / [Android time guide](docs/ANDROID_GNSS_TIME.md) | Build, record, export and distinguish transport evidence from a qualified comparison |
-| [General verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md) | Request-to-result architecture and local service |
-| [Positioning implementation](positioning/README.md) | Independent target-state estimation and historical replay |
-| [Scientific roadmap](docs/SCIENTIFIC_ROADMAP.md) | Preserved inverse research, uncertainty and qualification work |
+| [Project status](docs/PROJECT_STATUS.md) | Ecosystem priorities, delivered results and independent scientific gaps |
+| [Scientific roadmap](docs/SCIENTIFIC_ROADMAP.md) / [positioning implementation](positioning/README.md) | Independent reconstruction, motion, uncertainty and historical replay; original protocols preserved |
+| [Forward roadmap](ROADMAP.md) / [orbital and RF reports](experiments/orbital_discriminability/) | Declared orbital prediction, observation capability and immutable outcomes |
+| [PNT security plan](docs/PNT_SECURITY_PLAN.md) / [PNT tools](pnt/README.md) | PNT-specific goals, command formats and evidence requirements |
+| [Android app](pnt/android-collector/README.md) / [Android time guide](docs/ANDROID_GNSS_TIME.md) | Build, collect, export and distinguish transport from a qualified comparison |
+| [General verification workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md) / [service](service/README.md) | Shared request-to-result infrastructure and local queue |
 | [Exploratory reports](research/exploratory/) / [kinematic research](research/kinematic/) | Detailed experiments and reproducible evidence |
-| [Historical experiments](experiments/) / [forward-era README](docs/history/README_forward.md) | Original outcomes and earlier project direction |
+| [Forward-era README](docs/history/README_forward.md) | Earlier project presentation |
 | [Development workflow](docs/DEVELOPMENT_WORKFLOW.md) / [AGENTS.md](AGENTS.md) | Integration and operational principles: freeze claims, not ordinary engineering |
 
 ## Development

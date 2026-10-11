@@ -1,5 +1,31 @@
 # Stato del progetto — 11 ottobre 2026
 
+## Ecosistema e stato dei verticali
+
+Riferimento: commit `d11c24a` dell'11 ottobre 2026. Satellite comprende quattro
+verticali, con primitivi tecnici riutilizzabili e criteri scientifici distinti.
+L'app Android continua a evolvere; la ricerca orbitale non dipende dalla sua
+conclusione o da P2/P3 PNT. Il sito resta una consegna successiva.
+
+| Verticale | Risultato consegnato | Limite e prossimo avanzamento |
+|---|---|---|
+| Ricostruzione orbitale | Snapshot storici condizionali e prototipi di posizione/moto; G14 raggiunge il proprio criterio, altri eventi conservano fallimenti e incertezza eccessiva | S2 aperta: vincolo indipendente ai bias assoluti di stazione/codice o geometria/modello che li renda identificabili; poi inviluppo totale prima di S3. [Piano](SCIENTIFIC_ROADMAP.md), [limite misurato](../research/exploratory/REAL_TARGET_BIAS_IDENTIFIABILITY.md). |
+| Osservazione RF e previsione orbitale | Un evento DRAO reale preferisce la geometria orbitale congelata sulle alternative in un intervallo escluso | Risultato condizionato ai PRN e a una stazione, non identita indipendente o conferma distribuita. Nuova ricerca solo su una domanda fisica e un'osservabile identificabile; esiti chiusi e dati sigillati restano tali. [Esito](../experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md), [roadmap](../ROADMAP.md). |
+| Sicurezza PNT | Diagnostica locale/rete/tempo, challenge software condizionali e analisi di registrazioni fisiche | Beneficio fisico aggiuntivo e conferma P3 aperti; budget temporali e verita di riferimento non si ricavano dal successo software. [Piano PNT](PNT_SECURITY_PLAN.md). |
+| Android | Ciclo sperimentale GNSS/NTS -> ZIP -> analisi PC -> rapporto sul telefono e monitoraggio LAN opzionale implementati | Affidabilita/usabilita possono avanzare normalmente. Qualifica del tempo, rilevamento RF e latenza fisica richiedono evidenza propria. [App](../pnt/android-collector/README.md). |
+
+Il nucleo condiviso comprende parser applicabili, gestione degli input,
+provenienza, qualificazione, replay e workflow richiesta/risultato gia esistenti.
+Riusarli non rende intercambiabili i modelli fisici o i loro criteri.
+
+**Percorso senza Finlandia:** i dati pubblici acquisiti restano disponibili;
+manca soprattutto il chiarimento indipendente del clock nel caso JammerTest.
+La [consegna diagnostica e i percorsi alternativi](PNT_SECURITY_PLAN.md#avanzare-senza-ulteriori-dati-dalla-finlandia)
+non dipendono da una risposta FGI. Una conferma anti-spoofing resta aperta finche
+la prova non documenta riferimenti adeguati, controllo/challenge e beneficio
+aggiuntivo rispetto al locale; il solo chiarimento del PPS non basta.
+Nessuna nuova prova scientifica e avviata da questo aggiornamento.
+
 ## Incremento attuale: limite causale alla ricezione Android
 
 La [diagnostica alla ricezione](../research/exploratory/PNT_ANDROID_CAUSAL_RECEIPT.md)
@@ -63,10 +89,13 @@ verificabili, prima del sito; altre raccolte equivalenti non colmano il limite.
 
 ## Obiettivo
 
-La direzione attiva e il [piano di sicurezza PNT](PNT_SECURITY_PLAN.md):
-confrontare osservazioni GNSS locali e osservazioni esterne via Internet,
-valutare geometria e tempo e produrre evidenze riproducibili per gli incidenti.
-Il primo caso proposto e un ricevitore GPS fisso a coordinate note.
+La direzione e sviluppare l'ecosistema descritto sopra, con avanzamenti
+indipendenti. Il [piano PNT](PNT_SECURITY_PLAN.md) confronta osservazioni GNSS
+locali ed esterne via Internet e produce diagnosi riproducibili di geometria
+e tempo. Il primo caso e un ricevitore GPS fisso a coordinate note.
+La [ricostruzione orbitale](SCIENTIFIC_ROADMAP.md) mantiene la domanda di
+posizione/moto indipendente; la [ricerca RF](../ROADMAP.md) verifica previsioni
+orbitali dichiarate. I risultati dei tre percorsi non si qualificano a vicenda.
 
 La [roadmap operativa Android](PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto)
 porta ora il telefono al centro del flusso: A1 raccoglie GNSS/NTS nella stessa
@@ -651,13 +680,13 @@ riportati. Questa variazione non chiude S2 e non avvia la vecchia campagna S3.
   sensibilita del modello. Il successivo replay RF con VMF3 completo misura
   miglioramenti dello 0.134%/0.838%, con tre stazioni peggiorate per giorno.
 
-## Stato della ricerca inversa precedente
+## Stato del verticale di ricostruzione orbitale
 
 | Fase | Stato | Risultato necessario |
 |---|---|---|
 | S0: diagnosi | Consegnata | Cause e limiti degli eventi precedenti documentati |
 | S1: cinematica sintetica | Consegnata | Posizione/moto con codice e variazione di distanza in simulazione |
-| S2: misure vere | Aperta; avanzamento subordinato al nuovo obiettivo | Calibrazione fisica, continuita delle osservabili e incertezza difendibile |
+| S2: misure vere | Aperta; avanzamento con criteri propri | Calibrazione fisica, continuita delle osservabili e incertezza difendibile |
 | S3: conferma su nuovi dati | Non ancora avviata | Campioni nuovi, regole fissate prima dei dati, verifiche escluse |
 | S4: prestazioni e prodotto | Da affrontare dopo S3 | Disponibilita, errori, incertezza e dominio d'uso misurati |
 
@@ -699,8 +728,9 @@ puo sostituire queste verifiche sperimentali.
 
 ## Consegne e passi residui del percorso inverso
 
-Il riepilogo seguente conserva il percorso S2/S3. La priorita operativa e P2
-nel piano PNT, non la prosecuzione automatica di ogni voce storica.
+Il riepilogo seguente conserva il percorso S2/S3. La prossima prova inversa
+deve risolvere il limite di identificabilita sopra descritto; non dipende da
+P2 PNT e non implica la prosecuzione automatica di ogni voce storica.
 
 1. Collegamento meteorologico consegnato sulle due finestre esposte: griglie
    alle coordinate ammesse, 88 confronti numerici con la routine originale e
