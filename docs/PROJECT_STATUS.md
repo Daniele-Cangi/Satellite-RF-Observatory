@@ -134,6 +134,19 @@ file finali conferma la correzione senza riscrivere quell'esito. Ricevute e temp
 di richiesta non misurano la latenza dell'allarme fino all'operatore. Il prossimo
 incremento 0.6.0 porta quella consegna nell'app senza riscrivere questa prova.
 
+La [prova 0.6.0 di consegna degli esiti alla finestra](../research/exploratory/PNT_ANDROID_LIVE_OUTCOMES.md)
+chiude il percorso fino all'app: **37/37 risposte**, nessun errore di trasporto,
+**37 applicazioni del testo alla UI**, file finali PC/telefono identici e tutti
+i 37 file precedenti preservati. Conserva **49 callback / 1.419 Raw** e **11/20
+scambi NTS autenticati**, con nove timeout. Ogni esito resta insufficiente perché
+non sono forniti budget; la UI finale e la chiusura automatica PC sono verificate.
+La mediana richiesta/ricevuta è 409,469 ms e ricevuta/applicazione testo 7,312 ms,
+entro questa singola prova; non sono latenza operatore o beneficio RF.
+I test sintetici verificano anche revisioni discordante -> inconclusivo e
+indisponibilità con risultato storico. Il flusso software è ora completo fino
+alla presentazione; il prossimo problema resta qualifica temporale e beneficio
+benigno/challenge utile, non altre estensioni amministrative del monitor.
+
 Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni
 reali già esposte sono identici ai rapporti precedenti; i replay storici con
