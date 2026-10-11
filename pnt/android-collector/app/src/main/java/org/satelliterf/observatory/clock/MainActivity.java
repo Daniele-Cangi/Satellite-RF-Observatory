@@ -19,6 +19,7 @@ import android.provider.DocumentsContract;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -44,6 +45,7 @@ public final class MainActivity extends Activity {
     private static final int LOCATION_PERMISSION = 1;
     private static final int EXPORT_FILE = 2;
     private static final int IMPORT_REPORT = 3;
+    private static final int IMPORT_CONNECTION = 4;
     private static final List<String> NTS_SERVERS = Arrays.asList("ptbtime1.ptb.de", "ptbtime2.ptb.de");
     private static final int NTS_ROUNDS = 10;
     private LocationManager locations;
@@ -65,6 +67,14 @@ public final class MainActivity extends Activity {
     private Button reportButton;
     private TextView reportDetails;
     private boolean reportLoading;
+    private PcConnection pcConnection;
+    private PcConnection pcProbe;
+    private LiveTransfer liveTransfer;
+    private boolean pcChecking;
+    private Button connectionButton;
+    private Button connectionTestButton;
+    private CheckBox sendToPc;
+    private TextView connectionDetails;
     private final Runnable refreshDiagnostics = new Runnable() {
         @Override public void run() {
             if (log == null) return;
@@ -124,6 +134,14 @@ public final class MainActivity extends Activity {
         stopButton = button(layout, "Stop recording", v -> stop("USER_STOPPED"));
         exportButton = button(layout, "Export last session", v -> export());
         reportButton = button(layout, "Open PC report", v -> importReport());
+        connectionButton = button(layout, "Configure private PC connection", v -> importConnection());
+        connectionTestButton = button(layout, "Test PC connection (no GNSS upload)", v -> testConnection());
+        sendToPc = new CheckBox(this);
+        sendToPc.setText("Send this recording to the configured PC (GNSS, NTS and device metadata)");
+        layout.addView(sendToPc);
+        connectionDetails = new TextView(this);
+        connectionDetails.setText("PC transfer disabled. Configuration stays in this app instance only.");
+        layout.addView(connectionDetails);
         details = new TextView(this);
         details.setTextSize(16);
         layout.addView(details);
@@ -252,12 +270,28 @@ public final class MainActivity extends Activity {
                                 + "\nUnavailable attempts: " + ntsUnavailable
                                 + "\nNo timing precision or GNSS authenticity assessed. Export the session.");
                             renderDiagnostics();
+                            if (liveTransfer != null) liveTransfer.finish();
                             buttons();
                         });
                     }
                 });
             ntsCapture = capture;
             latestNtsFile = ntsFile;
+            if (sendToPc.isChecked() && pcConnection != null) {
+                CaptureLog recording = log;
+                try {
+                    liveTransfer = new LiveTransfer(pcConnection,
+                        () -> new byte[][]{recording.snapshot(file.toPath()), capture.snapshot()},
+                        id, getFilesDir().toPath(), SystemClock::elapsedRealtimeNanos,
+                        message -> ui.post(() -> {
+                            if (latestFile != file) return;
+                            connectionDetails.setText(message);
+                            buttons();
+                        }));
+                } catch (IOException error) {
+                    connectionDetails.setText("PC upload unavailable: " + error + "\nLocal acquisition continues; originals retained.");
+                }
+            }
             capture.start();
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             recordingStatus();
@@ -308,7 +342,53 @@ public final class MainActivity extends Activity {
 
     @Override protected void onStop() {
         if (busy()) stop("ACTIVITY_STOPPED");
+        if (liveTransfer != null) liveTransfer.close();
+        if (pcProbe != null) pcProbe.cancel();
         super.onStop();
+    }
+
+    private void importConnection() {
+        if (busy() || pcChecking) return;
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/json");
+        startActivityForResult(intent, IMPORT_CONNECTION);
+    }
+
+    private void readConnection(Uri document) {
+        sendToPc.setChecked(false);
+        pcChecking = true;
+        buttons();
+        new Thread(() -> {
+            PcConnection config = null;
+            String message;
+            try (InputStream input = getContentResolver().openInputStream(document)) {
+                if (input == null) throw new IOException("PC connection document is unavailable");
+                config = PcConnection.read(input);
+                message = "Configured PC: " + config.address
+                    + "\nNo upload starts until you select Send this recording and press Start.";
+            } catch (Exception error) { message = "PC configuration rejected: " + error.getClass().getSimpleName(); }
+            PcConnection parsed = config;
+            String text = message;
+            ui.post(() -> { pcChecking = false; pcConnection = parsed; connectionDetails.setText(text); buttons(); });
+        }, "pnt-pc-connection-import").start();
+    }
+
+    private void testConnection() {
+        if (pcConnection == null || busy() || pcChecking) return;
+        pcChecking = true;
+        PcConnection probe = pcConnection.fresh();
+        pcProbe = probe;
+        connectionDetails.setText("Testing configured PC; no GNSS file is sent.");
+        buttons();
+        new Thread(() -> {
+            String result;
+            try { probe.health(); result = "PC HTTPS connection ready. No GNSS data uploaded; no acquisition started."; }
+            catch (Exception error) { result = "PC connection unavailable: " + error.getClass().getSimpleName() + ": " + error.getMessage(); }
+            finally { probe.cancel(); }
+            String text = result;
+            ui.post(() -> { pcChecking = false; pcProbe = null; connectionDetails.setText(text); buttons(); });
+        }, "pnt-pc-connection-test").start();
     }
 
     private void export() {
@@ -356,7 +436,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onActivityResult(int request, int result, Intent data) {
         super.onActivityResult(request, result, data);
-        if ((request != EXPORT_FILE && request != IMPORT_REPORT) || result != RESULT_OK
+        if ((request != EXPORT_FILE && request != IMPORT_REPORT && request != IMPORT_CONNECTION) || result != RESULT_OK
                 || data == null || data.getData() == null) return;
         try {
             Uri requested = data.getData();
@@ -369,6 +449,10 @@ public final class MainActivity extends Activity {
                 throw new SecurityException("Validated destination differs from the granted URI");
             }
             Uri destination = Uri.parse(validated);
+            if (request == IMPORT_CONNECTION) {
+                if (!busy() && !pcChecking) readConnection(destination);
+                return;
+            }
             if (request == IMPORT_REPORT) {
                 loadReport(null, destination);
                 return;
@@ -393,12 +477,18 @@ public final class MainActivity extends Activity {
     }
 
     private void buttons() {
-        startButton.setEnabled(!busy() && !reportLoading);
+        startButton.setEnabled(!busy() && !reportLoading && !pcChecking);
         stopButton.setEnabled(log != null);
         exportButton.setEnabled(!busy() && !reportLoading && latestFile != null);
         reportButton.setEnabled(!busy() && !reportLoading);
+        connectionButton.setEnabled(!busy() && !pcChecking && !reportLoading);
+        connectionTestButton.setEnabled(pcConnection != null && !busy() && !pcChecking && !reportLoading);
+        sendToPc.setEnabled(pcConnection != null && !busy() && !pcChecking && !reportLoading);
     }
-    private boolean busy() { return log != null || (ntsCapture != null && !ntsCapture.isFinished()); }
+    private boolean busy() {
+        return log != null || (ntsCapture != null && !ntsCapture.isFinished())
+            || (liveTransfer != null && !liveTransfer.isClosed());
+    }
     private void recordingStatus() {
         show("Recording GNSS + NTS; keep the app visible. No Termux or PC required."
             + "\nNTS authenticated: " + ntsAuthenticated + "/20; unavailable: " + ntsUnavailable

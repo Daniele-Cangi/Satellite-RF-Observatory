@@ -51,7 +51,7 @@ final class CaptureLog implements Closeable {
         writer.flush();
     }
 
-    void event(long start, long readEnd, Map<String, String> clock,
+    synchronized void event(long start, long readEnd, Map<String, String> clock,
                List<Map<String, String>> measurements) throws IOException {
         if (terminal) throw new IOException("capture already terminated");
         long index = ++events;
@@ -71,7 +71,7 @@ final class CaptureLog implements Closeable {
         writer.flush();
     }
 
-    void comment(String... values) throws IOException {
+    synchronized void comment(String... values) throws IOException {
         if (terminal) throw new IOException("capture already terminated");
         writer.write("# ");
         for (int i = 0; i < values.length; i++) {
@@ -82,7 +82,7 @@ final class CaptureLog implements Closeable {
         writer.flush();
     }
 
-    void finish(String reason, long stopCounter) throws IOException {
+    synchronized void finish(String reason, long stopCounter) throws IOException {
         if (terminal) return;
         comment("Terminal", reason, Long.toString(stopCounter),
                 Long.toString(events), Long.toString(rows));
@@ -91,7 +91,31 @@ final class CaptureLog implements Closeable {
 
     long eventCount() { return events; }
     long rowCount() { return rows; }
-    @Override public void close() throws IOException { writer.close(); }
+    @Override public synchronized void close() throws IOException { writer.close(); }
+
+    byte[] snapshot(java.nio.file.Path file) throws IOException {
+        final long boundary;
+        synchronized (this) {
+            // Every callback/comment flushes before releasing this lock. Later
+            // appends cannot alter this complete prefix, including after close.
+            boundary = java.nio.file.Files.size(file);
+        }
+        try (var input = java.nio.file.Files.newInputStream(file)) {
+            return readPrefix(input, boundary);
+        }
+    }
+
+    static byte[] readPrefix(java.io.InputStream input, long boundary) throws IOException {
+        if (boundary < 0 || boundary > PcConnection.MAX_SNAPSHOT) throw new IOException("Raw snapshot exceeds size limit");
+        byte[] bytes = new byte[(int) boundary];
+        int offset = 0;
+        while (offset < bytes.length) {
+            int count = input.read(bytes, offset, Math.min(8192, bytes.length - offset));
+            if (count == -1) throw new java.io.EOFException("Raw snapshot prefix truncated");
+            offset += count;
+        }
+        return bytes;
+    }
 
     static String csv(String value) {
         if (value == null) return "";

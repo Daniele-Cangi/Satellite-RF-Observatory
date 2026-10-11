@@ -336,3 +336,20 @@ def test_unknown_budgets_and_deadline_retain_partial_result_without_success(tmp_
     update = json.loads((output/summary['last_result']).read_bytes())
     assert update['record_outcomes'] == {}
     assert any('not been supplied' in issue for issue in update['issues'])
+
+
+def test_unknown_budgets_do_not_hide_valid_native_completion_or_admit_rewritten_history(tmp_path):
+    _, pieces, full, witness = native_data()
+    raw, nts = paths(tmp_path)
+    put(raw, nts, pieces[1], ongoing(witness, complete=4))
+    monitor = AndroidSessionMonitor(raw, nts, tmp_path/'out', local_counter_resolution_ns=1)
+    assert not monitor.poll()['session_complete']
+    put(raw, nts, full, witness)
+    assert monitor.poll()['session_complete']
+    assert monitor.last_update['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert monitor.last_update['record_outcomes'] == {} and monitor.last_update['issues']
+    changed = copy.deepcopy(witness)
+    changed['attempts'][0]['exchange']['server_receive_unix_ns'] += 1
+    put(raw, nts, full, changed)
+    assert not monitor.poll()['session_complete']
+    assert any('changed' in issue for issue in monitor.last_update['issues'])

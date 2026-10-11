@@ -3,7 +3,8 @@
 A foreground research app that records native GNSS measurements and
 authenticated Internet time together. Version 0.2 removes the need for Termux,
 a PC or USB during acquisition; version 0.3 adds live acquisition diagnostics,
-and version 0.4 imports the existing engine's PC report.
+version 0.4 imports the existing engine's PC report, and version 0.5 adds an
+explicit private PC connection during recording.
 It retains the existing Raw format and Python
 intake/replay. It does not adjust the device clock, authenticate local RF or
 compute a timing/security verdict on the phone.
@@ -35,12 +36,83 @@ budgets. The session report makes missing assumptions explicit and reuses the
 existing engine/replay. The [Android guide](../../docs/ANDROID_GNSS_TIME.md)
 retains the earlier GNSS Logger/Termux conditional workflow separately.
 
+## Private PC connection
+
+Version **0.5.0** optionally sends complete native-file snapshots to the existing
+PC monitor while recording. It does not add a detector or change GNSS/NTS
+timestamps, budgets, schedules or terminal requirements. Offline recording and
+ZIP export remain available without configuring a PC.
+
+1. Connect phone and PC to the same trusted Wi-Fi. On the PC run, for example:
+
+   ```console
+   python -m pnt android-serve --bind 192.168.1.10 --port 8443 --duration-s 300 --local-counter-resolution-ns 1 --output-directory PRIVATE-NEW-DIRECTORY
+   ```
+
+   Replace the example IP with the PC's actual LAN IPv4 address. The `1` ns
+   resolution is an explicit **unqualified example**, not a phone bound. Add
+   `--analysis-options options.json` only with the documented explicit sources;
+   without options the existing monitor retains insufficient results and reasons.
+2. Transfer only `connection.json` from that new directory to the phone through
+   a trusted route, then press **Configure private PC connection** and select it.
+   The file contains a bearer credential and the exact PC certificate; protect
+   it. Never transfer `server-key.pem` or publish the directory.
+   The receiver creates its directory with owner-only POSIX permissions or a
+   user/admin-only Windows ACL **before writing any credentials or data**;
+   Windows requires Python 3.13+ for these creation semantics, as used in CI.
+   Configuration is held only in this Activity instance; it does not survive
+   an app restart or rotation.
+3. **Test PC connection (no GNSS upload)** checks HTTPS readiness without opening
+   a recording or transmitting a native file. Allow this specific LAN connection
+   through your firewall if needed; do not expose the receiver to the Internet.
+4. Select **Send this recording to the configured PC**, then press Start. This
+   explicitly enables transfer of this new recording's GNSS/NTS and device/boot
+   metadata. Earlier recordings are never automatically uploaded. A single worker
+   sends a pair once per second after the preceding request finishes, with no
+   queue of obsolete snapshots. A complete flushed Raw boundary or opened NTS
+   checkpoint is captured under its writer lock; full copying and network I/O
+   occur after releasing it, without splitting callbacks/checkpoints.
+
+The phone trusts only the PC's generated seven-day certificate, checking that
+exact leaf, its validity and the platform HTTPS host identity. There is no global
+trust override, redirect following or cleartext fallback. A plausible calendar
+is still needed for TLS. The per-run token authorizes upload to this PC; neither
+TLS nor the token authenticates GNSS measurements or PC arithmetic. Stop the
+receiver to revoke its connection, and explicitly import the new configuration
+for a later run. The service is a bounded, foreground research receiver for one
+capture on a specific private/loopback IPv4 address, **not a public API**.
+
+The native sources remain private and unchanged. Copies feed the existing monitor,
+which retains exact changed/error snapshots, reasons and result revisions. Invalid
+framing or another capture is rejected; a malformed native pair is retained and
+clears the current numerical result. Limits are 32 MiB per pair, 128 MiB received
+per run and 256 authenticated snapshot requests; existing output directories are
+refused. It stops at the duration limit, interrupt, storage failure or both valid
+session terminals. A network error never changes or restarts local acquisition.
+Native session completion is independent of optional timing-analysis budgets:
+a valid closed pair stops the receiver even when its analysis is insufficient.
+Rewritten history or invalid native terminals still cannot close the session.
+An admission/publication storage failure stops the receiver and invalidates its
+current monitor result: the final summary is insufficient with no current result
+pointer, while prior snapshots remain historical evidence. If the summary itself
+cannot be persisted, the command fails instead of returning an old verdict.
+
+The app displays **transport receipts only**, including cumulative failures and
+intake issue counts; `pnt-transfer-<id>.jsonl` retains the request outcomes privately.
+Orderly session completion sends a final snapshot; hiding the app cancels transfer
+and retains native partials, without a background restart. A periodic upload may
+already deliver the closed pair; its complete receipt stops the worker, so a
+later completion callback does not duplicate the final upload after PC exit.
+A newer snapshot may follow a failed request; this is transport recovery, not an
+NTS attempt retry or replacement. PC outcome delivery and phone-visible alert
+latency are the next increment. No ALLOW/BLOCK decision is shown.
+
 ## ZIP to PC report to phone
 
 The separate [conditional PC monitor](../README.md#conditional-pc-session-monitor)
-can analyze growing native files once they are available on the PC and retain
-revisions. It does not add live transfer or result delivery to this app; the
-ZIP/report workflow below remains the supported phone interface.
+can analyze growing native files and retain revisions. The optional private
+connection above supplies files during recording; the ZIP/report workflow below
+remains the interface for importing a complete PC report.
 
 On the PC, from the repository root:
 
@@ -81,7 +153,7 @@ NTS protocol. The slot list stays in round/endpoint order, irrespective of
 completion order. The PC checks each endpoint's non-overlapping attempt prefix,
 minimum start spacing, original round offsets and complete slot/terminal totals.
 Late slots start without replacement, retries or compressed catch-up. This mode
-requires declared collector version 0.4.2; older or unknown versions cannot opt
+requires declared collector version 0.4.2 or 0.5.0; older or unknown versions cannot opt
 into it. Historical reports retain the original global serial checks.
 Checkpoint writes and progress updates are serialized; Stop closes every active
 probe, wakes both schedules and waits for their completion before the final
@@ -181,8 +253,9 @@ The two PTB endpoints share one authority; they are not independent clock roots.
 Same-app association is provenance, not hardware attestation. Sudden process
 termination can leave the last checkpoint in progress and a Raw file without
 a terminal. Retain those partials; neither file alone proves completeness.
-The network sends NTS protocol requests, never the collected GNSS file. There
-is no upload service or public API.
+Without the explicit private PC connection, network traffic contains only NTS
+protocol requests. Optional native-file upload is described above; there is no
+public upload service or API.
 
 ## Observables and limits
 
@@ -248,7 +321,10 @@ the synthetic CSV/JSON with Python intake/UTC adapter/replay, then runs the nati
 client against local Python TLS/NTS servers. Shared synthetic vectors cover
 tampering, replay, framing and negotiation. Loopback cases cover valid exchange,
 wrong identity, untrusted certificate, missing ALPN, TLS 1.2, altered UDP and
-timeout. Existing Python Linux/Windows CI is preserved.
+timeout. The same Linux/Windows workflow also runs the native HTTPS client and
+transfer worker against local Python receivers, including wrong credentials,
+changed certificate, wrong host identity, unchanged source bytes and retained
+upload failures. Existing Python Linux/Windows CI is preserved.
 This checks engineering behavior; device API availability and physical bounds
 still require acquisition/qualification on the actual phone.
 

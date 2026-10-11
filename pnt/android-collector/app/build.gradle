@@ -12,8 +12,8 @@ android {
         applicationId 'org.satelliterf.observatory.clock'
         minSdk 29
         targetSdk 36
-        versionCode 7
-        versionName '0.4.2'
+        versionCode 8
+        versionName '0.5.0'
         buildConfigField 'String', 'SOURCE_REVISION', '"' + revision + '"'
     }
     buildFeatures { buildConfig true }
@@ -36,4 +36,5 @@ configurations.matching { it.name.endsWith('UnitTestRuntimeClasspath') }.configu
 tasks.withType(Test).configureEach {
     inputs.property('ntsLoopbackConfig', providers.environmentVariable('PNT_NTS_LOOPBACK_CONFIG').getOrElse('ABSENT'))
     inputs.property('sessionReportFixture', providers.environmentVariable('PNT_SESSION_REPORT_FIXTURE').getOrElse('ABSENT'))
+    inputs.property('pcConnectionFixture', providers.environmentVariable('PNT_PC_CONNECTION_FIXTURE').getOrElse('ABSENT'))
 }

@@ -82,6 +82,42 @@ public final class CaptureLogTest {
         assertEquals("", CaptureLog.csv(null));
     }
 
+    @Test public void prefixCopyExcludesConcurrentAppendAndClosedSnapshotRemainsReadable() throws Exception {
+        Path path = Files.createTempFile("pnt-prefix", ".txt");
+        try (CaptureLog log = new CaptureLog(Files.newBufferedWriter(path, StandardCharsets.UTF_8), "prefix", Map.of())) {
+            log.event(1, 2, clock(true), List.of(measurement()));
+            byte[] prefix = Files.readAllBytes(path);
+            var copied = new java.util.concurrent.CompletableFuture<byte[]>();
+            var boundaryObserved = new java.util.concurrent.CountDownLatch(1);
+            var continueCopy = new java.util.concurrent.CountDownLatch(1);
+            Thread snapshot = new Thread(() -> {
+                try {
+                    final long boundary;
+                    synchronized (log) { boundary = Files.size(path); }
+                    boundaryObserved.countDown();
+                    assertTrue(continueCopy.await(2, java.util.concurrent.TimeUnit.SECONDS));
+                    try (var input = Files.newInputStream(path)) { copied.complete(CaptureLog.readPrefix(input, boundary)); }
+                } catch (Throwable error) { copied.completeExceptionally(error); }
+            });
+            snapshot.start();
+            assertTrue(boundaryObserved.await(2, java.util.concurrent.TimeUnit.SECONDS));
+            log.event(3, 4, clock(true), List.of(measurement()));
+            continueCopy.countDown();
+            assertArrayEquals(prefix, copied.get(2, java.util.concurrent.TimeUnit.SECONDS));
+            assertTrue(Files.size(path) > prefix.length);
+            log.finish("SCHEDULE_COMPLETED", 5);
+            log.close();
+            assertArrayEquals(Files.readAllBytes(path), log.snapshot(path));
+            snapshot.join(2000);
+            assertFalse(snapshot.isAlive());
+        } finally { Files.delete(path); }
+    }
+
+    @Test public void prefixCopyRejectsTruncationAndOversizeBeforeReturningBytes() throws Exception {
+        assertThrows(java.io.EOFException.class, () -> CaptureLog.readPrefix(new java.io.ByteArrayInputStream(new byte[2]), 3));
+        assertThrows(IOException.class, () -> CaptureLog.readPrefix(new java.io.ByteArrayInputStream(new byte[0]), PcConnection.MAX_SNAPSHOT + 1L));
+    }
+
     @Test public void generateSyntheticIntakeFixture() throws Exception {
         Path path = Path.of("build", "synthetic-collector.txt");
         Files.createDirectories(path.getParent());

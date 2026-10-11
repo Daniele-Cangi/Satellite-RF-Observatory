@@ -241,7 +241,9 @@ e conserva zero Raw GNSS, senza dichiarare una nuova qualifica scientifica.
 Per A3 l'elaborazione iniziale resta sul PC: export/import esplicito precede
 l'eventuale collegamento a un servizio configurato dall'utente. Quando serve
 l'integrazione, riusare coda, worker e dossier esistenti; non presumere che il
-servizio locale sia già un'API pubblica. Nessun upload automatico dei dati grezzi.
+servizio locale sia già un'API pubblica. Il collegamento 0.5.0 richiede
+configurazione e consenso per la nuova registrazione; nessuna raccolta o invio
+dei dati grezzi parte automaticamente.
 Il porting dei controlli sul telefono segue un bisogno misurato.
 
 Il primo traguardo operativo è **registrare dal telefono e ottenere un rapporto
@@ -297,9 +299,14 @@ La disponibilità degli input è distinta dalla latenza dell'allarme. Il primo
 sui file nativi già disponibili sul PC, riusa il motore e aggiorna gli esiti
 con nuove prove. Conserva gli input letti, i fallimenti e le revisioni, senza
 trasformare un allarme successivamente inconclusivo in una decisione irrevocabile.
-Misura elaborazione e pubblicazione sul PC; il trasporto durante la raccolta
-e la consegna effettiva al telefono restano il prossimo passo. Queste durate
-non sono latenza GNSS -> allarme operatore né qualifica dei budget.
+Misura elaborazione e pubblicazione sul PC. Il
+[collegamento privato del raccoglitore 0.5.0](../pnt/android-collector/README.md#private-pc-connection)
+porta le copie native a questo monitor durante la raccolta, solo dopo
+configurazione e selezione esplicita dell'invio. Riusa controlli, snapshot e
+replay esistenti; TLS e credenziale servono alla sicurezza del trasporto, senza
+introdurre autorità scientifiche. L'app mostra ricevute e conserva i fallimenti;
+la consegna degli esiti e la latenza effettiva sul telefono restano il prossimo
+passo. Le durate PC non sono latenza GNSS -> allarme operatore né qualifica dei budget.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,

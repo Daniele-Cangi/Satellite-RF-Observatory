@@ -98,10 +98,35 @@ snapshot osservato e le revisioni per record. Tentativi ancora attivi, input
 parziali o mancanti e modifiche della storia non lasciano un vecchio esito
 come risultato corrente. Misura lettura, elaborazione e pubblicazione del file
 risultato sul contatore PC; non associa i contatori PC/telefono. I terminali
-del formato ZIP chiuso restano obbligatori. Il trasporto dei file durante
-l'acquisizione e la consegna del risultato al telefono sono il prossimo
-incremento di prodotto; la latenza operatore e il beneficio di sicurezza
-restano da misurare.
+del formato ZIP chiuso restano obbligatori. Il raccoglitore **0.5.0** aggiunge
+il [collegamento HTTPS privato](../pnt/android-collector/README.md#private-pc-connection):
+configurazione esplicita e invio facoltativo delle copie native durante la raccolta
+allo stesso monitor, senza cambiare il motore. La prova di connessione non avvia
+GNSS né trasmette registrazioni. Credenziale e certificato dedicati proteggono
+il trasporto; non attestano le misure. L'app conserva i fallimenti e mostra
+ricevute di trasporto. La consegna degli esiti numerici al telefono è il prossimo
+incremento; latenza operatore e beneficio di sicurezza restano da misurare.
+
+Prova ingegneristica 0.5.0 sul Galaxy S21 FE / Android 16: configurazione
+importata e connessione HTTPS telefono -> PC riuscita sulla LAN Wi-Fi.
+Nessuna nuova raccolta o trasmissione GNSS; i **34 file privati preesistenti**
+conservano gli stessi hash. I test sintetici esercitano anche l'invio delle
+copie al monitor e il rifiuto di credenziali, certificati, identità HTTPS,
+sessioni miste e trasferimenti incompleti. Non è ancora una prova outdoor
+del nuovo flusso né una misura di latenza fino all'operatore.
+
+La [prima raccolta con trasferimento live alla finestra](../research/exploratory/PNT_ANDROID_LIVE_TRANSFER.md)
+è conclusa: **43 callback / 1.082 righe Raw**, di cui 376 GPS normalizzate,
+17 GPS con tempo di trasmissione irrisolto e 689 di altre costellazioni;
+**9/20 scambi NTS autenticati**, con 11 timeout conservati. Tutti i **35 invii**
+sono confermati, senza errori di trasporto; la coppia finale PC/telefono coincide
+byte per byte e i 34 file preesistenti restano identici. Non sono stati forniti
+budget: nessun confronto numerico, esito insufficiente esplicito. La prova
+ha anche rilevato e corretto la chiusura PC che dipendeva erroneamente dai budget:
+il ricevitore originale ha atteso il limite di durata; un replay separato dei
+file finali conferma la correzione senza riscrivere quell'esito. Ricevute e tempi
+di richiesta non misurano la latenza dell'allarme fino all'operatore. Il prossimo
+incremento resta la consegna live degli esiti esistenti al telefono.
 
 Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni

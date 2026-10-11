@@ -51,6 +51,7 @@ absolute-time verification requires a separate qualified time reference.
 | [PNT Clock Collector](pnt/android-collector/README.md) | Same-app GNSS + NTS, live diagnostics, session ZIP export and input-bound PC report import; Android 10+ development APK |
 | `python -m pnt android-session` | Native session ZIP to a phone-readable report; missing budgets remain insufficient, explicit analysis reuses the existing time engine |
 | `python -m pnt android-monitor` | Growing native files on the PC to revisable local/external results; source snapshots and measured PC publication times retained |
+| `python -m pnt android-serve` | Explicit private LAN HTTPS transfer from the Android app into that same monitor; opt-in upload and retained failures |
 | `python -m pnt analyze` | Fixed-site RINEX geometry, local and matched-network clock fits, double differences and data gaps |
 | `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
 | `python -m pnt time-probe` / `android-time-probe` | Authenticated Internet time acquisition with declared assumptions; the Android command uses the phone's CLOCK_BOOTTIME |
@@ -169,8 +170,11 @@ study now distinguishes reported epochs from actual input availability using
 native callback and NTS completion receipts. The
 [conditional session monitor](pnt/README.md#conditional-pc-session-monitor)
 reuses the engine on growing native files available on the PC, retaining result
-revisions and measuring PC processing/publication. Transfer during phone
-acquisition and delivery back to the operator remain to be implemented and measured.
+revisions and measuring PC processing/publication. Collector 0.5.0 adds an
+optional [private HTTPS connection](pnt/android-collector/README.md#private-pc-connection)
+that supplies native snapshots during recording and displays transport receipts.
+Delivery of the numerical results back to the operator and its latency remain
+to be implemented and measured.
 Independent timing qualification and verified benign/RF challenge evidence
 remain necessary to establish operational security benefit.
 Website and deployment work follow that physical demonstration.

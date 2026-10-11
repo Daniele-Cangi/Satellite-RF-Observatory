@@ -94,6 +94,15 @@ final class NtsCapture {
     }
     void start() { worker.start(); }
     boolean isFinished() { return finished; }
+    byte[] snapshot() throws IOException {
+        final java.io.InputStream checkpoint;
+        // Open the complete checkpoint under the replacement lock; read its
+        // immutable file handle without blocking a later NTS save.
+        synchronized (this) { checkpoint = Files.newInputStream(file); }
+        try (var input = checkpoint) {
+            return PcConnection.readLimited(input, PcConnection.MAX_SNAPSHOT);
+        }
+    }
     synchronized void cancel(String reason) {
         if (finished || stopReason != null) return;
         stopReason = reason;
