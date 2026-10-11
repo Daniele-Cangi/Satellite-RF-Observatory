@@ -58,7 +58,12 @@ Ongoing input is a distinct intake mode: complete Raw callback blocks and
 completed NTS attempts may contribute before session terminals exist. An active
 attempt is retained as unavailable, never treated as authenticated. The last
 phone counter actually recorded bounds admission; PC read time is not used as
-the GNSS epoch or mapped onto the phone clock. Closed-ZIP terminal checks stay
+the GNSS epoch or mapped onto the phone clock. A row whose entire declared
+epoch interval lies after its own completed callback remains insufficient,
+even when later NTS receipts advance admission. The explicit alignment budget
+is preserved: the epoch interval is neither clipped nor replaced by callback
+time. The shared comparison/replay retains the row and reason; other valid rows
+remain usable. Closed-ZIP terminal checks stay
 unchanged. Partial callback writes, malformed/missing files, rewritten Raw
 history or changed completed NTS slots clear the current comparison to
 **INSUFFICIENT_EVIDENCE**, with reasons. Polling can recover when consistent
@@ -67,7 +72,8 @@ input returns; earlier results remain visible.
 The terminal prints per-record local/external/combined outcome counts and
 revisions. Each changed observed state creates `update-00001/`, etc., containing
 the exact read source bytes and `result.json`; `options.json` retains the fixed
-analysis settings. `updates.jsonl` records the PC input-read, analysis and
+analysis settings. `record_reasons` explains rows lacking an admitted claim.
+`updates.jsonl` records the PC input-read, analysis and
 result-publication durations. Publication is sampled after flushing the result
 file; the counter is **PC_MONOTONIC**, separate from phone `CLOCK_BOOTTIME`.
 These are processing timings on the PC, not phone-to-operator alert latency.

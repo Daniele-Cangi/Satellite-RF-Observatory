@@ -155,6 +155,54 @@ def test_monitor_matches_direct_prefix_engine_and_retains_later_alarm_revision(t
     assert not summary['phone_operator_alert_latency_measured']
 
 
+def test_later_nts_or_terminal_cannot_admit_epoch_wholly_after_its_own_callback(tmp_path):
+    _, pieces, full, witness = native_data()
+    raw, nts = paths(tmp_path)
+    header = next(csv.reader([next(line[2:] for line in full.decode().splitlines() if line.startswith('# Raw,'))]))
+    def future_epoch(data):
+        output = io.StringIO()
+        changed = False
+        for line in data.decode().splitlines():
+            if line.startswith('Raw,') and not changed:
+                row = next(csv.reader([line]))
+                receipt = int(row[header.index('CallbackReadEndElapsedRealtimeNanos')])
+                row[header.index('ChipsetElapsedRealtimeNanos')] = str(receipt + 5 * MS)
+                csv.writer(output, lineterminator='\n').writerow(row)
+                changed = True
+            else:
+                output.write(line + '\n')
+        return output.getvalue().encode()
+
+    monitor = AndroidSessionMonitor(raw, nts, tmp_path/'monitor',
+        analysis_options=ANALYSIS, local_counter_resolution_ns=1)
+    snapshots = [(future_epoch(pieces[0]), ongoing(witness, complete=1)),
+                 (future_epoch(pieces[0]), ongoing(witness, complete=2)),
+                 (future_epoch(pieces[1]), ongoing(witness, complete=4)),
+                 (future_epoch(full), witness)]
+    for data, checkpoint in snapshots:
+        put(raw, nts, data, checkpoint)
+        report = inspect_android_session_files(raw, nts, analysis_options=ANALYSIS)
+        assert not report['issues']  # The recording is retained; only the bad row is excluded.
+        row = report['comparison']['records'][0]
+        assert 'claim' not in row and 'wholly after its completed callback' in row['reason']
+        control = assess_time_sensitivity(report['comparison'], [0], local_counter_resolution_ns=1)
+        methods = _method_outcomes(control['offset_cases'][0], len(report['comparison']['records']))
+        assert all(values[0] == 'INSUFFICIENT_EVIDENCE' for values in methods.values())
+        receipt = monitor.poll()
+        saved = json.loads((monitor.output/receipt['result']).read_bytes())
+        assert set(saved['record_outcomes']['0'].values()) == {'INSUFFICIENT_EVIDENCE'}
+        assert 'wholly after its completed callback' in saved['record_reasons']['0']
+        assert (monitor.output/receipt['result']).parent.joinpath(raw.name).read_bytes() == data
+    assert 'claim' in report['comparison']['records'][1]
+    assert receipt['session_complete']
+    archive = tmp_path/'closed.zip'
+    with zipfile.ZipFile(archive, 'w') as z:
+        z.writestr(raw.name, raw.read_bytes())
+        z.writestr(nts.name, nts.read_bytes())
+    assert inspect_android_session(archive, analysis_options=ANALYSIS)['comparison'] == report['comparison']
+    assert monitor.finish('REGRESSION_TEST_COMPLETED')['updates'] == 4
+
+
 def test_unavailable_and_malformed_inputs_clear_current_results_and_recover(tmp_path):
     _, pieces, _, witness = native_data()
     raw, nts = paths(tmp_path)

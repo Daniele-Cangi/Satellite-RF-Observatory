@@ -132,6 +132,33 @@ def test_missing_alignment_remains_unknown_and_outside_acquisition_is_not_associ
     assert compare(witness, raw)['status'] == 'INSUFFICIENT_EVIDENCE'
 
 
+@pytest.mark.parametrize('epoch_after_receipt_ns,admitted', [
+    (-3 * NS, True), (-200 * MS, True), (0, True), (MS, True), (MS + 1, False), (5 * MS, False)])
+def test_callback_consistency_uses_declared_alignment_without_clipping_or_clock_substitution(
+        epoch_after_receipt_ns, admitted):
+    witness, raw, epoch, _ = inputs()
+    values = raw['records'][0]['source_values']
+    receipt = epoch - epoch_after_receipt_ns
+    values.update(CallbackStartElapsedRealtimeNanos=str(receipt - MS),
+                  CallbackReadEndElapsedRealtimeNanos=str(receipt))
+    original = copy.deepcopy((witness, raw))
+    result = compare(witness, raw)
+    row = result['records'][0]
+    assert ('claim' in row) is admitted
+    assert (witness, raw) == original
+    assert len(result['records']) == 8
+    assert 'claim' in result['records'][1]  # One invalid row does not discard others.
+    if admitted:
+        assert row['claim']['start_monotonic_ns'] == epoch - MS
+        assert row['claim']['end_monotonic_ns'] == epoch + MS
+    else:
+        assert 'wholly after its completed callback' in row['reason']
+        assert row['status'] == row['comparisons'][0]['status'] == 'INSUFFICIENT_EVIDENCE'
+    replay = compare_receiver_capture(result['witness_report'], result['receiver_capture'],
+        utc_error_ns=MS, utc_error_source=OPTIONS['utc_error_source'])
+    assert replay == result
+
+
 def test_unqualified_rows_and_clock_discontinuities_are_retained_without_joining():
     witness, raw, _, _ = inputs()
     raw['records'][0]['status'] = 'UNRESOLVED_GPS_TRANSMIT_TIME'

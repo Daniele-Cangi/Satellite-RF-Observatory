@@ -118,6 +118,8 @@ class AndroidSessionMonitor:
             processor=report['processor'] if report else None,
             source_members=[_source(n, b) for n, b in sorted(members.items())],
             issues=issues, revisions=changes, record_outcomes=outcomes,
+            record_reasons={r['source_index']: r['reason'] for r in report['comparison']['records'] if 'reason' in r}
+                if report and not issues and report['comparison'] is not None else {},
             witness_status_counts=report['witness_status_counts'] if report else {},
             snapshot=report['snapshot'] if report else None,
             timing=dict(counter_clock='PC_MONOTONIC', read_started_ns=started,

@@ -103,7 +103,7 @@ l'acquisizione e la consegna del risultato al telefono sono il prossimo
 incremento di prodotto; la latenza operatore e il beneficio di sicurezza
 restano da misurare.
 
-Verifica software: **798 test PNT passano**, cinque integrazioni restano
+Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni
 reali già esposte sono identici ai rapporti precedenti; i replay storici con
 scarti costanti e deriva restano invariati. Una consegna ricostruita e accelerata
@@ -112,6 +112,12 @@ con circa 270–729 ms di lettura/elaborazione/pubblicazione sul PC in questa pr
 È una verifica ingegneristica sul PC, non una nuova raccolta o latenza live del
 telefono; input e output completi restano privati. Il test sintetico conserva
 anche il passaggio discordante -> inconclusivo con una nuova prova esterna.
+Il costruttore condiviso della claim esclude ora una riga la cui epoca, anche
+con il budget di associazione dichiarato, sia interamente successiva al proprio
+callback completato: nuove ricevute NTS o terminali non possono renderla valida.
+Riga e motivo restano nel rapporto; le altre righe rimangono utilizzabili.
+Un callback ritardato o una sovrapposizione entro il budget non riducono né
+spostano l'intervallo dell'epoca. Il controllo opera anche nel replay esistente.
 
 Il [testimone temporale Internet autenticato](../research/exploratory/PNT_INTERNET_TIME_WITNESS.md)
 aggiunge `python -m pnt time-probe`: NTS verso PTB, intervalli UTC senza assumere
