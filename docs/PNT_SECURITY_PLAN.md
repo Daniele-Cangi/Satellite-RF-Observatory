@@ -380,8 +380,11 @@ Il [caso coerente FGI JammerTest 2025]
 (../research/exploratory/PNT_JAMMERTEST_2025_COHERENT.md) fornisce ora RINEX
 nativo e 30/30 confronti con due riferimenti contemporanei. Risolve la copertura
 sparsa del caso 2024, ma l'anomalia resta già evidente nel controllo locale:
-nessun beneficio aggiuntivo di rilevamento è dimostrato. Il log di uno standard
-al cesio esterno non qualifica da solo UTC o l'associazione dei timestamp.
+nessun beneficio aggiuntivo di rilevamento è dimostrato. Il successivo
+[vaglio del clock SBF](../research/exploratory/PNT_JAMMERTEST_2025_CLOCK_SOURCE.md)
+trova 901/901 stati senza riferimento esterno a 10 MHz, con impulso PPS IN
+rilevato ma di origine non documentata e clock regolato verso GNSS. Il log
+del cesio e il PPS di uscita non qualificano UTC o l'associazione dei timestamp.
 Restano necessari tempo indipendente e controlli benigni verificabili; nessuna
 nuova soglia o ulteriore variante dello stesso caso chiude questi limiti.
 

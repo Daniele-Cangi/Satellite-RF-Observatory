@@ -1,6 +1,20 @@
 # Stato del progetto — 11 ottobre 2026
 
-## Incremento attuale: registrazione coerente FGI 2025
+## Incremento attuale: limite temporale del file SBF
+
+Il [vaglio del file originale Septentrio]
+(../research/exploratory/PNT_JAMMERTEST_2025_CLOCK_SOURCE.md) copre tutti i
+21.355.148 byte e 138.447 blocchi, senza salti o errori CRC. Nei 901 stati il
+riferimento esterno a 10 MHz non risulta rilevato; un impulso PPS IN e rilevato,
+ma origine, associazione a UTC e incertezza non sono documentate. Il clock
+risulta regolato verso GNSS e il PPS di uscita non misura il tempo indipendente
+di acquisizione. Sono conservati anche il flag di errore software gia presente
+e i 45 stati PVT non validi. Nessun nuovo parser o dipendenza di produzione.
+Il cesio dichiarato nel log non colma il limite per questa registrazione:
+serve un'associazione temporale indipendente documentata alle misure attaccate.
+Il confronto geometrico precedente resta invariato; P2 fisica e P3 aperte.
+
+## Incremento precedente: registrazione coerente FGI 2025
 
 Il [caso FGI JammerTest 2025 GPS-only]
 (../research/exploratory/PNT_JAMMERTEST_2025_COHERENT.md) aggiunge una registrazione
