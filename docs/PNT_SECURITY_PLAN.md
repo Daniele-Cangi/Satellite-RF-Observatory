@@ -376,6 +376,15 @@ nello [stato del progetto](PROJECT_STATUS.md); la
 [specifica minima della registrazione](../research/exploratory/PNT_P2_RECORDING_DECISION.md)
 descrive le osservazioni mancanti per il confronto fisico più forte.
 
+Il [caso coerente FGI JammerTest 2025]
+(../research/exploratory/PNT_JAMMERTEST_2025_COHERENT.md) fornisce ora RINEX
+nativo e 30/30 confronti con due riferimenti contemporanei. Risolve la copertura
+sparsa del caso 2024, ma l'anomalia resta già evidente nel controllo locale:
+nessun beneficio aggiuntivo di rilevamento è dimostrato. Il log di uno standard
+al cesio esterno non qualifica da solo UTC o l'associazione dei timestamp.
+Restano necessari tempo indipendente e controlli benigni verificabili; nessuna
+nuova soglia o ulteriore variante dello stesso caso chiude questi limiti.
+
 ### Ciclo iniziale P0/P1: piano del 26 settembre
 
 1. Usare un ricevitore del corpus esposto come vittima di sviluppo e gli altri
