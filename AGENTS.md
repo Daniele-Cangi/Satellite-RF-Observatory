@@ -7,10 +7,12 @@ scientific boundaries.
 
 ## Direction and where to read
 
-Develop Satellite as an ecosystem: independent orbital reconstruction,
-RF observation/declared orbital prediction, PNT security diagnostics and Android
-acquisition. Reuse the general verification workflow and technical primitives;
-keep each area's physical question, evidence and advancement criteria separate.
+Develop Satellite as an ecosystem with three scientific areas: independent
+orbital reconstruction, RF observation/declared orbital prediction and PNT
+security diagnostics. Android is a shared acquisition capability with its own
+engineering workstream. Reuse the general verification workflow and technical
+primitives; keep each scientific area's physical question, evidence and
+advancement criteria separate.
 The [project status](docs/PROJECT_STATUS.md) records current priorities. The
 [PNT plan](docs/PNT_SECURITY_PLAN.md) governs that vertical, not all research.
 Android workflow completion is not physical security qualification; orbital

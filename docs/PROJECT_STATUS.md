@@ -2,17 +2,19 @@
 
 ## Ecosistema e stato dei verticali
 
-Riferimento: commit `d11c24a` dell'11 ottobre 2026. Satellite comprende quattro
-verticali, con primitivi tecnici riutilizzabili e criteri scientifici distinti.
-L'app Android continua a evolvere; la ricerca orbitale non dipende dalla sua
-conclusione o da P2/P3 PNT. Il sito resta una consegna successiva.
+Riferimento: commit `d11c24a` dell'11 ottobre 2026. Satellite comprende tre
+percorsi scientifici e l'acquisizione Android come capacita trasversale, con una
+propria evoluzione ingegneristica. I primitivi tecnici sono riutilizzabili;
+le domande fisiche e i criteri scientifici restano distinti. L'app continua a
+evolvere; la ricerca orbitale non dipende dalla sua conclusione o da P2/P3 PNT.
+Il sito resta una consegna successiva.
 
-| Verticale | Risultato consegnato | Limite e prossimo avanzamento |
+| Percorso / capacita condivisa | Risultato consegnato | Limite e prossimo avanzamento |
 |---|---|---|
 | Ricostruzione orbitale | Snapshot storici condizionali e prototipi di posizione/moto; G14 raggiunge il proprio criterio, altri eventi conservano fallimenti e incertezza eccessiva | S2 aperta: vincolo indipendente ai bias assoluti di stazione/codice o geometria/modello che li renda identificabili; poi inviluppo totale prima di S3. [Piano](SCIENTIFIC_ROADMAP.md), [limite misurato](../research/exploratory/REAL_TARGET_BIAS_IDENTIFIABILITY.md). |
 | Osservazione RF e previsione orbitale | Un evento DRAO reale preferisce la geometria orbitale congelata sulle alternative in un intervallo escluso | Risultato condizionato ai PRN e a una stazione, non identita indipendente o conferma distribuita. Nuova ricerca solo su una domanda fisica e un'osservabile identificabile; esiti chiusi e dati sigillati restano tali. [Esito](../experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md), [roadmap](../ROADMAP.md). |
 | Sicurezza PNT | Diagnostica locale/rete/tempo, challenge software condizionali e analisi di registrazioni fisiche | Beneficio fisico aggiuntivo e conferma P3 aperti; budget temporali e verita di riferimento non si ricavano dal successo software. [Piano PNT](PNT_SECURITY_PLAN.md). |
-| Android | Ciclo sperimentale GNSS/NTS -> ZIP -> analisi PC -> rapporto sul telefono e monitoraggio LAN opzionale implementati | Affidabilita/usabilita possono avanzare normalmente. Qualifica del tempo, rilevamento RF e latenza fisica richiedono evidenza propria. [App](../pnt/android-collector/README.md). |
+| Android: acquisizione trasversale | Ciclo sperimentale GNSS/NTS -> ZIP -> analisi PC -> rapporto sul telefono e monitoraggio LAN opzionale implementati | Affidabilita/usabilita possono avanzare normalmente. Qualifica del tempo, rilevamento RF e latenza fisica richiedono evidenza propria. [App](../pnt/android-collector/README.md). |
 
 Il nucleo condiviso comprende parser applicabili, gestione degli input,
 provenienza, qualificazione, replay e workflow richiesta/risultato gia esistenti.

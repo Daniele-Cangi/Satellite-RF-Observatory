@@ -21,21 +21,24 @@ predictions against RF observations, and compares local GNSS measurements with
 external observations for PNT incident analysis. An Android app supplies native
 GNSS measurements and authenticated Internet time to the research workflow.
 
-These areas share parsing, provenance, qualification, replay and request
-infrastructure where appropriate. Each keeps its own physical model, evidence
-requirements and advancement criteria. Completing an app workflow does not
-confirm an orbit or validate a spoofing detector.
+The three scientific areas share parsing, provenance, qualification, replay
+and request infrastructure where appropriate. Each keeps its own physical model,
+evidence requirements and advancement criteria. Android is both an engineering
+workstream and a shared acquisition capability for studies that can use its
+GNSS/NTS inputs. Completing an app workflow does not confirm an orbit or validate
+a spoofing detector.
 
 ## Research areas
 
-| Area | Question and implementation | Current boundary / next scientific step |
+| Area / shared capability | Question and implementation | Current boundary / next step |
 |---|---|---|
 | **Orbital reconstruction** | Can position and motion be estimated without fitting the target's orbit? [Positioning](positioning/README.md), [kinematic research](research/kinematic/README.md) and [scientific roadmap](docs/SCIENTIFIC_ROADMAP.md) | Historical conditional snapshots and synthetic motion results exist. Real interval work still needs an independent constraint on station/code bias or a geometry/model that identifies it, with a defensible total-error envelope. |
 | **RF observation and orbital prediction** | Does a declared orbital geometry predict held-out observations better than frozen alternatives? [Forward roadmap](ROADMAP.md) and [experiment reports](experiments/orbital_discriminability/) | A closed DRAO GNSS phase event supports a narrow orbital-model preference. Independent identity, distributed confirmation and general raw-RF capability remain unestablished. Further research needs an identifiable observable and adequate measurement timing. |
 | **PNT security research** | Do external geometry/time observations add useful evidence beyond reasonable local controls? [PNT tools](pnt/README.md) and [PNT plan](docs/PNT_SECURITY_PLAN.md) | Offline diagnostics and replay are available for a fixed GPS receiver. Added physical security benefit and prospective detection performance remain open. |
-| **Android acquisition** | Can an existing phone acquire GNSS/NTS, export originals and display the PC analysis? [PNT Clock Collector](pnt/android-collector/README.md) | The experimental software cycle is implemented, including optional private LAN monitoring. Timing qualification and physical attack validation remain separate research tasks. |
+| **Android: shared acquisition** | Engineering workstream for phone GNSS/NTS acquisition, original export and PC result display. [PNT Clock Collector](pnt/android-collector/README.md) | The experimental software cycle is implemented, including optional private LAN monitoring. Reliability and usability can evolve independently; timing qualification and physical attack validation remain separate research tasks. |
 
-The areas can advance independently. The
+The scientific areas and Android engineering can advance independently, with
+Android also supplying compatible research inputs. The
 [project status](docs/PROJECT_STATUS.md#ecosistema-e-stato-dei-verticali)
 records their results, gaps and next decisions. The website remains a later
 delivery step; the existing web archive preserves historical evidence.
@@ -130,6 +133,42 @@ Choose a new output filename for each run; existing reports are not overwritten.
 The fixture coordinates are provider declarations, not an independent survey.
 This example does not classify an attack or demonstrate position accuracy.
 For your own recordings, follow the [input requirements](pnt/README.md).
+
+### Replay an orbital reconstruction
+
+Use **Python 3.13**, from the repository root. The bundled G08 inputs replay a
+historical GPS position estimate without downloading observations or supplying
+the target orbit to the solver:
+
+```console
+python -m pip install -r requirements-positioning.txt
+python -m experiments.gnss_inverse_positioning.replay experiments/gnss_inverse_positioning/event_2026249/frozen_solver_input.json
+```
+
+The JSON printed to the terminal includes position, fitted clock terms and the
+95% outer uncertainty radius. The expected result is **UNCERTAINTY_TOO_LARGE**:
+21,607.660 m exceeds the original 10 km limit. This is a reproducible historical
+snapshot, not a completed orbit or a new confirmation. The
+[G08 guide and closed result](experiments/gnss_inverse_positioning/README.md)
+explain the inputs, excluded checks and uncertainty.
+
+### Enter RF research through the historical baseline
+
+Start with the [G0 identifiability report](experiments/orbital_discriminability/G0_IDENTIFIABILITY_REPORT.md)
+and its [original scope](experiments/orbital_discriminability/G0_SCOPE.md).
+This is a **synthetic** orbital/RF model experiment with a fixed geometry and
+128 capability cases, including outcomes below detectability. Its existing
+offline tests reproduce the sweep and exercise held-out comparisons against the
+frozen alternatives. Use **Python 3.13**, from the repository root:
+
+```console
+python -m pip install -r requirements-live-instrument.txt
+python -m pytest experiments/orbital_discriminability/tests/test_identifiability.py -q
+```
+
+This reproduces the historical mechanism; it does not demonstrate real RF
+reception or reopen the closed observation experiments. Their original criteria
+and outcomes remain in the [RF reports](experiments/orbital_discriminability/).
 
 ## Current evidence
 

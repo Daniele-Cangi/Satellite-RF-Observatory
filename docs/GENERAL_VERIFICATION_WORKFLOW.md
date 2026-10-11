@@ -3,7 +3,9 @@
 Questo documento descrive il workflow satellitare esistente e le sue consegne:
 richiesta, qualificazione, calcolo, controlli esclusi e dossier. E una base
 riutilizzabile nell'[ecosistema Satellite](PROJECT_STATUS.md#ecosistema-e-stato-dei-verticali),
-con obiettivi distinti per ricostruzione orbitale, osservazione RF, PNT e Android.
+con obiettivi scientifici distinti per ricostruzione orbitale, osservazione RF e
+PNT. Android fornisce acquisizione trasversale per gli input compatibili e mantiene
+un proprio percorso ingegneristico.
 Il [piano PNT](PNT_SECURITY_PLAN.md) governa quel verticale; il successo del
 workflow non dimostra un rilevatore di spoofing. Criteri e risultati degli
 esperimenti precedenti restano validi.
