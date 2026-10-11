@@ -77,8 +77,16 @@ def local_codes(stream, day, tolerance_s=0.5):
     return rows, dict(sorted(counts.items()))
 
 
-def reference_codes(content, day, *, signals=('C1C', 'C2W')):
-    """Read explicitly requested GPS codes; preserve historical dual-code defaults."""
+def reference_codes(content, day, *, signals=('C1C', 'C2W'), native_epochs=False):
+    """Read GPS codes on the historical 30-second grid or explicit native tags.
+
+    Native mode preserves every ordinary epoch without rounding or resampling.
+    RINEX 4.00/4.01 use the same observation record layout (IGS Tables A2/A3).
+    Navigation records and the newer 4.02 time-tag precision are outside scope.
+    Time-scale, correction, event and duplicate admission rules stay unchanged.
+    """
+    if not isinstance(native_epochs, bool):
+        raise ValueError('native_epochs must be boolean')
     if (not isinstance(signals, tuple) or not signals or len(set(signals)) != len(signals)
             or any(not isinstance(code, str) or len(code) != 3 or code[0] != 'C'
                    or code[1] not in '125' or not code[2].isalpha() for code in signals)):
@@ -106,9 +114,10 @@ def reference_codes(content, day, *, signals=('C1C', 'C2W')):
     else:
         raise ValueError('incomplete RINEX header')
     versions = headers.get('RINEX VERSION / TYPE', [])
-    if (len(versions) != 1 or not 3 <= float(versions[0][:9]) < 4 or
+    if (len(versions) != 1 or
+            not (3 <= float(versions[0][:9]) < 4 or float(versions[0][:9]) in (4.0, 4.01)) or
             'OBSERVATION DATA' not in versions[0].upper()):
-        raise ValueError('expected RINEX 3 observations')
+        raise ValueError('expected RINEX 3 or 4.00/4.01 observations')
     if declared_gps_types != len(types):
         raise ValueError('GPS observation type count mismatch')
     if len(types) != len(set(types)):
@@ -143,17 +152,17 @@ def reference_codes(content, day, *, signals=('C1C', 'C2W')):
         flag, record_count = int(fields[6]), int(fields[7])
         if record_count < 0:
             raise ValueError('negative RINEX epoch record count')
-        grid = round(seconds / 30) * 30
-        if grid in seen_epochs:
+        epoch_key = seconds if native_epochs else round(seconds / 30) * 30
+        if epoch_key in seen_epochs:
             raise ValueError('duplicate external RINEX epoch')
-        seen_epochs.add(grid)
+        seen_epochs.add(epoch_key)
         block = [next(lines, None) for _ in range(record_count)]
         if any(record is None for record in block):
             raise ValueError('truncated RINEX epoch')
         if flag != 0:
             raise ValueError('nonstandard RINEX epoch requires explicit interpretation')
         counts['ordinary_epochs'] += 1
-        if abs(seconds - round(seconds / 30) * 30) > 1e-3:
+        if not native_epochs and abs(seconds - round(seconds / 30) * 30) > 1e-3:
             raise ValueError('external epoch off 30-second grid')
         seen = set()
         for record in block:
@@ -174,11 +183,11 @@ def reference_codes(content, day, *, signals=('C1C', 'C2W')):
             if not all(math.isfinite(v) and v > 0 for v in values):
                 counts['invalid_' + code_kind] += 1
                 continue
-            key = round(seconds), satellite
+            key = (seconds if native_epochs else round(seconds)), satellite
             if key in rows:
                 raise ValueError('duplicate external GPS epoch/satellite')
             rows[key] = values
-    counts['selected_grid_satellites'] = len(rows)
+    counts['selected_native_satellites' if native_epochs else 'selected_grid_satellites'] = len(rows)
     return rows, dict(sorted(counts.items()))
 
 

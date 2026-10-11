@@ -13,7 +13,7 @@ import pytest
 from positioning.calibration import OMEGA, reference_model
 from research.exploratory.tests.test_pnt_texbat_clock_context import nav_source
 from research.exploratory.pnt_observation_pairing import reference_codes
-from pnt.fixed_site import analyze, evaluate_epoch
+from pnt.fixed_site import analyze, evaluate_epoch, read_station
 from pnt.model import broadcast_navigation, day_context, nearest_record
 
 
@@ -283,6 +283,23 @@ def test_explicit_antenna_coordinate_requires_provenance(tmp_path):
     report = analyze(paths['local'], {'A': paths['A'], 'B': paths['B']}, nav, DAY.isoformat(),
                      start_s=TIME, stop_s=TIME + 30, local_ecef=POSITIONS['local'], position_source='operator survey declaration')
     assert report['sources']['local']['position_source'] == 'operator survey declaration'
+
+
+def test_native_station_keeps_one_second_codes_and_coordinate_provenance(tmp_path):
+    codes = {'G01': (21000000., 21000005.)}
+    path = tmp_path / 'native.rnx'
+    path.write_text(rinex('LOCAL', POSITIONS['local'], {TIME: codes, TIME + 1: codes}),
+                    encoding='ascii')
+    with pytest.raises(ValueError, match='duplicate external RINEX epoch'):
+        read_station(path, DAY)
+    rows, position, info = read_station(
+        path, DAY, signals=('C1C',), native_epochs=True,
+        position=POSITIONS['local'], position_source='declared fixed antenna')
+    assert rows == {(TIME, 'G01'): (21000000.,), (TIME + 1, 'G01'): (21000000.,)}
+    assert np.array_equal(position, POSITIONS['local'])
+    assert info['position_source'] == 'declared fixed antenna'
+    assert info['code_status']['ordinary_epochs'] == 2
+    assert info['code_status']['selected_native_satellites'] == 2
 
 
 def test_repeated_receivers_and_invalid_coordinates_are_rejected(tmp_path):
