@@ -83,7 +83,13 @@ def test_real_report_retains_coverage_rejections_and_weak_information():
     for name,arcs in report['arcs'].items():
         for model,drift in [('constant',False),('linear_drift',True)]:
             actual = study.combine_profiles(arcs,linear_drift=drift)
-            np.testing.assert_allclose(actual['singular_per_m'],report['combined'][name][model]['singular_per_m'],rtol=1e-12)
+            # SVD roundoff is absolute at the matrix norm, not relative to each
+            # near-zero singular value. Preserve the tight relative check and
+            # allow 16 machine epsilons at that norm across BLAS implementations.
+            numerical_atol = 16*np.finfo(float).eps*actual['singular_per_m'][0]
+            np.testing.assert_allclose(actual['singular_per_m'],
+                report['combined'][name][model]['singular_per_m'],
+                rtol=1e-12,atol=numerical_atol)
         for row in arcs:
             original = next(c for c in previous['cases'] if c['start_gpst_s']==row['start_gpst_s'])
             assert original['fits'][name]['status']=='CONDITIONAL_INTERVAL_MODEL_ACCEPTED'
