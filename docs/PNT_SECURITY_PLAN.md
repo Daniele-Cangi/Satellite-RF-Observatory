@@ -1,9 +1,12 @@
 # Sicurezza PNT: verifica esterna e analisi degli incidenti
 
-Piano di sviluppo del 26 settembre 2026; roadmap operativa aggiornata il
-11 ottobre 2026 con l'app Android come ingresso principale. Direzione richiesta
-dall'utente; architettura proposta, ancora da dimostrare. Questo documento
-sostituisce le priorità di prodotto precedenti. Esperimenti conclusi, risultati e criteri
+Piano di sviluppo del 26 settembre 2026; direzione aggiornata l'11 ottobre 2026.
+Questo documento governa il verticale PNT nell'ecosistema Satellite, con
+l'app Android come ingresso principale di acquisizione. Ricostruzione orbitale
+e osservazione RF conservano obiettivi e criteri propri, riassunti nello
+[stato del progetto](PROJECT_STATUS.md#ecosistema-e-stato-dei-verticali).
+Il ciclo software mobile e completo in forma sperimentale; il beneficio fisico
+di sicurezza resta da dimostrare. Esperimenti conclusi, risultati e criteri
 storici conservano il loro significato originale.
 
 ## Avanzamento del confronto sul tempo
@@ -23,6 +26,45 @@ allineamento GNSS/BOOTTIME. Sulle stesse quattro sessioni, tuttavia, i margini
 condizionali alla ricezione sono 554,5-632,3 ms: la challenge di +100 ms rimane
 invisibile. Questo restringe le assunzioni per una direzione del test, senza
 chiudere P2 o qualificare i budget. Il confronto precedente resta disponibile.
+
+## Avanzare senza ulteriori dati dalla Finlandia
+
+Il dataset pubblico JammerTest gia acquisito resta utilizzabile per i risultati
+esplorativi documentati. La dipendenza aperta riguarda soprattutto la sorgente
+PPS e il legame tra epoche, acquisizione e UTC indipendente: una risposta FGI
+potrebbe chiarirli, ma non e una condizione per continuare tutto il progetto.
+Anche una sorgente temporale qualificata, da sola, non dimostrerebbe un beneficio
+aggiuntivo della rete nel caso gia evidente al controllo locale.
+
+| Percorso | Cosa possiamo completare / cosa resta necessario |
+|---|---|
+| Base di diagnostica e analisi degli incidenti | Riutilizzare acquisizione Android, analisi PC, riferimenti disponibili e dossier/replay. Il ciclo sperimentale esiste; la consegna resta una diagnostica con risultati condizionali o insufficienti, non protezione RF qualificata. |
+| Sicurezza del tempo | Senza il legame indipendente alle epoche, conservare confronto condizionale e limite causale unilaterale. Un'altra registrazione o acquisizione cooperativa e utile solo se fornisce proprio quel legame, con errore adeguato al danno da rilevare. |
+| Sicurezza geometrica PNT | Una prova deve contenere osservabili locali, riferimenti contemporanei, geometria e tempi adeguati, controllo/challenge verificabili e un confronto equo col locale. Il requisito temporale dipende da questa prova; non va sostituito automaticamente con quello del clock assoluto. |
+| Ricostruzione orbitale e osservazione RF | Proseguono secondo i rispettivi limiti fisici, senza attendere FGI o la chiusura di P2/P3 PNT. Nessuna riapertura di eventi consumati o dati ancora sigillati. |
+
+La base diagnostica e accettabile quando una sessione attraversa il flusso
+installazione/acquisizione -> originali -> analisi -> risultato consultabile,
+con versione e input identificati, replay dei controlli eseguiti, assenze e
+fallimenti visibili. I risultati esistenti documentano il ciclo; resta da
+rendere semplice la consegna riproducibile a un altro utilizzatore, usando
+strumenti e guide gia presenti. Non servono un nuovo motore o un nuovo sigillo.
+Questa accettazione software non chiude P2 fisica, P3 o il pilota operativo P4.
+
+Il prossimo lavoro PNT deve risolvere una delle due questioni fisiche aperte:
+associazione temporale indipendente utile, oppure un caso in cui la rete
+aggiunge evidenza oltre controlli locali ragionevoli. Prima di un nuovo download
+o di una raccolta, verificare nei metadati se la sorgente contiene l'informazione
+mancante. Una raccolta ordinaria col solo telefono puo migliorare acquisizione
+e disponibilita, ma non crea un testimone indipendente di spoofing RF.
+Se non c'e un candidato adeguato, registrare il limite e consegnare la base
+diagnostica; niente campagne benigne ripetute o varianti di soglia per ottenere
+un successo. Una futura conferma prospettica mantiene congelamento cieco,
+valutazione esclusa e requisiti di evidenza previsti da P3.
+
+La priorita del sito resta successiva. Il suo eventuale completamento dovra
+esporre il dominio dimostrato e i limiti ancora aperti; non trasformera la
+consegna diagnostica in una promessa anti-spoofing.
 
 ## Obiettivo e primo utilizzatore
 

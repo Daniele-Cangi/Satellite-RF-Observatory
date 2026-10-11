@@ -7,10 +7,16 @@ scientific boundaries.
 
 ## Direction and where to read
 
-Build open PNT security verification: local GNSS observations + external
-Internet observations -> geometry/time checks -> bounded result and replayable
-evidence. The [PNT security plan](docs/PNT_SECURITY_PLAN.md) defines the active
-direction; the general verification workflow remains reusable infrastructure.
+Develop Satellite as an ecosystem with three scientific areas: independent
+orbital reconstruction, RF observation/declared orbital prediction and PNT
+security diagnostics. Android is a shared acquisition capability with its own
+engineering workstream. Reuse the general verification workflow and technical
+primitives; keep each scientific area's physical question, evidence and
+advancement criteria separate.
+The [project status](docs/PROJECT_STATUS.md) records current priorities. The
+[PNT plan](docs/PNT_SECURITY_PLAN.md) governs that vertical, not all research.
+Android workflow completion is not physical security qualification; orbital
+research does not depend on PNT completion or a particular data provider.
 Orbit-consistency testing may use an explicitly declared target-orbit hypothesis;
 independent target-state estimation must still exclude it from fitting. Answer
 new physical questions. Exploration on exposed data may proceed rapidly;
@@ -21,14 +27,14 @@ Read only the documents relevant to the task:
 - [Project status](docs/PROJECT_STATUS.md): current priorities, results and gaps.
 - [General workflow](docs/GENERAL_VERIFICATION_WORKFLOW.md): product and worker
   behavior; [development workflow](docs/DEVELOPMENT_WORKFLOW.md): Git integration.
-- [Scientific roadmap](docs/SCIENTIFIC_ROADMAP.md): preserved inverse research;
+- [Scientific roadmap](docs/SCIENTIFIC_ROADMAP.md): inverse research objectives;
   [cohort protocol](docs/VALIDATION_COHORT_PROTOCOL.md): campaign prerequisites,
   not acquisition permission.
 - Reports in `research/exploratory/`, `research/kinematic/` and `experiments/`:
   evidence, access boundaries, manifests, retries and replay. Read the affected
   experiment's documents before operating it, not the whole history.
-- [Original roadmap](ROADMAP.md) and Git history: historical forward-orbit work,
-  not the active gate sequence.
+- [Forward roadmap](ROADMAP.md) and Git history: orbital/RF objectives and
+  preserved outcomes; old gate sequences are not an automatic backlog.
 
 Keep results, version histories and next-step detail there, not in this file.
 

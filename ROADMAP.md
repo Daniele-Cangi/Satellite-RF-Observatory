@@ -1,14 +1,17 @@
 # Roadmap: satellite-first predictive observation
 
-This file preserves the historical forward-orbit roadmap and its outcomes.
-Current development follows the [PNT security plan and Android app roadmap](docs/PNT_SECURITY_PLAN.md#roadmap-operativa-dal-telefono-al-rapporto),
-updated on 10 October 2026. See [project status](docs/PROJECT_STATUS.md) for
-delivered work and open scientific limits; the historical gates below do not
-define the current product backlog.
+This file preserves the forward-orbit question, experiment protocols and their
+outcomes. Satellite now develops an ecosystem of orbital reconstruction,
+RF observation, PNT diagnostics and Android acquisition; see
+[project status](docs/PROJECT_STATUS.md#ecosistema-e-stato-dei-verticali).
+The [PNT plan](docs/PNT_SECURITY_PLAN.md) defines that vertical's objectives.
+Forward/RF research retains an independent question; the historical gates below
+are not an automatic development backlog. Closed outcomes, sealed observations
+and experiment-specific stop conditions retain their original boundaries.
 
 ## North Star
 
-The project has one scientific question:
+The forward/RF vertical has this scientific question:
 
 > Does a candidate orbit predict observer-coupled RF structure in a future,
 > held-out interval better than frozen non-orbital explanations?
