@@ -115,6 +115,19 @@ copie al monitor e il rifiuto di credenziali, certificati, identità HTTPS,
 sessioni miste e trasferimenti incompleti. Non è ancora una prova outdoor
 del nuovo flusso né una misura di latenza fino all'operatore.
 
+La [prima raccolta con trasferimento live alla finestra](../research/exploratory/PNT_ANDROID_LIVE_TRANSFER.md)
+è conclusa: **43 callback / 1.082 righe Raw**, di cui 376 GPS normalizzate,
+17 GPS con tempo di trasmissione irrisolto e 689 di altre costellazioni;
+**9/20 scambi NTS autenticati**, con 11 timeout conservati. Tutti i **35 invii**
+sono confermati, senza errori di trasporto; la coppia finale PC/telefono coincide
+byte per byte e i 34 file preesistenti restano identici. Non sono stati forniti
+budget: nessun confronto numerico, esito insufficiente esplicito. La prova
+ha anche rilevato e corretto la chiusura PC che dipendeva erroneamente dai budget:
+il ricevitore originale ha atteso il limite di durata; un replay separato dei
+file finali conferma la correzione senza riscrivere quell'esito. Ricevute e tempi
+di richiesta non misurano la latenza dell'allarme fino all'operatore. Il prossimo
+incremento resta la consegna live degli esiti esistenti al telefono.
+
 Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni
 reali già esposte sono identici ai rapporti precedenti; i replay storici con
