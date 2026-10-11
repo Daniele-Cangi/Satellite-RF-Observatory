@@ -74,6 +74,13 @@ separate replay of these already exposed final bytes now marks native completion
 true while keeping the same insufficient status and empty numerical outcomes.
 This is a replay, not a second live trial of the corrected stop behavior.
 
+The subsequent app correction stops its upload worker after the receipt for a
+complete native pair. A queued acquisition-completion callback then cannot send
+a duplicate final pair after the receiver exits. Local Java HTTPS integration
+checks automatic worker closure, the harmless later callback and exactly one
+retained acknowledged request for a complete synthetic pair. This behavior was
+not part of the live recording above.
+
 Synthetic regression tests also confirm that the receiver stops on a valid
 unqualified closed pair, and that a changed completed NTS slot blocks completion.
 The targeted transport/monitor suite passes **41 tests**, with one native

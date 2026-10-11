@@ -100,8 +100,10 @@ cannot be persisted, the command fails instead of returning an old verdict.
 The app displays **transport receipts only**, including cumulative failures and
 intake issue counts; `pnt-transfer-<id>.jsonl` retains the request outcomes privately.
 Orderly session completion sends a final snapshot; hiding the app cancels transfer
-and retains native partials, without a background restart. Periodic upload can
-send a newer snapshot after a failed request; this is transport recovery, not an
+and retains native partials, without a background restart. A periodic upload may
+already deliver the closed pair; its complete receipt stops the worker, so a
+later completion callback does not duplicate the final upload after PC exit.
+A newer snapshot may follow a failed request; this is transport recovery, not an
 NTS attempt retry or replacement. PC outcome delivery and phone-visible alert
 latency are the next increment. No ALLOW/BLOCK decision is shown.
 

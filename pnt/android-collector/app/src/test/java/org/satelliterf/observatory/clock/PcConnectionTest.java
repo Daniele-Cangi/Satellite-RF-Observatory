@@ -51,10 +51,19 @@ public class PcConnectionTest {
             assertTrue("Upload failure must be visible", failure.await(10, TimeUnit.SECONDS));
         }
         CountDownLatch acknowledged = new CountDownLatch(1);
+        CountDownLatch completed = new CountDownLatch(1);
         try (LiveTransfer transfer = new LiveTransfer(connection, () -> new byte[][]{raw, nts}, id,
                 Path.of(fixture.get("directory").getAsString()), System::nanoTime,
-                text -> { if (text.contains("Acknowledged: 1")) acknowledged.countDown(); })) {
+                text -> {
+                    if (text.contains("Acknowledged: 1")) acknowledged.countDown();
+                    if (text.contains("PC transport stopped:") && text.contains("Acknowledged: 1")) completed.countDown();
+                })) {
             assertTrue("Transport worker must acknowledge", acknowledged.await(10, TimeUnit.SECONDS));
+            assertTrue("Complete receipt must stop upload before receiver exit", completed.await(10, TimeUnit.SECONDS));
+            assertTrue(transfer.isClosed());
+            transfer.finish(); // The later acquisition-completion callback is harmless.
+            assertEquals(1, Files.readAllLines(Path.of(fixture.get("directory").getAsString())
+                .resolve("pnt-transfer-" + id + ".jsonl")).size());
         }
         PcConnection cancelled = connection.fresh();
         cancelled.cancel();

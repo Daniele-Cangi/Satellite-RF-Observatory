@@ -44,6 +44,7 @@ final class LiveTransfer implements AutoCloseable {
         if (closed) return;
         long started = counter.getAsLong();
         String outcome, detail;
+        boolean complete = false;
         try {
             byte[][] snapshot = source.snapshot();
             if (closed) return;
@@ -52,6 +53,7 @@ final class LiveTransfer implements AutoCloseable {
             outcome = "ACKNOWLEDGED";
             detail = "PC stored snapshot; update " + receipt.get("update_index").getAsInt()
                 + "; intake issues " + receipt.getAsJsonArray("issues").size();
+            complete = receipt.get("session_complete").getAsBoolean();
         } catch (Exception error) {
             failures++;
             outcome = "UNAVAILABLE";
@@ -67,7 +69,10 @@ final class LiveTransfer implements AutoCloseable {
             detail += "; transfer log storage failed; upload stopped";
         }
         lastDetail = detail;
-        notifyListener();
+        // A complete pair is already the final upload. The receiver may now
+        // exit; a queued finish() must not send it again and invent a failure.
+        if (complete && !closed) close();
+        else notifyListener();
     }
     private void notifyListener() {
         listener.accept("PC transport " + (closed ? "stopped: " : "active: ") + lastDetail
