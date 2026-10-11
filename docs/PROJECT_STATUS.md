@@ -15,11 +15,14 @@ la direzione debole resta scarsamente vincolata: scala formale condizionale
 circa 16 km sui bias nei cinque fit con fase accettati, non errore di posizione
 o limite fisico. Tutti i quindici fit fase rifiutati restano tali.
 
-Il prossimo tentativo usa l'ora gia esposta: quattro stazioni comuni,
-STJO nella prima parte e BRAZ nella seconda. La presenza delle righe precede
-qualifica di elevazione, continuita e clock; costanza dei bias, modello temporale
-e dipendenze fra archi vanno giustificati. Se la geometria resta debole serve un
-vincolo indipendente sul bias differenziale effettivo, non un'altra soglia.
+La [qualifica dell'ora completa](../research/exploratory/G12_FULL_HOUR.md)
+riusa la calibrazione reference-only e gli stessi fit brevi: 33 fit codice e
+12 con fase accettati; sei finestre sotto maschera e un fallimento nella
+previsione codice restano visibili. Le stime clock della seconda mezz'ora sono
+identiche alle precedenti. Il profilo su sei stazioni ha rango locale completo,
+ma la scala formale debole e ancora circa 2 km sui bias con fase, non sulla
+posizione. Il prossimo passo e verificare un vincolo indipendente sul bias
+differenziale effettivo e la sua trasferibilita fisica; S2 resta aperta.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
