@@ -12,6 +12,11 @@ median scalar residual from 297.561 to 295.475 m, improving 27 epochs and
 worsening three. These are model residuals, not position errors or detection
 rates. P2 physical qualification and P3 remain open.
 
+The separate [SBF clock-source follow-up](PNT_JAMMERTEST_2025_CLOCK_SOURCE.md)
+subsequently inspects the original binary recording. It does not qualify the
+cesium lead as independent UTC and leaves this RINEX comparison unchanged;
+the access descriptions below refer to the original geometry analysis.
+
 ## Candidate and source
 
 [FGI's JammerTest 2025 archive][dataset], DOI
