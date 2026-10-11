@@ -148,6 +148,12 @@ data and uncalibrated assumptions; 91 insufficient groups and 23 NTS timeouts
 remain visible. It establishes software consistency benefit, not RF authenticity
 or qualified timing accuracy.
 
+An explicit [callback receipt diagnostic](research/exploratory/PNT_ANDROID_CAUSAL_RECEIPT.md)
+can test impossible future GNSS claims without a finite chipset alignment budget.
+On the same recordings it leaves +/-100 ms invisible: conditional receipt margins
+are 554.5-632.3 ms. Past claims remain unbounded; this mode does not replace the
+previous comparison or qualify physical detection.
+
 | Question | What the evidence supports |
 |---|---|
 | Do network residuals improve local prediction? | Mixed results on distant references; small improvements on nearby WegenerNet references. No demonstrated security benefit at matched false-alarm rates. |

@@ -35,6 +35,37 @@ Its CSV uses the same intake/UTC adapter/replay; missing native epochs never
 fall back to callback timing. Reported 68% uncertainty is retained as metadata,
 not fitted into the error budgets.
 
+### One-sided callback receipt diagnostic
+
+For native logs retaining both callback counters, opt in explicitly:
+
+```console
+python -m pnt android-time-compare phone-nts.json pnt-clock-session.txt --association-source "Trusted same phone and boot" --gps-utc-offset-seconds 18 --time-scale-source "External GPS-UTC conversion valid for this recording" --utc-error-ns 1000000 --utc-error-source "Unqualified illustrative receiver UTC budget" --causal-receipt-upper-bound --bracket-span-ns 15000000000 --output receipt-comparison.json
+```
+
+This trusts that the delivered `GnssClock` snapshot predates completion of the
+callback read. Existing NTS intervals bound UTC **at receipt**, not at the GNSS
+epoch. If `GNSS_UTC - declared_error > receipt_UTC_upper`, the result is
+`INCONSISTENT_WITH_CAUSAL_RECEIPT`; otherwise it is `NO_FUTURE_CONTRADICTION`.
+The latter does not validate the clock, RF origin or position. Unknown snapshot
+age has no finite upper bound: past shifts and delayed delivery can be invisible.
+Server accuracy, counter rate/resolution, receiver UTC error, time-scale conversion
+and the trusted collector/boot association remain explicit assumptions.
+
+There is no GNSS/CLOCK_BOOTTIME alignment budget in this mode, no use of the
+chipset epoch estimate or its 68% uncertainty, and no automatic fallback from
+the original two-sided comparison. Missing/invalid callbacks, unassociated
+receipts, unavailable exchanges and contradictory bracket anchors remain
+insufficient. Do not combine the flag with `--epoch-alignment-*`.
+
+The retained capture marks `time_association=ANDROID_CALLBACK_UPPER_BOUND`;
+its claim marks `event_relation=NOT_AFTER_EVENT_END`. Replay uses the same
+`compare_receiver_capture` and optional adjacent brackets. `time-sensitivity`
+rejects these reports because receipt is not a GNSS epoch for local continuity
+or the existing two-sided sensitivity analysis. Native ZIP, monitor and phone
+UI behavior are unchanged. The [four-session replay](../research/exploratory/PNT_ANDROID_CAUSAL_RECEIPT.md)
+reports this mode's limited sensitivity without replacing the earlier results.
+
 ## Conditional PC session monitor
 
 `android-monitor` watches one native `pnt-clock-<id>.txt` / `pnt-nts-<id>.json`
@@ -99,7 +130,7 @@ spoofing attribution or ALLOW/BLOCK claim.
 
 ## Receiver UTC offset sensitivity
 
-After `time-compare` or `android-time-compare`, use the retained comparison to
+After a two-sided `time-compare` or `android-time-compare`, use the retained comparison to
 measure which **software offsets of the decoded UTC claim** remain compatible:
 
 ```console

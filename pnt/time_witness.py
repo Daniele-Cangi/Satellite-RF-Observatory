@@ -124,6 +124,18 @@ def utc_bracket_interval(before, after, *, event_start_ns, event_end_ns,
 def _compare_interval(interval, claim):
     utc = _integer(claim['unix_ns'], 'claim unix_ns')
     error = _integer(claim['error_ns'], 'claim error_ns', 0)
+    relation = claim.get('event_relation', 'COINCIDENT')
+    if relation == 'NOT_AFTER_EVENT_END':
+        # The measurement precedes receipt, with no finite bound on its age.
+        # Only the upper UTC bound at completed receipt constrains it. Never
+        # treat callback time as the measurement epoch or test a past gap.
+        lead_lower = utc - error - interval['upper_unix_ns']
+        return dict(status='INCONSISTENT_WITH_CAUSAL_RECEIPT' if lead_lower > 0 else 'NO_FUTURE_CONTRADICTION',
+                    conditional_on_declared_budgets=True, witness_interval=interval,
+                    claim_minus_receipt_lower_ns=lead_lower, separation_ns=max(0, lead_lower),
+                    measurement_age_upper_bound_ns=None)
+    if relation != 'COINCIDENT':
+        raise ValueError('unsupported claim/event relation; no fallback')
     # Signed interval for claimant minus witness UTC, including claim error.
     offset_lower = utc - error - interval['upper_unix_ns']
     offset_upper = utc + error - interval['lower_unix_ns']
@@ -134,7 +146,11 @@ def _compare_interval(interval, claim):
 
 
 def compare_claim(exchange, claim, *, server_error_ns, rate_error_ppm):
-    """Check a co-captured UTC claim. Overlap never authenticates GNSS or a fix."""
+    """Check a co-captured UTC claim, or its explicit not-after receipt relation.
+
+    Neither interval overlap nor absence of a future contradiction authenticates
+    GNSS or a fix. The receipt relation cannot test a past-time discrepancy.
+    """
     _budgets(server_error_ns, rate_error_ppm)
     try:
         if not exchange.get('capture_id') or claim.get('capture_id') != exchange['capture_id']:

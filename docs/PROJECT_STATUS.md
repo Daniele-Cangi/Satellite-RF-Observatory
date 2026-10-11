@@ -1,6 +1,20 @@
 # Stato del progetto — 11 ottobre 2026
 
-## Incremento attuale: limite temporale del file SBF
+## Incremento attuale: limite causale alla ricezione Android
+
+La [diagnostica alla ricezione](../research/exploratory/PNT_ANDROID_CAUSAL_RECEIPT.md)
+aggiunge un test esplicito per tempi GNSS impossibilmente futuri, senza budget
+finito di allineamento GNSS/BOOTTIME. Riusa gli intervalli e il replay NTS;
+il callback non sostituisce l'epoca GNSS e i tempi passati restano non delimitati.
+Sulle quattro sessioni gia esposte, 66/156 gruppi e 553/1.446 righe hanno
+supporto: zero e +/-100 ms non generano contraddizioni. I margini condizionali
+alla ricezione sono 554,5-632,3 ms; restano 90 gruppi insufficienti e 23 timeout
+NTS su 80 slot. Tutti i confronti e gli input originali rimangono invariati.
+Il nuovo modo riduce le assunzioni in una direzione, senza qualificare gli altri
+budget o chiudere P2 fisica/P3. Il prossimo valore scientifico resta una prova
+fisica verificabile con un confine temporale adeguato all'errore dannoso scelto.
+
+## Incremento precedente: limite temporale del file SBF
 
 Il [vaglio del file originale Septentrio]
 (../research/exploratory/PNT_JAMMERTEST_2025_CLOCK_SOURCE.md) copre tutti i

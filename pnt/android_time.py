@@ -42,20 +42,23 @@ def collect_android_time(servers, *, collector_source, server_error_ns, rate_err
     return report
 
 
-def android_clock_claim(record, *, utc_error_ns, utc_error_source):
-    """Use clock epoch, not per-satellite TimeOffsetNanos or file receipt."""
+def android_clock_claim(record, *, utc_error_ns, utc_error_source, causal_receipt_upper_bound=False):
+    """Decode the clock; explicitly associate its epoch or bound it by receipt.
+
+    The receipt mode trusts that the delivered snapshot predates completion of
+    the callback read. Unknown buffering age remains unbounded: receipt is
+    never a replacement epoch and cannot constrain a claim in the past.
+    """
     if record.get('intake_status') != 'NORMALIZED':
         raise ValueError('Android GPS Raw row is not qualified by the existing intake')
     if record.get('counter_clock') != 'CLOCK_BOOTTIME':
         raise ValueError('Android GNSS elapsed time requires CLOCK_BOOTTIME association')
     values = record.get('source_values')
-    fields = ('TimeNanos', 'FullBiasNanos', 'BiasNanos', 'ChipsetElapsedRealtimeNanos',
-              'HardwareClockDiscontinuityCount')
+    fields = ('TimeNanos', 'FullBiasNanos', 'BiasNanos', 'HardwareClockDiscontinuityCount')
+    if not causal_receipt_upper_bound:
+        fields += ('ChipsetElapsedRealtimeNanos',)
     if not isinstance(values, dict) or any(not isinstance(values.get(f), str) for f in fields):
         raise ValueError('original Android clock fields must be strings')
-    epoch = _raw_integer(values, 'ChipsetElapsedRealtimeNanos')
-    alignment = _integer(record.get('epoch_alignment_error_ns'), 'epoch_alignment_error_ns', 0)
-    _text(record.get('epoch_alignment_source'), 'epoch_alignment_source')
     capture_id = _text(record.get('capture_id'), 'capture_id')
     offset = _integer(record.get('gps_utc_offset_seconds'), 'gps_utc_offset_seconds', 0)
     if offset > 127:
@@ -64,24 +67,33 @@ def android_clock_claim(record, *, utc_error_ns, utc_error_source):
     count = _raw_integer(values, 'HardwareClockDiscontinuityCount')
     if count < 0:
         raise ValueError('negative hardware clock discontinuity count')
-    start = _integer(epoch - alignment, 'GNSS epoch start', 0)
-    end = epoch + alignment
     acquired_start = _integer(record.get('acquisition_start_monotonic_ns'), 'acquisition start', 0)
     acquired_end = _integer(record.get('acquisition_end_monotonic_ns'), 'acquisition end', acquired_start)
     callback_fields = ('CallbackStartElapsedRealtimeNanos', 'CallbackReadEndElapsedRealtimeNanos')
-    if any(name in values for name in callback_fields):
+    if causal_receipt_upper_bound or any(name in values for name in callback_fields):
         if any(not isinstance(values.get(name), str) for name in callback_fields):
             raise ValueError('Android callback counters must retain both original Raw strings')
         callback_start, callback_end = (_raw_integer(values, name) for name in callback_fields)
         if not 0 <= callback_start <= callback_end:
             raise ValueError('Android callback counters are negative or reordered')
-        # The reported epoch may differ from the actual event within the explicit
-        # alignment budget. Only a wholly future event contradicts receipt; do
-        # not clip the claim, infer a tighter bound, or substitute callback time.
-        if start > callback_end:
+    if causal_receipt_upper_bound:
+        if any(record.get(name) is not None for name in ('epoch_alignment_error_ns', 'epoch_alignment_source')):
+            raise ValueError('callback upper-bound mode does not use an epoch alignment budget')
+        if callback_start < acquired_start or callback_end > acquired_end:
+            raise ValueError('Android callback is outside the retained phone acquisition window')
+        start = end = callback_end
+        epoch = None  # Never parse the chipset estimate as a receipt association.
+    else:
+        epoch = _raw_integer(values, 'ChipsetElapsedRealtimeNanos')
+        alignment = _integer(record.get('epoch_alignment_error_ns'), 'epoch_alignment_error_ns', 0)
+        _text(record.get('epoch_alignment_source'), 'epoch_alignment_source')
+        start = _integer(epoch - alignment, 'GNSS epoch start', 0)
+        end = epoch + alignment
+        # Do not clip the claim or infer a tighter bound from callback receipt.
+        if any(name in values for name in callback_fields) and start > callback_end:
             raise ValueError('Android epoch lies wholly after its completed callback under the declared alignment budget')
-    if start < acquired_start or end > acquired_end:
-        raise ValueError('Android epoch is outside the retained phone acquisition window')
+        if start < acquired_start or end > acquired_end:
+            raise ValueError('Android epoch is outside the retained phone acquisition window')
     hardware_time = _raw_integer(values, 'TimeNanos')
     full_bias = _raw_integer(values, 'FullBiasNanos')
     bias = _decimal(values, 'BiasNanos')  # Missing fine bias is not silently zero.
@@ -103,18 +115,26 @@ def android_clock_claim(record, *, utc_error_ns, utc_error_source):
                    gps_utc_offset_seconds=offset, time_scale_source=record['time_scale_source'],
                    receiver_reported_leap_second=values.get('LeapSecond'),
                    receiver_reported_bias_uncertainty_ns=values.get('BiasUncertaintyNanos'))
+    if causal_receipt_upper_bound:
+        claim['event_relation'] = 'NOT_AFTER_EVENT_END'
+        decoded.update(callback_start_monotonic_ns=callback_start, callback_read_end_monotonic_ns=callback_end,
+                       receiver_reported_chipset_elapsed_realtime_ns=values.get('ChipsetElapsedRealtimeNanos'))
     return claim, decoded
 
 
 def compare_android_time(witness, raw, *, association_source, gps_utc_offset_seconds, time_scale_source,
                          utc_error_ns, utc_error_source, epoch_alignment_error_ns=None,
-                         epoch_alignment_source=None, bracket_span_ns=None):
+                         epoch_alignment_source=None, bracket_span_ns=None, causal_receipt_upper_bound=False):
     """Adapt existing Android GPS intake to the existing UTC comparison/replay."""
     _text(association_source, 'association_source')
     _integer(gps_utc_offset_seconds, 'gps_utc_offset_seconds', 0)
     if gps_utc_offset_seconds > 127:
         raise ValueError('gps_utc_offset_seconds exceeds the supported range')
     _text(time_scale_source, 'time_scale_source')
+    if type(causal_receipt_upper_bound) is not bool:
+        raise ValueError('causal_receipt_upper_bound must be a boolean')
+    if causal_receipt_upper_bound and (epoch_alignment_error_ns is not None or epoch_alignment_source is not None):
+        raise ValueError('choose epoch alignment or causal receipt upper bound; no mixed association')
     if epoch_alignment_error_ns is not None or epoch_alignment_source is not None:
         _integer(epoch_alignment_error_ns, 'epoch_alignment_error_ns', 0)
         _text(epoch_alignment_source, 'epoch_alignment_source')
@@ -136,6 +156,8 @@ def compare_android_time(witness, raw, *, association_source, gps_utc_offset_sec
                    association='CALLER_ASSERTED_SAME_ANDROID_DEVICE_AND_BOOT',
                    reported_uncertainties_used_as_bounds=False,
                    android_intake=dict(source=raw.get('source'), coverage=raw.get('coverage')))
+    if causal_receipt_upper_bound:
+        capture['time_association'] = 'ANDROID_CALLBACK_UPPER_BOUND'
     for row in raw['records']:
         if not isinstance(row, dict):
             raise ValueError('Android intake records must be objects')

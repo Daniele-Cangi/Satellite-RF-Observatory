@@ -199,6 +199,9 @@ def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resoluti
             or comparison.get('schema') != 'pnt-gnss-time-comparison-v1'
             or not isinstance(comparison.get('assumptions'), dict)):
         raise ValueError('an existing pnt-gnss-time-comparison-v1 report is required')
+    capture = comparison.get('receiver_capture')
+    if isinstance(capture, dict) and capture.get('time_association') == 'ANDROID_CALLBACK_UPPER_BOUND':
+        raise ValueError('causal receipt is not a GNSS epoch; local continuity and two-sided sensitivity are not applicable')
     if android_raw_offsets_ns is not None:
         if (list(offsets_ns) or drift_rates_ppm is not None or onset_monotonic_ns is not None
                 or android_clock_diagnostics or evidence_availability):
