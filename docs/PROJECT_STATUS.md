@@ -1,5 +1,31 @@
 # Stato del progetto — 11 ottobre 2026
 
+## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
+
+La priorita scientifica e risolvere S2 dell'inversa: identificabilita,
+ricostruzione reale di posizione/moto, previsioni RF escluse e incertezza totale.
+Poi conferma su dati nuovi (S3) e consegna utilizzabile con dominio dichiarato,
+copertura e fallimenti (S4), oppure conclusione scientifica motivata se manca
+l'informazione. I protocolli e gli esiti storici restano invariati.
+
+Il [controllo fisico G12](../research/exploratory/G12_BIAS_GEOMETRY_DECISION.md)
+verifica copertura e informazione sui bias senza modificare il solver o leggere
+l'orbita del bersaglio. Legare i bias fra archi aggiunge informazione locale, ma
+la direzione debole resta scarsamente vincolata: scala formale condizionale
+circa 16 km sui bias nei cinque fit con fase accettati, non errore di posizione
+o limite fisico. Tutti i quindici fit fase rifiutati restano tali.
+
+Il prossimo tentativo usa l'ora gia esposta: quattro stazioni comuni,
+STJO nella prima parte e BRAZ nella seconda. La presenza delle righe precede
+qualifica di elevazione, continuita e clock; costanza dei bias, modello temporale
+e dipendenze fra archi vanno giustificati. Se la geometria resta debole serve un
+vincolo indipendente sul bias differenziale effettivo, non un'altra soglia.
+
+Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
+orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
+fisici adeguati. Android resta acquisizione trasversale e manutenzione.
+Un'eventuale risposta FGI si valuta senza interrompere questa priorita.
+
 ## Ecosistema e stato dei verticali
 
 Riferimento: commit `d11c24a` dell'11 ottobre 2026. Satellite comprende tre
