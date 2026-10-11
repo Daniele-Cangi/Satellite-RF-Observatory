@@ -76,6 +76,11 @@ nuisances. These commands do not issue an authenticated-signal or attack verdict
 
 ## Quick start
 
+Start with the [diagnostic quick start](docs/DIAGNOSTIC_QUICKSTART.md): run a
+bundled synthetic session offline, obtain a development APK from a successful
+CI build, then export and inspect your own recording. Offline session reporting
+needs only Python 3.13; no timing assumptions are filled in automatically.
+
 ### Collect on an Android phone
 
 Follow the [app build and installation guide](pnt/android-collector/README.md).
@@ -86,7 +91,6 @@ contains the original Raw CSV and NTS JSON, including failed and unattempted
 slots. Transfer it to a PC and create a report:
 
 ```console
-python -m pip install -r requirements-pnt-time.txt
 python -m pnt android-session pnt-session-<id>.zip --output phone-report.json
 ```
 
