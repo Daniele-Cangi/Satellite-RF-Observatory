@@ -194,7 +194,9 @@ def test_receiver_is_private_before_any_credential_is_generated(tmp_path, monkey
                 '$ErrorActionPreference = "Stop"; '
                 '$pntAcl = [System.IO.Directory]::GetAccessControl($env:PNT_PRIVATE_DIRECTORY); '
                 '$pntUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value; '
-                'if ($pntAcl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $pntUser) { exit 3 }; '
+                # Elevated Windows runners can assign the Administrators group
+                # as owner; it is already an explicitly admitted DACL principal.
+                'if ($pntAcl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -notin @($pntUser, "S-1-5-32-544")) { exit 3 }; '
                 '$pntAllowed = @($pntUser, "S-1-3-4", "S-1-5-18", "S-1-5-32-544"); '
                 '$pntAcl.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier]) | ForEach-Object { '
                 '$pntSid = $_.IdentityReference.Value; '
