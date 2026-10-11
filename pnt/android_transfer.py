@@ -5,6 +5,7 @@ TLS and a per-run credential protect transport; they do not attest GNSS evidence
 """
 import base64
 import copy
+from collections import Counter
 import datetime
 import hmac
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -29,6 +30,35 @@ from .time_witness import _integer
 MAX_SNAPSHOT = 32 * 1024 * 1024
 MAX_RUN_BYTES = 128 * 1024 * 1024
 MAX_REQUESTS = 256
+
+
+def _messages(values):
+    """Bound UI previews, with full reasons retained in the monitor result."""
+    return dict(total=len(values), preview=[v[:500] for v in values[:8]],
+                abbreviated=len(values) > 8 or any(len(v) > 500 for v in values[:8]))
+
+
+def _presentation(monitor, options, resolution):
+    update, receipt = monitor.last_update, monitor.last_receipt
+    transitions = {}
+    for method in ('local', 'external', 'combined'):
+        counts = Counter((r['previous'][method], r['current'][method])
+                         for r in update['revisions'] if r['previous'] is not None
+                         and r['previous'][method] != r['current'][method])
+        transitions[method] = [dict(previous=old, current=new, count=n)
+                              for (old, new), n in sorted(counts.items())]
+    # No per-row verdicts or new aggregation rule: counts come from the existing
+    # monitor receipt. Every transition, reason and input remains on the PC.
+    return dict(source_members=update['source_members'], processor=update['processor'],
+        record_count=len(update['record_outcomes']), record_outcome_counts=receipt['record_outcome_counts'],
+        revised_records=receipt['revised_records'], revision_transitions=transitions,
+        record_reasons=_messages(list(update['record_reasons'].values())),
+        witness_status_counts=update['witness_status_counts'],
+        analysis_options={k: v[:500] if isinstance(v, str) else v for k, v in (options or {}).items()},
+        analysis_options_abbreviated=any(isinstance(v, str) and len(v) > 500 for v in (options or {}).values()),
+        local_counter_resolution_ns=resolution, calibrated=False,
+        timing={k: receipt[k] for k in ('counter_clock', 'input_read_ns', 'analysis_ns',
+                                      'result_publication_ns', 'total_pc_processing_ns')})
 
 
 def lan_address(address):
@@ -152,11 +182,14 @@ class AndroidReceiver(HTTPServer):
         self.accepted += 1
         self.event(kind='SNAPSHOT_RECEIVED', capture_id=capture_id, size_bytes=len(raw)+len(nts),
                    changed=receipt is not None, update_index=self.monitor.updates)
+        messages = _messages(self.monitor.last_update['issues'])
         return dict(schema='pnt-android-transfer-receipt-v1', capture_id=capture_id,
             stored=True, update_index=self.monitor.updates,
-            status=self.monitor.last_update['status'], issues=self.monitor.last_update['issues'],
+            status=self.monitor.last_update['status'], issues=messages['preview'],
+            issue_count=messages['total'], issues_abbreviated=messages['abbreviated'],
             session_complete=self.monitor.last_update['session_complete'],
-            scope='TRANSPORT_RECEIPT_ONLY; NOT_A_PHONE_TIMING_OR_SECURITY_VERDICT')
+            presentation=_presentation(self.monitor, self.options, self.resolution),
+            scope='EXISTING_PC_CONDITIONAL_DIAGNOSTIC; NOT_RF_AUTHENTICATION_OR_ALLOW_BLOCK')
 
 
 class _Handler(BaseHTTPRequestHandler):

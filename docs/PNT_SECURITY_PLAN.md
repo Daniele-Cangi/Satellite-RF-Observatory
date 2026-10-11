@@ -304,9 +304,13 @@ Misura elaborazione e pubblicazione sul PC. Il
 porta le copie native a questo monitor durante la raccolta, solo dopo
 configurazione e selezione esplicita dell'invio. Riusa controlli, snapshot e
 replay esistenti; TLS e credenziale servono alla sicurezza del trasporto, senza
-introdurre autorità scientifiche. L'app mostra ricevute e conserva i fallimenti;
-la consegna degli esiti e la latenza effettiva sul telefono restano il prossimo
-passo. Le durate PC non sono latenza GNSS -> allarme operatore né qualifica dei budget.
+introdurre autorità scientifiche. La versione 0.6.0 restituisce gli esiti del
+monitor al telefono: conteggi locali/esterni/combinati, insufficienze e revisioni,
+associati agli hash della copia inviata. Un errore rende indisponibile il risultato
+corrente; quello precedente rimane storico. Conserva le durate richiesta/ricevuta
+e applicazione del testo alla UI sul contatore telefono, separato dal PC.
+Non misurano la comparsa di un frame, l'osservazione dell'operatore o la latenza
+GNSS -> allarme; la qualifica temporale e il beneficio fisico restano aperti.
 
 Dopo il flusso autonomo, il traguardo scientifico resta misurare il beneficio
 locale + rete rispetto ai controlli locali sugli stessi casi, con falsi allarmi,

@@ -4,7 +4,8 @@ A foreground research app that records native GNSS measurements and
 authenticated Internet time together. Version 0.2 removes the need for Termux,
 a PC or USB during acquisition; version 0.3 adds live acquisition diagnostics,
 version 0.4 imports the existing engine's PC report, and version 0.5 adds an
-explicit private PC connection during recording.
+explicit private PC connection during recording. Version 0.6 returns the existing
+PC monitor's conditional results to the phone, including revisions and failures.
 It retains the existing Raw format and Python
 intake/replay. It does not adjust the device clock, authenticate local RF or
 compute a timing/security verdict on the phone.
@@ -38,7 +39,7 @@ retains the earlier GNSS Logger/Termux conditional workflow separately.
 
 ## Private PC connection
 
-Version **0.5.0** optionally sends complete native-file snapshots to the existing
+Version **0.6.0** optionally sends complete native-file snapshots to the existing
 PC monitor while recording. It does not add a detector or change GNSS/NTS
 timestamps, budgets, schedules or terminal requirements. Offline recording and
 ZIP export remain available without configuring a PC.
@@ -97,15 +98,35 @@ current monitor result: the final summary is insufficient with no current result
 pointer, while prior snapshots remain historical evidence. If the summary itself
 cannot be persisted, the command fails instead of returning an old verdict.
 
-The app displays **transport receipts only**, including cumulative failures and
-intake issue counts; `pnt-transfer-<id>.jsonl` retains the request outcomes privately.
+The app displays the existing PC monitor's **conditional diagnostic**, including
+local/external/combined counts, insufficient and inconclusive records, revision
+transitions, NTS failures, declared uncalibrated options and PC source revision.
+Counts are records, not independent trials. `NOT_DISTINGUISHABLE` is not validation.
+The phone checks both uploaded snapshot hashes, byte counts and capture identity;
+it trusts PC arithmetic. Use the updated PC receiver with this app; an older
+receipt without presentation is rejected as unavailable, without fallback.
+Reasons and source descriptions have explicitly labeled bounded previews; full
+inputs, per-record results and revisions remain in the existing PC monitor.
+Identical uploads return the same update and processing duration, without
+inventing another analysis or counting revisions again.
+
+On failed requests or invalid responses the **current result is unavailable**;
+the prior acknowledged result is labeled historical. After cancellation the
+connection is stopped, and only an acknowledged closed pair can be displayed
+as a final snapshot. No background reconnection is started. Failed evidence-log
+writes stop transfer and remove the current presentation.
+`pnt-transfer-<id>.jsonl` privately retains request outcomes and their received
+PC summaries, plus `UI_TEXT_APPLIED` events after the Activity assigns the text.
+Phone request/snapshot-to-receipt and receipt-to-text durations use
+`CLOCK_BOOTTIME`; PC processing uses its own monotonic counter. They are not
+mapped across devices. Text assignment does not measure a displayed frame,
+operator observation, physical attack onset or GNSS-to-alert latency.
 Orderly session completion sends a final snapshot; hiding the app cancels transfer
 and retains native partials, without a background restart. A periodic upload may
 already deliver the closed pair; its complete receipt stops the worker, so a
 later completion callback does not duplicate the final upload after PC exit.
 A newer snapshot may follow a failed request; this is transport recovery, not an
-NTS attempt retry or replacement. PC outcome delivery and phone-visible alert
-latency are the next increment. No ALLOW/BLOCK decision is shown.
+NTS attempt retry or replacement. No ALLOW/BLOCK decision is shown.
 
 ## ZIP to PC report to phone
 
@@ -153,7 +174,7 @@ NTS protocol. The slot list stays in round/endpoint order, irrespective of
 completion order. The PC checks each endpoint's non-overlapping attempt prefix,
 minimum start spacing, original round offsets and complete slot/terminal totals.
 Late slots start without replacement, retries or compressed catch-up. This mode
-requires declared collector version 0.4.2 or 0.5.0; older or unknown versions cannot opt
+requires declared collector version 0.4.2, 0.5.0 or 0.6.0; older or unknown versions cannot opt
 into it. Historical reports retain the original global serial checks.
 Checkpoint writes and progress updates are serialized; Stop closes every active
 probe, wakes both schedules and waits for their completion before the final

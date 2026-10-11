@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.junit.Assume.*;
@@ -47,16 +49,16 @@ public class PcConnectionTest {
         CountDownLatch failure = new CountDownLatch(1);
         try (LiveTransfer transfer = new LiveTransfer(read(configs.getAsJsonObject("credential")),
                 () -> new byte[][]{raw, nts}, id + "-failed", Path.of(fixture.get("directory").getAsString()),
-                System::nanoTime, text -> { if (text.contains("failures retained: 1")) failure.countDown(); })) {
+                System::nanoTime, update -> { if (update.text.contains("failures retained: 1")) failure.countDown(); })) {
             assertTrue("Upload failure must be visible", failure.await(10, TimeUnit.SECONDS));
         }
         CountDownLatch acknowledged = new CountDownLatch(1);
         CountDownLatch completed = new CountDownLatch(1);
         try (LiveTransfer transfer = new LiveTransfer(connection, () -> new byte[][]{raw, nts}, id,
                 Path.of(fixture.get("directory").getAsString()), System::nanoTime,
-                text -> {
-                    if (text.contains("Acknowledged: 1")) acknowledged.countDown();
-                    if (text.contains("PC transport stopped:") && text.contains("Acknowledged: 1")) completed.countDown();
+                update -> {
+                    if (update.text.contains("Acknowledged: 1")) acknowledged.countDown();
+                    if (update.text.contains("PC transport stopped:") && update.text.contains("Acknowledged: 1")) completed.countDown();
                 })) {
             assertTrue("Transport worker must acknowledge", acknowledged.await(10, TimeUnit.SECONDS));
             assertTrue("Complete receipt must stop upload before receiver exit", completed.await(10, TimeUnit.SECONDS));
@@ -68,5 +70,58 @@ public class PcConnectionTest {
         PcConnection cancelled = connection.fresh();
         cancelled.cancel();
         assertThrows(java.io.IOException.class, cancelled::health);
+    }
+
+    @Test public void realEngineRevisionsFailuresAndDisplayTiming() throws Exception {
+        String file = System.getenv("PNT_PC_CONNECTION_FIXTURE");
+        assumeTrue(file != null);
+        JsonObject fixture = JsonParser.parseString(new String(Files.readAllBytes(Path.of(file)), StandardCharsets.UTF_8)).getAsJsonObject();
+        byte[] raw = Files.readAllBytes(Path.of(fixture.get("live_raw").getAsString()));
+        byte[] first = Files.readAllBytes(Path.of(fixture.get("live_first").getAsString()));
+        byte[] second = Files.readAllBytes(Path.of(fixture.get("live_second").getAsString()));
+        AtomicInteger phase = new AtomicInteger();
+        AtomicReference<String> last = new AtomicReference<>();
+        CountDownLatch inconsistent = new CountDownLatch(1), revised = new CountDownLatch(1),
+            unavailable = new CountDownLatch(1), malformed = new CountDownLatch(1);
+        Path directory = Path.of(fixture.get("directory").getAsString()).resolve("live-phone");
+        Files.createDirectory(directory);
+        try (LiveTransfer transfer = new LiveTransfer(read(fixture.getAsJsonObject("live_config")), () -> {
+            int stage = phase.get();
+            if (stage == 2) throw new java.io.IOException("synthetic unavailable snapshot");
+            if (stage == 3) return new byte[][]{"corrupt retained original\n".getBytes(StandardCharsets.UTF_8), "{}".getBytes(StandardCharsets.UTF_8)};
+            return new byte[][]{raw, stage == 0 ? first : second};
+        }, "synthetic-monitor", directory, System::nanoTime, update -> {
+            last.set(update.text);
+            try { update.displayed(System.nanoTime()); }
+            catch (java.io.IOException error) { throw new AssertionError(error); }
+            if (update.text.contains("LATEST ACKNOWLEDGED") && update.text.contains("combined (records, not independent trials): INCONSISTENT=1")) inconsistent.countDown();
+            if (update.text.contains("Revised INCONSISTENT -> INCONCLUSIVE: 1")) revised.countDown();
+            if (update.text.contains("CURRENT PC RESULT UNAVAILABLE") && update.text.contains("HISTORICAL ONLY")) unavailable.countDown();
+            if (phase.get() == 3 && update.text.contains("LATEST ACKNOWLEDGED") && update.text.contains("no numerical comparison")) malformed.countDown();
+        })) {
+            assertTrue(inconsistent.await(10, TimeUnit.SECONDS));
+            phase.set(1);
+            assertTrue(revised.await(10, TimeUnit.SECONDS));
+            phase.set(2);
+            assertTrue(unavailable.await(10, TimeUnit.SECONDS));
+            assertFalse(last.get().contains("LATEST ACKNOWLEDGED"));
+            phase.set(3);
+            assertTrue(malformed.await(10, TimeUnit.SECONDS));
+        }
+        assertTrue(last.get().contains("CURRENT PC RESULT UNAVAILABLE"));
+        var lines = Files.readAllLines(directory.resolve("pnt-transfer-synthetic-monitor.jsonl"));
+        boolean sawReceipt = false, sawApplied = false, sawFailure = false;
+        for (String line : lines) {
+            JsonObject event = JsonParser.parseString(line).getAsJsonObject();
+            if (event.get("kind").getAsString().equals("UI_TEXT_APPLIED")) {
+                assertTrue(event.get("text_applied_counter_ns").getAsLong() >= event.get("receipt_received_counter_ns").getAsLong());
+                sawApplied = true;
+            } else if (event.get("outcome").getAsString().equals("UNAVAILABLE")) sawFailure = true;
+            else {
+                assertTrue(event.getAsJsonObject("pc_receipt").has("presentation"));
+                sawReceipt = true;
+            }
+        }
+        assertTrue(sawReceipt && sawApplied && sawFailure);
     }
 }

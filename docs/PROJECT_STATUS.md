@@ -104,8 +104,14 @@ configurazione esplicita e invio facoltativo delle copie native durante la racco
 allo stesso monitor, senza cambiare il motore. La prova di connessione non avvia
 GNSS né trasmette registrazioni. Credenziale e certificato dedicati proteggono
 il trasporto; non attestano le misure. L'app conserva i fallimenti e mostra
-ricevute di trasporto. La consegna degli esiti numerici al telefono è il prossimo
-incremento; latenza operatore e beneficio di sicurezza restano da misurare.
+ricevute di trasporto. La versione **0.6.0** restituisce gli esiti del monitor
+esistente: conteggi locali/esterni/combinati, revisioni, insufficienze e motivi,
+legati agli hash delle copie inviate. Un errore o una cancellazione rende il
+risultato corrente indisponibile e conserva il precedente come storico;
+una coppia chiusa confermata resta un risultato finale. I log privati conservano
+le risposte e le durate richiesta/ricevuta/applicazione del testo sul telefono,
+senza associare il contatore al PC. Latenza operatore e beneficio di sicurezza
+restano da misurare; nessun nuovo motore o budget qualificato.
 
 Prova ingegneristica 0.5.0 sul Galaxy S21 FE / Android 16: configurazione
 importata e connessione HTTPS telefono -> PC riuscita sulla LAN Wi-Fi.
@@ -126,7 +132,7 @@ ha anche rilevato e corretto la chiusura PC che dipendeva erroneamente dai budge
 il ricevitore originale ha atteso il limite di durata; un replay separato dei
 file finali conferma la correzione senza riscrivere quell'esito. Ricevute e tempi
 di richiesta non misurano la latenza dell'allarme fino all'operatore. Il prossimo
-incremento resta la consegna live degli esiti esistenti al telefono.
+incremento 0.6.0 porta quella consegna nell'app senza riscrivere questa prova.
 
 Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni

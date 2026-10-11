@@ -86,6 +86,10 @@ No decoded-UTC challenge is injected, and retrospective group/common-support
 selection is not used for the monitor. Recompute a retained snapshot with
 `inspect_android_session_files` and the same existing zero-control engine.
 Monitor results are PC diagnostic files, not phone-import report envelopes.
+Collector 0.6.0 presents a bounded summary of these existing results in each
+private HTTPS response, bound to the uploaded pair's hashes. Full records remain
+here; unavailable connections cannot leave a prior conclusion as current on the
+phone. See the [private connection guide](android-collector/README.md#private-pc-connection).
 
 The foreground command stops when both native terminals are observed, at the
 duration limit, or on Ctrl-C. It writes `summary.json`; a partial or insufficient

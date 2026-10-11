@@ -168,7 +168,7 @@ final class SessionReport {
         return new SessionReport(bytes, text.toString());
     }
 
-    private static String string(JsonObject object, String key) {
+    static String string(JsonObject object, String key) {
         JsonElement value = object.get(key);
         if (value == null || !value.isJsonPrimitive() || !value.getAsJsonPrimitive().isString()) {
             throw new IllegalArgumentException("Missing or invalid report field: " + key);
@@ -176,7 +176,7 @@ final class SessionReport {
         return value.getAsString();
     }
 
-    private static long integer(JsonElement value) {
+    static long integer(JsonElement value) {
         if (value == null || !value.isJsonPrimitive() || !value.getAsJsonPrimitive().isNumber()
                 || !value.getAsString().matches("[0-9]+")) throw new IllegalArgumentException("Invalid byte count");
         return Long.parseLong(value.getAsString());
@@ -190,10 +190,19 @@ final class SessionReport {
                 int count;
                 while ((count = input.read(buffer)) != -1) hash.update(buffer, 0, count);
             }
-            StringBuilder result = new StringBuilder();
-            for (byte value : hash.digest()) result.append(String.format(java.util.Locale.ROOT, "%02x", value & 255));
-            return result.toString();
+            return hex(hash.digest());
         } catch (NoSuchAlgorithmException error) { throw new AssertionError(error); }
+    }
+
+    static String sha256(byte[] bytes) {
+        try { return hex(MessageDigest.getInstance("SHA-256").digest(bytes)); }
+        catch (NoSuchAlgorithmException error) { throw new AssertionError(error); }
+    }
+
+    private static String hex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte value : bytes) result.append(String.format(java.util.Locale.ROOT, "%02x", value & 255));
+        return result.toString();
     }
 
     private static String display(JsonElement value) {
