@@ -167,3 +167,59 @@ def test_zero_derivative_is_exact_and_clock_integer_overflow_fails_closed():
     assert len(checks['checks']) == len(capture['records'])
     with pytest.raises(ValueError, match='integer range'):
         challenge(source, [2**63])
+
+
+@pytest.mark.parametrize('status', ['UNSUPPORTED_GPS_SIGNAL', 'UNRESOLVED_GPS_TRANSMIT_TIME',
+                                    'INVALID_GPS_MEASUREMENT', 'INVALID_CONSTELLATION'])
+def test_imported_unusable_label_cannot_hide_a_normalizable_gps_row(status):
+    source = session('stale-unusable-label')
+    source['receiver_capture']['records'][1]['intake_status'] = status
+    before = copy.deepcopy(source)
+    with pytest.raises(ValueError, match='disagrees'):
+        challenge(source)
+    assert source == before
+
+
+def test_rechallenging_retained_derivative_preserves_original_digest():
+    source = session('rechallenged')
+    first = challenge(source, [100 * MS])['offset_cases'][1]['derived_receiver_capture']
+    before = copy.deepcopy(first)
+    replay = compare_receiver_capture(source['witness_report'], first, utc_error_ns=MS,
+                                     utc_error_source='synthetic', bracket_span_ns=200 * MS)
+    second = challenge(replay, [-100 * MS])['offset_cases'][1]['derived_receiver_capture']
+    assert first == before
+    assert second['android_intake']['original_source'] == source['receiver_capture']['android_intake']['source']
+    assert 'source' not in second['android_intake']
+    assert second['records'] == source['receiver_capture']['records']
+
+
+@pytest.mark.parametrize('field,value,status', [
+    ('CodeType', 'unsupported', 'UNSUPPORTED_GPS_SIGNAL'),
+    ('State', '1', 'UNRESOLVED_GPS_TRANSMIT_TIME'),
+    ('FullBiasNanos', '', 'MISSING_FULL_BIAS'),
+    ('Svid', '99', 'INVALID_GPS_MEASUREMENT'),
+    ('ConstellationType', 'NaN', 'INVALID_CONSTELLATION'),
+])
+def test_genuinely_unusable_rows_reparse_and_remain_unchanged(field, value, status):
+    source = session('genuine-unusable')
+    row = source['receiver_capture']['records'][1]
+    row['source_values'][field] = value
+    row['intake_status'] = status
+    before = copy.deepcopy(source)
+    result = challenge(source)
+    assert source == before
+    for case in result['offset_cases']:
+        assert case['raw_clock_challenge']['checks'][1]['status'] == 'UNCHANGED_UNUSABLE_ROW'
+        assert 1 in case['record_indices_by_pattern']['INSUFFICIENT_EVIDENCE']
+        if case['utc_claim_offset_ns']:
+            assert case['derived_receiver_capture']['records'][1] == row
+
+
+def test_original_digest_is_not_replaced_by_later_source_metadata():
+    capture = session('root-source')['receiver_capture']
+    original = copy.deepcopy(capture['android_intake']['source'])
+    capture['android_intake']['original_source'] = original
+    capture['android_intake']['source'] = {'sha256': 'different-later-source'}
+    derived, _ = shift_android_raw_clock_capture(capture, MS)
+    assert derived['android_intake']['original_source'] == original
+    assert 'source' not in derived['android_intake']

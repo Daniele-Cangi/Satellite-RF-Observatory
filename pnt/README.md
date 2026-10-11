@@ -249,13 +249,16 @@ supported normalized GPS rows. The existing Raw parser checks the GPS reception
 shift and identical pseudoranges for every row, including week rollover. The
 UTC/NTS comparison and local control then rerun from the derived fields, with
 unchanged NTS, BOOTTIME, callback counters, fine bias, ADR, rates and budgets.
+Imported intake labels are verified by the same Raw parser, including unusable
+rows; mismatches reject the input rather than silently changing support.
 Source admission and calendar segmentation are recomputed; the zero case fixes
 the common-support denominator. Unsupported/unusable rows remain unchanged and
 visible. A native-field shift that invalidates a UTC claim remains insufficient.
 
 Each case retains its normalization checks and derivative capture for the
 existing comparison replay. Its `original_source` digest identifies the
-original acquisition bytes, never a fabricated phone recording. Stored verdicts
+original acquisition bytes, never a fabricated phone recording; it survives
+subsequent challenges of retained derivatives. Stored verdicts
 are ignored, and originals are unchanged. This mutually exclusive mode cannot
 be combined with decoded offsets, drift, onset or availability/component
 diagnostics. No extra detector or replay protocol is introduced.

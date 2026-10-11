@@ -45,15 +45,17 @@ def shift_android_raw_clock_capture(capture, offset_ns):
             raise ValueError('Raw clock challenge requires Android CLOCK_BOOTTIME records only')
         check = dict(source_index=index, source_line=row.get('source_line'))
         checks.append(check)
-        if row.get('intake_status') != 'NORMALIZED':
-            check.update(status='UNCHANGED_UNUSABLE_ROW', intake_status=row.get('intake_status'))
-            continue
         values = row.get('source_values')
-        if not isinstance(values, dict) or _integer(values, 'ConstellationType') != 1:
-            raise ValueError('normalized GPS Raw source fields are required')
-        before = _gps_row(values, row.get('source_line'))
+        if not isinstance(values, dict) or any(not isinstance(values.get(name), str) for name in REQUIRED):
+            raise ValueError('complete original Raw source strings are required')
+        before = _intake_row(values, row.get('source_line'))
+        if before is None:
+            raise ValueError('Android GPS intake does not retain unsupported constellation rows')
+        if before['status'] != row.get('intake_status'):
+            raise ValueError('retained intake status disagrees with original Raw parser')
         if before['status'] != 'NORMALIZED':
-            raise ValueError('retained NORMALIZED status disagrees with original GPS parser')
+            check.update(status='UNCHANGED_UNUSABLE_ROW', intake_status=before['status'])
+            continue
         bias = _integer(values, 'FullBiasNanos') - offset_ns
         if not -(2**63) <= bias < 2**63:
             raise ValueError('shifted FullBiasNanos exceeds the Android integer range')
@@ -73,8 +75,8 @@ def shift_android_raw_clock_capture(capture, offset_ns):
                      receiver_gpst_delta_ns=offset_ns, pseudorange_m=before['pseudorange_m'])
     # The source digest identifies original bytes, never synthetic acquisition.
     intake = derived.get('android_intake')
-    if isinstance(intake, dict) and offset_ns:
-        intake['original_source'] = intake.pop('source', None)
+    if isinstance(intake, dict) and offset_ns and 'source' in intake:
+        intake.setdefault('original_source', intake.pop('source'))
     transformation = dict(mode='SUPPORTED_GPS_RAW_CLOCK_AND_TRANSMIT_TOW', offset_ns=offset_ns,
                           changed_fields=['FullBiasNanos', 'ReceivedSvTimeNanos'] if offset_ns else [],
                           receiver_gpst_shift='FullBiasNanos - offset_ns',
@@ -191,6 +193,22 @@ def _gps_row(values, line):
     return row
 
 
+def _intake_row(values, line):
+    """Shared Raw classification, including retained invalid rows; no filtering by label."""
+    try:
+        constellation = _integer(values, 'ConstellationType')
+    except ValueError as error:
+        return dict(source_line=line, source_values=values,
+                    status='INVALID_CONSTELLATION', reason=str(error))
+    if constellation != 1:
+        return None
+    try:
+        return _gps_row(values, line)
+    except (ValueError, DecimalException, OverflowError) as error:
+        return dict(source_line=line, source_values=values,
+                    status='INVALID_GPS_MEASUREMENT', reason=str(error))
+
+
 def inspect_android_raw(path):
     """Return source-bound GPS records and complete Raw-row accounting.
 
@@ -246,21 +264,10 @@ def inspect_android_raw_bytes(data, name, *, allow_empty=False, expected_capture
                 raise ValueError(f'line {line}: native Raw rows disagree on their callback window')
         counts['raw_rows'] += 1
         constellations[values['ConstellationType']] += 1
-        try:
-            constellation = _integer(values, 'ConstellationType')
-        except ValueError as error:
-            records.append({'source_line': line, 'source_values': values,
-                            'status': 'INVALID_CONSTELLATION', 'reason': str(error)})
-            counts['INVALID_CONSTELLATION'] += 1
-            continue
-        if constellation != 1:
+        row = _intake_row(values, line)
+        if row is None:
             counts['UNSUPPORTED_CONSTELLATION'] += 1
             continue
-        try:
-            row = _gps_row(values, line)
-        except (ValueError, DecimalException, OverflowError) as error:
-            row = {'source_line': line, 'source_values': values,
-                   'status': 'INVALID_GPS_MEASUREMENT', 'reason': str(error)}
         records.append(row)
         counts[row['status']] += 1
     if header is None or (not counts['raw_rows'] and not allow_empty):
