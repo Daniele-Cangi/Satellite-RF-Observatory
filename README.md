@@ -56,7 +56,7 @@ absolute-time verification requires a separate qualified time reference.
 | `python -m pnt android-raw` | Android GPS L1/L5 measurement intake with source fields, signal identity and unusable-row accounting |
 | `python -m pnt time-probe` / `android-time-probe` | Authenticated Internet time acquisition with declared assumptions; the Android command uses the phone's CLOCK_BOOTTIME |
 | `python -m pnt android-time-compare` | GNSS UTC versus same-phone NTS with explicit association and error budgets; missing bounds remain insufficient |
-| `python -m pnt time-sensitivity` | Paired local/external UTC offset sensitivity, including multiple Android sessions with fixed budgets and visible unsupported cases |
+| `python -m pnt time-sensitivity` | Paired local/external UTC sensitivity, including Android Raw clock/transmit-TOW challenges with unchanged parsed pseudoranges |
 | `python -m pnt android-analyze` | Android L1/C1C compared with external C1C observations at explicit fixed coordinates |
 | `python -m pnt compare` | Development comparison with separate training/calibration/evaluation windows and software code ramps |
 | `python -m pnt transfer` | Training-only prediction of later local residuals from external observations |
@@ -139,6 +139,14 @@ This example does not classify an attack or demonstrate position accuracy.
 For your own recordings, follow the [input requirements](pnt/README.md).
 
 ## Current evidence
+
+The [Android Raw clock challenge](research/exploratory/PNT_ANDROID_RAW_CLOCK_CHALLENGE.md)
+shifts GPS reception and transmit time together by ±100 ms, preserving all
+1,446 parsed GPS pseudoranges. NTS distinguishes both shifts on 65/156 common
+clock groups while local elapsed continuity stays unchanged. This reuses exposed
+data and uncalibrated assumptions; 91 insufficient groups and 23 NTS timeouts
+remain visible. It establishes software consistency benefit, not RF authenticity
+or qualified timing accuracy.
 
 | Question | What the evidence supports |
 |---|---|

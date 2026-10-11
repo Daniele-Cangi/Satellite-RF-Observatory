@@ -1,5 +1,19 @@
 # Stato del progetto â€” 11 ottobre 2026
 
+## Incremento attuale: challenge sui campi Raw GPS
+
+La [challenge clock/trasmissione](../research/exploratory/PNT_ANDROID_RAW_CLOCK_CHALLENGE.md)
+riusa quattro sessioni esposte con gli stessi budget: sposta insieme clock GPS
+e tempo di trasmissione di ±100 ms, conservando gli pseudorange di tutte le
+1.446 righe GPS. Sui 65/156 gruppi comuni NTS/combinato distinguono entrambi
+gli scarti e il locale relativo resta invariato. Restano 91 gruppi insufficienti
+e 23/80 timeout NTS. Confronto, ammissione e controllo locale sono ricalcolati
+tramite il motore esistente; originali e risultati storici restano identici.
+È una challenge software dei segnali GPS supportati, con BOOTTIME/NTS fidati,
+non un modello RF completo né una qualifica dei budget. P2 fisica e P3 restano
+aperte: occorrono un confine temporale indipendente e dati benigni/challenge
+verificabili, prima del sito; altre raccolte equivalenti non colmano il limite.
+
 ## Obiettivo
 
 La direzione attiva e il [piano di sicurezza PNT](PNT_SECURITY_PLAN.md):

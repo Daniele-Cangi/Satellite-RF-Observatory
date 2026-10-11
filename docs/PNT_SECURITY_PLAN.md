@@ -6,6 +6,17 @@ dall'utente; architettura proposta, ancora da dimostrare. Questo documento
 sostituisce le priorità di prodotto precedenti. Esperimenti conclusi, risultati e criteri
 storici conservano il loro significato originale.
 
+## Avanzamento del confronto sul tempo
+
+Il percorso telefono -> rapporto PC e implementato; la
+[challenge Raw GPS](../research/exploratory/PNT_ANDROID_RAW_CLOCK_CHALLENGE.md)
+mostra il beneficio temporale condizionale anche spostando clock e trasmissione
+insieme, senza alterare gli pseudorange. Riusa replay e budget esistenti, con
+fallimenti e supporto insufficiente visibili. Questa evidenza software su dati
+esposti non chiude P2 fisica o P3. Il successivo avanzamento richiede un confine
+temporale indipendente documentato e una challenge verificabile nel modello di
+attacco scelto; raccolte equivalenti e nuove matrici di budget non bastano.
+
 ## Obiettivo e primo utilizzatore
 
 Costruire un framework aperto che confronta le osservazioni GNSS di un sistema

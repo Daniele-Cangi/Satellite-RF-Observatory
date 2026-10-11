@@ -167,7 +167,7 @@ def _android_clock_diagnostics(baseline, local):
 
 def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resolution_ns=None,
                             onset_monotonic_ns=None, android_clock_diagnostics=False,
-                            drift_rates_ppm=None, evidence_availability=False):
+                            drift_rates_ppm=None, evidence_availability=False, android_raw_offsets_ns=None):
     """Replay retained inputs, then shift only decoded UTC against fixed intervals.
 
     This measures conditional interval separation, not RF spoofing performance.
@@ -177,6 +177,10 @@ def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resoluti
     are counted separately and never vote. Zero is always included as a control.
     Optional local continuity and a step at a declared counter midpoint reuse
     this replay, with no independent absolute-time claim for the local channel.
+    Android Raw offsets instead change supported GPS clock/transmit-TOW fields,
+    preserve parsed pseudoranges and rerun source admission. Derived captures
+    remain replayable with the same comparison engine. This mode does not model
+    unsupported constellations, RF, or a compromised local counter.
     Optional Android component diagnostics describe original admitted clocks;
     they never change comparison support, budgets or software cases.
     Signed integer drift rates change decoded UTC only, starting at an explicit
@@ -195,6 +199,12 @@ def assess_time_sensitivity(comparison, offsets_ns=(), *, local_counter_resoluti
             or comparison.get('schema') != 'pnt-gnss-time-comparison-v1'
             or not isinstance(comparison.get('assumptions'), dict)):
         raise ValueError('an existing pnt-gnss-time-comparison-v1 report is required')
+    if android_raw_offsets_ns is not None:
+        if (list(offsets_ns) or drift_rates_ppm is not None or onset_monotonic_ns is not None
+                or android_clock_diagnostics or evidence_availability):
+            raise ValueError('Raw clock offsets cannot be combined with decoded offsets, drift, onset or availability/component diagnostics')
+        return _assess_android_raw_offsets(comparison, android_raw_offsets_ns,
+                                          local_counter_resolution_ns=local_counter_resolution_ns)
     offsets = list(offsets_ns)
     if drift_rates_ppm is not None and offsets:
         raise ValueError('choose constant/step offsets or drift rates, not both')
@@ -364,6 +374,54 @@ _CLOCK_FIELDS = ('ChipsetElapsedRealtimeNanos', 'TimeNanos', 'FullBiasNanos',
 _METHODS = ('local', 'external', 'combined')
 _COHERENT_PAIRED = {'BOTH_INCONSISTENT', 'LOCAL_ONLY_INCONSISTENT',
                     'EXTERNAL_ONLY_INCONSISTENT', 'NEITHER_INCONSISTENT'}
+
+
+def _assess_android_raw_offsets(comparison, offsets, *, local_counter_resolution_ns):
+    """Use existing replay and paired controls after a native-field derivative."""
+    from .android_raw import shift_android_raw_clock_capture
+
+    offsets = list(offsets)
+    if not offsets:
+        raise ValueError('at least one explicit Android Raw clock offset is required')
+    for offset in offsets:
+        _integer(offset, 'Android Raw clock offset')
+    if len(set(offsets)) != len(offsets):
+        raise ValueError('Android Raw clock offsets must be distinct')
+    offsets = [0] + [offset for offset in offsets if offset]
+    report = assess_time_sensitivity(comparison, [0],
+                                    local_counter_resolution_ns=local_counter_resolution_ns)
+    baseline = report['baseline']
+    zero = report['offset_cases'][0]
+    cases = []
+    for offset in offsets:
+        capture, transformation = shift_android_raw_clock_capture(baseline['receiver_capture'], offset)
+        replay = assess_time_sensitivity(dict(comparison, receiver_capture=capture), [0],
+                                        local_counter_resolution_ns=local_counter_resolution_ns)
+        case = replay['offset_cases'][0]
+        case['utc_claim_offset_ns'] = offset
+        case['raw_clock_challenge'] = transformation
+        if offset:
+            # Retain the actual inputs for the same comparison/replay mechanism.
+            case['derived_receiver_capture'] = replay['baseline']['receiver_capture']
+        case['applied_offset_ns_by_record'] = [
+            new['claim']['unix_ns'] - old['claim']['unix_ns'] if 'claim' in old and 'claim' in new else None
+            for old, new in zip(baseline['records'], replay['baseline']['records'])]
+        if local_counter_resolution_ns is not None:
+            original = {i: name for name, indices in zero['paired_record_indices_by_pattern'].items() for i in indices}
+            current = {i: name for name, indices in case['paired_record_indices_by_pattern'].items() for i in indices}
+            transitions = Counter((original[i], current[i]) for i in original)
+            case['paired_transition_counts'] = [dict(baseline_pattern=before, case_pattern=after, records=count)
+                for (before, after), count in sorted(transitions.items())]
+        cases.append(case)
+    report['offset_cases'] = cases
+    report['assumptions'].update(perturbation='SUPPORTED_GPS_RAW_CLOCK_AND_TRANSMIT_TOW',
+                                source_admission_recomputed=True, complete_receiver_model=False,
+                                trusted_local_counter_required=True)
+    report['perturbation_profile'] = dict(mode='SUPPORTED_GPS_RAW_WHOLE_CAPTURE_CONSTANT',
+        original_inputs_unchanged=True, boottime_and_nts_unchanged=True,
+        local_segmentation='RECOMPUTED_FROM_DERIVED_CLAIMS; NO_FORCED_ADMISSION',
+        unsupported_rows='RETAINED_UNCHANGED')
+    return report
 
 
 def _session_profile(baseline):
@@ -716,7 +774,7 @@ def _evidence_availability(sensitivity):
 
 
 def assess_time_sensitivity_sessions(comparisons, offsets_ns=(), *, local_counter_resolution_ns,
-                                     drift_rates_ppm=None, evidence_availability=False):
+                                     drift_rates_ppm=None, evidence_availability=False, android_raw_offsets_ns=None):
     """Descriptive multi-session aggregation of the existing paired replay.
 
     Whole-capture offsets or drift from each session's first admitted epoch.
@@ -729,13 +787,15 @@ def assess_time_sensitivity_sessions(comparisons, offsets_ns=(), *, local_counte
     comparisons, offsets = list(comparisons), list(offsets_ns)
     if drift_rates_ppm is not None:
         drift_rates_ppm = list(drift_rates_ppm)
+    if android_raw_offsets_ns is not None:
+        android_raw_offsets_ns = list(android_raw_offsets_ns)
     if not comparisons:
         raise ValueError('at least one comparison session is required')
     sessions, ids, raw_hashes, profile = [], set(), set(), None
     for comparison in comparisons:
         sensitivity = assess_time_sensitivity(comparison, offsets,
             local_counter_resolution_ns=local_counter_resolution_ns, drift_rates_ppm=drift_rates_ppm,
-            evidence_availability=evidence_availability)
+            evidence_availability=evidence_availability, android_raw_offsets_ns=android_raw_offsets_ns)
         baseline = sensitivity['baseline']
         capture = baseline['receiver_capture']
         capture_id = capture.get('capture_id')
@@ -798,6 +858,9 @@ def assess_time_sensitivity_sessions(comparisons, offsets_ns=(), *, local_counte
                            profile='MATCH_OBSERVED_SETTINGS_WITHOUT_FILLING_MISSING_SESSION_VALUES',
                            totals='DESCRIPTIVE_SUMS_WITHOUT_PERFORMANCE_OR_POPULATION_ESTIMATE'),
                 sessions=sessions, totals=totals)
+    if android_raw_offsets_ns is not None:
+        report['rules']['perturbation'] = 'SUPPORTED_GPS_RAW_CLOCK_AND_TRANSMIT_TOW'
+        report['rules']['source_admission'] = 'RECOMPUTED_FOR_EACH_DERIVATIVE; COMMON_SUPPORT_FIXED_FROM_ZERO'
     if drift_rates_ppm is not None:
         report['rules']['perturbation'] = 'DECODED_UTC_LINEAR_DRIFT_FROM_EACH_SESSION_FIRST_ADMITTED_MIDPOINT'
         report['rules']['detection_timing'] = 'FIRST_NEW_INCONSISTENT_REPORTED_EPOCH; NTS_RECEIPTS_RETAINED; NOT_LIVE_ALERT_LATENCY'

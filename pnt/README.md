@@ -233,6 +233,43 @@ verified false alarms. Totals do not establish detection rates, population
 coverage, budget qualification or held-out/RF confirmation. This implements the
 software comparison step in the [timing-model decision](../docs/ANDROID_TIMING_MODEL.md).
 
+
+### Challenge supported Android Raw clocks
+
+To move beyond decoded-UTC-only offsets, use the same replay on retained
+Android GPS Raw fields:
+
+```console
+python -m pnt time-sensitivity first-session-report.json second-session-report.json --android-raw-clock-offset-ns -100000000 --android-raw-clock-offset-ns 100000000 --local-counter-resolution-ns 1 --output raw-clock-summary.json
+```
+
+The mode changes `FullBiasNanos -= offset` and
+`ReceivedSvTimeNanos = (ReceivedSvTimeNanos + offset) % GPS_WEEK_NS` on
+supported normalized GPS rows. The existing Raw parser checks the GPS reception
+shift and identical pseudoranges for every row, including week rollover. The
+UTC/NTS comparison and local control then rerun from the derived fields, with
+unchanged NTS, BOOTTIME, callback counters, fine bias, ADR, rates and budgets.
+Imported intake labels are verified by the same Raw parser, including unusable
+rows; mismatches reject the input rather than silently changing support.
+Source admission and calendar segmentation are recomputed; the zero case fixes
+the common-support denominator. Unsupported/unusable rows remain unchanged and
+visible. A native-field shift that invalidates a UTC claim remains insufficient.
+
+Each case retains its normalization checks and derivative capture for the
+existing comparison replay. Its `original_source` digest identifies the
+original acquisition bytes, never a fabricated phone recording; it survives
+subsequent challenges of retained derivatives. Stored verdicts
+are ignored, and originals are unchanged. This mutually exclusive mode cannot
+be combined with decoded offsets, drift, onset or availability/component
+diagnostics. No extra detector or replay protocol is introduced.
+
+This is a software challenge of supported GPS measurements with a trusted
+BOOTTIME/NTS channel. Preserving parsed code ranges does not preserve orbital
+geometry at the shifted epoch, authenticate satellite RF, simulate a complete
+receiver, or establish physical timing bounds. Calibration, local-counter
+compromise and RF validation remain separate questions.
+
+
 ### Gradual UTC drift
 
 Use `--drift-ppm` instead of `--offset-ns` to apply a signed linear change to

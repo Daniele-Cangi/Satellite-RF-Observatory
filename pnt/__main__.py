@@ -50,7 +50,7 @@ def main():
     time_compare.add_argument('--utc-error-ns', type=int, required=True, help='declared GNSS UTC error budget; not tAcc')
     time_compare.add_argument('--utc-error-source', required=True, help='independent qualification or explicit assumption')
     time_compare.add_argument('--output', required=True, type=Path)
-    time_sensitivity = commands.add_parser('time-sensitivity', help='offline decoded UTC offset/drift sensitivity; no RF attack simulation')
+    time_sensitivity = commands.add_parser('time-sensitivity', help='offline UTC/Android Raw clock sensitivity; no RF attack simulation')
     time_sensitivity.add_argument('comparison_report', type=Path, nargs='+',
                                   help='receiver UTC/NTS comparison or analyzed Android session JSON(s)')
     time_sensitivity.add_argument('--session-summary', action='store_true',
@@ -58,6 +58,8 @@ def main():
     perturbation = time_sensitivity.add_mutually_exclusive_group(required=True)
     perturbation.add_argument('--offset-ns', action='append', type=int,
                               help='explicit signed software UTC offset; zero control is always included')
+    perturbation.add_argument('--android-raw-clock-offset-ns', action='append', type=int,
+                              help='supported GPS Raw common clock/transmit-TOW offset; parsed pseudoranges unchanged; no RF model')
     perturbation.add_argument('--drift-ppm', action='append', type=int,
                               help='signed software UTC drift, integer ppm (1000 = 1 ms/s); zero control included')
     time_sensitivity.add_argument('--local-counter-resolution-ns', type=int,
@@ -236,7 +238,8 @@ def main():
                 contents = [path.read_bytes() for path in args.comparison_report]
                 report = assess_time_sensitivity_sessions([load_json(data) for data in contents], args.offset_ns or (),
                     local_counter_resolution_ns=args.local_counter_resolution_ns, drift_rates_ppm=args.drift_ppm,
-                    evidence_availability=args.evidence_availability)
+                    evidence_availability=args.evidence_availability,
+                    android_raw_offsets_ns=args.android_raw_clock_offset_ns)
                 report['sources'] = [dict(path=str(path), sha256=hashlib.sha256(data).hexdigest())
                                      for path, data in zip(args.comparison_report, contents)]
                 write_report(report, args.output)
@@ -251,7 +254,8 @@ def main():
                                               onset_monotonic_ns=args.onset_monotonic_ns,
                                               android_clock_diagnostics=args.android_clock_diagnostics,
                                               drift_rates_ppm=args.drift_ppm,
-                                              evidence_availability=args.evidence_availability)
+                                              evidence_availability=args.evidence_availability,
+                                              android_raw_offsets_ns=args.android_raw_clock_offset_ns)
             report['source'] = dict(path=str(path),
                                   sha256=hashlib.sha256(comparison_bytes).hexdigest())
             write_report(report, args.output)
