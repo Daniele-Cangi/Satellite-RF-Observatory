@@ -17,6 +17,13 @@ esposti non chiude P2 fisica o P3. Il successivo avanzamento richiede un confine
 temporale indipendente documentato e una challenge verificabile nel modello di
 attacco scelto; raccolte equivalenti e nuove matrici di budget non bastano.
 
+La [diagnostica causale alla ricezione](../research/exploratory/PNT_ANDROID_CAUSAL_RECEIPT.md)
+aggiunge un percorso esplicito per anticipi impossibili, senza un budget di
+allineamento GNSS/BOOTTIME. Sulle stesse quattro sessioni, tuttavia, i margini
+condizionali alla ricezione sono 554,5-632,3 ms: la challenge di +100 ms rimane
+invisibile. Questo restringe le assunzioni per una direzione del test, senza
+chiudere P2 o qualificare i budget. Il confronto precedente resta disponibile.
+
 ## Obiettivo e primo utilizzatore
 
 Costruire un framework aperto che confronta le osservazioni GNSS di un sistema

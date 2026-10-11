@@ -51,6 +51,148 @@ def compare(witness, raw, **overrides):
     return android_time.compare_android_time(witness, raw, **{**OPTIONS, **overrides})
 
 
+def receipt_inputs(*, bracket=False):
+    witness, raw, epoch, utc = inputs(bracket=bracket)
+    for row in raw['records']:
+        row['source_values'].update(CallbackStartElapsedRealtimeNanos=str(epoch + MS),
+                                    CallbackReadEndElapsedRealtimeNanos=str(epoch + 2 * MS))
+    return witness, raw, epoch, utc
+
+
+def compare_receipt(witness, raw, **overrides):
+    return compare(witness, raw, epoch_alignment_error_ns=None, epoch_alignment_source=None,
+                   causal_receipt_upper_bound=True, **overrides)
+
+
+@pytest.mark.parametrize('offset,status', [(0, 'NO_FUTURE_CONTRADICTION'),
+    (-NS, 'NO_FUTURE_CONTRADICTION'), (100 * MS, 'INCONSISTENT_WITH_CAUSAL_RECEIPT')])
+def test_receipt_checks_only_future_claims_without_epoch_alignment_and_replays(offset, status):
+    witness, raw, epoch, utc = receipt_inputs(bracket=True)
+    for row in raw['records']:
+        row['source_values']['FullBiasNanos'] = str(int(row['source_values']['FullBiasNanos']) - offset)
+    original = copy.deepcopy((witness, raw))
+    report = compare_receipt(witness, raw, bracket_span_ns=200 * MS)
+    assert report['coverage']['bracket_status_counts'] == {status: 8}
+    assert report['status'] == 'CONDITIONAL_TIME_DIAGNOSTIC'
+    assert report['assumptions']['gnss_epoch_counter_alignment_used'] is False
+    assert report['assumptions']['measurement_age_upper_bound_ns'] is None
+    for row in report['records']:
+        claim = row['claim']
+        assert claim['unix_ns'] == utc + offset
+        assert claim['start_monotonic_ns'] == claim['end_monotonic_ns'] == epoch + 2 * MS
+        assert claim['event_relation'] == 'NOT_AFTER_EVENT_END'
+        result = row['bracket_comparisons'][0]
+        assert 'claim_minus_witness_ns' not in result
+        assert result['measurement_age_upper_bound_ns'] is None
+        assert result['separation_ns'] > 0 if offset > 0 else result['separation_ns'] == 0
+    assert (witness, raw) == original
+    replay = compare_receiver_capture(report['witness_report'], report['receiver_capture'],
+        utc_error_ns=MS, utc_error_source=OPTIONS['utc_error_source'], bracket_span_ns=200 * MS)
+    assert replay == report
+
+
+def test_receipt_does_not_admit_chipset_or_receiver_sigmas_as_alignment_and_default_stays_unknown():
+    witness, raw, _, _ = receipt_inputs()
+    baseline = compare_receipt(witness, raw)
+    for row in raw['records']:
+        row['source_values'].update(ChipsetElapsedRealtimeNanos='', ElapsedRealtimeUncertaintyNanos='0',
+                                    TimeOffsetNanos='999999999', utcTimeMillis='0')
+    report = compare_receipt(witness, raw)
+    assert report['coverage'] == baseline['coverage']
+    assert [r['claim'] for r in report['records']] == [r['claim'] for r in baseline['records']]
+    assert all(r['receiver_utc']['chipset_elapsed_realtime_ns'] is None for r in report['records'])
+    assert compare(witness, raw, epoch_alignment_error_ns=None, epoch_alignment_source=None)['status'] == 'INSUFFICIENT_EVIDENCE'
+    with pytest.raises(ValueError, match='no mixed association'):
+        compare(witness, raw, causal_receipt_upper_bound=True)
+
+
+@pytest.mark.parametrize('field,value', [
+    ('CallbackStartElapsedRealtimeNanos', None), ('CallbackReadEndElapsedRealtimeNanos', ''),
+    ('CallbackStartElapsedRealtimeNanos', '-1'), ('CallbackReadEndElapsedRealtimeNanos', '1'),
+    ('CallbackReadEndElapsedRealtimeNanos', str(2**63))])
+def test_bad_callback_is_retained_without_chipset_fallback(field, value):
+    witness, raw, _, _ = receipt_inputs()
+    if value is None:
+        del raw['records'][0]['source_values'][field]
+    else:
+        raw['records'][0]['source_values'][field] = value
+    report = compare_receipt(witness, raw)
+    assert report['records'][0]['status'] == 'INSUFFICIENT_EVIDENCE'
+    assert 'claim' not in report['records'][0]
+    assert len(report['records']) == 8
+    assert 'claim' in report['records'][1]
+
+
+def test_receipt_inside_capture_and_exchange_is_required_and_delay_weakens_detection():
+    witness, raw, epoch, _ = receipt_inputs()
+    # Widen the exchange to contain both callbacks, keeping server UTC fixed.
+    witness['attempts'][0]['exchange']['receive_monotonic_ns'] = epoch + 500 * MS
+    for row in raw['records']:
+        row['source_values']['FullBiasNanos'] = str(int(row['source_values']['FullBiasNanos']) - 100 * MS)
+    early = compare_receipt(witness, raw)
+    assert early['coverage']['comparison_status_counts'] == {'INCONSISTENT_WITH_CAUSAL_RECEIPT': 8}
+    for row in raw['records']:
+        row['source_values'].update(CallbackStartElapsedRealtimeNanos=str(epoch + 201 * MS),
+                                    CallbackReadEndElapsedRealtimeNanos=str(epoch + 202 * MS))
+    delayed = compare_receipt(witness, raw)
+    assert delayed['coverage']['comparison_status_counts'] == {'NO_FUTURE_CONTRADICTION': 8}
+    witness['acquisition']['ended_monotonic_ns'] = epoch + 201 * MS
+    assert compare_receipt(witness, raw)['status'] == 'INSUFFICIENT_EVIDENCE'
+    witness['acquisition']['ended_monotonic_ns'] = epoch + 2 * NS
+    witness['attempts'][0]['exchange']['receive_monotonic_ns'] = epoch + 50 * MS
+    assert compare_receipt(witness, raw)['status'] == 'INSUFFICIENT_EVIDENCE'
+
+
+def test_receipt_brackets_keep_failures_conflicts_and_counter_domain_boundaries():
+    witness, raw, _, _ = receipt_inputs(bracket=True)
+    witness['attempts'][1]['exchange']['server_receive_unix_ns'] += NS
+    witness['attempts'][1]['exchange']['server_transmit_unix_ns'] += NS
+    report = compare_receipt(witness, raw, bracket_span_ns=200 * MS)
+    assert report['coverage']['bracket_status_counts'] == {'INSUFFICIENT_EVIDENCE': 8}
+    assert all('contradict' in r['bracket_comparisons'][0]['reason'] for r in report['records'])
+    witness, raw, _, _ = receipt_inputs(bracket=True)
+    witness['attempts'].insert(1, dict(server='synthetic-server', status='WITNESS_UNAVAILABLE', reason='timeout'))
+    report = compare_receipt(witness, raw, bracket_span_ns=200 * MS)
+    assert report['coverage']['bracket_status_counts'] == {'INSUFFICIENT_EVIDENCE': 16}
+    assert len(report['witness_report']['attempts']) == 3
+    for field in ('capture_id', 'counter_clock'):
+        altered, raw, _, _ = receipt_inputs()
+        altered['attempts'][0]['exchange'][field] = 'different'
+        assert compare_receipt(altered, raw)['status'] == 'INSUFFICIENT_EVIDENCE'
+
+
+def test_receipt_cannot_be_used_as_a_local_epoch_or_unknown_relation():
+    from pnt.time_sensitivity import assess_time_sensitivity
+
+    witness, raw, _, _ = receipt_inputs()
+    report = compare_receipt(witness, raw)
+    with pytest.raises(ValueError, match='not a GNSS epoch'):
+        assess_time_sensitivity(report, [MS], local_counter_resolution_ns=1)
+    altered = copy.deepcopy(report['receiver_capture'])
+    altered['time_association'] = 'UNKNOWN'
+    with pytest.raises(ValueError, match='no fallback'):
+        compare_receiver_capture(witness, altered, utc_error_ns=MS, utc_error_source='synthetic')
+    claim = dict(report['records'][0]['claim'], event_relation='UNKNOWN')
+    assert time_witness.compare_claim(witness['attempts'][0]['exchange'], claim,
+        server_error_ns=MS, rate_error_ppm=100)['status'] == 'INSUFFICIENT_EVIDENCE'
+
+
+def test_receipt_equality_is_not_a_contradiction_and_one_nanosecond_lead_is():
+    witness, raw, _, _ = receipt_inputs()
+    claim = compare_receipt(witness, raw)['records'][0]['claim']
+    exchange = witness['attempts'][0]['exchange']
+    bound = time_witness.utc_interval(exchange, event_start_ns=claim['start_monotonic_ns'],
+        event_end_ns=claim['end_monotonic_ns'], server_error_ns=MS, rate_error_ppm=100)
+    claim['unix_ns'] = bound['upper_unix_ns'] + claim['error_ns']
+    equal = time_witness.compare_claim(exchange, claim, server_error_ns=MS, rate_error_ppm=100)
+    assert equal['status'] == 'NO_FUTURE_CONTRADICTION'
+    assert equal['claim_minus_receipt_lower_ns'] == 0
+    claim['unix_ns'] += 1
+    future = time_witness.compare_claim(exchange, claim, server_error_ns=MS, rate_error_ppm=100)
+    assert future['status'] == 'INCONSISTENT_WITH_CAUSAL_RECEIPT'
+    assert future['separation_ns'] == 1
+
+
 def test_public_intake_preserved_and_comparison_replays_with_existing_engine():
     witness, raw, epoch, utc = inputs()
     original = copy.deepcopy((witness, raw))
@@ -321,6 +463,28 @@ def test_time_cli_runs_without_geometry_or_nts_dependencies(tmp_path):
                             cwd=Path(__file__).parents[2], text=True, capture_output=True)
     assert result.returncode == 0, result.stderr
     assert json.loads(output.read_text())['coverage']['comparison_status_counts'] == {'NOT_DISTINGUISHABLE': 8}
+
+
+def test_receipt_cli_requires_explicit_mode_and_original_callback_fields(tmp_path):
+    witness, _, epoch, _ = receipt_inputs()
+    source, output = tmp_path / 'witness.json', tmp_path / 'comparison.json'
+    source.write_text(json.dumps(witness), encoding='utf-8')
+    receiver = tmp_path / 'synthetic-callbacks.txt'
+    lines = FIXTURE.read_text().splitlines()
+    for index, line in enumerate(lines):
+        if line.startswith('# Raw,'):
+            lines[index] += ',CallbackStartElapsedRealtimeNanos,CallbackReadEndElapsedRealtimeNanos'
+        elif line.startswith('Raw,'):
+            lines[index] += f',{epoch + MS},{epoch + 2 * MS}'
+    receiver.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+    arguments = cli_arguments(source, output)
+    arguments[3] = str(receiver)
+    result = subprocess.run([sys.executable, '-S', '-m', 'pnt', *arguments[1:], '--causal-receipt-upper-bound'],
+                            cwd=Path(__file__).parents[2], text=True, capture_output=True)
+    assert result.returncode == 0, result.stderr
+    report = json.loads(output.read_text())
+    assert report['coverage']['comparison_status_counts'] == {'NO_FUTURE_CONTRADICTION': 8}
+    assert report['sources']['receiver']['sha256'] == hashlib.sha256(receiver.read_bytes()).hexdigest()
 
 
 def test_phone_cli_saves_interrupted_attempts(monkeypatch, tmp_path):

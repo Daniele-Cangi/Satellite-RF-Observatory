@@ -81,6 +81,8 @@ def main():
     android_compare.add_argument('--utc-error-source', required=True)
     android_compare.add_argument('--epoch-alignment-error-ns', type=int, help='independent GNSS/CLOCK_BOOTTIME association bound')
     android_compare.add_argument('--epoch-alignment-source')
+    android_compare.add_argument('--causal-receipt-upper-bound', action='store_true',
+                                 help='explicit one-sided callback receipt test; no epoch alignment or past-time verdict')
     android_compare.add_argument('--output', required=True, type=Path)
     for command in (time_compare, time_capture, android_compare):
         command.add_argument('--bracket-span-ns', type=int,
@@ -283,7 +285,8 @@ def main():
                 association_source=args.association_source, gps_utc_offset_seconds=args.gps_utc_offset_seconds,
                 time_scale_source=args.time_scale_source, utc_error_ns=args.utc_error_ns,
                 utc_error_source=args.utc_error_source, epoch_alignment_error_ns=args.epoch_alignment_error_ns,
-                epoch_alignment_source=args.epoch_alignment_source, bracket_span_ns=args.bracket_span_ns)
+                epoch_alignment_source=args.epoch_alignment_source, bracket_span_ns=args.bracket_span_ns,
+                causal_receipt_upper_bound=args.causal_receipt_upper_bound)
             report['sources'] = {
                 'witness': dict(path=str(args.witness_report), sha256=hashlib.sha256(witness_bytes).hexdigest()),
                 'receiver': dict(path=str(args.local_log), sha256=raw['source']['sha256'])}

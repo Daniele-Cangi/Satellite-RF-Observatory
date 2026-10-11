@@ -46,7 +46,7 @@ def decode_timeutc(packet):
                 receiver_utc_standard=valid >> 4)
 
 
-def receiver_claim(record, *, utc_error_ns, utc_error_source):
+def receiver_claim(record, *, utc_error_ns, utc_error_source, time_association=None):
     """Adapt UBX receipt or an Android clock epoch to the witness counter.
 
     The independently supplied age interval covers solution-to-receipt latency
@@ -54,9 +54,13 @@ def receiver_claim(record, *, utc_error_ns, utc_error_source):
     Its units are host monotonic-counter nanoseconds, not receiver time. Never
     infer it from the receiver UTC, iTOW, tAcc or a fitted offset. Android
     clock epochs require their own explicit GNSS/boottime alignment bound.
+    Explicit callback upper-bound mode instead constrains only future claims;
+    it retains unknown measurement age and never substitutes a receipt epoch.
     """
     _integer(utc_error_ns, 'utc_error_ns', 0)
     _text(utc_error_source, 'utc_error_source')
+    if time_association not in (None, 'ANDROID_CALLBACK_UPPER_BOUND'):
+        raise ValueError('unsupported receiver time association; no fallback')
     if not isinstance(record, dict):
         raise ValueError('receiver capture record must be an object')
     if 'epoch_age_budget_violation' in record:
@@ -65,7 +69,10 @@ def receiver_claim(record, *, utc_error_ns, utc_error_source):
     if record.get('source_format') == 'ANDROID_RAW_CLOCK':
         from .android_time import android_clock_claim
 
-        return android_clock_claim(record, utc_error_ns=utc_error_ns, utc_error_source=utc_error_source)
+        return android_clock_claim(record, utc_error_ns=utc_error_ns, utc_error_source=utc_error_source,
+                                   causal_receipt_upper_bound=time_association == 'ANDROID_CALLBACK_UPPER_BOUND')
+    if time_association is not None:
+        raise ValueError('callback upper-bound association requires Android Raw clocks')
     if record.get('source_format') not in (None, 'UBX_NAV_TIMEUTC'):
         raise ValueError('unsupported receiver UTC source_format')
     packet = bytes.fromhex(_text(record.get('packet_hex'), 'packet_hex'))
@@ -122,6 +129,9 @@ def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source
             or not isinstance(capture.get('records'), list)):
         raise ValueError('a pnt-gnss-utc-capture-v1 receiver capture is required')
     _text(capture.get('receiver_source'), 'receiver_source')
+    association = capture.get('time_association')
+    if association not in (None, 'ANDROID_CALLBACK_UPPER_BOUND'):
+        raise ValueError('unsupported receiver time association; no fallback')
     rows, record_counts, comparison_counts = [], Counter(), Counter()
     pairs, unnamed = _adjacent_attempt_pairs(witness['attempts']) if bracket_span_ns is not None else ([], [])
     bracket_counts, support = Counter(), Counter()
@@ -130,7 +140,7 @@ def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source
         rows.append(row)
         try:
             claim, decoded = receiver_claim(record, utc_error_ns=utc_error_ns,
-                                            utc_error_source=utc_error_source)
+                                            utc_error_source=utc_error_source, time_association=association)
             row.update(status='UTC_CLAIM_AVAILABLE', claim=claim, receiver_utc=decoded)
         except ValueError as error:
             row['reason'] = str(error)
@@ -167,8 +177,9 @@ def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source
             support['records_with_single_support'] += single
             support['records_with_bracket_support'] += bracket
             support['records_with_any_temporal_support'] += single or bracket
-    usable = sum(comparison_counts[s] for s in ('NOT_DISTINGUISHABLE', 'INCONSISTENT_WITH_WITNESS'))
-    usable += sum(bracket_counts[s] for s in ('NOT_DISTINGUISHABLE', 'INCONSISTENT_WITH_WITNESS'))
+    usable_statuses = ('NOT_DISTINGUISHABLE', 'INCONSISTENT_WITH_WITNESS',
+                       'NO_FUTURE_CONTRADICTION', 'INCONSISTENT_WITH_CAUSAL_RECEIPT')
+    usable = sum(comparison_counts[s] + bracket_counts[s] for s in usable_statuses)
     report = dict(schema='pnt-gnss-time-comparison-v1', regime='EXPLORATORY_CAPTURE_REPLAY',
                 status='CONDITIONAL_TIME_DIAGNOSTIC' if usable else 'INSUFFICIENT_EVIDENCE',
                 receiver_capture=capture, witness_report=witness, records=rows,
@@ -179,6 +190,11 @@ def compare_receiver_capture(witness, capture, *, utc_error_ns, utc_error_source
                               comparisons=sum(comparison_counts.values()),
                               record_status_counts=dict(sorted(record_counts.items())),
                               comparison_status_counts=dict(sorted(comparison_counts.items()))))
+    if association is not None:
+        report['assumptions'].update(gnss_epoch_counter_alignment_used=False,
+                                    trusted_snapshot_precedes_completed_callback=True,
+                                    measurement_age_upper_bound_ns=None,
+                                    past_claims_are_unbounded=True)
     if bracket_span_ns is not None:
         report['temporal_association'] = dict(method='ADJACENT_SAME_ENDPOINT_BRACKETS',
                                              maximum_span_ns=bracket_span_ns, attempt_pairs=pairs,
