@@ -19,11 +19,12 @@ MIN_SATELLITES = 4
 MIN_ELEVATION_DEG = 10
 
 
-def read_station(path, day, *, position=None, position_source=None, signals=('C1C', 'C2W')):
+def read_station(path, day, *, position=None, position_source=None, signals=('C1C', 'C2W'),
+                 native_epochs=False):
     data = Path(path).read_bytes()
     content = hatanaka.decompress(data, strict=True).decode('ascii')
     identity = station_header(content)
-    codes, counts = reference_codes(content, day, signals=signals)
+    codes, counts = reference_codes(content, day, signals=signals, native_epochs=native_epochs)
     if position is None:
         header = defaultdict(list)
         for line in content.splitlines():

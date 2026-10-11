@@ -56,6 +56,66 @@ def test_external_parser_and_two_station_pairing():
         pairing.pair(local, {'TRO1': values})
 
 
+def test_native_rinex_keeps_adjacent_fractional_epochs_without_rounding():
+    content = rinex().replace('0.0000000  0  1', '0.1250000  0  1')
+    satellite = content.splitlines()[-1]
+    content += '\n> 2024 09 11 08 00  0.3750000  0  1\n' + satellite
+    values, counts = pairing.reference_codes(content, DAY, native_epochs=True)
+    assert set(values) == {(28800.125, 'G01'), (28800.375, 'G01')}
+    assert counts['ordinary_epochs'] == counts['selected_native_satellites'] == 2
+    assert 'selected_grid_satellites' not in counts
+    with pytest.raises(ValueError, match='off 30-second grid'):
+        pairing.reference_codes(content, DAY)
+    with pytest.raises(ValueError, match='duplicate external RINEX epoch'):
+        pairing.reference_codes(content + '\n' + '\n'.join(content.splitlines()[-2:]),
+                                DAY, native_epochs=True)
+
+
+@pytest.mark.parametrize('change, message', [
+    (lambda text: text.replace('GPS', 'UTC'), 'time scale'),
+    (lambda text: text.replace('  0  1', '  4  1'), 'nonstandard'),
+    (lambda text: text.replace('2024 09 11 08', '2024 09 12 08'), 'outside selected'),
+    (lambda text: text + '\n> 2024 09 11 08 00  1.0000000  0  1', 'truncated'),
+    (lambda text: text.replace('  0  1', '  0  2') + '\n' + text.splitlines()[-1],
+     'duplicate satellite'),
+])
+def test_native_epochs_preserve_existing_admission(change, message):
+    content = change(rinex())
+    with pytest.raises(ValueError, match=message):
+        pairing.reference_codes(content, DAY, native_epochs=True)
+
+
+def test_native_and_grid_modes_agree_on_exact_grid_codes():
+    native, _ = pairing.reference_codes(rinex(), DAY, native_epochs=True)
+    grid, _ = pairing.reference_codes(rinex(), DAY)
+    assert native == grid
+
+
+def test_native_mode_rejects_nonboolean_and_applied_clock_correction():
+    with pytest.raises(ValueError, match='must be boolean'):
+        pairing.reference_codes(rinex(), DAY, native_epochs=1)
+    correction = f'{"1":<60}{"RCV CLOCK OFFS APPL":<20}'
+    with pytest.raises(ValueError, match='clock correction already applied'):
+        pairing.reference_codes(rinex(extra_header=correction), DAY, native_epochs=True)
+
+
+@pytest.mark.parametrize('version', ['4.00', '4.01'])
+def test_rinex4_observation_layout_preserves_codes_and_correction_rejections(version):
+    content = rinex().replace('3.05', version)
+    assert pairing.reference_codes(content, DAY) == pairing.reference_codes(rinex(), DAY)
+    corrected = content.replace(f'{"":<60}{"END OF HEADER":<20}',
+                                f'{"G  1  1.0 C1C":<60}{"SYS / SCALE FACTOR":<20}\n' +
+                                f'{"":<60}{"END OF HEADER":<20}')
+    with pytest.raises(ValueError, match='unqualified applied'):
+        pairing.reference_codes(corrected, DAY, native_epochs=True)
+
+
+@pytest.mark.parametrize('version', ['2.11', '4.02', '4.99', '5.00', 'nan'])
+def test_unqualified_rinex_versions_are_rejected(version):
+    with pytest.raises(ValueError, match='expected RINEX'):
+        pairing.reference_codes(rinex().replace('3.05', version), DAY, native_epochs=True)
+
+
 def test_reference_time_and_header_changes_fail_closed():
     with pytest.raises(ValueError, match='time scale'):
         pairing.reference_codes(rinex(time_scale='UTC'), DAY)

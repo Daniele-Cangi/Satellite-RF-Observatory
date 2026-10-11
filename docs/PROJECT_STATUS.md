@@ -1,6 +1,25 @@
 # Stato del progetto — 11 ottobre 2026
 
-## Incremento attuale: challenge sui campi Raw GPS
+## Incremento attuale: registrazione coerente FGI 2025
+
+Il [caso FGI JammerTest 2025 GPS-only]
+(../research/exploratory/PNT_JAMMERTEST_2025_COHERENT.md) aggiunge una registrazione
+fisica con 899 epoche native a 1 Hz e segnali identificati. Riusando TRO1/KIRU
+della stessa giornata, 30/30 richieste a 30 secondi sono valutabili, con 283
+righe satellite-epoca comuni. Il controllo locale a coordinate fisse mostra
+gia l'anomalia: residuo mediano 297,561 m contro 295,475 m combinato, 27 epoche
+migliorate e tre peggiorate. La rete fornisce contesto stabile, senza dimostrare
+un vantaggio aggiuntivo di rilevamento. Il parser condiviso conserva ora i tag
+nativi con opzione esplicita e legge osservazioni RINEX 4.00/4.01; la griglia
+predefinita, i controlli scientifici e gli esiti storici restano invariati.
+Le coordinate pubblicate non hanno un budget di rilievo qualificato; il log
+EXTERNAL CESIUM non documenta il legame con UTC e i timestamp acquisiti.
+Il piano di trasmissione non misura indipendentemente l'attivita RF, e le
+epoche fuori piano non sono benignita certificata. P2 fisica e P3 restano
+aperte; il sito viene dopo. Il prossimo valore deve venire da un limite fisico
+indipendente o da un caso ambiguo localmente, non da altre varianti di soglia.
+
+## Incremento precedente: challenge sui campi Raw GPS
 
 La [challenge clock/trasmissione](../research/exploratory/PNT_ANDROID_RAW_CLOCK_CHALLENGE.md)
 riusa quattro sessioni esposte con gli stessi budget: sposta insieme clock GPS
