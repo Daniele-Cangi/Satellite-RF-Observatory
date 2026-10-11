@@ -27,7 +27,8 @@ final class LiveTransfer implements AutoCloseable {
     private volatile ScheduledFuture<?> periodic;
     private int acknowledged, failures, notificationIndex;
     private PcLiveResult current, historical;
-    private long requestStarted, receiptReceived;
+    private long requestStarted, requestFinished;
+    private boolean receiptAccepted;
     private long highestUpdate;
     private volatile String lastDetail = "Waiting for first snapshot";
     private volatile boolean closed;
@@ -67,11 +68,12 @@ final class LiveTransfer implements AutoCloseable {
             outcome = "UNAVAILABLE";
             detail = error.getClass().getSimpleName() + ": " + error.getMessage();
         }
-        long received = counter.getAsLong();
+        long finished = counter.getAsLong();
         synchronized (this) {
             if (closed) return; // A cancelled request cannot restore a live result.
             requestStarted = started;
-            receiptReceived = received;
+            requestFinished = finished;
+            receiptAccepted = result != null;
             current = result;
             if (result != null) {
                 acknowledged++;
@@ -82,7 +84,7 @@ final class LiveTransfer implements AutoCloseable {
         }
         try {
             append(NtsCapture.map("kind", "REQUEST", "started_counter_ns", started,
-                "finished_counter_ns", received, "counter_clock", "CLOCK_BOOTTIME",
+                "finished_counter_ns", finished, "counter_clock", "CLOCK_BOOTTIME",
                 "outcome", outcome, "detail", detail, "pc_receipt", result == null ? null : result.receipt));
         } catch (IOException error) {
             synchronized (this) { current = null; lastDetail += "; transfer log storage failed; upload stopped"; }
@@ -103,7 +105,7 @@ final class LiveTransfer implements AutoCloseable {
             text += "\nCURRENT PC RESULT UNAVAILABLE; no current timing conclusion.";
             if (historical != null) text += "\nHISTORICAL ONLY — previous acknowledged snapshot\n" + historical.text;
         }
-        listener.accept(new Update(++notificationIndex, text, requestStarted, receiptReceived));
+        listener.accept(new Update(++notificationIndex, text, requestStarted, requestFinished, receiptAccepted));
     }
 
     private void append(Object value) throws IOException {
@@ -121,23 +123,28 @@ final class LiveTransfer implements AutoCloseable {
     final class Update {
         final int notification;
         final String text;
-        final long started, received;
-        private Update(int notification, String text, long started, long received) {
+        final long started, finished;
+        final boolean accepted;
+        private Update(int notification, String text, long started, long finished, boolean accepted) {
             this.notification = notification;
             this.text = text;
             this.started = started;
-            this.received = received;
+            this.finished = finished;
+            this.accepted = accepted;
         }
         String timingText(long applied) {
-            if (received == 0) return "\nNo completed PC request to time.";
-            return "\nPhone request/snapshot -> receipt (ns): " + (received - started)
-                + "\nReceipt -> UI text applied (ns): " + (applied - received)
+            if (finished == 0) return "\nNo completed PC request to time.";
+            String endpoint = accepted ? "receipt" : "failure completion";
+            return "\nPhone request/snapshot -> " + endpoint + " (ns): " + (finished - started)
+                + "\n" + (accepted ? "Receipt" : "Failure completion") + " -> UI text applied (ns): " + (applied - finished)
                 + "\nCLOCK_BOOTTIME durations; counters are not mapped to PC time."
                 + "\nUI text applied is not frame presentation, operator observation or RF alert latency.";
         }
         void displayed(long applied) throws IOException {
             append(NtsCapture.map("kind", "UI_TEXT_APPLIED", "notification_index", notification,
-                "request_started_counter_ns", started, "receipt_received_counter_ns", received,
+                "request_started_counter_ns", started, "request_finished_counter_ns", finished,
+                "request_outcome", finished == 0 ? "NOT_COMPLETED" : accepted ? "ACKNOWLEDGED" : "UNAVAILABLE",
+                "receipt_received_counter_ns", accepted ? finished : null,
                 "text_applied_counter_ns", applied, "counter_clock", "CLOCK_BOOTTIME",
                 "scope", "TEXT_ASSIGNMENT_ONLY; NOT_OPERATOR_OR_RF_ALERT_LATENCY"));
         }

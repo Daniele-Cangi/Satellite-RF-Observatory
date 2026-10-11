@@ -117,7 +117,10 @@ as a final snapshot. No background reconnection is started. Failed evidence-log
 writes stop transfer and remove the current presentation.
 `pnt-transfer-<id>.jsonl` privately retains request outcomes and their received
 PC summaries, plus `UI_TEXT_APPLIED` events after the Activity assigns the text.
-Phone request/snapshot-to-receipt and receipt-to-text durations use
+Only accepted receipts have a `receipt_received_counter_ns` and request-to-receipt
+timing. Failed attempts retain their request-failure completion counter and
+outcome; the UI labels their durations as failure completion, without a receipt
+counter. Phone request/snapshot-to-receipt and receipt-to-text durations use
 `CLOCK_BOOTTIME`; PC processing uses its own monotonic counter. They are not
 mapped across devices. Text assignment does not measure a displayed frame,
 operator observation, physical attack onset or GNSS-to-alert latency.

@@ -92,6 +92,13 @@ public class PcConnectionTest {
             return new byte[][]{raw, stage == 0 ? first : second};
         }, "synthetic-monitor", directory, System::nanoTime, update -> {
             last.set(update.text);
+            String timing = update.timingText(System.nanoTime());
+            if (update.accepted) assertTrue(timing.contains("request/snapshot -> receipt (ns)"));
+            else {
+                assertTrue(timing.contains("request/snapshot -> failure completion (ns)"));
+                assertFalse(timing.contains("request/snapshot -> receipt"));
+                assertFalse(timing.contains("Receipt -> UI text"));
+            }
             try { update.displayed(System.nanoTime()); }
             catch (java.io.IOException error) { throw new AssertionError(error); }
             if (update.text.contains("LATEST ACKNOWLEDGED") && update.text.contains("combined (records, not independent trials): INCONSISTENT=1")) inconsistent.countDown();
@@ -110,11 +117,18 @@ public class PcConnectionTest {
         }
         assertTrue(last.get().contains("CURRENT PC RESULT UNAVAILABLE"));
         var lines = Files.readAllLines(directory.resolve("pnt-transfer-synthetic-monitor.jsonl"));
-        boolean sawReceipt = false, sawApplied = false, sawFailure = false;
+        boolean sawReceipt = false, sawApplied = false, sawFailure = false, sawFailedDisplay = false;
         for (String line : lines) {
             JsonObject event = JsonParser.parseString(line).getAsJsonObject();
             if (event.get("kind").getAsString().equals("UI_TEXT_APPLIED")) {
-                assertTrue(event.get("text_applied_counter_ns").getAsLong() >= event.get("receipt_received_counter_ns").getAsLong());
+                assertTrue(event.get("text_applied_counter_ns").getAsLong() >= event.get("request_finished_counter_ns").getAsLong());
+                if (event.get("request_outcome").getAsString().equals("ACKNOWLEDGED")) {
+                    assertEquals(event.get("request_finished_counter_ns"), event.get("receipt_received_counter_ns"));
+                } else {
+                    assertEquals("UNAVAILABLE", event.get("request_outcome").getAsString());
+                    assertFalse("A failed attempt has no accepted receipt counter", event.has("receipt_received_counter_ns"));
+                    sawFailedDisplay = true;
+                }
                 sawApplied = true;
             } else if (event.get("outcome").getAsString().equals("UNAVAILABLE")) sawFailure = true;
             else {
@@ -122,6 +136,6 @@ public class PcConnectionTest {
                 sawReceipt = true;
             }
         }
-        assertTrue(sawReceipt && sawApplied && sawFailure);
+        assertTrue(sawReceipt && sawApplied && sawFailure && sawFailedDisplay);
     }
 }
