@@ -37,6 +37,7 @@ class AndroidSessionMonitor:
         self.previous_outcomes, self.last_fingerprint, self.last_update = {}, None, None
         self.last_input_fingerprint = None
         self.updates, self.finished = 0, False
+        self.invalidation_reason = None
 
     def _history_issues(self, members, report):
         issues = []
@@ -61,6 +62,26 @@ class AndroidSessionMonitor:
 
     def poll(self):
         """Publish changed input/error state; return None for identical polls."""
+        if self.invalidation_reason:
+            raise ValueError('monitor invalidated after a storage failure')
+        try:
+            return self._poll()
+        except OSError as error:
+            self.invalidate(f'Snapshot publication failed: {error}')
+            raise
+
+    def invalidate(self, reason):
+        """Clear current results; finish durably records the failed admission.
+
+        Previously published snapshots remain historical evidence. If storage
+        also refuses the summary, the caller fails instead of returning success.
+        """
+        if self.finished:
+            raise ValueError('monitor is closed')
+        self.invalidation_reason = reason
+        self.last_update, self.previous_outcomes = None, {}
+
+    def _poll(self):
         if self.finished:
             raise ValueError('monitor is closed')
         started = time.monotonic_ns()
@@ -105,14 +126,14 @@ class AndroidSessionMonitor:
                 changes.append(dict(source_index=index, previous=old,
                     current=new or dict.fromkeys(('local', 'external', 'combined'), 'INSUFFICIENT_EVIDENCE')))
         analysed = time.monotonic_ns()
-        self.updates += 1
-        folder = self.output/f'update-{self.updates:05d}'
+        next_update = self.updates + 1
+        folder = self.output/f'update-{next_update:05d}'
         folder.mkdir()
         for name, data in members.items():
             with (folder/name).open('xb') as stream:
                 stream.write(data)
         update = dict(schema='pnt-android-session-monitor-update-v1', regime='EXPLORATORY_FILE_SNAPSHOT_DIAGNOSTIC',
-            update_index=self.updates, status=report['status'] if report and not issues else 'INSUFFICIENT_EVIDENCE',
+            update_index=next_update, status=report['status'] if report and not issues else 'INSUFFICIENT_EVIDENCE',
             session_complete=bool(report and not issues and report['snapshot']['session_complete']),
             capture_id=report['capture_id'] if report else None,
             processor=report['processor'] if report else None,
@@ -129,7 +150,7 @@ class AndroidSessionMonitor:
                     'PC file observation/publishing is not phone callback-to-operator latency.'])
         write_report(update, folder/'result.json', durable=True)
         published = time.monotonic_ns()  # After the result file has been flushed.
-        receipt = dict(update_index=self.updates, result=f'{folder.name}/result.json',
+        receipt = dict(update_index=next_update, result=f'{folder.name}/result.json',
             result_published_monotonic_ns=published, counter_clock='PC_MONOTONIC',
             input_read_ns=read_end-started, analysis_ns=analysed-read_end,
             result_publication_ns=published-analysed, total_pc_processing_ns=published-started,
@@ -142,6 +163,7 @@ class AndroidSessionMonitor:
             os.fsync(stream.fileno())
         self.last_fingerprint, self.previous_outcomes, self.last_update = fingerprint, outcomes, update
         self.last_input_fingerprint = input_fingerprint
+        self.updates = next_update
         return receipt
 
     def finish(self, reason):
@@ -151,9 +173,12 @@ class AndroidSessionMonitor:
         summary = dict(schema='pnt-android-session-monitor-summary-v1', updates=self.updates, stop_reason=reason,
             status=self.last_update['status'] if self.last_update else 'INSUFFICIENT_EVIDENCE',
             session_complete=bool(self.last_update and self.last_update['session_complete']),
-            last_result=f'update-{self.updates:05d}/result.json' if self.updates else None,
+            last_result=f'update-{self.updates:05d}/result.json' if self.updates and not self.invalidation_reason else None,
             scope='PC_FILE_SNAPSHOTS_ONLY', phone_operator_alert_latency_measured=False,
             original_inputs_modified=False, calibrated=False)
+        if self.invalidation_reason:
+            summary.update(issues=[self.invalidation_reason],
+                prior_result=f'update-{self.updates:05d}/result.json' if self.updates else None)
         write_report(summary, self.output/'summary.json', durable=True)
         return summary
 
@@ -182,4 +207,6 @@ def monitor_android_files(raw_path, nts_path, output_directory, *, analysis_opti
             time.sleep(min(poll_interval_s, remaining))
     except KeyboardInterrupt:
         reason = 'USER_INTERRUPTED_MONITOR'
+    except OSError:
+        reason = 'PC_STORAGE_FAILED'
     return monitor.finish(reason)

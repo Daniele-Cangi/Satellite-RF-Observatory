@@ -56,9 +56,12 @@ ZIP export remain available without configuring a PC.
 2. Transfer only `connection.json` from that new directory to the phone through
    a trusted route, then press **Configure private PC connection** and select it.
    The file contains a bearer credential and the exact PC certificate; protect
-   it. Never transfer `server-key.pem` or publish the directory. Restrict directory
-   access to your account (including Windows ACLs). Configuration is held only in
-   this Activity instance; it does not survive an app restart or rotation.
+   it. Never transfer `server-key.pem` or publish the directory.
+   The receiver creates its directory with owner-only POSIX permissions or a
+   user/admin-only Windows ACL **before writing any credentials or data**;
+   Windows requires Python 3.13+ for these creation semantics, as used in CI.
+   Configuration is held only in this Activity instance; it does not survive
+   an app restart or rotation.
 3. **Test PC connection (no GNSS upload)** checks HTTPS readiness without opening
    a recording or transmitting a native file. Allow this specific LAN connection
    through your firewall if needed; do not expose the receiver to the Internet.
@@ -66,8 +69,9 @@ ZIP export remain available without configuring a PC.
    explicitly enables transfer of this new recording's GNSS/NTS and device/boot
    metadata. Earlier recordings are never automatically uploaded. A single worker
    sends a pair once per second after the preceding request finishes, with no
-   queue of obsolete snapshots. File copying cannot split a Raw callback or an
-   NTS checkpoint; network I/O holds neither acquisition lock.
+   queue of obsolete snapshots. A complete flushed Raw boundary or opened NTS
+   checkpoint is captured under its writer lock; full copying and network I/O
+   occur after releasing it, without splitting callbacks/checkpoints.
 
 The phone trusts only the PC's generated seven-day certificate, checking that
 exact leaf, its validity and the platform HTTPS host identity. There is no global
@@ -85,6 +89,10 @@ clears the current numerical result. Limits are 32 MiB per pair, 128 MiB receive
 per run and 256 authenticated snapshot requests; existing output directories are
 refused. It stops at the duration limit, interrupt, storage failure or both valid
 session terminals. A network error never changes or restarts local acquisition.
+An admission/publication storage failure stops the receiver and invalidates its
+current monitor result: the final summary is insufficient with no current result
+pointer, while prior snapshots remain historical evidence. If the summary itself
+cannot be persisted, the command fails instead of returning an old verdict.
 
 The app displays **transport receipts only**, including cumulative failures and
 intake issue counts; `pnt-transfer-<id>.jsonl` retains the request outcomes privately.

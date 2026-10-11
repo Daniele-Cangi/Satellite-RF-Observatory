@@ -11,11 +11,13 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import ipaddress
 import json
 import math
+import os
 from pathlib import Path
 import re
 import secrets
 import socket
 import ssl
+import sys
 import threading
 import time
 
@@ -49,7 +51,11 @@ def prepare_connection(directory, address, port):
     if port > 65535:
         raise ValueError('port exceeds 65535')
     directory = Path(directory)
-    directory.mkdir(parents=True, exist_ok=False)
+    if os.name == 'nt' and sys.version_info < (3, 13):
+        raise ValueError('private receiver directory creation on Windows requires Python 3.13+')
+    # Apply access control at creation, before any credential or native byte.
+    # Python 3.13 also implements 0700 as a user/admin-only Windows DACL.
+    directory.mkdir(mode=0o700, parents=True, exist_ok=False)
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, 'PNT private PC receiver')])
     now = datetime.datetime.now(datetime.timezone.utc)
@@ -120,6 +126,8 @@ class AndroidReceiver(HTTPServer):
         self.event(kind='CONNECTION_FAILED', reason='TLS_HTTP_OR_RESPONSE_DELIVERY_FAILED')
 
     def accept_snapshot(self, capture_id, raw, nts):
+        if self.fatal:
+            raise ValueError('receiver stopped after a storage/admission failure')
         if self.capture_id is not None and self.capture_id != capture_id:
             raise ValueError('receiver already bound to a different capture')
         if self.monitor is None:
@@ -131,11 +139,16 @@ class AndroidReceiver(HTTPServer):
                 analysis_options=self.options, local_counter_resolution_ns=self.resolution)
         # Working copies only. poll() retains changed native bytes and all issues;
         # handlers never run concurrently and poll runs only after both writes.
-        self.monitor.raw_path.write_bytes(raw)
-        self.monitor.nts_path.write_bytes(nts)
-        receipt = self.monitor.poll()
-        if receipt is not None and self.on_update is not None:
-            self.on_update(receipt)
+        try:
+            self.monitor.raw_path.write_bytes(raw)
+            self.monitor.nts_path.write_bytes(nts)
+            receipt = self.monitor.poll()
+            if receipt is not None and self.on_update is not None:
+                self.on_update(receipt)
+        except OSError as error:
+            self.fatal = 'PC_STORAGE_OR_TRANSPORT_FAILED'
+            self.monitor.invalidate(f'Native snapshot admission failed: {error}')
+            raise
         self.accepted += 1
         self.event(kind='SNAPSHOT_RECEIVED', capture_id=capture_id, size_bytes=len(raw)+len(nts),
                    changed=receipt is not None, update_index=self.monitor.updates)
@@ -215,9 +228,16 @@ class _Handler(BaseHTTPRequestHandler):
             result = server.accept_snapshot(capture_id, body[:raw_size], body[raw_size:])
         except (ValueError, OSError) as error:
             server.failed += 1
-            server.event(kind='REQUEST_REJECTED', reason=str(error))
             if isinstance(error, OSError):
                 server.fatal = 'PC_STORAGE_OR_TRANSPORT_FAILED'
+                if server.monitor:
+                    server.monitor.invalidate(f'Native snapshot admission/retention failed: {error}')
+            try:
+                server.event(kind='REQUEST_REJECTED', reason=str(error))
+            except OSError:
+                server.fatal = 'PC_STORAGE_OR_TRANSPORT_FAILED'
+                if server.monitor:
+                    server.monitor.invalidate('Transport failure could not be recorded')
             self.reply(400, dict(error=str(error)))
             return
         self.reply(200, result)

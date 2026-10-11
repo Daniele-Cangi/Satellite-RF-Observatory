@@ -7,6 +7,7 @@ from pathlib import Path
 import ssl
 import socket
 import subprocess
+import sys
 import threading
 import time
 
@@ -181,6 +182,92 @@ def test_duration_and_no_overwrite(tmp_path):
     assert summary['stop_reason'] == 'DURATION_LIMIT'
     with pytest.raises(FileExistsError):
         prepare_connection(directory, '127.0.0.1', port)
+
+
+def test_receiver_is_private_before_any_credential_is_generated(tmp_path, monkeypatch):
+    from cryptography.hazmat.primitives.asymmetric import rsa
+    directory = tmp_path/'private'
+    original = rsa.generate_private_key
+    def checked(**kwargs):
+        if os.name == 'nt':
+            probe = subprocess.run(['powershell', '-NoProfile', '-Command',
+                '$ErrorActionPreference = "Stop"; '
+                '$pntAcl = [System.IO.Directory]::GetAccessControl($env:PNT_PRIVATE_DIRECTORY); '
+                '$pntUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().User.Value; '
+                'if ($pntAcl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $pntUser) { exit 3 }; '
+                '$pntAllowed = @($pntUser, "S-1-3-4", "S-1-5-18", "S-1-5-32-544"); '
+                '$pntAcl.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier]) | ForEach-Object { '
+                '$pntSid = $_.IdentityReference.Value; '
+                'if ($_.AccessControlType -eq "Allow" -and $pntSid -notin $pntAllowed) { exit 1 } }; '
+                'if (!$pntAcl.AreAccessRulesProtected) { exit 2 }'],
+                env=os.environ | dict(PNT_PRIVATE_DIRECTORY=str(directory)), capture_output=True, text=True)
+            assert probe.returncode == 0, probe.stdout+probe.stderr
+        else:
+            assert directory.stat().st_mode & 0o077 == 0
+        assert list(directory.iterdir()) == []
+        return original(**kwargs)
+    monkeypatch.setattr(rsa, 'generate_private_key', checked)
+    previous_umask = os.umask(0o022)
+    try:
+        prepare_connection(directory, '127.0.0.1', 8443)
+    finally:
+        os.umask(previous_umask)
+
+
+@pytest.mark.skipif(os.name != 'nt', reason='Windows-specific private mkdir compatibility')
+def test_old_windows_python_cannot_silently_create_public_receiver(tmp_path, monkeypatch):
+    monkeypatch.setattr(sys, 'version_info', (3, 12))
+    with pytest.raises(ValueError, match='Python 3.13'):
+        prepare_connection(tmp_path/'receiver', '127.0.0.1', 8443)
+    assert not (tmp_path/'receiver').exists()
+
+
+@pytest.mark.parametrize('failure', ['raw', 'nts', 'publication'])
+def test_storage_failure_invalidates_current_result_and_preserves_prior_evidence(receiver, monkeypatch, failure):
+    import pnt.session_monitor as module
+    server, config = receiver
+    _, pieces, _, witness = native_data()
+    assert request(server, config, raw=pieces[0], witness=ongoing(witness, 4))[0] == 200
+    monitor = server.monitor
+    assert monitor.last_update['record_outcomes']
+    prior = monitor.output/'update-00001'/'result.json'
+    original_result = prior.read_bytes()
+    original_write, original_report = Path.write_bytes, module.write_report
+    def broken_write(path, data):
+        target = monitor.raw_path if failure == 'raw' else monitor.nts_path
+        if failure != 'publication' and path == target:
+            raise OSError('synthetic disk exhaustion')
+        return original_write(path, data)
+    def broken_report(report, path, **kwargs):
+        if failure == 'publication' and path.name == 'result.json':
+            raise OSError('synthetic result publication failure')
+        return original_report(report, path, **kwargs)
+    monkeypatch.setattr(Path, 'write_bytes', broken_write)
+    monkeypatch.setattr(module, 'write_report', broken_report)
+    assert request(server, config, raw=pieces[1], witness=ongoing(witness, 6))[0] == 400
+    assert server.fatal and monitor.last_update is None and monitor.previous_outcomes == {}
+    assert request(server, config, raw=pieces[1], witness=ongoing(witness, 6))[0] == 400
+    summary = monitor.finish(server.fatal)
+    assert summary['status'] == 'INSUFFICIENT_EVIDENCE' and not summary['session_complete']
+    assert summary['last_result'] is None and summary['prior_result'] == 'update-00001/result.json'
+    assert summary['issues'] and summary['updates'] == 1
+    assert json.loads((monitor.output/'summary.json').read_bytes()) == summary
+    assert prior.read_bytes() == original_result
+
+
+def test_unwritable_invalidation_summary_fails_instead_of_returning_old_result(receiver, monkeypatch):
+    import pnt.session_monitor as module
+    server, config = receiver
+    _, pieces, _, witness = native_data()
+    request(server, config, raw=pieces[1], witness=ongoing(witness, 6))
+    server.monitor.invalidate('synthetic storage failure')
+    def unavailable(*args, **kwargs):
+        raise OSError('synthetic full disk remains unavailable')
+    monkeypatch.setattr(module, 'write_report', unavailable)
+    with pytest.raises(OSError, match='full disk'):
+        server.monitor.finish('PC_STORAGE_FAILED')
+    assert server.monitor.last_update is None
+    assert not (server.monitor.output/'summary.json').exists()
 
 
 @pytest.mark.skipif(os.environ.get('PNT_ANDROID_NTS_INTEGRATION') != '1',

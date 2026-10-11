@@ -93,11 +93,28 @@ final class CaptureLog implements Closeable {
     long rowCount() { return rows; }
     @Override public synchronized void close() throws IOException { writer.close(); }
 
-    synchronized byte[] snapshot(java.nio.file.Path file) throws IOException {
-        // Complete callback writes and this copy share the same lock. Network I/O does not.
-        try (var input = java.nio.file.Files.newInputStream(file)) {
-            return PcConnection.readLimited(input, PcConnection.MAX_SNAPSHOT);
+    byte[] snapshot(java.nio.file.Path file) throws IOException {
+        final long boundary;
+        synchronized (this) {
+            // Every callback/comment flushes before releasing this lock. Later
+            // appends cannot alter this complete prefix, including after close.
+            boundary = java.nio.file.Files.size(file);
         }
+        try (var input = java.nio.file.Files.newInputStream(file)) {
+            return readPrefix(input, boundary);
+        }
+    }
+
+    static byte[] readPrefix(java.io.InputStream input, long boundary) throws IOException {
+        if (boundary < 0 || boundary > PcConnection.MAX_SNAPSHOT) throw new IOException("Raw snapshot exceeds size limit");
+        byte[] bytes = new byte[(int) boundary];
+        int offset = 0;
+        while (offset < bytes.length) {
+            int count = input.read(bytes, offset, Math.min(8192, bytes.length - offset));
+            if (count == -1) throw new java.io.EOFException("Raw snapshot prefix truncated");
+            offset += count;
+        }
+        return bytes;
     }
 
     static String csv(String value) {
