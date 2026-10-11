@@ -104,8 +104,14 @@ configurazione esplicita e invio facoltativo delle copie native durante la racco
 allo stesso monitor, senza cambiare il motore. La prova di connessione non avvia
 GNSS né trasmette registrazioni. Credenziale e certificato dedicati proteggono
 il trasporto; non attestano le misure. L'app conserva i fallimenti e mostra
-ricevute di trasporto. La consegna degli esiti numerici al telefono è il prossimo
-incremento; latenza operatore e beneficio di sicurezza restano da misurare.
+ricevute di trasporto. La versione **0.6.0** restituisce gli esiti del monitor
+esistente: conteggi locali/esterni/combinati, revisioni, insufficienze e motivi,
+legati agli hash delle copie inviate. Un errore o una cancellazione rende il
+risultato corrente indisponibile e conserva il precedente come storico;
+una coppia chiusa confermata resta un risultato finale. I log privati conservano
+le risposte e le durate richiesta/ricevuta/applicazione del testo sul telefono,
+senza associare il contatore al PC. Latenza operatore e beneficio di sicurezza
+restano da misurare; nessun nuovo motore o budget qualificato.
 
 Prova ingegneristica 0.5.0 sul Galaxy S21 FE / Android 16: configurazione
 importata e connessione HTTPS telefono -> PC riuscita sulla LAN Wi-Fi.
@@ -126,7 +132,20 @@ ha anche rilevato e corretto la chiusura PC che dipendeva erroneamente dai budge
 il ricevitore originale ha atteso il limite di durata; un replay separato dei
 file finali conferma la correzione senza riscrivere quell'esito. Ricevute e tempi
 di richiesta non misurano la latenza dell'allarme fino all'operatore. Il prossimo
-incremento resta la consegna live degli esiti esistenti al telefono.
+incremento 0.6.0 porta quella consegna nell'app senza riscrivere questa prova.
+
+La [prova 0.6.0 di consegna degli esiti alla finestra](../research/exploratory/PNT_ANDROID_LIVE_OUTCOMES.md)
+chiude il percorso fino all'app: **37/37 risposte**, nessun errore di trasporto,
+**37 applicazioni del testo alla UI**, file finali PC/telefono identici e tutti
+i 37 file precedenti preservati. Conserva **49 callback / 1.419 Raw** e **11/20
+scambi NTS autenticati**, con nove timeout. Ogni esito resta insufficiente perché
+non sono forniti budget; la UI finale e la chiusura automatica PC sono verificate.
+La mediana richiesta/ricevuta è 409,469 ms e ricevuta/applicazione testo 7,312 ms,
+entro questa singola prova; non sono latenza operatore o beneficio RF.
+I test sintetici verificano anche revisioni discordante -> inconclusivo e
+indisponibilità con risultato storico. Il flusso software è ora completo fino
+alla presentazione; il prossimo problema resta qualifica temporale e beneficio
+benigno/challenge utile, non altre estensioni amministrative del monitor.
 
 Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni

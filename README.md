@@ -172,9 +172,11 @@ native callback and NTS completion receipts. The
 reuses the engine on growing native files available on the PC, retaining result
 revisions and measuring PC processing/publication. Collector 0.5.0 adds an
 optional [private HTTPS connection](pnt/android-collector/README.md#private-pc-connection)
-that supplies native snapshots during recording and displays transport receipts.
-Delivery of the numerical results back to the operator and its latency remain
-to be implemented and measured.
+that supplies native snapshots during recording. Collector 0.6.0 returns the
+existing monitor's local/external/combined counts and revisions to the phone,
+binds them to uploaded snapshot hashes and labels prior results historical after
+failure. Phone request/receipt/UI-text durations remain separate from PC
+processing; neither establishes physical GNSS-to-operator alert latency.
 Independent timing qualification and verified benign/RF challenge evidence
 remain necessary to establish operational security benefit.
 Website and deployment work follow that physical demonstration.

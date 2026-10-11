@@ -36,7 +36,7 @@ class AndroidSessionMonitor:
         self.raw_previous, self.raw_closed, self.witness_previous = None, False, None
         self.previous_outcomes, self.last_fingerprint, self.last_update = {}, None, None
         self.last_input_fingerprint = None
-        self.updates, self.finished = 0, False
+        self.updates, self.finished, self.last_receipt = 0, False, None
         self.invalidation_reason = None
 
     def _history_issues(self, members, report):
@@ -79,7 +79,7 @@ class AndroidSessionMonitor:
         if self.finished:
             raise ValueError('monitor is closed')
         self.invalidation_reason = reason
-        self.last_update, self.previous_outcomes = None, {}
+        self.last_update, self.previous_outcomes, self.last_receipt = None, {}, None
 
     def _poll(self):
         if self.finished:
@@ -169,6 +169,7 @@ class AndroidSessionMonitor:
         self.last_fingerprint, self.previous_outcomes, self.last_update = fingerprint, outcomes, update
         self.last_input_fingerprint = input_fingerprint
         self.updates = next_update
+        self.last_receipt = receipt
         return receipt
 
     def finish(self, reason):

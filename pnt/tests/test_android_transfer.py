@@ -1,5 +1,6 @@
 """Private HTTPS transport: exact native bytes -> existing monitor, synthetic only."""
 import copy
+import hashlib
 import http.client
 import json
 import os
@@ -74,11 +75,20 @@ def test_native_prefixes_reuse_monitor_and_preserve_exact_bytes_and_revisions(re
     status, receipt = request(server, config, raw=pieces[1], witness=first)
     assert status == 200 and receipt['stored'] and not receipt['session_complete']
     assert server.monitor.last_update['record_outcomes'][1]['combined'] == 'INCONSISTENT'
+    view = receipt['presentation']
+    assert view['record_outcome_counts'] == server.monitor.last_receipt['record_outcome_counts']
+    assert view['record_count'] == 2 and not view['calibrated']
+    assert view['analysis_options'] == ANALYSIS
+    assert view['timing']['total_pc_processing_ns'] == server.monitor.last_receipt['total_pc_processing_ns']
+    assert view['source_members'][0]['sha256'] == hashlib.sha256(pieces[1]).hexdigest()
     folder = server.monitor.output/'update-00001'
     assert (folder/'pnt-clock-synthetic-monitor.txt').read_bytes() == pieces[1]
     assert json.loads((folder/'pnt-nts-synthetic-monitor.json').read_bytes()) == first
-    assert request(server, config, raw=pieces[1], witness=first)[1]['update_index'] == 1
-    assert request(server, config, raw=pieces[1], witness=ongoing(witness, 8))[0] == 200
+    assert request(server, config, raw=pieces[1], witness=first)[1] == receipt
+    status, revised = request(server, config, raw=pieces[1], witness=ongoing(witness, 8))
+    assert status == 200
+    assert revised['presentation']['revision_transitions']['combined'] == [dict(
+        previous='INCONSISTENT', current='INCONCLUSIVE', count=1)]
     assert server.monitor.last_update['record_outcomes'][1]['combined'] == 'INCONCLUSIVE'
     assert server.monitor.last_update['revisions'][0]['previous'] is not None
     assert request(server, config, raw=closed, witness=witness)[1]['session_complete']
@@ -93,6 +103,9 @@ def test_accepted_malformed_native_pair_clears_outcomes_and_retains_failure(rece
     status, receipt = request(server, config, raw=b'corrupt original bytes\n', witness={})
     assert status == 200 and receipt['status'] == 'INSUFFICIENT_EVIDENCE' and receipt['issues']
     assert server.monitor.last_update['record_outcomes'] == {}
+    assert receipt['presentation']['record_count'] == 0
+    assert all(not v for v in receipt['presentation']['record_outcome_counts'].values())
+    assert receipt['issue_count'] > 0
     assert (server.monitor.output/'update-00002'/'pnt-clock-synthetic-monitor.txt').read_bytes() == b'corrupt original bytes\n'
 
 
@@ -309,6 +322,38 @@ def test_closed_native_transfer_stops_without_inventing_analysis_budgets(tmp_pat
     assert summary['monitor']['status'] == 'INSUFFICIENT_EVIDENCE'
     result = json.loads((directory/'monitor'/summary['monitor']['last_result']).read_bytes())
     assert result['record_outcomes'] == {} and result['issues']
+    assert sent[0][1]['presentation']['analysis_options'] == {}
+    assert sent[0][1]['presentation']['record_count'] == 0
+
+
+def test_live_reason_previews_are_bounded_and_full_pc_result_is_preserved(receiver, monkeypatch):
+    import pnt.session_monitor as module
+    server, config = receiver
+    original = module._inspect_android_members
+    issues = ['synthetic reason '+str(i)+'x'*2000 for i in range(100)]
+    def many_issues(*args, **kwargs):
+        report = original(*args, **kwargs)
+        report['issues'] = issues
+        return report
+    monkeypatch.setattr(module, '_inspect_android_members', many_issues)
+    _, pieces, _, witness = native_data()
+    status, receipt = request(server, config, raw=pieces[0], witness=ongoing(witness, 1))
+    assert status == 200 and len(json.dumps(receipt).encode()) < 65536
+    assert receipt['issue_count'] == 100 and receipt['issues_abbreviated']
+    assert len(receipt['issues']) == 8 and all(len(v) <= 500 for v in receipt['issues'])
+    result = json.loads((server.monitor.output/'update-00001'/'result.json').read_bytes())
+    assert result['issues'] == issues
+
+
+@pytest.mark.parametrize('version', ['0.4.2', '0.5.0', '0.6.0', '9.9.9'])
+def test_live_collector_version_does_not_relax_known_nts_protocol(receiver, version):
+    server, config = receiver
+    _, pieces, _, witness = native_data()
+    witness['capture_context']['metadata']['Version'] = version
+    receipt = request(server, config, raw=pieces[1], witness=ongoing(witness, 6))[1]
+    assert (receipt['status'] == 'CONDITIONAL_TIME_DIAGNOSTIC') == (version != '9.9.9')
+    if version == '9.9.9':
+        assert receipt['issues'] and receipt['presentation']['record_count'] == 0
 
 
 @pytest.mark.skipif(os.environ.get('PNT_ANDROID_NTS_INTEGRATION') != '1',
@@ -316,7 +361,7 @@ def test_closed_native_transfer_stops_without_inventing_analysis_budgets(tmp_pat
 def test_native_java_https_client_credentials_identity_and_transfer_worker(receiver, tmp_path):
     server, config = receiver
     _, _, raw, witness = native_data()
-    witness['capture_context']['metadata']['Version'] = '0.5.0'
+    witness['capture_context']['metadata']['Version'] = '0.6.0'
     raw_path, nts_path = tmp_path/'raw.txt', tmp_path/'nts.json'
     raw_path.write_bytes(raw)
     nts_path.write_text(json.dumps(witness))
@@ -331,7 +376,24 @@ def test_native_java_https_client_credentials_identity_and_transfer_worker(recei
     other_thread.start()
     cases['identity'] = identity | dict(url=f'https://127.0.0.1:{other.server_port}')
     fixture = tmp_path/'fixture.json'
-    fixture.write_text(json.dumps(dict(configs=cases, raw=str(raw_path), nts=str(nts_path),
+    # A separate real HTTPS receiver exercises partial -> revised -> failure ->
+    # malformed presentation without touching the completed integration capture.
+    live_directory = tmp_path/'live'
+    live_config = prepare_connection(live_directory, '127.0.0.1', 8443)
+    live_server = AndroidReceiver(('127.0.0.1', 0), live_directory, live_config,
+        analysis_options=ANALYSIS, local_counter_resolution_ns=1)
+    live_config['url'] = f'https://127.0.0.1:{live_server.server_port}'
+    live_thread = threading.Thread(target=live_server.serve_forever, kwargs=dict(poll_interval=.02), daemon=True)
+    live_thread.start()
+    _, live_pieces, _, live_witness = native_data(two_endpoints=True, shifted=True)
+    live_raw = tmp_path/'partial.txt'
+    live_raw.write_bytes(live_pieces[1])
+    first, second = tmp_path/'first.json', tmp_path/'second.json'
+    first.write_text(json.dumps(ongoing(live_witness, 7, active=7)))
+    second.write_text(json.dumps(ongoing(live_witness, 8)))
+    fixture.write_text(json.dumps(dict(configs=cases, live_config=live_config,
+        live_raw=str(live_raw), live_first=str(first), live_second=str(second),
+        raw=str(raw_path), nts=str(nts_path),
         directory=str(tmp_path), capture_id='synthetic-monitor')))
     project = Path(__file__).resolve().parents[1]/'android-collector'
     command = str(project/'gradlew.bat') if os.name == 'nt' else './gradlew'
@@ -346,6 +408,9 @@ def test_native_java_https_client_credentials_identity_and_transfer_worker(recei
         assert any(event['outcome'] == 'ACKNOWLEDGED' for event in events)
         assert raw_path.read_bytes() == raw and json.loads(nts_path.read_bytes()) == witness
     finally:
+        live_server.shutdown()
+        live_server.server_close()
+        live_thread.join(timeout=10)
         other.shutdown()
         other.server_close()
         other_thread.join(timeout=10)

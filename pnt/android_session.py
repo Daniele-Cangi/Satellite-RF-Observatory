@@ -30,6 +30,7 @@ REQUIRED_OPTIONS = {
 }
 OPTIONAL_OPTIONS = {'epoch_alignment_error_ns', 'epoch_alignment_source', 'bracket_span_ns'}
 LEGACY_FIXED_PTB_VERSIONS = {'0.2.0', '0.3.0', '0.3.1', '0.4.0'}
+INDEPENDENT_NTS_VERSIONS = {'0.4.2', '0.5.0', '0.6.0'}
 
 
 def load_json(data):
@@ -143,10 +144,10 @@ def _nts_schedule(witness, *, allow_in_progress=False):
     independent = execution == 'INDEPENDENT_ENDPOINTS_SPACED'
     metadata = witness['capture_context'].get('metadata', {})
     version = metadata.get('Version') if isinstance(metadata, dict) else None
-    if version in ('0.4.2', '0.5.0') and not independent:
-        raise ValueError('collector 0.4.2/0.5.0 requires its NTS execution declaration')
-    if independent and version not in ('0.4.2', '0.5.0'):
-        raise ValueError('independent NTS execution requires a known supporting collector version (0.4.2/0.5.0)')
+    if version in INDEPENDENT_NTS_VERSIONS and not independent:
+        raise ValueError('collector 0.4.2/0.5.0/0.6.0 requires its NTS execution declaration')
+    if independent and version not in INDEPENDENT_NTS_VERSIONS:
+        raise ValueError('independent NTS execution requires a known supporting collector version (0.4.2/0.5.0/0.6.0)')
     if independent and (protocol.get('endpoints') is None
                         or protocol.get('missed_schedule') != 'START_LATE_WITHOUT_REPLACEMENT'):
         raise ValueError('independent NTS execution requires explicit endpoints and late-slot semantics')

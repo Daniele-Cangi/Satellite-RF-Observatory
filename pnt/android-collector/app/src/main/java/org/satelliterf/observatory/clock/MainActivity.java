@@ -70,6 +70,7 @@ public final class MainActivity extends Activity {
     private PcConnection pcConnection;
     private PcConnection pcProbe;
     private LiveTransfer liveTransfer;
+    private boolean liveDisplayLogFailed;
     private boolean pcChecking;
     private Button connectionButton;
     private Button connectionTestButton;
@@ -278,14 +279,25 @@ public final class MainActivity extends Activity {
             ntsCapture = capture;
             latestNtsFile = ntsFile;
             if (sendToPc.isChecked() && pcConnection != null) {
+                liveDisplayLogFailed = false;
                 CaptureLog recording = log;
                 try {
                     liveTransfer = new LiveTransfer(pcConnection,
                         () -> new byte[][]{recording.snapshot(file.toPath()), capture.snapshot()},
                         id, getFilesDir().toPath(), SystemClock::elapsedRealtimeNanos,
-                        message -> ui.post(() -> {
+                        update -> ui.post(() -> {
                             if (latestFile != file) return;
-                            connectionDetails.setText(message);
+                            connectionDetails.setText((liveDisplayLogFailed
+                                ? "CURRENT PC RESULT UNAVAILABLE: display log failed.\nHISTORICAL PRESENTATION ONLY\n" : "") + update.text);
+                            long applied = SystemClock.elapsedRealtimeNanos();
+                            connectionDetails.append(update.timingText(applied));
+                            try { if (!liveDisplayLogFailed) update.displayed(applied); }
+                            catch (IOException error) {
+                                liveDisplayLogFailed = true;
+                                connectionDetails.setText("CURRENT PC RESULT UNAVAILABLE: display log failed."
+                                    + "\nOriginals retained; upload stopped.\nHISTORICAL PRESENTATION ONLY\n" + update.text);
+                                liveTransfer.displayFailed();
+                            }
                             buttons();
                         }));
                 } catch (IOException error) {

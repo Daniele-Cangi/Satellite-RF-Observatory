@@ -112,14 +112,11 @@ final class PcConnection {
         if (!result.get("ready").getAsBoolean()) throw new IOException("PC receiver is not ready");
         return result;
     }
-    JsonObject send(String id, byte[] raw, byte[] nts) throws Exception {
+    PcLiveResult send(String id, byte[] raw, byte[] nts) throws Exception {
         if (!id.matches("[a-zA-Z0-9-]{1,80}") || raw.length == 0 || nts.length == 0
                 || raw.length > MAX_SNAPSHOT - nts.length) throw new IOException("Invalid or oversized native snapshot");
         JsonObject receipt = request("/snapshot", id, raw, nts);
-        if (!id.equals(receipt.get("capture_id").getAsString()) || !receipt.get("stored").getAsBoolean()) {
-            throw new IOException("PC did not acknowledge this capture");
-        }
-        return receipt;
+        return new PcLiveResult(receipt, id, raw, nts);
     }
     private JsonObject request(String path, String id, byte[] raw, byte[] nts) throws Exception {
         if (cancelled) throw new IOException("PC transfer cancelled");
