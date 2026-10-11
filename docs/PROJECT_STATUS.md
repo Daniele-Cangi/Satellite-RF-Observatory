@@ -107,6 +107,14 @@ il trasporto; non attestano le misure. L'app conserva i fallimenti e mostra
 ricevute di trasporto. La consegna degli esiti numerici al telefono è il prossimo
 incremento; latenza operatore e beneficio di sicurezza restano da misurare.
 
+Prova ingegneristica 0.5.0 sul Galaxy S21 FE / Android 16: configurazione
+importata e connessione HTTPS telefono -> PC riuscita sulla LAN Wi-Fi.
+Nessuna nuova raccolta o trasmissione GNSS; i **34 file privati preesistenti**
+conservano gli stessi hash. I test sintetici esercitano anche l'invio delle
+copie al monitor e il rifiuto di credenziali, certificati, identità HTTPS,
+sessioni miste e trasferimenti incompleti. Non è ancora una prova outdoor
+del nuovo flusso né una misura di latenza fino all'operatore.
+
 Verifica software: **805 test PNT passano**, cinque integrazioni restano
 saltate come nel baseline. I confronti sui file completi delle quattro sessioni
 reali già esposte sono identici ai rapporti precedenti; i replay storici con
