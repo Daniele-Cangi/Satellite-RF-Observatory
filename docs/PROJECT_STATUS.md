@@ -11,8 +11,8 @@ supporto: zero e +/-100 ms non generano contraddizioni. I margini condizionali
 alla ricezione sono 554,5-632,3 ms; restano 90 gruppi insufficienti e 23 timeout
 NTS su 80 slot. Tutti i confronti e gli input originali rimangono invariati.
 Il nuovo modo riduce le assunzioni in una direzione, senza qualificare gli altri
-budget o chiudere P2 fisica/P3. Una review mirata deve verificare la relazione
-causale e l'assenza di fallback al test a due lati.
+budget o chiudere P2 fisica/P3. Il prossimo valore scientifico resta una prova
+fisica verificabile con un confine temporale adeguato all'errore dannoso scelto.
 
 ## Incremento precedente: limite temporale del file SBF
 
