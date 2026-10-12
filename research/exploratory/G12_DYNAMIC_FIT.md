@@ -153,7 +153,8 @@ line-search failures. [v2](results/g12_dynamic_fit_v2.json), produced by
 `64c31fe`, retains the same failures after a joint-metric convergence diagnostic.
 Neither phase failure is rewritten as an accepted fit or scored retrospectively.
 
-[v3](results/g12_dynamic_fit_v3.json) corrects the Jacobian instead of relaxing
+[v3](results/g12_dynamic_fit_v3.json), produced by commit `51c17ad`, corrects
+the Jacobian instead of relaxing
 the scientific test. Integrated state-transition matrices use the analytic
 central/J2 rotating-frame force derivative. Implicit light-time derivatives
 include Earth rotation, station coordinates and both clocks. Differentiate

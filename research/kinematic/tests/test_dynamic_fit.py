@@ -64,6 +64,17 @@ def test_rejected_calibration_stops_before_target_decoding():
         solver.fit(arcs)
 
 
+def test_incomplete_calibration_list_stops_before_target_decoding():
+    class Forbidden:
+        def __array__(self,*args,**kwargs):
+            raise AssertionError('target decoded')
+    arcs,_,_ = toy()
+    arcs[0]['calibration_statuses']=[]
+    arcs[0]['codes_m']=Forbidden()
+    with pytest.raises(ValueError,match='before target decoding'):
+        solver.fit(arcs)
+
+
 def test_shared_fit_refuses_reused_training_endpoints_and_bad_covariance():
     arcs,_,_ = toy()
     with pytest.raises(ValueError,match='reuse target endpoint'):

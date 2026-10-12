@@ -24,7 +24,8 @@ STEP_SIGMA_TOL = 1e-4
 def prepare(arcs, phase):
     if not isinstance(phase,bool):
         raise ValueError('include_phase must be boolean')
-    if not arcs or any(s not in ACCEPTED_CALIBRATIONS for a in arcs for s in a['calibration_statuses']):
+    if not arcs or any(len(a['calibration_statuses'])!=len(a['stations']) or
+                       any(s not in ACCEPTED_CALIBRATIONS for s in a['calibration_statuses']) for a in arcs):
         raise ValueError('qualified reference calibrations required before target decoding')
     names = sorted(set(s for a in arcs for s in a['stations']))
     if len(names)<5:
