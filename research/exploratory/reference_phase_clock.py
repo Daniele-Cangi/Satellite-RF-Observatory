@@ -73,7 +73,18 @@ def model_environment(context):
     return model
 
 
-def run(phase_path=BASE/'inputs/real_phase/observations.json'):
+def evaluation_boundary(plan, after_gpst_s):
+    """Explicit exposed-window extension; the historical default is unchanged."""
+    after = plan['training_before_gpst_s'] if after_gpst_s is None else after_gpst_s
+    start = plan['start_gpst_s']
+    stop = start+(plan['samples']-1)*plan['step_s']
+    if (not np.isfinite(after) or not start <= after < stop
+            or (after-start) % plan['step_s']):
+        raise ValueError('clock evaluation boundary must lie on the retained time grid')
+    return after
+
+
+def run(phase_path=BASE/'inputs/real_phase/observations.json', *, after_gpst_s=None):
     context = pseudo.inputs(PLAN_SHA)
     _, original, ctx, _, _, receipt, baseline = context
     source = phase_path.read_bytes()
@@ -81,6 +92,7 @@ def run(phase_path=BASE/'inputs/real_phase/observations.json'):
     if (phase['plan'] != original or phase['receipt_sha256'] != baseline['receipt_sha256']
             or ctx.target != 'G12' or phase['plan']['target_excluded'] in phase['plan']['references']):
         raise ValueError('reference-only cohort differs from baseline')
+    after = evaluation_boundary(original, after_gpst_s)
     model = model_environment(context)
     blocks, failures, stations, model_failures = defaultdict(list), Counter(), {}, []
     for station in original['stations']:
@@ -110,7 +122,7 @@ def run(phase_path=BASE/'inputs/real_phase/observations.json'):
                                        'reference': reference, 'reason': str(error)})
                 continue
         for (t, reference), value in levels.items():
-            if t <= original['training_before_gpst_s'] or (t-original['start_gpst_s']) % original['step_s']:
+            if t <= after or (t-original['start_gpst_s']) % original['step_s']:
                 continue
             if (t-original['step_s'], reference) not in levels:
                 failures['UNBRIDGED_REFERENCE_INTERVAL'] += 1
@@ -151,6 +163,8 @@ def run(phase_path=BASE/'inputs/real_phase/observations.json'):
                'held_out_count': len(leave_out)}
     return {'schema': 'reference-phase-clock-v1', 'scope': 'Exposed references only; precision products, atmosphere and phase header interpretation remain conditional. Held-out references use independently computed elevation, but share upstream products. No absolute clock or total covariance bound.',
             'target_excluded': ctx.target, 'target_values_accessed': False,
+            'evaluation_after_gpst_s': after,
+            'exploratory_window_extension': after != original['training_before_gpst_s'],
             'input_sha256': digest(source), 'baseline_report_sha256': digest((BASE/'results/day_reference_v1.json').read_bytes()),
             'source_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             'stations': stations, 'failures': dict(failures),
@@ -162,8 +176,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
     parser.add_argument('--phase-input', type=Path, default=BASE/'inputs/real_phase/observations.json')
+    parser.add_argument('--after-gpst-s', type=int, help='explicit exploratory extension within retained observations')
     args = parser.parse_args()
-    result = run(args.phase_input)
+    result = run(args.phase_input, after_gpst_s=args.after_gpst_s)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, separators=(',', ':'), allow_nan=False)+'\n',
                            encoding='utf-8', newline='\n')

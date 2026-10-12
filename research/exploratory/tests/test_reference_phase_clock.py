@@ -46,3 +46,13 @@ def test_retained_exposed_report_does_not_claim_absolute_clock_bound():
                and row['time_s'] == 38040 and row['error_m_s_median'] > .02
                for row in result['held_out_reference_diagnostics'])
     assert 'No absolute clock' in result['scope']
+
+
+def test_exposed_window_extension_keeps_default_and_rejects_invalid_boundaries():
+    plan = {'start_gpst_s':36000, 'samples':121, 'step_s':30,
+            'training_before_gpst_s':37800}
+    assert study.evaluation_boundary(plan, None) == 37800
+    assert study.evaluation_boundary(plan, 36000) == 36000
+    for after in (35970, 36001, 39600, float('nan'), float('inf')):
+        with pytest.raises(ValueError, match='retained time grid'):
+            study.evaluation_boundary(plan, after)
