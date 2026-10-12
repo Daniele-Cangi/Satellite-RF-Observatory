@@ -32,10 +32,18 @@ peggioramenti restano nel rapporto. La selezione storica e i prodotti condivisi
 rendono il test esplorativo e condizionale, non una conferma indipendente.
 La legge direzionale non diventa una correzione o un prior del solver.
 
-La prossima domanda fisica e se una dinamica orbitale dichiarata possa legare
-gli archi brevi e risolvere il modo bias-posizione senza orbita, raggio o stato
-propagato del bersaglio nel fit. Prima osservabilita e limiti del modello;
-nessuna nuova prova o modifica al solver e avviata da questo aggiornamento.
+La [fattibilita dinamica G12](../research/exploratory/G12_DYNAMICS_FEASIBILITY.md)
+mostra maggiore informazione locale con una traiettoria condivisa: la scala
+formale del bias debole con fase passa da circa 1.993 a 217 m. Non e errore di
+posizione o un fit orbitale comune. L'orbita nota non entra nel calcolo; tutti
+i fallimenti storici restano tali. Gravita centrale e centrale+J2, dallo stesso
+stato RF, divergono fino a 318 m in posizione e 296 m nel codice previsto:
+sono separazioni fra modelli, non errori irriducibili dopo una nuova stima.
+
+La prossima consegna e un fit RF dinamico condiviso con bias differenziali
+liberi e previsioni escluse, confrontato agli archi indipendenti. Vanno ancora
+qualificati modello delle forze, clock, propagazione e incertezza totale.
+Questa diagnosi non modifica il solver di produzione e non chiude S2.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
