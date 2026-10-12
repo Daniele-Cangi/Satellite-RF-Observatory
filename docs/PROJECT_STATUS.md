@@ -40,10 +40,24 @@ i fallimenti storici restano tali. Gravita centrale e centrale+J2, dallo stesso
 stato RF, divergono fino a 318 m in posizione e 296 m nel codice previsto:
 sono separazioni fra modelli, non errori irriducibili dopo una nuova stima.
 
-La prossima consegna e un fit RF dinamico condiviso con bias differenziali
-liberi e previsioni escluse, confrontato agli archi indipendenti. Vanno ancora
-qualificati modello delle forze, clock, propagazione e incertezza totale.
-Questa diagnosi non modifica il solver di produzione e non chiude S2.
+Il [fit RF dinamico condiviso G12](../research/exploratory/G12_DYNAMIC_FIT.md)
+e implementato senza orbita nota o stato precedente come seed, con bias liberi
+e finestre alternate per escludere globalmente i campioni di verifica. Con solo
+codice e J2, 85 previsioni passano da 2,684 a 1,071 m RMS; l'ultima previsione
+oltre tutti i dati usati peggiora da 2,108 a 2,334 m. La ricerca dei rami resta
+incompleta per un ramo iniziale non propagabile. Con fase, il codice peggiora
+e il modello e rifiutato dai pesi originali (p circa 2e-14), pur migliorando
+alcune previsioni fase. Tutti i fallimenti numerici precedenti sono conservati.
+La review ha rilevato una dipendenza dalle correzioni di un fit storico:
+i risultati v1-v3 non sostengono piu la dichiarazione di indipendenza dalla
+geometria precedente. Il risultato corrente v4 ricalcola VMF3 dentro il fit
+e i clock dai riferimenti, senza usare quelle correzioni; gli esiti restano tali.
+
+S2 resta aperta: residui migliori non dimostrano accuratezza della posizione.
+La prossima domanda fisica e localizzare l'incompatibilita degli incrementi
+fase fra trasferimento clock/propagazione e modello dinamico, con budget
+indipendenti prima di aggiungere vincoli. Forze, bias, correlazioni e incertezza
+totale restano da qualificare; nessuna modifica ai floor o al solver di produzione.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti

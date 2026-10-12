@@ -76,3 +76,45 @@ def test_light_time_with_analytic_circular_motion_and_transmit_clock():
     expected = rho+clocks[0,0]+tags*clocks[0,1]-satellite_clock[0]-satellite_clock[1]*(receive-tau)
     curve = model.Trajectory(circular(0),[-100,100],j2=0.)
     assert model.predict_codes(curve,0.,tags,stations,clocks,satellite_clock)[:,0]==pytest.approx(expected,rel=0,abs=2e-5)
+
+
+@pytest.mark.parametrize('j2',[0.,model.J2])
+def test_force_and_integrated_variational_derivatives_match_independent_perturbations(j2):
+    seed = np.array([26e6,2e6,4e6,-250.,1800.,500.])
+    steps = np.array([100.,100.,100.,.01,.01,.01])
+    rhs = lambda y:np.r_[y[3:],model.acceleration(y,j2=j2)]
+    numerical = np.column_stack([(rhs(seed+e)-rhs(seed-e))/(2*h)
+                for e,h in zip(np.diag(steps),steps,strict=True)])
+    np.testing.assert_allclose(model.force_jacobian(seed,j2=j2),numerical,rtol=1e-6,atol=1e-12)
+    curve = model.Trajectory(seed,[-3600,3600],j2=j2,sensitivities=True)
+    times = np.array([-3500.,0.,3500.])
+    columns = [(model.Trajectory(seed+e,[-3600,3600],j2=j2)(times)-
+                model.Trajectory(seed-e,[-3600,3600],j2=j2)(times))/(2*h)
+               for e,h in zip(np.diag(steps),steps,strict=True)]
+    np.testing.assert_allclose(curve.state_jacobian(times),np.stack(columns,axis=-1),rtol=1e-6,atol=1e-6)
+
+
+def test_observation_derivatives_include_light_time_rotation_and_both_clocks():
+    seed = np.array([26e6,2e6,4e6,-250.,1800.,500.])
+    stations = np.array([[6378137.,0.,0.],[0.,6378137.,0.]])
+    clocks = np.array([[1000.,.01],[-2000.,-.02]])
+    tags = np.array([-60.,-30.,0.])
+    curve = model.Trajectory(seed,[-100,1900],sensitivities=True)
+    prediction = model.predict_observations(curve,1800.,tags,stations,clocks,[75000.,12.])
+    steps = np.array([100.,100.,100.,.01,.01,.01])
+    for k,(e,h) in enumerate(zip(np.diag(steps),steps,strict=True)):
+        plus = model.predict_codes(model.Trajectory(seed+e,[-100,1900]),1800.,tags,stations,clocks,[75000.,12.])
+        minus = model.predict_codes(model.Trajectory(seed-e,[-100,1900]),1800.,tags,stations,clocks,[75000.,12.])
+        np.testing.assert_allclose(prediction['initial_state_derivative'][...,k],(plus-minus)/(2*h),rtol=1e-6,atol=1e-6)
+    for j in range(2):
+        for k,h in enumerate([10.,.1]):
+            change = np.zeros_like(clocks); change[j,k]=h
+            plus = model.predict_codes(curve,1800.,tags,stations,clocks+change,[75000.,12.])
+            minus = model.predict_codes(curve,1800.,tags,stations,clocks-change,[75000.,12.])
+            expected = prediction['receiver_clock_derivative'][:,j]*(tags if k else 1.)
+            np.testing.assert_allclose((plus-minus)[:,j]/(2*h),expected,rtol=1e-6,atol=1e-7)
+        for k in range(3):
+            change = np.zeros_like(stations); change[j,k]=10.
+            plus = model.predict_codes(curve,1800.,tags,stations+change,clocks,[75000.,12.])
+            minus = model.predict_codes(curve,1800.,tags,stations-change,clocks,[75000.,12.])
+            np.testing.assert_allclose((plus-minus)[:,j]/20.,prediction['station_derivative'][:,j,k],rtol=1e-6,atol=1e-7)

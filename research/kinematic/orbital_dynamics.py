@@ -28,9 +28,28 @@ def acceleration(state, *, j2=J2):
     return gravity+zonal-2*np.cross(spin,v)-np.cross(spin,np.cross(spin,r))
 
 
+def force_jacobian(state, *, j2=J2):
+    """Derivative of [velocity, acceleration] in the same declared frame."""
+    r = np.asarray(state)[:3]
+    radius = np.linalg.norm(r)
+    acceleration(state,j2=j2)  # Same finite/exterior-Earth domain.
+    square = radius**2
+    gradient = -MU/radius**3*np.eye(3)+3*MU/radius**5*np.outer(r,r)
+    shape = 5*r[2]**2/square-np.array([1.,1.,3.])
+    ds = 10*r[2]/square*np.array([0.,0.,1.])-10*r[2]**2/square**2*r
+    gradient += 1.5*j2*MU*R_EARTH**2/radius**5*(
+        np.diag(shape)-5*np.outer(r*shape,r)/square+np.outer(r,ds))
+    gradient += np.diag([OMEGA**2,OMEGA**2,0.])
+    jac = np.zeros((6,6))
+    jac[:3,3:] = np.eye(3)
+    jac[3:,:3] = gradient
+    jac[3:,3:] = np.array([[0.,2*OMEGA,0.],[-2*OMEGA,0.,0.],[0.,0.,0.]])
+    return jac
+
+
 class Trajectory:
     """Dense forward/backward integration, epoch zero; forbid extrapolation."""
-    def __init__(self, state, bounds, *, j2=J2, rtol=2e-12):
+    def __init__(self, state, bounds, *, j2=J2, rtol=2e-12, sensitivities=False):
         state = np.asarray(state,float)
         lower,upper = map(float,bounds)
         if (state.shape!=(6,) or not np.isfinite(state).all() or
@@ -38,31 +57,46 @@ class Trajectory:
                 not lower<0<upper or rtol<=0):
             raise ValueError('six-state trajectory needs finite bounds spanning epoch zero')
         acceleration(state,j2=j2)
-        self.lower,self.upper = lower,upper
+        self.lower,self.upper,self.sensitivities = lower,upper,sensitivities
         def rhs(t,y):
-            return np.r_[y[3:],acceleration(y,j2=j2)]
-        options = dict(method='DOP853',rtol=rtol,atol=np.r_[np.full(3,1e-6),np.full(3,1e-9)],
+            motion = np.r_[y[3:6],acceleration(y[:6],j2=j2)]
+            return np.r_[motion,(force_jacobian(y[:6],j2=j2)@y[6:].reshape(6,6)).ravel()] if sensitivities else motion
+        initial = np.r_[state,np.eye(6).ravel()] if sensitivities else state
+        atol = np.r_[np.full(3,1e-6),np.full(3,1e-9)]
+        if sensitivities:
+            atol = np.r_[atol,np.full(36,1e-13)]
+        options = dict(method='DOP853',rtol=rtol,atol=atol,
                        dense_output=True,max_step=120.)
-        self.backward = solve_ivp(rhs,[0,lower],state,**options)
-        self.forward = solve_ivp(rhs,[0,upper],state,**options)
+        self.backward = solve_ivp(rhs,[0,lower],initial,**options)
+        self.forward = solve_ivp(rhs,[0,upper],initial,**options)
         if not self.backward.success or not self.forward.success:
             raise ValueError('orbital integration failed')
 
-    def __call__(self, seconds):
+    def _dense(self, seconds):
         t = np.asarray(seconds,float)
         if not np.isfinite(t).all() or np.any(t<self.lower) or np.any(t>self.upper):
             raise ValueError('trajectory evaluation outside integrated bounds')
         flat = t.ravel()
-        result = np.empty((len(flat),6))
+        width = 42 if self.sensitivities else 6
+        result = np.empty((len(flat),width))
         before = flat<0
         if before.any():
             result[before] = self.backward.sol(flat[before]).T
         if (~before).any():
             result[~before] = self.forward.sol(flat[~before]).T
-        return result.reshape(t.shape+(6,))
+        return result.reshape(t.shape+(width,))
+
+    def __call__(self, seconds):
+        return self._dense(seconds)[...,:6]
+
+    def state_jacobian(self, seconds):
+        if not self.sensitivities:
+            raise ValueError('trajectory sensitivities not integrated')
+        value = self._dense(seconds)
+        return value[...,6:].reshape(value.shape[:-1]+(6,6))
 
 
-def predict_codes(trajectory, endpoint_s, tags_s, stations, clocks, satellite_clock):
+def predict_observations(trajectory, endpoint_s, tags_s, stations, clocks, satellite_clock):
     """Vacuum code at receiver tags; clock [b0,b1] local to this arc endpoint.
 
     All times are GPST offsets from the trajectory epoch. Receiver-clock offsets
@@ -94,5 +128,34 @@ def predict_codes(trajectory, endpoint_s, tags_s, stations, clocks, satellite_cl
     else:
         raise ValueError('dynamic light time did not converge')
     transmit = receive-tau
-    rho = np.linalg.norm(rotate_z(trajectory(transmit)[...,:3],-OMEGA*tau)-stations,axis=-1)
-    return rho+clock_r-clock[0]-clock[1]*(transmit-endpoint_s)
+    states = trajectory(transmit)
+    rotated = rotate_z(states[...,:3],-OMEGA*tau)
+    ray = rotated-stations
+    rho = np.linalg.norm(ray,axis=-1)
+    unit = ray/rho[...,None]
+    velocity = rotate_z(states[...,3:],-OMEGA*tau)
+    spin = OMEGA*np.stack([-rotated[...,1],rotated[...,0],np.zeros_like(rho)],axis=-1)
+    denominator = 1+np.sum(unit*(velocity+spin),axis=-1)/C
+    radial = np.sum(unit*velocity,axis=-1)/denominator
+    result = {'code_m':rho+clock_r-clock[0]-clock[1]*(transmit-endpoint_s),
+        'receive_s':receive,'transmit_s':transmit,'light_time_s':tau,
+        'receiver_clock_derivative':1-(radial-clock[1]*(1-radial/C))/C,
+        'station_derivative':-(1+clock[1]/C)*unit/denominator[...,None],
+        'emission_position_m':rotated,'emission_velocity_m_s':velocity,
+        'unit_ray':unit,'light_time_denominator':denominator,'range_receive_rate_m_s':radial}
+    if getattr(trajectory,'sensitivities',False):
+        # Partial state sensitivity at fixed emission time, then implicit light
+        # time/clock differentiation. Never differentiate small phase values by
+        # subtracting two already-differenced ~25 Mm paths.
+        stm = trajectory.state_jacobian(transmit)[...,:3,:]
+        rotated_stm = np.moveaxis(rotate_z(np.moveaxis(stm,-1,-2),-OMEGA*tau[...,None]),-2,-1)
+        range_derivative = np.einsum('...i,...ij->...j',unit,rotated_stm)/denominator[...,None]
+        result['initial_state_derivative'] = (1+clock[1]/C)*range_derivative
+        drift = velocity+spin
+        result['emission_initial_state_derivative'] = rotated_stm-drift[...,None]*range_derivative[...,None,:]/C
+    return result
+
+
+def predict_codes(trajectory, endpoint_s, tags_s, stations, clocks, satellite_clock):
+    """Code-only view of the shared dynamic light-time model, in metres."""
+    return predict_observations(trajectory,endpoint_s,tags_s,stations,clocks,satellite_clock)['code_m']

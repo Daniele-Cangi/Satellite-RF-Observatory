@@ -187,6 +187,11 @@ cases and worsens it in 2/5; 15/20 phase cases remain rejected. The
 explains why phase increments leave an absolute station-bias/position mode
 unresolved. Synthetic motion results do not close this physical gap.
 
+The [shared dynamic G12 fit](research/exploratory/G12_DYNAMIC_FIT.md) estimates
+position/motion and free station-code biases from RF alone. Code-only temporal
+holdouts improve, but the final forecast worsens; phase fits fail the unchanged
+residual test. Branch completeness and total physical uncertainty remain open.
+
 ### RF observation and declared orbital prediction
 
 The closed [DRAO labelled-forward event](experiments/orbital_discriminability/GNSS_DRAO_LABELLED_FORWARD_DOY234_OUTCOME_REPORT.md)
