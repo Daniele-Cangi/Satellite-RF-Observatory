@@ -54,10 +54,15 @@ geometria precedente. Il risultato corrente v4 ricalcola VMF3 dentro il fit
 e i clock dai riferimenti, senza usare quelle correzioni; gli esiti restano tali.
 
 S2 resta aperta: residui migliori non dimostrano accuratezza della posizione.
-La prossima domanda fisica e localizzare l'incompatibilita degli incrementi
-fase fra trasferimento clock/propagazione e modello dinamico, con budget
-indipendenti prima di aggiungere vincoli. Forze, bias, correlazioni e incertezza
-totale restano da qualificare; nessuna modifica ai floor o al solver di produzione.
+Il [confronto fase agli stessi tempi](../research/exploratory/G12_PHASE_DIAGNOSTIC.md)
+localizza il problema: per J2 il contrasto temporale scende da 2,422 a 0,720 mm/s
+sottraendo la variazione reference-only; il 97,8% del residuo resta comune alle
+stazioni. Non e prova di una causa clock-only o di accuratezza orbitale.
+L'estrapolazione del trend clock peggiora 28/40 controlli sui riferimenti.
+La prossima correzione riguarda gli incrementi clock per intervallo e la loro
+covarianza congiunta, lasciando libera la componente comune clock/percorso.
+Tutti i rifiuti e i risultati precedenti restano invariati; nessuna riduzione
+dei floor o modifica al solver di produzione.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
