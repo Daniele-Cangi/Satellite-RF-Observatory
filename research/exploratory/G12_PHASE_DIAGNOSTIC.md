@@ -107,7 +107,9 @@ observation rules out an unflagged discontinuity or proves a clock-only cause.
 For each of the same forty station/arcs, form two predictions solely from
 reference increments `a1`, `a2`: constant `(a1+a2)/2`, and extrapolated linear
 rate `2*a2-a1`. Only then evaluate the third reference increment `a3`.
-No target future code, phase or geometry-free value is read by this study.
+No target future code, phase or geometry-free value participates in the
+numerical diagnostic. The already exposed JSON is parsed as a complete
+artifact; this is a numerical-use boundary, not a value-blind opening.
 
 Both rules have forty evaluable cases. The linear-rate rule worsens 28;
 maximum absolute error grows from 24.679 to 40.404 mm/s. These are forecasts
@@ -156,7 +158,8 @@ The JSON binds the v4 report, its original input bytes and this analysis source
 using the existing hash mechanism. It checks the v4 producer bytes before
 replay; later refactors can reproduce this diagnostic from its Git revision.
 Tests independently construct nonlinear clock endpoints, verify covariance
-contrasts and full-model ablation, poison excluded target future values and
+contrasts and full-model ablation, poison excluded target future values after
+JSON parsing and
 historical corrections, reject target-labeled references before numeric access,
 and retain missing reference/forecast slots. Linux/Windows CI discovers them
 through its existing exploratory-test suite.
