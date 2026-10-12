@@ -62,7 +62,7 @@ class Trajectory:
         return result.reshape(t.shape+(6,))
 
 
-def predict_codes(trajectory, endpoint_s, tags_s, stations, clocks, satellite_clock):
+def predict_observations(trajectory, endpoint_s, tags_s, stations, clocks, satellite_clock):
     """Vacuum code at receiver tags; clock [b0,b1] local to this arc endpoint.
 
     All times are GPST offsets from the trajectory epoch. Receiver-clock offsets
@@ -95,4 +95,10 @@ def predict_codes(trajectory, endpoint_s, tags_s, stations, clocks, satellite_cl
         raise ValueError('dynamic light time did not converge')
     transmit = receive-tau
     rho = np.linalg.norm(rotate_z(trajectory(transmit)[...,:3],-OMEGA*tau)-stations,axis=-1)
-    return rho+clock_r-clock[0]-clock[1]*(transmit-endpoint_s)
+    return {'code_m':rho+clock_r-clock[0]-clock[1]*(transmit-endpoint_s),
+            'receive_s':receive,'transmit_s':transmit,'light_time_s':tau}
+
+
+def predict_codes(trajectory, endpoint_s, tags_s, stations, clocks, satellite_clock):
+    """Code-only view of the shared dynamic light-time model, in metres."""
+    return predict_observations(trajectory,endpoint_s,tags_s,stations,clocks,satellite_clock)['code_m']
