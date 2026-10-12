@@ -118,7 +118,7 @@ def predict(fitted, arcs, weather):
 
 def score(predictions, cases, target, mode):
     """Score fixed predictions, keeping rejected fits and worsening pairs visible."""
-    names = set(s for c in cases for s in c['stations'])
+    names = {s for p in predictions if p['status']=='PREDICTED' for s in p['stations']}
     rows = {s:{r['time_s']:r for r in target['stations'][s]['rows']} for s in names}
     by_end = {c['start_gpst_s']+60:c for c in cases}
     retained = []

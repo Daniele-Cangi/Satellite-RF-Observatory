@@ -16,6 +16,9 @@ from .interval_fit import ACCEPTED_CALIBRATIONS
 
 STATE_SCALE = np.r_[np.full(3,1e7),np.full(3,1e3)]
 RTOL = 1e-10
+# Numerical termination in the fixed, whitened joint-data metric. This is not
+# an observation noise floor or residual/model acceptance threshold.
+STEP_SIGMA_TOL = 1e-4
 
 
 def prepare(arcs, phase):
@@ -108,9 +111,11 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
     residual = np.concatenate([b['reduced_residual'] for b in blocks])
     delta = -(vt.T/singular)@(u.T@residual)
     local_delta = [solve_triangular(b['r'],-b['q'].T@(b['residual']+b['global']@delta)) for b in blocks]
+    step_sigma = float(np.sqrt(sum(np.linalg.norm(b['global']@delta+b['q']@(b['r']@d))**2
+                      for b,d in zip(blocks,local_delta,strict=True))))
     covariance = (vt.T/singular**2)@vt*global_scale[:,None]*global_scale[None,:]
     cost = sum(float(b['residual']@b['residual']) for b in blocks)
-    return delta,local_delta,cost,covariance,float(singular[0]/singular[-1])
+    return delta,local_delta,cost,covariance,float(singular[0]/singular[-1]),step_sigma
 
 
 def cost(global_scaled,locals_scaled,arcs,global_scale,epoch,bounds,j2):
@@ -162,11 +167,11 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
             global_point,locals_point = initial(first,branch['q'],prepared,global_scale,epoch,bounds,j2)
             converged = False
             for iteration in range(max_iterations):
-                delta,local_delta,old_cost,cov,condition = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2)
-                history.append({'iteration':iteration,'cost':old_cost})
+                delta,local_delta,old_cost,cov,condition,step_sigma = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2)
+                history.append({'iteration':iteration,'cost':old_cost,'proposed_step_joint_sigma':step_sigma})
                 if progress:
-                    progress({'branch':index,'iteration':iteration,'cost':old_cost})
-                if max(np.max(abs(delta)),max(np.max(abs(d)) for d in local_delta))<1e-8:
+                    progress({'branch':index,'iteration':iteration,'cost':old_cost,'step_sigma':step_sigma})
+                if step_sigma<STEP_SIGMA_TOL:
                     converged = True
                     break
                 accepted = False
@@ -191,7 +196,7 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
                     break
             if not converged:
                 raise ValueError('dynamic iteration limit reached')
-            _,_,final_cost,cov,condition = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2)
+            _,_,final_cost,cov,condition,_ = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2)
             candidates.append({'branch':index,'cost':final_cost,'physical':global_point*global_scale,
                                'locals':[p*a['local_scale'] for p,a in zip(locals_point,prepared,strict=True)],
                                'covariance':cov,'scaled_condition':condition,'history':history})
@@ -222,4 +227,5 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
             'conditional_global_covariance':best['covariance'],'weighted_residual_cost':best['cost'],
             'residual_dof':dof,'conditional_residual_p':p_value,'parameter_count':total_parameters,
             'scaled_condition':best['scaled_condition'],'branch_failures':failures,'branches':branches,
-            'candidate_count':len(candidates),'physical_covariance_qualified':False,'j2':j2}
+            'candidate_count':len(candidates),'physical_covariance_qualified':False,'j2':j2,
+            'numerical_step_joint_sigma_tolerance':STEP_SIGMA_TOL,'residual_threshold_p':.01}
