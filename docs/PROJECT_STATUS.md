@@ -21,8 +21,21 @@ riusa la calibrazione reference-only e gli stessi fit brevi: 33 fit codice e
 previsione codice restano visibili. Le stime clock della seconda mezz'ora sono
 identiche alle precedenti. Il profilo su sei stazioni ha rango locale completo,
 ma la scala formale debole e ancora circa 2 km sui bias con fase, non sulla
-posizione. Il prossimo passo e verificare un vincolo indipendente sul bias
-differenziale effettivo e la sua trasferibilita fisica; S2 resta aperta.
+posizione. S2 resta aperta.
+
+Il [test di trasferibilita reference-only](../research/exploratory/REFERENCE_BIAS_TRANSFER.md)
+esclude ciascun satellite dalla calibrazione numerica e dal fit direzionale:
+3.942 previsioni RF peggiorano da 1,135 a 1,168 m RMS. La proiezione sulla
+direzione debole G12 peggiora da 0,868 a 0,929 m, con appena 32 blocchi
+valutabili su 1.342 e due satelliti di riferimento. Tutti i casi mancanti e i
+peggioramenti restano nel rapporto. La selezione storica e i prodotti condivisi
+rendono il test esplorativo e condizionale, non una conferma indipendente.
+La legge direzionale non diventa una correzione o un prior del solver.
+
+La prossima domanda fisica e se una dinamica orbitale dichiarata possa legare
+gli archi brevi e risolvere il modo bias-posizione senza orbita, raggio o stato
+propagato del bersaglio nel fit. Prima osservabilita e limiti del modello;
+nessuna nuova prova o modifica al solver e avviata da questo aggiornamento.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
