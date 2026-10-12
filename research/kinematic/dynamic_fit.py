@@ -10,7 +10,7 @@ from scipy.stats import chi2
 
 from positioning.solver import solve
 from . import orbital_dynamics as dynamics
-from .receiver_time import central_jacobian, cholesky_covariance
+from .receiver_time import cholesky_covariance
 from .phase_rates import interval_matrix
 from .interval_fit import ACCEPTED_CALIBRATIONS
 
@@ -70,27 +70,36 @@ def model(curve, arc, local, beta, epoch):
 
 def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j2):
     physical = global_scaled*global_scale
-    curve = dynamics.Trajectory(physical[:6],bounds,j2=j2)
-    step = 1e-5
-    plus = [dynamics.Trajectory(physical[:6]+e,bounds,j2=j2) for e in np.diag(STATE_SCALE*step)]
-    minus = [dynamics.Trajectory(physical[:6]-e,bounds,j2=j2) for e in np.diag(STATE_SCALE*step)]
+    curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
     blocks = []
     for arc,local in zip(arcs,locals_scaled,strict=True):
         value,pair = model(curve,arc,local,physical[6:],epoch)
         residual = solve_triangular(arc['chol'],value-arc['observed'],lower=True)
-        jac = central_jacobian(lambda p:model(curve,arc,p,physical[6:],epoch)[0],local)
         count = arc['codes'].size
-        jac[:,0] = 0.
+        jac = np.zeros((len(value),len(local)))
         jac[:count,0] = -arc['local_scale'][0]
         # Satellite slope is linear at its transmit GPST, independent of light time.
         jac[:,1] = 0.
         slope = -(pair['transmit_s']-(arc['endpoint_gpst_s']-epoch)).ravel()*arc['local_scale'][1]
         jac[:count,1] = slope
+        row = np.arange(count)
+        site = np.tile(np.arange(arc['n']),len(arc['tags']))
+        rc = pair['receiver_clock_derivative'].ravel()
+        jac[row,2+2*site] = rc*arc['local_scale'][2+2*site]
+        jac[row,3+2*site] = rc*np.repeat(arc['tags'],arc['n'])*arc['local_scale'][3+2*site]
+        for k in range(3):
+            col = 2+2*arc['n']+3*site+k
+            jac[row,col] = pair['station_derivative'][...,k].ravel()*arc['local_scale'][col]
+        state = np.zeros((len(value),6))
+        state[:count] = pair['initial_state_derivative'].reshape(count,6)*global_scale[:6]
         if arc['phase']:
-            jac[count:count+len(arc['difference']),1] = arc['difference']@slope
-        state = np.column_stack([(model(a,arc,local,physical[6:],epoch)[0]-
-                                  model(b,arc,local,physical[6:],epoch)[0])/(2*step)
-                                 for a,b in zip(plus,minus,strict=True)])
+            stop = count+len(arc['difference'])
+            jac[count:stop] = arc['difference']@jac[:count]
+            jac[count:stop,0] = 0.  # Exact additive clock gauge.
+            state[count:stop] = arc['difference']@state[:count]
+        else:
+            stop = count
+        jac[stop:,2:] = np.diag(arc['local_scale'][2:])
         bias = np.zeros((len(value),len(physical)-6))
         bias[:count] = np.tile(arc['basis'],(len(arc['tags']),1))*global_scale[6:]
         weighted = lambda x:solve_triangular(arc['chol'],x,lower=True)
@@ -120,7 +129,7 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
 
 def cost(global_scaled,locals_scaled,arcs,global_scale,epoch,bounds,j2):
     physical = global_scaled*global_scale
-    curve = dynamics.Trajectory(physical[:6],bounds,j2=j2)
+    curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
     value = 0.
     for arc,local in zip(arcs,locals_scaled,strict=True):
         r = solve_triangular(arc['chol'],model(curve,arc,local,physical[6:],epoch)[0]-arc['observed'],lower=True)
@@ -135,7 +144,7 @@ def initial(arc, seed, all_arcs, global_scale, epoch, bounds, j2):
     rates = (arc['codes'][-1]-arc['codes'][-2])/(arc['tags'][-1]-arc['tags'][-2])-arc['clocks'][:,1]
     velocity = np.linalg.lstsq(np.column_stack([unit,np.ones(len(unit))]),rates,rcond=None)[0][:3]
     physical = np.r_[q[:3],velocity,np.zeros(len(global_scale)-6)]
-    curve = dynamics.Trajectory(physical[:6],bounds,j2=j2)
+    curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
     locals_scaled = []
     for a in all_arcs:
         local = np.r_[0.,0.,a['clocks'].ravel(),np.zeros(3*a['n'])]/a['local_scale']

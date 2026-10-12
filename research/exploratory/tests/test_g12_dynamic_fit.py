@@ -77,3 +77,39 @@ def test_unavailable_fit_retains_every_prediction_slot():
     scored,summary = study.score(predictions,cases,{},'code_phase')
     assert len(scored)==8 and summary['window_status_counts']=={'UNSCORED':8}
     assert summary['ALL']['pair_count']==0
+
+
+def test_real_fit_retains_rejections_forecast_worsening_and_replayable_scores():
+    data = inputs()
+    report = json.loads((study.BASE/'results/g12_dynamic_fit_v3.json').read_bytes())
+    assert not any(report[k] for k in ['target_orbit_used','oracle_error_used','prior_target_state_used',
+                                       'physical_covariance_qualified','production_floors_changed','new_confirmation'])
+    assert report['historical_code_floor_m']==20. and report['target_elevation_mask_deg']==10.
+    assert report['input_sha256']['hour']==study.digest((study.BASE/'results/g12_full_hour_v1.json').read_bytes())
+    assert set(report['variants'])=={m+'_'+f for m in study.MODES for f,_ in study.FORCES}
+    for label,v in report['variants'].items():
+        mode = 'code_phase' if label.startswith('code_phase') else 'code_only'
+        cases,selection = study.cohort(data['hour'],mode)
+        assert v['cohort']==json.loads(json.dumps(selection))
+        fitted = v['fit']
+        assert fitted['status']==('MODEL_REJECTED' if mode=='code_phase' else 'BRANCH_SEARCH_INCOMPLETE')
+        assert len(fitted['branch_failures'])==1
+        assert 'exterior-Earth' in fitted['branch_failures'][0]['reason']
+        assert fitted['residual_threshold_p']==.01
+        assert fitted['conditional_residual_p']<.01 if mode=='code_phase' else fitted['conditional_residual_p']>=.01
+        assert sum(fitted['station_code_bias_m'].values())==pytest.approx(0.,abs=1e-10)
+        assert all(p['status']=='PREDICTED' and np.min(p['elevation_deg'])>=10. for p in v['predictions'])
+        predicted_bytes = json.dumps(v['predictions'],separators=(',',':'),allow_nan=False).encode()
+        assert v['frozen_prediction_sha256']==study.digest(predicted_bytes)
+        scored,summary = study.score(v['predictions'],cases,data['target'],mode)
+        assert scored==v['withheld'] and summary==v['summary']
+        assert summary['ALL']['pair_count']==(40 if mode=='code_phase' else 85)
+        assert summary['BEYOND_ALL_TRAINING']['pair_count']==5
+        assert sum(p['kind']=='BEYOND_ALL_TRAINING' for p in v['predictions'])==1
+        assert summary['BEYOND_ALL_TRAINING']['code']['rms']>summary['BEYOND_ALL_TRAINING']['code']['old_same_cohort_rms']
+    for version in [1,2]:
+        first = json.loads((study.BASE/f'results/g12_dynamic_fit_v{version}.json').read_bytes())
+        for force,_ in study.FORCES:
+            v = first['variants']['code_phase_'+force]
+            assert v['fit']['status']=='NUMERICAL_FAILURE'
+            assert v['summary']['window_status_counts']=={'UNSCORED':8}
