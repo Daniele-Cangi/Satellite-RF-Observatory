@@ -58,11 +58,24 @@ def prepare(arcs, phase):
     return prepared,names,basis
 
 
-def model(curve, arc, local, beta, epoch):
+def model(curve, arc, local, beta, epoch, *, derivatives=False):
     n = arc['n']
     physical = local*arc['local_scale']
+    xyz = arc['xyz']+physical[2+2*n:].reshape(n,3)
     pair = dynamics.predict_observations(curve,arc['endpoint_gpst_s']-epoch,arc['tags'],
-        arc['xyz']+physical[2+2*n:].reshape(n,3),physical[2:2+2*n].reshape(n,2),physical[:2])
+        xyz,physical[2:2+2*n].reshape(n,2),physical[:2])
+    if 'propagation' in arc:
+        correction = arc['propagation'](pair,xyz,epoch,derivatives=derivatives)
+        delay = np.asarray(correction['delay_m'],float)
+        if delay.shape!=pair['code_m'].shape or not np.isfinite(delay).all():
+            raise ValueError('finite propagation at the current fitted geometry required')
+        pair['code_m'] = pair['code_m']+delay
+        if derivatives:
+            for key in ['initial_state_derivative','receiver_clock_derivative','station_derivative']:
+                jac = np.asarray(correction[key],float)
+                if jac.shape!=pair[key].shape or not np.isfinite(jac).all():
+                    raise ValueError('finite propagation sensitivity of the required shape needed')
+                pair[key] = pair[key]+jac
     path = pair['code_m'].ravel()
     # Constant code bias is absent from carrier increments.
     code = path+np.tile(arc['basis']@beta,len(arc['tags']))
@@ -74,7 +87,7 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
     curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
     blocks = []
     for arc,local in zip(arcs,locals_scaled,strict=True):
-        value,pair = model(curve,arc,local,physical[6:],epoch)
+        value,pair = model(curve,arc,local,physical[6:],epoch,derivatives=True)
         residual = solve_triangular(arc['chol'],value-arc['observed'],lower=True)
         count = arc['codes'].size
         jac = np.zeros((len(value),len(local)))

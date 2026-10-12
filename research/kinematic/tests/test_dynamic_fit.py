@@ -26,13 +26,27 @@ def toy():
     return arcs,state,bias
 
 
-def test_noiseless_fit_recovers_shared_state_and_free_code_bias():
+def capture_snapshot_branches(monkeypatch):
+    found = []
+    original = solver.solve
+    def recording(*args,**kwargs):
+        result = original(*args,**kwargs)
+        found.extend(range(len(result['branches'])))
+        return result
+    monkeypatch.setattr(solver,'solve',recording)
+    return found
+
+
+def test_noiseless_fit_recovers_shared_state_and_free_code_bias(monkeypatch):
     arcs,state,bias = toy()
+    found = capture_snapshot_branches(monkeypatch)
     fitted = solver.fit(arcs)
-    # Snapshot multilateration also finds two interior-Earth roots. They cannot
-    # be propagated, and their failure must keep the branch search incomplete.
+    # Numerical root counts differ across LAPACK/platform builds. Every root
+    # actually returned must appear exactly once as a candidate or failure.
     assert fitted['status']=='BRANCH_SEARCH_INCOMPLETE',fitted
-    assert len(fitted['branch_failures'])==2
+    retained = [b['branch'] for b in fitted['branches']+fitted['branch_failures']]
+    assert sorted(retained)==found
+    assert fitted['branch_failures']
     assert all('exterior-Earth' in f['reason'] for f in fitted['branch_failures'])
     assert fitted['state_ecef_m_m_s'][:3]==pytest.approx(state[:3],abs=.1)
     assert fitted['state_ecef_m_m_s'][3:]==pytest.approx(state[3:],abs=1e-4)
@@ -51,6 +65,24 @@ def test_constant_code_bias_does_not_enter_carrier_increments():
     changed,_ = solver.model(curve,a,local,np.arange(5)*100.,36060.)
     assert changed[a['codes'].size:]==pytest.approx(zero[a['codes'].size:],abs=0)
     assert (changed-zero)[:a['codes'].size].reshape(3,6)==pytest.approx(np.tile(basis@(np.arange(5)*100.),(3,1)),abs=1e-8)
+
+
+def test_current_propagation_enters_both_code_and_interval_phase():
+    arcs,state,_ = toy()
+    prepared,_,_ = solver.prepare(arcs,True)
+    a = prepared[0]
+    curve = dynamics.Trajectory(state,[-100,1900])
+    local = np.r_[70000.,.1,a['clocks'].ravel(),np.zeros(3*a['n'])]/a['local_scale']
+    vacuum,_ = solver.model(curve,a,local,np.zeros(5),36060.)
+    delay = np.tile(np.array([1.,3.,5.])[:,None],(1,a['n']))
+    def propagation(pair,xyz,epoch,*,derivatives=False):
+        return {'delay_m':delay}
+    a['propagation']=propagation
+    corrected,_ = solver.model(curve,a,local,np.zeros(5),36060.)
+    count = a['codes'].size
+    np.testing.assert_allclose((corrected-vacuum)[:count],delay.ravel(),atol=1e-8,rtol=0)
+    np.testing.assert_allclose((corrected-vacuum)[count:count+len(a['difference'])],a['difference']@delay.ravel(),atol=1e-9,rtol=0)
+    np.testing.assert_array_equal(corrected[count+len(a['difference']):],vacuum[count+len(a['difference']):])
 
 
 def test_rejected_calibration_stops_before_target_decoding():
@@ -86,6 +118,7 @@ def test_shared_fit_refuses_reused_training_endpoints_and_bad_covariance():
 
 def test_failed_numerical_branches_are_retained_without_fallback(monkeypatch):
     arcs,_,_ = toy()
+    found = capture_snapshot_branches(monkeypatch)
     def fail(*args):
         raise ValueError('synthetic shared design failure')
     monkeypatch.setattr(solver,'linearize',fail)
@@ -94,4 +127,4 @@ def test_failed_numerical_branches_are_retained_without_fallback(monkeypatch):
     assert fitted['candidate_count']==0
     assert fitted['branch_failures']
     assert any(f['reason']=='synthetic shared design failure' for f in fitted['branch_failures'])
-    assert len(fitted['branch_failures'])==3
+    assert sorted(f['branch'] for f in fitted['branch_failures'])==found

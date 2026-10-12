@@ -48,6 +48,10 @@ oltre tutti i dati usati peggiora da 2,108 a 2,334 m. La ricerca dei rami resta
 incompleta per un ramo iniziale non propagabile. Con fase, il codice peggiora
 e il modello e rifiutato dai pesi originali (p circa 2e-14), pur migliorando
 alcune previsioni fase. Tutti i fallimenti numerici precedenti sono conservati.
+La review ha rilevato una dipendenza dalle correzioni di un fit storico:
+i risultati v1-v3 non sostengono piu la dichiarazione di indipendenza dalla
+geometria precedente. Il risultato corrente v4 ricalcola VMF3 dentro il fit
+e i clock dai riferimenti, senza usare quelle correzioni; gli esiti restano tali.
 
 S2 resta aperta: residui migliori non dimostrano accuratezza della posizione.
 La prossima domanda fisica e localizzare l'incompatibilita degli incrementi

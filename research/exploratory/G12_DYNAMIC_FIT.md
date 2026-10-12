@@ -2,6 +2,13 @@
 
 ## Result and decision
 
+**Current evidence: [v4](results/g12_dynamic_fit_v4.json), after PR #221 review.**
+The earlier v1–v3 calculations used historical RF-fitted propagation in
+preprocessing. No known target orbit entered them, but their claim of no prior
+target-state dependence was too broad. Those bytes remain historical diagnostic
+results and are withdrawn as support for independence from earlier fitted
+geometry. v4 recomputes propagation within the new fit and records this correction.
+
 **The shared RF fit is implemented and improves some excluded predictions; S2
 remains open.** It estimates a common position/velocity and free constant station
 code contrasts from real observations, without a target orbit or previously
@@ -18,8 +25,8 @@ Most exclusions are interpolation gaps inside the fitted time span. The final
 phase did not enter this fit. These observations do not establish position
 accuracy, prospective confirmation or general forecasting ability.
 
-Adding phase gives a converged but **MODEL_REJECTED** fit: chi-square 352.582
-on 173 residual degrees of freedom, p = 2.28e-14 under the historical weights.
+Adding phase gives a converged but **MODEL_REJECTED** fit: chi-square 352.563
+on 173 residual degrees of freedom, p = 2.29e-14 under the historical weights.
 Excluded phase-rate RMS improves from 0.02069 to 0.00808 m/s, but code RMS
 worsens from 0.943 to 1.111 m. Improving one observable cannot override the
 rejection or erase the worsening of another.
@@ -81,12 +88,18 @@ from endpoint paths, not instantaneous Doppler. The code epoch is 10:01 GPST;
 the phase epoch is 10:04 GPST. State vectors at these different epochs cannot
 be subtracted directly as a model disagreement.
 
-Training retains the old VMF3 corrections derived from each training-only
-provisional RF code geometry. These are fixed preprocessing, not an orbit prior.
-Excluded VMF3 paths use the newly fitted geometry/receiver clocks, including
-fitted ground corrections, with the original 10-degree mask. Predictions for
+Training now consumes raw codes and phase increments. Clock means are rebuilt
+from the admitted reference-only reports. Historical target-state, propagation,
+elevation and clock-prior arrays are not used numerically. The old fit statuses
+still determine the explicitly exposed comparison cohort; this is not blind
+selection. VMF3 is recomputed at the current shared trajectory and fitted
+receiver clocks/ground at each optimizer evaluation, with its sensitivities
+included in the joint Jacobian. Excluded paths use the same propagation function
+at the fitted geometry and original 10-degree mask. Predictions for
 all four variants are fixed and hashed before scoring any excluded values.
 No future observation determines a propagation correction or light time.
+This remains the declared additive delay approximation on geometric vacuum
+light time, not a complete radiative propagation model or physical error budget.
 
 Weights remain 20 m code sigma, 0.02 m phase-endpoint sigma, 2 m receiver-clock
 offset sigma, 0.01 m/s receiver-clock slope sigma and 0.5 m ground-coordinate
@@ -121,7 +134,7 @@ on the same receiver/time pairs.
 |---|---:|---:|
 | Code, central | 2.297 / 2.108 | 0.02307 / 0.12194 |
 | Code, central + J2 | 2.334 / 2.108 | 0.02444 / 0.12194 |
-| Code + phase, central | 1.843 / 1.317 | 0.00675 / 0.00643 |
+| Code + phase, central | 1.844 / 1.317 | 0.00675 / 0.00643 |
 | Code + phase, central + J2 | 1.746 / 1.317 | 0.00682 / 0.00643 |
 
 Each fit retains one initial multilateration branch inside Earth that cannot be
@@ -132,7 +145,7 @@ prevents an accepted outcome. The very small code cost relative to the assumed
 20 m sigma is not permission to reduce that historical floor.
 
 For the J2 phase fit, the whitened cost splits into code **0.254**, phase
-**351.892**, independent reference-clock measurements **0.435**, and ground
+**351.873**, independent reference-clock measurements **0.435**, and ground
 coordinates **0.000267**. Almost all incompatibility lies in the phase block
 of this declared model. That decomposition localizes the diagnostic, but does
 not identify its physical cause or establish that the clock transfer is correct.
@@ -164,6 +177,17 @@ differences of already-differenced large ranges. Final proposed joint steps are
 below 1.5e-6 in the fixed whitened-data metric; the numerical tolerance is 1e-4.
 Weights, cohorts, masks, constant-bias model and p = 0.01 residual threshold stay
 unchanged. All original output bytes and their producer versions remain in Git.
+
+v4 removes the historical propagation dependency identified in review and
+includes the atmospheric state, receiver-clock and ground sensitivities. These
+differentiate the small delay first, then chain through the current geometric
+light-time derivatives; no historical fitted state enters that calculation.
+All four fits converge with final joint steps below 1.7e-6, using the same
+numerical tolerance. The residual rejection and forecast worsening persist.
+Tests poison cached propagation, elevations and clock priors as well as old
+states and excluded RF. CI branch-retention assertions check every actually
+returned root exactly once, rather than a platform-dependent root count;
+state/bias accuracy tolerances and failure semantics are unchanged.
 
 ## Reproduction and checks
 

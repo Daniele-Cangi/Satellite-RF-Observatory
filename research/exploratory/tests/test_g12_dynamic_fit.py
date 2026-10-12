@@ -51,6 +51,7 @@ def test_training_excludes_all_future_values_and_historical_target_states():
                 if (s,r['time_s']) in excluded:
                     r['code_m']=r['phase_m']=Forbidden()
         for c in cases:
+            c['propagation_m']=c['elevation_deg']=c['clock_prior']=Forbidden()
             for f in [c['provisional_code_fit'],*c['fits'].values()]:
                 f['state']=Forbidden()
         actual = study.training_arcs(cases,poisoned,data['positions'],data['baseline'],data['clock'],mode)
@@ -79,9 +80,15 @@ def test_unavailable_fit_retains_every_prediction_slot():
     assert summary['ALL']['pair_count']==0
 
 
-def test_real_fit_retains_rejections_forecast_worsening_and_replayable_scores():
+@pytest.mark.parametrize('version',[3,4])
+def test_stored_fit_retains_rejections_forecast_worsening_and_replayable_scores(version):
     data = inputs()
-    report = json.loads((study.BASE/'results/g12_dynamic_fit_v3.json').read_bytes())
+    report = json.loads((study.BASE/f'results/g12_dynamic_fit_v{version}.json').read_bytes())
+    if version==4:
+        assert not report['historical_fit_geometry_used']
+        assert 'current shared trial geometry' in report['training_propagation']
+        assert report['superseded_independence_claim']['reports']==[
+            'g12_dynamic_fit_v1.json','g12_dynamic_fit_v2.json','g12_dynamic_fit_v3.json']
     assert not any(report[k] for k in ['target_orbit_used','oracle_error_used','prior_target_state_used',
                                        'physical_covariance_qualified','production_floors_changed','new_confirmation'])
     assert report['historical_code_floor_m']==20. and report['target_elevation_mask_deg']==10.
@@ -113,3 +120,36 @@ def test_real_fit_retains_rejections_forecast_worsening_and_replayable_scores():
             v = first['variants']['code_phase_'+force]
             assert v['fit']['status']=='NUMERICAL_FAILURE'
             assert v['summary']['window_status_counts']=={'UNSCORED':8}
+
+
+class SyntheticWeather:
+    """Invented smooth correction depending on elevation, ground and UTC."""
+    def evaluate(self,mjd,latitude,longitude,height,elevation):
+        mapping = 1/np.sin(np.deg2rad(elevation))
+        return mapping,mapping,2.3+(mjd-61288)*.1+height/1e5+latitude*.001,.1+longitude*.00005
+
+
+def test_current_geometry_propagation_derivatives_match_direct_perturbations():
+    from research.kinematic import orbital_dynamics as dynamics
+    from research.kinematic.synthetic import receiver_positions
+    state = np.array([26e6,2e6,4e6,-250.,1800.,500.])
+    xyz = receiver_positions()[:5]
+    clocks = np.column_stack([np.arange(5)*100.,np.arange(5)*.001])
+    callback = study.propagation_model(SyntheticWeather(),list('ABCDE'))
+    def evaluate(seed,ground,receiver,derivatives=False):
+        curve = dynamics.Trajectory(seed,[-100,1000],sensitivities=derivatives)
+        pair = dynamics.predict_observations(curve,600.,study.TAGS,ground,receiver,[70000.,12.])
+        return callback(pair,ground,36060.,derivatives=derivatives)
+    actual = evaluate(state,xyz,clocks,True)
+    for k,h in enumerate([100.,100.,100.,.01,.01,.01]):
+        delta = np.eye(6)[k]*h
+        expected = (evaluate(state+delta,xyz,clocks)['delay_m']-evaluate(state-delta,xyz,clocks)['delay_m'])/(2*h)
+        np.testing.assert_allclose(actual['initial_state_derivative'][...,k],expected,rtol=1e-4,atol=1e-10)
+    for j in range(5):
+        for k in range(3):
+            delta = np.zeros_like(xyz); delta[j,k]=1.
+            expected = (evaluate(state,xyz+delta,clocks)['delay_m']-evaluate(state,xyz-delta,clocks)['delay_m'])[:,j]/2.
+            np.testing.assert_allclose(actual['station_derivative'][:,j,k],expected,rtol=1e-4,atol=1e-10)
+        delta = np.zeros_like(clocks); delta[j,0]=10.
+        expected = (evaluate(state,xyz,clocks+delta)['delay_m']-evaluate(state,xyz,clocks-delta)['delay_m'])[:,j]/20.
+        np.testing.assert_allclose(actual['receiver_clock_derivative'][:,j],expected,rtol=1e-2,atol=1e-12)

@@ -140,14 +140,19 @@ def predict_observations(trajectory, endpoint_s, tags_s, stations, clocks, satel
     result = {'code_m':rho+clock_r-clock[0]-clock[1]*(transmit-endpoint_s),
         'receive_s':receive,'transmit_s':transmit,'light_time_s':tau,
         'receiver_clock_derivative':1-(radial-clock[1]*(1-radial/C))/C,
-        'station_derivative':-(1+clock[1]/C)*unit/denominator[...,None]}
+        'station_derivative':-(1+clock[1]/C)*unit/denominator[...,None],
+        'emission_position_m':rotated,'emission_velocity_m_s':velocity,
+        'unit_ray':unit,'light_time_denominator':denominator,'range_receive_rate_m_s':radial}
     if getattr(trajectory,'sensitivities',False):
         # Partial state sensitivity at fixed emission time, then implicit light
         # time/clock differentiation. Never differentiate small phase values by
         # subtracting two already-differenced ~25 Mm paths.
         stm = trajectory.state_jacobian(transmit)[...,:3,:]
         rotated_stm = np.moveaxis(rotate_z(np.moveaxis(stm,-1,-2),-OMEGA*tau[...,None]),-2,-1)
-        result['initial_state_derivative'] = (1+clock[1]/C)*np.einsum('...i,...ij->...j',unit,rotated_stm)/denominator[...,None]
+        range_derivative = np.einsum('...i,...ij->...j',unit,rotated_stm)/denominator[...,None]
+        result['initial_state_derivative'] = (1+clock[1]/C)*range_derivative
+        drift = velocity+spin
+        result['emission_initial_state_derivative'] = rotated_stm-drift[...,None]*range_derivative[...,None,:]/C
     return result
 
 
