@@ -75,6 +75,18 @@ bilancio fisico qualificato. S2 resta aperta: prossimo controllo utile, errore
 assoluto e incertezza su riferimenti reali esclusi dalla propria calibrazione.
 Nessun risultato storico o floor viene modificato.
 
+Il [controllo degli stati sui riferimenti](../research/exploratory/REFERENCE_STATE_VALIDATION.md)
+ricostruisce ciascun candidato escludendo i suoi prodotti dalla propria
+calibrazione e dal fit. Su 22 candidati, quattro producono traiettorie con
+scarti CODE di 66-210 m RMS in posizione e 0,013-0,028 m/s in velocita.
+Restano 17 casi senza archi sufficienti e il fallimento numerico G11: la
+traiettoria iniziale scende a 9,996 gradi contro la maschera di 10. Non si
+ripiega sul precedente sottoinsieme di dati. Entrambe le esecuzioni restano
+conservate, inclusi i peggioramenti dopo una correzione nell'ordine della
+maschera dei riferimenti. Le incertezze formali sono ancora ampie e i prodotti
+CODE condivisi non sono verita indipendente. S2 resta aperta: migliorare
+inizializzazione RF/rami e qualificare il bilancio fisico prima di S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
