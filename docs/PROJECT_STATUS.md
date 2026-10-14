@@ -1,4 +1,4 @@
-# Stato del progetto — 14 ottobre 2026
+# Stato del progetto — 15 ottobre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -77,15 +77,18 @@ Nessun risultato storico o floor viene modificato.
 
 Il [controllo degli stati sui riferimenti](../research/exploratory/REFERENCE_STATE_VALIDATION.md)
 ricostruisce ciascun candidato escludendo i suoi prodotti dalla propria
-calibrazione e dal fit. Su 22 candidati, quattro producono traiettorie con
-scarti CODE di 66-210 m RMS in posizione e 0,013-0,028 m/s in velocita.
-Restano 17 casi senza archi sufficienti e il fallimento numerico G11: la
-traiettoria iniziale scende a 9,996 gradi contro la maschera di 10. Non si
-ripiega sul precedente sottoinsieme di dati. Entrambe le esecuzioni restano
-conservate, inclusi i peggioramenti dopo una correzione nell'ordine della
-maschera dei riferimenti. Le incertezze formali sono ancora ampie e i prodotti
-CODE condivisi non sono verita indipendente. S2 resta aperta: migliorare
-inizializzazione RF/rami e qualificare il bilancio fisico prima di S3.
+calibrazione e dal fit. La v3 recupera G11 sui nove archi originali con una
+velocita iniziale riferita all'epoca finale, ricavata dai soli tre campioni RF
+di training. Non cambia maschera, floor, pesi, modello o criterio finale.
+G11 ha uno scarto CODE di 88,51 m RMS in posizione e 0,0130 m/s in velocita,
+con asse formale condizionale 1-sigma di 4,12 km non qualificato.
+Le traiettorie disponibili passano da quattro a cinque su 22 candidati;
+restano 17 casi senza archi sufficienti e un ramo interno non propagabile
+per ciascun fit. Il fallimento G11 a 9,996 gradi resta nella v2 originale.
+Le preparazioni e tutte le 440 finestre restano identiche alla v2, inclusi
+i casi di geometria RF ambigua. Le incertezze formali sono ancora ampie e
+CODE non e verita indipendente. S2 resta aperta: qualificare il bilancio
+fisico congiunto di clock, bias e propagazione prima di S3.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
