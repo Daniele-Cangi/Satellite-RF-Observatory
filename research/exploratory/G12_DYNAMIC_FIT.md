@@ -31,10 +31,13 @@ Excluded phase-rate RMS improves from 0.02069 to 0.00808 m/s, but code RMS
 worsens from 0.943 to 1.111 m. Improving one observable cannot override the
 rejection or erase the worsening of another.
 
-The next physical question is the source of the incompatible phase increments:
-separate clock-transfer/propagation and trajectory-model contributions using
-independent diagnostics at the same times. Establish their uncertainty budgets
-before imposing additional constraints. Nominal J2 alone does not resolve this
+The [same-time phase diagnostic](G12_PHASE_DIAGNOSTIC.md) now localizes this
+incompatibility: reference-derived interval clock variation matches much of
+the station-dependent temporal contrast; the remaining component is mostly
+common to stations. Smooth clock-trend extrapolation worsens 28/40 reference
+forecasts. The next correction concerns the interval-wise clock observation
+model and its joint uncertainty, with a free common clock/path component;
+this is not proof of a clock-only cause. Nominal J2 alone does not resolve the
 rejection. Do not lower weights, change masks, promote the result to production
 or begin S3 on this evidence.
 
