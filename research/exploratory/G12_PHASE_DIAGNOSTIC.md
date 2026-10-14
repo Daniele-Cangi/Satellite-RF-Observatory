@@ -2,6 +2,10 @@
 
 ## Decision
 
+The follow-up [interval-clock refit](G12_INTERVAL_CLOCKS.md) is now available.
+It preserves this diagnostic and the original rejection; improved code
+predictions do not establish position accuracy or close S2.
+
 **The reference increments expose a clock-shape mismatch that the single
 receiver-clock slope per arc cannot represent.** Correct the clock observation
 model before adding orbital forces. This is a supported development direction,

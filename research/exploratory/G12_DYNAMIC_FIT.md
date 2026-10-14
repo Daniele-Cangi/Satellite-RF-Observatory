@@ -2,6 +2,10 @@
 
 ## Result and decision
 
+The subsequent [interval-clock study](G12_INTERVAL_CLOCKS.md) extends the active
+solver and compares the same phase cohort. This report and v4 outcomes remain
+historical evidence; their producer versions remain available in Git.
+
 **Current evidence: [v4](results/g12_dynamic_fit_v4.json), after PR #221 review.**
 The earlier v1–v3 calculations used historical RF-fitted propagation in
 preprocessing. No known target orbit entered them, but their claim of no prior

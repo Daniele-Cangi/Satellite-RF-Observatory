@@ -1,6 +1,9 @@
 """Physical contrast, missing-data and calibration boundaries for G12 replay."""
 from copy import deepcopy
 import json
+from pathlib import Path
+import subprocess
+from types import ModuleType
 
 import numpy as np
 import pytest
@@ -92,7 +95,18 @@ def test_reference_predictions_ignore_future_and_failures_are_retained():
     assert study.reference_forecast((estimates, {}), 'S', 60.)['status'] == 'TRAINING_REFERENCE_UNAVAILABLE'
 
 
-def test_real_replay_preserves_rejection_covariance_and_excludes_target_future():
+def test_real_replay_preserves_rejection_covariance_and_excludes_target_future(tmp_path, monkeypatch):
+    # v4 binds its producer bytes. Keep replaying that exact historical solver
+    # after active-code refactors, using Git rather than changing the receipt.
+    root = Path(__file__).resolve().parents[3]
+    source = subprocess.check_output(['git', 'show', 'bea6819:research/kinematic/dynamic_fit.py'], cwd=root)
+    path = tmp_path/'dynamic_fit.py'
+    path.write_bytes(source)
+    archived = ModuleType('research.kinematic._v4_dynamic_fit')
+    archived.__file__, archived.__package__ = str(path), 'research.kinematic'
+    exec(compile(source, str(path), 'exec'), archived.__dict__)
+    monkeypatch.setattr(study, 'dynamic_fit', archived)
+    monkeypatch.setattr(shared, 'dynamic_fit', archived)
     raw = {k: (study.BASE/p).read_bytes() for k, p in study.FILES.items()}
     data = {k: json.loads(v) for k, v in raw.items()}
     selection = data['fit']['variants']['code_phase_central_j2']['cohort']
