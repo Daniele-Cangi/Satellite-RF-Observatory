@@ -106,6 +106,12 @@ projections.
 
 ## Missing physical information and next check
 
+The [reference-state diagnostic](REFERENCE_STATE_VALIDATION.md) now evaluates
+this model on all 22 original candidates with per-fold exclusion. Four produce
+trajectories with 66–210 m RMS discrepancies against the shared CODE reference;
+other support/numerical failures remain visible. This is conditional evidence,
+not physical covariance qualification or a new G12 confirmation.
+
 This removes a demonstrable model restriction without adding physical data.
 Qualification still needs an independently supported joint clock/propagation
 error budget and absolute position/motion evaluation with the target orbit

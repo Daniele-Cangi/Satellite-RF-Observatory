@@ -147,7 +147,10 @@ def calibration_environment(data, excluded, weather):
     def offset(s, t):
         try:
             values = codes(s, t)
-            selected = sorted(q for q, v in values.items() if model(s, t, q, v, 0.)[1] >= 10.)
+            # Geometric admission precedes atmospheric evaluation. Below-mask
+            # references need not lie in VMF3's supported elevation domain.
+            selected = sorted(q for q, v in values.items()
+                              if provider.model(q, v, t, xyz(s, t), 0.)[1] >= 10.)
             # Same reference residual, subset, rank and ground-coordinate checks
             # as the existing calibrator; qualify this single epoch explicitly.
             context = SimpleNamespace(target=excluded, samples=1)
@@ -170,11 +173,14 @@ def calibration_environment(data, excluded, weather):
             pair = [rows[s].get((q, when)) for when in (t-30, t)]
             if not all(r is not None and r['status'] == 'AVAILABLE' for r in pair) or q not in values or q not in previous:
                 continue
-            a, ea = model(s, t-30, q, previous[q], 0.)
-            b, eb = model(s, t, q, values[q], 0.)
-            if min(ea, eb) >= 10.:
-                estimates.append({'reference': q, 'phase_minus_model_rate_m_s':
-                    ((float(pair[1]['phase_m'])-b)-(float(pair[0]['phase_m'])-a))/30.})
+            elevations = [provider.model(q, v, when, xyz(s, when), 0.)[1]
+                          for when, v in ((t-30, previous[q]), (t, values[q]))]
+            if min(elevations) < 10.:
+                continue
+            a, _ = model(s, t-30, q, previous[q], 0.)
+            b, _ = model(s, t, q, values[q], 0.)
+            estimates.append({'reference': q, 'phase_minus_model_rate_m_s':
+                ((float(pair[1]['phase_m'])-b)-(float(pair[0]['phase_m'])-a))/30.})
         return clock_rate(estimates, excluded=excluded, estimator='median')
     return offset, rate, xyz
 
@@ -375,10 +381,10 @@ def run():
         except (ValueError, KeyError, np.linalg.LinAlgError) as error:
             result['state_evaluation'] = {'status': 'ORACLE_UNAVAILABLE', 'reason': str(error), 'rows': []}
     modules = [Path(m.__file__) for m in [interval, interval.shared, dynamic_fit, dynamics, interval.clock_observations,
-        precise, attitude, bias, conventions, sp3, day.atmosphere, interval.shared.meteo]]
+        precise, attitude, bias, conventions, sp3, day, day.atmosphere, interval.shared.meteo]]
     modules += [Path(inspect.getmodule(f).__file__) for f in [clock_rate, calibrate_fixed, solve, troposphere]]
     return native({'schema': 'exposed-reference-state-validation-v1',
-        'scope': 'All 22 original references; exposed RF-only geometry selection and leave-one-out recalibration. Candidate products excluded from numeric calibration/fitting; CODE COM/IF antenna-center trajectories opened only after all fits. Shared upstream products and conditional covariance prevent independent truth or coverage claims.',
+        'scope': 'All 22 original references; exposed RF-only geometry selection and leave-one-out recalibration. Each fold excludes its own candidate products from numeric calibration/fitting; the same satellite is an allowed reference in other folds. Dedicated CODE COM/IF antenna-center scoring oracles are loaded after all fits. This is not process-wide value blindness; shared upstream products and conditional covariance prevent independent truth or coverage claims.',
         'candidate_orbit_used_in_fit': False, 'candidate_clock_used_in_fit': False,
         'candidate_bias_or_attitude_used_in_fit': False, 'g12_state_accessed': False,
         'oracle_opened_after_all_fits': True, 'new_confirmation': False, 'physical_covariance_qualified': False,

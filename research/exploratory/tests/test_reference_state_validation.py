@@ -1,5 +1,9 @@
 """Leave-one-out physical boundaries and after-fit state evaluation."""
 from copy import deepcopy
+import hashlib
+import json
+from pathlib import Path
+import subprocess
 
 import numpy as np
 import pytest
@@ -119,6 +123,40 @@ def test_reference_rejection_precedes_candidate_numeric_access(monkeypatch):
     assert not arcs and windows[0]['status'] == 'REFERENCE_CALIBRATION_REJECTED'
 
 
+def test_reference_mask_precedes_weather_and_phase_numeric_access(monkeypatch):
+    refs = ['G05', 'G06', 'G07', 'G08', 'G09', 'G10']
+    times = [36000., 36030., 36060.]
+    data = {'plan': {'references': refs, 'date_gpst': '2026-09-05'},
+        'observations': {'A': [{'time_s': t, 'if_code_m': {q: 1000. for q in refs}} for t in times]},
+        'positions': {'A': [[6378137., 0., 0.]]*3},
+        'phase': {'stations': {'A': {'rows': [
+            {'reference': q, 'time_s': t, 'status': 'AVAILABLE',
+             'phase_m': Forbidden() if q in ('G05', 'G06') else 1000.+.001*(t-36000.)}
+            for q in refs for t in times]}}}}
+    class Provider:
+        def model(self, q, code, t, station, clock):
+            assert q != 'G05'
+            return 1000., 2. if q == 'G06' else 30.
+    corrections = {(t, q): {'if_code_change_m': 0.} for t in times for q in refs if q != 'G05'}
+    monkeypatch.setattr(study, 'subset_products', lambda *args: (Provider(), corrections))
+    seen = []
+    def components(provider, weather, mjd, q, code, t, station, clock):
+        assert q not in ('G05', 'G06')
+        seen.append(q)
+        return {'legacy_baseline': 0., 'vmf3_full': 0.}, {}
+    monkeypatch.setattr(study.day.atmosphere, 'components', components)
+    def qualify(observations, station, context, references, model):
+        assert references[36060.] == ['G07', 'G08', 'G09', 'G10']
+        return {'status': 'CALIBRATION_QUALIFIED', 'epochs': [{'clock_m': 0.}]}
+    monkeypatch.setattr(study, 'calibrate_fixed', qualify)
+    offset, rate, _ = study.calibration_environment(data, 'G05', None)
+    assert offset('A', 36060.)['status'] == 'CALIBRATION_QUALIFIED'
+    estimate = rate('A', 36060.)
+    assert estimate['status'] == 'ESTIMATED' and estimate['reference_count'] == 4
+    assert estimate['rate_m_s'] == pytest.approx(.001)
+    assert seen
+
+
 def test_ambiguous_rf_geometry_retains_both_branches_without_orbit_tiebreak(monkeypatch):
     monkeypatch.setattr(study, 'solve', lambda *args, **kwargs: {'branches': [
         {'q': [26e6, 0., 0., 0.]}, {'q': [-26e6, 0., 0., 0.]}]})
@@ -195,3 +233,63 @@ def test_oracles_open_after_all_fits_and_missing_oracle_is_retained(monkeypatch)
     assert result['candidates']['G05']['state_evaluation']['status'] == 'ORACLE_UNAVAILABLE'
     assert result['candidates']['G06']['state_evaluation']['status'] == 'EVALUATED'
     assert result['fit_status_counts'] == {'MODEL_REJECTED': 2}
+
+
+def test_initial_preparation_failures_and_original_producer_are_preserved():
+    raw = (study.BASE/'results/reference_state_validation_v1.json').read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == '6c3762da503a7d8cee489c8e8b3d0ed2d1d8e89c0aefed9f366c620439f90206'
+    report = json.loads(raw)
+    name = 'research/exploratory/reference_state_validation.py'
+    source = subprocess.check_output(['git', 'show', '6e4042d:'+name], cwd=study.BASE.parents[1])
+    assert hashlib.sha256(source).hexdigest() == report['source_sha256'][name]
+    assert report['fit_status_counts'] == {'INSUFFICIENT_PREPARED_ARCS': 17, 'BRANCH_SEARCH_INCOMPLETE': 5}
+    failures = [w for result in report['candidates'].values() for w in result['windows']
+                if w['status'] == 'PREPARATION_FAILED']
+    assert len(failures) == 33
+    assert {w['reason'] for w in failures} == {'outside bounded atmosphere domain'}
+
+
+def test_corrected_real_result_replays_rf_and_state_errors_without_refitting():
+    raw, data = study.read_inputs()
+    root = study.BASE.parents[1]
+    result = json.loads((study.BASE/'results/reference_state_validation_v2.json').read_bytes())
+    assert result['input_sha256'] == {k: hashlib.sha256(v).hexdigest() for k, v in raw.items()}
+    for path, wanted in result['source_sha256'].items():
+        assert hashlib.sha256((root/path).read_bytes()).hexdigest() == wanted
+    assert not any(result[k] for k in ['candidate_orbit_used_in_fit', 'candidate_clock_used_in_fit',
+        'candidate_bias_or_attitude_used_in_fit', 'g12_state_accessed', 'new_confirmation',
+        'physical_covariance_qualified', 'production_floors_changed'])
+    assert set(result['candidates']) == set(data['plan']['references'])
+    assert result['fit_status_counts'] == {'INSUFFICIENT_PREPARED_ARCS': 17,
+                                         'BRANCH_SEARCH_INCOMPLETE': 4, 'NUMERICAL_FAILURE': 1}
+    evaluated_count = 0
+    for candidate, record in result['candidates'].items():
+        assert len(record['windows']) == 20
+        assert [w['start_gpst_s'] for w in record['windows']] == list(range(36000, 39600, 180))
+        assert 'PREPARATION_FAILED' not in record['window_status_counts']
+        assert study.score_rf(data, candidate, record['rf_predictions']) == record['rf_evaluation']
+        fit = record['fit']
+        if 'state_ecef_m_m_s' not in fit:
+            assert record['state_evaluation']['status'] == 'FIT_UNAVAILABLE'
+            continue
+        assert fit['branch_failures'] and fit['residual_threshold_p'] == .01
+        # Reconstruct only evaluation epochs from retained preparation metadata;
+        # neither calibration nor fitting is repeated in CI.
+        arcs = [{'endpoint_gpst_s': w['start_gpst_s']+60} for w in record['windows'] if w['status'] == 'PREPARED']
+        replay = study.state_errors(fit, arcs, study.oracle(data, candidate))
+        expected = record['state_evaluation']
+        assert len(replay['rows']) == len(expected['rows'])
+        for a, b in zip(replay['rows'], expected['rows'], strict=True):
+            assert a['gpst_s'] == b['gpst_s'] and a['kind'] == b['kind'] and a['status'] == b['status']
+            assert a['position_error_m'] == pytest.approx(b['position_error_m'], abs=1e-4)
+            assert a['velocity_error_m_s'] == pytest.approx(b['velocity_error_m_s'], abs=1e-7)
+            assert a['position_inside_formal_95'] == b['position_inside_formal_95']
+            assert a['state_inside_formal_95'] == b['state_inside_formal_95']
+        assert replay['summary']['BEYOND_ALL_TRAINING']['count'] == 1
+        evaluated_count += len(replay['rows'])
+    assert evaluated_count == 108
+    # A worse terminal is preserved after fixing preparation, rather than
+    # substituting its earlier, smaller-cohort fit or relaxing the mask.
+    failed = result['candidates']['G11']['fit']
+    assert failed['status'] == 'NUMERICAL_FAILURE'
+    assert any('9.996 deg' in b['reason'] for b in failed['branch_failures'])
