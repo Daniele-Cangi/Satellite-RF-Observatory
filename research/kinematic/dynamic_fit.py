@@ -13,6 +13,7 @@ from . import orbital_dynamics as dynamics
 from .receiver_time import cholesky_covariance
 from .phase_rates import interval_matrix
 from .interval_fit import ACCEPTED_CALIBRATIONS
+from . import clock_observations
 
 STATE_SCALE = np.r_[np.full(3,1e7),np.full(3,1e3)]
 RTOL = 1e-10
@@ -35,8 +36,14 @@ def prepare(arcs, phase):
     for a in arcs:
         tags,xyz,clocks,codes = [np.asarray(a[k],float) for k in ['tags_s','stations_m','clock_mean','codes_m']]
         n = len(a['stations'])
+        ns = a.get('satellite_clock_count',2)
+        nc = clocks.shape[1] if clocks.ndim==2 else 0
+        clock_basis = np.asarray(a.get('receiver_clock_basis',np.column_stack([np.ones(len(tags)),tags])),float)
         if (not np.isfinite(a['endpoint_gpst_s']) or tags.ndim!=1 or len(tags)<3 or tags[-1]!=0 or np.any(np.diff(tags)<=0)
-                or len(set(a['stations']))!=n or n<5 or xyz.shape!=(n,3) or clocks.shape!=(n,2)
+                or len(set(a['stations']))!=n or n<5 or xyz.shape!=(n,3) or nc not in (2,3) or clocks.shape!=(n,nc)
+                or ns not in (2,3) or clock_basis.shape!=(len(tags),nc) or not np.isfinite(clock_basis).all()
+                or not np.array_equal(clock_basis[:,:2],np.column_stack([np.ones(len(tags)),tags]))
+                or nc==3 and ('receiver_clock_basis' not in a or clock_basis[-1,2]!=0)
                 or codes.shape!=(len(tags),n) or len(a['calibration_statuses'])!=n
                 or not all(np.isfinite(x).all() for x in [tags,xyz,clocks,codes])):
             raise ValueError('complete finite dynamic RF arc required')
@@ -50,20 +57,22 @@ def prepare(arcs, phase):
             raise ValueError('finite interval phase rates required')
         observed = np.r_[codes.ravel(),rates.ravel(),clocks.ravel(),np.zeros(3*n)]
         chol = cholesky_covariance(a['covariance'],len(observed))
-        local_scale = np.r_[1e5,10.,np.tile([1000.,1.],n),np.full(3*n,1e5)]
+        local_scale = np.r_[[1e5,10.,.1][:ns],np.tile([1000.,1.,1.][:nc],n),np.full(3*n,1e5)]
         prepared.append({**a,'tags':tags,'xyz':xyz,'clocks':clocks,'codes':codes,'observed':observed,
             'chol':chol,'difference':difference,'local_scale':local_scale,
-            'basis':basis[[names.index(s) for s in a['stations']]],'n':n,'phase':phase})
+            'basis':basis[[names.index(s) for s in a['stations']]],'n':n,'phase':phase,
+            'ns':ns,'nc':nc,'clock_basis':clock_basis})
     prepared.sort(key=lambda a:a['endpoint_gpst_s'])
     return prepared,names,basis
 
 
 def model(curve, arc, local, beta, epoch, *, derivatives=False):
-    n = arc['n']
+    n,ns,nc = arc['n'],arc['ns'],arc['nc']
     physical = local*arc['local_scale']
-    xyz = arc['xyz']+physical[2+2*n:].reshape(n,3)
-    pair = dynamics.predict_observations(curve,arc['endpoint_gpst_s']-epoch,arc['tags'],
-        xyz,physical[2:2+2*n].reshape(n,2),physical[:2])
+    xyz = arc['xyz']+physical[ns+nc*n:].reshape(n,3)
+    pair = clock_observations.predict(curve,arc['endpoint_gpst_s']-epoch,arc['tags'],
+        xyz,physical[ns:ns+nc*n].reshape(n,nc),physical[:ns],
+        arc['clock_basis'] if nc!=2 else None)
     if 'propagation' in arc:
         correction = arc['propagation'](pair,xyz,epoch,derivatives=derivatives)
         delay = np.asarray(correction['delay_m'],float)
@@ -79,7 +88,7 @@ def model(curve, arc, local, beta, epoch, *, derivatives=False):
     path = pair['code_m'].ravel()
     # Constant code bias is absent from carrier increments.
     code = path+np.tile(arc['basis']@beta,len(arc['tags']))
-    return np.r_[code,arc['difference']@path if arc['phase'] else [],physical[2:]],pair
+    return np.r_[code,arc['difference']@path if arc['phase'] else [],physical[ns:]],pair
 
 
 def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j2):
@@ -90,19 +99,18 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
         value,pair = model(curve,arc,local,physical[6:],epoch,derivatives=True)
         residual = solve_triangular(arc['chol'],value-arc['observed'],lower=True)
         count = arc['codes'].size
+        ns,nc = arc['ns'],arc['nc']
         jac = np.zeros((len(value),len(local)))
-        jac[:count,0] = -arc['local_scale'][0]
-        # Satellite slope is linear at its transmit GPST, independent of light time.
-        jac[:,1] = 0.
-        slope = -(pair['transmit_s']-(arc['endpoint_gpst_s']-epoch)).ravel()*arc['local_scale'][1]
-        jac[:count,1] = slope
+        tx = pair['transmit_s']-(arc['endpoint_gpst_s']-epoch)
+        jac[:count,:ns] = -clock_observations.satellite_basis(tx,ns).reshape(count,ns)*arc['local_scale'][:ns]
         row = np.arange(count)
         site = np.tile(np.arange(arc['n']),len(arc['tags']))
         rc = pair['receiver_clock_derivative'].ravel()
-        jac[row,2+2*site] = rc*arc['local_scale'][2+2*site]
-        jac[row,3+2*site] = rc*np.repeat(arc['tags'],arc['n'])*arc['local_scale'][3+2*site]
+        for k in range(nc):
+            col = ns+nc*site+k
+            jac[row,col] = rc*np.repeat(arc['clock_basis'][:,k],arc['n'])*arc['local_scale'][col]
         for k in range(3):
-            col = 2+2*arc['n']+3*site+k
+            col = ns+nc*arc['n']+3*site+k
             jac[row,col] = pair['station_derivative'][...,k].ravel()*arc['local_scale'][col]
         state = np.zeros((len(value),6))
         state[:count] = pair['initial_state_derivative'].reshape(count,6)*global_scale[:6]
@@ -113,7 +121,7 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
             state[count:stop] = arc['difference']@state[:count]
         else:
             stop = count
-        jac[stop:,2:] = np.diag(arc['local_scale'][2:])
+        jac[stop:,ns:] = np.diag(arc['local_scale'][ns:])
         bias = np.zeros((len(value),len(physical)-6))
         bias[:count] = np.tile(arc['basis'],(len(arc['tags']),1))*global_scale[6:]
         weighted = lambda x:solve_triangular(arc['chol'],x,lower=True)
@@ -155,17 +163,20 @@ def initial(arc, seed, all_arcs, global_scale, epoch, bounds, j2):
     q = np.asarray(seed)
     unit = q[:3]-arc['xyz']
     unit /= np.linalg.norm(unit,axis=1)[:,None]
-    rates = (arc['codes'][-1]-arc['codes'][-2])/(arc['tags'][-1]-arc['tags'][-2])-arc['clocks'][:,1]
+    measured_clock = arc['clock_basis']@arc['clocks'].T
+    clock_rate = (measured_clock[-1]-measured_clock[-2])/(arc['tags'][-1]-arc['tags'][-2])
+    rates = (arc['codes'][-1]-arc['codes'][-2])/(arc['tags'][-1]-arc['tags'][-2])-clock_rate
     velocity = np.linalg.lstsq(np.column_stack([unit,np.ones(len(unit))]),rates,rcond=None)[0][:3]
     physical = np.r_[q[:3],velocity,np.zeros(len(global_scale)-6)]
     curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
     locals_scaled = []
     for a in all_arcs:
-        local = np.r_[0.,0.,a['clocks'].ravel(),np.zeros(3*a['n'])]/a['local_scale']
+        ns = a['ns']
+        local = np.r_[np.zeros(ns),a['clocks'].ravel(),np.zeros(3*a['n'])]/a['local_scale']
         value,pair = model(curve,a,local,physical[6:],epoch)
         tx = (pair['transmit_s']-(a['endpoint_gpst_s']-epoch)).ravel()
-        clock = np.linalg.lstsq(np.column_stack([np.ones(len(tx)),tx]),value[:a['codes'].size]-a['codes'].ravel(),rcond=None)[0]
-        local[:2] = clock/a['local_scale'][:2]
+        clock = np.linalg.lstsq(clock_observations.satellite_basis(tx,ns),value[:a['codes'].size]-a['codes'].ravel(),rcond=None)[0]
+        local[:ns] = clock/a['local_scale'][:ns]
         locals_scaled.append(local)
     return physical/global_scale,locals_scaled
 
@@ -245,8 +256,8 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
             'stations':names,'bias_contrast_coefficients_m':best['physical'][6:],
             'station_code_bias_m':dict(zip(names,basis@best['physical'][6:],strict=True)),
             'arc_parameters':[{'endpoint_gpst_s':a['endpoint_gpst_s'],'stations':a['stations'],
-                'satellite_clock':p[:2],'receiver_clocks':p[2:2+2*a['n']].reshape(a['n'],2),
-                'station_corrections_m':p[2+2*a['n']:].reshape(a['n'],3)} for a,p in zip(prepared,best['locals'],strict=True)],
+                'satellite_clock':p[:a['ns']],'receiver_clocks':p[a['ns']:a['ns']+a['nc']*a['n']].reshape(a['n'],a['nc']),
+                'station_corrections_m':p[a['ns']+a['nc']*a['n']:].reshape(a['n'],3)} for a,p in zip(prepared,best['locals'],strict=True)],
             'conditional_global_covariance':best['covariance'],'weighted_residual_cost':best['cost'],
             'residual_dof':dof,'conditional_residual_p':p_value,'parameter_count':total_parameters,
             'scaled_condition':best['scaled_condition'],'branch_failures':failures,'branches':branches,

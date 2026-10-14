@@ -142,6 +142,9 @@ scientific ancestry with merge commits where receipts/tests require it; no
 force push or bypass. Deployment and messages to others need authorization.
 Git integration is not scientific admission.
 
+Use the installed SonarQube checks for new PR reviews. Do not automatically
+request additional Codex reviews unless the user asks for them.
+
 Use `gh` for GitHub; authenticated/network commands run outside the Windows
 sandbox. Sandbox DNS/socket errors do not prove expired tokens: verify with
 `gh auth status` outside it, never demand `gh auth login` from that error.

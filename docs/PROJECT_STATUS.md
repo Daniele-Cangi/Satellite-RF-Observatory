@@ -1,4 +1,4 @@
-# Stato del progetto — 11 ottobre 2026
+# Stato del progetto — 14 ottobre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -63,6 +63,17 @@ La prossima correzione riguarda gli incrementi clock per intervallo e la loro
 covarianza congiunta, lasciando libera la componente comune clock/percorso.
 Tutti i rifiuti e i risultati precedenti restano invariati; nessuna riduzione
 dei floor o modifica al solver di produzione.
+
+Il [fit con clock per intervallo](../research/exploratory/G12_INTERVAL_CLOCKS.md)
+usa gli stessi otto archi fase, senza orbita o stato precedente del bersaglio.
+Con J2 il codice escluso migliora rispetto a v4 da 1,111 a 0,882 m RMS, ma la
+fase peggiora da 8,076 a 8,358 mm/s. Il costo condizionale scende a 0,212 su
+165 gradi di liberta; non e prova di accuratezza. La scala formale debole della
+posizione cresce da 1,39 a 1,51 km e un ramo iniziale resta non propagabile.
+Le due ipotesi sulla covarianza clock, incluso un processo comune, non sono un
+bilancio fisico qualificato. S2 resta aperta: prossimo controllo utile, errore
+assoluto e incertezza su riferimenti reali esclusi dalla propria calibrazione.
+Nessun risultato storico o floor viene modificato.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
