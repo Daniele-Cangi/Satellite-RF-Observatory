@@ -258,8 +258,8 @@ def test_corrected_real_result_replays_rf_and_state_errors_without_refitting(ver
     for path, wanted in result['source_sha256'].items():
         # v2 retains its original interval-midpoint velocity initializer; the
         # active solver may evolve without rewriting that failed execution.
-        source = (subprocess.check_output(['git','show','9f61866:'+path],cwd=root)
-                  if version==2 else (root/path).read_bytes())
+        producer = '9f61866' if version==2 else 'ac902e5'
+        source = subprocess.check_output(['git','show',producer+':'+path],cwd=root)
         assert hashlib.sha256(source).hexdigest() == wanted
     assert not any(result[k] for k in ['candidate_orbit_used_in_fit', 'candidate_clock_used_in_fit',
         'candidate_bias_or_attitude_used_in_fit', 'g12_state_accessed', 'new_confirmation',

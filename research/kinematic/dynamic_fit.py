@@ -32,6 +32,9 @@ def prepare(arcs, phase):
     if len(names)<5:
         raise ValueError('at least five distinct stations required')
     basis = helmert(len(names),full=False).T
+    wet = ['wet_clock_response' in a for a in arcs]
+    if any(wet) and not all(wet):
+        raise ValueError('shared wet calibration response required for every arc')
     prepared,keys = [],set()
     for a in arcs:
         tags,xyz,clocks,codes = [np.asarray(a[k],float) for k in ['tags_s','stations_m','clock_mean','codes_m']]
@@ -57,11 +60,15 @@ def prepare(arcs, phase):
             raise ValueError('finite interval phase rates required')
         observed = np.r_[codes.ravel(),rates.ravel(),clocks.ravel(),np.zeros(3*n)]
         chol = cholesky_covariance(a['covariance'],len(observed))
+        response = np.asarray(a.get('wet_clock_response', np.zeros((n,nc))),float)
+        if response.shape!=(n,nc) or not np.isfinite(response).all() or wet[0] and 'propagation' not in a:
+            raise ValueError('finite station-wise wet clock response and propagation required')
         local_scale = np.r_[[1e5,10.,.1][:ns],np.tile([1000.,1.,1.][:nc],n),np.full(3*n,1e5)]
         prepared.append({**a,'tags':tags,'xyz':xyz,'clocks':clocks,'codes':codes,'observed':observed,
             'chol':chol,'difference':difference,'local_scale':local_scale,
             'basis':basis[[names.index(s) for s in a['stations']]],'n':n,'phase':phase,
-            'ns':ns,'nc':nc,'clock_basis':clock_basis})
+            'ns':ns,'nc':nc,'clock_basis':clock_basis,'wet':wet[0],
+            'wet_response':response,'station_indices':[names.index(s) for s in a['stations']]})
     prepared.sort(key=lambda a:a['endpoint_gpst_s'])
     return prepared,names,basis
 
@@ -73,8 +80,11 @@ def model(curve, arc, local, beta, epoch, *, derivatives=False):
     pair = clock_observations.predict(curve,arc['endpoint_gpst_s']-epoch,arc['tags'],
         xyz,physical[ns:ns+nc*n].reshape(n,nc),physical[:ns],
         arc['clock_basis'] if nc!=2 else None)
+    nb = arc['basis'].shape[1]
+    wet = np.asarray(beta[nb:])[arc['station_indices']] if arc['wet'] else None
     if 'propagation' in arc:
-        correction = arc['propagation'](pair,xyz,epoch,derivatives=derivatives)
+        options = {'wet_m':wet} if arc['wet'] else {}
+        correction = arc['propagation'](pair,xyz,epoch,derivatives=derivatives,**options)
         delay = np.asarray(correction['delay_m'],float)
         if delay.shape!=pair['code_m'].shape or not np.isfinite(delay).all():
             raise ValueError('finite propagation at the current fitted geometry required')
@@ -85,13 +95,24 @@ def model(curve, arc, local, beta, epoch, *, derivatives=False):
                 if jac.shape!=pair[key].shape or not np.isfinite(jac).all():
                     raise ValueError('finite propagation sensitivity of the required shape needed')
                 pair[key] = pair[key]+jac
+            if arc['wet']:
+                jac = np.asarray(correction['wet_derivative'],float)
+                if jac.shape!=delay.shape or not np.isfinite(jac).all():
+                    raise ValueError('finite wet-path derivative required')
+                pair['wet_derivative'] = jac
     path = pair['code_m'].ravel()
     # Constant code bias is absent from carrier increments.
-    code = path+np.tile(arc['basis']@beta,len(arc['tags']))
-    return np.r_[code,arc['difference']@path if arc['phase'] else [],physical[ns:]],pair
+    code = path+np.tile(arc['basis']@beta[:nb],len(arc['tags']))
+    measurements = physical[ns:].copy()
+    if arc['wet']:
+        # Recalibrating the references at wet z gives c(z)=c(0)+R*z.
+        # Thus c(0) observes the true receiver clock minus R*z. The same z
+        # also changes the candidate path, with its own elevation mapping.
+        measurements[:nc*n] -= (arc['wet_response']*wet[:,None]).ravel()
+    return np.r_[code,arc['difference']@path if arc['phase'] else [],measurements],pair
 
 
-def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j2):
+def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j2, *, diagnostics=None):
     physical = global_scaled*global_scale
     curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
     blocks = []
@@ -122,15 +143,25 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
         else:
             stop = count
         jac[stop:,ns:] = np.diag(arc['local_scale'][ns:])
-        bias = np.zeros((len(value),len(physical)-6))
-        bias[:count] = np.tile(arc['basis'],(len(arc['tags']),1))*global_scale[6:]
+        nb = arc['basis'].shape[1]
+        bias = np.zeros((len(value),nb))
+        bias[:count] = np.tile(arc['basis'],(len(arc['tags']),1))*global_scale[6:6+nb]
+        shared = np.zeros((len(value),len(physical)-6-nb))
+        if arc['wet']:
+            columns = np.asarray(arc['station_indices'])
+            shared[row,columns[site]] = pair['wet_derivative'].ravel()
+            if arc['phase']:
+                shared[count:stop] = arc['difference']@shared[:count]
+            for k in range(nc):
+                shared[stop+nc*np.arange(arc['n'])+k,columns] = -arc['wet_response'][:,k]
+            shared *= global_scale[6+nb:]
         weighted = lambda x:solve_triangular(arc['chol'],x,lower=True)
         nuisance = weighted(jac)
         singular = np.linalg.svd(nuisance,compute_uv=False)
         if singular[-1]<=singular[0]*RTOL:
             raise ValueError('rank-deficient local dynamic nuisance design')
         q,r = qr(nuisance,mode='economic')
-        global_jac = weighted(np.column_stack([state,bias]))
+        global_jac = weighted(np.column_stack([state,bias,shared]))
         blocks.append({'q':q,'r':r,'global':global_jac,'residual':residual,
                        'reduced':global_jac-q@(q.T@global_jac),
                        'reduced_residual':residual-q@(q.T@residual)})
@@ -145,6 +176,18 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
     step_sigma = float(np.sqrt(sum(np.linalg.norm(b['global']@delta+b['q']@(b['r']@d))**2
                       for b,d in zip(blocks,local_delta,strict=True))))
     covariance = (vt.T/singular**2)@vt*global_scale[:,None]*global_scale[None,:]
+    if diagnostics is not None:
+        # Response to a change in the *raw observed vector*, after profiling
+        # every local clock/ground parameter. This retains within-arc whitening
+        # and can propagate a coherent source through all arcs without treating
+        # repeated calibrations as independent measurements.
+        inverse = global_scale[:,None]*(vt.T/singular)@u.T
+        response,offset = [],0
+        for a in arcs:
+            count = len(a['observed'])
+            response.append(inverse[:,offset:offset+count]@solve_triangular(a['chol'],np.eye(count),lower=True))
+            offset += count
+        diagnostics.update(observation_response=response,scaled_singular_values=singular)
     cost = sum(float(b['residual']@b['residual']) for b in blocks)
     return delta,local_delta,cost,covariance,float(singular[0]/singular[-1]),step_sigma
 
@@ -202,7 +245,8 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
     epoch = prepared[0]['endpoint_gpst_s']
     bounds = (min(a['endpoint_gpst_s']-epoch+a['tags'][0] for a in prepared)-2.,
               max(1.,max(a['endpoint_gpst_s']-epoch+30 for a in prepared)+2.))
-    global_scale = np.r_[STATE_SCALE,np.full(len(names)-1,100.)]
+    nb = len(names)-1
+    global_scale = np.r_[STATE_SCALE,np.full(nb,100.),np.ones(len(names) if prepared[0]['wet'] else 0)]
     first = prepared[0]
     n = first['n']
     snapshot = solve(first['codes'][-1]-first['clocks'][:,0],first['xyz'],
@@ -267,8 +311,10 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
                     b['distance_in_global_sigma']>.1 for c,b in zip(candidates[1:],branches[1:],strict=True))
     status = 'MODEL_REJECTED' if p_value<.01 else 'AMBIGUOUS' if ambiguous else 'BRANCH_SEARCH_INCOMPLETE' if failures else 'CONDITIONAL_DYNAMIC_MODEL_ACCEPTED'
     return {'status':status,'epoch_gpst_s':epoch,'integrated_bounds_s':bounds,'state_ecef_m_m_s':best['physical'][:6],
-            'stations':names,'bias_contrast_coefficients_m':best['physical'][6:],
-            'station_code_bias_m':dict(zip(names,basis@best['physical'][6:],strict=True)),
+            'stations':names,'bias_contrast_coefficients_m':best['physical'][6:6+nb],
+            'station_code_bias_m':dict(zip(names,basis@best['physical'][6:6+nb],strict=True)),
+            **({'station_zenith_wet_correction_m':dict(zip(names,best['physical'][6+nb:],strict=True)),
+                'wet_model':'free station-constant zenith wet corrections; reference recalibration linear response; no wet prior'} if prepared[0]['wet'] else {}),
             'arc_parameters':[{'endpoint_gpst_s':a['endpoint_gpst_s'],'stations':a['stations'],
                 'satellite_clock':p[:a['ns']],'receiver_clocks':p[a['ns']:a['ns']+a['nc']*a['n']].reshape(a['n'],a['nc']),
                 'station_corrections_m':p[a['ns']+a['nc']*a['n']:].reshape(a['n'],3)} for a,p in zip(prepared,best['locals'],strict=True)],
