@@ -2,6 +2,7 @@
 from copy import deepcopy
 import json
 from pathlib import Path
+import subprocess
 
 import numpy as np
 import pytest
@@ -73,7 +74,11 @@ def test_stored_real_result_retains_all_variants_failures_and_replayable_scores(
     assert result['input_sha256'] == {k: study.shared.digest(v) for k, v in raw.items()}
     for module in [study, study.shared, study.diagnostic, study.dynamic_fit, study.clock_observations, study.dynamics]:
         p = Path(module.__file__)
-        assert result['source_sha256'][p.name] == study.shared.digest(p.read_bytes())
+        # The historical fit predates the endpoint-velocity initializer. Keep
+        # its producer bytes bound through Git; replay below never refits it.
+        source = (subprocess.check_output(['git','show','9f61866:research/kinematic/dynamic_fit.py'],
+                  cwd=study.shared.BASE.parents[1]) if module is study.dynamic_fit else p.read_bytes())
+        assert result['source_sha256'][p.name] == study.shared.digest(source)
     assert not any(result[k] for k in ['target_orbit_used', 'oracle_error_used', 'prior_target_state_used',
                                      'new_confirmation', 'physical_covariance_qualified', 'production_floors_changed'])
     assert len(result['cohort']['retained_outcomes']) == 40

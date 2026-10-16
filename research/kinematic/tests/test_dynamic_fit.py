@@ -37,6 +37,30 @@ def capture_snapshot_branches(monkeypatch):
     return found
 
 
+@pytest.mark.parametrize('tags', [[-60.,-30.,0.],[-120.,-75.,-20.,0.]])
+def test_velocity_seed_uses_endpoint_derivative_and_subtracts_interval_clocks(tags):
+    arcs,state,bias = toy()
+    prepared,names,_ = solver.prepare(arcs,True)
+    arc = prepared[0]
+    tags = np.asarray(tags)
+    unit = state[:3]-arc['xyz']
+    unit /= np.linalg.norm(unit,axis=1)[:,None]
+    expected = unit@state[3:]+.37  # Unknown common satellite-clock slope.
+    curvature = np.linspace(.1,.6,len(names))
+    # A non-linear receiver clock must be removed at each training epoch, not
+    # represented by its last interval slope at the endpoint.
+    basis = np.column_stack([np.ones(len(tags)),tags,np.where(tags==tags[-2],17.,0.)])
+    clocks = np.column_stack([arc['clocks'],np.linspace(.2,1.2,len(names))])
+    arc.update(tags=tags,clock_basis=basis,clocks=clocks,
+        codes=27e6+bias+tags[:,None]*expected+.5*tags[:,None]**2*curvature+basis@clocks.T)
+    np.testing.assert_allclose(solver.endpoint_code_rates(arc),expected,rtol=0,atol=1e-9)
+    # Also exercise the actual seed path: it must use the endpoint derivative
+    # and let the common clock slope remain free instead of shifting velocity.
+    scale = np.r_[solver.STATE_SCALE,np.full(len(names)-1,100.)]
+    seed,_ = solver.initial(arc,np.r_[state[:3],0.],[],scale,36060.,[-100.,1900.],dynamics.J2)
+    np.testing.assert_allclose((seed*scale)[3:6],state[3:],rtol=0,atol=1e-6)
+
+
 def test_noiseless_fit_recovers_shared_state_and_free_code_bias(monkeypatch):
     arcs,state,bias = toy()
     found = capture_snapshot_branches(monkeypatch)

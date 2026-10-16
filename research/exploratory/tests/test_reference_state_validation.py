@@ -249,19 +249,32 @@ def test_initial_preparation_failures_and_original_producer_are_preserved():
     assert {w['reason'] for w in failures} == {'outside bounded atmosphere domain'}
 
 
-def test_corrected_real_result_replays_rf_and_state_errors_without_refitting():
+@pytest.mark.parametrize('version',[2,3])
+def test_corrected_real_result_replays_rf_and_state_errors_without_refitting(version):
     raw, data = study.read_inputs()
     root = study.BASE.parents[1]
-    result = json.loads((study.BASE/'results/reference_state_validation_v2.json').read_bytes())
+    result = json.loads((study.BASE/f'results/reference_state_validation_v{version}.json').read_bytes())
     assert result['input_sha256'] == {k: hashlib.sha256(v).hexdigest() for k, v in raw.items()}
     for path, wanted in result['source_sha256'].items():
-        assert hashlib.sha256((root/path).read_bytes()).hexdigest() == wanted
+        # v2 retains its original interval-midpoint velocity initializer; the
+        # active solver may evolve without rewriting that failed execution.
+        source = (subprocess.check_output(['git','show','9f61866:'+path],cwd=root)
+                  if version==2 else (root/path).read_bytes())
+        assert hashlib.sha256(source).hexdigest() == wanted
     assert not any(result[k] for k in ['candidate_orbit_used_in_fit', 'candidate_clock_used_in_fit',
         'candidate_bias_or_attitude_used_in_fit', 'g12_state_accessed', 'new_confirmation',
         'physical_covariance_qualified', 'production_floors_changed'])
     assert set(result['candidates']) == set(data['plan']['references'])
-    assert result['fit_status_counts'] == {'INSUFFICIENT_PREPARED_ARCS': 17,
-                                         'BRANCH_SEARCH_INCOMPLETE': 4, 'NUMERICAL_FAILURE': 1}
+    expected_statuses = {'INSUFFICIENT_PREPARED_ARCS':17,'BRANCH_SEARCH_INCOMPLETE':4,'NUMERICAL_FAILURE':1}
+    if version==3:
+        expected_statuses = {'INSUFFICIENT_PREPARED_ARCS':17,'BRANCH_SEARCH_INCOMPLETE':5}
+        previous = json.loads((study.BASE/'results/reference_state_validation_v2.json').read_bytes())
+        assert result['input_sha256'] == previous['input_sha256']
+        assert result['weather_receipt_sha256'] == previous['weather_receipt_sha256']
+        assert result['selection'] == previous['selection'] and result['model'] == previous['model']
+        for candidate,record in result['candidates'].items():
+            assert record['windows'] == previous['candidates'][candidate]['windows']
+    assert result['fit_status_counts'] == expected_statuses
     evaluated_count = 0
     for candidate, record in result['candidates'].items():
         assert len(record['windows']) == 20
@@ -273,6 +286,11 @@ def test_corrected_real_result_replays_rf_and_state_errors_without_refitting():
             assert record['state_evaluation']['status'] == 'FIT_UNAVAILABLE'
             continue
         assert fit['branch_failures'] and fit['residual_threshold_p'] == .01
+        if version==3:
+            assert all('exterior-Earth' in b['reason'] for b in fit['branch_failures'])
+            for prediction in record['rf_predictions']:
+                if prediction['status']=='PREDICTED':
+                    assert np.min(prediction['elevation_deg'])>=10.
         # Reconstruct only evaluation epochs from retained preparation metadata;
         # neither calibration nor fitting is repeated in CI.
         arcs = [{'endpoint_gpst_s': w['start_gpst_s']+60} for w in record['windows'] if w['status'] == 'PREPARED']
@@ -287,9 +305,12 @@ def test_corrected_real_result_replays_rf_and_state_errors_without_refitting():
             assert a['state_inside_formal_95'] == b['state_inside_formal_95']
         assert replay['summary']['BEYOND_ALL_TRAINING']['count'] == 1
         evaluated_count += len(replay['rows'])
-    assert evaluated_count == 108
-    # A worse terminal is preserved after fixing preparation, rather than
-    # substituting its earlier, smaller-cohort fit or relaxing the mask.
-    failed = result['candidates']['G11']['fit']
-    assert failed['status'] == 'NUMERICAL_FAILURE'
-    assert any('9.996 deg' in b['reason'] for b in failed['branch_failures'])
+    assert evaluated_count == (108 if version==2 else 126)
+    g11 = result['candidates']['G11']['fit']
+    if version==2:
+        # Preserve the failure, not an earlier smaller-cohort fit or lower mask.
+        assert g11['status'] == 'NUMERICAL_FAILURE'
+        assert any('9.996 deg' in b['reason'] for b in g11['branch_failures'])
+    else:
+        assert g11['status'] == 'BRANCH_SEARCH_INCOMPLETE'
+        assert g11['branches'][0]['history']

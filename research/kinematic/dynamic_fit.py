@@ -159,13 +159,27 @@ def cost(global_scaled,locals_scaled,arcs,global_scale,epoch,bounds,j2):
     return value
 
 
+def endpoint_code_rates(arc):
+    """Quadratic derivative at the last training tag, not an interval midpoint.
+
+    Subtract measured receiver clocks before differentiating. Constant station
+    biases cancel; the unknown common satellite-clock rate is absorbed by the
+    velocity seed's intercept. This noisier derivative is only an initializer,
+    never an extra observation, prior or change to the fitted covariance.
+    """
+    tags = arc['tags'][-3:]
+    span = -tags[0]  # prepare() requires increasing tags ending at zero.
+    x = tags/span
+    weights = np.linalg.solve(np.vstack([np.ones(3),x,x*x]),[0.,1./span,0.])
+    corrected = arc['codes'][-3:]-arc['clock_basis'][-3:]@arc['clocks'].T
+    return weights[:2]@(corrected[:2]-corrected[-1])
+
+
 def initial(arc, seed, all_arcs, global_scale, epoch, bounds, j2):
     q = np.asarray(seed)
     unit = q[:3]-arc['xyz']
     unit /= np.linalg.norm(unit,axis=1)[:,None]
-    measured_clock = arc['clock_basis']@arc['clocks'].T
-    clock_rate = (measured_clock[-1]-measured_clock[-2])/(arc['tags'][-1]-arc['tags'][-2])
-    rates = (arc['codes'][-1]-arc['codes'][-2])/(arc['tags'][-1]-arc['tags'][-2])-clock_rate
+    rates = endpoint_code_rates(arc)
     velocity = np.linalg.lstsq(np.column_stack([unit,np.ones(len(unit))]),rates,rcond=None)[0][:3]
     physical = np.r_[q[:3],velocity,np.zeros(len(global_scale)-6)]
     curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
