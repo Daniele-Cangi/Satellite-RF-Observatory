@@ -1,4 +1,4 @@
-# Stato del progetto — 15 ottobre 2026
+# Stato del progetto — 17 ottobre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -89,6 +89,26 @@ Le preparazioni e tutte le 440 finestre restano identiche alla v2, inclusi
 i casi di geometria RF ambigua. Le incertezze formali sono ancora ampie e
 CODE non e verita indipendente. S2 resta aperta: qualificare il bilancio
 fisico congiunto di clock, bias e propagazione prima di S3.
+
+Il [profilo del ritardo umido condiviso](../research/exploratory/REFERENCE_WET_FIT.md)
+rimuove la correzione umida esatta con un parametro libero per stazione,
+propagato sia nella ricalibrazione reference-only dei clock sia nel percorso
+RF del candidato. Riusa gli stessi 22 candidati, 440 finestre e 63 archi;
+cinque fit convergono, 17 candidati restano senza supporto sufficiente e i
+cinque seed interni alla Terra falliscono ancora. Tutti i cinque fit liberi
+implicano almeno un ritardo umido totale negativo: sono sensibilita algebriche,
+non correzioni fisiche accettate. Gli scarti CODE migliorano in tre casi e
+peggiorano in G11 e G20; per G20 il RMS di posizione cresce da 66,20 a 148,29 m.
+I 26 confronti RF realmente futuri passano da 0,8403 a 0,8309 m nel codice,
+ma peggiorano da 6,9795 a 7,0115 mm/s nella fase. Gli assi formali di posizione
+crescono in tutti i casi; non sono un bilancio totale qualificato.
+La scomposizione locale attribuisce ai pesi dei clock medi di intervallo
+l'81-97% della varianza nella direzione debole del modello fisso. Nemmeno
+misure umide esterne ipotetiche a 1 mm risolvono quel limite. Il prossimo
+ostacolo concreto e una calibrazione congiunta codice/fase dei soli riferimenti
+che sostenga la dipendenza temporale e differenziale dei clock, insieme a
+informazione giustificata sui bias stabili o geometria che li vincoli. Nessun
+floor, esito storico o orbita G12 viene modificato; S2 resta aperta.
 
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti

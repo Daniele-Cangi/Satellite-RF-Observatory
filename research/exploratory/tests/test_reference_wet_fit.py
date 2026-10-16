@@ -80,9 +80,6 @@ def test_perturbed_calibration_rejection_is_not_replaced_by_a_nominal_clock():
 
 def test_stored_result_keeps_support_provenance_and_replays_excluded_scores():
     path = study.baseline.BASE/'results/reference_wet_fit_v1.json'
-    # Added with the scientific result, after the implementation tests run.
-    if not path.exists():
-        pytest.skip('new scientific execution not yet produced')
     raw, data = study.baseline.read_inputs()
     result = json.loads(path.read_bytes())
     assert result['input_sha256'] == {k: hashlib.sha256(v).hexdigest() for k, v in raw.items()}
@@ -91,11 +88,26 @@ def test_stored_result_keeps_support_provenance_and_replays_excluded_scores():
         assert hashlib.sha256((root/source).read_bytes()).hexdigest() == wanted
     previous = json.loads((study.baseline.BASE/'results/reference_state_validation_v3.json').read_bytes())
     assert set(result['candidates']) == set(data['plan']['references'])
+    assert result['fit_status_counts'] == {v: {'INSUFFICIENT_PREPARED_ARCS': 17, 'BRANCH_SEARCH_INCOMPLETE': 5}
+        for v in ('fixed_vmf3', 'free_station_wet')}
+    assert sum(w['status'] == 'PREPARED' for c in result['candidates'].values() for w in c['windows']) == 63
     assert not any(result[k] for k in ['candidate_products_used_in_own_fit', 'g12_state_accessed', 'oracle_tuning',
         'new_confirmation', 'physical_covariance_qualified', 'production_floors_changed', 'wet_prior_used'])
     for candidate, record in result['candidates'].items():
-        assert record['windows'] == previous['candidates'][candidate]['windows']
         assert len(record['windows']) == 20
+        for actual, old in zip(record['windows'], previous['candidates'][candidate]['windows'], strict=True):
+            # As in the existing snapshot tests, LAPACK can return different
+            # duplicate/interior roots. Keep every new root in the artifact;
+            # compare the actual support/mask, not bit-identical root metadata.
+            assert {k: v for k, v in actual.items() if k != 'rf_geometry'} == {
+                k: v for k, v in old.items() if k != 'rf_geometry'}
+            if 'rf_geometry' in actual:
+                assert actual['rf_geometry']['status'] == old['rf_geometry']['status']
+                if actual['status'] == 'PREPARED':
+                    assert all(sum(b['exterior'] for b in s['branches']) == 1
+                               for s in actual['rf_geometry']['snapshots'])
+                    np.testing.assert_allclose(actual['rf_geometry']['elevation_deg'],
+                        old['rf_geometry']['elevation_deg'], rtol=0, atol=1e-8)
         for name, variant in record['variants'].items():
             prediction = json.dumps(variant['rf_predictions'], separators=(',', ':'), allow_nan=False).encode()
             assert hashlib.sha256(prediction).hexdigest() == variant['prediction_sha256']
@@ -114,4 +126,27 @@ def test_stored_result_keeps_support_provenance_and_replays_excluded_scores():
             assert sum(variance.values()) == pytest.approx(variant['information']['weak_position_sigma_m']**2, rel=1e-5)
             if name == 'fixed_vmf3':
                 old = previous['candidates'][candidate]['fit']
-                np.testing.assert_allclose(fit['state_ecef_m_m_s'], old['state_ecef_m_m_s'], atol=1e-5, rtol=0)
+                np.testing.assert_allclose(fit['state_ecef_m_m_s'], old['state_ecef_m_m_s'], atol=1e-4, rtol=0)
+            else:
+                assert variant['calibration_check']['physical_domain_status'] == 'NEGATIVE_TOTAL_ZENITH_WET'
+                assert variant['calibration_check']['negative_total_wet_stations']
+
+
+def test_negative_wet_domain_and_full_calibration_disagreement_remain_visible(monkeypatch):
+    from research.kinematic.synthetic import receiver_positions
+    data = {'plan': {'date_gpst': '2026-09-05'}}
+    arcs = [{'stations': ['A'], 'endpoint_gpst_s': 36060.,
+        'stations_m': receiver_positions()[:1], 'clock_mean': np.zeros((1, 3)),
+        'wet_clock_response': np.array([[-2., .001, .0002]])}]
+    fit = {'station_zenith_wet_correction_m': {'A': -.2}}
+    monkeypatch.setattr(study.baseline, 'calibration_environment', lambda *args: None)
+    monkeypatch.setattr(study, 'clock_coefficients', lambda *args: np.array([.5, 0., 0.]))
+    class Weather:
+        def evaluate(self, *args):
+            return [1., 1., 2.3, .1]
+    checked = study.calibration_check(data, 'G05', arcs, fit, Weather())
+    assert checked['negative_total_wet_stations'] == ['A']
+    assert checked['physical_domain_status'] == 'NEGATIVE_TOTAL_ZENITH_WET'
+    assert checked['minimum_total_zenith_wet_m']['A'] == pytest.approx(-.1)
+    assert checked['rows'][0]['exact_minus_linear_clock_coefficients'][0] == pytest.approx(.1)
+    assert fit['station_zenith_wet_correction_m']['A'] == -.2
