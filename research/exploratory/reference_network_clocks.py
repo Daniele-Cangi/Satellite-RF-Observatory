@@ -16,12 +16,13 @@ from pathlib import Path
 import numpy as np
 from scipy.linalg import block_diag
 
-from . import reference_state_validation as baseline
-from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance, shared_error_structure, network_closures
+from . import reference_state_validation as baseline, reference_wet_fit as wet
+from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance, shared_error_structure, network_closures, source_geometry
 from ..kinematic.synthetic import native
 
 
-def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=False, combinations=False):
+def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=False, combinations=False,
+                   source_geometry=False, zenith_wet_m=None):
     """Identity/time filtering precedes numeric product and RF arithmetic.
 
     Phase/code bias is free per flag/gap/mask-contiguous segment. The optional
@@ -46,6 +47,7 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
                 continue
             xyz = np.asarray(data['positions'][station][int((t-36000)/30)], float)
             try:
+                local_weather = weather if zenith_wet_m is None else wet.ShiftedWetWeather(weather,zenith_wet_m.get(station,0.))
                 code = float(codes[station][t][q])+corrections[t, q]['if_code_change_m']
                 if provider.model(q, code, t, xyz, 0.)[1] < 10.:
                     failures['BELOW_MASK'] += 1
@@ -53,7 +55,7 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
                 centre = centres.get((station, t), 0.)
                 def model(clock):
                     value, _ = provider.model(q, code, t, xyz, clock)
-                    delay, _ = baseline.day.atmosphere.components(provider, weather, mjd, q, code, t, xyz, clock)
+                    delay, _ = baseline.day.atmosphere.components(provider, local_weather, mjd, q, code, t, xyz, clock)
                     return value-delay['legacy_baseline']+delay['vmf3_full']
                 value = model(centre)
                 derivative = (model(centre+1.)-model(centre-1.))/2.
@@ -66,6 +68,10 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
                     'phase_m': float(row['phase_m'])-value+derivative*centre,
                     'clock_derivative': 1.+derivative,
                     'geometry_free_phase_m': float(row['geometry_free_phase_m'])}
+                if source_geometry:
+                    _,geometry = baseline.day.atmosphere.components(provider,local_weather,mjd,q,code,t,xyz,centre)
+                    record.update(wet_mapping=geometry['mfw'],zenith_wet_m=geometry['zwd_m'],
+                        elevation_deg=geometry['elevation_deg'],source_geometry_mjd_utc=geometry['mjd_utc'])
                 if combinations:
                     raw = gnss_combinations.values(row['fields'],code1_change_m=
                         corrections[t,q]['if_code_change_m']/gnss_combinations.ALPHA)
@@ -78,12 +84,15 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
     return phase_continuity.segment(output) if continuity else output, dict(failures)
 
 
-def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None, continuity=False, raw_covariance=None):
+def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None, continuity=False, raw_covariance=None,
+              source_geometry=False, zenith_wet_m=None):
     stop = max(a['endpoint_gpst_s'] for a in arcs)
     centres, iterations = ({} if centres is None else centres), []
     for iteration in range(4):
         rows, failures = reference_rows(data, candidate, stop, weather, centres,
-            continuity=continuity,combinations=raw_covariance is not None)
+            continuity=continuity,combinations=raw_covariance is not None,
+            **({'source_geometry':source_geometry,'zenith_wet_m':zenith_wet_m}
+               if source_geometry or zenith_wet_m is not None else {}))
         network = network_clocks.fit(rows,phase_drift=phase_drift,raw_covariance=raw_covariance)
         updated = {(s, b['time_s']): b['parameters'][i]
                    for b in network['blocks'] for i, s in enumerate(b['stations'])}
@@ -429,8 +438,12 @@ def target_combinations(data, candidate, arcs, raw_covariance, *, free_drift=Fal
     return output
 
 
-def predict_combinations(fit, arcs, weather):
-    predictions = baseline.interval.predict(fit,arcs,weather)
+def predict_combinations(fit, arcs, weather, *, zenith_wet_m=None):
+    if zenith_wet_m is not None and 'state_ecef_m_m_s' in fit:
+        own = [{**a,'propagation':wet.propagation_model(weather,a['stations'])} for a in arcs]
+        predictions = wet.predict({**fit,'station_zenith_wet_correction_m':zenith_wet_m},own,weather)
+    else:
+        predictions = baseline.interval.predict(fit,arcs,weather)
     if 'state_ecef_m_m_s' not in fit:
         return predictions
     for p,a,parameters in zip(predictions,sorted(arcs,key=lambda a:a['endpoint_gpst_s']),fit['arc_parameters'],strict=True):
@@ -518,6 +531,185 @@ def prepare_temporal(data, candidate, arcs, weather):
             if label not in calibrated:
                 records[label] = {'calibration':calibration,'covariance_status':'UNAVAILABLE','reason':str(error)}
     return calibrated,records,model
+
+
+def fixed_wet_propagation(weather, stations, corrections):
+    propagation = wet.propagation_model(weather,stations)
+    values = np.array([corrections.get(s,0.) for s in stations])
+    def model(pair, xyz, epoch, *, derivatives=False):
+        return propagation(pair,xyz,epoch,derivatives=derivatives,wet_m=values)
+    return model
+
+
+def target_wet_design(fitted, arcs, weather, names):
+    """Current RF-only geometry, in full original target-data ordering."""
+    prepared,_,_ = dynamic_fit.prepare(arcs,True)
+    curve = baseline.dynamics.Trajectory(fitted['state_ecef_m_m_s'],fitted['integrated_bounds_s'],j2=fitted['j2'])
+    designs = []
+    for a,p in zip(prepared,fitted['arc_parameters'],strict=True):
+        local = np.r_[p['satellite_clock'],np.asarray(p['receiver_clocks']).ravel(),
+            np.asarray(p['station_corrections_m']).ravel()]/a['local_scale']
+        _,pair = dynamic_fit.model(curve,a,local,fitted['bias_contrast_coefficients_m'],fitted['epoch_gpst_s'])
+        xyz = a['xyz']+np.asarray(p['station_corrections_m'])
+        propagation = wet.propagation_model(weather,a['stations'])
+        mapping = (propagation(pair,xyz,fitted['epoch_gpst_s'],wet_m=np.ones(a['n']))['delay_m']-
+            propagation(pair,xyz,fitted['epoch_gpst_s'])['delay_m'])
+        code = np.zeros((a['codes'].size,len(names)))
+        for j,station in enumerate(a['stations']):code[j::a['n'],names.index(station)] = mapping[:,j]
+        g = np.zeros((a['full_observation_count'],len(names)))
+        g[:len(code)] = code
+        difference = dynamic_fit.interval_matrix(a['tags'],a['n'])
+        g[len(code):len(code)+len(difference)] = difference@code
+        designs.append(g)
+    return np.vstack(designs)
+
+
+def run_sources():
+    """Restricted wet geometry, reference transfer and both physical paths."""
+    raw,data = baseline.read_inputs()
+    weather = baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
+    raw_covariance = gnss_combinations.assumed_endpoint_covariance()
+    labels = ('joint_independent','reference_only','candidate_only','coupled')
+    results = {}
+    def estimate(candidate,label,own,joint,status,corrections=None):
+        try:
+            fitted = dynamic_fit.fit(own,joint_covariance=joint,
+                progress=lambda r:print(candidate,label,r,flush=True))
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            fitted = {'status':'FIT_FAILED','reason':str(error)}
+        fitted['reference_calibration_status'] = status
+        if status=='CONDITIONAL_MODEL_REJECTED':
+            fitted['algebraic_target_fit_status'] = fitted['status']
+            fitted['status'] = 'REFERENCE_CALIBRATION_MODEL_REJECTED'
+        predictions = (predict_combinations(fitted,own,weather) if corrections is None else
+            predict_combinations(fitted,own,weather,zenith_wet_m=corrections))
+        return {'fit':fitted,'rf_predictions':predictions,
+            'prediction_sha256':baseline.interval.shared.digest(json.dumps(predictions,separators=(',',':'),allow_nan=False).encode())}
+    for candidate in data['plan']['references']:
+        print(candidate,'prepare source geometry',flush=True)
+        try:
+            arcs,windows = baseline.build_arcs(data,candidate,weather)
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            arcs,windows = [],baseline.coverage(data,candidate)
+            for w in windows:
+                if w['status']=='RF_COVERED':w.update(status='CANDIDATE_PREPARATION_FAILED',reason=str(error))
+        record = {'windows':native(windows),'prepared_arc_count':len(arcs),'variants':{
+            label:{'fit':{'status':'INSUFFICIENT_PREPARED_ARCS','arc_count':len(arcs)},
+                'rf_predictions':[],'prediction_sha256':baseline.interval.shared.digest(b'[]')} for label in labels}}
+        results[candidate] = record
+        if len(arcs)<2:continue
+        try:
+            network,rows,calibration = calibrate(data,candidate,arcs,weather,continuity=True,
+                raw_covariance=raw_covariance,source_geometry=True)
+            own = target_combinations(data,candidate,arcs,raw_covariance)
+            own,joint,transport = attach(network,own)
+            own,target = target_continuity(data,candidate,own)
+            for a in own:a['mw_increment_mask'] = a['phase_increment_mask'].copy()
+            profile = source_geometry.profile_wet(network,candidate)
+            record.update(calibration=calibration,reference_rows=rows,source_profile=profile,
+                transport={**transport,'target_continuity':target},future_links={
+                    'clock_only':network_closures.prepare_future_links(rows,candidate,raw_covariance),
+                    'wet_source':network_closures.prepare_future_links(rows,candidate,raw_covariance,wet_sources=True)})
+            record['variants']['joint_independent'] = estimate(candidate,'joint_independent',own,joint,calibration['status'])
+            fitted = record['variants']['joint_independent']['fit']
+            if 'state_ecef_m_m_s' not in fitted:raise ValueError('nominal trajectory unavailable for source response')
+            details,_,_ = linear_response(fitted,own,joint)
+            response = details['full_observation_response'][:6]
+            names = profile['stations']
+            requests = clock_requests(own)
+            clock_source = source_geometry.clock_wet_response(network,requests,candidate,names)
+            target_source = target_wet_design(fitted,own,weather,names)
+            combined = source_geometry.coupled_response(response,transport['clock_observation_indices'],clock_source,target_source,names)
+            record.update(full_state_observation_response=response,clock_source_response=clock_source,
+                target_source_model_design=target_source,
+                target_source_design_units='code metres/zenith metre; IF phase-rate (m/s)/zenith metre; MW/clock/ground zero',
+                clock_requests=[[[s,t,c] for (s,t),c in r.items()] for r in requests],
+                clock_request_output_units=['m','m/s','m/s']*(len(requests)//3),source_response=combined)
+            if combined['status']!='SOURCE_PROBE_PREPARED':
+                for label in labels[1:]:record['variants'][label]['fit'] = {'status':'NO_RESOLVED_SOURCE_POSITION_PROBE'}
+                continue
+            probe = combined['zenith_probe_m']
+            vector = np.array([probe[s] for s in names])
+            ref_path = np.concatenate([(source_geometry.wet_design(b,names)@vector)[:len(b['rows'])] for b in network['blocks']])
+            record['probe_reference_path_rms_m'] = float(np.sqrt(np.mean(ref_path**2)))
+            record['probe_reference_path_peak_m'] = float(max(abs(ref_path)))
+            recalibrated = None
+            try:
+                centres = {(s,b['time_s']):float(b['parameters'][j]) for b in network['blocks'] for j,s in enumerate(b['stations'])}
+                recalibrated,newrows,recalibration = calibrate(data,candidate,arcs,weather,centres=centres,
+                    continuity=True,raw_covariance=raw_covariance,source_geometry=True,zenith_wet_m=probe)
+                keys = lambda own: [(r['station'],r['reference'],r['time_s'],r['segment']) for r in own]
+                if keys(rows)!=keys(newrows):raise ValueError('reference support/segments changed under source probe')
+                changed,recomputed,updated = attach(recalibrated,own)
+                chol = np.linalg.cholesky(transport['clock_covariance'])
+                difference = updated['clock_covariance']-transport['clock_covariance']
+                relative = np.linalg.solve(chol,np.linalg.solve(chol,difference).T).T
+                record['reference_source_calibration'] = {**recalibration,'support_and_segments_preserved':True,
+                    'clock_measurement_change':updated['clock_mean']-transport['clock_mean'],
+                    'fixed_linear_clock_change':-clock_source@vector,
+                    'nominal_weight_whitened_clock_covariance_change_max':float(np.max(abs(relative))),
+                    'minimum_reference_total_zenith_wet_m':{s:min(r['zenith_wet_m'] for r in newrows if r['station']==s) for s in names}}
+                # Hold the declared trajectory weighting metric fixed. A new
+                # noise law is not inferred from relinearized clock geometry.
+                for a,nominal in zip(changed,own,strict=True):a['covariance'] = nominal['covariance']
+            except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+                recalibrated = None
+                record['reference_source_calibration'] = {'status':'SOURCE_CALIBRATION_FAILED','reason':str(error)}
+            for label in labels[1:]:
+                reference = label!='candidate_only'
+                candidate_path = label!='reference_only'
+                if reference and recalibrated is None:
+                    record['variants'][label]['fit'] = {'status':'SOURCE_CALIBRATION_FAILED',
+                        'reason':record['reference_source_calibration']['reason']}
+                    continue
+                trial = [{**a} for a in (changed if reference else own)]
+                if candidate_path:
+                    for a in trial:a['propagation'] = fixed_wet_propagation(weather,a['stations'],probe)
+                variant = estimate(candidate,label,trial,joint,
+                    recalibration['status'] if reference else calibration['status'],probe if candidate_path else None)
+                variant['probe'] = {'target_weight_covariance_fixed_at_nominal':True,
+                    'reference_observation_time_relinearized':reference,
+                    'candidate_wet_geometry_recomputed_each_trial':candidate_path,
+                    'linear_state_change_m_m_s':combined['linear_probe_state_change_m_m_s'][label]}
+                if 'state_ecef_m_m_s' in variant['fit']:
+                    delta = np.asarray(variant['fit']['state_ecef_m_m_s'])-fitted['state_ecef_m_m_s']
+                    variant['probe'].update(finite_state_change_m_m_s=delta,
+                        finite_minus_linear_state_change_m_m_s=delta-combined['linear_probe_state_change_m_m_s'][label])
+                record['variants'][label] = variant
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            record['preparation_failure'] = str(error)
+            for v in record['variants'].values():
+                if v['fit']['status']=='INSUFFICIENT_PREPARED_ARCS':
+                    v['fit'] = {'status':'SOURCE_PREPARATION_UNAVAILABLE','reason':str(error)}
+    # All fitted source models, finite interventions and predictions precede
+    # both reference-link and candidate-RF scoring; no CODE scoring is called.
+    for candidate,record in results.items():
+        for label,predictions in record.get('future_links',{}).items():
+            record['future_links'][label] = network_closures.score_future_links(predictions,record['reference_rows'])
+        for variant in record['variants'].values():
+            variant['rf_evaluation'] = baseline.score_rf(data,candidate,variant['rf_predictions'])
+            variant['mw_evaluation'] = score_mw(data,candidate,variant['rf_predictions'])
+    modules = [baseline,baseline.interval,baseline.interval.shared,wet,dynamic_fit,network_clocks,
+        phase_continuity,gnss_combinations,temporal_contrasts,network_closures,source_geometry,
+        baseline.dynamics,baseline.interval.clock_observations,baseline.precise,baseline.attitude,baseline.bias,
+        baseline.conventions,baseline.sp3,baseline.day,baseline.day.atmosphere,baseline.interval.shared.meteo]
+    sources = [Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
+    return native({'schema':'exposed-wet-source-coupling-v1',
+        'scope':'Exposed constant station wet geometry; reference-only profile and future-link prediction; fixed coherent wet-model probe through calibration and candidate paths, separately and jointly.',
+        'candidate_products_used_in_own_fit':False,'candidate_rf_used_in_own_network':False,
+        'candidate_code_orbit_scoring':False,'g12_state_accessed':False,'oracle_tuning':False,
+        'all_predictions_before_scoring':True,'new_confirmation':False,
+        'physical_covariance_qualified':False,'physical_wet_model_qualified':False,
+        'production_floors_changed':False,'target_weights_fixed_at_nominal':True,
+        'source_estimates_used_as_candidate_corrections':False,
+        'probe_rms_m':source_geometry.PROBE_RMS_M,'probe_amplitude_is_sigma':False,
+        'probe_coordinates':'one coherent zenith-wet metre coordinate per reference station, not link metres',
+        'raw_endpoint_weight_covariance_m2':raw_covariance,
+        'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,
+        'input_sha256':{k:baseline.interval.shared.digest(v) for k,v in raw.items()},
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'fit_status_counts':{label:dict(Counter(c['variants'][label]['fit']['status'] for c in results.values())) for label in labels},
+        'candidates':results})
 
 
 def run_closures():
@@ -703,7 +895,9 @@ def run_structure():
         'candidates':results})
 
 
-def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False):
+def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False):
+    if sources:
+        return run_sources()
     if closures:
         return run_closures()
     if structure:
@@ -869,14 +1063,17 @@ if __name__ == '__main__':
     parser.add_argument('--temporal',action='store_true',help='reference-informed temporal shape and shared raw RF covariance transport')
     parser.add_argument('--structure',action='store_true',help='qualify shared differential error structure on excluded references')
     parser.add_argument('--closures',action='store_true',help='nondispersive calibrated network closures and complete state response')
+    parser.add_argument('--sources',action='store_true',help='station wet source geometry through reference and candidate paths')
     args = parser.parse_args()
+    if args.sources and (args.closures or args.structure or args.temporal or args.combinations or args.continuity):
+        parser.error('--sources is a separate source-geometry analysis')
     if args.closures and (args.structure or args.temporal or args.combinations or args.continuity):
         parser.error('--closures is a separate calibration/state-response analysis')
     if args.structure and (args.temporal or args.combinations or args.continuity):
         parser.error('--structure is a separate reference-only analysis')
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)
