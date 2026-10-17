@@ -9,7 +9,7 @@ import hashlib
 
 import numpy as np
 
-from . import calibration_transfer, network_clocks, phase_continuity, temporal_contrasts
+from . import calibration_transfer, network_clocks, phase_continuity, temporal_contrasts, source_geometry
 
 PROBE_RMS_M = .01  # coherent finite-difference amplitude, NOT a noise sigma
 LAGS = (30., 300.)
@@ -55,7 +55,7 @@ def closure_records(network, candidate):
         'physical_nondispersive_covariance_qualified': False}
 
 
-def prepare_future_links(rows, candidate, raw_covariance):
+def prepare_future_links(rows, candidate, raw_covariance, *, wet_sources=False):
     """Remove fixed links in the last third before GF/ambiguity/clock fitting.
 
     Predictions use other links at the excluded epoch, not a clock forecast.
@@ -76,6 +76,15 @@ def prepare_future_links(rows, candidate, raw_covariance):
         'conditional_on_original_timing_and_reference_masks': True}
     try:
         fitted = network_clocks.fit(training, raw_covariance=raw_covariance)
+        if wet_sources:
+            source = source_geometry.profile_wet(fitted,candidate)
+            output['source_model'] = source
+            if source['status']!='CONDITIONAL_SOURCE_FIT':
+                return {**output,'status':'HELD_OUT_SOURCE_UNOBSERVABLE'}
+            coefficients = source['zenith_wet_correction_m']
+            corrected = [{**r,'code_m':r['code_m']-r['wet_mapping']*coefficients[r['station']],
+                'phase_m':r['phase_m']-r['wet_mapping']*coefficients[r['station']]} for r in training]
+            fitted = network_clocks.fit(corrected,raw_covariance=raw_covariance)
     except (ValueError, np.linalg.LinAlgError) as error:
         return {**output, 'status': 'HELD_OUT_NETWORK_FAILED', 'reason': str(error)}
     blocks = {b['time_s']: b for b in fitted['blocks']}
@@ -96,6 +105,10 @@ def prepare_future_links(rows, candidate, raw_covariance):
             continue
         item.update(status='PREDICTED', clock_prediction_m=float(predicted), phase_prediction_m=None,
                     continuity_after_prefix_observed=False)
+        if wet_sources:
+            item['wet_prediction_m'] = float(r['wet_mapping']*coefficients[r['station']])
+            predicted += item['wet_prediction_m']
+            item['path_prediction_m'] = float(predicted)
         last = prefix.get((r['station'],r['reference'],base))
         if last is not None:
             segment = last['segment']
@@ -115,10 +128,11 @@ def score_future_links(prepared, rows):
         if p['status'] != 'PREDICTED':
             continue
         r = index[p['station'],p['reference'],p['time_s']]
+        predicted = p.get('path_prediction_m',p['clock_prediction_m'])
         errors.append({**p, 'segment':p['base_segment'],
-            'code_m': r['code_m']-p['clock_prediction_m'], 'phase_m': 0.,
-            'mw_m': r['phase_m']-p['clock_prediction_m']})
-        levels.append({**p, 'code_error_m': r['code_m']-p['clock_prediction_m'],
+            'code_m': r['code_m']-predicted, 'phase_m': 0.,
+            'mw_m': r['phase_m']-predicted})
+        levels.append({**p, 'code_error_m': r['code_m']-predicted,
             'phase_error_m': None if p['phase_prediction_m'] is None else r['phase_m']-p['phase_prediction_m']})
     results = []
     if errors:
