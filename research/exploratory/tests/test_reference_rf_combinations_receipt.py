@@ -37,7 +37,7 @@ def test_joint_combinations_receipt_preserves_inputs_covariance_support_and_fore
     for label,raw_covariance in result['raw_covariance_scenarios_m2'].items():
         expected = study.gnss_combinations.assumed_endpoint_covariance(
             code_correlation=.5 if label=='joint_correlated_code' else 0.)
-        np.testing.assert_array_equal(raw_covariance,expected)
+        np.testing.assert_allclose(raw_covariance,expected,rtol=1e-14,atol=1e-18)
     for candidate,c in result['candidates'].items():
         assert set(c['variants'])==labels
         for label,v in c['variants'].items():
@@ -45,7 +45,29 @@ def test_joint_combinations_receipt_preserves_inputs_covariance_support_and_fore
             serialized = json.dumps(predictions,separators=(',',':'),allow_nan=False).encode()
             assert hashlib.sha256(serialized).hexdigest()==v['prediction_sha256']
             assert study.baseline.score_rf(data,candidate,predictions)==v['rf_evaluation']
-            assert study.score_mw(data,candidate,predictions)==v['mw_evaluation']
+            # Recomputing metre-scale MW by subtracting raw paths of order
+            # 1e8 m can differ by BLAS/FMA roundoff across Linux/Windows.
+            # Hashes above bind the original bytes; only this numerical
+            # replay allows 1e-8 m/s, never a change in support or metadata.
+            replay = study.score_mw(data,candidate,predictions)
+            expected = v['mw_evaluation']
+            assert replay['gf_prediction']==expected['gf_prediction']
+            for a,b in zip(replay['windows'],expected['windows'],strict=True):
+                assert {k:x for k,x in a.items() if k!='pairs'}=={k:x for k,x in b.items() if k!='pairs'}
+                for x,y in zip(a['pairs'],b['pairs'],strict=True):
+                    assert {k:z for k,z in x.items() if k!='mw_rate_residual_m_s'}=={
+                        k:z for k,z in y.items() if k!='mw_rate_residual_m_s'}
+                    if x['status']=='EVALUATED':
+                        np.testing.assert_allclose(x['mw_rate_residual_m_s'],y['mw_rate_residual_m_s'],atol=1e-8,rtol=0)
+            for kind,a in replay['summary'].items():
+                b = expected['summary'][kind]
+                assert a['status_counts']==b['status_counts']
+                for key,value in a['mw_rate_residual_m_s'].items():
+                    wanted = b['mw_rate_residual_m_s'][key]
+                    if isinstance(value,float):
+                        np.testing.assert_allclose(value,wanted,atol=1e-8,rtol=0)
+                    else:
+                        assert value==wanted
             fit = v['fit']
             if 'state_ecef_m_m_s' not in fit:
                 assert fit['status']=='INSUFFICIENT_PREPARED_ARCS'
@@ -70,7 +92,7 @@ def test_joint_combinations_receipt_preserves_inputs_covariance_support_and_fore
             retained_covariance = study.gnss_combinations.covariance(
                 result['raw_covariance_scenarios_m2'][label])[np.ix_(
                     study.gnss_combinations.RETAINED,study.gnss_combinations.RETAINED)]
-            np.testing.assert_array_equal(calibration['retained_combination_covariance_m2'],retained_covariance)
+            np.testing.assert_allclose(calibration['retained_combination_covariance_m2'],retained_covariance,rtol=1e-13,atol=1e-14)
             assert sum(held['mw_status_counts'].values())==sum(held['code_status_counts'].values())
             assert held['gf_prediction']=='UNIDENTIFIABLE_WITH_FREE_LINK_EPOCH_IONOSPHERE'
             for p,a in zip(predictions,fit['arc_parameters'],strict=True):
