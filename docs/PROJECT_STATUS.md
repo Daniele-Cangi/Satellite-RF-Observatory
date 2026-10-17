@@ -218,6 +218,29 @@ sensibilita. S2 aperta: vincolare i contrasti non dispersivi di collegamento
 che sopravvivono a clock/bias e calibrazione, con geometria reference-only,
 closure di rete e propagazione della risposta fino allo stato. G12 e S3 invariati.
 
+Il [contrasto non dispersivo di rete](../research/exploratory/REFERENCE_NONDISPERSIVE_CLOSURES.md)
+compone geometria ammessa, calibrazione e risposta dello stato, con nuovi
+fit reference-only e traiettorie RF a ogni perturbazione. Nei cinque fold il
+99,53-99,83% dell'energia della risposta in posizione appartiene al sottospazio
+assorbito dai clock: e una proprieta condizionale dell'estimatore, non una
+frazione di varianza fisica. Probe coerenti reference-only da 1 cm RMS, con
+picchi fino a 9,62 cm, spostano lo stato di 0,69-3,72 km senza cambiare i
+contrasti calibrati. Sono sensibilita costruite, non errori orbitali osservati;
+un disturbo fisico comune al ricevitore richiede anche il contributo del
+candidato e puo cancellarsi. Nei probe ciclici restano 1 cm RMS nel codice,
+ma i bias float assorbono quasi tutta la fase e lo stato cambia di 48-260 m.
+Piccoli residui fase non qualificano quindi il budget di calibrazione.
+I link esclusi nell'ultimo terzo hanno 1.316/1.494 predizioni condizionali;
+178 campioni restano senza clock osservabile. Gli incrementi fase esclusi
+hanno RMS 7,81-9,86 mm a 30 s e 13,72-18,38 mm a 300 s, usando altri link
+RF agli stessi tempi: non e previsione dell'intera rete senza RF futura.
+Il codice realmente futuro peggiora da 0,9036 a 1,0237/0,9219 m RMS nei due
+probe; tutti i peggioramenti e i rami falliti restano visibili. Nessuno score
+CODE nuovo, floor o covarianza fisica ammessa; S2 aperta e G12 non rivelato.
+Il prossimo incremento utile deve assegnare ai modi una geometria di sorgente
+e un accoppiamento reference/candidato fisicamente sostenuti, prima di usare
+i contrasti per qualificare propagazione, bias o clock.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.

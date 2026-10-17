@@ -127,7 +127,10 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False, raw_cov
         'phase_drift': phase_drift, 'segment_start_s': start, 'drift_index': drift_index,
         'mw_index':mw_index,'mw_drift_index':mw_drift_index,
         'raw_covariance':raw_covariance,'combination_covariance':endpoint_covariance,
-        'ambiguity_covariance': ambiguity_covariance, 'weighted_cost': cost,
+        'ambiguity_covariance': ambiguity_covariance,
+        'profiled_ambiguity_inverse': vt.T/singular,
+        'profiled_ambiguity_left': u,
+        'weighted_cost': cost,
         'residual_dof': dof, 'conditional_p': float(chi2.sf(cost, dof)) if dof > 0 else None,
         'residuals': diagnostics, 'code_sigma_m': float(np.sqrt(endpoint_covariance[0,0])) if combined else code_sigma_m,
         'phase_sigma_m': float(np.sqrt(endpoint_covariance[1,1])) if combined else phase_sigma_m,
@@ -182,11 +185,17 @@ def observation_response(network, requests):
         shared += t@b['ambiguity_response']
     if any(remaining):
         raise ValueError('requested receiver clock is not observed by the network')
-    shared = shared@network['ambiguity_covariance']
+    # Apply the profiled SVD inverse directly. Multiplying C_beta by the
+    # profiled design transpose forms inverse-normal-equation products and
+    # can create spurious clock response to an exactly orthogonal link cycle.
+    shared = shared@network['profiled_ambiguity_inverse']
     output = []
+    at = 0
     for b,t in zip(network['blocks'],transforms,strict=True):
         project = np.eye(len(b['y']))-b['a']@b['gain']
         whiten = (lambda x:solve_triangular(b['chol'],x,lower=True)) if b['chol'] is not None else (
             lambda x:x/b['sigma'][:,None])
-        output.append(t@b['gain']+shared@whiten(project@b['b']).T@whiten(project))
+        stop = at+len(b['y'])
+        output.append(t@b['gain']+shared@network['profiled_ambiguity_left'][at:stop].T@whiten(project))
+        at = stop
     return output
