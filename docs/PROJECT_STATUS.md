@@ -198,6 +198,26 @@ aperta: identificare struttura di errore ammissibile e dipendenza dal link,
 validando G21 e tempi piu lunghi prima di qualificare ampiezze condivise.
 Risultati precedenti, floor e orbita G12 invariati; nessuna S3.
 
+La [struttura degli errori condivisi](../research/exploratory/REFERENCE_SHARED_ERROR_STRUCTURE.md)
+ora dispone di un fit differenziale reference-only con predizione fra gruppi
+su tempi esclusi: quattro partizioni fisse, lag di 30 e 300 s, momento comune
+PSD confrontato con indipendenza e dipendenza di segno libero. Restano 22
+candidati, 440 finestre e 63 archi. Dei 40 confronti, 38 sono valutabili e due
+hanno grafi disconnessi in G19: nessun ancoraggio o split sostitutivo. Nessuna
+componente supera i controlli di trasferimento e stabilita. A 300 s cinque
+momenti positivi di training diventano non-PSD in validazione; G21 conserva
+un momento positivo anche nelle delezioni di training, ma peggiora fuori
+training. Il modello di segno libero peggiora 58/76 predizioni direzionali.
+D/MW osservano tre combinazioni dei dieci termini della covarianza grezza:
+sette direzioni restano non identificate. Un controllo sintetico completo
+ricalibra i disturbi comuni ai ricevitori; errori non dispersivi dipendenti
+dal link possono invece imitare 137,48 m e 26,93 mm/s senza cambiare D/MW/GF.
+Nessuna nuova covarianza grezza viene ammessa, nessun fit o scoring CODE del
+candidato viene rifatto e nessun floor cambia. La quota .5 della #230 resta
+sensibilita. S2 aperta: vincolare i contrasti non dispersivi di collegamento
+che sopravvivono a clock/bias e calibrazione, con geometria reference-only,
+closure di rete e propagazione della risposta fino allo stato. G12 e S3 invariati.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
