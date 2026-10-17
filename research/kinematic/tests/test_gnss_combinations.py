@@ -124,3 +124,31 @@ def test_target_joint_mw_covariance_and_free_temporal_bias_recover_state(free):
             np.testing.assert_allclose(p['mw_rate_bias_m_s'][1:],np.arange(1,6)*.001,atol=1e-7)
     for a,b in zip(arcs,before,strict=True):
         np.testing.assert_array_equal(a['covariance'],b['covariance'])
+
+
+@pytest.mark.parametrize('cycles',[(77,60),(9,7)])
+def test_joint_likelihood_does_not_automatically_repair_gf_null_slips(cycles):
+    arcs,state,_ = target_arcs()
+    for a in arcs:
+        a['mw_rates_m_s'] = np.zeros((2,6))
+        a['covariance'] = block_diag(combo.rf_covariance(a['tags_s'],6,
+            combo.assumed_endpoint_covariance()),a['covariance'][30:,30:])
+    delta = combo.transform()@np.r_[0.,0.,
+        combo.C/np.array([combo.F1_HZ,combo.F2_HZ])*np.asarray(cycles)]
+    assert abs(delta[2])<.004  # Below the existing GF witness threshold.
+    arcs[0]['rates_m_s'][0,0] += delta[1]/30.
+    arcs[0]['mw_rates_m_s'][0,0] += delta[3]/30.
+    joint = block_diag(*[a['covariance'] for a in arcs])
+    contaminated = dynamic_fit.fit(arcs,joint_covariance=joint)
+    assert contaminated['status']=='MODEL_REJECTED'
+    assert np.linalg.norm(np.asarray(contaminated['state_ecef_m_m_s'])[:3]-state[:3])>100.
+    # A supported external boundary can use the existing free-jump path for
+    # both IF and MW. This test supplies the known synthetic boundary, not an
+    # automatic detector or an estimate from the contaminated target state.
+    mask = np.ones((2,6),dtype=bool)
+    mask[0,0] = False
+    arcs[0]['phase_increment_mask'] = mask
+    arcs[0]['mw_increment_mask'] = mask.copy()
+    supported_boundary = dynamic_fit.fit(arcs,joint_covariance=joint)
+    np.testing.assert_allclose(supported_boundary['state_ecef_m_m_s'],state,atol=.1,rtol=0)
+    assert supported_boundary['weighted_residual_cost']<1e-6

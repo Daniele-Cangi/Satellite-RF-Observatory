@@ -156,6 +156,26 @@ valere come misura indipendente aggiunta. Il termine comune clock-like resta
 non qualificato. Floor, risultati storici e orbita G12 invariati; S2 aperta,
 nessuna S3.
 
+La [combinazione congiunta IF/MW](../research/exploratory/REFERENCE_RF_COMBINATIONS.md)
+usa i quattro canali RF con la loro covarianza, senza contare GF e MW come
+osservazioni indipendenti. Mantiene 22 candidati, 440 finestre, 63 archi,
+cinque traiettorie e 17 casi senza supporto. Con bias costanti MW sposta lo
+stato iniziale di soli 0,006-0,034 m e restringe gli assi formali di circa
+0,0033%; il codice realmente futuro passa da 0,903614 a 0,903600 m RMS.
+Non e un avanzamento orbitale fisicamente significativo. Le grandi variazioni
+con deriva libera riproducono quasi interamente il precedente effetto dei
+bias IF. Le nuove previsioni MW peggiorano con deriva libera da 6,073 a
+7,600 mm/s sui 26 confronti realmente futuri, 18 dei quali peggiorano.
+La rete prevede MW anche in 508 casi senza clock di epoca osservato, ma
+restano 438 segmenti MW senza supporto e quattro ulteriori derive non
+identificabili. G19 mantiene fase esclusa a 0,589 m RMS e massimo 7,875 m.
+I controlli sintetici GF-nulli rifiutano il modello contaminato: non e un
+rilevatore o una riparazione automatica dei salti. Il prossimo ostacolo e
+qualificare stabilita temporale e covarianza condivisa codice/fase; per il
+caso 9/7 la precisione ipotetica richiesta resta circa 0,285 m per banda.
+Il termine comune clock-like, il budget totale e S2 restano aperti. Nessuna
+S3; floor, artefatti precedenti e orbita G12 invariati.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
