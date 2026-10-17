@@ -179,7 +179,9 @@ unsupported cases. The original v1 receipt incorrectly predicted four
 single-training-epoch segments by implicitly fixing their unidentifiable
 slopes to zero. The separate immutable
 `results/reference_network_clocks_heldout_correction_v1.json` invalidates those
-predictions and recomputes the held-out summaries. The affected rows are
+predictions and recomputes the held-out summaries. Its producer is retained at
+`b2998c65c2ca3519080393f56d2088a1210f1456`; later unrelated failure handling does
+not refresh its source hashes. The affected rows are
 G05/STJO/G13 at 36030, G05/BRAZ/G21 at 37740, G11/STJO/G13 at 36030 and
 G19/STJO/G13 at 36000 GPST. All clocks, trajectories, covariance, candidate RF
 forecasts and CODE scores remain the original execution. Fresh executions

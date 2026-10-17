@@ -322,7 +322,13 @@ def run():
                     if not drift:
                         record['injections'] = injection_checks(rows,arcs)
                 except (ValueError, KeyError, np.linalg.LinAlgError) as error:
-                    record[label] = {'calibration':{'status':'NETWORK_FAILED','reason':str(error)}}
+                    # Publish a network only after its full preparation has
+                    # succeeded. A later diagnostic error must not leave a
+                    # cached calibration eligible for an orbit fit.
+                    calibrated.pop(label,None)
+                    failed = record.setdefault(label,{})
+                    failed['calibration'] = {**failed.get('calibration',{}),
+                        'status':'NETWORK_FAILED','reason':str(error)}
         for label in ('baseline','network','network_free_phase_drift'):
             own,joint = (arcs,None) if label=='baseline' else calibrated.get(label,(arcs,None))
             fit = {'status': 'INSUFFICIENT_PREPARED_ARCS', 'arc_count': len(arcs)}

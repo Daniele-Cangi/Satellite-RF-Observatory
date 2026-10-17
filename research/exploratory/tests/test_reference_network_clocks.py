@@ -87,7 +87,14 @@ def test_heldout_correction_replays_without_changing_the_original_result():
     before = json.dumps(result,separators=(',',':'))
     actual = study.held_out_support_correction(result,hashlib.sha256(original).hexdigest())
     stored = json.loads((study.baseline.BASE/'results/reference_network_clocks_heldout_correction_v1.json').read_bytes())
-    assert actual == stored
+    # Recompute the corrected classifications with active code, but verify
+    # the immutable correction's producer separately rather than refreshing
+    # its recorded source hashes after unrelated engineering changes.
+    assert {k:v for k,v in actual.items() if k!='source_sha256'} == {
+        k:v for k,v in stored.items() if k!='source_sha256'}
+    for name,wanted in stored['source_sha256'].items():
+        original_source = subprocess.check_output(['git','show','b2998c65c2ca3519080393f56d2088a1210f1456:'+name],cwd=study.baseline.BASE.parents[1])
+        assert hashlib.sha256(original_source).hexdigest() == wanted
     assert json.dumps(result,separators=(',',':')) == before
     assert sum(len(c['invalidated_rows']) for c in actual['candidates'].values()) == 4
     assert sum(c['status_counts'].get('EVALUATED',0) for c in actual['candidates'].values()) == 3041
@@ -95,7 +102,8 @@ def test_heldout_correction_replays_without_changing_the_original_result():
 
 
 @pytest.mark.parametrize('oracle_fails',[False,True])
-def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails):
+@pytest.mark.parametrize('diagnostic_fails',[False,True])
+def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails,diagnostic_fails):
     events = []
     monkeypatch.setattr(study.baseline,'read_inputs',lambda: ({},{'plan':{'references':['G05','G06']}}))
     arcs = lambda q:[{'candidate':q,'endpoint_gpst_s':36060.},{'candidate':q,'endpoint_gpst_s':36240.}]
@@ -103,7 +111,11 @@ def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails):
     monkeypatch.setattr(study,'calibrate',lambda *args,**kwargs:({'blocks':[]},[],{'status':'CONDITIONAL_MODEL_REJECTED'}))
     monkeypatch.setattr(study,'attach',lambda network,arcs:(arcs,np.eye(1),{}))
     monkeypatch.setattr(study,'held_out_links',lambda *args,**kwargs:{})
-    monkeypatch.setattr(study,'injection_checks',lambda *args:{})
+    def diagnostic(*args):
+        if diagnostic_fails:
+            raise ValueError('synthetic network diagnostic failure')
+        return {}
+    monkeypatch.setattr(study,'injection_checks',diagnostic)
     monkeypatch.setattr(study,'information',lambda *args:{})
     def fit(arcs,**kwargs):
         events.append('fit '+arcs[0]['candidate'])
@@ -113,7 +125,8 @@ def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails):
     monkeypatch.setattr(study.dynamic_fit,'fit',fit)
     monkeypatch.setattr(study.baseline.interval,'predict',lambda *args:[])
     def score(data,q,predictions):
-        assert events[:6] == ['fit G05']*3+['fit G06']*3
+        count = 2 if diagnostic_fails else 3
+        assert events[:2*count] == ['fit G05']*count+['fit G06']*count
         events.append('score '+q)
         return {}
     monkeypatch.setattr(study.baseline,'score_rf',score)
@@ -125,10 +138,14 @@ def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails):
     monkeypatch.setattr(study.baseline,'state_errors',lambda *args:{})
     result = study.run()
     assert result['all_predictions_before_scoring']
-    assert result['candidates']['G05']['variants']['network']['fit']['status'] == 'REFERENCE_CALIBRATION_MODEL_REJECTED'
-    assert result['candidates']['G05']['variants']['network']['fit']['algebraic_target_fit_status'] == 'BRANCH_SEARCH_INCOMPLETE'
+    if diagnostic_fails:
+        assert result['candidates']['G05']['variants']['network']['fit']['status']=='NETWORK_UNAVAILABLE'
+        assert result['candidates']['G05']['network']['calibration']['status']=='NETWORK_FAILED'
+    else:
+        assert result['candidates']['G05']['variants']['network']['fit']['status'] == 'REFERENCE_CALIBRATION_MODEL_REJECTED'
+        assert result['candidates']['G05']['variants']['network']['fit']['algebraic_target_fit_status'] == 'BRANCH_SEARCH_INCOMPLETE'
     if oracle_fails:
-        assert result['candidates']['G05']['variants']['network']['state_evaluation']['status']=='ORACLE_UNAVAILABLE'
+        assert result['candidates']['G05']['variants']['network_free_phase_drift']['state_evaluation']['status']=='ORACLE_UNAVAILABLE'
 
 
 def test_result_preserves_all_candidates_failures_covariances_and_scores():
