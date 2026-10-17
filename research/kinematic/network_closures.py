@@ -55,7 +55,7 @@ def closure_records(network, candidate):
         'physical_nondispersive_covariance_qualified': False}
 
 
-def prepare_future_links(rows, candidate, raw_covariance, *, wet_sources=False):
+def prepare_future_links(rows, candidate, raw_covariance, *, wet_sources=False, source_families=None):
     """Remove fixed links in the last third before GF/ambiguity/clock fitting.
 
     Predictions use other links at the excluded epoch, not a clock forecast.
@@ -63,6 +63,8 @@ def prepare_future_links(rows, candidate, raw_covariance, *, wet_sources=False):
     declared continuity hypothesis; increments do not require its level.
     """
     admit(rows, candidate)
+    if wet_sources and source_families is not None:
+        raise ValueError('select one source model')
     cut = min(r['time_s'] for r in rows)+2*(max(r['time_s'] for r in rows)-min(r['time_s'] for r in rows))/3
     links = sorted({(r['station'], r['reference']) for r in rows})
     selected = [k for k in links if int.from_bytes(hashlib.sha256(('/'.join(k)).encode('ascii')).digest()[:8], 'big') % 7 == 0]
@@ -76,6 +78,9 @@ def prepare_future_links(rows, candidate, raw_covariance, *, wet_sources=False):
         'conditional_on_original_timing_and_reference_masks': True}
     try:
         fitted = network_clocks.fit(training, raw_covariance=raw_covariance)
+        if source_families is not None:
+            source,workspace=source_geometry.profile_sources(fitted,candidate,source_families)
+            output['source_model']=source
         if wet_sources:
             source = source_geometry.profile_wet(fitted,candidate)
             output['source_model'] = source
@@ -96,6 +101,11 @@ def prepare_future_links(rows, candidate, raw_covariance, *, wet_sources=False):
         base = r.get('base_segment', r['segment'])
         item = {k:r[k] for k in ('station','reference','time_s')}
         item['base_segment'] = base
+        if source_families is not None:
+            last=prefix.get((r['station'],r['reference'],base))
+            prediction=source_geometry.source_link_prediction(fitted,workspace,r,None if last is None else last['segment'])
+            output['predictions'].append({**item,**prediction,'continuity_after_prefix_observed':False})
+            continue
         try:
             b = blocks[r['time_s']]
             i,j = b['stations'].index(r['station']), b['references'].index(r['reference'])
@@ -131,7 +141,7 @@ def score_future_links(prepared, rows):
         predicted = p.get('path_prediction_m',p['clock_prediction_m'])
         errors.append({**p, 'segment':p['base_segment'],
             'code_m': r['code_m']-predicted, 'phase_m': 0.,
-            'mw_m': r['phase_m']-predicted})
+            'mw_m': r['phase_m']-p.get('phase_path_prediction_m',predicted)})
         levels.append({**p, 'code_error_m': r['code_m']-predicted,
             'phase_error_m': None if p['phase_prediction_m'] is None else r['phase_m']-p['phase_prediction_m']})
     results = []
