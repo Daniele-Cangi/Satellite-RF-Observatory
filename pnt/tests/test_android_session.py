@@ -456,18 +456,42 @@ def test_independent_execution_rejects_weakened_or_impossible_schedule(tmp_path,
     assert result['witness_report'] == witness
 
 
-def test_cli_retains_insufficient_report_and_does_not_overwrite(tmp_path):
-    path, _, _ = archive(tmp_path)
+@pytest.mark.parametrize('sample', ['generated', 'quickstart'])
+def test_cli_retains_insufficient_report_and_does_not_overwrite(tmp_path, sample):
+    if sample == 'generated':
+        path, _, _ = archive(tmp_path)
+    else:
+        path = Path(__file__).resolve().parents[1] / 'examples/android-session-synthetic.zip'
+    original = path.read_bytes()
     report_path = tmp_path / 'pc-report.json'
-    command = [sys.executable, '-m', 'pnt', 'android-session', str(path), '--output', str(report_path)]
+    command = [sys.executable, '-S', '-m', 'pnt', 'android-session', str(path), '--output', str(report_path)]
     result = subprocess.run(command, capture_output=True, text=True)
     assert result.returncode == 2 and report_path.exists()
     content = report_path.read_bytes()
-    assert json.loads(content)['comparison'] is None
+    report = json.loads(content)
+    assert report['comparison'] is None and report['analysis_options'] is None
+    assert report['sources']['archive']['sha256'] == hashlib.sha256(original).hexdigest()
+    if sample == 'quickstart':
+        assert report['capture_id'] == ID
+        assert report['witness_status_counts'] == {'AUTHENTICATED_EXCHANGE': 3, 'WITNESS_UNAVAILABLE': 1}
+        assert report['intake']['coverage']['status_counts'] == {
+            'NORMALIZED': 3, 'UNSUPPORTED_CONSTELLATION': 1, 'raw_rows': 4}
+        witness = report['witness_report']
+        assert witness['capture_context']['collector_source'] == 'SYNTHETIC_ONLY'
+        assert witness['assumptions']['server_error_ns'] is None
+        assert witness['assumptions']['rate_error_ppm'] is None
+        assert all(a['exchange']['monotonic_resolution_ns'] is None
+                   for a in witness['attempts'] if 'exchange' in a)
+        assert len(report['issues']) == 1 and 'not been supplied' in report['issues'][0]
+        assert 'independent_budget_qualification' in report['checks_not_performed']
+        with zipfile.ZipFile(path) as z:
+            assert set(z.namelist()) == {RAW_NAME, NTS_NAME}
+            assert z.read(RAW_NAME) == FIXTURE.read_bytes()
     assert 'Timing comparison not run' in result.stdout
     repeat = subprocess.run(command, capture_output=True, text=True)
     assert repeat.returncode == 2 and 'already exists' in repeat.stderr
     assert report_path.read_bytes() == content
+    assert path.read_bytes() == original
 
 
 @pytest.mark.skipif(os.environ.get('PNT_ANDROID_NTS_INTEGRATION') != '1',

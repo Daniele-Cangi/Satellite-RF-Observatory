@@ -10,6 +10,10 @@ It retains the existing Raw format and Python
 intake/replay. It does not adjust the device clock, authenticate local RF or
 compute a timing/security verdict on the phone.
 
+For a first installation and PC report, follow the
+[diagnostic quick start](../../docs/DIAGNOSTIC_QUICKSTART.md), including the
+synthetic offline example and existing CI APK artifacts.
+
 ## Record and export
 
 1. Install the debug APK below on the recording phone. Enable Location and grant
@@ -138,10 +142,12 @@ can analyze growing native files and retain revisions. The optional private
 connection above supplies files during recording; the ZIP/report workflow below
 remains the interface for importing a complete PC report.
 
-On the PC, from the repository root:
+On the PC, from the repository root, using Python 3.13. Offline ZIP intake,
+conditional session comparison and arithmetic replay use only the standard
+library; live Python NTS probes and private HTTPS transfer have separate
+dependencies documented in their command guides:
 
 ```console
-python -m pip install -r requirements-pnt-time.txt
 python -m pnt android-session pnt-session-<id>.zip --output phone-report.json
 ```
 
