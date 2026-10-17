@@ -263,6 +263,29 @@ riferimenti e bias stabili, con il corretto accoppiamento e informazione
 indipendente sui funzionali umidi richiesti. Nessuno score CODE nuovo,
 covarianza fisica ammessa, rivelazione G12 o avanzamento S3.
 
+Il [confronto congiunto delle sorgenti](../research/exploratory/REFERENCE_SOURCE_SEPARATION.md)
+ora compete la forma umida con spostamenti APC dei soli riferimenti in RTN,
+offset antenna nel corpo satellite e bias IF stabili, profilando clock e float.
+Restano 22 candidati, 440 finestre, 63 archi, 17 preparazioni insufficienti e
+cinque traiettorie BRANCH_SEARCH_INCOMPLETE. Il rango umido resta 6/6, ma la
+precisione marginale condizionale peggiora da 1,6-19,1 mm a 14,2-3268,9 mm;
+l'inflazione massima per stazione raggiunge 227 volte. G19 produce ritardo
+umido totale negativo. I rappresentanti algebrici dei modelli piu liberi
+richiedono bias e spostamenti enormi: fino a 2,13 milioni di metri per RTN,
+fuori dal significato di una perturbazione APC locale. Non sono errori misurati.
+I 68-72 modi sorgente irrisolti del modello completo quasi si cancellano nel
+trasferimento congiunto al candidato per il probe da 1 cm di norma totale;
+il limite serio resta nelle combinazioni deboli ancora risolte, non si cura
+fissando a zero un alias. Nessuna ampiezza diventa correzione del candidato.
+Su 1494 righe escluse il modello completo emette 1292 coppie, conserva 178
+clock assenti, 18 prefissi fase assenti e sei predizioni non identificabili.
+A supporto comune, la fase a 300 s peggiora in tutti i cinque fold, da 14,567
+a 113,850 mm RMS; i peggioramenti e tutti i denominatori restano nel rapporto.
+La stima non qualifica una separazione fisica umidita/orbita/antenna/bias.
+S2 resta aperta: risolvere le combinazioni deboli con validita fisica finita
+e informazione indipendente o maggiore leva geometrica, senza floor ad hoc.
+Nessuno score CODE nuovo, rivelazione G12, covarianza fisica o campagna S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
