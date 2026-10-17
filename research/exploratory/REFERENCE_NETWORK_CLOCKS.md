@@ -172,20 +172,23 @@ predictions, code worsens in 14/26 and phase in 8/26 for either network variant.
 The aggregate code improvement mixes internal holdouts with genuinely future
 prediction; it must not conceal the latter's worsening.
 
-Network withholding evaluates 3045 of 3589 link-epochs with constant biases;
-544 have no observed clock/reference/segment support after withholding and
-are retained. For free drift, the corrected count is **3041/3589**, with 548
-unsupported cases. The original v1 receipt incorrectly predicted four
-single-training-epoch segments by implicitly fixing their unidentifiable
-slopes to zero. The separate immutable
-`results/reference_network_clocks_heldout_correction_v1.json` invalidates those
-predictions and recomputes the held-out summaries. Its producer is retained at
-`b2998c65c2ca3519080393f56d2088a1210f1456`; later unrelated failure handling does
-not refresh its source hashes. The affected rows are
+Network withholding evaluates **3045/3589 code observations in either variant**,
+with 544 unsupported code observations retained. Phase evaluates 3045/3589 with
+constant biases and **3041/3589 with free drift**, with 548 unsupported phase
+observations. The original v1 receipt incorrectly predicted four
+single-training-epoch phase segments by implicitly fixing their unidentifiable
+slopes to zero. The first immutable support correction at
+`b2998c65c2ca3519080393f56d2088a1210f1456` discarded their still-supported code
+observations as well; review identified that error. The active correction is
+`results/reference_network_clocks_heldout_correction_v2.json`, produced at
+`2d4bc3a04cc737d65a82cc517bf2fde1a0937acb`. It invalidates only the phase
+predictions and preserves the original code errors, counts and RMS. The full
+receipt and superseded v1 correction remain unchanged. The affected rows are
 G05/STJO/G13 at 36030, G05/BRAZ/G21 at 37740, G11/STJO/G13 at 36030 and
 G19/STJO/G13 at 36000 GPST. All clocks, trajectories, covariance, candidate RF
 forecasts and CODE scores remain the original execution. Fresh executions
-now return `UNIDENTIFIABLE_PHASE_DRIFT` for these singleton extrapolations.
+report code and phase status separately: these rows have evaluated code and
+`UNIDENTIFIABLE_PHASE_DRIFT` phase, with overall `PARTIALLY_EVALUATED` status.
 These folds overlap and share products. Constant-bias phase
 prediction RMS is 22.3–30.5 mm by candidate. Free drift gives 18.6–24.4 mm in
 four candidates but **566.7 mm for G19**, with a 7.865 m maximum on an excluded

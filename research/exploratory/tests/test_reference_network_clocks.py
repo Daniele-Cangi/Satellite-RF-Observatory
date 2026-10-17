@@ -93,6 +93,12 @@ def test_heldout_correction_replays_without_changing_the_original_result():
     previous_bytes = (study.baseline.BASE/'results/reference_network_clocks_heldout_correction_v1.json').read_bytes()
     previous = json.loads(previous_bytes)
     actual = study.held_out_support_correction(result,hashlib.sha256(original).hexdigest(),hashlib.sha256(previous_bytes).hexdigest())
+    stored = json.loads((study.baseline.BASE/'results/reference_network_clocks_heldout_correction_v2.json').read_bytes())
+    assert {k:v for k,v in actual.items() if k!='source_sha256'} == {
+        k:v for k,v in stored.items() if k!='source_sha256'}
+    for name,wanted in stored['source_sha256'].items():
+        producer = subprocess.check_output(['git','show','2d4bc3a04cc737d65a82cc517bf2fde1a0937acb:'+name],cwd=study.baseline.BASE.parents[1])
+        assert hashlib.sha256(producer).hexdigest()==wanted
     # The superseded correction remains byte/source bound; its four code
     # exclusions are diagnosed, not silently rewritten to the new counts.
     for name,wanted in previous['source_sha256'].items():
