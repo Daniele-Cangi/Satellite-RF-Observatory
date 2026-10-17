@@ -13,10 +13,11 @@ from research.exploratory.tests.test_reference_state_validation import Forbidden
 from research.kinematic.tests.test_network_clocks import toy
 
 
-def test_real_network_filters_candidate_products_rf_and_future_before_arithmetic():
+@pytest.mark.parametrize('continuity',[False,True])
+def test_real_network_filters_candidate_products_rf_and_future_before_arithmetic(continuity):
     _,data = study.baseline.read_inputs()
     weather = study.baseline.interval.shared.meteo.WeatherGrid(study.baseline.interval.shared.meteo.read_inputs()[0])
-    expected,failures = study.reference_rows(data,'G05',36060.,weather)
+    expected,failures = study.reference_rows(data,'G05',36060.,weather,continuity=continuity)
     poisoned = poison_products(data,'G05')
     for epochs in poisoned['observations'].values():
         for epoch in epochs:
@@ -27,7 +28,7 @@ def test_real_network_filters_candidate_products_rf_and_future_before_arithmetic
         for row in item['rows']:
             if row['reference']=='G05' or row['time_s']>36060.:
                 row['phase_m'] = row['code_m'] = row['geometry_free_phase_m'] = Forbidden()
-    actual,actual_failures = study.reference_rows(poisoned,'G05',36060.,weather)
+    actual,actual_failures = study.reference_rows(poisoned,'G05',36060.,weather,continuity=continuity)
     assert actual == expected and actual_failures == failures
     assert {r['station'] for r in actual} == {'ALGO00CAN','AREQ00PER','BOGT00COL','BRAZ00BRA','DRAO00CAN','STJO00CAN'}
 
@@ -63,6 +64,66 @@ def test_network_clock_transport_keeps_arc_order_and_correlations():
     assert transport['maximum_cross_arc_clock_covariance'] > 1.
     # Neither the input arcs nor their conditional floors are modified.
     assert 'clock_mean' not in arcs[0]
+
+
+def test_witness_recalibrates_the_whole_network_without_repairing_phase():
+    rows = toy()
+    for r in rows:
+        if r['time_s']>60.:
+            r['time_s'] -= 90.
+        r['geometry_free_phase_m'] = 0.
+        if r['station']=='A' and r['reference']=='X' and r['time_s']>=90.:
+            r['phase_m'] += .85
+            r['geometry_free_phase_m'] = -.425
+    original = study.network_clocks.fit(rows)
+    segmented = study.phase_continuity.segment(rows)
+    revised = study.network_clocks.fit(segmented)
+    requests = [{('A',90.):1.,('B',90.):-1.},
+                {('A',90.):1/60.,('A',30.):-1/60.}]
+    before,c0 = study.network_clocks.clock_coefficients(original,requests)
+    after,c1 = study.network_clocks.clock_coefficients(revised,requests)
+    pristine = toy()
+    for r in pristine:
+        if r['time_s']>60.:
+            r['time_s'] -= 90.
+    expected,_ = study.network_clocks.clock_coefficients(study.network_clocks.fit(pristine),requests)
+    assert max(abs(before-expected)) > .01
+    np.testing.assert_allclose(after,expected,atol=1e-8,rtol=0)
+    assert np.linalg.eigvalsh(c1-c0)[-1] > 1e-8
+    assert sum(r['continuity']['break'] for r in segmented)==1
+    assert [r['phase_m'] for r in segmented]==[r['phase_m'] for r in rows]
+
+
+def test_withheld_gf_cannot_select_its_own_phase_prediction():
+    rows = toy()
+    for r in rows:
+        r['geometry_free_phase_m'] = 0.
+    rows = study.phase_continuity.segment(rows)
+    expected = study.held_out_links(rows,continuity=True)
+    poisoned = [dict(r) for r in rows]
+    for i,r in enumerate(poisoned):
+        if not i%7:
+            r['geometry_free_phase_m'] = Forbidden()
+    assert study.held_out_links(poisoned,continuity=True)==expected
+    assert expected['segmentation_uses_withheld_phase'] is False
+
+
+def test_target_mask_uses_only_training_rf_and_keeps_every_code():
+    own = [{'reference':'G05','time_s':t,'status':'AVAILABLE',
+            'geometry_free_phase_m':0. if t<60. else -.425}
+           for t in (0.,30.,60.)]
+    own += [{'reference':'G05','time_s':t,'status':'AVAILABLE','geometry_free_phase_m':Forbidden()}
+            for t in (90.,120.)]
+    own += [{'reference':'G06','time_s':0.,'status':'AVAILABLE','geometry_free_phase_m':Forbidden()}]
+    data = {'phase':{'stations':{'A':{'rows':own}}}}
+    arcs = [{'stations':['A'],'endpoint_gpst_s':60.,'tags_s':[-60.,-30.,0.],
+             'codes_m':np.array([[1.],[2.],[3.]])}]
+    actual,diagnostic = study.target_continuity(data,'G05',arcs)
+    np.testing.assert_array_equal(actual[0]['phase_increment_mask'],[[True],[False]])
+    np.testing.assert_array_equal(actual[0]['codes_m'],arcs[0]['codes_m'])
+    assert diagnostic['retained_increment_count']==1
+    assert diagnostic['total_increment_count']==2
+    assert not diagnostic['globally_withheld_target_phase_used']
 
 
 @pytest.mark.parametrize('training_phase_level',[False,True])
@@ -116,13 +177,15 @@ def test_heldout_correction_replays_without_changing_the_original_result():
 
 @pytest.mark.parametrize('oracle_fails',[False,True])
 @pytest.mark.parametrize('diagnostic_fails',[False,True])
-def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails,diagnostic_fails):
+@pytest.mark.parametrize('continuity',[False,True])
+def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails,diagnostic_fails,continuity):
     events = []
     monkeypatch.setattr(study.baseline,'read_inputs',lambda: ({},{'plan':{'references':['G05','G06']}}))
     arcs = lambda q:[{'candidate':q,'endpoint_gpst_s':36060.},{'candidate':q,'endpoint_gpst_s':36240.}]
     monkeypatch.setattr(study.baseline,'build_arcs',lambda data,q,weather:(arcs(q),[{'status':'PREPARED'}]))
     monkeypatch.setattr(study,'calibrate',lambda *args,**kwargs:({'blocks':[]},[],{'status':'CONDITIONAL_MODEL_REJECTED'}))
     monkeypatch.setattr(study,'attach',lambda network,arcs:(arcs,np.eye(1),{}))
+    monkeypatch.setattr(study,'target_continuity',lambda data,q,arcs:(arcs,{}))
     monkeypatch.setattr(study,'held_out_links',lambda *args,**kwargs:{})
     def diagnostic(*args):
         if diagnostic_fails:
@@ -149,7 +212,7 @@ def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails,di
         return None
     monkeypatch.setattr(study.baseline,'oracle',oracle)
     monkeypatch.setattr(study.baseline,'state_errors',lambda *args:{})
-    result = study.run()
+    result = study.run(continuity=continuity)
     assert result['all_predictions_before_scoring']
     if diagnostic_fails:
         assert result['candidates']['G05']['variants']['network']['fit']['status']=='NETWORK_UNAVAILABLE'
@@ -158,7 +221,8 @@ def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails,di
         assert result['candidates']['G05']['variants']['network']['fit']['status'] == 'REFERENCE_CALIBRATION_MODEL_REJECTED'
         assert result['candidates']['G05']['variants']['network']['fit']['algebraic_target_fit_status'] == 'BRANCH_SEARCH_INCOMPLETE'
     if oracle_fails:
-        assert result['candidates']['G05']['variants']['network_free_phase_drift']['state_evaluation']['status']=='ORACLE_UNAVAILABLE'
+        label = 'network_gf_segments_free_phase_drift' if continuity else 'network_free_phase_drift'
+        assert result['candidates']['G05']['variants'][label]['state_evaluation']['status']=='ORACLE_UNAVAILABLE'
 
 
 def test_result_preserves_all_candidates_failures_covariances_and_scores():

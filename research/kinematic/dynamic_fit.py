@@ -60,6 +60,22 @@ def prepare(arcs, phase):
             raise ValueError('finite interval phase rates required')
         observed = np.r_[codes.ravel(),rates.ravel(),clocks.ravel(),np.zeros(3*n)]
         chol = cholesky_covariance(a['covariance'],len(observed))
+        mask = np.asarray(a.get('phase_increment_mask',np.ones(rates.shape,dtype=bool)))
+        if mask.dtype != np.bool_ or mask.shape != rates.shape:
+            raise ValueError('boolean mask matching phase interval rates required')
+        # Profiling a completely free jump in an increment is exactly its
+        # removal with the retained covariance's principal submatrix. In
+        # particular a rejected increment must not condition its neighbor's
+        # noise through the negative shared-endpoint covariance.
+        indices = np.flatnonzero(np.r_[np.ones(codes.size,dtype=bool),mask.ravel(),
+                                      np.ones(clocks.size+3*n,dtype=bool)])
+        if len(indices) != len(observed):
+            covariance = np.asarray(a['covariance'])[np.ix_(indices,indices)]
+            chol = cholesky_covariance(covariance,len(indices))
+        if phase:
+            difference = difference[mask.ravel()]
+        full_count = len(observed)
+        observed = observed[indices]
         response = np.asarray(a.get('wet_clock_response', np.zeros((n,nc))),float)
         if response.shape!=(n,nc) or not np.isfinite(response).all() or wet[0] and 'propagation' not in a:
             raise ValueError('finite station-wise wet clock response and propagation required')
@@ -68,9 +84,22 @@ def prepare(arcs, phase):
             'chol':chol,'difference':difference,'local_scale':local_scale,
             'basis':basis[[names.index(s) for s in a['stations']]],'n':n,'phase':phase,
             'ns':ns,'nc':nc,'clock_basis':clock_basis,'wet':wet[0],
+            'observation_indices':indices,'full_observation_count':full_count,
             'wet_response':response,'station_indices':[names.index(s) for s in a['stations']]})
     prepared.sort(key=lambda a:a['endpoint_gpst_s'])
     return prepared,names,basis
+
+
+def joint_cholesky(prepared, covariance):
+    """Select retained data in a full chronological joint covariance."""
+    count = sum(a['full_observation_count'] for a in prepared)
+    chol = cholesky_covariance(covariance,count)
+    indices, at = [], 0
+    for a in prepared:
+        indices.extend(at+a['observation_indices'])
+        at += a['full_observation_count']
+    return chol if len(indices)==count else cholesky_covariance(
+        np.asarray(covariance)[np.ix_(indices,indices)],len(indices))
 
 
 def model(curve, arc, local, beta, epoch, *, derivatives=False):
@@ -290,7 +319,7 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
     # Matrix ordering is the concatenation of complete observed vectors in
     # chronological prepared-arc order. The historical block path is unchanged.
     joint_options = {} if joint_covariance is None else {'joint_chol':
-        cholesky_covariance(joint_covariance, sum(len(a['observed']) for a in prepared))}
+        joint_cholesky(prepared,joint_covariance)}
     epoch = prepared[0]['endpoint_gpst_s']
     bounds = (min(a['endpoint_gpst_s']-epoch+a['tags'][0] for a in prepared)-2.,
               max(1.,max(a['endpoint_gpst_s']-epoch+30 for a in prepared)+2.))
@@ -371,4 +400,6 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
             'residual_dof':dof,'conditional_residual_p':p_value,'parameter_count':total_parameters,
             'scaled_condition':best['scaled_condition'],'branch_failures':failures,'branches':branches,
             'candidate_count':len(candidates),'physical_covariance_qualified':False,'j2':j2,
-            'numerical_step_joint_sigma_tolerance':STEP_SIGMA_TOL,'residual_threshold_p':.01}
+            'numerical_step_joint_sigma_tolerance':STEP_SIGMA_TOL,'residual_threshold_p':.01,
+            'retained_phase_increment_count':sum(len(a['difference']) for a in prepared) if include_phase else 0,
+            'total_phase_increment_count':sum((len(a['tags'])-1)*a['n'] for a in prepared) if include_phase else 0}

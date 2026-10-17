@@ -17,15 +17,15 @@ import numpy as np
 from scipy.linalg import block_diag
 
 from . import reference_state_validation as baseline
-from ..kinematic import dynamic_fit, network_clocks
+from ..kinematic import dynamic_fit, network_clocks, phase_continuity
 from ..kinematic.synthetic import native
 
 
-def reference_rows(data, candidate, stop, weather, centres=None):
+def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=False):
     """Identity/time filtering precedes numeric product and RF arithmetic.
 
-    Phase/code bias is free per flag/gap/mask-contiguous segment. No unflagged
-    jump repair is performed; its network residual remains in the result.
+    Phase/code bias is free per flag/gap/mask-contiguous segment. The optional
+    GF witness splits a segment without repairing any observed phase value.
     """
     refs = [q for q in data['plan']['references'] if q != candidate]
     provider, corrections = baseline.subset_products(data, refs, candidate)
@@ -68,20 +68,20 @@ def reference_rows(data, candidate, stop, weather, centres=None):
                     'geometry_free_phase_m': float(row['geometry_free_phase_m'])})
             except (KeyError, ValueError) as error:
                 failures[type(error).__name__+': '+str(error)] += 1
-    return output, dict(failures)
+    return phase_continuity.segment(output) if continuity else output, dict(failures)
 
 
-def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None):
+def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None, continuity=False):
     stop = max(a['endpoint_gpst_s'] for a in arcs)
     centres, iterations = ({} if centres is None else centres), []
     for iteration in range(4):
-        rows, failures = reference_rows(data, candidate, stop, weather, centres)
+        rows, failures = reference_rows(data, candidate, stop, weather, centres,continuity=continuity)
         network = network_clocks.fit(rows,phase_drift=phase_drift)
         updated = {(s, b['time_s']): b['parameters'][i]
                    for b in network['blocks'] for i, s in enumerate(b['stations'])}
         change = max(abs(v-centres.get(k, 0.)) for k, v in updated.items())
         iterations.append({'iteration': iteration, 'maximum_clock_change_m': change})
-        print(candidate,'network drift='+str(phase_drift),iterations[-1],flush=True)
+        print(candidate,'network drift='+str(phase_drift),'GF='+str(continuity),iterations[-1],flush=True)
         if change < 1e-5:
             break
         centres = updated
@@ -92,7 +92,13 @@ def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None
         'station_count': len({r['station'] for r in rows}),
         'reference_count': len({r['reference'] for r in rows}),
         'segment_count': len(network['segments']),
-        'phase_drift': phase_drift, 'drift_coefficients_m_per_hour': {
+        'phase_drift': phase_drift, 'geometry_free_segmentation': continuity,
+        **({'continuity_witnesses': [
+            {k:r[k] for k in ('station','reference','time_s','base_segment','segment','continuity')}
+            for r in rows if r['continuity']['break']],
+            'continuity_method_counts':dict(Counter(r['continuity']['method'] for r in rows))}
+            if continuity else {}),
+        'drift_coefficients_m_per_hour': {
             s: network['ambiguities_m'][j] for s,j in network['drift_index'].items()},
         'conditional_p': network['conditional_p'], 'weighted_cost': network['weighted_cost'],
         'residual_dof': network['residual_dof'],
@@ -106,7 +112,7 @@ def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None
         'residuals': network['residuals']}
 
 
-def held_out_links(rows, *, phase_drift=False):
+def held_out_links(rows, *, phase_drift=False, continuity=False):
     """Deterministic link-epoch withholding, never a source of tuned weights.
 
     Withholding an entire epoch cannot be predicted by free epoch clocks;
@@ -114,6 +120,10 @@ def held_out_links(rows, *, phase_drift=False):
     """
     training = [r for i,r in enumerate(rows) if i%7]
     withheld = [r for i,r in enumerate(rows) if not i%7]
+    if continuity:
+        # Rebuild using only retained RF. Using the excluded phase's own GF
+        # to select its ambiguity would leak it into the prediction/support.
+        training = phase_continuity.segment(training)
     try:
         network = network_clocks.fit(training,phase_drift=phase_drift)
     except (ValueError,np.linalg.LinAlgError) as error:
@@ -123,6 +133,8 @@ def held_out_links(rows, *, phase_drift=False):
     records = []
     for r in withheld:
         record = {k:r[k] for k in ('time_s','station','reference','segment')}
+        segment = phase_continuity.withheld_segment(r,training) if continuity else r['segment']
+        record['predicted_segment'] = segment
         try:
             b = blocks[r['time_s']]
             i,j = b['stations'].index(r['station']),b['references'].index(r['reference'])
@@ -136,15 +148,17 @@ def held_out_links(rows, *, phase_drift=False):
         # Code requires only the receiver/reference clocks. A missing phase
         # ambiguity or slope must not discard this supported observation.
         record.update(code_status='EVALUATED',code_error_m=r['code_m']-predicted)
-        if r['segment'] not in segments:
+        if segment is None:
+            record.update(status='PARTIALLY_EVALUATED',phase_status='UNOBSERVED_CONTINUITY_SEGMENT')
+        elif segment not in segments:
             record.update(status='PARTIALLY_EVALUATED',phase_status='UNOBSERVED_SEGMENT')
-        elif phase_drift and r['segment'] not in network['drift_index']:
+        elif phase_drift and segment not in network['drift_index']:
             record.update(status='PARTIALLY_EVALUATED',phase_status='UNIDENTIFIABLE_PHASE_DRIFT')
         else:
-            ambiguity = network['ambiguities_m'][segments[r['segment']]]
-            if r['segment'] in network['drift_index']:
-                ambiguity += network['ambiguities_m'][network['drift_index'][r['segment']]]*(
-                    r['time_s']-network['segment_start_s'][r['segment']])/3600.
+            ambiguity = network['ambiguities_m'][segments[segment]]
+            if segment in network['drift_index']:
+                ambiguity += network['ambiguities_m'][network['drift_index'][segment]]*(
+                    r['time_s']-network['segment_start_s'][segment])/3600.
             record.update(status='EVALUATED',phase_status='EVALUATED',
                 phase_error_m=r['phase_m']-predicted-ambiguity)
         records.append(record)
@@ -155,6 +169,7 @@ def held_out_links(rows, *, phase_drift=False):
         'code_error_m':baseline.interval.diagnostic.moments([r['code_error_m'] for r in records if r['code_status']=='EVALUATED']),
         'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in records if r['phase_status']=='EVALUATED']),
         'whole_time_block_prediction':'UNIDENTIFIABLE_WITH_FREE_EPOCH_CLOCKS',
+        'segmentation_uses_withheld_phase':False,
         'future_clock_rule':'retain the fitted arc mean; no network future data or quadratic extrapolation'}
 
 
@@ -216,7 +231,7 @@ def information(fit, arcs, joint):
         for p,a in zip(fit['arc_parameters'],prepared,strict=True)]
     details = {}
     _,_,_,cov,_,_ = dynamic_fit.linearize(point,locals_,prepared,scale,fit['epoch_gpst_s'],
-        fit['integrated_bounds_s'],fit['j2'],joint_chol=np.linalg.cholesky(joint),diagnostics=details)
+        fit['integrated_bounds_s'],fit['j2'],joint_chol=dynamic_fit.joint_cholesky(prepared,joint),diagnostics=details)
     indices, at = [],0
     for a in prepared:
         indices.extend(at+a['ns']+1+3*np.arange(a['n']))
@@ -308,10 +323,43 @@ def injection_checks(rows, arcs):
     return checks
 
 
-def run():
+def target_continuity(data, candidate, arcs):
+    """Assess only target epochs already in the RF training arcs.
+
+    Globally excluded internal/future target phase is never used to construct
+    a training mask. Codes remain observed even when an increment has a free
+    unknown jump. Reference calibration is performed separately without it.
+    """
+    index, own, witnesses = baseline.phase_index(data), [], []
+    for arc in sorted(arcs,key=lambda a:a['endpoint_gpst_s']):
+        rows = []
+        for s in arc['stations']:
+            for dt in arc['tags_s']:
+                t = arc['endpoint_gpst_s']+dt
+                r = index[s][candidate,t]
+                if r['status'] != 'AVAILABLE':
+                    raise ValueError('prepared target phase became unavailable')
+                rows.append({'station':s,'reference':candidate,'time_s':t,
+                    'segment':f'{s}/{candidate}/{arc["endpoint_gpst_s"]}',
+                    'geometry_free_phase_m':r['geometry_free_phase_m']})
+        assessed = phase_continuity.segment(rows)
+        by_key = {(r['station'],r['time_s']):r for r in assessed}
+        mask = np.array([[not by_key[s,arc['endpoint_gpst_s']+t]['continuity']['break']
+                          for s in arc['stations']] for t in arc['tags_s'][1:]],dtype=bool)
+        own.append({**arc,'phase_increment_mask':mask})
+        witnesses.extend(r for r in assessed if r['continuity']['break'])
+    return own, {'witnesses':witnesses,'retained_increment_count':sum(int(a['phase_increment_mask'].sum()) for a in own),
+        'total_increment_count':sum(a['phase_increment_mask'].size for a in own),
+        'globally_withheld_target_phase_used':False,'target_codes_retained':True}
+
+
+def run(*, continuity=False):
     raw, data = baseline.read_inputs()
     weather = baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
     results, prepared = {}, {}
+    configurations = ([('network',False,False),('network_gf_segments',False,True),
+                       ('network_gf_segments_free_phase_drift',True,True)] if continuity else
+                      [('baseline',False,False),('network',False,False),('network_free_phase_drift',True,False)])
     for candidate in data['plan']['references']:
         print(candidate, 'prepare', flush=True)
         try:
@@ -326,16 +374,21 @@ def run():
         calibrated = {}
         if len(arcs) >= 2:
             centres = None
-            for label,drift in [('network',False),('network_free_phase_drift',True)]:
+            for label,drift,split in configurations:
+                if label=='baseline':
+                    continue
                 try:
-                    network, rows, calibration = calibrate(data,candidate,arcs,weather,phase_drift=drift,centres=centres)
+                    network, rows, calibration = calibrate(data,candidate,arcs,weather,phase_drift=drift,centres=centres,continuity=split)
                     centres = {(s,b['time_s']):b['parameters'][i]
                         for b in network['blocks'] for i,s in enumerate(b['stations'])}
                     own,joint,transport = attach(network,arcs)
+                    if split:
+                        own,target = target_continuity(data,candidate,own)
+                        transport['target_continuity'] = target
                     calibrated[label] = (own,joint)
                     record[label] = {'calibration':calibration,'transport':transport,
-                        'held_out_links':held_out_links(rows,phase_drift=drift)}
-                    if not drift:
+                        'held_out_links':held_out_links(rows,phase_drift=drift,continuity=split)}
+                    if not drift and not split:
                         record['injections'] = injection_checks(rows,arcs)
                 except (ValueError, KeyError, np.linalg.LinAlgError) as error:
                     # Publish a network only after its full preparation has
@@ -345,7 +398,7 @@ def run():
                     failed = record.setdefault(label,{})
                     failed['calibration'] = {**failed.get('calibration',{}),
                         'status':'NETWORK_FAILED','reason':str(error)}
-        for label in ('baseline','network','network_free_phase_drift'):
+        for label,_,_ in configurations:
             own,joint = (arcs,None) if label=='baseline' else calibrated.get(label,(arcs,None))
             fit = {'status': 'INSUFFICIENT_PREPARED_ARCS', 'arc_count': len(arcs)}
             if len(arcs) >= 2:
@@ -381,35 +434,42 @@ def run():
                     variant['state_evaluation'] = baseline.state_errors(variant['fit'],prepared[candidate],baseline.oracle(data,candidate))
                 except (ValueError,KeyError,np.linalg.LinAlgError) as error:
                     variant['state_evaluation'] = {'status':'ORACLE_UNAVAILABLE','reason':str(error),'rows':[]}
-    modules = [baseline, baseline.interval, baseline.interval.shared, dynamic_fit, network_clocks,
+    modules = [baseline, baseline.interval, baseline.interval.shared, dynamic_fit, network_clocks, phase_continuity,
         baseline.dynamics, baseline.precise, baseline.attitude, baseline.bias, baseline.conventions,
         baseline.sp3, baseline.day, baseline.day.atmosphere, baseline.interval.shared.meteo]
     sources = [Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
-    return native({'schema': 'exposed-reference-network-clocks-v1',
+    return native({'schema': 'exposed-reference-phase-continuity-v1' if continuity else 'exposed-reference-network-clocks-v1',
         'scope': 'Exposed paired 22-candidate/440-window development. Free network reference-clock errors, float segment code/phase biases, joint offset/increment/cross-arc covariance; zero-mean reference-error datum. Conditional measurement model only, not independent truth or absolute clock/total uncertainty qualification.',
         'candidate_products_used_in_own_fit': False, 'candidate_rf_used_in_own_network': False,
         'g12_state_accessed': False, 'oracle_tuning': False, 'all_predictions_before_scoring': True,
         'new_confirmation': False, 'physical_covariance_qualified': False, 'production_floors_changed': False,
         'reference_endpoint_weight_sigmas_m': {'code':20.,'phase':.02},
+        'geometry_free_segmentation':continuity,
+        **({'continuity_rule':{'source':phase_continuity.SOURCE,'history':phase_continuity.HISTORY,
+            'warmup':'first difference','threshold':'1.5*(lambda2-lambda1)*(1-.5*exp(-dt/60))',
+            'maximum_gap_s':phase_continuity.MAX_GAP_S,'physical_detection_qualified':False,
+            'integer_slip_repair':False,'heldout_own_phase_used_for_segmentation':False}}
+           if continuity else {}),
         'phase_bias_variants':'constant float per segment versus additional unpenalized link-linear drift in m/hour; no amplitude prior or oracle selection',
         'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,
-        'execution_note':'Initial development run interrupted during G06 preparation after two G05 algebraic fits, before RF/CODE scoring, to include free phase drift and held-out network links. No completed artifact or historical outcome was replaced.',
+        'execution_note':('New exploratory continuity comparison, all variants retained; historical network v1 and corrections unchanged.' if continuity else 'Initial development run interrupted during G06 preparation after two G05 algebraic fits, before RF/CODE scoring, to include free phase drift and held-out network links. No completed artifact or historical outcome was replaced.'),
         'unqualified_sources': ['common reference-clock datum','reference orbit/attitude/phase bias stability',
             'unflagged phase continuity','phase wind-up and receiver code/phase bias drift',
             'terrestrial coordinates/propagation/dynamics and shared reference-target covariance'],
         'input_sha256': {k:baseline.interval.shared.digest(v) for k,v in raw.items()},
         'source_sha256': {p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
-        'fit_status_counts': {v:dict(Counter(r['variants'][v]['fit']['status'] for r in results.values())) for v in ('baseline','network','network_free_phase_drift')},
+        'fit_status_counts': {v:dict(Counter(r['variants'][v]['fit']['status'] for r in results.values())) for v,_,_ in configurations},
         'candidates': results})
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output',type=Path)
+    parser.add_argument('--continuity',action='store_true',help='compare geometry-free segmentation through reference and target paths')
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run()
+    result = run(continuity=args.continuity)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)
