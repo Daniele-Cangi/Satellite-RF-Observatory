@@ -17,11 +17,11 @@ import numpy as np
 from scipy.linalg import block_diag
 
 from . import reference_state_validation as baseline
-from ..kinematic import dynamic_fit, network_clocks, phase_continuity
+from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations
 from ..kinematic.synthetic import native
 
 
-def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=False):
+def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=False, combinations=False):
     """Identity/time filtering precedes numeric product and RF arithmetic.
 
     Phase/code bias is free per flag/gap/mask-contiguous segment. The optional
@@ -60,23 +60,31 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
                 if previous.get(key) != t-30:
                     segments[key] += 1
                 previous[key] = t
-                output.append({'station': station, 'reference': q, 'time_s': t,
+                record = {'station': station, 'reference': q, 'time_s': t,
                     'segment': f'{station}/{q}/{segments[key]}',
                     'code_m': code-value+derivative*centre,
                     'phase_m': float(row['phase_m'])-value+derivative*centre,
                     'clock_derivative': 1.+derivative,
-                    'geometry_free_phase_m': float(row['geometry_free_phase_m'])})
+                    'geometry_free_phase_m': float(row['geometry_free_phase_m'])}
+                if combinations:
+                    raw = gnss_combinations.values(row['fields'],code1_change_m=
+                        corrections[t,q]['if_code_change_m']/gnss_combinations.ALPHA)
+                    if abs(raw[0]-code)>1e-5:
+                        raise ValueError('raw/day IF code mismatch')
+                    record['mw_m'] = raw[3]
+                output.append(record)
             except (KeyError, ValueError) as error:
                 failures[type(error).__name__+': '+str(error)] += 1
     return phase_continuity.segment(output) if continuity else output, dict(failures)
 
 
-def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None, continuity=False):
+def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None, continuity=False, raw_covariance=None):
     stop = max(a['endpoint_gpst_s'] for a in arcs)
     centres, iterations = ({} if centres is None else centres), []
     for iteration in range(4):
-        rows, failures = reference_rows(data, candidate, stop, weather, centres,continuity=continuity)
-        network = network_clocks.fit(rows,phase_drift=phase_drift)
+        rows, failures = reference_rows(data, candidate, stop, weather, centres,
+            continuity=continuity,combinations=raw_covariance is not None)
+        network = network_clocks.fit(rows,phase_drift=phase_drift,raw_covariance=raw_covariance)
         updated = {(s, b['time_s']): b['parameters'][i]
                    for b in network['blocks'] for i, s in enumerate(b['stations'])}
         change = max(abs(v-centres.get(k, 0.)) for k, v in updated.items())
@@ -109,10 +117,16 @@ def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None
             'reference_error_m': b['reference_basis']@b['parameters'][len(b['stations']):]}
             for b in network['blocks']],
         'segments': network['segments'], 'ambiguities_m': network['ambiguities_m'],
+        **({'raw_endpoint_covariance_m2':raw_covariance,
+            'retained_combination_covariance_m2':network['combination_covariance'],
+            'mw_float_bias_m':{s:network['ambiguities_m'][i] for s,i in network['mw_index'].items()},
+            'mw_drift_m_per_hour':{s:network['ambiguities_m'][i] for s,i in network['mw_drift_index'].items()},
+            'gf_model':'free link-epoch ionosphere; GF profiled out, not conditioned on as exact'}
+            if raw_covariance is not None else {}),
         'residuals': network['residuals']}
 
 
-def held_out_links(rows, *, phase_drift=False, continuity=False):
+def held_out_links(rows, *, phase_drift=False, continuity=False, raw_covariance=None):
     """Deterministic link-epoch withholding, never a source of tuned weights.
 
     Withholding an entire epoch cannot be predicted by free epoch clocks;
@@ -125,7 +139,7 @@ def held_out_links(rows, *, phase_drift=False, continuity=False):
         # to select its ambiguity would leak it into the prediction/support.
         training = phase_continuity.segment(training)
     try:
-        network = network_clocks.fit(training,phase_drift=phase_drift)
+        network = network_clocks.fit(training,phase_drift=phase_drift,raw_covariance=raw_covariance)
     except (ValueError,np.linalg.LinAlgError) as error:
         return {'status':'HELD_OUT_NETWORK_FAILED','reason':str(error),'withheld_count':len(withheld)}
     blocks = {b['time_s']:b for b in network['blocks']}
@@ -135,13 +149,24 @@ def held_out_links(rows, *, phase_drift=False, continuity=False):
         record = {k:r[k] for k in ('time_s','station','reference','segment')}
         segment = phase_continuity.withheld_segment(r,training) if continuity else r['segment']
         record['predicted_segment'] = segment
+        if raw_covariance is not None:
+            if segment is None or segment not in network['mw_index']:
+                record['mw_status'] = 'UNOBSERVED_SEGMENT'
+            elif phase_drift and segment not in network['mw_drift_index']:
+                record['mw_status'] = 'UNIDENTIFIABLE_MW_DRIFT'
+            else:
+                mw = network['ambiguities_m'][network['mw_index'][segment]]
+                if segment in network['mw_drift_index']:
+                    mw += network['ambiguities_m'][network['mw_drift_index'][segment]]*(
+                        r['time_s']-network['segment_start_s'][segment])/3600.
+                record.update(mw_status='EVALUATED',mw_error_m=r['mw_m']-mw)
         try:
             b = blocks[r['time_s']]
             i,j = b['stations'].index(r['station']),b['references'].index(r['reference'])
             clocks = b['parameters']
             predicted = r.get('clock_derivative',1.)*clocks[i]-b['reference_basis'][j]@clocks[len(b['stations']):]
         except (KeyError,ValueError):
-            record.update(status='UNOBSERVED_CLOCK_OR_SEGMENT',
+            record.update(status='PARTIALLY_EVALUATED' if record.get('mw_status')=='EVALUATED' else 'UNOBSERVED_CLOCK_OR_SEGMENT',
                 code_status='UNOBSERVED_CLOCK',phase_status='UNOBSERVED_CLOCK')
             records.append(record)
             continue
@@ -161,6 +186,8 @@ def held_out_links(rows, *, phase_drift=False, continuity=False):
                     r['time_s']-network['segment_start_s'][segment])/3600.
             record.update(status='EVALUATED',phase_status='EVALUATED',
                 phase_error_m=r['phase_m']-predicted-ambiguity)
+        if raw_covariance is not None and record['mw_status']!='EVALUATED' and record['status']=='EVALUATED':
+            record['status'] = 'PARTIALLY_EVALUATED'
         records.append(record)
     return {'status':'RELATIVE_SHARED_PRODUCT_DIAGNOSTIC','rows':records,
         'status_counts':dict(Counter(r['status'] for r in records)),
@@ -168,6 +195,9 @@ def held_out_links(rows, *, phase_drift=False, continuity=False):
         'phase_status_counts':dict(Counter(r['phase_status'] for r in records)),
         'code_error_m':baseline.interval.diagnostic.moments([r['code_error_m'] for r in records if r['code_status']=='EVALUATED']),
         'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in records if r['phase_status']=='EVALUATED']),
+        **({'mw_status_counts':dict(Counter(r['mw_status'] for r in records)),
+            'mw_error_m':baseline.interval.diagnostic.moments([r['mw_error_m'] for r in records if r['mw_status']=='EVALUATED']),
+            'gf_prediction':'UNIDENTIFIABLE_WITH_FREE_LINK_EPOCH_IONOSPHERE'} if raw_covariance is not None else {}),
         'whole_time_block_prediction':'UNIDENTIFIABLE_WITH_FREE_EPOCH_CLOCKS',
         'segmentation_uses_withheld_phase':False,
         'future_clock_rule':'retain the fitted arc mean; no network future data or quadratic extrapolation'}
@@ -227,7 +257,8 @@ def information(fit, arcs, joint):
     scale = np.r_[dynamic_fit.STATE_SCALE,np.full(len(names)-1,100.)]
     point = np.r_[fit['state_ecef_m_m_s'],fit['bias_contrast_coefficients_m']]/scale
     locals_ = [np.r_[p['satellite_clock'],np.asarray(p['receiver_clocks']).ravel(),
-        np.asarray(p['station_corrections_m']).ravel()]/a['local_scale']
+        np.asarray(p['station_corrections_m']).ravel(),
+        [p['mw_rate_bias_m_s'][i] for i in a['mw_indices']]]/a['local_scale']
         for p,a in zip(fit['arc_parameters'],prepared,strict=True)]
     details = {}
     _,_,_,cov,_,_ = dynamic_fit.linearize(point,locals_,prepared,scale,fit['epoch_gpst_s'],
@@ -269,10 +300,11 @@ def attach(network, arcs):
     for a in arcs:
         n = len(a['stations'])
         a['clock_mean'] = means[ct:ct+3*n].reshape(n, 3)
-        indices = np.arange(at+5*n, at+8*n)
+        rf_count = 7*n if 'mw_rates_m_s' in a else 5*n
+        indices = np.arange(at+rf_count, at+rf_count+3*n)
         clock_indices.extend(indices)
         own = np.array(a['covariance'], copy=True)
-        own[5*n:8*n, 5*n:8*n] = clock_covariance[ct:ct+3*n, ct:ct+3*n]
+        own[rf_count:rf_count+3*n, rf_count:rf_count+3*n] = clock_covariance[ct:ct+3*n, ct:ct+3*n]
         a['covariance'] = own
         at += len(own)
         ct += 3*n
@@ -353,13 +385,87 @@ def target_continuity(data, candidate, arcs):
         'globally_withheld_target_phase_used':False,'target_codes_retained':True}
 
 
-def run(*, continuity=False):
+def target_combinations(data, candidate, arcs, raw_covariance, *, free_drift=False):
+    """IF code/phase plus MW increments from the same admitted raw endpoints."""
+    index,output = baseline.phase_index(data),[]
+    for a in arcs:
+        n = len(a['stations'])
+        if len(a['tags_s'])!=3:
+            raise ValueError('this study requires original three-endpoint arcs')
+        epochs = []
+        for t in a['tags_s']:
+            own = []
+            for s in a['stations']:
+                r = index[s][candidate,a['endpoint_gpst_s']+t]
+                if r['status']!='AVAILABLE':
+                    raise ValueError('prepared target raw observations became unavailable')
+                own.append(gnss_combinations.values(r['fields']))
+            epochs.append(own)
+        values = np.asarray(epochs)
+        if not np.allclose(values[:,:,0],a['codes_m'],atol=1e-5,rtol=0):
+            raise ValueError('raw/prepared target IF code mismatch')
+        output.append({**a,'mw_rates_m_s':np.diff(values[:,:,3],axis=0)/30.,
+            'mw_free_drift':free_drift,'covariance':block_diag(
+                gnss_combinations.rf_covariance(a['tags_s'],n,raw_covariance),
+                np.asarray(a['covariance'])[5*n:,5*n:])})
+    return output
+
+
+def predict_combinations(fit, arcs, weather):
+    predictions = baseline.interval.predict(fit,arcs,weather)
+    if 'state_ecef_m_m_s' not in fit:
+        return predictions
+    for p,a,parameters in zip(predictions,sorted(arcs,key=lambda a:a['endpoint_gpst_s']),fit['arc_parameters'],strict=True):
+        if p['status']=='PREDICTED' and 'mw_rates_m_s' in a:
+            p['mw_rate_m_s'] = parameters.get('mw_rate_bias_m_s',[0.]*len(a['stations']))
+            p['mw_model'] = 'free training linear bias extrapolated unchanged' if a.get('mw_free_drift') else 'constant link bias'
+            p['gf_prediction'] = 'UNIDENTIFIABLE_WITH_FREE_LINK_EPOCH_IONOSPHERE'
+    return predictions
+
+
+def score_mw(data, candidate, predictions):
+    index,windows = baseline.phase_index(data),[]
+    for p in predictions:
+        record = {'endpoint_gpst_s':p['endpoint_gpst_s'],'kind':p.get('kind'),'pairs':[]}
+        for i,s in enumerate(p.get('stations',[])):
+            own = {'station':s,'status':'MW_NOT_PREDICTED'}
+            if p.get('status')=='PREDICTED' and 'mw_rate_m_s' in p:
+                if p['mw_rate_m_s'][i] is None:
+                    own['status'] = 'UNIDENTIFIABLE_MW_DRIFT'
+                else:
+                    end = p['endpoint_gpst_s']
+                    a,b = index[s].get((candidate,end)),index[s].get((candidate,end+30))
+                    if a is None or b is None or a['status']!='AVAILABLE' or b['status']!='AVAILABLE':
+                        own['status'] = 'WITHHELD_UNAVAILABLE'
+                    else:
+                        delta = (gnss_combinations.values(b['fields'])[3]-gnss_combinations.values(a['fields'])[3])/30.
+                        own.update(status='EVALUATED',mw_rate_residual_m_s=delta-p['mw_rate_m_s'][i])
+            record['pairs'].append(own)
+        windows.append(record)
+    summaries = {}
+    for kind in ('ALL','TEMPORAL_HOLDOUT','BEYOND_ALL_TRAINING'):
+        pairs = [p for w in windows if kind=='ALL' or w['kind']==kind for p in w['pairs']]
+        summaries[kind] = {'status_counts':dict(Counter(p['status'] for p in pairs)),
+            'mw_rate_residual_m_s':baseline.interval.diagnostic.moments([
+                p['mw_rate_residual_m_s'] for p in pairs if p['status']=='EVALUATED'])}
+    return {'windows':windows,'summary':summaries,
+        'gf_prediction':'UNIDENTIFIABLE_WITH_FREE_LINK_EPOCH_IONOSPHERE'}
+
+
+def run(*, continuity=False, combinations=False):
     raw, data = baseline.read_inputs()
     weather = baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
     results, prepared = {}, {}
     configurations = ([('network',False,False),('network_gf_segments',False,True),
                        ('network_gf_segments_free_phase_drift',True,True)] if continuity else
                       [('baseline',False,False),('network',False,False),('network_free_phase_drift',True,False)])
+    raw_models = {}
+    if combinations:
+        continuity = True
+        configurations = [('network_gf_segments',False,True),('joint_independent',False,True),
+            ('joint_free_drift',True,True),('joint_correlated_code',False,True)]
+        raw_models = {label:gnss_combinations.assumed_endpoint_covariance(code_correlation=rho)
+                      for label,rho in [('joint_independent',0.),('joint_free_drift',0.),('joint_correlated_code',.5)]}
     for candidate in data['plan']['references']:
         print(candidate, 'prepare', flush=True)
         try:
@@ -378,16 +484,22 @@ def run(*, continuity=False):
                 if label=='baseline':
                     continue
                 try:
-                    network, rows, calibration = calibrate(data,candidate,arcs,weather,phase_drift=drift,centres=centres,continuity=split)
+                    raw_covariance = raw_models.get(label)
+                    network, rows, calibration = calibrate(data,candidate,arcs,weather,phase_drift=drift,
+                        centres=centres,continuity=split,raw_covariance=raw_covariance)
                     centres = {(s,b['time_s']):b['parameters'][i]
                         for b in network['blocks'] for i,s in enumerate(b['stations'])}
-                    own,joint,transport = attach(network,arcs)
+                    own = target_combinations(data,candidate,arcs,raw_covariance,free_drift=drift) if raw_covariance is not None else arcs
+                    own,joint,transport = attach(network,own)
                     if split:
                         own,target = target_continuity(data,candidate,own)
                         transport['target_continuity'] = target
+                        for a in own:
+                            if 'mw_rates_m_s' in a:
+                                a['mw_increment_mask'] = a['phase_increment_mask'].copy()
                     calibrated[label] = (own,joint)
                     record[label] = {'calibration':calibration,'transport':transport,
-                        'held_out_links':held_out_links(rows,phase_drift=drift,continuity=split)}
+                        'held_out_links':held_out_links(rows,phase_drift=drift,continuity=split,raw_covariance=raw_covariance)}
                     if not drift and not split:
                         record['injections'] = injection_checks(rows,arcs)
                 except (ValueError, KeyError, np.linalg.LinAlgError) as error:
@@ -416,46 +528,58 @@ def run(*, continuity=False):
                 if calibration_status == 'CONDITIONAL_MODEL_REJECTED':
                     fit['algebraic_target_fit_status'] = fit['status']
                     fit['status'] = 'REFERENCE_CALIBRATION_MODEL_REJECTED'
-            predictions = baseline.interval.predict(fit, own, weather) if own else []
+            predictions = (predict_combinations(fit,own,weather) if combinations else baseline.interval.predict(fit, own, weather)) if own else []
             record['variants'][label] = {'fit': native(fit), 'observability': baseline.interval.observability(fit),
                 'rf_predictions': predictions,
                 'prediction_sha256': baseline.interval.shared.digest(json.dumps(predictions,separators=(',',':'),allow_nan=False).encode())}
             if joint is not None:
-                record['variants'][label]['information'] = information(fit,own,joint)
+                try:
+                    record['variants'][label]['information'] = information(fit,own,joint)
+                except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+                    record['variants'][label]['information'] = {'status':'INFORMATION_FAILED','reason':str(error)}
         results[candidate] = native(record)
     # All candidates' estimates, conditional covariance and predictions fixed
     # before opening any candidate products for dedicated scoring.
     for candidate, record in results.items():
         for variant in record['variants'].values():
             variant['rf_evaluation'] = baseline.score_rf(data,candidate,variant['rf_predictions'])
+            if combinations:
+                variant['mw_evaluation'] = score_mw(data,candidate,variant['rf_predictions'])
             variant['state_evaluation'] = {'status': 'FIT_UNAVAILABLE', 'rows': []}
             if 'state_ecef_m_m_s' in variant['fit']:
                 try:
                     variant['state_evaluation'] = baseline.state_errors(variant['fit'],prepared[candidate],baseline.oracle(data,candidate))
                 except (ValueError,KeyError,np.linalg.LinAlgError) as error:
                     variant['state_evaluation'] = {'status':'ORACLE_UNAVAILABLE','reason':str(error),'rows':[]}
-    modules = [baseline, baseline.interval, baseline.interval.shared, dynamic_fit, network_clocks, phase_continuity,
+    modules = [baseline, baseline.interval, baseline.interval.shared, dynamic_fit, network_clocks, phase_continuity,gnss_combinations,
         baseline.dynamics, baseline.precise, baseline.attitude, baseline.bias, baseline.conventions,
         baseline.sp3, baseline.day, baseline.day.atmosphere, baseline.interval.shared.meteo]
     sources = [Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
-    return native({'schema': 'exposed-reference-phase-continuity-v1' if continuity else 'exposed-reference-network-clocks-v1',
-        'scope': 'Exposed paired 22-candidate/440-window development. Free network reference-clock errors, float segment code/phase biases, joint offset/increment/cross-arc covariance; zero-mean reference-error datum. Conditional measurement model only, not independent truth or absolute clock/total uncertainty qualification.',
+    return native({'schema': 'exposed-joint-rf-combinations-v1' if combinations else 'exposed-reference-phase-continuity-v1' if continuity else 'exposed-reference-network-clocks-v1',
+        'scope': 'Exposed paired 22-candidate/440-window development. Free network reference-clock errors, float segment code/phase biases, joint offset/increment/cross-arc covariance; zero-mean reference-error datum. Optional joint IF/MW likelihood profiles free link-epoch ionosphere out of GF. Conditional measurement model only, not independent truth or absolute clock/total uncertainty qualification.',
         'candidate_products_used_in_own_fit': False, 'candidate_rf_used_in_own_network': False,
         'g12_state_accessed': False, 'oracle_tuning': False, 'all_predictions_before_scoring': True,
         'new_confirmation': False, 'physical_covariance_qualified': False, 'production_floors_changed': False,
         'reference_endpoint_weight_sigmas_m': {'code':20.,'phase':.02},
         'geometry_free_segmentation':continuity,
+        **({'raw_covariance_scenarios_m2':raw_models,'combination_transform':gnss_combinations.transform(),
+            'raw_channel_order':['P1_m','P2_m','phase1_m','phase2_m'],
+            'combination_order':['IF_code_m','IF_phase_m','GF_phase_m','MW_m'],
+            'gf_model':'free link-epoch ionosphere; profile GF and retain marginal IF/MW covariance',
+            'raw_covariance_qualified':False,'mw_bias_stability_qualified':False}
+            if combinations else {}),
         **({'continuity_rule':{'source':phase_continuity.SOURCE,'history':phase_continuity.HISTORY,
             'warmup':'first difference','threshold':'1.5*(lambda2-lambda1)*(1-.5*exp(-dt/60))',
             'maximum_gap_s':phase_continuity.MAX_GAP_S,'physical_detection_qualified':False,
             'integer_slip_repair':False,'heldout_own_phase_used_for_segmentation':False}}
            if continuity else {}),
-        'phase_bias_variants':'constant float per segment versus additional unpenalized link-linear drift in m/hour; no amplitude prior or oracle selection',
+        'phase_bias_variants':('Reference IF-phase and MW constant segment biases versus additional unpenalized linear drifts in m/hour. Candidate MW constant arc bias (zero rate) versus free receiver/arc MW rate; candidate IF code bias remains constant. No amplitude prior or oracle selection.' if combinations else 'constant float per segment versus additional unpenalized link-linear drift in m/hour; no amplitude prior or oracle selection'),
         'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,
-        'execution_note':('New exploratory continuity comparison, all variants retained; historical network v1 and corrections unchanged.' if continuity else 'Initial development run interrupted during G06 preparation after two G05 algebraic fits, before RF/CODE scoring, to include free phase drift and held-out network links. No completed artifact or historical outcome was replaced.'),
+        'execution_note':('New exploratory joint IF/GF/MW comparison: refreshed GF baseline, independent equal-band raw noise with constant or free-linear biases, and code-correlation sensitivity rho=0.5. All variants retained; historical network and continuity artifacts unchanged.' if combinations else 'New exploratory continuity comparison, all variants retained; historical network v1 and corrections unchanged.' if continuity else 'Initial development run interrupted during G06 preparation after two G05 algebraic fits, before RF/CODE scoring, to include free phase drift and held-out network links. No completed artifact or historical outcome was replaced.'),
         'unqualified_sources': ['common reference-clock datum','reference orbit/attitude/phase bias stability',
             'unflagged phase continuity','phase wind-up and receiver code/phase bias drift',
-            'terrestrial coordinates/propagation/dynamics and shared reference-target covariance'],
+            'terrestrial coordinates/propagation/dynamics and shared reference-target covariance',
+            *(['raw inter-band, temporal and inter-link noise covariance; MW bias stability'] if combinations else [])],
         'input_sha256': {k:baseline.interval.shared.digest(v) for k,v in raw.items()},
         'source_sha256': {p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
         'fit_status_counts': {v:dict(Counter(r['variants'][v]['fit']['status'] for r in results.values())) for v,_,_ in configurations},
@@ -466,10 +590,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output',type=Path)
     parser.add_argument('--continuity',action='store_true',help='compare geometry-free segmentation through reference and target paths')
+    parser.add_argument('--combinations',action='store_true',help='joint IF/GF/MW raw-covariance and temporal-bias comparison')
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity)
+    result = run(continuity=args.continuity,combinations=args.combinations)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)

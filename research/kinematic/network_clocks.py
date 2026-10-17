@@ -10,13 +10,14 @@ assumptions, never a physical covariance inferred from small residuals.
 from collections import defaultdict
 
 import numpy as np
-from scipy.linalg import helmert
+from scipy.linalg import helmert, solve_triangular
 from scipy.stats import chi2
 
 from .calibration_transfer import operators
+from . import gnss_combinations
 
 
-def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False):
+def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False, raw_covariance=None):
     """Profile epoch clocks, then solve shared segment ambiguities by SVD.
 
     Rows contain already model-subtracted code/phase metres, a segment identity,
@@ -28,17 +29,25 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False):
     keys = [(r['time_s'], r['station'], r['reference']) for r in rows]
     if len(set(keys)) != len(keys):
         raise ValueError('duplicate network observation')
+    combined = raw_covariance is not None
+    channels = 3 if combined else 2
+    endpoint_covariance = (gnss_combinations.covariance(raw_covariance)[np.ix_(
+        gnss_combinations.RETAINED,gnss_combinations.RETAINED)] if combined else None)
     segments = sorted({r['segment'] for r in rows})
     segment_index = {s: i for i, s in enumerate(segments)}
     start = {s: min(r['time_s'] for r in rows if r['segment']==s) for s in segments}
     drifting = [s for s in segments if phase_drift and any(
         r['segment']==s and r['time_s']!=start[s] for r in rows)]
-    drift_index = {s: len(segments)+i for i,s in enumerate(drifting)}
-    parameter_count = len(segments)+len(drifting)
+    mw_index = {s:len(segments)+i for i,s in enumerate(segments)} if combined else {}
+    drift_index = {s: len(segments)+len(mw_index)+i for i,s in enumerate(drifting)}
+    mw_drift_index = {s:2*len(segments)+len(drifting)+i for i,s in enumerate(drifting)} if combined else {}
+    parameter_count = len(segments)+len(mw_index)+len(drifting)+len(mw_drift_index)
     grouped = defaultdict(list)
     for r in rows:
         if not np.isfinite([r['code_m'], r['phase_m'], r.get('clock_derivative', 1.)]).all():
             raise ValueError('finite network observations required')
+        if combined and not np.isfinite(r['mw_m']):
+            raise ValueError('finite admitted MW observation required')
         grouped[r['time_s']].append(r)
     blocks, reduced, values = [], [], []
     for time, own in sorted(grouped.items()):
@@ -61,8 +70,8 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False):
             raise ValueError('reference nuisance design rank deficient: disconnected clock network')
         datum = helmert(len(refs), full=False).T
         m, n = len(own), len(stations)
-        a = np.zeros((2*m, n+len(refs)-1))
-        b = np.zeros((2*m, parameter_count))
+        a = np.zeros((channels*m, n+len(refs)-1))
+        b = np.zeros((channels*m, parameter_count))
         for i, r in enumerate(own):
             a[i, stations.index(r['station'])] = r.get('clock_derivative', 1.)
             a[i, n:] = -datum[refs.index(r['reference'])]
@@ -70,18 +79,29 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False):
             b[m+i, segment_index[r['segment']]] = 1.
             if r['segment'] in drift_index:
                 b[m+i, drift_index[r['segment']]] = (time-start[r['segment']])/3600.
-        y = np.array([r['code_m'] for r in own]+[r['phase_m'] for r in own])
+            if combined:
+                b[2*m+i,mw_index[r['segment']]] = 1.
+                if r['segment'] in mw_drift_index:
+                    b[2*m+i,mw_drift_index[r['segment']]] = (time-start[r['segment']])/3600.
+        y = np.array([r['code_m'] for r in own]+[r['phase_m'] for r in own]+(
+            [r['mw_m'] for r in own] if combined else []))
         sigma = np.r_[np.full(m, code_sigma_m), np.full(m, phase_sigma_m)]
+        covariance = (np.kron(endpoint_covariance,np.eye(m)) if combined else np.diag(sigma**2))
+        chol = np.linalg.cholesky(covariance) if combined else None
+        whiten = (lambda x:solve_triangular(chol,x,lower=True)) if combined else (
+            lambda x:x/sigma[:,None] if x.ndim==2 else x/sigma)
         # A disconnected bipartite graph has extra unobservable station
         # contrasts. Do not repair it by anchoring an arbitrary receiver.
-        op = operators(a, a, np.diag(sigma**2))
+        op = operators(a, a, covariance)
         gain, project = op['gain'], op['reference_residual']
-        reduced.append((project@b)/sigma[:, None])
-        values.append((project@y)/sigma)
+        reduced.append(whiten(project@b))
+        values.append(whiten(project@y))
         blocks.append({'time_s': time, 'stations': stations, 'references': refs,
             'reference_basis': datum, 'rows': own, 'a': a, 'b': b, 'y': y,
-            'sigma': sigma, 'gain': gain, 'conditional_covariance':
-            (gain*sigma)@(gain*sigma).T, 'ambiguity_response': -gain@b})
+            'sigma':np.sqrt(covariance.diagonal()) if combined else sigma,
+            'chol':chol,'covariance':covariance,'gain': gain, 'conditional_covariance':
+            gain@covariance@gain.T if combined else (gain*sigma)@(gain*sigma).T,
+            'ambiguity_response': -gain@b})
     design, y = np.vstack(reduced), np.concatenate(values)
     u, singular, vt = np.linalg.svd(design, full_matrices=False)
     if len(singular) != parameter_count or singular[-1] <= singular[0]*1e-10:
@@ -94,19 +114,23 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False):
         x = block['gain']@(block['y']-block['b']@ambiguities)
         residual = block['a']@x+block['b']@ambiguities-block['y']
         block['parameters'] = x
-        cost += float((residual/block['sigma'])@(residual/block['sigma']))
+        weighted = (solve_triangular(block['chol'],residual,lower=True) if combined else residual/block['sigma'])
+        cost += float(weighted@weighted)
         m = len(block['rows'])
         diagnostics.extend({'time_s': block['time_s'], 'station': r['station'],
             'reference': r['reference'], 'segment': r['segment'],
-            'code_residual_m': residual[i], 'phase_residual_m': residual[m+i]}
+            'code_residual_m': residual[i], 'phase_residual_m': residual[m+i],
+            **({'mw_residual_m':residual[2*m+i]} if combined else {})}
             for i, r in enumerate(block['rows']))
     dof = len(y)-parameter_count-sum(len(b['parameters']) for b in blocks)
     return {'blocks': blocks, 'segments': segments, 'ambiguities_m': ambiguities,
         'phase_drift': phase_drift, 'segment_start_s': start, 'drift_index': drift_index,
+        'mw_index':mw_index,'mw_drift_index':mw_drift_index,
+        'raw_covariance':raw_covariance,'combination_covariance':endpoint_covariance,
         'ambiguity_covariance': ambiguity_covariance, 'weighted_cost': cost,
         'residual_dof': dof, 'conditional_p': float(chi2.sf(cost, dof)) if dof > 0 else None,
-        'residuals': diagnostics, 'code_sigma_m': code_sigma_m,
-        'phase_sigma_m': phase_sigma_m,
+        'residuals': diagnostics, 'code_sigma_m': float(np.sqrt(endpoint_covariance[0,0])) if combined else code_sigma_m,
+        'phase_sigma_m': float(np.sqrt(endpoint_covariance[1,1])) if combined else phase_sigma_m,
         'fixed_reference_clock_datum_epochs': len(blocks),
         'datum': 'zero mean reference-clock error at each epoch; not a physical bound'}
 
