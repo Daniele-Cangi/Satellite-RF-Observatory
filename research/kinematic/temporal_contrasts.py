@@ -38,8 +38,8 @@ def variograms(rows, start, stop):
     return output
 
 
-def split_receiver_contrasts(rows, start, stop):
-    """Disjoint-reference estimates of receiver contrasts in 30 s changes.
+def split_receiver_contrasts(rows, start, stop, *, groups=None, lag=30.):
+    """Disjoint-reference estimates of receiver contrasts at a fixed lag.
 
     Free reference effects remove satellite-common changes. Missing/disconnected
     split graphs remain unsupported. Cross moments may be negative: do not
@@ -47,16 +47,20 @@ def split_receiver_contrasts(rows, start, stop):
     """
     sites = sorted({r['station'] for r in rows})
     refs = sorted({r['reference'] for r in rows})
+    groups = [refs[::2],refs[1::2]] if groups is None else groups
+    if (len(groups)!=2 or len(set(groups[0]) & set(groups[1]))
+            or sorted(groups[0]+groups[1])!=refs or not np.isfinite(lag) or lag<=0):
+        raise ValueError('two disjoint exhaustive reference groups and a positive lag required')
     if len(sites)<2:
         return {'status':'INSUFFICIENT_STATIONS','rows':[]}
     h = helmert(len(sites),full=False).T
     grouped = defaultdict(list)
-    for r in increments(rows,start,stop,30.):
+    for r in increments(rows,start,stop,lag):
         grouped[r['time_s']].append(r)
     output = []
     for time,own in sorted(grouped.items()):
         fitted = []
-        for group in (refs[::2],refs[1::2]):
+        for group in groups:
             selected = [r for r in own if r['reference'] in group]
             qs = sorted({r['reference'] for r in selected})
             a = np.array([np.r_[h[sites.index(r['station'])],np.eye(len(qs))[qs.index(r['reference'])]] for r in selected])
@@ -67,7 +71,7 @@ def split_receiver_contrasts(rows, start, stop):
             **({'split_contrasts_m':fitted} if len(fitted)==2 else {})})
     complete = [r['split_contrasts_m'] for r in output if r['status']=='EVALUATED']
     result = {'status':'RELATIVE_DISJOINT_REFERENCE_DIAGNOSTIC','stations':sites,
-        'reference_groups':[refs[::2],refs[1::2]],'rows':output,
+        'reference_groups':groups,'rows':output,
         'status_counts':dict(Counter(r['status'] for r in output)),
         'physical_receiver_covariance_qualified':False}
     if len(complete)>1:

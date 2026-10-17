@@ -17,7 +17,7 @@ import numpy as np
 from scipy.linalg import block_diag
 
 from . import reference_state_validation as baseline
-from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance
+from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance, shared_error_structure
 from ..kinematic.synthetic import native
 
 
@@ -507,7 +507,71 @@ def prepare_temporal(data, candidate, arcs, weather):
     return calibrated,records,model
 
 
-def run(*, continuity=False, combinations=False, temporal=False):
+def run_structure():
+    """Reference-only spatial qualification on the existing preparation cohort."""
+    raw, data = baseline.read_inputs()
+    weather = baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
+    results = {}
+    for candidate in data['plan']['references']:
+        print(candidate, 'prepare shared structure', flush=True)
+        try:
+            arcs, windows = baseline.build_arcs(data, candidate, weather)
+        except (ValueError, KeyError, np.linalg.LinAlgError) as error:
+            arcs, windows = [], baseline.coverage(data, candidate)
+            for w in windows:
+                if w['status'] == 'RF_COVERED':
+                    w.update(status='CANDIDATE_PREPARATION_FAILED', reason=str(error))
+        record = {'windows': native(windows), 'prepared_arc_count': len(arcs),
+                  'status': 'INSUFFICIENT_PREPARED_ARCS'}
+        results[candidate] = record
+        if len(arcs) < 2:
+            continue
+        try:
+            rows, failures = reference_rows(data, candidate, max(a['endpoint_gpst_s'] for a in arcs),
+                weather, continuity=True, combinations=True)
+            # The common modeled range/clock term cancels algebraically. No
+            # fitted reference mean or historical candidate state is required.
+            admitted = [{k:r[k] for k in ('station', 'reference', 'time_s', 'segment', 'mw_m')}
+                        | {'code_m':r['code_m']-r['phase_m'], 'phase_m':0.} for r in rows]
+            record.update(status='REFERENCE_CONTRASTS_AVAILABLE', reference_rows=admitted,
+                reference_preparation_failures=failures,
+                structure=shared_error_structure.prepare(admitted, candidate))
+        except (ValueError, KeyError, np.linalg.LinAlgError) as error:
+            record.update(status='REFERENCE_STRUCTURE_UNAVAILABLE', reason=str(error))
+    # Every fold/partition predictor is frozen before excluded reference
+    # scoring. Dedicated candidate RF and CODE scoring are never invoked.
+    for record in results.values():
+        if 'structure' in record:
+            record['structure']['comparisons'] = {k:shared_error_structure.evaluate(v)
+                for k,v in record['structure']['comparisons'].items()}
+    modules = [baseline, baseline.interval, baseline.interval.shared, phase_continuity,
+        gnss_combinations, temporal_contrasts, shared_error_structure, baseline.dynamics,
+        baseline.precise, baseline.attitude, baseline.bias, baseline.conventions, baseline.sp3,
+        baseline.day, baseline.day.atmosphere, baseline.interval.shared.meteo]
+    sources = [Path(m.__file__) for m in modules]+[Path(__file__)]
+    return native({'schema':'exposed-shared-error-structure-v1',
+        'scope':'Exposed reference-only conditional cross-reference prediction; fixed GF masks and original snapshot preparation. No new orbital solution or prospective confirmation.',
+        'candidate_products_used_in_own_fit':False, 'candidate_rf_used_in_own_network':False,
+        'dedicated_candidate_rf_or_code_scoring':False, 'g12_state_accessed':False,
+        'all_predictions_before_validation_scoring':True, 'oracle_tuning':False,
+        'new_confirmation':False, 'physical_covariance_qualified':False,
+        'production_floors_changed':False, 'new_candidate_trajectory_fit':False,
+        'method':{'training_fraction':2/3, 'lags_s':shared_error_structure.LAGS,
+            'delete_block_s':shared_error_structure.BLOCK_S,
+            'models':['independent','positive_common','signed_cross_group'],
+            'validation':'Contemporaneous excluded-reference group prediction at later epochs; future source-group RF is supplied, so this is not an RF-free temporal forecast.',
+            'support_rule':'Positive cross eigenvalues in training and validation, all 300 s training block deletions positive, a PSD shared moment compatible with both split marginals and improved scaled validation loss in both directions. Descriptive conditional support, not a calibrated hypothesis test or physical raw covariance admission.'},
+        'raw_identifiability':shared_error_structure.raw_identifiability(np.eye(2)),
+        'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,
+        'input_sha256':{k:baseline.interval.shared.digest(v) for k,v in raw.items()},
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'candidate_status_counts':dict(Counter(r['status'] for r in results.values())),
+        'candidates':results})
+
+
+def run(*, continuity=False, combinations=False, temporal=False, structure=False):
+    if structure:
+        return run_structure()
     if temporal:
         continuity,combinations = True,True
     raw, data = baseline.read_inputs()
@@ -667,10 +731,13 @@ if __name__ == '__main__':
     parser.add_argument('--continuity',action='store_true',help='compare geometry-free segmentation through reference and target paths')
     parser.add_argument('--combinations',action='store_true',help='joint IF/GF/MW raw-covariance and temporal-bias comparison')
     parser.add_argument('--temporal',action='store_true',help='reference-informed temporal shape and shared raw RF covariance transport')
+    parser.add_argument('--structure',action='store_true',help='qualify shared differential error structure on excluded references')
     args = parser.parse_args()
+    if args.structure and (args.temporal or args.combinations or args.continuity):
+        parser.error('--structure is a separate reference-only analysis')
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)
