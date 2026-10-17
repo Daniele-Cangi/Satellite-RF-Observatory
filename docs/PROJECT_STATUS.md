@@ -176,6 +176,28 @@ caso 9/7 la precisione ipotetica richiesta resta circa 0,285 m per banda.
 Il termine comune clock-like, il budget totale e S2 restano aperti. Nessuna
 S3; floor, artefatti precedenti e orbita G12 invariati.
 
+La [covarianza RF temporale e condivisa](../research/exploratory/REFERENCE_TEMPORAL_SHARED_RF.md)
+propaga gli errori grezzi attraverso anche ambiguita e clock stimati, con i
+termini incrociati riferimento-candidato. I floor marginali restano invariati.
+La forma temporale reference-only stima rho a 30 s fra 0,183 e 0,249; migliora
+il variogramma escluso in quattro fold, ma peggiora G21 e non descrive bene
+la scala a 300 s. Tutti i cross-momenti di training fra gruppi disgiunti sono
+non-PSD: non qualificano una varianza fisica condivisa positiva e non vengono
+forzati a diventarlo. La quota condivisa del 50% resta sensibilita dichiarata.
+Sotto tale ipotesi, eliminare il solo blocco RF-clock allarga gli assi formali
+di posizione di 1,60-1,63 volte; questo mostra l'effetto della falsa indipendenza,
+non un miglioramento fisico dell'incertezza. Con correlazione temporale del
+codice la posizione CODE peggiora in quattro dei cinque casi. Il codice RF
+realmente futuro migliora poco, da 0,903600 a 0,901966 m; la fase da 7,81384
+a 7,80327 mm/s. Con condivisione ipotetica sono 0,898541 m e 7,77001 mm/s,
+ma nessuno dei cinque stati futuri rientra nell'ellissoide congiunto nominale
+al 95% in alcuna variante. Rimangono 22 candidati, 440 finestre, 63 archi,
+cinque traiettorie e 17 casi senza supporto. G19 conserva due seed falliti
+nelle varianti temporali; non sono due orbite fisiche dimostrate. S2 resta
+aperta: identificare struttura di errore ammissibile e dipendenza dal link,
+validando G21 e tempi piu lunghi prima di qualificare ampiezze condivise.
+Risultati precedenti, floor e orbita G12 invariati; nessuna S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.

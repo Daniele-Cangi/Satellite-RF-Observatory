@@ -159,3 +159,34 @@ def clock_coefficients(network, requests):
         raise ValueError('requested receiver clock is not observed by the network')
     covariance = independent+shared@network['ambiguity_covariance']@shared.T
     return estimate, (covariance+covariance.T)/2
+
+
+def observation_response(network, requests):
+    """Derivative of this fixed-weight estimator, including fitted biases.
+
+    Returns one matrix per epoch, with columns in that block's code/phase/MW
+    observation order. This transports arbitrary temporal/shared noise; it
+    does not refit the estimator with a new covariance or infer noise scales.
+    """
+    count = len(requests)
+    remaining = [set(r) for r in requests]
+    transforms, shared = [], np.zeros((count,len(network['ambiguities_m'])))
+    for b in network['blocks']:
+        t = np.zeros((count,len(b['parameters'])))
+        for i,r in enumerate(requests):
+            for j,s in enumerate(b['stations']):
+                if (s,b['time_s']) in r:
+                    t[i,j] = r[s,b['time_s']]
+                    remaining[i].remove((s,b['time_s']))
+        transforms.append(t)
+        shared += t@b['ambiguity_response']
+    if any(remaining):
+        raise ValueError('requested receiver clock is not observed by the network')
+    shared = shared@network['ambiguity_covariance']
+    output = []
+    for b,t in zip(network['blocks'],transforms,strict=True):
+        project = np.eye(len(b['y']))-b['a']@b['gain']
+        whiten = (lambda x:solve_triangular(b['chol'],x,lower=True)) if b['chol'] is not None else (
+            lambda x:x/b['sigma'][:,None])
+        output.append(t@b['gain']+shared@whiten(project@b['b']).T@whiten(project))
+    return output
