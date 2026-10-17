@@ -49,3 +49,38 @@ def environment(context):
             raise ValueError('target or unknown reference at geometry boundary')
         return vacuum_direction(provider, coordinates[station,time_s], time_s, reference)
     return direction
+
+
+def emitted_source_mappings(provider, weather, mjd_day, reference, code, tag_s, station, clock):
+    """Emitted APC displacement shapes, at fixed admitted emission and clocks.
+
+    RTN uses COM position and inertial velocity expressed in ECEF. Body PCO
+    axes use the admitted attitude at emission. Rotate both to reception ECEF.
+    Include the VMF3 elevation derivative. No product-error amplitude is known.
+    """
+    if reference==provider.precise.target or reference not in provider.precise.offsets:
+        raise ValueError('candidate/unadmitted source geometry')
+    tx,_,apc,offset=provider.antenna_state(reference,code,tag_s)
+    com,velocity=provider.precise.orbit(reference,tx)
+    radial=com/np.linalg.norm(com)
+    inertial=velocity+np.cross([0.,0.,OMEGA],com)
+    normal=np.cross(com,inertial);normal/=np.linalg.norm(normal)
+    rtn=np.column_stack([radial,np.cross(normal,radial),normal])
+    body=provider.attitude.body_to_ecef(reference,tx,provider.step)
+    tau=-clock/C-offset
+    if not 0<tau<1:raise ValueError('invalid source light time')
+    rotation=np.column_stack([rotate_z(v,-OMEGA*tau) for v in np.eye(3)])
+    rotated=rotation@apc;ray=rotated-station
+    gradient=ray/np.linalg.norm(ray)
+    lat,lon,height,_=geodetic(station)
+    utc=mjd_day+(tag_s-clock/C-18)/86400.
+    from positioning.calibration import troposphere
+    def atmosphere(point):
+        elevation=troposphere(station,point)[1]
+        mh,mw,dry,wet=weather.evaluate(utc,np.degrees(lat),np.degrees(lon),float(height),elevation)
+        return mh*dry+mw*wet
+    for j in range(3):
+        delta=np.eye(3)[j]  # one metre central elevation derivative
+        gradient[j]+=(atmosphere(rotated+delta)-atmosphere(rotated-delta))/2.
+    return {'orbit_mapping':gradient@rotation@rtn,'antenna_mapping':gradient@rotation@body,
+        'source_emission_gpst_s':tx,'source_light_time_s':tau}

@@ -123,3 +123,140 @@ independent noise sources. No source covariance is assigned here.
         'zenith_probe_rms_m':float(np.sqrt(np.mean(probe**2))),
         'zenith_probe_peak_m':float(max(abs(probe))),
         'linear_probe_state_change_m_m_s':{k:t@probe for k,t in matrices.items()}}
+
+
+FAMILIES = ('wet', 'orbit', 'antenna', 'bias')
+PREDICTION_RTOL = 1e-8
+
+
+def source_columns(rows, families):
+    if not families or len(set(families))!=len(families) or not set(families)<=set(FAMILIES):
+        raise ValueError('distinct admitted source families required')
+    stations = sorted({r['station'] for r in rows})
+    references = sorted({r['reference'] for r in rows})
+    links = sorted({r['station']+'/'+r['reference'] for r in rows})
+    return ([('wet',s,'Z') for s in stations] if 'wet' in families else [])+[
+        (f,q,a) for f,axes in [('orbit','RTN'),('antenna','XYZ')] if f in families
+        for q in references for a in axes]+([('bias',k,'IF_CODE') for k in links] if 'bias' in families else [])
+
+
+def source_design(rows, columns, channels=3):
+    """Metres of retained IF model per source metre; stable phase/MW already float.
+
+    Orbit-like RTN and body PCO shapes shift emitted APC at fixed emission and
+    clock. They are not complete orbit/relativity or frequency-dependent PCV laws.
+    """
+    m=len(rows);g=np.zeros((channels*m,len(columns)))
+    index={tuple(c):j for j,c in enumerate(columns)}
+    for i,r in enumerate(rows):
+        for j,(family,key,axis) in enumerate(columns):
+            value=0.
+            if family=='wet' and key==r['station']:
+                value=float(r['wet_mapping'])
+                if value<=0:raise ValueError('positive admitted wet mapping required')
+            if family in ('orbit','antenna') and key==r['reference']:
+                value=float(r[family+'_mapping']['RTN'.index(axis) if family=='orbit' else 'XYZ'.index(axis)])
+            if family=='bias' and key==r['station']+'/'+r['reference']:value=1.
+            g[i,j]=value
+            if family!='bias':g[m+i,j]=value
+    if not np.isfinite(g).all():raise ValueError('finite admitted source mappings required')
+    # A new reference/link cannot silently receive a zero correction.
+    for r in rows:
+        for family,keys in [('wet',[(r['station'],'Z')]),('orbit',[(r['reference'],a) for a in 'RTN']),
+                            ('antenna',[(r['reference'],a) for a in 'XYZ']),
+                            ('bias',[(r['station']+'/'+r['reference'],'IF_CODE')])]:
+            if any(c[0]==family for c in columns) and any((family,k,a) not in index for k,a in keys):
+                raise ValueError('unseen source coordinate')
+    return g
+
+
+def profile_sources(network, candidate, families):
+    """Joint identifiable projection, conditional wet fit and nuisance response.
+
+    The minimum Euclidean metre-norm representative is a computational device.
+    A null coordinate is never asserted to be zero or physically estimated.
+    Returned workspace is transient; result retains the source null space.
+    """
+    rows=admit(network,candidate);columns=source_columns(rows,families)
+    designs=[];original=[];reduced=[];residual=[]
+    for b in network['blocks']:
+        g=source_design(b['rows'],columns,len(b['y'])//len(b['rows']))
+        def w(x):return (solve_triangular(b['chol'],x,lower=True) if b['chol'] is not None else
+            x/(b['sigma'][:,None] if x.ndim==2 else b['sigma']))
+        designs.append(g);original.append(w(g));reduced.append(w(g-b['a']@(b['gain']@g)))
+        residual.append(w(b['y']-b['a']@b['parameters']-b['b']@network['ambiguities_m']))
+    j0=np.vstack(reduced);u0=network['profiled_ambiguity_left']
+    beta=network['profiled_ambiguity_inverse']@(u0.T@j0)
+    clocks=[b['gain']@(g-b['b']@beta) for b,g in zip(network['blocks'],designs,strict=True)]
+    j=j0-u0@(u0.T@j0);y=np.concatenate(residual)
+    u,s,vt=np.linalg.svd(j,full_matrices=j.shape[0]<j.shape[1])
+    scale=np.linalg.svd(np.vstack(original),compute_uv=False)[0]
+    rank=int(np.count_nonzero(s>RTOL*scale));basis=vt[:rank];null=vt[rank:].T
+    theta=basis.T@((u[:,:rank].T@y)/s[:rank])
+    remaining=y-j@theta
+    result={'status':'CONDITIONAL_IDENTIFIED_SOURCE_PROJECTION','families':list(families),
+        'columns':columns,'parameter_units':'metres in each declared source coordinate',
+        'source_count':len(columns),'resolved_rank':rank,'null_count':len(columns)-rank,
+        'rank_rtol':RTOL,'original_weighted_source_scale_per_m':scale,
+        'singular_values_per_m':s,'unresolved_source_basis':null,
+        'representative_m':theta,'representative_is_physical_source_estimate':False,
+        'representative_convention':'minimum Euclidean metre norm; null amplitudes unassigned',
+        'weighted_cost_before':float(y@y),'weighted_cost_after':float(remaining@remaining),
+        'physical_source_covariance_qualified':False,'fixed_weight_precision_only':True}
+    nw=sum(c[0]=='wet' for c in columns)
+    if nw:
+        wetj=j[:,:nw];other=j[:,nw:]
+        if other.shape[1]:
+            ou,os,_=np.linalg.svd(other,full_matrices=False)
+            other_scale=np.linalg.svd(np.vstack(original)[:,nw:],compute_uv=False)[0]
+            nr=int(np.count_nonzero(os>RTOL*other_scale));ou=ou[:,:nr]
+            conditional=wetj-ou@(ou.T@wetj);wy=y-ou@(ou.T@y)
+        else:conditional,wy=wetj,y
+        wu,ws,wv=np.linalg.svd(conditional,full_matrices=False)
+        wet_scale=np.linalg.svd(np.vstack(original)[:,:nw],compute_uv=False)[0]
+        wrank=int(np.count_nonzero(ws>RTOL*wet_scale))
+        wp={'status':'WET_CONDITIONALLY_IDENTIFIABLE' if wrank==nw else 'WET_SOURCE_UNIDENTIFIABLE',
+            'stations':[c[1] for c in columns[:nw]],'resolved_rank':wrank,
+            'singular_values_per_m':ws,'original_weighted_wet_scale_per_m':wet_scale,
+            'joint_null_wet_projection_norm':float(np.linalg.norm(null[:nw],2)) if null.shape[1] else 0.}
+        if wrank==nw:
+            inv=wv.T/ws;z=inv@(wu.T@wy)
+            minimum={c[1]:min(float(r['zenith_wet_m'])+z[i] for r in rows if r['station']==c[1]) for i,c in enumerate(columns[:nw])}
+            wp.update(zenith_wet_correction_m=dict(zip(wp['stations'],z,strict=True)),
+                conditional_parameter_covariance_m2=inv@inv.T,minimum_reference_total_zenith_wet_m=minimum,
+                domain_status='NEGATIVE_REFERENCE_TOTAL_WET' if min(minimum.values())<0 else 'NONNEGATIVE_REFERENCE_SAMPLES_ONLY')
+        result['wet']=wp
+    return result,{'columns':columns,'theta':theta,'null':null,'designs':designs,'design':j,
+        'clock_response':clocks,'ambiguity_response':beta}
+
+
+def source_link_prediction(network, workspace, row, segment):
+    """Only issue a held code/phase level when its complete map kills the null.
+
+    Includes compensating clock and prefix float-bias refits, not merely G_held.
+    No held observation value or GF witness is read here.
+    """
+    bidx=next((i for i,b in enumerate(network['blocks']) if b['time_s']==row['time_s']),None)
+    if bidx is None:return {'status':'UNOBSERVED_NETWORK_CLOCK'}
+    b=network['blocks'][bidx]
+    try:
+        i=b['stations'].index(row['station']);q=b['references'].index(row['reference'])
+    except ValueError:return {'status':'UNOBSERVED_NETWORK_CLOCK'}
+    if segment not in network['segments']:return {'status':'UNOBSERVED_PREFIX_PHASE'}
+    try:g=source_design([row],workspace['columns'])
+    except ValueError:return {'status':'UNSEEN_SOURCE_COORDINATE'}
+    a=np.zeros(len(b['parameters']));a[i]=row.get('clock_derivative',1.)
+    a[len(b['stations']):]=-b['reference_basis'][q]
+    nuisance=a@workspace['clock_response'][bidx]
+    k=network['segments'].index(segment)
+    h=np.vstack([g[0]-nuisance,g[1]-nuisance-workspace['ambiguity_response'][k]])
+    null=workspace['null']
+    scales=np.maximum(1.,np.maximum(np.linalg.norm(g[:2],axis=1),np.linalg.norm(g[:2]-h,axis=1)))
+    defect=np.linalg.norm(h@null,axis=1)/scales
+    result={'code_phase_null_response_relative':defect,'prediction_rtol':PREDICTION_RTOL}
+    if np.any(defect>PREDICTION_RTOL):return {**result,'status':'UNIDENTIFIABLE_SOURCE_PREDICTION'}
+    clock=float(a@b['parameters']);change=h@workspace['theta']
+    return {**result,'status':'PREDICTED','clock_prediction_m':clock,
+        'path_prediction_m':float(clock+change[0]),
+        'phase_prediction_m':float(clock+network['ambiguities_m'][k]+change[1]),
+        'phase_path_prediction_m':float(clock+network['ambiguities_m'][k]+change[1])}

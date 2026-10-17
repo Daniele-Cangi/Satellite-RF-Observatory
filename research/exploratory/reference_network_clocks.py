@@ -16,13 +16,13 @@ from pathlib import Path
 import numpy as np
 from scipy.linalg import block_diag
 
-from . import reference_state_validation as baseline, reference_wet_fit as wet
+from . import reference_state_validation as baseline, reference_wet_fit as wet, reference_geometry
 from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance, shared_error_structure, network_closures, source_geometry
 from ..kinematic.synthetic import native
 
 
 def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=False, combinations=False,
-                   source_geometry=False, zenith_wet_m=None):
+                   source_geometry=False, zenith_wet_m=None, reference_sources=False):
     """Identity/time filtering precedes numeric product and RF arithmetic.
 
     Phase/code bias is free per flag/gap/mask-contiguous segment. The optional
@@ -72,6 +72,8 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
                     _,geometry = baseline.day.atmosphere.components(provider,local_weather,mjd,q,code,t,xyz,centre)
                     record.update(wet_mapping=geometry['mfw'],zenith_wet_m=geometry['zwd_m'],
                         elevation_deg=geometry['elevation_deg'],source_geometry_mjd_utc=geometry['mjd_utc'])
+                if reference_sources:
+                    record.update(native(reference_geometry.emitted_source_mappings(provider,local_weather,mjd,q,code,t,xyz,centre)))
                 if combinations:
                     raw = gnss_combinations.values(row['fields'],code1_change_m=
                         corrections[t,q]['if_code_change_m']/gnss_combinations.ALPHA)
@@ -85,14 +87,14 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
 
 
 def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None, continuity=False, raw_covariance=None,
-              source_geometry=False, zenith_wet_m=None):
+              source_geometry=False, zenith_wet_m=None, reference_sources=False):
     stop = max(a['endpoint_gpst_s'] for a in arcs)
     centres, iterations = ({} if centres is None else centres), []
     for iteration in range(4):
         rows, failures = reference_rows(data, candidate, stop, weather, centres,
             continuity=continuity,combinations=raw_covariance is not None,
-            **({'source_geometry':source_geometry,'zenith_wet_m':zenith_wet_m}
-               if source_geometry or zenith_wet_m is not None else {}))
+            **({'source_geometry':source_geometry,'zenith_wet_m':zenith_wet_m,'reference_sources':reference_sources}
+               if source_geometry or zenith_wet_m is not None or reference_sources else {}))
         network = network_clocks.fit(rows,phase_drift=phase_drift,raw_covariance=raw_covariance)
         updated = {(s, b['time_s']): b['parameters'][i]
                    for b in network['blocks'] for i, s in enumerate(b['stations'])}
@@ -564,6 +566,120 @@ def target_wet_design(fitted, arcs, weather, names):
     return np.vstack(designs)
 
 
+
+def run_separation():
+    """Separate exposed wet, emitted reference APC shapes and stable IF bias.
+
+    Fresh nominal cold-start RF fits provide only local response geometry.
+    Unresolved source amplitudes never become candidate-state corrections.
+    """
+    raw,data=baseline.read_inputs()
+    weather=baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
+    covariance=gnss_combinations.assumed_endpoint_covariance()
+    models={'wet':('wet',),'wet_bias':('wet','bias'),
+        'wet_orbit_bias':('wet','orbit','bias'),'wet_orbit_antenna_bias':source_geometry.FAMILIES}
+    results={}
+    for candidate in data['plan']['references']:
+        print(candidate,'prepare source separation',flush=True)
+        try:arcs,windows=baseline.build_arcs(data,candidate,weather)
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            arcs,windows=[],baseline.coverage(data,candidate)
+            for w in windows:
+                if w['status']=='RF_COVERED':w.update(status='CANDIDATE_PREPARATION_FAILED',reason=str(error))
+        record={'windows':native(windows),'prepared_arc_count':len(arcs),
+            'fit':{'status':'INSUFFICIENT_PREPARED_ARCS','arc_count':len(arcs)},'rf_predictions':[]}
+        results[candidate]=record
+        if len(arcs)<2:continue
+        try:
+            network,rows,calibration=calibrate(data,candidate,arcs,weather,continuity=True,
+                raw_covariance=covariance,source_geometry=True,reference_sources=True)
+            record.update(reference_rows=rows,calibration=calibration,source_models={},future_links={})
+            workspaces={}
+            for label,families in models.items():
+                profile,workspace=source_geometry.profile_sources(network,candidate,families)
+                record['source_models'][label]=profile;workspaces[label]=workspace
+                record['future_links'][label]=network_closures.prepare_future_links(rows,candidate,covariance,source_families=families)
+            own=target_combinations(data,candidate,arcs,covariance)
+            own,joint,transport=attach(network,own)
+            own,continuity=target_continuity(data,candidate,own)
+            for a in own:a['mw_increment_mask']=a['phase_increment_mask'].copy()
+            fitted=dynamic_fit.fit(own,joint_covariance=joint,progress=lambda r:print(candidate,r,flush=True))
+            fitted['reference_calibration_status']=calibration['status']
+            if calibration['status']=='CONDITIONAL_MODEL_REJECTED':
+                fitted['algebraic_target_fit_status']=fitted['status'];fitted['status']='REFERENCE_CALIBRATION_MODEL_REJECTED'
+            record.update(fit=fitted,rf_predictions=predict_combinations(fitted,own,weather),
+                transport={**transport,'target_continuity':continuity})
+            details,_,_=linear_response(fitted,own,joint);response=details['full_observation_response'][:6]
+            requests=clock_requests(own);operators=network_clocks.observation_response(network,requests)
+            stations=record['source_models']['wet']['wet']['stations']
+            target=target_wet_design(fitted,own,weather,stations)
+            record.update(full_state_observation_response=response,target_wet_model_design=target,
+                clock_requests=[[[s,t,c] for (s,t),c in r.items()] for r in requests])
+            for label,workspace in workspaces.items():
+                profile=record['source_models'][label];columns=workspace['columns']
+                kg=sum(k@g for k,g in zip(operators,workspace['designs'],strict=True))
+                gc=np.zeros((response.shape[1],len(columns)))
+                for j,c in enumerate(columns):
+                    if c[0]=='wet':gc[:,j]=target[:,stations.index(c[1])]
+                tref=-response[:,transport['clock_observation_indices']]@kg
+                tcand=-response@gc;t=tref+tcand;null=workspace['null']
+                ambiguity=t@null
+                source_response={'reference_model_response':tref,'candidate_model_response':tcand,
+                    'coupled_model_response':t,'clock_source_response':kg,
+                    'candidate_nonwet_source_columns_zero':True,
+                    'null_position_gain_m_per_source_l2_m':float(np.linalg.norm(ambiguity[:3],2)) if null.shape[1] else 0.,
+                    'null_velocity_gain_mm_s_per_source_l2_m':float(np.linalg.norm(ambiguity[3:],2)*1000) if null.shape[1] else 0.,
+                    'response_is_local_not_total_state_uncertainty':True}
+                profile['state_response']=source_response
+                if null.shape[1]:
+                    _,_,v=np.linalg.svd(ambiguity[:3],full_matrices=False)
+                    probe=null@v[0]*.01  # fixed 1 cm TOTAL Euclidean metre norm, not RMS or sigma
+                    source_response.update(null_probe_m=probe,null_probe_source_l2_m=float(np.linalg.norm(probe)),
+                        null_probe_weighted_training_residual_norm=float(np.linalg.norm(workspace['design']@probe)),
+                        null_probe_linear_state_change_m_m_s=t@probe)
+                    if label=='wet_orbit_antenna_bias':
+                        corrected=[]
+                        for b,g in zip(network['blocks'],workspace['designs'],strict=True):
+                            change=g@probe;m=len(b['rows'])
+                            corrected.extend({**r,'code_m':r['code_m']-change[i],
+                                'phase_m':r['phase_m']-change[m+i],'mw_m':r['mw_m']-change[2*m+i]} for i,r in enumerate(b['rows']))
+                        finite=network_clocks.fit(corrected,raw_covariance=covariance)
+                        before,_=network_clocks.clock_coefficients(network,requests)
+                        after,_=network_clocks.clock_coefficients(finite,requests)
+                        source_response.update(fixed_geometry_reference_refit_clock_change=after-before,
+                            fixed_geometry_reference_refit_minus_linear=after-before+kg@probe,
+                            full_reference_observation_time_relinearized=False,
+                            null_probe_is_observed_error=False)
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            record['preparation_failure']=str(error)
+            if record['fit']['status']=='INSUFFICIENT_PREPARED_ARCS':record['fit']={'status':'SOURCE_SEPARATION_PREPARATION_FAILED','reason':str(error)}
+    for candidate,record in results.items():
+        for label,predictions in record.get('future_links',{}).items():
+            record['future_links'][label]=network_closures.score_future_links(predictions,record['reference_rows'])
+        predictions=record['rf_predictions']
+        record.update(prediction_sha256=baseline.interval.shared.digest(json.dumps(predictions,separators=(',',':'),allow_nan=False).encode()),
+            rf_evaluation=baseline.score_rf(data,candidate,predictions),mw_evaluation=score_mw(data,candidate,predictions))
+    modules=[baseline,baseline.interval,baseline.interval.shared,wet,dynamic_fit,network_clocks,source_geometry,
+        network_closures,reference_geometry,phase_continuity,gnss_combinations,temporal_contrasts,
+        baseline.precise,baseline.attitude,baseline.bias,baseline.conventions,baseline.sp3,baseline.day,
+        baseline.day.atmosphere,baseline.interval.shared.meteo,baseline.dynamics,baseline.interval.clock_observations]
+    sources=[Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
+    return native({'schema':'exposed-reference-source-separation-v1','models':models,
+        'scope':'Exposed joint source-shape identifiability, null-safe future reference transfer and local coupled RF-state response.',
+        'candidate_products_used_in_own_fit':False,'candidate_rf_used_in_own_network':False,
+        'all_predictions_before_scoring':True,'candidate_code_orbit_scoring':False,'g12_state_accessed':False,
+        'oracle_tuning':False,'new_confirmation':False,'physical_covariance_qualified':False,
+        'production_floors_changed':False,'source_estimates_used_as_candidate_corrections':False,
+        'reference_orbit_shape_is_fixed_emission_apc_displacement':True,
+        'reference_clock_relativity_and_emission_not_recomputed_for_source_shapes':True,
+        'stable_bias_is_reference_link_if_code_only_after_phase_mw_float_profiling':True,
+        'input_sha256':{k:baseline.interval.shared.digest(v) for k,v in raw.items()},
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,
+        'raw_endpoint_weight_covariance_m2':covariance,
+        'fit_status_counts':dict(Counter(c['fit']['status'] for c in results.values())),'candidates':results})
+
+
 def run_sources():
     """Restricted wet geometry, reference transfer and both physical paths."""
     raw,data = baseline.read_inputs()
@@ -895,7 +1011,9 @@ def run_structure():
         'candidates':results})
 
 
-def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False):
+def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False, separate=False):
+    if separate:
+        return run_separation()
     if sources:
         return run_sources()
     if closures:
@@ -1064,7 +1182,10 @@ if __name__ == '__main__':
     parser.add_argument('--structure',action='store_true',help='qualify shared differential error structure on excluded references')
     parser.add_argument('--closures',action='store_true',help='nondispersive calibrated network closures and complete state response')
     parser.add_argument('--sources',action='store_true',help='station wet source geometry through reference and candidate paths')
+    parser.add_argument('--separate',action='store_true',help='joint wet, emitted reference orbit/antenna shapes and stable bias identifiability')
     args = parser.parse_args()
+    if args.separate and (args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
+        parser.error('--separate is a separate joint source analysis')
     if args.sources and (args.closures or args.structure or args.temporal or args.combinations or args.continuity):
         parser.error('--sources is a separate source-geometry analysis')
     if args.closures and (args.structure or args.temporal or args.combinations or args.continuity):
@@ -1073,7 +1194,7 @@ if __name__ == '__main__':
         parser.error('--structure is a separate reference-only analysis')
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources,separate=args.separate)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)
