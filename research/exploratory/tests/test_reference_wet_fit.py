@@ -2,6 +2,7 @@
 from copy import deepcopy
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -85,7 +86,9 @@ def test_stored_result_keeps_support_provenance_and_replays_excluded_scores():
     assert result['input_sha256'] == {k: hashlib.sha256(v).hexdigest() for k, v in raw.items()}
     root = study.baseline.BASE.parents[1]
     for source, wanted in result['source_sha256'].items():
-        assert hashlib.sha256((root/source).read_bytes()).hexdigest() == wanted
+        # This completed execution binds its producer, not later solver work.
+        original = subprocess.check_output(['git','show','1e50213:'+source],cwd=root)
+        assert hashlib.sha256(original).hexdigest() == wanted
     previous = json.loads((study.baseline.BASE/'results/reference_state_validation_v3.json').read_bytes())
     assert set(result['candidates']) == set(data['plan']['references'])
     assert result['fit_status_counts'] == {v: {'INSUFFICIENT_PREPARED_ARCS': 17, 'BRANCH_SEARCH_INCOMPLETE': 5}

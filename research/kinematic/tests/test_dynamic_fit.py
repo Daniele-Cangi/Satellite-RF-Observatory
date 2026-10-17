@@ -79,6 +79,36 @@ def test_noiseless_fit_recovers_shared_state_and_free_code_bias(monkeypatch):
     assert not fitted['physical_covariance_qualified']
 
 
+def test_joint_observation_covariance_preserves_block_limit_and_shared_sources():
+    from scipy.linalg import block_diag
+    arcs,state,_ = toy()
+    old = solver.fit(arcs)
+    covariance = block_diag(*[a['covariance'] for a in arcs])
+    fitted = solver.fit(arcs,joint_covariance=covariance)
+    np.testing.assert_allclose(fitted['state_ecef_m_m_s'],old['state_ecef_m_m_s'],atol=1e-3,rtol=0)
+    np.testing.assert_allclose(fitted['conditional_global_covariance'],old['conditional_global_covariance'],rtol=2e-5,atol=1e-4)
+    # A coherent source across every arc is propagated jointly, not copied
+    # into independent arc variances. Verify the actual raw-data response.
+    source = np.zeros(len(covariance))
+    at = 0
+    for arc in arcs:
+        source[at+30:at+42:2] = np.linspace(1.,2.,6)
+        at += len(arc['covariance'])
+    covariance += np.outer(source,source)
+    prepared,names,_ = solver.prepare(arcs,True)
+    scale = np.r_[solver.STATE_SCALE,np.full(len(names)-1,100.)]
+    point = np.r_[old['state_ecef_m_m_s'],old['bias_contrast_coefficients_m']]/scale
+    locals_ = [np.r_[p['satellite_clock'],np.asarray(p['receiver_clocks']).ravel(),
+        np.asarray(p['station_corrections_m']).ravel()]/a['local_scale']
+        for p,a in zip(old['arc_parameters'],prepared,strict=True)]
+    diagnostics = {}
+    _,_,_,cov,_,_ = solver.linearize(point,locals_,prepared,scale,old['epoch_gpst_s'],
+        old['integrated_bounds_s'],old['j2'],joint_chol=np.linalg.cholesky(covariance),diagnostics=diagnostics)
+    response = np.hstack(diagnostics['observation_response'])
+    np.testing.assert_allclose(response@covariance@response.T,cov,rtol=2e-5,atol=1e-4)
+    assert not np.allclose(cov[6:,6:],np.asarray(old['conditional_global_covariance'])[6:,6:],rtol=1e-8,atol=1e-5)
+
+
 def test_constant_code_bias_does_not_enter_carrier_increments():
     arcs,state,_ = toy()
     prepared,names,basis = solver.prepare(arcs,True)
