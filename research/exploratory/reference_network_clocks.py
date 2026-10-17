@@ -22,7 +22,7 @@ from ..kinematic.synthetic import native
 
 
 def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=False, combinations=False,
-                   source_geometry=False, zenith_wet_m=None, reference_sources=False):
+                   source_geometry=False, zenith_wet_m=None, reference_sources=False, source_probe=None):
     """Identity/time filtering precedes numeric product and RF arithmetic.
 
     Phase/code bias is free per flag/gap/mask-contiguous segment. The optional
@@ -30,6 +30,10 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
     """
     refs = [q for q in data['plan']['references'] if q != candidate]
     provider, corrections = baseline.subset_products(data, refs, candidate)
+    if source_probe is not None:
+        provider=reference_geometry.physical_source_provider(provider,candidate,source_probe)
+        if zenith_wet_m is not None:raise ValueError('one wet source correction per intervention')
+        zenith_wet_m=source_probe.get('wet',{})
     centres = {} if centres is None else centres
     codes = {s: {e['time_s']: {q: v for q, v in e['if_code_m'].items() if q in refs}
                  for e in epochs if e['time_s'] <= stop}
@@ -48,7 +52,8 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
             xyz = np.asarray(data['positions'][station][int((t-36000)/30)], float)
             try:
                 local_weather = weather if zenith_wet_m is None else wet.ShiftedWetWeather(weather,zenith_wet_m.get(station,0.))
-                code = float(codes[station][t][q])+corrections[t, q]['if_code_change_m']
+                hardware_bias=(float(source_probe.get('bias',{}).get(station+'/'+q,0.)) if source_probe is not None else 0.)
+                code = float(codes[station][t][q])+corrections[t, q]['if_code_change_m']-hardware_bias
                 if provider.model(q, code, t, xyz, 0.)[1] < 10.:
                     failures['BELOW_MASK'] += 1
                     continue
@@ -76,7 +81,7 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
                     record.update(native(reference_geometry.emitted_source_mappings(provider,local_weather,mjd,q,code,t,xyz,centre)))
                 if combinations:
                     raw = gnss_combinations.values(row['fields'],code1_change_m=
-                        corrections[t,q]['if_code_change_m']/gnss_combinations.ALPHA)
+                        (corrections[t,q]['if_code_change_m']-hardware_bias)/gnss_combinations.ALPHA)
                     if abs(raw[0]-code)>1e-5:
                         raise ValueError('raw/day IF code mismatch')
                     record['mw_m'] = raw[3]
@@ -87,14 +92,14 @@ def reference_rows(data, candidate, stop, weather, centres=None, *, continuity=F
 
 
 def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None, continuity=False, raw_covariance=None,
-              source_geometry=False, zenith_wet_m=None, reference_sources=False):
+              source_geometry=False, zenith_wet_m=None, reference_sources=False, source_probe=None):
     stop = max(a['endpoint_gpst_s'] for a in arcs)
     centres, iterations = ({} if centres is None else centres), []
     for iteration in range(4):
         rows, failures = reference_rows(data, candidate, stop, weather, centres,
             continuity=continuity,combinations=raw_covariance is not None,
-            **({'source_geometry':source_geometry,'zenith_wet_m':zenith_wet_m,'reference_sources':reference_sources}
-               if source_geometry or zenith_wet_m is not None or reference_sources else {}))
+            **({'source_geometry':source_geometry,'zenith_wet_m':zenith_wet_m,'reference_sources':reference_sources,'source_probe':source_probe}
+               if source_geometry or zenith_wet_m is not None or reference_sources or source_probe is not None else {}))
         network = network_clocks.fit(rows,phase_drift=phase_drift,raw_covariance=raw_covariance)
         updated = {(s, b['time_s']): b['parameters'][i]
                    for b in network['blocks'] for i, s in enumerate(b['stations'])}
@@ -567,6 +572,163 @@ def target_wet_design(fitted, arcs, weather, names):
 
 
 
+
+def physical_source_rows(data,candidate,rows,network,weather):
+    source_geometry.admit(network,candidate)
+    provider,corrections=baseline.subset_products(data,[q for q in data['plan']['references'] if q!=candidate],candidate)
+    codes={(s,e['time_s'],q):v for s,epochs in data['observations'].items() for e in epochs
+        for q,v in e['if_code_m'].items() if q!=candidate and q in data['plan']['references']}
+    centres={(s,b['time_s']):float(b['parameters'][i]) for b in network['blocks'] for i,s in enumerate(b['stations'])}
+    mjd=(datetime.fromisoformat(data['plan']['date_gpst'])-datetime(1858,11,17)).days
+    output=[]
+    for r in rows:
+        q,s,t=r['reference'],r['station'],r['time_s']
+        if q==candidate:raise ValueError('candidate at physical source boundary')
+        xyz=np.asarray(data['positions'][s][int((t-36000)/30)],float)
+        code=float(codes[s,t,q])+corrections[t,q]['if_code_change_m']
+        g=reference_geometry.emitted_source_mappings(provider,weather,mjd,q,code,t,xyz,centres[s,t],complete=True)
+        output.append({**r,**native(g),'reference_clock_centre_m':centres[s,t]})
+    return output,centres
+
+
+def run_weak_sources():
+    """Weak source stability, finite physical recovery and information design."""
+    prior_path=baseline.BASE/'results/reference_source_separation_v1.json.gz'
+    prior_bytes=prior_path.read_bytes();prior_sha='a8caee27bbb751090ce4af25d384bc23bad8111e2d94fe76754834f937821467'
+    if baseline.interval.shared.digest(prior_bytes)!=prior_sha:raise ValueError('changed source-separation evidence')
+    prior=json.loads(gzip.decompress(prior_bytes));raw,data=baseline.read_inputs()
+    if prior['input_sha256']!={k:baseline.interval.shared.digest(v) for k,v in raw.items()}:raise ValueError('weak-source inputs changed')
+    weather=baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
+    covariance=gnss_combinations.assumed_endpoint_covariance();results={}
+    labels=('weak_001m','weak_010m')
+    for candidate,old in prior['candidates'].items():
+        print(candidate,'weak sources',flush=True)
+        record={'windows':old['windows'],'prepared_arc_count':old['prepared_arc_count'],
+            'archived_nominal_fit_status':old['fit']['status'],'variants':{k:{'fit':{'status':'INSUFFICIENT_PREPARED_ARCS'},'rf_predictions':[]} for k in labels}}
+        results[candidate]=record
+        if 'source_models' not in old:continue
+        try:
+            nominal=network_clocks.fit(old['reference_rows'],raw_covariance=covariance)
+            rows,centres=physical_source_rows(data,candidate,old['reference_rows'],nominal,weather)
+            network=network_clocks.fit(rows,raw_covariance=covariance)
+            profile,w=source_geometry.profile_sources(network,candidate,source_geometry.FAMILIES)
+            requests=[{(s,t):coefficient for s,t,coefficient in own} for own in old['clock_requests']]
+            operators=network_clocks.observation_response(network,requests)
+            kg=sum(k@g for k,g in zip(operators,w['designs'],strict=True))
+            response=np.asarray(old['full_state_observation_response']);gc=np.zeros((response.shape[1],len(w['columns'])))
+            stations=profile['wet']['stations'];target=np.asarray(old['target_wet_model_design'])
+            for j,col in enumerate(w['columns']):
+                if col[0]=='wet':gc[:,j]=target[:,stations.index(col[1])]
+            tref=-response[:,old['transport']['clock_observation_indices']]@kg;tcand=-response@gc;t=tref+tcand
+            modes,spectrum=source_geometry.weak_modes(w['design'],t,profile['original_weighted_source_scale_per_m'])
+            rotated=network_clocks.fit(rows,raw_covariance=covariance,reference_rotation=.37)
+            rotated_profile,rw=source_geometry.profile_sources(rotated,candidate,source_geometry.FAMILIES)
+            flat=[{**r,'clock_derivative':1.} for r in rows]
+            flat_profile,fw=source_geometry.profile_sources(network_clocks.fit(flat,raw_covariance=covariance),candidate,source_geometry.FAMILIES)
+            endpoints=sorted({k for request in requests for k in request})
+            h=sum(k@g for k,g in zip(network_clocks.observation_response(network,[{key:1.} for key in endpoints]),w['designs'],strict=True))
+            design={str(tol):source_geometry.independent_information({**spectrum,'rank':modes['thresholds'][str(tol)]['rank']},t,w['columns'],h,modes['weak_direction_m_per_unit_l2_m']) for tol in source_geometry.WEAK_RTOLS}
+            record.update(reference_rows=rows,source_profile=profile,stability=modes,
+                equivalent_clock_basis={'rank':rotated_profile['resolved_rank'],
+                    'profiled_design_relative_difference':float(np.linalg.norm(rw['design']-w['design'])/np.linalg.norm(w['design']))},
+                clock_derivative_ablation={'status':'DIFFERENT_CALIBRATION_MODEL_NOT_EQUIVALENT_DATUM',
+                    'rank':flat_profile['resolved_rank'],'source_count':flat_profile['source_count']},
+                independent_information=design,clock_endpoint_keys=endpoints,clock_endpoint_source_map=h,
+                reference_model_state_map=tref,candidate_model_state_map=tcand,coupled_model_state_map=t,
+                clock_source_map=kg,physical_probes=[])
+            # Fresh preparation is used for every cold-start trajectory fit.
+            arcs,windows=baseline.build_arcs(data,candidate,weather)
+            if len(arcs)!=old['prepared_arc_count']:raise ValueError('changed candidate preparation support')
+            own=target_combinations(data,candidate,arcs,covariance);own,joint,transport=attach(network,own)
+            own,continuity=target_continuity(data,candidate,own)
+            for a in own:a['mw_increment_mask']=a['phase_increment_mask'].copy()
+            stop=max(a['endpoint_gpst_s'] for a in arcs)
+            base_rows,base_failures=reference_rows(data,candidate,stop,weather,centres,continuity=True,combinations=True)
+            keys=lambda rs:[(r['station'],r['reference'],r['time_s'],r['segment']) for r in rs]
+            if keys(base_rows)!=keys(rows):raise ValueError('physical baseline support/segments changed')
+            base_index={(r['station'],r['reference'],r['time_s']):r for r in base_rows}
+            for mode in ('strong','weak'):
+                direction=np.asarray(modes[mode+'_direction_m_per_unit_l2_m'])
+                for amplitude in source_geometry.PROBE_SOURCE_L2_M:
+                    for sign in ((1.,-1.) if mode=='weak' else (1.,)):
+                        vector=direction*amplitude*sign;probe=source_geometry.split_probe(w['columns'],vector,candidate)
+                        item={'mode':mode,'source_l2_m':amplitude,'sign':sign,'source_vector_m':vector}
+                        record['physical_probes'].append(item)
+                        try:
+                            minimum={s:min(r['zenith_wet_m'] for r in rows if r['station']==s)+probe['wet'].get(s,0.) for s in stations}
+                            item['minimum_reference_total_zenith_wet_m']=minimum
+                            if min(minimum.values())<0:raise ValueError('negative total reference wet in declared finite probe')
+                            changed,failures=reference_rows(data,candidate,stop,weather,centres,continuity=True,combinations=True,source_probe=probe)
+                            if failures!=base_failures or keys(changed)!=keys(base_rows):raise ValueError('finite source support/segments changed')
+                            changed_index={(r['station'],r['reference'],r['time_s']):r for r in changed}
+                            signals=[];linear=[];physical_blocks=[];roundoff=0.
+                            for b,g in zip(network['blocks'],w['designs'],strict=True):
+                                values=[]
+                                for r in b['rows']:
+                                    key=r['station'],r['reference'],r['time_s'];a=base_index[key];z=changed_index[key]
+                                    shift=(z['clock_derivative']-a['clock_derivative'])*centres[r['station'],r['time_s']]
+                                    values.append([-(z['code_m']-a['code_m']-shift),-(z['phase_m']-a['phase_m']-shift),-(z['mw_m']-a['mw_m'])])
+                                    roundoff=max(roundoff,32*np.finfo(float).eps*max(abs(a['phase_m']),abs(a['code_m']),3e7))
+                                physical=np.asarray(values).T.ravel();physical_blocks.append(physical)
+                                signals.append((b['rows'],physical));linear.append((b['rows'],g@vector))
+                            item.update(status='FINITE_PHYSICAL_INCREMENT_PREPARED',physical_increment_blocks=physical_blocks,
+                                forward_difference_roundoff_bound_per_observable_m=roundoff,
+                                recovery=source_geometry.known_source_recovery(rows,signals,linear,vector,t,spectrum,covariance,candidate),
+                                physical_update='COM position/velocity, relativistic clock, emission, Sagnac, admitted attitude, VMF3 and P1-only stable IF bias')
+                            if mode=='weak' and sign>0:
+                                label='weak_001m' if amplitude==.01 else 'weak_010m'
+                                ref,newrows,cal=calibrate(data,candidate,arcs,weather,centres=centres,continuity=True,
+                                    raw_covariance=covariance,source_probe=probe)
+                                if keys(newrows)!=keys(base_rows):raise ValueError('recalibrated source support/segments changed')
+                                trial,recomputed,meta=attach(ref,own)
+                                for a,b in zip(trial,own,strict=True):
+                                    a['covariance']=b['covariance'];a['propagation']=fixed_wet_propagation(weather,a['stations'],probe['wet'])
+                                fitted=dynamic_fit.fit(trial,joint_covariance=joint,progress=lambda v:print(candidate,label,v,flush=True))
+                                fitted['reference_calibration_status']=cal['status']
+                                if cal['status']=='CONDITIONAL_MODEL_REJECTED':
+                                    fitted['algebraic_target_fit_status']=fitted['status'];fitted['status']='REFERENCE_CALIBRATION_MODEL_REJECTED'
+                                predictions=predict_combinations(fitted,trial,weather,zenith_wet_m=probe['wet'])
+                                variant={'fit':fitted,'rf_predictions':predictions,'reference_calibration':cal,
+                                    'target_weight_covariance_fixed_at_nominal':True,'cold_start_rf_initialization':True,
+                                    'source_vector_m':vector,'linear_state_change_m_m_s':t@vector,
+                                    'clock_change':meta['clock_mean']-transport['clock_mean'],
+                                    'linear_clock_change':-kg@vector}
+                                if 'state_ecef_m_m_s' in fitted:
+                                    delta=np.asarray(fitted['state_ecef_m_m_s'])-np.asarray(old['fit']['state_ecef_m_m_s'])
+                                    variant.update(finite_state_change_m_m_s=delta,finite_minus_linear_state_change_m_m_s=delta-t@vector)
+                                record['variants'][label]=variant
+                        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+                            item.update(status='FINITE_PHYSICAL_PROBE_FAILED',reason=str(error))
+                            if mode=='weak' and sign>0:
+                                record['variants']['weak_001m' if amplitude==.01 else 'weak_010m']['fit']={'status':'FINITE_PHYSICAL_PROBE_FAILED','reason':str(error)}
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            record['preparation_failure']=str(error)
+            for v in record['variants'].values():v['fit']={'status':'WEAK_SOURCE_PREPARATION_FAILED','reason':str(error)}
+    # Every physical intervention, recovery and candidate prediction is fixed
+    # before any dedicated RF/MW score. No CODE/oracle state is consumed.
+    for candidate,c in results.items():
+        for v in c['variants'].values():
+            predictions=v['rf_predictions']
+            v.update(prediction_sha256=baseline.interval.shared.digest(json.dumps(predictions,separators=(',',':'),allow_nan=False).encode()),
+                rf_evaluation=baseline.score_rf(data,candidate,predictions),mw_evaluation=score_mw(data,candidate,predictions))
+    modules=[baseline,baseline.interval,baseline.interval.shared,wet,reference_geometry,dynamic_fit,source_geometry,network_clocks,
+        phase_continuity,gnss_combinations,baseline.precise,baseline.attitude,baseline.conventions,baseline.bias,baseline.sp3,
+        baseline.day,baseline.day.atmosphere,baseline.interval.shared.meteo,baseline.dynamics,baseline.interval.clock_observations]
+    sources=[Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
+    return native({'schema':'exposed-weak-source-physical-recovery-v1','prior_sha256':prior_sha,
+        'scope':'Exposed weak combinations; equivalent-coordinate and clock-basis stability; finite physical incremental recovery; cold-start candidate probes; hypothetical independent source-information design.',
+        'candidate_products_used_in_own_fit':False,'candidate_rf_used_in_own_network':False,'candidate_code_orbit_scoring':False,
+        'archived_rf_state_used_only_for_local_response_and_after_fit_comparison':True,'archived_rf_state_used_as_fit_seed':False,
+        'all_predictions_before_scoring':True,'g12_state_accessed':False,'oracle_tuning':False,'new_confirmation':False,
+        'physical_covariance_qualified':False,'production_floors_changed':False,'independent_measurements_admitted':False,
+        'physical_probe_amplitudes_are_measured_errors':False,'thresholds_selected_from_scores':False,
+        'probe_source_l2_m':source_geometry.PROBE_SOURCE_L2_M,'rank_rtols':source_geometry.WEAK_RTOLS,
+        'input_sha256':{k:baseline.interval.shared.digest(v) for k,v in raw.items()},
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,'raw_endpoint_weight_covariance_m2':covariance,
+        'fit_status_counts':{label:dict(Counter(c['variants'][label]['fit']['status'] for c in results.values())) for label in labels},'candidates':results})
+
+
 def run_separation():
     """Separate exposed wet, emitted reference APC shapes and stable IF bias.
 
@@ -1011,7 +1173,9 @@ def run_structure():
         'candidates':results})
 
 
-def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False, separate=False):
+def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False, separate=False, weak_sources=False):
+    if weak_sources:
+        return run_weak_sources()
     if separate:
         return run_separation()
     if sources:
@@ -1183,7 +1347,10 @@ if __name__ == '__main__':
     parser.add_argument('--closures',action='store_true',help='nondispersive calibrated network closures and complete state response')
     parser.add_argument('--sources',action='store_true',help='station wet source geometry through reference and candidate paths')
     parser.add_argument('--separate',action='store_true',help='joint wet, emitted reference orbit/antenna shapes and stable bias identifiability')
+    parser.add_argument('--weak-sources',action='store_true',help='weak-source stability, finite physical recovery and hypothetical independent information')
     args = parser.parse_args()
+    if args.weak_sources and (args.separate or args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
+        parser.error('--weak-sources is a separate physical recovery analysis')
     if args.separate and (args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
         parser.error('--separate is a separate joint source analysis')
     if args.sources and (args.closures or args.structure or args.temporal or args.combinations or args.continuity):
@@ -1194,7 +1361,7 @@ if __name__ == '__main__':
         parser.error('--structure is a separate reference-only analysis')
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources,separate=args.separate)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources,separate=args.separate,weak_sources=args.weak_sources)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)

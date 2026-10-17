@@ -51,8 +51,8 @@ def environment(context):
     return direction
 
 
-def emitted_source_mappings(provider, weather, mjd_day, reference, code, tag_s, station, clock):
-    """Emitted APC displacement shapes, at fixed admitted emission and clocks.
+def emitted_source_mappings(provider, weather, mjd_day, reference, code, tag_s, station, clock, *, complete=False):
+    """Emitted APC source shapes, optionally including emission/clock response.
 
     RTN uses COM position and inertial velocity expressed in ECEF. Body PCO
     axes use the admitted attitude at emission. Rotate both to reception ECEF.
@@ -82,5 +82,76 @@ def emitted_source_mappings(provider, weather, mjd_day, reference, code, tag_s, 
     for j in range(3):
         delta=np.eye(3)[j]  # one metre central elevation derivative
         gradient[j]+=(atmosphere(rotated+delta)-atmosphere(rotated-delta))/2.
-    return {'orbit_mapping':gradient@rotation@rtn,'antenna_mapping':gradient@rotation@body,
+    result={'orbit_mapping':gradient@rotation@rtn,'antenna_mapping':gradient@rotation@body,
         'source_emission_gpst_s':tx,'source_light_time_s':tau}
+    if complete:
+        from .precise_reference_model import relativity_m
+        from ..kinematic import gnss_combinations
+        def state_at(t):
+            r,v=provider.precise.orbit(reference,t)
+            return r,v,provider.precise.clock(reference,t)+relativity_m(r,v)/C
+        rm,vm,_=state_at(tx-.5);rp,vp,_=state_at(tx+.5)
+        bdot=rtn_basis(rp,vp)-rtn_basis(rm,vm)
+        # Keep clock/attitude derivatives inside the current 30 s interval.
+        dt=min(.01,(tx%30)/2,(30-tx%30)/2)
+        if dt<1e-6:raise ValueError('source derivative at interpolation knot')
+        _,_,cm=state_at(tx-dt);_,_,cp=state_at(tx+dt)
+        clock_rate=(cp-cm)/(2*dt)
+        body_rate=(provider.attitude.body_to_ecef(reference,tx+dt,provider.step)-
+            provider.attitude.body_to_ecef(reference,tx-dt,provider.step))/(2*dt)
+        apc_velocity=velocity+body_rate@np.asarray(provider.precise.offsets[reference]['if_pco_body_m'])
+        # d R(-Omega*tau)/d tx, since tau = tag-clock/C-tx.
+        rotated_rate=rotation@apc_velocity+np.cross([0.,0.,OMEGA],rotated)
+        path_rate=gradient@rotated_rate
+        dc=-2*(velocity@rtn+com@bdot)/C**2
+        dtx=-dc/(1+clock_rate)
+        result['restricted_orbit_mapping']=result['orbit_mapping'].copy()
+        result['orbit_mapping']+=(path_rate-C*clock_rate)*dtx-C*dc
+        hardware_phase=(path_rate/C-clock_rate)/(1+clock_rate)
+        result.update(bias_phase_mapping=float(hardware_phase),bias_code_mapping=float(1+hardware_phase),
+            bias_mw_mapping=float(gnss_combinations.transform()[3,0]/gnss_combinations.ALPHA),
+            source_clock_rate_s_s=float(clock_rate),source_emission_relativity_linearized=True)
+    return result
+
+
+def rtn_basis(com, velocity):
+    radial=com/np.linalg.norm(com)
+    normal=np.cross(com,velocity+np.cross([0.,0.,OMEGA],com))
+    normal/=np.linalg.norm(normal)
+    return np.column_stack([radial,np.cross(normal,radial),normal])
+
+
+def physical_source_provider(provider, candidate, probe):
+    """Perturb admitted reference products, recomputing velocity/relativity/tx.
+
+    Constant RTN product-trajectory residuals need not themselves be a new
+    gravitational orbit. Body offsets use admitted attitude at the new tx.
+    """
+    from .precise_reference_model import PreciseReference
+    from .reference_attitude_model import AttitudeReference
+    if provider.precise.target!=candidate:raise ValueError('candidate boundary mismatch')
+    allowed=set(provider.precise.offsets)
+    if not set(probe)<={'wet','orbit','antenna','bias'}:raise ValueError('unknown physical source family')
+    if any(k.rsplit('/',1)[-1] not in allowed for k in probe.get('bias',{})):
+        raise ValueError('candidate/unadmitted hardware source before decoding')
+    for family in ('orbit','antenna'):
+        if candidate in probe.get(family,{}) or not set(probe.get(family,{}))<=allowed:
+            raise ValueError('candidate/unadmitted physical source before decoding')
+    vectors={f:{q:np.asarray(v,float) for q,v in probe.get(f,{}).items()} for f in ('orbit','antenna')}
+    if any(v.shape!=(3,) or not np.isfinite(v).all() for d in vectors.values() for v in d.values()):
+        raise ValueError('finite three-dimensional source displacement required')
+    class Perturbed(PreciseReference):
+        @lru_cache(maxsize=16384)
+        def displacement(self,q,t,count):
+            r,v=provider.precise.orbit(q,t,count)
+            return rtn_basis(r,v)@vectors['orbit'].get(q,np.zeros(3))
+        def orbit(self,q,t,count=9):
+            if q==candidate or q not in allowed:raise ValueError('candidate/unadmitted perturbed orbit')
+            r,v=provider.precise.orbit(q,t,count)
+            dp=self.displacement(q,t,count)
+            dv=(self.displacement(q,t+.5,count)-self.displacement(q,t-.5,count))
+            return r+dp,v+dv  # denominator 2*.5 seconds
+    offsets={q:{**item,'if_pco_body_m':np.asarray(item['if_pco_body_m'])+vectors['antenna'].get(q,np.zeros(3))}
+        for q,item in provider.precise.offsets.items()}
+    precise=Perturbed(provider.precise.orbits,provider.precise.clocks,offsets,candidate)
+    return AttitudeReference(precise,provider.attitude,provider.step,provider.z_only)
