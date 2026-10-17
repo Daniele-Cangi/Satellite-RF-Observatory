@@ -286,6 +286,27 @@ S2 resta aperta: risolvere le combinazioni deboli con validita fisica finita
 e informazione indipendente o maggiore leva geometrica, senza floor ad hoc.
 Nessuno score CODE nuovo, rivelazione G12, covarianza fisica o campagna S3.
 
+Il [recupero fisico delle combinazioni deboli](../research/exploratory/WEAK_SOURCE_RECOVERY.md)
+conserva 22 candidati, 440 finestre e 63 archi; per entrambe le ampiezze RF
+restano 17 casi insufficienti e cinque BRANCH_SEARCH_INCOMPLETE. I sottospazi
+sono stabili per coordinate equivalenti e per la stessa base clock, ma i modi
+selezionati cambiano molto con la soglia di rango. I 30 controlli lineari
+recuperano la proiezione nota; i 20 probe fisici deboli falliscono il recupero
+del funzionale iniettato, mentre il controllo forte lo recupera in 10/10 casi.
+Il difetto fisico meno lineare profilato supera il segnale debole di 14-1282
+volte: il calcolo differenziale deve essere qualificato prima del recupero.
+Le variazioni finite di posizione dei dieci fit RF da zero sono 43-493 um,
+con discrepanza dalla derivata fino a 106 um; non sono errori orbitali osservati.
+Nessuna singola famiglia, ne umidita+orbita o un solo funzionale debole,
+raggiunge il benchmark condizionale 1 m / 1 mm/s nella griglia testata.
+Misurare ogni coordinata sorgente e uno scenario sufficiente, fino a 1 mm
+per tutte le 182/198 coordinate di G19/G20; non e un prior ammesso o un
+requisito strumentale necessario. Il caso clock osserva idealmente lo shift
+di calibrazione indotto dalle sorgenti, non una misura esterna reale del clock.
+S2 resta aperta: valutazione differenziale stabile e osservabili fisiche
+complementari con modello congiunto dei nuisance e delle correlazioni.
+Nessun nuovo score CODE, stato G12, floor, covarianza fisica o campagna S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
