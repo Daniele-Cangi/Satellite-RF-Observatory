@@ -162,3 +162,25 @@ def test_unsupported_temporal_shape_retains_baseline_and_every_failed_variant(mo
     for label in ('temporal_code','temporal_shared','temporal_without_cross'):
         assert records[label]['covariance_status']=='UNAVAILABLE'
         assert 'no supported temporal lag' in records[label]['reason']
+
+
+def test_temporal_study_ablation_preserves_marginals_and_changes_only_cross_block(monkeypatch):
+    from research.kinematic.tests.test_temporal_shared_rf import prepared
+    arcs,_,_,network,_,_ = prepared()
+    monkeypatch.setattr(study,'calibrate',lambda *a,**k:(network,[],{'status':'CONDITIONAL_MODEL_ONLY'}))
+    monkeypatch.setattr(study,'target_combinations',lambda d,q,a,c:a)
+    monkeypatch.setattr(study,'held_out_links',lambda *a,**k:{})
+    monkeypatch.setattr(study,'target_continuity',lambda d,q,a:([
+        {**r,'phase_increment_mask':np.ones((2,len(r['stations'])),dtype=bool)} for r in a],{}))
+    monkeypatch.setattr(study.temporal_contrasts,'estimate',lambda rows:{'code_endpoint_ar1_rho_30s':.4})
+    calibrated,records,_ = study.prepare_temporal({},'G05',arcs,None)
+    assert len(calibrated)==4
+    full = calibrated['temporal_shared'][1]
+    ablated = calibrated['temporal_without_cross'][1]
+    clocks = records['temporal_shared']['transport']['clock_observation_indices']
+    rf,at=[],0
+    for a in arcs:rf.extend(at+np.arange(7*len(a['stations'])));at+=len(a['covariance'])
+    np.testing.assert_array_equal(full[np.ix_(rf,rf)],ablated[np.ix_(rf,rf)])
+    np.testing.assert_array_equal(full[np.ix_(clocks,clocks)],ablated[np.ix_(clocks,clocks)])
+    assert np.max(abs(full[np.ix_(rf,clocks)]))>.01
+    assert not np.any(ablated[np.ix_(rf,clocks)])
