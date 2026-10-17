@@ -86,6 +86,19 @@ def test_free_unknown_increment_keeps_code_and_marginalizes_correlated_noise():
     np.testing.assert_allclose(a['chol']@a['chol'].T,
         arcs[0]['covariance'][np.ix_(kept,kept)],atol=1e-12)
     covariance = block_diag(*[r['covariance'] for r in arcs])
+    source = np.zeros(len(covariance))
+    at = 0
+    for arc in arcs:
+        source[at+19] = .001
+        at += len(arc['covariance'])
+    source[18] = 2.  # Large correlation with the discarded increment.
+    covariance += np.outer(source,source)
+    indices,at = [],0
+    for arc in prepared:
+        indices.extend(at+arc['observation_indices'])
+        at += arc['full_observation_count']
+    chol = dynamic_fit.joint_cholesky(prepared,covariance)
+    np.testing.assert_allclose(chol@chol.T,covariance[np.ix_(indices,indices)],atol=1e-12)
     fitted = dynamic_fit.fit(arcs,joint_covariance=covariance)
     np.testing.assert_allclose(fitted['state_ecef_m_m_s'],state,atol=.1,rtol=0)
     assert fitted['residual_dof']==full['residual_dof']-1

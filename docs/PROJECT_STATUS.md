@@ -136,6 +136,26 @@ trasferimento comune attraverso riferimenti e percorso del candidato.
 Nessuna variante diventa correzione fisica qualificata; default, floor,
 risultati storici e orbita G12 restano invariati. S2 aperta, nessuna S3.
 
+Il [trattamento della continuita geometry-free](../research/exploratory/REFERENCE_PHASE_CONTINUITY.md)
+spezza le ambiguita ai passaggi segnalati e ricalcola clock e covarianza fino
+all'orbita. Cinque passaggi distinti dei riferimenti sono riusati in 19 casi
+fra i fold; nessuno dei 680 incrementi di training dei candidati viene tolto.
+Con bias costanti lo scarto CODE migliora in quattro traiettorie, ma G19
+peggiora da 50,16 a 87,99 m RMS e la velocita peggiora in tre casi.
+I 26 confronti RF realmente futuri peggiorano: codice da 0,8876 a 0,9036 m,
+fase da 6,8972 a 7,8139 mm/s. Con deriva libera, rispetto alla precedente
+variante libera, la posizione migliora solo in G11/G20 e peggiora negli altri
+tre. La fase esclusa di G19 resta a 0,589 m RMS, con massimo 7,875 m; G20
+raggiunge 0,730 m. I 402 ulteriori controlli fase senza segmento assegnabile
+restano nel denominatore, preservando i codici valutabili. Nessuna variante
+diventa correzione fisica qualificata. I modi quasi nulli GF richiedono una
+combinazione complementare e un budget temporale codice/fase: per il caso
+9/7, MW richiederebbe circa 0,285 m di rumore per banda nelle ipotesi dichiarate.
+MW usa gli stessi dati, quindi deve conservarne covarianza e rango, non puo
+valere come misura indipendente aggiunta. Il termine comune clock-like resta
+non qualificato. Floor, risultati storici e orbita G12 invariati; S2 aperta,
+nessuna S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.

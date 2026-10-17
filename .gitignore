@@ -281,3 +281,4 @@ research/exploratory/results/*
 !research/exploratory/results/pnt_android_nts_coverage_v1.json
 !research/exploratory/results/pnt_android_time_drift_v1.json
 !research/exploratory/results/pnt_android_time_availability_v1.json
+!research/exploratory/results/reference_phase_continuity_v1.json.gz
