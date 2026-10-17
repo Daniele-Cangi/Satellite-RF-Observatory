@@ -17,7 +17,7 @@ import numpy as np
 from scipy.linalg import block_diag
 
 from . import reference_state_validation as baseline
-from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations
+from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance
 from ..kinematic.synthetic import native
 
 
@@ -281,6 +281,16 @@ def information(fit, arcs, joint):
         'measurement_requirement':'separate independent receiver interval mean-rate information, not another correlated GNSS product; no such measurements are admitted here'})
 
 
+def clock_requests(arcs):
+    requests = []
+    for a in sorted(arcs,key=lambda a:a['endpoint_gpst_s']):
+        t = a['endpoint_gpst_s']
+        for s in a['stations']:
+            requests.extend([{(s,t):1.},{(s,t):1/60.,(s,t-60):-1/60.},
+                {(s,t-30):1/30.,(s,t-60):-1/60.,(s,t):-1/60.}])
+    return requests
+
+
 def attach(network, arcs):
     """Replace conditional clock data jointly; keep candidate RF/ground floors.
 
@@ -288,12 +298,7 @@ def attach(network, arcs):
     Its arbitrary common error has no inferred physical amplitude here.
     """
     arcs = [{**a} for a in sorted(arcs, key=lambda a: a['endpoint_gpst_s'])]
-    requests = []
-    for a in arcs:
-        t = a['endpoint_gpst_s']
-        for s in a['stations']:
-            requests.extend([{(s, t): 1.}, {(s, t): 1/60., (s, t-60): -1/60.},
-                {(s, t-30): 1/30., (s, t-60): -1/60., (s, t): -1/60.}])
+    requests = clock_requests(arcs)
     means, clock_covariance = network_clocks.clock_coefficients(network, requests)
     joint = block_diag(*[a['covariance'] for a in arcs])
     clock_indices, at, ct = [], 0, 0
@@ -452,7 +457,59 @@ def score_mw(data, candidate, predictions):
         'gf_prediction':'UNIDENTIFIABLE_WITH_FREE_LINK_EPOCH_IONOSPHERE'}
 
 
-def run(*, continuity=False, combinations=False):
+def prepare_temporal(data, candidate, arcs, weather):
+    """Keep the reference estimator fixed; propagate new raw-noise hypotheses."""
+    raw_covariance = gnss_combinations.assumed_endpoint_covariance()
+    network,rows,calibration = calibrate(data,candidate,arcs,weather,continuity=True,raw_covariance=raw_covariance)
+    own = target_combinations(data,candidate,arcs,raw_covariance)
+    own,joint,transport = attach(network,own)
+    own,target = target_continuity(data,candidate,own)
+    for a in own:a['mw_increment_mask'] = a['phase_increment_mask'].copy()
+    transport['target_continuity'] = target
+    held = held_out_links(rows,continuity=True,raw_covariance=raw_covariance)
+    calibrated = {'joint_independent':(own,joint)}
+    records = {'joint_independent':{'calibration':calibration,'transport':transport,'held_out_links':held}}
+    labels = ('temporal_code','temporal_shared','temporal_without_cross')
+    model = {'status':'TEMPORAL_MODEL_UNAVAILABLE'}
+    try:
+        model = temporal_contrasts.estimate(rows)
+        for label,fraction in (('temporal_code',0.),('temporal_shared',.5)):
+            updated,covariance,propagation = shared_rf_covariance.propagate(network,clock_requests(own),own,
+                joint,transport['clock_observation_indices'],candidate,raw_covariance,
+                code_rho=model['code_endpoint_ar1_rho_30s'],receiver_fraction=fraction)
+            calibrated[label] = updated,covariance
+            records[label] = {'calibration':calibration,'held_out_links':held,
+                'transport':{**transport,**propagation}}
+        # The ablation changes only the RF/clock cross block, retaining both
+        # marginal blocks and the same fitted reference estimator/parameters.
+        updated,covariance = calibrated['temporal_shared']
+        covariance = covariance.copy()
+        rf,at = [],0
+        for a in updated:
+            rf.extend(at+np.arange(7*len(a['stations'])));at+=len(a['covariance'])
+        clocks = transport['clock_observation_indices']
+        covariance[np.ix_(rf,clocks)] = 0.
+        covariance[np.ix_(clocks,rf)] = 0.
+        own_ablation,at = [],0
+        for a in updated:
+            stop = at+len(a['covariance'])
+            own_ablation.append({**a,'covariance':covariance[at:stop,at:stop].copy()});at=stop
+        calibrated['temporal_without_cross'] = own_ablation,covariance
+        records['temporal_without_cross'] = {**records['temporal_shared'],
+            'transport':{**records['temporal_shared']['transport'],
+                'reference_target_cross_covariance_retained':False,'counterfactual_independence_ablation':True}}
+    except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+        model = {**model,
+            'preparation_status':'TEMPORAL_COVARIANCE_PREPARATION_FAILED','reason':str(error)}
+        for label in labels:
+            if label not in calibrated:
+                records[label] = {'calibration':calibration,'covariance_status':'UNAVAILABLE','reason':str(error)}
+    return calibrated,records,model
+
+
+def run(*, continuity=False, combinations=False, temporal=False):
+    if temporal:
+        continuity,combinations = True,True
     raw, data = baseline.read_inputs()
     weather = baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
     results, prepared = {}, {}
@@ -466,6 +523,10 @@ def run(*, continuity=False, combinations=False):
             ('joint_free_drift',True,True),('joint_correlated_code',False,True)]
         raw_models = {label:gnss_combinations.assumed_endpoint_covariance(code_correlation=rho)
                       for label,rho in [('joint_independent',0.),('joint_free_drift',0.),('joint_correlated_code',.5)]}
+    if temporal:
+        configurations = [(label,False,True) for label in (
+            'joint_independent','temporal_code','temporal_shared','temporal_without_cross')]
+        raw_models = {label:gnss_combinations.assumed_endpoint_covariance() for label,_,_ in configurations}
     for candidate in data['plan']['references']:
         print(candidate, 'prepare', flush=True)
         try:
@@ -478,7 +539,14 @@ def run(*, continuity=False, combinations=False):
         prepared[candidate] = arcs
         record = {'windows': native(windows), 'variants': {}}
         calibrated = {}
-        if len(arcs) >= 2:
+        if len(arcs)>=2 and temporal:
+            try:
+                calibrated,records,model = prepare_temporal(data,candidate,arcs,weather)
+                record.update(records)
+                record['temporal_model'] = model
+            except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+                record['temporal_model'] = {'status':'REFERENCE_PREPARATION_FAILED','reason':str(error)}
+        if len(arcs) >= 2 and not temporal:
             centres = None
             for label,drift,split in configurations:
                 if label=='baseline':
@@ -515,7 +583,7 @@ def run(*, continuity=False, combinations=False):
             fit = {'status': 'INSUFFICIENT_PREPARED_ARCS', 'arc_count': len(arcs)}
             if len(arcs) >= 2:
                 if label != 'baseline' and joint is None:
-                    fit = {'status': 'NETWORK_UNAVAILABLE'}
+                    fit = {'status': 'COVARIANCE_UNAVAILABLE' if temporal and 'joint_independent' in calibrated else 'NETWORK_UNAVAILABLE'}
                 else:
                     try:
                         options = {'joint_covariance': joint} if label != 'baseline' else {}
@@ -551,17 +619,24 @@ def run(*, continuity=False, combinations=False):
                     variant['state_evaluation'] = baseline.state_errors(variant['fit'],prepared[candidate],baseline.oracle(data,candidate))
                 except (ValueError,KeyError,np.linalg.LinAlgError) as error:
                     variant['state_evaluation'] = {'status':'ORACLE_UNAVAILABLE','reason':str(error),'rows':[]}
-    modules = [baseline, baseline.interval, baseline.interval.shared, dynamic_fit, network_clocks, phase_continuity,gnss_combinations,
+    modules = [baseline, baseline.interval, baseline.interval.shared, dynamic_fit, network_clocks, phase_continuity,gnss_combinations,temporal_contrasts,shared_rf_covariance,
         baseline.dynamics, baseline.precise, baseline.attitude, baseline.bias, baseline.conventions,
         baseline.sp3, baseline.day, baseline.day.atmosphere, baseline.interval.shared.meteo]
     sources = [Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
-    return native({'schema': 'exposed-joint-rf-combinations-v1' if combinations else 'exposed-reference-phase-continuity-v1' if continuity else 'exposed-reference-network-clocks-v1',
+    return native({'schema': 'exposed-temporal-shared-rf-v1' if temporal else 'exposed-joint-rf-combinations-v1' if combinations else 'exposed-reference-phase-continuity-v1' if continuity else 'exposed-reference-network-clocks-v1',
         'scope': 'Exposed paired 22-candidate/440-window development. Free network reference-clock errors, float segment code/phase biases, joint offset/increment/cross-arc covariance; zero-mean reference-error datum. Optional joint IF/MW likelihood profiles free link-epoch ionosphere out of GF. Conditional measurement model only, not independent truth or absolute clock/total uncertainty qualification.',
         'candidate_products_used_in_own_fit': False, 'candidate_rf_used_in_own_network': False,
         'g12_state_accessed': False, 'oracle_tuning': False, 'all_predictions_before_scoring': True,
         'new_confirmation': False, 'physical_covariance_qualified': False, 'production_floors_changed': False,
         'reference_endpoint_weight_sigmas_m': {'code':20.,'phase':.02},
         'geometry_free_segmentation':continuity,
+        **({'temporal_model':{'code_shape_source':'normalized D/MW variograms, first 2/3 reference times; last 1/3 validation only',
+            'fit_lags_s':[30,60,90,120],'diagnostic_lag_s':300,'code_rho_range':[0,.99],
+            'phase_endpoint_correlation':0.,'receiver_shared_fraction_sensitivity':.5,
+            'historical_marginal_weights_preserved':True,'physical_covariance_qualified':False,
+            'reference_estimator_weights_changed':False,'reference_target_cross_ablation_retained':True,
+            'hyperparameter_uncertainty_propagated':False}}
+           if temporal else {}),
         **({'raw_covariance_scenarios_m2':raw_models,'combination_transform':gnss_combinations.transform(),
             'raw_channel_order':['P1_m','P2_m','phase1_m','phase2_m'],
             'combination_order':['IF_code_m','IF_phase_m','GF_phase_m','MW_m'],
@@ -573,9 +648,9 @@ def run(*, continuity=False, combinations=False):
             'maximum_gap_s':phase_continuity.MAX_GAP_S,'physical_detection_qualified':False,
             'integer_slip_repair':False,'heldout_own_phase_used_for_segmentation':False}}
            if continuity else {}),
-        'phase_bias_variants':('Reference IF-phase and MW constant segment biases versus additional unpenalized linear drifts in m/hour. Candidate MW constant arc bias (zero rate) versus free receiver/arc MW rate; candidate IF code bias remains constant. No amplitude prior or oracle selection.' if combinations else 'constant float per segment versus additional unpenalized link-linear drift in m/hour; no amplitude prior or oracle selection'),
+        'phase_bias_variants':('Constant reference IF-phase/MW segment biases and constant candidate MW arc bias in every variant; only covariance hypotheses change.' if temporal else 'Reference IF-phase and MW constant segment biases versus additional unpenalized linear drifts in m/hour. Candidate MW constant arc bias (zero rate) versus free receiver/arc MW rate; candidate IF code bias remains constant. No amplitude prior or oracle selection.' if combinations else 'constant float per segment versus additional unpenalized link-linear drift in m/hour; no amplitude prior or oracle selection'),
         'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,
-        'execution_note':('New exploratory joint IF/GF/MW comparison: refreshed GF baseline, independent equal-band raw noise with constant or free-linear biases, and code-correlation sensitivity rho=0.5. All variants retained; historical network and continuity artifacts unchanged.' if combinations else 'New exploratory continuity comparison, all variants retained; historical network v1 and corrections unchanged.' if continuity else 'Initial development run interrupted during G06 preparation after two G05 algebraic fits, before RF/CODE scoring, to include free phase drift and held-out network links. No completed artifact or historical outcome was replaced.'),
+        'execution_note':('New exploratory temporal/shared covariance comparison. Reference means retain fixed historical weights; full linearized estimator response including ambiguities transports declared raw covariance into RF and clock data. Receiver fraction .5 is an unqualified sensitivity, not a fitted positive shared component. All variants retained; historical artifacts unchanged.' if temporal else 'New exploratory joint IF/GF/MW comparison: refreshed GF baseline, independent equal-band raw noise with constant or free-linear biases, and code-correlation sensitivity rho=0.5. All variants retained; historical network and continuity artifacts unchanged.' if combinations else 'New exploratory continuity comparison, all variants retained; historical network v1 and corrections unchanged.' if continuity else 'Initial development run interrupted during G06 preparation after two G05 algebraic fits, before RF/CODE scoring, to include free phase drift and held-out network links. No completed artifact or historical outcome was replaced.'),
         'unqualified_sources': ['common reference-clock datum','reference orbit/attitude/phase bias stability',
             'unflagged phase continuity','phase wind-up and receiver code/phase bias drift',
             'terrestrial coordinates/propagation/dynamics and shared reference-target covariance',
@@ -591,10 +666,11 @@ if __name__ == '__main__':
     parser.add_argument('output',type=Path)
     parser.add_argument('--continuity',action='store_true',help='compare geometry-free segmentation through reference and target paths')
     parser.add_argument('--combinations',action='store_true',help='joint IF/GF/MW raw-covariance and temporal-bias comparison')
+    parser.add_argument('--temporal',action='store_true',help='reference-informed temporal shape and shared raw RF covariance transport')
     args = parser.parse_args()
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)

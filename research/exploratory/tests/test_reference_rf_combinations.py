@@ -1,5 +1,6 @@
 """Admitted raw RF, observable-specific support and combined forecast order."""
 import numpy as np
+import pytest
 from copy import deepcopy
 from scipy.linalg import block_diag
 
@@ -63,7 +64,8 @@ def test_target_combinations_do_not_decode_globally_excluded_rf():
     np.testing.assert_array_equal(own[0]['codes_m'],arcs[0]['codes_m'])
 
 
-def test_all_combination_models_finish_before_any_rf_or_oracle_score(monkeypatch):
+@pytest.mark.parametrize('mode',['combinations','temporal'])
+def test_all_combination_models_finish_before_any_rf_or_oracle_score(monkeypatch,mode):
     events=[]
     monkeypatch.setattr(study.baseline,'read_inputs',lambda:({},{'plan':{'references':['G05','G06']}}))
     monkeypatch.setattr(study.baseline,'build_arcs',lambda d,q,w:([
@@ -74,6 +76,11 @@ def test_all_combination_models_finish_before_any_rf_or_oracle_score(monkeypatch
     monkeypatch.setattr(study,'attach',lambda n,a:(a,np.eye(1),{}))
     monkeypatch.setattr(study,'held_out_links',lambda *a,**k:{})
     monkeypatch.setattr(study,'information',lambda *a:{})
+    if mode=='temporal':
+        labels=('joint_independent','temporal_code','temporal_shared','temporal_without_cross')
+        monkeypatch.setattr(study,'prepare_temporal',lambda d,q,a,w:(
+            {label:(a,np.eye(1)) for label in labels},
+            {label:{'calibration':{'status':'CONDITIONAL_MODEL_ONLY'}} for label in labels},{}))
     def fit(a,**kw):
         events.append('fit '+a[0]['candidate'])
         return {'status':'BRANCH_SEARCH_INCOMPLETE','state_ecef_m_m_s':np.zeros(6),
@@ -88,9 +95,9 @@ def test_all_combination_models_finish_before_any_rf_or_oracle_score(monkeypatch
     monkeypatch.setattr(study,'score_mw',score)
     monkeypatch.setattr(study.baseline,'oracle',lambda *a:None)
     monkeypatch.setattr(study.baseline,'state_errors',lambda *a:{})
-    result = study.run(combinations=True)
+    result = study.run(**{mode:True})
     assert result['all_predictions_before_scoring']
-    assert result['schema']=='exposed-joint-rf-combinations-v1'
+    assert result['schema']==('exposed-temporal-shared-rf-v1' if mode=='temporal' else 'exposed-joint-rf-combinations-v1')
     assert not result['raw_covariance_qualified']
 
 
@@ -137,3 +144,21 @@ def test_common_raw_band_error_is_recalibrated_before_target_refitting():
     assert np.linalg.norm(np.asarray(coupled['state_ecef_m_m_s'])[:3]-
                           np.asarray(incomplete['state_ecef_m_m_s'])[:3]) > .01
     assert not np.array_equal(full[0]['clock_mean'],target_only[0]['clock_mean'])
+
+
+def test_unsupported_temporal_shape_retains_baseline_and_every_failed_variant(monkeypatch):
+    from research.kinematic.tests.test_temporal_shared_rf import prepared
+    arcs,_,_,network,_,_ = prepared()
+    monkeypatch.setattr(study,'calibrate',lambda *a,**k:(network,[],{'status':'CONDITIONAL_MODEL_ONLY'}))
+    monkeypatch.setattr(study,'target_combinations',lambda d,q,a,c:a)
+    monkeypatch.setattr(study,'held_out_links',lambda *a,**k:{})
+    monkeypatch.setattr(study,'target_continuity',lambda d,q,a:([
+        {**r,'phase_increment_mask':np.ones((2,len(r['stations'])),dtype=bool)} for r in a],{}))
+    def unsupported(rows):raise ValueError('no supported temporal lag')
+    monkeypatch.setattr(study.temporal_contrasts,'estimate',unsupported)
+    calibrated,records,model=study.prepare_temporal({},'G05',arcs,None)
+    assert set(calibrated)=={'joint_independent'}
+    assert model['preparation_status']=='TEMPORAL_COVARIANCE_PREPARATION_FAILED'
+    for label in ('temporal_code','temporal_shared','temporal_without_cross'):
+        assert records[label]['covariance_status']=='UNAVAILABLE'
+        assert 'no supported temporal lag' in records[label]['reason']
