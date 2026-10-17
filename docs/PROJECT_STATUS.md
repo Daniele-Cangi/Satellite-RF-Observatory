@@ -241,6 +241,28 @@ Il prossimo incremento utile deve assegnare ai modi una geometria di sorgente
 e un accoppiamento reference/candidato fisicamente sostenuti, prima di usare
 i contrasti per qualificare propagazione, bias o clock.
 
+La [geometria della sorgente umida](../research/exploratory/REFERENCE_SOURCE_GEOMETRY.md)
+ora stima sei residui zenitali costanti per stazione dai soli riferimenti,
+profilando tutti i clock e bias float. I cinque fold hanno rango condizionale
+6/6; i ritardi umidi totali campionati restano positivi. La precisione formale
+1,6-19,1 mm dipende dai pesi storici, non e una covarianza meteorologica fisica.
+Restano 22 candidati, 440 finestre, 63 archi e 17 preparazioni insufficienti.
+La forma predice 1.316/1.494 campioni su link esclusi; 178 clock restano non osservati.
+A 300 s il RMS fase migliora in tutti i fold, da 15,113 a 14,595 mm aggregati;
+a 30 s peggiora in tre fold, da 9,247 a 9,274 mm. Il codice e misto e nessun
+floor viene ritarato. Sono predizioni condizionali con altri RF contemporanei.
+Lo stesso probe da 1 cm RMS zenitale attraversa la ricalibrazione completa e
+il percorso del candidato: le variazioni in posizione si sommano nei cinque
+modi selezionati, producendo 3,38-17,09 m e 0,137-2,089 mm/s. Sono sensibilita
+costruite, non errori orbitali osservati. I due percorsi separati non sono
+copie indipendenti della sorgente. Il codice realmente futuro peggiora da
+0,903600 a 0,904373 m RMS nel probe congiunto; tutti i peggioramenti sono
+conservati. I coefficienti stimati non diventano correzioni del candidato.
+S2 resta aperta: separare la forma umida da geometrie orbita/antenna dei soli
+riferimenti e bias stabili, con il corretto accoppiamento e informazione
+indipendente sui funzionali umidi richiesti. Nessuno score CODE nuovo,
+covarianza fisica ammessa, rivelazione G12 o avanzamento S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
