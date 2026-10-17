@@ -16,6 +16,8 @@ RESULT_SHA256='917202d0184c4bed1b8925d98818df6c4e0a14af1ad2b9eb2524f5dd001b3717'
 def test_weak_source_receipt_preserves_boundaries_denominators_and_physical_recovery():
     payload=(study.baseline.BASE/'results/weak_source_physical_recovery_v1.json.gz').read_bytes()
     assert hashlib.sha256(payload).hexdigest()==RESULT_SHA256
+    subprocess.run(['git','merge-base','--is-ancestor',PRODUCER,'HEAD'],
+        cwd=study.baseline.BASE.parents[1],check=True,capture_output=True)
     result=json.loads(gzip.decompress(payload));raw,data=study.baseline.read_inputs()
     assert result['input_sha256']=={k:hashlib.sha256(v).hexdigest() for k,v in raw.items()}
     for path,wanted in result['source_sha256'].items():

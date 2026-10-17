@@ -7,8 +7,8 @@ increment can be recovered, which combinations affect the candidate state,
 and what independent information would resolve them. The archive is already
 exposed; no result here is prospective confirmation or a physical error budget.
 
-The modes are stable under equivalent coordinates and the same clock basis
-space, but not under the rank threshold: the selected directions rotate
+The retained subspaces are stable under equivalent coordinates and rotations
+of the same clock-basis space, but not under the rank threshold: the selected directions rotate
 substantially. All 30 exact linear controls recover their identified source
 projection; all 20 weak finite physical probes fail the injected-functional
 criterion. The projected finite forward defect is 14--1282 times the intended
@@ -132,6 +132,10 @@ metres of light time; shared endpoints are counted once and intervals are not
 counted as additional independent measurements. An ideal mixed-functional observation is an information
 benchmark, not a claim that an available instrument directly observes it.
 
+Position and velocity diagnostic sigmas are the square roots of the largest
+eigenvalues of their separate 3-by-3 state-information image covariance blocks.
+They are largest principal-axis one-sigma scales, not RMS position errors.
+
 The resulting precision is a **source-information diagnostic under declared
 weights and measurement assumptions**. It is not added to the RF covariance,
 a measured source covariance, prospective coverage or total orbit accuracy.
@@ -165,7 +169,9 @@ they remain hypothetical observations of the stated constant-fold sources.
 
 Executed on 17 October 2026 with Python 3.13 and one OpenBLAS/OMP thread.
 The numerical producer is `a52202088aa2204507e0e5d3f37fb489b31a0f80`,
-an ancestor of this report. Run:
+the direct parent of the original result commit `0bf04a3f6531643cef1642d4d8a9abfd97658da5`.
+Both local Git and the GitHub Git-commit API verify that ancestry; the offline
+receipt additionally requires `git merge-base --is-ancestor PRODUCER HEAD`. Run:
 
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m research.exploratory.reference_network_clocks --weak-sources research/exploratory/results/weak_source_physical_recovery_v1.json.gz
@@ -321,7 +327,8 @@ and S3 remain outside this increment.
 
 Validation: 66 focused regression tests passed (160.02 s); the final six
 boundary/physics unit tests passed again (7.91 s); the new offline receipt
-passed (20.81 s). The receipt verifies artifact/producer/input hashes, all
+passed (20.81 s), then passed again with the explicit ancestry check (12.52 s).
+The receipt verifies artifact/producer/input hashes, all
 prediction scores and denominators, and replays G19 geometry, physical recovery
 and the canonical independent-information grid. Historical receipts remain
 unchanged.
