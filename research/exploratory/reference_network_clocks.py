@@ -17,7 +17,7 @@ import numpy as np
 from scipy.linalg import block_diag
 
 from . import reference_state_validation as baseline
-from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance, shared_error_structure
+from ..kinematic import dynamic_fit, network_clocks, phase_continuity, gnss_combinations, temporal_contrasts, shared_rf_covariance, shared_error_structure, network_closures
 from ..kinematic.synthetic import native
 
 
@@ -250,9 +250,8 @@ def held_out_support_correction(result, original_sha256, superseded_correction_s
         'candidates':candidates})
 
 
-def information(fit, arcs, joint):
-    if 'state_ecef_m_m_s' not in fit:
-        return {'status':'FIT_UNAVAILABLE'}
+def linear_response(fit, arcs, joint):
+    """Reuse the fitted GLS derivative, retaining full original data columns."""
     prepared,names,_ = dynamic_fit.prepare(arcs,True)
     scale = np.r_[dynamic_fit.STATE_SCALE,np.full(len(names)-1,100.)]
     point = np.r_[fit['state_ecef_m_m_s'],fit['bias_contrast_coefficients_m']]/scale
@@ -263,6 +262,20 @@ def information(fit, arcs, joint):
     details = {}
     _,_,_,cov,_,_ = dynamic_fit.linearize(point,locals_,prepared,scale,fit['epoch_gpst_s'],
         fit['integrated_bounds_s'],fit['j2'],joint_chol=dynamic_fit.joint_cholesky(prepared,joint),diagnostics=details)
+    count = sum(a['full_observation_count'] for a in prepared)
+    full = np.zeros((len(cov),count))
+    at = 0
+    for a,r in zip(prepared,details['observation_response'],strict=True):
+        full[:,at+a['observation_indices']] = r
+        at += a['full_observation_count']
+    details['full_observation_response'] = full
+    return details,cov,prepared
+
+
+def information(fit, arcs, joint):
+    if 'state_ecef_m_m_s' not in fit:
+        return {'status':'FIT_UNAVAILABLE'}
+    details,cov,prepared = linear_response(fit,arcs,joint)
     indices, at = [],0
     for a in prepared:
         indices.extend(at+a['ns']+1+3*np.arange(a['n']))
@@ -507,6 +520,127 @@ def prepare_temporal(data, candidate, arcs, weather):
     return calibrated,records,model
 
 
+def run_closures():
+    """Reference closures, future-link predictions and finite state responses."""
+    raw,data = baseline.read_inputs()
+    weather = baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
+    raw_covariance = gnss_combinations.assumed_endpoint_covariance()
+    results = {}
+    labels = ('joint_independent','clock_blind','cycle_visible')
+    def estimate(candidate,label,own,joint,reference_status):
+        try:
+            fitted = dynamic_fit.fit(own,joint_covariance=joint,
+                progress=lambda r:print(candidate,label,r,flush=True))
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            fitted = {'status':'FIT_FAILED','reason':str(error)}
+        fitted['reference_calibration_status'] = reference_status
+        if reference_status=='CONDITIONAL_MODEL_REJECTED':
+            fitted['algebraic_target_fit_status'] = fitted['status']
+            fitted['status'] = 'REFERENCE_CALIBRATION_MODEL_REJECTED'
+        predictions = predict_combinations(fitted,own,weather)
+        return {'fit':fitted,'rf_predictions':predictions,
+            'prediction_sha256':baseline.interval.shared.digest(json.dumps(predictions,separators=(',',':'),allow_nan=False).encode())}
+    for candidate in data['plan']['references']:
+        print(candidate,'prepare nondispersive closures',flush=True)
+        try:
+            arcs,windows = baseline.build_arcs(data,candidate,weather)
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            arcs,windows = [],baseline.coverage(data,candidate)
+            for w in windows:
+                if w['status']=='RF_COVERED':
+                    w.update(status='CANDIDATE_PREPARATION_FAILED',reason=str(error))
+        record = {'windows':native(windows),'prepared_arc_count':len(arcs),'variants':{
+            label:{'fit':{'status':'INSUFFICIENT_PREPARED_ARCS','arc_count':len(arcs)},
+                   'rf_predictions':[],'prediction_sha256':baseline.interval.shared.digest(b'[]')}
+            for label in labels}}
+        results[candidate] = record
+        if len(arcs)<2:
+            continue
+        try:
+            network,rows,calibration = calibrate(data,candidate,arcs,weather,continuity=True,raw_covariance=raw_covariance)
+            own = target_combinations(data,candidate,arcs,raw_covariance)
+            own,joint,transport = attach(network,own)
+            own,target = target_continuity(data,candidate,own)
+            for a in own:a['mw_increment_mask'] = a['phase_increment_mask'].copy()
+            record.update(calibration=calibration,reference_rows=rows,transport={**transport,'target_continuity':target},
+                closures=network_closures.closure_records(network,candidate),
+                future_links=network_closures.prepare_future_links(rows,candidate,raw_covariance))
+            record['variants']['joint_independent'] = estimate(candidate,'joint_independent',own,joint,calibration['status'])
+            fitted = record['variants']['joint_independent']['fit']
+            if 'state_ecef_m_m_s' not in fitted:
+                raise ValueError('baseline trajectory unavailable for calibration/state response')
+            details,_,_ = linear_response(fitted,own,joint)
+            response = details['full_observation_response'][:6]
+            requests = clock_requests(own)
+            indices = transport['clock_observation_indices']
+            record['state_response_to_clock_measurements'] = response[:,indices]
+            record['clock_requests'] = [[[s,t,c] for (s,t),c in r.items()] for r in requests]
+            partition = network_closures.state_transfer(network,requests,candidate,response,indices)
+            record['state_transfer'] = partition
+            original = np.array([[r['code_closure_m'],r['phase_closure_m']] for r in record['closures']['rows']])
+            flat = [r for b in network['blocks'] for r in b['rows']]
+            for label,mode in partition['modes'].items():
+                if mode['status']!='PROBE_PREPARED':
+                    record['variants'][label]['fit'] = {'status':'NO_RESOLVED_POSITION_PROBE'}
+                    continue
+                try:
+                    perturbed = [{**r,'code_m':r['code_m']+float(delta),'phase_m':r['phase_m']+float(delta)}
+                        for r,delta in zip(flat,mode['reference_change_m'],strict=True)]
+                    recalibrated = network_clocks.fit(perturbed,raw_covariance=raw_covariance)
+                    changed,covariance,updated = attach(recalibrated,own)
+                    actual_closures = network_closures.closure_records(recalibrated,candidate)
+                    actual = np.array([[r['code_closure_m'],r['phase_closure_m']] for r in actual_closures['rows']])
+                    reference_status = 'CONDITIONAL_MODEL_REJECTED' if recalibrated['conditional_p'] < .01 else 'CONDITIONAL_MODEL_ONLY'
+                    variant = estimate(candidate,label,changed,covariance,reference_status)
+                    variant['probe'] = {'reference_observation_time_linearization_fixed':True,
+                        'weights_and_covariance_preserved':bool(np.array_equal(joint,covariance)),
+                        'clock_measurement_change_m':updated['clock_mean']-transport['clock_mean'],
+                        'calibrated_closure_change_rms_m':np.sqrt(np.mean((actual-original)**2,axis=0)),
+                        'calibrated_closure_change_max_m':np.max(abs(actual-original),axis=0),
+                        'maximum_float_bias_change_m':float(max(abs(recalibrated['ambiguities_m']-network['ambiguities_m']))),
+                        'reference_conditional_p':recalibrated['conditional_p'],
+                        'reference_weighted_cost_change':recalibrated['weighted_cost']-network['weighted_cost']}
+                    if 'state_ecef_m_m_s' in variant['fit']:
+                        change = np.asarray(variant['fit']['state_ecef_m_m_s'])-fitted['state_ecef_m_m_s']
+                        variant['probe'].update(finite_state_change_m_m_s=change,
+                            finite_minus_linear_state_change_m_m_s=change-mode['linear_state_change_m_m_s'])
+                    record['variants'][label] = variant
+                except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+                    record['variants'][label]['fit'] = {'status':'PROBE_FAILED','reason':str(error)}
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+            record['preparation_failure'] = str(error)
+            for variant in record['variants'].values():
+                if variant['fit']['status']=='INSUFFICIENT_PREPARED_ARCS':
+                    variant['fit'] = {'status':'CLOSURE_PREPARATION_UNAVAILABLE','reason':str(error)}
+    # Every estimate, response, finite probe and prediction is fixed before
+    # excluded reference or candidate RF scoring. No candidate CODE is opened.
+    for candidate,record in results.items():
+        if 'future_links' in record:
+            record['future_links'] = network_closures.score_future_links(record['future_links'],record['reference_rows'])
+        for variant in record['variants'].values():
+            variant['rf_evaluation'] = baseline.score_rf(data,candidate,variant['rf_predictions'])
+            variant['mw_evaluation'] = score_mw(data,candidate,variant['rf_predictions'])
+    modules = [baseline,baseline.interval,baseline.interval.shared,dynamic_fit,network_clocks,
+        phase_continuity,gnss_combinations,temporal_contrasts,network_closures,
+        baseline.dynamics,baseline.precise,baseline.attitude,baseline.bias,baseline.conventions,
+        baseline.sp3,baseline.day,baseline.day.atmosphere,baseline.interval.shared.meteo]
+    sources = [Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
+    return native({'schema':'exposed-nondispersive-network-closures-v1',
+        'scope':'Exposed reference-only calibrated closure and conditional future-link IF prediction; reference-only coherent error sensitivities through recalibration and fresh trajectory fits.',
+        'candidate_products_used_in_own_fit':False,'candidate_rf_used_in_own_network':False,
+        'candidate_code_orbit_scoring':False,'g12_state_accessed':False,'oracle_tuning':False,
+        'all_predictions_before_scoring':True,'new_confirmation':False,
+        'physical_covariance_qualified':False,'production_floors_changed':False,
+        'reference_observation_time_linearization_fixed':True,
+        'probe_rms_m':network_closures.PROBE_RMS_M,'probe_amplitude_is_sigma':False,
+        'raw_endpoint_weight_covariance_m2':raw_covariance,
+        'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,
+        'input_sha256':{k:baseline.interval.shared.digest(v) for k,v in raw.items()},
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'fit_status_counts':{label:dict(Counter(c['variants'][label]['fit']['status'] for c in results.values())) for label in labels},
+        'candidates':results})
+
+
 def run_structure():
     """Reference-only spatial qualification on the existing preparation cohort."""
     raw, data = baseline.read_inputs()
@@ -569,7 +703,9 @@ def run_structure():
         'candidates':results})
 
 
-def run(*, continuity=False, combinations=False, temporal=False, structure=False):
+def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False):
+    if closures:
+        return run_closures()
     if structure:
         return run_structure()
     if temporal:
@@ -732,12 +868,15 @@ if __name__ == '__main__':
     parser.add_argument('--combinations',action='store_true',help='joint IF/GF/MW raw-covariance and temporal-bias comparison')
     parser.add_argument('--temporal',action='store_true',help='reference-informed temporal shape and shared raw RF covariance transport')
     parser.add_argument('--structure',action='store_true',help='qualify shared differential error structure on excluded references')
+    parser.add_argument('--closures',action='store_true',help='nondispersive calibrated network closures and complete state response')
     args = parser.parse_args()
+    if args.closures and (args.structure or args.temporal or args.combinations or args.continuity):
+        parser.error('--closures is a separate calibration/state-response analysis')
     if args.structure and (args.temporal or args.combinations or args.continuity):
         parser.error('--structure is a separate reference-only analysis')
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)
