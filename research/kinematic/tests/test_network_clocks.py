@@ -46,7 +46,7 @@ def test_joint_profile_matches_dense_gls_with_cross_epoch_covariance():
     np.testing.assert_allclose(actual,transform@estimate,atol=1e-8,rtol=0)
     np.testing.assert_allclose(cov,transform@covariance@transform.T,atol=1e-8,rtol=1e-7)
     assert cov[0,1] > 1.  # Shared float ambiguity, not independent epochs.
-    assert network['unobservable_common_clock_modes'] == 6
+    assert network['fixed_reference_clock_datum_epochs'] == 6
     assert network['weighted_cost'] < 1e-12
 
 
@@ -86,7 +86,14 @@ def test_unflagged_link_jump_is_not_silently_absorbed_as_a_network_clock():
 
 def test_disconnected_network_and_unobserved_future_are_explicit_failures():
     rows = [r for r in toy() if (r['station']=='A') == (r['reference']=='X')]
+    for i,r in enumerate(rows):
+        r['clock_derivative'] = 1.+i*1e-6
     with pytest.raises(ValueError,match='rank deficient'):
         solver.fit(rows)
     with pytest.raises(ValueError,match='not observed'):
         solver.clock_coefficients(solver.fit(toy()),[{('A',270.):1.}])
+    # A withheld interior time block is also unidentifiable. Shared segment
+    # information does not invent its free receiver/reference clock values.
+    network = solver.fit([r for r in toy() if r['time_s']!=60.])
+    with pytest.raises(ValueError,match='not observed'):
+        solver.clock_coefficients(network,[{('A',60.):1.}])

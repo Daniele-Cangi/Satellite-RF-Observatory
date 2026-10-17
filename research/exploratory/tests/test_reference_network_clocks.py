@@ -1,9 +1,12 @@
 """Candidate/time boundaries and observation-derived network transport."""
 import gzip
+from collections import defaultdict
 import hashlib
 import json
+import subprocess
 
 import numpy as np
+import pytest
 
 from research.exploratory import reference_network_clocks as study
 from research.exploratory.tests.test_reference_state_validation import Forbidden, poison_products
@@ -62,7 +65,37 @@ def test_network_clock_transport_keeps_arc_order_and_correlations():
     assert 'clock_mean' not in arcs[0]
 
 
-def test_all_variants_precede_rf_and_product_scoring(monkeypatch):
+def test_a_single_training_phase_level_cannot_predict_a_free_drift():
+    rows = toy()
+    for r in rows:
+        if r['station']=='A' and r['reference']=='X' and r['time_s']>=210.:
+            r['segment'] = 'short AX'
+    # Put the last sample in the deterministic holdout while the other one
+    # trains the float level. The free slope has no observation.
+    row = next(r for r in rows if r['segment']=='short AX' and r['time_s']==240.)
+    rows.remove(row)
+    rows.insert(0,row)
+    result = study.held_out_links(rows,phase_drift=True)
+    held = next(r for r in result['rows'] if r['segment']=='short AX' and r['time_s']==240.)
+    assert held['status']=='UNIDENTIFIABLE_PHASE_DRIFT'
+    assert 'phase_error_m' not in held
+
+
+def test_heldout_correction_replays_without_changing_the_original_result():
+    original = (study.baseline.BASE/'results/reference_network_clocks_v1.json.gz').read_bytes()
+    result = json.loads(gzip.decompress(original))
+    before = json.dumps(result,separators=(',',':'))
+    actual = study.held_out_support_correction(result,hashlib.sha256(original).hexdigest())
+    stored = json.loads((study.baseline.BASE/'results/reference_network_clocks_heldout_correction_v1.json').read_bytes())
+    assert actual == stored
+    assert json.dumps(result,separators=(',',':')) == before
+    assert sum(len(c['invalidated_rows']) for c in actual['candidates'].values()) == 4
+    assert sum(c['status_counts'].get('EVALUATED',0) for c in actual['candidates'].values()) == 3041
+    assert not actual['trajectories_or_candidate_predictions_changed']
+
+
+@pytest.mark.parametrize('oracle_fails',[False,True])
+def test_all_variants_precede_rf_and_product_scoring(monkeypatch,oracle_fails):
     events = []
     monkeypatch.setattr(study.baseline,'read_inputs',lambda: ({},{'plan':{'references':['G05','G06']}}))
     arcs = lambda q:[{'candidate':q,'endpoint_gpst_s':36060.},{'candidate':q,'endpoint_gpst_s':36240.}]
@@ -84,12 +117,18 @@ def test_all_variants_precede_rf_and_product_scoring(monkeypatch):
         events.append('score '+q)
         return {}
     monkeypatch.setattr(study.baseline,'score_rf',score)
-    monkeypatch.setattr(study.baseline,'oracle',lambda *args:None)
+    def oracle(data,candidate):
+        if oracle_fails and candidate=='G05':
+            raise ValueError('synthetic unavailable oracle')
+        return None
+    monkeypatch.setattr(study.baseline,'oracle',oracle)
     monkeypatch.setattr(study.baseline,'state_errors',lambda *args:{})
     result = study.run()
     assert result['all_predictions_before_scoring']
     assert result['candidates']['G05']['variants']['network']['fit']['status'] == 'REFERENCE_CALIBRATION_MODEL_REJECTED'
     assert result['candidates']['G05']['variants']['network']['fit']['algebraic_target_fit_status'] == 'BRANCH_SEARCH_INCOMPLETE'
+    if oracle_fails:
+        assert result['candidates']['G05']['variants']['network']['state_evaluation']['status']=='ORACLE_UNAVAILABLE'
 
 
 def test_result_preserves_all_candidates_failures_covariances_and_scores():
@@ -99,13 +138,32 @@ def test_result_preserves_all_candidates_failures_covariances_and_scores():
     assert result['input_sha256'] == {k:hashlib.sha256(v).hexdigest() for k,v in raw.items()}
     root = study.baseline.BASE.parents[1]
     for name,wanted in result['source_sha256'].items():
-        assert hashlib.sha256((root/name).read_bytes()).hexdigest() == wanted
+        # Retain this completed producer as ancestry while active code adds
+        # disconnected-graph checks and per-candidate oracle failure handling.
+        original = subprocess.check_output(['git','show','197468e5aceadf9917e34a71dfdcef5bf9c2445f:'+name],cwd=root)
+        assert hashlib.sha256(original).hexdigest() == wanted
     assert set(result['candidates']) == set(data['plan']['references'])
     assert sum(len(c['windows']) for c in result['candidates'].values()) == 440
     assert sum(w['status']=='PREPARED' for c in result['candidates'].values() for w in c['windows']) == 63
     assert not any(result[k] for k in ['candidate_products_used_in_own_fit','candidate_rf_used_in_own_network',
         'g12_state_accessed','oracle_tuning','new_confirmation','physical_covariance_qualified','production_floors_changed'])
     for candidate,c in result['candidates'].items():
+        if 'network' in c:
+            rows = c['network']['calibration']['residuals']
+            held = {(r['time_s'],r['station'],r['reference']) for r in c['network']['held_out_links']['rows']}
+            for withheld in (False,True):
+                epochs = defaultdict(list)
+                for r in rows:
+                    if not withheld or (r['time_s'],r['station'],r['reference']) not in held:
+                        epochs[r['time_s']].append(r)
+                for own in epochs.values():
+                    stations = sorted({r['station'] for r in own})
+                    references = sorted({r['reference'] for r in own})
+                    incidence = np.zeros((len(own),len(stations)+len(references)))
+                    for i,r in enumerate(own):
+                        incidence[i,stations.index(r['station'])] = 1.
+                        incidence[i,len(stations)+references.index(r['reference'])] = -1.
+                    assert np.linalg.matrix_rank(incidence) == incidence.shape[1]-1
         for label,variant in c['variants'].items():
             payload = json.dumps(variant['rf_predictions'],separators=(',',':'),allow_nan=False).encode()
             assert hashlib.sha256(payload).hexdigest() == variant['prediction_sha256']

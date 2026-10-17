@@ -123,8 +123,10 @@ realmente futuro peggiora da 0,8403 a circa 0,887 m RMS; la fase migliora da
 54/126 posizioni CODE rientrano nei relativi ellissoidi condizionali al 95%
 in ciascuna variante, contro 126/126 nel baseline: non sono una copertura
 indipendente o un budget fisico qualificato.
-I controlli di rete mantengono 544/3589 collegamenti esclusi senza supporto;
-la deriva libera G19 ha un RMS fase esclusa di 0,566 m e massimo 7,865 m.
+I controlli di rete mantengono 544/3589 collegamenti esclusi senza supporto
+con bias costanti e 548/3589 con deriva libera, dopo la correzione esplicita
+di quattro estrapolazioni non identificabili. La deriva libera G19 ha un RMS
+fase esclusa di 0,567 m e massimo 7,865 m.
 Misure ipotetiche indipendenti del clock medio a 0,1 mm/s porterebbero gli
 assi maggiori a circa 41/202/338/185/64 m, ancora condizionali: stringere i
 clock da soli non risolve i modi di bias, geometria e propagazione. Il prossimo

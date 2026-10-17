@@ -1,7 +1,8 @@
 """Code/phase network clocks with free reference clocks and float link biases.
 
 Every epoch has its own receiver and reference-clock values. Reference errors
-sum to zero only to choose a datum: a common epoch clock error is unobservable.
+sum to zero to choose an additive-clock datum. Tiny geometry-time derivatives
+are conditional on the reference model, not independent datum information.
 Code and phase share clocks, but each admitted continuous link segment has an
 unpenalized phase/code ambiguity. Supplied endpoint sigmas are weighting
 assumptions, never a physical covariance inferred from small residuals.
@@ -45,6 +46,19 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False):
         refs = sorted({r['reference'] for r in own})
         if len(stations) < 2 or len(refs) < 2:
             raise ValueError(f'network lacks a station/reference contrast at {time}')
+        graph = defaultdict(set)
+        for row in own:
+            s,q = ('station',row['station']),('reference',row['reference'])
+            graph[s].add(q)
+            graph[q].add(s)
+        pending,seen = [next(iter(graph))],set()
+        while pending:
+            node = pending.pop()
+            if node not in seen:
+                seen.add(node)
+                pending.extend(graph[node]-seen)
+        if len(seen) != len(graph):
+            raise ValueError('reference nuisance design rank deficient: disconnected clock network')
         datum = helmert(len(refs), full=False).T
         m, n = len(own), len(stations)
         a = np.zeros((2*m, n+len(refs)-1))
@@ -93,7 +107,7 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False):
         'residual_dof': dof, 'conditional_p': float(chi2.sf(cost, dof)) if dof > 0 else None,
         'residuals': diagnostics, 'code_sigma_m': code_sigma_m,
         'phase_sigma_m': phase_sigma_m,
-        'unobservable_common_clock_modes': len(blocks),
+        'fixed_reference_clock_datum_epochs': len(blocks),
         'datum': 'zero mean reference-clock error at each epoch; not a physical bound'}
 
 

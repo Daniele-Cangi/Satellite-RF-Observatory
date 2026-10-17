@@ -97,7 +97,7 @@ def calibrate(data, candidate, arcs, weather, *, phase_drift=False, centres=None
         'conditional_p': network['conditional_p'], 'weighted_cost': network['weighted_cost'],
         'residual_dof': network['residual_dof'],
         'status': 'CONDITIONAL_MODEL_REJECTED' if network['conditional_p'] < .01 else 'CONDITIONAL_MODEL_ONLY',
-        'datum': network['datum'], 'unobservable_common_clock_modes': network['unobservable_common_clock_modes'],
+        'datum': network['datum'], 'fixed_reference_clock_datum_epochs': network['fixed_reference_clock_datum_epochs'],
         'receiver_clocks_m': [{'time_s': b['time_s'], 'stations': b['stations'],
             'values': b['parameters'][:len(b['stations'])], 'references': b['references'],
             'reference_error_m': b['reference_basis']@b['parameters'][len(b['stations']):]}
@@ -123,11 +123,17 @@ def held_out_links(rows, *, phase_drift=False):
     records = []
     for r in withheld:
         record = {k:r[k] for k in ('time_s','station','reference','segment')}
+        if phase_drift and r['segment'] in segments and r['segment'] not in network['drift_index']:
+            # A singleton training segment estimates only its phase level.
+            # Omitting its zero design column does not measure its slope.
+            record['status'] = 'UNIDENTIFIABLE_PHASE_DRIFT'
+            records.append(record)
+            continue
         try:
             b = blocks[r['time_s']]
             i,j = b['stations'].index(r['station']),b['references'].index(r['reference'])
             clocks = b['parameters']
-            predicted = r['clock_derivative']*clocks[i]-b['reference_basis'][j]@clocks[len(b['stations']):]
+            predicted = r.get('clock_derivative',1.)*clocks[i]-b['reference_basis'][j]@clocks[len(b['stations']):]
             ambiguity = network['ambiguities_m'][segments[r['segment']]]
             if r['segment'] in network['drift_index']:
                 ambiguity += network['ambiguities_m'][network['drift_index'][r['segment']]]*(
@@ -143,6 +149,44 @@ def held_out_links(rows, *, phase_drift=False):
         'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in records if r['status']=='EVALUATED']),
         'whole_time_block_prediction':'UNIDENTIFIABLE_WITH_FREE_EPOCH_CLOCKS',
         'future_clock_rule':'retain the fitted arc mean; no network future data or quadratic extrapolation'}
+
+
+def held_out_support_correction(result, original_sha256):
+    """Invalidate singleton drift extrapolations in the immutable v1 receipt.
+
+    Structural correction only: do not recompute or alter clocks, trajectories,
+    covariance, candidate RF predictions, or CODE scores. No new fit or tuning.
+    """
+    candidates = {}
+    for candidate, record in result['candidates'].items():
+        if 'network_free_phase_drift' not in record:
+            continue
+        item = record['network_free_phase_drift']
+        held = item['held_out_links']['rows']
+        keys = {(r['station'],r['reference'],r['time_s']) for r in held}
+        times = {}
+        for r in item['calibration']['residuals']:
+            if (r['station'],r['reference'],r['time_s']) not in keys:
+                times.setdefault(r['segment'],set()).add(r['time_s'])
+        invalid,valid,statuses = [],[],Counter()
+        for r in held:
+            if r['status']=='EVALUATED' and len(times.get(r['segment'],set()))==1:
+                invalid.append({k:r[k] for k in ('time_s','station','reference','segment')})
+                statuses['UNIDENTIFIABLE_PHASE_DRIFT'] += 1
+            else:
+                statuses[r['status']] += 1
+                if r['status']=='EVALUATED':
+                    valid.append(r)
+        candidates[candidate] = {'invalidated_rows':invalid,'status_counts':dict(statuses),
+            'code_error_m':baseline.interval.diagnostic.moments([r['code_error_m'] for r in valid]),
+            'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in valid])}
+    sources = [Path(__file__),Path(baseline.interval.diagnostic.__file__)]
+    return native({'schema':'reference-network-heldout-support-correction-v1',
+        'scope':'Invalidate four v1 free-drift held-out link predictions whose segment has only one training time. Its phase slope is unidentifiable, not zero. All orbit fits, clock estimates/covariances, candidate RF forecasts and CODE diagnostics remain the original execution.',
+        'original_result_sha256':original_sha256,
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'trajectories_or_candidate_predictions_changed':False,'new_fit_or_oracle_tuning':False,
+        'candidates':candidates})
 
 
 def information(fit, arcs, joint):
@@ -311,7 +355,10 @@ def run():
             variant['rf_evaluation'] = baseline.score_rf(data,candidate,variant['rf_predictions'])
             variant['state_evaluation'] = {'status': 'FIT_UNAVAILABLE', 'rows': []}
             if 'state_ecef_m_m_s' in variant['fit']:
-                variant['state_evaluation'] = baseline.state_errors(variant['fit'],prepared[candidate],baseline.oracle(data,candidate))
+                try:
+                    variant['state_evaluation'] = baseline.state_errors(variant['fit'],prepared[candidate],baseline.oracle(data,candidate))
+                except (ValueError,KeyError,np.linalg.LinAlgError) as error:
+                    variant['state_evaluation'] = {'status':'ORACLE_UNAVAILABLE','reason':str(error),'rows':[]}
     modules = [baseline, baseline.interval, baseline.interval.shared, dynamic_fit, network_clocks,
         baseline.dynamics, baseline.precise, baseline.attitude, baseline.bias, baseline.conventions,
         baseline.sp3, baseline.day, baseline.day.atmosphere, baseline.interval.shared.meteo]
@@ -344,4 +391,6 @@ if __name__ == '__main__':
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)
-    args.output.write_bytes(payload)
+    args.output.parent.mkdir(parents=True,exist_ok=True)
+    with args.output.open('xb') as stream:
+        stream.write(payload)

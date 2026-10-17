@@ -111,6 +111,17 @@ orbit fit for sensitivity analysis, but its public terminal is
 override reference model rejection.
 
 Execution results are recorded in `results/reference_network_clocks_v1.json.gz`.
+The exact executed source is preserved at
+`197468e5aceadf9917e34a71dfdcef5bf9c2445f`; its source hashes are checked against
+Git bytes, not rewritten when active code evolves. Later engineering changes
+reject a disconnected graph explicitly, retain per-candidate oracle failures,
+and create output files exclusively. All full and withheld training graphs in
+this receipt were separately checked connected, so that added guard does not
+change these numerical results. The receipt's legacy
+`unobservable_common_clock_modes` counts the additive-clock datum choices;
+active code calls them `fixed_reference_clock_datum_epochs`. Observation-time
+geometry derivatives are conditional on the reference model and are not an
+independent physical clock-datum measurement.
 An initial development run was interrupted during G06 preparation after two
 G05 algebraic fits, before any RF/CODE scoring, to include free phase drift
 and withheld links. It produced no completed result artifact. The completed
@@ -161,11 +172,21 @@ predictions, code worsens in 14/26 and phase in 8/26 for either network variant.
 The aggregate code improvement mixes internal holdouts with genuinely future
 prediction; it must not conceal the latter's worsening.
 
-Network withholding evaluates 3045 of 3589 link-epochs in either variant;
+Network withholding evaluates 3045 of 3589 link-epochs with constant biases;
 544 have no observed clock/reference/segment support after withholding and
-are retained. These folds overlap and share products. Constant-bias phase
+are retained. For free drift, the corrected count is **3041/3589**, with 548
+unsupported cases. The original v1 receipt incorrectly predicted four
+single-training-epoch segments by implicitly fixing their unidentifiable
+slopes to zero. The separate immutable
+`results/reference_network_clocks_heldout_correction_v1.json` invalidates those
+predictions and recomputes the held-out summaries. The affected rows are
+G05/STJO/G13 at 36030, G05/BRAZ/G21 at 37740, G11/STJO/G13 at 36030 and
+G19/STJO/G13 at 36000 GPST. All clocks, trajectories, covariance, candidate RF
+forecasts and CODE scores remain the original execution. Fresh executions
+now return `UNIDENTIFIABLE_PHASE_DRIFT` for these singleton extrapolations.
+These folds overlap and share products. Constant-bias phase
 prediction RMS is 22.3–30.5 mm by candidate. Free drift gives 18.6–24.4 mm in
-four candidates but **565.7 mm for G19**, with a 7.865 m maximum on an excluded
+four candidates but **566.7 mm for G19**, with a 7.865 m maximum on an excluded
 link-epoch. Weak short-segment slope information must not become a transferable
 phase correction. These failures remain even though training cost decreases.
 
