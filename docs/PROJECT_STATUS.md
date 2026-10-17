@@ -110,6 +110,29 @@ che sostenga la dipendenza temporale e differenziale dei clock, insieme a
 informazione giustificata sui bias stabili o geometria che li vincoli. Nessun
 floor, esito storico o orbita G12 viene modificato; S2 resta aperta.
 
+Il [calibratore di rete codice/fase](../research/exploratory/REFERENCE_NETWORK_CLOCKS.md)
+stima insieme clock dei ricevitori, errori comuni dei riferimenti e ambiguita
+libere per segmento, propagando covarianza offset/incrementi e fra archi nel
+fit orbitale esistente. Mantiene 22 candidati, 440 finestre, 63 archi e cinque
+traiettorie; i 17 casi senza supporto e i rami iniziali falliti restano visibili.
+La variante con bias costanti peggiora lo scarto CODE in quattro candidati su
+cinque; quella con deriva libera migliora tre e peggiora G11/G20. Per G11 il
+RMS di posizione passa da 88,51 a 305,96 m con deriva libera. Il codice
+realmente futuro peggiora da 0,8403 a circa 0,887 m RMS; la fase migliora da
+6,9795 a 6,8972/6,9303 mm/s. Le covarianze formali si restringono, ma solo
+54/126 posizioni CODE rientrano nei relativi ellissoidi condizionali al 95%
+in ciascuna variante, contro 126/126 nel baseline: non sono una copertura
+indipendente o un budget fisico qualificato.
+I controlli di rete mantengono 544/3589 collegamenti esclusi senza supporto;
+la deriva libera G19 ha un RMS fase esclusa di 0,566 m e massimo 7,865 m.
+Misure ipotetiche indipendenti del clock medio a 0,1 mm/s porterebbero gli
+assi maggiori a circa 41/202/338/185/64 m, ancora condizionali: stringere i
+clock da soli non risolve i modi di bias, geometria e propagazione. Il prossimo
+ostacolo concreto sono continuita e termini temporali codice/fase, con il
+trasferimento comune attraverso riferimenti e percorso del candidato.
+Nessuna variante diventa correzione fisica qualificata; default, floor,
+risultati storici e orbita G12 restano invariati. S2 aperta, nessuna S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.

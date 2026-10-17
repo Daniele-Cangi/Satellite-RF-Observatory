@@ -5,7 +5,7 @@ state. All arc clocks/ground measurements retain their covariance. No bias or
 target-state prior, covariance rescaling, silent fallback or outlier removal.
 """
 import numpy as np
-from scipy.linalg import helmert, qr, solve_triangular
+from scipy.linalg import block_diag, helmert, qr, solve_triangular
 from scipy.stats import chi2
 
 from positioning.solver import solve
@@ -112,7 +112,7 @@ def model(curve, arc, local, beta, epoch, *, derivatives=False):
     return np.r_[code,arc['difference']@path if arc['phase'] else [],measurements],pair
 
 
-def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j2, *, diagnostics=None):
+def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j2, *, diagnostics=None, joint_chol=None):
     physical = global_scaled*global_scale
     curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
     blocks = []
@@ -163,8 +163,48 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
         q,r = qr(nuisance,mode='economic')
         global_jac = weighted(np.column_stack([state,bias,shared]))
         blocks.append({'q':q,'r':r,'global':global_jac,'residual':residual,
+                       'raw_local':jac,'raw_global':np.column_stack([state,bias,shared]),
+                       'raw_residual':value-arc['observed'],
                        'reduced':global_jac-q@(q.T@global_jac),
                        'reduced_residual':residual-q@(q.T@residual)})
+    if joint_chol is not None:
+        # Reference clocks can share code/phase segment ambiguities across
+        # arcs. Whiten the complete observation vector before profiling local
+        # nuisance parameters; independent arc whitening would lose that
+        # information and its signed offset/increment correlations.
+        weighted = lambda x: solve_triangular(joint_chol, x, lower=True)
+        nuisance = weighted(block_diag(*[b['raw_local'] for b in blocks]))
+        global_jac = weighted(np.vstack([b['raw_global'] for b in blocks]))
+        residual = weighted(np.concatenate([b['raw_residual'] for b in blocks]))
+        q, r = qr(nuisance, mode='economic')
+        if np.min(np.abs(np.diag(r))) <= np.max(np.abs(np.diag(r)))*RTOL:
+            raise ValueError('rank-deficient joint dynamic nuisance design')
+        reduced = global_jac-q@(q.T@global_jac)
+        u, singular, vt = np.linalg.svd(reduced, full_matrices=False)
+        if singular[-1] <= singular[0]*RTOL:
+            raise ValueError('rank-deficient shared dynamic state/bias design')
+        delta = -(vt.T/singular)@(u.T@(residual-q@(q.T@residual)))
+        flat_delta = solve_triangular(r, -q.T@(residual+global_jac@delta))
+        cuts = np.cumsum([len(a['local_scale']) for a in arcs])[:-1]
+        local_delta = np.split(flat_delta, cuts)
+        step_sigma = float(np.linalg.norm(global_jac@delta+nuisance@flat_delta))
+        covariance = (vt.T/singular**2)@vt*global_scale[:,None]*global_scale[None,:]
+        if diagnostics is not None:
+            inverse = global_scale[:,None]*(vt.T/singular)@u.T
+            raw_response = solve_triangular(joint_chol.T, inverse.T, lower=False).T
+            cuts = np.cumsum([len(a['observed']) for a in arcs])[:-1]
+            # Posterior local/global cross covariance supports explicit
+            # hypothetical independent timing information requirements.
+            scaled_cov = (vt.T/singular**2)@vt
+            compensation = -solve_triangular(r,q.T@global_jac)
+            inverse_r = solve_triangular(r,np.eye(len(r)))
+            local_scale = np.concatenate([a['local_scale'] for a in arcs])
+            local_cov = inverse_r@inverse_r.T+compensation@scaled_cov@compensation.T
+            diagnostics.update(observation_response=np.split(raw_response,cuts,axis=1),
+                scaled_singular_values=singular,
+                local_covariance=local_cov*local_scale[:,None]*local_scale[None,:],
+                global_local_covariance=(global_scale[:,None]*scaled_cov@compensation.T)*local_scale[None,:])
+        return delta, local_delta, float(residual@residual), covariance, float(singular[0]/singular[-1]), step_sigma
     reduced = np.vstack([b['reduced'] for b in blocks])
     u,singular,vt = np.linalg.svd(reduced,full_matrices=False)
     rank = int(np.sum(singular>singular[0]*RTOL))
@@ -192,13 +232,18 @@ def linearize(global_scaled, locals_scaled, arcs, global_scale, epoch, bounds, j
     return delta,local_delta,cost,covariance,float(singular[0]/singular[-1]),step_sigma
 
 
-def cost(global_scaled,locals_scaled,arcs,global_scale,epoch,bounds,j2):
+def cost(global_scaled,locals_scaled,arcs,global_scale,epoch,bounds,j2, *, joint_chol=None):
     physical = global_scaled*global_scale
     curve = dynamics.Trajectory(physical[:6],bounds,j2=j2,sensitivities=True)
-    value = 0.
+    value, raw = 0., []
     for arc,local in zip(arcs,locals_scaled,strict=True):
-        r = solve_triangular(arc['chol'],model(curve,arc,local,physical[6:],epoch)[0]-arc['observed'],lower=True)
+        residual = model(curve,arc,local,physical[6:],epoch)[0]-arc['observed']
+        raw.append(residual)
+        r = solve_triangular(arc['chol'],residual,lower=True)
         value += float(r@r)
+    if joint_chol is not None:
+        r = solve_triangular(joint_chol,np.concatenate(raw),lower=True)
+        return float(r@r)
     return value
 
 
@@ -238,10 +283,14 @@ def initial(arc, seed, all_arcs, global_scale, epoch, bounds, j2):
     return physical/global_scale,locals_scaled
 
 
-def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress=None):
+def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress=None, joint_covariance=None):
     if not isinstance(max_iterations,int) or max_iterations<1:
         raise ValueError('positive integer iteration budget required')
     prepared,names,basis = prepare(arcs,include_phase)
+    # Matrix ordering is the concatenation of complete observed vectors in
+    # chronological prepared-arc order. The historical block path is unchanged.
+    joint_options = {} if joint_covariance is None else {'joint_chol':
+        cholesky_covariance(joint_covariance, sum(len(a['observed']) for a in prepared))}
     epoch = prepared[0]['endpoint_gpst_s']
     bounds = (min(a['endpoint_gpst_s']-epoch+a['tags'][0] for a in prepared)-2.,
               max(1.,max(a['endpoint_gpst_s']-epoch+30 for a in prepared)+2.))
@@ -259,7 +308,7 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
             global_point,locals_point = initial(first,branch['q'],prepared,global_scale,epoch,bounds,j2)
             converged = False
             for iteration in range(max_iterations):
-                delta,local_delta,old_cost,cov,condition,step_sigma = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2)
+                delta,local_delta,old_cost,cov,condition,step_sigma = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2,**joint_options)
                 history.append({'iteration':iteration,'cost':old_cost,'proposed_step_joint_sigma':step_sigma})
                 if progress:
                     progress({'branch':index,'iteration':iteration,'cost':old_cost,'step_sigma':step_sigma})
@@ -272,7 +321,7 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
                     proposed = global_point+alpha*delta
                     proposed_locals = [p+alpha*d for p,d in zip(locals_point,local_delta,strict=True)]
                     try:
-                        new_cost = cost(proposed,proposed_locals,prepared,global_scale,epoch,bounds,j2)
+                        new_cost = cost(proposed,proposed_locals,prepared,global_scale,epoch,bounds,j2,**joint_options)
                     except ValueError as error:
                         history[-1].setdefault('invalid_trials',[]).append({'alpha':alpha,'reason':str(error)})
                         continue
@@ -288,7 +337,7 @@ def fit(arcs, *, include_phase=True, j2=dynamics.J2, max_iterations=25, progress
                     break
             if not converged:
                 raise ValueError('dynamic iteration limit reached')
-            _,_,final_cost,cov,condition,_ = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2)
+            _,_,final_cost,cov,condition,_ = linearize(global_point,locals_point,prepared,global_scale,epoch,bounds,j2,**joint_options)
             candidates.append({'branch':index,'cost':final_cost,'physical':global_point*global_scale,
                                'locals':[p*a['local_scale'] for p,a in zip(locals_point,prepared,strict=True)],
                                'covariance':cov,'scaled_condition':condition,'history':history})
