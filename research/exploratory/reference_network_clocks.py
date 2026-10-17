@@ -123,35 +123,42 @@ def held_out_links(rows, *, phase_drift=False):
     records = []
     for r in withheld:
         record = {k:r[k] for k in ('time_s','station','reference','segment')}
-        if phase_drift and r['segment'] in segments and r['segment'] not in network['drift_index']:
-            # A singleton training segment estimates only its phase level.
-            # Omitting its zero design column does not measure its slope.
-            record['status'] = 'UNIDENTIFIABLE_PHASE_DRIFT'
-            records.append(record)
-            continue
         try:
             b = blocks[r['time_s']]
             i,j = b['stations'].index(r['station']),b['references'].index(r['reference'])
             clocks = b['parameters']
             predicted = r.get('clock_derivative',1.)*clocks[i]-b['reference_basis'][j]@clocks[len(b['stations']):]
+        except (KeyError,ValueError):
+            record.update(status='UNOBSERVED_CLOCK_OR_SEGMENT',
+                code_status='UNOBSERVED_CLOCK',phase_status='UNOBSERVED_CLOCK')
+            records.append(record)
+            continue
+        # Code requires only the receiver/reference clocks. A missing phase
+        # ambiguity or slope must not discard this supported observation.
+        record.update(code_status='EVALUATED',code_error_m=r['code_m']-predicted)
+        if r['segment'] not in segments:
+            record.update(status='PARTIALLY_EVALUATED',phase_status='UNOBSERVED_SEGMENT')
+        elif phase_drift and r['segment'] not in network['drift_index']:
+            record.update(status='PARTIALLY_EVALUATED',phase_status='UNIDENTIFIABLE_PHASE_DRIFT')
+        else:
             ambiguity = network['ambiguities_m'][segments[r['segment']]]
             if r['segment'] in network['drift_index']:
                 ambiguity += network['ambiguities_m'][network['drift_index'][r['segment']]]*(
                     r['time_s']-network['segment_start_s'][r['segment']])/3600.
-            record.update(status='EVALUATED',code_error_m=r['code_m']-predicted,
+            record.update(status='EVALUATED',phase_status='EVALUATED',
                 phase_error_m=r['phase_m']-predicted-ambiguity)
-        except (KeyError,ValueError):
-            record['status'] = 'UNOBSERVED_CLOCK_OR_SEGMENT'
         records.append(record)
     return {'status':'RELATIVE_SHARED_PRODUCT_DIAGNOSTIC','rows':records,
         'status_counts':dict(Counter(r['status'] for r in records)),
-        'code_error_m':baseline.interval.diagnostic.moments([r['code_error_m'] for r in records if r['status']=='EVALUATED']),
-        'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in records if r['status']=='EVALUATED']),
+        'code_status_counts':dict(Counter(r['code_status'] for r in records)),
+        'phase_status_counts':dict(Counter(r['phase_status'] for r in records)),
+        'code_error_m':baseline.interval.diagnostic.moments([r['code_error_m'] for r in records if r['code_status']=='EVALUATED']),
+        'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in records if r['phase_status']=='EVALUATED']),
         'whole_time_block_prediction':'UNIDENTIFIABLE_WITH_FREE_EPOCH_CLOCKS',
         'future_clock_rule':'retain the fitted arc mean; no network future data or quadratic extrapolation'}
 
 
-def held_out_support_correction(result, original_sha256):
+def held_out_support_correction(result, original_sha256, superseded_correction_sha256=None):
     """Invalidate singleton drift extrapolations in the immutable v1 receipt.
 
     Structural correction only: do not recompute or alter clocks, trajectories,
@@ -168,22 +175,31 @@ def held_out_support_correction(result, original_sha256):
         for r in item['calibration']['residuals']:
             if (r['station'],r['reference'],r['time_s']) not in keys:
                 times.setdefault(r['segment'],set()).add(r['time_s'])
-        invalid,valid,statuses = [],[],Counter()
+        invalid,valid_phase,valid_code,statuses,code_statuses,phase_statuses = [],[],[],Counter(),Counter(),Counter()
         for r in held:
             if r['status']=='EVALUATED' and len(times.get(r['segment'],set()))==1:
-                invalid.append({k:r[k] for k in ('time_s','station','reference','segment')})
-                statuses['UNIDENTIFIABLE_PHASE_DRIFT'] += 1
+                invalid.append({**{k:r[k] for k in ('time_s','station','reference','segment')},
+                    'invalidated_observable':'phase','retained_code_error_m':r['code_error_m']})
+                statuses['PARTIALLY_EVALUATED'] += 1
+                phase_statuses['UNIDENTIFIABLE_PHASE_DRIFT'] += 1
+                code_statuses['EVALUATED'] += 1
+                valid_code.append(r)
             else:
                 statuses[r['status']] += 1
+                code_statuses[r['status']] += 1
+                phase_statuses[r['status']] += 1
                 if r['status']=='EVALUATED':
-                    valid.append(r)
+                    valid_code.append(r)
+                    valid_phase.append(r)
         candidates[candidate] = {'invalidated_rows':invalid,'status_counts':dict(statuses),
-            'code_error_m':baseline.interval.diagnostic.moments([r['code_error_m'] for r in valid]),
-            'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in valid])}
+            'code_status_counts':dict(code_statuses),'phase_status_counts':dict(phase_statuses),
+            'code_error_m':baseline.interval.diagnostic.moments([r['code_error_m'] for r in valid_code]),
+            'phase_error_m':baseline.interval.diagnostic.moments([r['phase_error_m'] for r in valid_phase])}
     sources = [Path(__file__),Path(baseline.interval.diagnostic.__file__)]
-    return native({'schema':'reference-network-heldout-support-correction-v1',
-        'scope':'Invalidate four v1 free-drift held-out link predictions whose segment has only one training time. Its phase slope is unidentifiable, not zero. All orbit fits, clock estimates/covariances, candidate RF forecasts and CODE diagnostics remain the original execution.',
+    return native({'schema':'reference-network-heldout-support-correction-v2',
+        'scope':'Invalidate only the phase observable in four v1 free-drift held-out rows whose segment has one training time. Retain their evaluable code errors and original code RMS. All orbit fits, clock estimates/covariances, candidate RF forecasts and CODE diagnostics remain the original execution. The superseded v1 correction discarded both observables.',
         'original_result_sha256':original_sha256,
+        'superseded_correction_sha256':superseded_correction_sha256,
         'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
         'trajectories_or_candidate_predictions_changed':False,'new_fit_or_oracle_tuning':False,
         'candidates':candidates})

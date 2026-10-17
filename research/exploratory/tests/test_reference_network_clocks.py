@@ -65,10 +65,12 @@ def test_network_clock_transport_keeps_arc_order_and_correlations():
     assert 'clock_mean' not in arcs[0]
 
 
-def test_a_single_training_phase_level_cannot_predict_a_free_drift():
+@pytest.mark.parametrize('training_phase_level',[False,True])
+def test_unobserved_phase_terms_preserve_supported_code(training_phase_level):
     rows = toy()
     for r in rows:
-        if r['station']=='A' and r['reference']=='X' and r['time_s']>=210.:
+        if r['station']=='A' and r['reference']=='X' and (
+                r['time_s']==240. or training_phase_level and r['time_s']==210.):
             r['segment'] = 'short AX'
     # Put the last sample in the deterministic holdout while the other one
     # trains the float level. The free slope has no observation.
@@ -77,7 +79,10 @@ def test_a_single_training_phase_level_cannot_predict_a_free_drift():
     rows.insert(0,row)
     result = study.held_out_links(rows,phase_drift=True)
     held = next(r for r in result['rows'] if r['segment']=='short AX' and r['time_s']==240.)
-    assert held['status']=='UNIDENTIFIABLE_PHASE_DRIFT'
+    assert held['status']=='PARTIALLY_EVALUATED'
+    assert held['code_status']=='EVALUATED'
+    assert held['code_error_m']==pytest.approx(0.,abs=1e-8)
+    assert held['phase_status']==('UNIDENTIFIABLE_PHASE_DRIFT' if training_phase_level else 'UNOBSERVED_SEGMENT')
     assert 'phase_error_m' not in held
 
 
@@ -85,19 +90,21 @@ def test_heldout_correction_replays_without_changing_the_original_result():
     original = (study.baseline.BASE/'results/reference_network_clocks_v1.json.gz').read_bytes()
     result = json.loads(gzip.decompress(original))
     before = json.dumps(result,separators=(',',':'))
-    actual = study.held_out_support_correction(result,hashlib.sha256(original).hexdigest())
-    stored = json.loads((study.baseline.BASE/'results/reference_network_clocks_heldout_correction_v1.json').read_bytes())
-    # Recompute the corrected classifications with active code, but verify
-    # the immutable correction's producer separately rather than refreshing
-    # its recorded source hashes after unrelated engineering changes.
-    assert {k:v for k,v in actual.items() if k!='source_sha256'} == {
-        k:v for k,v in stored.items() if k!='source_sha256'}
-    for name,wanted in stored['source_sha256'].items():
+    previous_bytes = (study.baseline.BASE/'results/reference_network_clocks_heldout_correction_v1.json').read_bytes()
+    previous = json.loads(previous_bytes)
+    actual = study.held_out_support_correction(result,hashlib.sha256(original).hexdigest(),hashlib.sha256(previous_bytes).hexdigest())
+    # The superseded correction remains byte/source bound; its four code
+    # exclusions are diagnosed, not silently rewritten to the new counts.
+    for name,wanted in previous['source_sha256'].items():
         original_source = subprocess.check_output(['git','show','b2998c65c2ca3519080393f56d2088a1210f1456:'+name],cwd=study.baseline.BASE.parents[1])
         assert hashlib.sha256(original_source).hexdigest() == wanted
+    assert sum(c['code_error_m']['count'] for c in previous['candidates'].values())==3041
     assert json.dumps(result,separators=(',',':')) == before
     assert sum(len(c['invalidated_rows']) for c in actual['candidates'].values()) == 4
-    assert sum(c['status_counts'].get('EVALUATED',0) for c in actual['candidates'].values()) == 3041
+    assert sum(c['code_status_counts'].get('EVALUATED',0) for c in actual['candidates'].values()) == 3045
+    assert sum(c['phase_status_counts'].get('EVALUATED',0) for c in actual['candidates'].values()) == 3041
+    for q,c in actual['candidates'].items():
+        assert c['code_error_m']==result['candidates'][q]['network_free_phase_drift']['held_out_links']['code_error_m']
     assert not actual['trajectories_or_candidate_predictions_changed']
 
 
