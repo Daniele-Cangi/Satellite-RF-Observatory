@@ -143,8 +143,8 @@ def source_columns(rows, families):
 def source_design(rows, columns, channels=3):
     """Metres of retained IF model per source metre; stable phase/MW already float.
 
-    Orbit-like RTN and body PCO shapes shift emitted APC at fixed emission and
-    clock. They are not complete orbit/relativity or frequency-dependent PCV laws.
+    Legacy rows hold emission/clock fixed. Complete rows also carry the
+    emitted-clock/relativity and P1 hardware response. Neither models antenna PCV.
     """
     m=len(rows);g=np.zeros((channels*m,len(columns)))
     index={tuple(c):j for j,c in enumerate(columns)}
@@ -156,9 +156,12 @@ def source_design(rows, columns, channels=3):
                 if value<=0:raise ValueError('positive admitted wet mapping required')
             if family in ('orbit','antenna') and key==r['reference']:
                 value=float(r[family+'_mapping']['RTN'.index(axis) if family=='orbit' else 'XYZ'.index(axis)])
-            if family=='bias' and key==r['station']+'/'+r['reference']:value=1.
+            if family=='bias' and key==r['station']+'/'+r['reference']:value=float(r.get('bias_code_mapping',1.))
             g[i,j]=value
             if family!='bias':g[m+i,j]=value
+            elif key==r['station']+'/'+r['reference']:
+                g[m+i,j]=float(r.get('bias_phase_mapping',0.))
+                if channels==3:g[2*m+i,j]=float(r.get('bias_mw_mapping',0.))
     if not np.isfinite(g).all():raise ValueError('finite admitted source mappings required')
     # A new reference/link cannot silently receive a zero correction.
     for r in rows:
@@ -260,3 +263,129 @@ def source_link_prediction(network, workspace, row, segment):
         'path_prediction_m':float(clock+change[0]),
         'phase_prediction_m':float(clock+network['ambiguities_m'][k]+change[1]),
         'phase_path_prediction_m':float(clock+network['ambiguities_m'][k]+change[1])}
+
+
+WEAK_RTOLS=(1e-9,1e-10,1e-11)
+PROBE_SOURCE_L2_M=(.01,.1)
+
+
+def split_probe(columns, vector, candidate):
+    result={'wet':{},'orbit':{},'antenna':{},'bias':{}}
+    for (family,key,axis),value in zip(columns,vector,strict=True):
+        if family in ('orbit','antenna'):
+            if key==candidate:raise ValueError('candidate physical product probe')
+            result[family].setdefault(key,[0.,0.,0.])['RTN'.index(axis) if family=='orbit' else 'XYZ'.index(axis)]=float(value)
+        else:result[family][key]=float(value)
+    return result
+
+
+def weak_modes(design, state_map, original_scale):
+    """Compare subspaces, then select a state-relevant weak retained direction.
+
+    All coordinates have the declared Euclidean metre metric. Orthogonal
+    changes preserve it; thresholds are sensitivity cases, not score tuning.
+    """
+    u,s,v=np.linalg.svd(design,full_matrices=design.shape[0]<design.shape[1])
+    t=np.asarray(state_map);cases={}
+    for tol in WEAK_RTOLS:
+        rank=int(sum(s>tol*original_scale));basis=v[:rank];null=v[rank:].T
+        gain=(t@basis.T)/s[:rank]
+        cases[str(tol)]={'rank':rank,'source_count':len(v),
+            'position_gain_m_per_weighted_reference_norm':float(np.linalg.norm(gain[:3],2)),
+            'velocity_gain_mm_s_per_weighted_reference_norm':float(np.linalg.norm(gain[3:],2)*1000),
+            'null_state_map_norm':float(np.linalg.norm(t@null,2)) if null.shape[1] else 0.}
+    rank=cases[str(RTOL)]['rank'];basis=v[:rank]
+    weak=np.flatnonzero((s>RTOL*original_scale)&(s<1e-8*original_scale))
+    if not len(weak):raise ValueError('no declared weak retained source band')
+    gain=(t[:3]@v[weak].T)/s[weak]
+    _,_,directions=np.linalg.svd(gain,full_matrices=False)
+    q=(v[weak].T/s[weak])@directions[0];q/=np.linalg.norm(q)
+    # Compare signs/permutation, orthogonal rotation and global m -> mm units.
+    p=len(v);permutation=np.eye(p)[:,np.arange(p)[::-1]]
+    permutation*=np.where(np.arange(p)%2,1.,-1.)
+    rotation=np.eye(p);angle=.37
+    for i in range(0,p-1,2):rotation[i:i+2,i:i+2]=[[np.cos(angle),-np.sin(angle)],[np.sin(angle),np.cos(angle)]]
+    checks={}
+    nominal=basis.T@basis
+    for label,change,unit in [('signed_permutation',permutation,1.),('orthogonal_rotation',rotation,1.),('millimetre_coordinates',np.eye(p),.001)]:
+        _,ss,vv=np.linalg.svd(design@change*unit,full_matrices=False)
+        rr=int(sum(ss>RTOL*original_scale*unit));bb=change@vv[:rr].T
+        checks[label]={'rank':rr,'retained_projector_difference_norm':float(np.linalg.norm(bb@bb.T-nominal,2)),
+            'scaled_singular_value_relative_max_difference':float(max(abs(ss/unit-s)/original_scale))}
+    return {'thresholds':cases,'equivalent_coordinate_checks':checks,'weak_band_count':len(weak),
+        'weak_band_upper_rtol':1e-8,'mode_selection_uses_held_scores':False,
+        'weak_direction_m_per_unit_l2_m':q,'strong_direction_m_per_unit_l2_m':v[0],
+        'weak_reference_weighted_signal_per_m':float(np.linalg.norm(design@q)),
+        'weak_linear_state_response_per_m':t@q}, {'s':s,'v':v,'rank':rank,'projector':nominal}
+
+
+def independent_information(spectrum, state_map, columns, clock_map, weak_direction):
+    """Hypothetical independent measurements, never a physical covariance.
+
+    Retain the declared reference information, then add measurements. Missing
+    source directions are kept unresolved, not assigned zero uncertainty.
+    Endpoint clock measurements are unique; derived intervals are not counted
+    twice. Source sigma is a scenario, not an observed calibration accuracy.
+    """
+    s,v,rank=spectrum['s'],spectrum['v'],spectrum['rank']
+    reference=s[:rank,None]*v[:rank];p=v.shape[1];identity=np.eye(p)
+    families={f:identity[[i for i,c in enumerate(columns) if c[0]==f]] for f in FAMILIES}
+    families.update(wet_and_orbit=np.vstack([families['wet'],families['orbit']]),
+        all_source_coordinates=identity,receiver_clock_endpoints=np.asarray(clock_map),
+        ideal_weak_functional=np.asarray(weak_direction)[None,:])
+    t=np.asarray(state_map);result={}
+    for label,h in families.items():
+        grid=[]
+        for sigma in (1e-4,1e-3,1e-2,1e-1,1.):
+            a=np.vstack([reference,h/sigma])
+            _,ss,vv=np.linalg.svd(a,full_matrices=a.shape[0]<p)
+            rr=int(sum(ss>1e-12*ss[0]));null=vv[rr:].T
+            inv=vv[:rr].T/ss[:rr]
+            defect=float(np.linalg.norm(t@null,2)/max(1.,np.linalg.norm(t,2))) if null.shape[1] else 0.
+            image=t@inv;cov=image@image.T
+            pos=float(np.sqrt(max(0.,np.linalg.eigvalsh(cov[:3,:3])[-1])))
+            vel=float(np.sqrt(max(0.,np.linalg.eigvalsh(cov[3:,3:])[-1]))*1000)
+            q=np.asarray(weak_direction)
+            qdef=float(np.linalg.norm(q@null)) if null.shape[1] else 0.
+            grid.append({'sigma_m':sigma,'resolved_rank':rr,'source_count':p,
+                'state_null_response_relative':defect,'state_functional_status':
+                    'CONDITIONALLY_ESTIMABLE_AT_NUMERICAL_TOLERANCE' if defect<=1e-8 else 'UNRESOLVED_STATE_FUNCTIONAL',
+                'identified_projection_position_sigma_m':pos,'identified_projection_velocity_sigma_mm_s':vel,
+                'complete_state_precision_issued':defect<=1e-8,
+                'weak_functional_sigma_m':float(np.linalg.norm(q@inv)) if qdef<=1e-8 else None,
+                'weak_functional_null_response':qdef,
+                'meets_1m_1mm_s_design_benchmark':defect<=1e-8 and pos<=1 and vel<=1})
+        result[label]={'measurement_count':len(h),'independent_measurements_are_hypothetical':True,
+            'precision_is_source_information_diagnostic_not_added_to_rf_covariance':True,'grid':grid}
+    return result
+
+
+def known_source_recovery(rows, physical_signal, linear_signal, truth, state_map, spectrum, raw_covariance, candidate):
+    """Noiseless incremental networks, with physical and linear forward controls.
+
+    Unknown real residuals/float levels are absent. Only the identifiable source
+    projection is a recovery target. A failed physical shape recovery is kept.
+    """
+    admit({'blocks':[{'rows':rows}]},candidate)
+    truth=np.asarray(truth);expected=spectrum['projector']@truth;t=np.asarray(state_map)
+    result={}
+    for label,signal in [('linear_control',linear_signal),('physical_increment',physical_signal)]:
+        admit({'blocks':[{'rows':own} for own,_ in signal]},candidate)
+        synthetic=[]
+        for own,g in signal:
+            m=len(own)
+            synthetic.extend({**r,'code_m':g[i],'phase_m':g[m+i],'mw_m':g[2*m+i]} for i,r in enumerate(own))
+        fitted=network_clocks.fit(synthetic,raw_covariance=raw_covariance)
+        record,_=profile_sources(fitted,candidate,FAMILIES)
+        estimate=np.asarray(record['representative_m']);error=estimate-expected
+        relative=float(np.linalg.norm(error)/max(np.linalg.norm(expected),1e-30))
+        direction=truth/np.linalg.norm(truth)
+        functional_error=float(direction@error)
+        functional_relative=abs(functional_error)/np.linalg.norm(truth)
+        result[label]={'status':'IDENTIFIED_PROJECTION_RECOVERED' if relative<=1e-3 else 'IDENTIFIED_PROJECTION_RECOVERY_FAILED',
+            'injected_functional_status':'RECOVERED' if functional_relative<=1e-3 else 'RECOVERY_FAILED',
+            'injected_functional_error_m':functional_error,'injected_functional_relative_error':functional_relative,
+            'relative_identified_source_error':relative,'identified_source_error_l2_m':float(np.linalg.norm(error)),
+            'local_state_functional_error_m_m_s':t@error,'fitted_source_projection_m':estimate,
+            'resolved_rank':record['resolved_rank'],'weighted_cost_after':record['weighted_cost_after']}
+    return result

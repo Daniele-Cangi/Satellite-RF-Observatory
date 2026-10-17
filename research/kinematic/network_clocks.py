@@ -17,7 +17,7 @@ from .calibration_transfer import operators
 from . import gnss_combinations
 
 
-def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False, raw_covariance=None):
+def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False, raw_covariance=None, reference_rotation=None):
     """Profile epoch clocks, then solve shared segment ambiguities by SVD.
 
     Rows contain already model-subtracted code/phase metres, a segment identity,
@@ -69,6 +69,12 @@ def fit(rows, *, code_sigma_m=20., phase_sigma_m=.02, phase_drift=False, raw_cov
         if len(seen) != len(graph):
             raise ValueError('reference nuisance design rank deficient: disconnected clock network')
         datum = helmert(len(refs), full=False).T
+        if reference_rotation is not None:
+            if not np.isfinite(reference_rotation):raise ValueError('finite equivalent clock-basis angle required')
+            rotation=np.eye(datum.shape[1]);c,s=np.cos(reference_rotation),np.sin(reference_rotation)
+            for j in range(datum.shape[1]-1):
+                rotation[:,j:j+2]=rotation[:,j:j+2]@np.array([[c,-s],[s,c]])
+            datum=datum@rotation
         m, n = len(own), len(stations)
         a = np.zeros((channels*m, n+len(refs)-1))
         b = np.zeros((channels*m, parameter_count))
