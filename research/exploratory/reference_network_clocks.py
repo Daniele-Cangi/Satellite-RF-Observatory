@@ -592,6 +592,76 @@ def physical_source_rows(data,candidate,rows,network,weather):
 
 
 
+
+
+def run_physical_observables():
+    """Physical readout operators and absolute calibration/support levels."""
+    parent_name='stable_source_differential_v1.json.gz';parent_sha='56b325ab32a679d89223b89bbe88633cd3850bdcf0cd605c18bea1bf62900020'
+    payload=(baseline.BASE/'results'/parent_name).read_bytes()
+    if baseline.interval.shared.digest(payload)!=parent_sha:raise ValueError('changed physical-operator parent evidence')
+    previous=json.loads(gzip.decompress(payload));raw,data=baseline.read_inputs()
+    hashes={k:baseline.interval.shared.digest(v) for k,v in raw.items()}
+    if hashes!=previous['input_sha256']:raise ValueError('physical-operator inputs changed')
+    results={}
+    for candidate,old in previous['candidates'].items():
+        print(candidate,'physical observable operators',flush=True)
+        record={'windows':old['windows'],'prepared_arc_count':old['prepared_arc_count'],
+            'archived_nominal_fit_status':old['archived_nominal_fit_status'],'status':'INSUFFICIENT_PREPARED_ARCS'};results[candidate]=record
+        if 'source_profile' not in old:continue
+        try:
+            rows=old['reference_rows'];source_geometry.admit({'blocks':[{'rows':rows}]},candidate)
+            identities=[(r['station'],r['reference'],r['time_s']) for r in rows]
+            if len(set(identities))!=len(identities):raise ValueError('duplicate admitted reference identity')
+            provider,_=baseline.subset_products(data,[q for q in data['plan']['references'] if q!=candidate],candidate)
+            ranges=[]
+            for row in rows:
+                if row['time_s']%300:continue
+                station,reference,time=row['station'],row['reference'],row['time_s']
+                item={'station':station,'reference':reference,'time_s':time};ranges.append(item)
+                try:
+                    xyz=np.asarray(data['positions'][station][int((time-36000)/30)],float)
+                    geometry=reference_geometry.two_way_range_geometry(provider,reference,time-.1,xyz)
+                    item.update(status='TWO_WAY_GEOMETRY_PREPARED',geometry=geometry)
+                except (ValueError,KeyError,np.linalg.LinAlgError) as error:item.update(status='TWO_WAY_GEOMETRY_FAILED',reason=str(error))
+            network=network_clocks.fit(rows,raw_covariance=previous['raw_endpoint_weight_covariance_m2'])
+            columns=source_geometry.source_columns(rows,source_geometry.FAMILIES)
+            if native(columns)!=old['source_profile']['columns']:raise ValueError('source-coordinate order changed')
+            designs=[source_geometry.source_design(b['rows'],columns,len(b['y'])//len(b['rows'])) for b in network['blocks']]
+            reference_design=source_geometry.profiled_increment(network,designs)
+            profile=old['source_profile'];scale=profile['original_weighted_source_scale_per_m']
+            singular=np.linalg.svd(reference_design,compute_uv=False);rank=int(sum(singular>source_geometry.RTOL*scale))
+            if rank!=profile['resolved_rank']:raise ValueError('archived source matrix replay rank changed')
+            catalog=source_geometry.complementary_observable_catalog(rows,columns,ranges,candidate)
+            tmap=np.asarray(old['coupled_model_state_map']);direction=old['prior_frozen_weak_direction_m_per_unit_l2_m']
+            cases=source_geometry.physical_observable_information(reference_design,catalog,columns,tmap,direction,scale)
+            record.update(status='PHYSICAL_OBSERVABLE_OPERATORS_PREPARED',reference_row_count=len(rows),
+                source_columns=columns,source_profile=profile,coupled_model_state_map=tmap,
+                source_profile_is_unchanged_archive=True,reference_matrix_replay_rank=rank,
+                prior_frozen_weak_direction_m_per_unit_l2_m=direction,range_geometry_terminals=ranges,
+                range_geometry_status_counts=dict(Counter(r['status'] for r in ranges)),observable_catalog=catalog,
+                hardware_component_gap=source_geometry.hardware_component_gap(columns),operator_cases=cases,
+                operator_case_status_counts=dict(Counter(c['status'] for c in cases)),
+                archived_rf_fits_and_all_previous_outcomes_unchanged=True)
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:record.update(status='PHYSICAL_OBSERVABLE_PREPARATION_FAILED',reason=str(error))
+    modules=[baseline,baseline.bias,reference_geometry,source_geometry,network_clocks,gnss_combinations,
+        baseline.precise,baseline.attitude,baseline.conventions,baseline.sp3,baseline.day]
+    sources=[Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
+    return native({'schema':'exposed-physical-observable-operators-v1','prior_sha256':{parent_name:parent_sha},'input_sha256':hashes,
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'raw_endpoint_weight_covariance_m2':previous['raw_endpoint_weight_covariance_m2'],
+        'schedule':'each admitted reference row at receive tag modulo 300s=0; nominal hypothetical range bounce=tag-0.1s',
+        'range_nominal_reflector_lever_arm_body_m':[0.,0.,0.],
+        'range_is_conditional_flat_spacetime_rigid_earth_operator_not_slr_processing':True,
+        'case_specifications':source_geometry.physical_observable_case_specs(),
+        'information_target_is_fixed_nominal_rf_sensitivity_not_joint_state_covariance':True,
+        'candidate_products_used_in_own_network':False,'candidate_rf_used_in_own_network':False,
+        'new_rf_trajectory_fits':False,'new_rf_or_mw_scoring':False,'candidate_code_orbit_scoring':False,
+        'physical_covariance_qualified':False,'production_floors_changed':False,'independent_measurements_admitted':False,
+        'g12_state_accessed':False,'new_confirmation':False,'equipment_support_qualified':False,
+        'new_source_or_calibration_values_estimated':False,'status_counts':dict(Counter(c['status'] for c in results.values())),
+        'archived_nominal_fit_status_counts':dict(Counter(c['archived_nominal_fit_status'] for c in results.values())),
+        'candidates':results})
+
 def run_stable_sources():
     """Stable physical increments and complementary hypothetical observables."""
     priors={}
@@ -1300,7 +1370,9 @@ def run_structure():
         'candidates':results})
 
 
-def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False, separate=False, weak_sources=False, stable_sources=False):
+def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False, separate=False, weak_sources=False, stable_sources=False, physical_observables=False):
+    if physical_observables:
+        return run_physical_observables()
     if stable_sources:
         return run_stable_sources()
     if weak_sources:
@@ -1476,9 +1548,12 @@ if __name__ == '__main__':
     parser.add_argument('--closures',action='store_true',help='nondispersive calibrated network closures and complete state response')
     parser.add_argument('--sources',action='store_true',help='station wet source geometry through reference and candidate paths')
     parser.add_argument('--separate',action='store_true',help='joint wet, emitted reference orbit/antenna shapes and stable bias identifiability')
+    parser.add_argument('--physical-observables',action='store_true',help='physical complementary readout operators and absolute calibration-level information')
     parser.add_argument('--stable-sources',action='store_true',help='stable differential source recovery and complementary independent-observation designs')
     parser.add_argument('--weak-sources',action='store_true',help='weak-source stability, finite physical recovery and hypothetical independent information')
     args = parser.parse_args()
+    if args.physical_observables and (args.stable_sources or args.weak_sources or args.separate or args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
+        parser.error('--physical-observables is a separate physical readout and calibration-information analysis')
     if args.stable_sources and (args.weak_sources or args.separate or args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
         parser.error('--stable-sources is a separate differential and source-information analysis')
     if args.weak_sources and (args.separate or args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
@@ -1493,7 +1568,7 @@ if __name__ == '__main__':
         parser.error('--structure is a separate reference-only analysis')
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources,separate=args.separate,weak_sources=args.weak_sources,stable_sources=args.stable_sources)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources,separate=args.separate,weak_sources=args.weak_sources,stable_sources=args.stable_sources,physical_observables=args.physical_observables)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)
