@@ -591,6 +591,133 @@ def physical_source_rows(data,candidate,rows,network,weather):
     return output,centres
 
 
+
+def run_stable_sources():
+    """Stable physical increments and complementary hypothetical observables."""
+    priors={}
+    pins={'weak_source_physical_recovery_v1.json.gz':'917202d0184c4bed1b8925d98818df6c4e0a14af1ad2b9eb2524f5dd001b3717',
+        'reference_source_separation_v1.json.gz':'a8caee27bbb751090ce4af25d384bc23bad8111e2d94fe76754834f937821467'}
+    for name,sha in pins.items():
+        payload=(baseline.BASE/'results'/name).read_bytes()
+        if baseline.interval.shared.digest(payload)!=sha:raise ValueError('changed stable-source parent evidence')
+        priors[name]=json.loads(gzip.decompress(payload))
+    previous=priors['weak_source_physical_recovery_v1.json.gz'];separation=priors['reference_source_separation_v1.json.gz']
+    raw,data=baseline.read_inputs();hashes={k:baseline.interval.shared.digest(v) for k,v in raw.items()}
+    if previous['input_sha256']!=hashes or separation['input_sha256']!=hashes:raise ValueError('stable-source inputs changed')
+    weather=baseline.interval.shared.meteo.WeatherGrid(baseline.interval.shared.meteo.read_inputs()[0])
+    covariance=gnss_combinations.assumed_endpoint_covariance();results={}
+    for candidate,old in previous['candidates'].items():
+        print(candidate,'stable differential',flush=True)
+        record={'windows':old['windows'],'prepared_arc_count':old['prepared_arc_count'],
+            'archived_nominal_fit_status':old['archived_nominal_fit_status'],'status':'INSUFFICIENT_PREPARED_ARCS'};results[candidate]=record
+        if 'source_profile' not in old:continue
+        try:
+            source_geometry.admit({'blocks':[{'rows':old['reference_rows']}]},candidate)
+            provider,corrections=baseline.subset_products(data,[q for q in data['plan']['references'] if q!=candidate],candidate)
+            codes={(s,e['time_s'],q):v for s,epochs in data['observations'].items() for e in epochs
+                for q,v in e['if_code_m'].items() if q!=candidate and q in data['plan']['references']}
+            mjd=(datetime.fromisoformat(data['plan']['date_gpst'])-datetime(1858,11,17)).days
+            rows=[];frozen=[];contexts={};precision={};clock_change=0.;mapping_precision=0.;central_difference=0.
+            for i,r in enumerate(old['reference_rows']):
+                q,s,t=r['reference'],r['station'],r['time_s'];code=float(codes[s,t,q])+corrections[t,q]['if_code_change_m']
+                xyz=np.asarray(data['positions'][s][int((t-36000)/30)],float);centre=r['reference_clock_centre_m']
+                context=reference_geometry.StableSourceRay(provider,weather,mjd,q,code,t,xyz,centre);maps=native(context.mappings())
+                new_clock=context.clock_coefficient();delta=new_clock-r['clock_derivative'];clock_change=max(clock_change,abs(delta))
+                frozen.append({**r,**maps});rows.append({**r,**maps,'clock_derivative':new_clock,
+                    'code_m':r['code_m']+delta*centre,'phase_m':r['phase_m']+delta*centre})
+                key=s,q,t;contexts[key]=context
+                if i%128==0:
+                    other=reference_geometry.StableSourceRay(provider,weather,mjd,q,code,t,xyz,centre,digits=35)
+                    precision[key]=other;check=other.mappings();central=context.central_mappings()
+                    for field in ('wet_mapping','orbit_mapping','antenna_mapping','bias_code_mapping','bias_phase_mapping','bias_mw_mapping'):
+                        mapping_precision=max(mapping_precision,float(np.max(np.abs(np.asarray(check[field])-maps[field]))))
+                        central_difference=max(central_difference,float(np.max(np.abs(np.asarray(central[field])-maps[field]))))
+                if i%1024==0:print(candidate,'stable rows',i,len(old['reference_rows']),flush=True)
+            network=network_clocks.fit(rows,raw_covariance=covariance);profile,w=source_geometry.profile_sources(network,candidate,source_geometry.FAMILIES)
+            old_net=network_clocks.fit(frozen,raw_covariance=covariance);frozen_profile,_=source_geometry.profile_sources(old_net,candidate,source_geometry.FAMILIES)
+            columns=w['columns']
+            if native(columns)!=old['source_profile']['columns']:raise ValueError('changed physical source-coordinate order')
+            prior=separation['candidates'][candidate]
+            requests=[{(s,t):coefficient for s,t,coefficient in own} for own in prior['clock_requests']]
+            kg=sum(k@g for k,g in zip(network_clocks.observation_response(network,requests),w['designs'],strict=True))
+            response=np.asarray(prior['full_state_observation_response']);gc=np.zeros((response.shape[1],len(columns)))
+            stations=profile['wet']['stations'];target=np.asarray(prior['target_wet_model_design'])
+            for j,col in enumerate(columns):
+                if col[0]=='wet':gc[:,j]=target[:,stations.index(col[1])]
+            tref=-response[:,prior['transport']['clock_observation_indices']]@kg;tcand=-response@gc;tmap=tref+tcand
+            u,s,v=np.linalg.svd(w['design'],full_matrices=False);rank=profile['resolved_rank'];spectrum={'u':u,'s':s,'v':v,'rank':rank}
+            direction=np.asarray(old['stability']['weak_direction_m_per_unit_l2_m']);scale=profile['original_weighted_source_scale_per_m']
+            endpoints=old['clock_endpoint_keys']
+            record.update(status='STABLE_DIFFERENTIAL_PREPARED',reference_rows=rows,source_profile=profile,
+                frozen_historical_clock_profile=frozen_profile,maximum_clock_coefficient_change=clock_change,
+                precision_check_keys=[list(k) for k in precision],precision_mapping_max_abs_35_minus50=mapping_precision,analytic_central_mapping_max_abs_difference=central_difference,
+                reference_model_state_map=tref,candidate_model_state_map=tcand,coupled_model_state_map=tmap,
+                prior_frozen_weak_direction_m_per_unit_l2_m=direction,clock_endpoint_keys=endpoints,
+                reference_information=source_geometry.source_information_summary(s[:,None]*v,tmap,direction,scale),
+                physical_probes=[],odd_even_probes=[])
+            for planned in old['physical_probes']:
+                vector=np.asarray(planned['source_vector_m']);probe=source_geometry.split_probe(columns,vector,candidate)
+                item={k:planned[k] for k in ('mode','source_l2_m','sign')};item['source_vector_m']=vector;record['physical_probes'].append(item)
+                try:
+                    blocks=[];precision_difference=0.
+                    for b in network['blocks']:
+                        values=[]
+                        for r in b['rows']:
+                            q,s,t=r['reference'],r['station'],r['time_s'];key=s,q,t
+                            local=[probe['wet'].get(s,0.),*probe['orbit'].get(q,[0.,0.,0.]),*probe['antenna'].get(q,[0.,0.,0.]),probe['bias'].get(s+'/'+q,0.)]
+                            value=contexts[key].increment(local);values.append(value)
+                            if key in precision:precision_difference=max(precision_difference,float(np.max(np.abs(value-precision[key].increment(local)))))
+                        blocks.append(np.asarray(values).T.ravel())
+                    physical=source_geometry.profiled_increment(network,blocks)
+                    linear=source_geometry.profiled_increment(network,[g@vector for g in w['designs']])
+                    intended=w['design']@vector
+                    item.update(status='STABLE_FINITE_PHYSICAL_INCREMENT_PREPARED',physical_increment_blocks=blocks,
+                        decimal35_minus50_max_abs_m=precision_difference,profiled_linear_weighted_norm=float(np.linalg.norm(intended)),
+                        profiled_physical_weighted_norm=float(np.linalg.norm(physical)),
+                        profiled_forward_defect_weighted_norm=float(np.linalg.norm(physical-intended)),
+                        recovery={'linear_control':source_geometry.recover_profiled_increment(linear,w['design'],spectrum,vector,tmap),
+                            'physical_increment':source_geometry.recover_profiled_increment(physical,w['design'],spectrum,vector,tmap)})
+                except (ValueError,KeyError,np.linalg.LinAlgError) as error:item.update(status='STABLE_PHYSICAL_PROBE_FAILED',reason=str(error))
+            for amplitude in source_geometry.PROBE_SOURCE_L2_M:
+                pair=[p for p in record['physical_probes'] if p['mode']=='weak' and p['source_l2_m']==amplitude]
+                if any(p['status']!='STABLE_FINITE_PHYSICAL_INCREMENT_PREPARED' for p in pair):
+                    record['odd_even_probes'].append({'source_l2_m':amplitude,'status':'PAIRED_PHYSICAL_PROBE_UNAVAILABLE'});continue
+                plus=next(p for p in pair if p['sign']>0);minus=next(p for p in pair if p['sign']<0)
+                yp=source_geometry.profiled_increment(network,plus['physical_increment_blocks']);ym=source_geometry.profiled_increment(network,minus['physical_increment_blocks'])
+                odd=(yp-ym)/2;even=(yp+ym)/2;truth=np.asarray(plus['source_vector_m']);linear=w['design']@truth
+                record['odd_even_probes'].append({'source_l2_m':amplitude,'status':'STABLE_ODD_EVEN_EVALUATED',
+                    'odd_weighted_norm':float(np.linalg.norm(odd)),'even_weighted_norm':float(np.linalg.norm(even)),
+                    'odd_minus_linear_weighted_norm':float(np.linalg.norm(odd-linear)),
+                    'odd_recovery':source_geometry.recover_profiled_increment(odd,w['design'],spectrum,truth,tmap)})
+            print(candidate,'complementary source information',flush=True)
+            record['complementary_source_information']=source_geometry.complementary_source_information(w['design'],columns,tmap,direction,scale)
+            clock=[]
+            for rho in (0.,.5):
+                for sigma in (1e-4,1e-3,1e-2,1e-1,1.):
+                    joint,meta=source_geometry.joint_external_clock_source_design(network,columns,endpoints,sigma,candidate,epoch_correlation=rho)
+                    _,sj,vj=np.linalg.svd(joint,full_matrices=False);compressed=sj[:,None]*vj;designs={}
+                    for families in ((),('wet',),('antenna',),('wet','antenna'),('wet','antenna','bias')):
+                        h,count=source_geometry.source_measurement_design(columns,families,'independent')
+                        designs['_'.join(families) or 'clock_only']={'direct_source_measurement_count':count,
+                            'information':source_geometry.source_information_summary(np.vstack([compressed,h/sigma]),tmap,direction,scale)}
+                    clock.append({'joint_clock_model':meta,'complementary_direct_source_observations':designs})
+            record['joint_external_clock_information']=clock
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:record.update(status='STABLE_DIFFERENTIAL_PREPARATION_FAILED',reason=str(error))
+    modules=[baseline,baseline.interval,baseline.interval.shared,reference_geometry,source_geometry,network_clocks,gnss_combinations,
+        baseline.precise,baseline.attitude,baseline.conventions,baseline.sp3,baseline.day,baseline.day.atmosphere,baseline.interval.shared.meteo]
+    sources=[Path(m.__file__) for m in modules]+[Path(__file__),Path(inspect.getmodule(network_clocks.operators).__file__)]
+    return native({'schema':'exposed-stable-source-differential-v1','prior_sha256':pins,'input_sha256':hashes,
+        'source_sha256':{p.relative_to(baseline.BASE.parents[1]).as_posix():baseline.interval.shared.digest(p.read_bytes()) for p in sources},
+        'weather_receipt_sha256':baseline.interval.shared.meteo.RECEIPT_SHA,'raw_endpoint_weight_covariance_m2':covariance,
+        'decimal_digits':50,'precision_check_digits':35,'precision_check_row_stride':128,'analytic_source_derivative_central_check_step_m':1e-12,'emission_time_derivative_step_s':1e-8,
+        'source_probe_directions_frozen_from_prior':True,'candidate_products_used_in_own_network':False,
+        'candidate_rf_used_in_own_network':False,'candidate_code_orbit_scoring':False,'new_rf_trajectory_fits':False,'new_rf_or_mw_scoring':False,
+        'archived_rf_state_used_only_for_local_response':True,'archived_rf_state_used_as_fit_seed':False,
+        'physical_covariance_qualified':False,'production_floors_changed':False,'independent_measurements_admitted':False,
+        'g12_state_accessed':False,'new_confirmation':False,'information_target_is_fixed_nominal_rf_sensitivity_not_joint_state_covariance':True,
+        'status_counts':dict(Counter(c['status'] for c in results.values())),
+        'archived_nominal_fit_status_counts':dict(Counter(c['archived_nominal_fit_status'] for c in results.values())),'candidates':results})
+
 def run_weak_sources():
     """Weak source stability, finite physical recovery and information design."""
     prior_path=baseline.BASE/'results/reference_source_separation_v1.json.gz'
@@ -1173,7 +1300,9 @@ def run_structure():
         'candidates':results})
 
 
-def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False, separate=False, weak_sources=False):
+def run(*, continuity=False, combinations=False, temporal=False, structure=False, closures=False, sources=False, separate=False, weak_sources=False, stable_sources=False):
+    if stable_sources:
+        return run_stable_sources()
     if weak_sources:
         return run_weak_sources()
     if separate:
@@ -1347,8 +1476,11 @@ if __name__ == '__main__':
     parser.add_argument('--closures',action='store_true',help='nondispersive calibrated network closures and complete state response')
     parser.add_argument('--sources',action='store_true',help='station wet source geometry through reference and candidate paths')
     parser.add_argument('--separate',action='store_true',help='joint wet, emitted reference orbit/antenna shapes and stable bias identifiability')
+    parser.add_argument('--stable-sources',action='store_true',help='stable differential source recovery and complementary independent-observation designs')
     parser.add_argument('--weak-sources',action='store_true',help='weak-source stability, finite physical recovery and hypothetical independent information')
     args = parser.parse_args()
+    if args.stable_sources and (args.weak_sources or args.separate or args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
+        parser.error('--stable-sources is a separate differential and source-information analysis')
     if args.weak_sources and (args.separate or args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
         parser.error('--weak-sources is a separate physical recovery analysis')
     if args.separate and (args.sources or args.closures or args.structure or args.temporal or args.combinations or args.continuity):
@@ -1361,7 +1493,7 @@ if __name__ == '__main__':
         parser.error('--structure is a separate reference-only analysis')
     if args.output.exists():
         parser.error('output exists; preserve previous results')
-    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources,separate=args.separate,weak_sources=args.weak_sources)
+    result = run(continuity=args.continuity,combinations=args.combinations,temporal=args.temporal,structure=args.structure,closures=args.closures,sources=args.sources,separate=args.separate,weak_sources=args.weak_sources,stable_sources=args.stable_sources)
     payload = (json.dumps(result,separators=(',',':'),allow_nan=False)+'\n').encode()
     if args.output.suffix == '.gz':
         payload = gzip.compress(payload,mtime=0)

@@ -389,3 +389,125 @@ def known_source_recovery(rows, physical_signal, linear_signal, truth, state_map
             'local_state_functional_error_m_m_s':t@error,'fitted_source_projection_m':estimate,
             'resolved_rank':record['resolved_rank'],'weighted_cost_after':record['weighted_cost_after']}
     return result
+
+
+def profiled_increment(network, blocks):
+    """Apply the existing clock/float residual projector to an increment."""
+    if len(blocks)!=len(network['blocks']):raise ValueError('one increment per admitted epoch required')
+    parts=[]
+    for b,y in zip(network['blocks'],blocks,strict=True):
+        y=np.asarray(y,float)
+        if y.shape!=b['y'].shape or not np.isfinite(y).all():raise ValueError('finite admitted increment shape required')
+        z=y-b['a']@(b['gain']@y)
+        parts.append(solve_triangular(b['chol'],z,lower=True) if b['chol'] is not None else z/b['sigma'])
+    y=np.concatenate(parts);u=network['profiled_ambiguity_left']
+    return y-u@(u.T@y)
+
+
+def recover_profiled_increment(projected, design, spectrum, truth, state_map):
+    """Recover an identifiable projection without refitting unchanged nuisances."""
+    u,s,v,rank=(spectrum[k] for k in ('u','s','v','rank'))
+    estimate=v[:rank].T@((u[:,:rank].T@projected)/s[:rank]);truth=np.asarray(truth)
+    expected=v[:rank].T@(v[:rank]@truth);error=estimate-expected
+    relative=float(np.linalg.norm(error)/max(np.linalg.norm(expected),1e-30))
+    scalar=float((truth/np.linalg.norm(truth))@error);functional_relative=abs(scalar)/np.linalg.norm(truth)
+    null_response=float(np.linalg.norm(v[rank:]@truth)/np.linalg.norm(truth))
+    remaining=projected-design@estimate
+    return {'status':'IDENTIFIED_PROJECTION_RECOVERED' if relative<=1e-3 else 'IDENTIFIED_PROJECTION_RECOVERY_FAILED',
+        'injected_functional_status':('UNIDENTIFIABLE_INJECTED_FUNCTIONAL' if null_response>1e-8 else ('RECOVERED' if functional_relative<=1e-3 else 'RECOVERY_FAILED')),
+        'injected_functional_null_response':null_response,
+        'identified_truth_projection_l2_m':float(np.linalg.norm(expected)),'injected_source_l2_m':float(np.linalg.norm(truth)),
+        'relative_identified_source_error':relative,'injected_functional_relative_error':functional_relative,
+        'injected_functional_error_m':scalar,'fitted_source_projection_m':estimate,
+        'local_state_functional_error_m_m_s':np.asarray(state_map)@error,'weighted_cost_after':float(remaining@remaining)}
+
+
+def source_information_summary(design,state_map,weak_direction,original_scale):
+    """Absolute reference-scale cuts; unresolved directions stay unbounded.
+
+    Three cuts are sensitivity cases on one SVD, with no sigma-dependent
+    rescaling of the rank criterion when measurement precision changes.
+    """
+    _,s,v=np.linalg.svd(design,full_matrices=design.shape[0]<design.shape[1]);t=np.asarray(state_map);q=np.asarray(weak_direction);out={}
+    for tol in WEAK_RTOLS:
+        r=int(sum(s>tol*original_scale));null=v[r:].T;inv=v[:r].T/s[:r]
+        defect=float(np.linalg.norm(t@null,2)/max(1.,np.linalg.norm(t,2))) if null.shape[1] else 0.
+        image=t@inv;cov=image@image.T;qdef=float(np.linalg.norm(q@null)) if null.shape[1] else 0.
+        pos=float(np.sqrt(max(0.,np.linalg.eigvalsh(cov[:3,:3])[-1])))
+        vel=float(np.sqrt(max(0.,np.linalg.eigvalsh(cov[3:,3:])[-1]))*1000)
+        out[str(tol)]={'resolved_rank':r,'source_count':v.shape[1],'absolute_singular_cut':tol*original_scale,
+            'state_null_response_relative':defect,'complete_state_precision_issued':defect<=1e-8,
+            'state_functional_status':'CONDITIONALLY_ESTIMABLE_AT_NUMERICAL_TOLERANCE' if defect<=1e-8 else 'UNRESOLVED_STATE_FUNCTIONAL',
+            'identified_projection_position_sigma_m':pos,'identified_projection_velocity_sigma_mm_s':vel,
+            'weak_functional_sigma_m':float(np.linalg.norm(q@inv)) if qdef<=1e-8 else None,
+            'weak_functional_null_response':qdef,'meets_1m_1mm_s_design_benchmark':defect<=1e-8 and pos<=1 and vel<=1}
+    return out
+
+
+def source_measurement_design(columns,families,law):
+    """Hypothetical source observations with stated correlations or free offsets."""
+    from scipy.linalg import helmert
+    p=len(columns);parts=[];count=0
+    if law not in ('independent','family_common_half','family_offset_free'):raise ValueError('unknown external source law')
+    for f in families:
+        if f not in FAMILIES:raise ValueError('unknown external source family')
+        axes=sorted({c[2] for c in columns if c[0]==f})
+        for axis in axes:
+            at=[i for i,c in enumerate(columns) if c[0]==f and c[2]==axis];h=np.eye(p)[at];count+=len(h)
+            if law=='family_common_half':h=solve_triangular(np.linalg.cholesky(.5*np.eye(len(h))+.5*np.ones((len(h),len(h)))),h,lower=True)
+            elif law=='family_offset_free':h=helmert(len(h),full=False)@h
+            parts.append(h)
+    return (np.vstack(parts) if parts else np.empty((0,p))),count
+
+
+def complementary_source_information(design,columns,state_map,weak_direction,original_scale):
+    """All family subsets; direct observations remain hypothetical, no priors."""
+    from itertools import combinations
+    _,s,v=np.linalg.svd(design,full_matrices=False);reference=s[:,None]*v
+    out={}
+    for size in range(1,len(FAMILIES)+1):
+        for families in combinations(FAMILIES,size):
+            label='_'.join(families);out[label]={}
+            for law in ('independent','family_common_half','family_offset_free'):
+                h,count=source_measurement_design(columns,families,law)
+                out[label][law]={'raw_measurement_count':count,'retained_contrast_count':len(h),
+                    'independent_external_values_admitted':False,'source_observation_law':law,
+                    'grid':[{'sigma_m':sigma,'rank_cases':source_information_summary(np.vstack([reference,h/sigma]),state_map,weak_direction,original_scale)} for sigma in (1e-4,1e-3,1e-2,1e-1,1.)]}
+    return out
+
+
+def joint_external_clock_source_design(network,columns,endpoint_keys,sigma_m,candidate,*,epoch_correlation=0.):
+    """Profile true external-clock rows with RF clocks and station offsets.
+
+    External measurements observe receiver clocks, not K G source shifts.
+    Their RF calibration noise and its coupling to sources are retained by
+    joint profiling. A free instrument offset per station removes unsupported
+    absolute calibration; same-epoch correlation is an explicit scenario.
+    """
+    admit(network,candidate)
+    if not np.isfinite(sigma_m) or sigma_m<=0 or epoch_correlation not in (0.,.5):raise ValueError('declared external clock law required')
+    keys=set(map(tuple,endpoint_keys))
+    if len(keys)!=len(endpoint_keys):raise ValueError('unique external clock endpoints required')
+    stations=sorted({s for s,t in keys});nb=len(network['ambiguities_m']);parts=[];sources=[];seen=set();raw_count=0
+    for b in network['blocks']:
+        m=len(b['rows']);g=source_design(b['rows'],columns,len(b['y'])//m)
+        def w(x):return solve_triangular(b['chol'],x,lower=True) if b['chol'] is not None else x/b['sigma'][:,None]
+        at=[(i,s) for i,s in enumerate(b['stations']) if (s,b['time_s']) in keys];k=len(at)
+        a=np.vstack([w(b['a']),np.zeros((k,b['a'].shape[1]))])
+        beta=np.zeros((len(a),nb+len(stations)));beta[:len(b['y']),:nb]=w(b['b'])
+        source=np.vstack([w(g),np.zeros((k,len(columns)))])
+        if k:
+            ext=np.zeros((k,b['a'].shape[1]));offset=np.zeros((k,len(stations)))
+            for row,(i,s) in enumerate(at):ext[row,i]=1.;offset[row,stations.index(s)]=1.;seen.add((s,b['time_s']))
+            chol=np.linalg.cholesky(sigma_m**2*((1-epoch_correlation)*np.eye(k)+epoch_correlation*np.ones((k,k))))
+            a[-k:]=solve_triangular(chol,ext,lower=True);beta[-k:,nb:]=solve_triangular(chol,offset,lower=True)
+        q,_=np.linalg.qr(a,mode='reduced');parts.append(beta-q@(q.T@beta));sources.append(source-q@(q.T@source));raw_count+=k
+    if seen!=keys:raise ValueError('external clock endpoint absent from admitted reference network')
+    b=np.vstack(parts);g=np.vstack(sources);norms=np.linalg.norm(b,axis=0)
+    normalized=np.divide(b,norms,out=np.zeros_like(b),where=norms>0)
+    u,s,_=np.linalg.svd(normalized,full_matrices=False)
+    rank=int(sum(s>1e-12*s[0]));u=u[:,:rank];j=g-u@(u.T@g)
+    return j,{'external_endpoint_count':raw_count,'instrument_offset_stations':stations,'instrument_offsets_profiled_without_prior':True,
+        'epoch_correlation':epoch_correlation,'sigma_m':sigma_m,'profiled_float_and_instrument_rank':rank,
+        'nuisance_columns_normalized_before_rank_test':True,'nuisance_rank_rtol':1e-12,'float_and_instrument_count':b.shape[1],'external_measurements_observe_receiver_clocks':True,
+        'external_source_shift_KG_not_treated_as_direct_observation':True,'external_values_admitted':False}

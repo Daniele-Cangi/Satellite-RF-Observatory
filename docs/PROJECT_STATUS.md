@@ -307,6 +307,27 @@ S2 resta aperta: valutazione differenziale stabile e osservabili fisiche
 complementari con modello congiunto dei nuisance e delle correlazioni.
 Nessun nuovo score CODE, stato G12, floor, covarianza fisica o campagna S3.
 
+Il [calcolo differenziale stabile e le osservabili complementari](../research/exploratory/STABLE_SOURCE_DIFFERENTIAL.md)
+(18 ottobre 2026) conserva i 22 candidati, 440 finestre, 63 archi e tutti i
+precedenti esiti RF. I 200 campioni di precisione concordano a 35/50 cifre;
+a parita di proiettore clock il difetto differenziale debole scende da
+14-1282 volte il segnale a 2,21e-8--6,44e-5. La derivata clock stabile cambia
+pero il sottospazio risolto: le proiezioni identificate dei 20 probe deboli
+recuperano, mentre tutti i 20 funzionali completi restano irrisolti alla
+soglia dichiarata. Quattro dei dieci probe forti falliscono ancora il recupero
+della proiezione completa per curvatura finita; lo scalare forte passa 10/10.
+Nella griglia ipotetica nessuna singola famiglia basta. Orbita+antenna+bias
+basta per G05/G11/G21; G19/G20 richiedono anche la componente umida negli
+operatori testati. Liberare gli zeri di calibrazione impedisce il benchmark
+G19 fino a 0,1 mm. Il clock esterno ora osserva il nuisance clock in una
+likelihood congiunta con rumore RF e offset strumentali liberi: nessun caso
+clock solo passa; clock+umidita+antenna+bias passa solo per G05 e G21 nella
+griglia. Sono immagini informative della sensibilita RF nominale fissata,
+non covarianze di un nuovo fit assistito, prior o requisiti strumentali.
+S2 resta aperta: operatori fisici indipendenti con geometria, livelli assoluti
+e correlazione temporale verificabili. Nessun nuovo fit/score RF o CODE,
+stato G12, floor, covarianza fisica ammessa o campagna S3.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
