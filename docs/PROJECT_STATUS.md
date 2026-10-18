@@ -328,6 +328,26 @@ S2 resta aperta: operatori fisici indipendenti con geometria, livelli assoluti
 e correlazione temporale verificabili. Nessun nuovo fit/score RF o CODE,
 stato G12, floor, covarianza fisica ammessa o campagna S3.
 
+Gli [operatori fisici e i livelli di calibrazione](../research/exploratory/PHYSICAL_OBSERVABLE_OPERATORS.md)
+(18 ottobre 2026 UTC) sostituiscono i benchmark di coordinate dirette con
+geometria locale di distanza a due vie, ritardo umido recuperato e PCO grezzi
+per frequenza. Il trasferimento origine meccanica/COM e condiviso fra distanza
+e antenna. Restano 22 candidati, 440 finestre, 63 archi e tutti gli esiti RF.
+Sono preparate 2633/2633 geometrie ipotetiche; nessuna disponibilita di strumenti,
+dati indipendenti o calibrazioni viene ammessa. Dei 1060 casi previsti, 1059
+valutano e un controllo G11 conserva SVD did not converge. Nessuno dei 510
+casi completi o 300 ablation passa il benchmark su tutte le soglie di rango.
+Calibrare ritardi di ricevitore/trasmettitore non vincola il bias totale di
+link se il residuo non spiegato resta libero. Solo il controllo indisponibile
+che aggiunge quel funzionale produce 120 passaggi, tutti in G05/G11/G21;
+G19/G20 restano oltre 1 m alla precisione/geometria fissata di quel controllo.
+Le calibrazioni relative bastano per quei passaggi ipotetici: non ogni livello
+assoluto deve essere ancorato se si cancella nel funzionale di stato richiesto.
+S2 resta aperta: decomposizione fisica verificabile del residuo stabile di link,
+metrologia COM e disponibilita effettiva delle osservabili, con correlazioni.
+Nessun nuovo fit/score RF o CODE, stima sorgente, stato G12, floor,
+covarianza fisica ammessa o campagna S3. Main della #236 verificato 11/11.
+
 Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.

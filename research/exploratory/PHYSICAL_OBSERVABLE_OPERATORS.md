@@ -6,6 +6,14 @@ combinations, once their instrument levels and mechanical reference transfers
 are included. It does not acquire independent observations or admit a source
 covariance. All archived outcomes remain unchanged.
 
+**18 October 2026 UTC, exploratory result:** none of the 510 full-readout or
+300 family-ablation cases meets the benchmark at all three cuts. Adding the
+unavailable ideal total-link functional gives 120 passing controls, confined
+to G05/G11/G21. G19/G20 still fail on this finite control grid. Relative level
+information is enough for those passing controls: the result does not require
+an absolute anchor for every source coordinate. One G11 control retains a
+numerical SVD failure; no passing or failed result is replaced.
+
 ## Scope and support
 
 The same 22 exposed candidates, 440 windows, 63 prepared arcs and five supported
@@ -162,3 +170,162 @@ gives a physical route to wet-path readouts. [BIPM calibration guidance](https:/
 describes delay-transfer references and retained calibration uncertainty.
 These references motivate observable types and missing metrology. No precision,
 equipment coverage, calibration value or independent data is imported from them.
+
+## Retained results
+
+All five supported folds prepared their readout operators. The 17 insufficient
+preparations and all five archived RF `BRANCH_SEARCH_INCOMPLETE` terminals are
+unchanged. The catalog has the following **hypothetical readout occurrences**,
+not independent observations acquired from the world; folds share their archive.
+
+| Fold | Scheduled/prepared two-way geometries | Unique station wet-path readouts | Raw frequency/axis antenna readouts | Nuisance coordinates | Evaluated / planned operator cases |
+|---|---:|---:|---:|---:|---:|
+| G05 | 609 / 609 | 72 | 126 | 219 | 212 / 212 |
+| G11 | 623 / 623 | 72 | 126 | 219 | 211 / 212 |
+| G19 | 261 / 261 | 30 | 120 | 210 | 212 / 212 |
+| G20 | 628 / 628 | 72 | 126 | 219 | 212 / 212 |
+| G21 | 512 / 512 | 60 | 126 | 219 | 212 / 212 |
+
+There are 2,633/2,633 prepared range geometries, 306 wet and 624 antenna
+readout occurrences across the folds, attached to the same 25,117 reference-row
+occurrences. All 510 full-readout cases and 300 family ablations evaluated;
+none passes the full-cut benchmark. Of 250 unavailable total-link controls,
+249 evaluated, 120 pass and 129 fail the benchmark. The remaining G11 control
+retains `PHYSICAL_OPERATOR_CASE_FAILED: SVD did not converge`: observation
+sigma .01 m, correlated noise .5, free calibration levels and total-link
+control sigma .01 m IF. It was not retried or replaced, and no precision result
+is issued for that terminal. This numerical failure is distinct from a failed
+physical-information benchmark.
+
+### Absolute levels remove aliases, but do not guarantee precision
+
+The full catalog has 156 eligible calibration/support coordinates (150 for
+G19); frequency differences contribute 63 additional free coordinates (60 for
+G19). Relative calibration leaves **11 common levels** free, one per eligible
+type/axis group. Anchored relative calibration observes one member of each
+of those groups plus all contrasts. These are 11 distinct required support
+observations in this declared calibration graph, not one universal datum or
+proof that every level must be measured in an operational design.
+
+At raw readout sigma .01 m, finite calibration/support sigma .001 m and
+independent random errors, the central-cut position-axis diagnostics are:
+
+| Fold | Free levels, identified projection only (m) | Relative levels (m) | Anchored relative (m) | Ideal known levels (m) |
+|---|---:|---:|---:|---:|
+| G05 | 858.99 | 849.26 | 847.78 | 847.72 |
+| G11 | 7.799 | 1.951 | 1.692 | 1.668 |
+| G19 | 177.95 | 6.351 | 3.918 | 3.875 |
+| G20 | 12.285 | 2.202 | 2.114 | 2.080 |
+| G21 | 604.99 | 598.61 | 597.47 | 597.38 |
+
+These are conditional local image scales, not orbital errors. Free-level
+cases do not issue complete state precision at the central cut. Relative,
+anchored and ideal cases do issue it there at the numerical null tolerance;
+that does not make their large sigmas pass, nor does it imply robustness at
+the other cuts. For anchored relative calibration, G05/G11/G21 still have an
+unresolved state functional at the coarse `1e-9` cut. Every cut remains in the
+artifact rather than selecting the most favourable rank.
+
+The central-cut unresolved-direction diagnostics show the mechanism. With
+free levels, antenna/COM-origin/reflector tradeoffs dominate. Relative levels
+leave an approximately equal orbit/antenna mixture (L2 fractions about .7071
+and .7071) in G05/G11/G20/G21. Anchoring removes that dominant calibration
+alias; their remaining central-cut source nulls are almost entirely bias
+coordinates with very small response in the fixed state map. G19 instead
+retains an orbit/bias mixture (norm fractions .9706/.2407) even with ideal
+levels. These are cut-dependent algebraic directions, not physical error
+estimates. A small null response does not cure weak **resolved** combinations:
+they still drive the large conditional precision scales in the table.
+
+### Component hardware calibration leaves an operator gap
+
+The archive has 65,65,56,66,61 total-link bias coordinates for G05/G11/G19/G20/G21,
+respectively, but only 27,27,26,27,27 receiver/transmitter component-delay
+readouts in the declared additive law. Counts alone are not the proof: for
+any change of a total-link bias, its unrestricted remainder can change by the
+same amount while every independently measured component stays fixed. Thus
+component calibration supplies zero additional information on the arbitrary
+total-link source vector under this retained law. This remains true with
+perfect component precision. Restricting or removing the remainder would be
+a new physical source hypothesis, not a consequence of calibration.
+
+The unavailable total-link closure controls deliberately supply that missing
+functional to locate the gap. At fixed physical-readout sigma .01 m, finite
+support-calibration sigma .001 m, both noise laws and every tested total-link
+sigma `.0001,.001,.01,.1,1 m IF`:
+
+| Fold | Free levels | Relative levels | Anchored relative | Individually absolute | Ideal known levels |
+|---|---|---|---|---|---|
+| G05 | none | all five sigmas | all five | all five | all five |
+| G11 | none, one SVD failure retained | all five | all five | all five | all five |
+| G19 | none | none | none | none | none |
+| G20 | none | none | none | none | none |
+| G21 | none | all five | all five | all five | all five |
+
+Every passing entry passes all three source cuts. Relative calibration still
+leaves common absolute calibration levels free, but those levels need not prevent
+the fixed state functional from meeting its benchmark once the missing link
+information is supplied. This is why the useful research target is the
+observable functional, not full absolute identification of every coordinate.
+The total-link control is unavailable; these are not successful physical
+measurement packages.
+
+Even the strongest tested total-link control (.0001 m IF) with ideal levels
+and independent random errors gives worst position/velocity axis scales
+across cuts of: G05 .23167 m / .03049 mm/s; G11 .48034 m / .04379 mm/s;
+G19 2.39256 m / .22179 mm/s; G20 1.16859 m / .16760 mm/s;
+G21 .24693 m / .03449 mm/s. G19/G20 fail the position benchmark despite
+conditionally estimable state images. This identifies a remaining precision/
+geometric-leverage limit **at the fixed .01 m physical-readout scenario**;
+it does not prove an exact universal null or exclude finer/better-supported
+independent measurements outside this grid.
+
+## Provenance and validation
+
+Numerical producer: `d71c322d19a6b77832e53bd6d422a3f588a768d6`, descending from
+main merge `660cc7696f4b6730c8689a2c06fdf497625422ae` (#236). Main passed all
+11 checks before this branch was created, including 1980 Linux and 1981 Windows
+positioning tests. The existing runner executed once:
+
+```
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m research.exploratory.reference_network_clocks --physical-observables research/exploratory/results/physical_observable_operators_v1.json.gz
+```
+
+The retained gzip artifact is 2,086,228 bytes, SHA-256
+`510327524edba59d8face5a081e8aecd3d0b600d5db2f6c655ad0497987a480b`.
+Its literal parent hash is checked before decoding; input and selected source
+hashes plus the full Git producer anchor the calculation. The old source
+profile and coupled RF sensitivity are copied unchanged. The existing generic
+clock/float increment projector now also accepts column matrices, allowing
+matrix replay without a new source fit. No source or calibration values are
+estimated by this increment.
+
+Local validation: 11 focused tests and 37 relevant regression tests passed,
+then the retained receipt passed: 49 distinct tests. Tests compare the moving
+fixed-transmit range derivative with an independently perturbed full path,
+propagate raw L1/L2 and COM-origin uncertainty, verify the repeated-readout
+calibration limit, compare joint profiling with an independent Schur calculation,
+and demonstrate the unrestricted hardware gauge. The runner test poisons
+candidate products and all fresh RF data, and forbids new RF/source fits and
+state scores. The receipt verifies producer ancestry and Git source blobs,
+all candidates/readouts/cases/failures, the immutable parent profile and a G19
+geometry/catalog/information replay under relative and anchored calibration.
+
+## Consequence for the next physical question
+
+This is the appropriate route because it separates three issues that the
+identity-coordinate benchmark could not resolve: physical measurement
+projection, common calibration datum and unobserved total-link remainder.
+A blanket absolute anchor on every coordinate is not the result. Determine
+which calibration levels affect the required state functional and which cancel.
+For G05/G11/G21 the decisive missing input in these controls is an independent
+constraint on the total stable-link functional; for G19/G20 the tested ranging/
+antenna geometry and precision remain limiting after that ideal addition.
+
+The next useful evidence is an explicit physical decomposition of the link
+remainder and independently qualified observations/metrology for its relevant
+components, together with real coverage, COM transfers and calibration
+correlations. Keep that decomposition testable against reference-only data;
+do not set an unexplained remainder to zero. Establish actual measurement
+availability before translating these hypothetical scales into an acquisition
+proposal or an instrument requirement. S2 remains open.
