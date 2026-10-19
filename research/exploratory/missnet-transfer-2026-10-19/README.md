@@ -70,7 +70,7 @@ uncertainty, S2 completion, autonomy or a blocked development agent being helped
 
 ## Reproduction
 
-After RepoTraction #132 review corrections and Windows/Linux CI complete, run:
+After RepoTraction #132 review corrections and relevant local regressions, run:
 
 ```text
 python -m research.exploratory.masked_prediction_study --comparison research/exploratory/missnet-transfer-2026-10-19/original-comparison.json --output data/missnet-transfer-2026-10-19
@@ -80,5 +80,12 @@ The output directory must be new. The computation uses ordinary source control,
 the existing native preparation/scorer and gzip JSON reports, with no new runner
 or audit infrastructure. Unit tests cover available-coordinate information,
 shared-mode transfer, held-value poisoning and missing comparison support.
-Native outcome is pending. Relevant regressions and Linux/Windows CI are required
+Native outcome is negative; see [RESULTS.md](RESULTS.md). Relevant regressions and Linux/Windows CI are required
 before integration. Historical files and production paths remain unchanged.
+
+Execution-sequence correction before the first native calculation (20 October,
+Europe/Rome): the original preparation unnecessarily placed this unpaid local
+exploratory calculation after all documentation CI. Both review corrections are
+resolved and relevant local tests pass; the calculation may proceed while the
+remaining Windows job runs. Full applicable CI is still required before merge.
+No model, parameter rule, input, holdout, scoring or acceptance criterion changes.
