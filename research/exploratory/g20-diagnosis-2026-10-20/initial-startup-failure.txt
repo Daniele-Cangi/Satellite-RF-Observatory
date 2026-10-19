@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\dacan\Documents\Codex\2026-10-18\satellite-native-discovery\research\exploratory\g20_prediction_diagnosis.py", line 173, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\dacan\Documents\Codex\2026-10-18\satellite-native-discovery\research\exploratory\g20_prediction_diagnosis.py", line 72, in main
+    start = time.perf_counter()
+            ^^^^
+UnboundLocalError: cannot access local variable 'time' where it is not associated with a value
