@@ -1,5 +1,7 @@
 """Missing predictions cannot shrink the original comparison denominator."""
 from research.exploratory.masked_prediction_study import summarize
+import subprocess
+import sys
 
 
 def test_absent_method_retains_every_required_pair_and_fails_acceptance():
@@ -14,3 +16,16 @@ def test_absent_method_retains_every_required_pair_and_fails_acceptance():
     for lag in ('30','300'):
         record = result['methods']['observed_coordinates']['pooled'][lag]
         assert record == {'count':0, 'missing_count':1, 'code_phase_rms_m':None}
+
+
+def test_optimized_python_cannot_stamp_unrelated_input_as_original_archive(tmp_path):
+    wrong = tmp_path/'wrong.gz'
+    wrong.write_bytes(b'not the stable source archive')
+    output = tmp_path/'output'
+    script = ("from pathlib import Path; import sys; "
+              "from research.exploratory import masked_prediction_study as s; "
+              f"s.INPUT=Path({str(wrong)!r}); "
+              f"sys.argv=['study','--output',{str(output)!r},'--comparison','unused']; s.main()")
+    process = subprocess.run([sys.executable, '-O', '-c', script], capture_output=True, text=True)
+    assert process.returncode != 0 and 'stable input hash mismatch' in process.stderr
+    assert not (output/'predictions-before-scoring.json.gz').exists()

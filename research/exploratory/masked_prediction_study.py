@@ -80,7 +80,8 @@ def main():
     args = parser.parse_args()
     args.output.mkdir(exist_ok=False)
     raw = INPUT.read_bytes()
-    assert hashlib.sha256(raw).hexdigest() == INPUT_SHA
+    if hashlib.sha256(raw).hexdigest() != INPUT_SHA:
+        raise ValueError('stable input hash mismatch; no prediction or score produced')
     data = json.loads(gzip.decompress(raw))
     start = time.perf_counter()
     output = {'input_sha256':INPUT_SHA, 'implementation_revision':subprocess.check_output(
