@@ -139,8 +139,8 @@ def main():
     rank = profile['resolved_rank']
     for station, reference, t in support:
         maps = []
-        for time in (t-300., t):
-            row = row_index[station,reference,time]
+        for epoch in (t-300., t):
+            row = row_index[station,reference,epoch]
             segment = prefix[station,reference,row['base_segment']]
             h, nominal = phase_source_map(net,w,row,segment)
             p = source_geometry.source_link_prediction(net,w,row,segment)
