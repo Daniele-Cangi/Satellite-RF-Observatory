@@ -29,6 +29,11 @@ unchanged. Model variances are predictive assumptions, not qualified physical
 covariance or new raw-error floors. Clustering, graphical lasso, EM, smoothing,
 external checkpoints and additional dependencies are not imported.
 
+The existing native clock calibration already handles available links. The new
+candidate is the shared temporal residual model beyond those free epoch clocks,
+not the invention of partial-observation linear algebra. No claim that an
+external source was necessary, or that this is a novel algorithm, follows.
+
 A fixed ablation uses identical fitted parameters but discards an entire epoch
 if any coordinate is absent. It tests whether partial-coordinate information,
 rather than merely a temporal prior, contributes. It is not another tuned model
@@ -53,6 +58,9 @@ lower pooled 300 s phase RMS than the wet baseline; both code RMS values and
 30 s phase RMS must be within 2% of the metric-wise best original direct method.
 At least four of five folds must improve primary phase RMS, with none over 10%
 worse. Every fold, terminal, missing prediction and worsening is retained.
+The wet baseline replay must reproduce its original metrics to numerical
+tolerance before any gain can be credited. The comparison file's Git bytes are
+preserved across Windows/Linux text checkouts.
 
 These are the previously exposed #131 exploratory comparison criteria, not a new
 independent practical necessity, prospective threshold or significance test. A
