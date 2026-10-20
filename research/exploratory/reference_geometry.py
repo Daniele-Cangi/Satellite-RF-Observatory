@@ -364,3 +364,52 @@ class StableSourceRay:
                 'bias_mw_mapping':float(gnss_combinations.transform()[3,0]/gnss_combinations.ALPHA),
                 'source_emission_relativity_linearized':True,'source_mapping_method':'decimal implicit emission and analytic geometric derivatives',
                 'stable_decimal_digits':self.digits}
+
+
+def two_way_range_geometry(provider, reference, bounce_s, station):
+    """Fixed-transmit two-leg vacuum range operator from admitted COM products.
+
+    The explicit zero nominal lever arm is a geometry control, not payload
+    knowledge. Unknown reflector and common mechanical-origin offsets are
+    separate downstream nuisances. No GNSS code, clock or target state enters.
+    """
+    if reference==provider.precise.target or reference not in provider.precise.offsets:
+        raise ValueError('candidate/unadmitted two-way reference before decoding')
+    time=float(bounce_s);station=np.asarray(station,float)
+    if not np.isfinite(time) or station.shape!=(3,) or not np.isfinite(station).all():
+        raise ValueError('finite admitted two-way epoch and station required')
+    com,velocity=provider.precise.orbit(reference,time)
+    body=provider.attitude.body_to_ecef(reference,time,provider.step)
+    inertial=velocity+np.cross([0.,0.,OMEGA],com)
+    _,_,_,up=geodetic(station)
+    legs=[]
+    for sign in (-1.,1.):
+        tau=np.linalg.norm(com-station)/C
+        for _ in range(12):
+            point=rotate_z(station,sign*OMEGA*tau)
+            updated=np.linalg.norm(com-point)/C
+            if abs(updated-tau)<1e-15:tau=updated;break
+            tau=updated
+        else:raise ValueError('two-way leg did not converge')
+        point=rotate_z(station,sign*OMEGA*tau);ray=com-point
+        unit=ray/np.linalg.norm(ray);sine=float(unit@rotate_z(up,sign*OMEGA*tau))
+        if not 0<tau<1 or sine<np.sin(np.radians(10.)):
+            raise ValueError('two-way leg outside light-time or elevation domain')
+        legs.append((tau,unit,np.cross([0.,0.,OMEGA],point),sine))
+    (uplight,uu,vu,su),(downlight,ud,vd,sd)=legs
+    upden=C-uu@inertial;downden=C+ud@vd
+    if min(upden,downden)<=.99*C:raise ValueError('unsupported two-way implicit timing')
+    transfer=(C+ud@inertial)/upden
+    gradient=C/(2*downden)*(ud+transfer*uu)
+    optical=C/(2*downden)*(1/sd+transfer/su)
+    receive_rate=(C+ud@inertial)/downden*(C-uu@vu)/upden
+    distance=C*(uplight+downlight)/2
+    return {'bounce_gpst_s':time,'transmit_gpst_s':time-uplight,'receive_gpst_s':time+downlight,
+        'uplink_s':uplight,'downlink_s':downlight,'uplink_sine_elevation':su,'downlink_sine_elevation':sd,
+        'vacuum_half_roundtrip_m':distance,'cartesian_mapping':gradient,
+        'orbit_mapping':gradient@rtn_basis(com,velocity),'body_mapping':gradient@body,
+        'optical_zenith_mapping':float(optical),'epoch_light_time_mapping':float((receive_rate-1)/2),
+        'range_scale_mapping':float(distance/25e6),'range_scale_reference_m':25e6,
+        'nominal_reflector_lever_arm_body_m':[0.,0.,0.],
+        'observable':'c*(receive-transmit)/2, fixed transmit epoch, vacuum and rigid Earth rotation',
+        'equipment_or_independent_measurement_available':False}
