@@ -14,7 +14,7 @@ import time
 
 import numpy as np
 
-from research.kinematic import masked_prediction, gnss_combinations, network_closures
+from research.kinematic import masked_prediction, mask_consistent_prediction, gnss_combinations, network_closures
 from research.exploratory.reference_network_clocks import native
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -30,9 +30,10 @@ def write(path, value):
         handle.write(raw)
 
 
-def summarize(scored, comparison):
+def summarize(scored, comparison, *, primary_method='observed_coordinates'):
     result = {}
-    for method in ('wet', 'observed_coordinates', 'whole_row_ablation'):
+    methods = ('wet', 'observed_coordinates', 'whole_row_ablation') if primary_method=='observed_coordinates' else ('wet',primary_method)
+    for method in methods:
         combined, folds = {}, {}
         for lag in ('30', '300'):
             pooled = []
@@ -51,7 +52,7 @@ def summarize(scored, comparison):
             combined[lag] = {'count':len(pooled), 'missing_count':missing,
                 'code_phase_rms_m':np.sqrt(np.mean(np.asarray(pooled) ** 2, axis=0)) if pooled else None}
         result[method] = {'pooled':combined, 'folds':folds}
-    primary = result['observed_coordinates']
+    primary = result[primary_method]
     prior = comparison['direct_comparison']
     primary_rms = primary['pooled']['300']['code_phase_rms_m']
     checks = {'complete_support':all(primary['pooled'][lag]['missing_count'] == 0 for lag in ('30','300')),
@@ -77,6 +78,8 @@ def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--comparison', type=Path, required=True)
+    parser.add_argument('--mask-consistent', action='store_true',
+                        help='one conditional wet-process correction trained on excluded errors')
     args = parser.parse_args()
     args.output.mkdir(exist_ok=False)
     raw = INPUT.read_bytes()
@@ -84,17 +87,24 @@ def main():
         raise ValueError('stable input hash mismatch; no prediction or score produced')
     data = json.loads(gzip.decompress(raw))
     start = time.perf_counter()
+    predictor = mask_consistent_prediction if args.mask_consistent else masked_prediction
+    primary_method = 'mask_consistent' if args.mask_consistent else 'observed_coordinates'
+    producers = ['research/kinematic/'+predictor.__name__.split('.')[-1]+'.py',
+                 'research/exploratory/masked_prediction_study.py']
+    if args.mask_consistent:
+        producers += ['research/kinematic/'+name+'.py' for name in
+            ('network_clocks','network_closures','source_geometry','phase_continuity','gnss_combinations')]
     output = {'input_sha256':INPUT_SHA, 'implementation_revision':subprocess.check_output(
         ['git','rev-parse','HEAD'], cwd=ROOT, text=True).strip(),
-        'source_sha256':{path:hashlib.sha256((ROOT/path).read_bytes()).hexdigest() for path in (
-            'research/kinematic/masked_prediction.py', 'research/exploratory/masked_prediction_study.py')},
-        'assisted_transfer':True, 'prospective_confirmation':False, 'physical_covariance_qualified':False,
+        'source_sha256':{path:hashlib.sha256((ROOT/path).read_bytes()).hexdigest() for path in producers},
+        'assisted_transfer':not args.mask_consistent, 'primary_method':primary_method,
+        'prospective_confirmation':False, 'physical_covariance_qualified':False,
         'candidate_products_used':False, 'folds':{}}
     for fold, candidate in data['candidates'].items():
         if 'source_profile' not in candidate:
             continue
         print(fold, 'preparing', flush=True)
-        output['folds'][fold] = masked_prediction.prepare_future_links(
+        output['folds'][fold] = predictor.prepare_future_links(
             candidate['reference_rows'], fold, gnss_combinations.assumed_endpoint_covariance())
         print(fold, output['folds'][fold]['model_status'], flush=True)
     output['all_predictions_fixed_before_scoring'] = True
@@ -109,7 +119,7 @@ def main():
     write(args.output/'native-scores.json.gz', scored)
     comparison_raw = args.comparison.read_bytes()
     comparison = json.loads(comparison_raw)
-    summary = summarize(scored, comparison)
+    summary = summarize(scored, comparison, primary_method=primary_method)
     summary.update(input_sha256=INPUT_SHA, comparison_sha256=hashlib.sha256(comparison_raw).hexdigest(),
                    elapsed_seconds=time.perf_counter()-start)
     write(args.output/'summary.json', summary)
