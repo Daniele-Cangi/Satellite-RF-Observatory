@@ -78,36 +78,54 @@ def summarize(scored, comparison, *, primary_method='observed_coordinates'):
 def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--comparison', type=Path, required=True)
+    parser.add_argument('--comparison', type=Path)
     parser.add_argument('--mask-consistent', action='store_true',
                         help='one conditional wet-process correction trained on excluded errors')
+    parser.add_argument('--diagnose-mask', action='store_true',
+                        help='inspect original error/covariance images without correction or held scoring')
     args = parser.parse_args()
+    if args.mask_consistent and args.diagnose_mask:
+        parser.error('select prediction or diagnosis, not both')
+    if not args.diagnose_mask and args.comparison is None:
+        parser.error('--comparison is required for a predictive comparison')
     args.output.mkdir(exist_ok=False)
     raw = INPUT.read_bytes()
     if hashlib.sha256(raw).hexdigest() != INPUT_SHA:
         raise ValueError('stable input hash mismatch; no prediction or score produced')
     data = json.loads(gzip.decompress(raw))
     start = time.perf_counter()
-    predictor = mask_consistent_prediction if args.mask_consistent else masked_prediction
-    primary_method = 'mask_consistent' if args.mask_consistent else 'observed_coordinates'
+    operator_model = args.mask_consistent or args.diagnose_mask
+    predictor = mask_consistent_prediction if operator_model else masked_prediction
+    primary_method = 'covariance_diagnosis' if args.diagnose_mask else 'mask_consistent' if args.mask_consistent else 'observed_coordinates'
     producers = ['research/kinematic/'+predictor.__name__.split('.')[-1]+'.py',
                  'research/exploratory/masked_prediction_study.py']
-    if args.mask_consistent:
+    if operator_model:
         producers += ['research/kinematic/'+name+'.py' for name in
             ('network_clocks','network_closures','source_geometry','phase_continuity','gnss_combinations')]
     output = {'input_sha256':INPUT_SHA, 'implementation_revision':subprocess.check_output(
         ['git','rev-parse','HEAD'], cwd=ROOT, text=True).strip(),
         'source_sha256':{path:hashlib.sha256((ROOT/path).read_bytes()).hexdigest() for path in producers},
-        'assisted_transfer':not args.mask_consistent, 'primary_method':primary_method,
+        'assisted_transfer':not operator_model, 'primary_method':primary_method,
         'prospective_confirmation':False, 'physical_covariance_qualified':False,
         'candidate_products_used':False, 'folds':{}}
     for fold, candidate in data['candidates'].items():
         if 'source_profile' not in candidate:
             continue
         print(fold, 'preparing', flush=True)
+        options = {'diagnose_only':True} if args.diagnose_mask else {}
         output['folds'][fold] = predictor.prepare_future_links(
-            candidate['reference_rows'], fold, gnss_combinations.assumed_endpoint_covariance())
+            candidate['reference_rows'], fold, gnss_combinations.assumed_endpoint_covariance(),**options)
+        if args.diagnose_mask:
+            baseline=output['folds'][fold]['baseline']
+            output['folds'][fold]['baseline']={k:baseline[k] for k in (
+                'status','training_stop_s','held_links','training_row_count','withheld_row_count') if k in baseline}
         print(fold, output['folds'][fold]['model_status'], flush=True)
+    if args.diagnose_mask:
+        output.update(diagnostic_only=True,held_scores_computed=False,correction_variance_fitted=False,
+                      elapsed_seconds=time.perf_counter()-start)
+        write(args.output/'covariance-diagnosis.json.gz',output)
+        print('Covariance diagnosis saved; no new correction or held scoring.',flush=True)
+        return
     output['all_predictions_fixed_before_scoring'] = True
     output['elapsed_before_scoring_seconds'] = time.perf_counter() - start
     write(args.output/'predictions-before-scoring.json.gz', output)

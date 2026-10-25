@@ -107,6 +107,49 @@ def image_solve(covariance, values):
     return (u/eigen[keep])@(u.T@y), u/np.sqrt(eigen[keep]), int(keep.sum())
 
 
+def covariance_diagnostics(covariance, errors, factor, whitened_values):
+    """Inspect the unchanged image rule and its independent raw-factor replay.
+
+    C=F F.T, e=F whitened_y must have the same exact image for positive raw
+    covariance. A cutoff can discard nonzero directions; matrix products and
+    native predictions also have finite precision. Do not conflate these cases.
+    No rank change, ridge, process fit or held score is performed here.
+    """
+    c, e, f = np.asarray(covariance,float), np.asarray(errors,float), np.asarray(factor,float)
+    eigen, vectors = eigh((c+c.T)/2,check_finite=False)
+    scale=max(float(eigen[-1]),np.finfo(float).tiny)
+    cut=PSD_RTOL*scale
+    keep=eigen>cut
+    components=vectors.T@e
+    retained=vectors[:,keep]
+    remainder=e-retained@(retained.T@e)
+    norm=float(np.linalg.norm(e))
+    tail=float(np.linalg.norm(remainder))
+    tolerance=1e-7*max(norm,1e-8)
+    replay=f@np.asarray(whitened_values,float)
+    replay_tail=replay-retained@(retained.T@replay)
+    direction=remainder/tail if tail else np.zeros(len(e))
+    factor_variance=float(np.linalg.norm(f.T@direction)**2)
+    gram_variance=float(direction@c@direction)
+    discarded=np.flatnonzero(~keep)
+    strongest=discarded[np.argsort(abs(components[discarded]))[-8:][::-1]]
+    return {'error_count':len(e),'retained_rank':int(keep.sum()),'discarded_count':int((~keep).sum()),
+        'psd_rtol':PSD_RTOL,'eigenvalue_cut_m2':cut,'minimum_eigenvalue_m2':float(eigen[0]),
+        'maximum_eigenvalue_m2':scale,'positive_discarded_eigenvalues':int(np.sum((eigen>0)&~keep)),
+        'error_norm_m':norm,'discarded_error_norm_m':tail,'image_tolerance_m':tolerance,
+        'guard_accepts':bool(keep.any() and eigen[0]>=-cut and tail<=tolerance),
+        'operator_replay_max_abs_m':float(np.max(abs(e-replay))),
+        'operator_replay_l2_m':float(np.linalg.norm(e-replay)),
+        'replayed_error_discarded_norm_m':float(np.linalg.norm(replay_tail)),
+        'discarded_error_factor_variance_m2':factor_variance,
+        'discarded_error_gram_variance_m2':gram_variance,
+        'discarded_error_factor_projection_m':float((f.T@direction)@whitened_values),
+        'eigenvalues_m2':eigen,'error_eigen_components_m':components,
+        'largest_discarded_error_modes':[{'index':int(i),'eigenvalue_m2':float(eigen[i]),
+            'error_component_m':float(components[i]),
+            'factor_variance_m2':float(np.linalg.norm(f.T@vectors[:,i])**2)} for i in strongest]}
+
+
 def fit_variance(errors, noise, signal_factor):
     """One prefix-only marginal likelihood; variance zero is an explicit fit.
 
@@ -172,7 +215,7 @@ def _embed(target, block, response, raw_index, output_indices):
         target[np.ix_(output_indices, columns)] -= response[:, channel*m:(channel+1)*m]
 
 
-def prepare_future_links(rows, candidate, raw_covariance):
+def prepare_future_links(rows, candidate, raw_covariance, *, diagnose_only=False):
     """One fixed covariance-aware correction, preserving the native baseline.
 
     Outer held values are excluded before ANY segmentation/fit. Inner groups
@@ -270,6 +313,20 @@ def prepare_future_links(rows, candidate, raw_covariance):
             a[:, 3*first:3*last] = (a[:, 3*first:3*last].reshape(len(a), -1, 3)@chol).reshape(len(a), -1)
             h[:, 3*first:3*last] = (h[:, 3*first:3*last].reshape(len(h), -1, 3)@chol).reshape(len(h), -1)
         noise = a@a.T
+        if diagnose_only:
+            # These are admitted rows only. Replay error formation independently
+            # before deleting F; no correction/process parameter is estimated.
+            raw_values=np.asarray([[r[k] for k in ('code_m','phase_m','mw_m')] for r in admitted],float)
+            whitened=solve_triangular(chol,raw_values.T,lower=True).T.ravel()
+            prefix_rows=np.asarray([r['time_s']<=cut for r in query])
+            output.update(model_status='COVARIANCE_DIAGNOSTIC_COMPLETE',
+                diagnostic_only=True,correction_variance_fitted=False,held_scores_computed=False,
+                diagnostics={'prefix':covariance_diagnostics(noise[np.ix_(prefix_rows,prefix_rows)],
+                    errors[prefix_rows],a[prefix_rows],whitened),
+                    'all_admitted':covariance_diagnostics(noise,errors,a,whitened)})
+            output['first_rejection_stage']=next((stage for stage in ('prefix','all_admitted')
+                if not output['diagnostics'][stage]['guard_accepts']),None)
+            return output
         cross = h@a.T
         del a, h
         distance = abs(np.subtract.outer(times, times))

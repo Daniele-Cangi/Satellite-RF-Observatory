@@ -99,3 +99,29 @@ def test_retained_mask_consistent_execution_replays_without_refitting():
     first=json.loads((folder/'summary.json').read_bytes())
     assert first['criteria']['primary_10_percent'] and not first['passes_all']
     assert not expected['criteria']['primary_10_percent'] and expected['scoring_only_correction']
+
+
+def test_diagnostic_entrypoint_writes_no_predictions_or_held_scores(tmp_path,monkeypatch):
+    payload=gzip.compress(json.dumps({'candidates':{'CONTROL':{
+        'source_profile':{},'reference_rows':[]}}}).encode(),mtime=0)
+    archive=tmp_path/'input.gz'
+    archive.write_bytes(payload)
+    output=tmp_path/'diagnosis'
+    monkeypatch.setattr(study,'INPUT',archive)
+    monkeypatch.setattr(study,'INPUT_SHA',hashlib.sha256(payload).hexdigest())
+    def prepare(rows,candidate,covariance,*,diagnose_only=False):
+        assert candidate=='CONTROL' and diagnose_only
+        return {'baseline':{'status':'FUTURE_LINK_PREDICTIONS_FROZEN','training_stop_s':60.},
+                'model_status':'COVARIANCE_DIAGNOSTIC_COMPLETE','diagnostics':{}}
+    def forbidden(*args,**kwargs):
+        raise AssertionError('diagnosis accessed a scorer or predictive comparison')
+    monkeypatch.setattr(study.mask_consistent_prediction,'prepare_future_links',prepare)
+    monkeypatch.setattr(study.network_closures,'score_future_links',forbidden)
+    monkeypatch.setattr(study,'summarize',forbidden)
+    monkeypatch.setattr(sys,'argv',['study','--diagnose-mask','--output',str(output)])
+    study.main()
+    result=json.loads(gzip.decompress((output/'covariance-diagnosis.json.gz').read_bytes()))
+    assert result['diagnostic_only'] and not result['held_scores_computed']
+    assert not result['correction_variance_fitted']
+    assert not (output/'predictions-before-scoring.json.gz').exists()
+    assert not (output/'summary.json').exists()

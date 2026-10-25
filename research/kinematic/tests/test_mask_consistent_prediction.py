@@ -143,3 +143,39 @@ def test_failed_predictive_fit_does_not_silently_substitute_native_baseline(monk
     assert len(original)==len(variant)
     assert any(p['status']=='PREDICTED' for p in original)
     assert all(p['status']!='PREDICTED' for p in variant)
+
+
+def test_diagnosis_distinguishes_discarded_nonzero_direction_from_wrong_error_operator():
+    factor=np.diag([1.,1e-6])
+    values=np.array([0.,2.])
+    errors=factor@values
+    result=model.covariance_diagnostics(factor@factor.T,errors,factor,values)
+    assert not result['guard_accepts'] and result['retained_rank']==1
+    assert result['positive_discarded_eigenvalues']==1
+    assert result['operator_replay_max_abs_m']==0.
+    assert result['discarded_error_norm_m']==pytest.approx(2e-6)
+    assert result['discarded_error_factor_variance_m2']==pytest.approx(1e-12)
+    assert result['discarded_error_factor_projection_m']==pytest.approx(2e-6)
+    with pytest.raises(ValueError,match='outside'):
+        model.image_solve(factor@factor.T,errors)
+    # A genuinely inconsistent error has a nonzero replay defect but no raw
+    # response in its rejected direction. It must not get the same diagnosis.
+    factor=np.array([[1.],[0.]])
+    wrong=model.covariance_diagnostics(factor@factor.T,np.array([1.,2.]),factor,np.array([1.]))
+    assert wrong['operator_replay_max_abs_m']==2.
+    assert wrong['discarded_error_factor_variance_m2']==0.
+    assert not wrong['guard_accepts']
+
+
+def test_diagnostic_mode_never_fits_process_or_conditions_new_corrections(monkeypatch):
+    def forbidden(*args):
+        raise AssertionError('diagnosis fitted a predictive correction')
+    monkeypatch.setattr(model,'fit_variance',forbidden)
+    monkeypatch.setattr(model,'condition_errors',forbidden)
+    result=model.prepare_future_links(rows(),'TARGET',gnss_combinations.assumed_endpoint_covariance(),diagnose_only=True)
+    assert result['model_status']=='COVARIANCE_DIAGNOSTIC_COMPLETE'
+    assert not result['correction_variance_fitted'] and not result['held_scores_computed']
+    assert 'variants' not in result
+    assert set(result['diagnostics'])=={'prefix','all_admitted'}
+    for record in result['diagnostics'].values():
+        assert record['operator_replay_max_abs_m']<1e-7
