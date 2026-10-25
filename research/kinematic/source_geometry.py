@@ -392,14 +392,14 @@ def known_source_recovery(rows, physical_signal, linear_signal, truth, state_map
 
 
 def profiled_increment(network, blocks):
-    """Apply the existing clock/float residual projector to an increment."""
+    """Apply the existing clock/float projector to vectors or column matrices."""
     if len(blocks)!=len(network['blocks']):raise ValueError('one increment per admitted epoch required')
     parts=[]
     for b,y in zip(network['blocks'],blocks,strict=True):
         y=np.asarray(y,float)
-        if y.shape!=b['y'].shape or not np.isfinite(y).all():raise ValueError('finite admitted increment shape required')
+        if y.ndim not in (1,2) or y.shape[0]!=len(b['y']) or not np.isfinite(y).all():raise ValueError('finite admitted increment shape required')
         z=y-b['a']@(b['gain']@y)
-        parts.append(solve_triangular(b['chol'],z,lower=True) if b['chol'] is not None else z/b['sigma'])
+        parts.append(solve_triangular(b['chol'],z,lower=True) if b['chol'] is not None else z/(b['sigma'][:,None] if z.ndim==2 else b['sigma']))
     y=np.concatenate(parts);u=network['profiled_ambiguity_left']
     return y-u@(u.T@y)
 
@@ -511,3 +511,208 @@ def joint_external_clock_source_design(network,columns,endpoint_keys,sigma_m,can
         'epoch_correlation':epoch_correlation,'sigma_m':sigma_m,'profiled_float_and_instrument_rank':rank,
         'nuisance_columns_normalized_before_rank_test':True,'nuisance_rank_rtol':1e-12,'float_and_instrument_count':b.shape[1],'external_measurements_observe_receiver_clocks':True,
         'external_source_shift_KG_not_treated_as_direct_observation':True,'external_values_admitted':False}
+
+
+def complementary_observable_catalog(rows,columns,range_records,candidate):
+    """Local external readout laws; no independent observation values exist.
+
+    A mechanical-origin/COM transfer is shared by range and raw antenna PCO.
+    Hardware component calibration deliberately does not observe total link bias.
+    """
+    from .gnss_combinations import ALPHA,BETA
+    admit({'blocks':[{'rows':rows}]},candidate)
+    if list(map(tuple,columns))!=source_columns(rows,FAMILIES):
+        raise ValueError('admitted complete source coordinates required before decoding')
+    allowed={r['reference'] for r in rows}
+    if any(r['reference']==candidate or r['reference'] not in allowed for r in range_records):
+        raise ValueError('candidate/unadmitted range identity before decoding')
+    expected={(r['station'],r['reference'],r['time_s']) for r in rows if r['time_s']%300==0}
+    actual={(r['station'],r['reference'],r['time_s']) for r in range_records}
+    if actual!=expected or len(actual)!=len(range_records):raise ValueError('complete unique scheduled range terminals required')
+    index={tuple(c):i for i,c in enumerate(columns)};entries=[];nuisances=set()
+    def add(family,key,time,h,b,group,step):
+        nuisances.update(b);entries.append({'family':family,'key':key,'time_s':time,
+            'noise_group':group,'noise_step':step,'source':h,'nuisance':b})
+    for r in range_records:
+        if r['reference']==candidate:raise ValueError('candidate two-way row before decoding')
+        if r['status']!='TWO_WAY_GEOMETRY_PREPARED':continue
+        s,q,t=r['station'],r['reference'],r['time_s'];g=r['geometry']
+        h={index['orbit',q,a]:float(g['orbit_mapping'][j]) for j,a in enumerate('RTN')}
+        b={(f,q,a):float(g['body_mapping'][j]) for f in ('origin','reflector') for j,a in enumerate('XYZ')}
+        b.update({('range_zero',s,'HALF_RT_M'):1.,('optical_zenith',s,'ZENITH_M'):float(g['optical_zenith_mapping']),
+            ('range_epoch',s,'C_DT_M'):float(g['epoch_light_time_mapping']),('range_scale',s,'AT_25MM_M'):float(g['range_scale_mapping'])})
+        add('range',s+'/'+q,t,h,b,'range/'+s+'/'+q,(t-36000.)/300.)
+    scheduled=[r for r in rows if r['time_s']%300==0]
+    for s,t in sorted({(r['station'],r['time_s']) for r in scheduled}):
+        add('wet',s,t,{index['wet',s,'Z']:1.},{('wet_zero',s,'ZENITH_M'):1.},'wet/'+s,(t-36000.)/300.)
+    for q in sorted({r['reference'] for r in rows}):
+        for a in 'XYZ':
+            for frequency,coefficient in ((1,-BETA),(2,ALPHA)):
+                add('antenna',q+'/'+a+'/L'+str(frequency),None,{index['antenna',q,a]:1.},
+                    {('origin',q,a):-1.,('frequency_difference',q,a):coefficient},'antenna/'+q+'/'+a,frequency-1.)
+    keys=sorted(nuisances);ni={key:i for i,key in enumerate(keys)}
+    h=np.zeros((len(entries),len(columns)));b=np.zeros((len(entries),len(keys)));metadata=[]
+    for i,r in enumerate(entries):
+        for j,v in r['source'].items():h[i,j]=v
+        for key,v in r['nuisance'].items():b[i,ni[key]]=v
+        metadata.append({k:v for k,v in r.items() if k not in ('source','nuisance')})
+    if not np.isfinite(h).all() or not np.isfinite(b).all():raise ValueError('finite physical readout operators required')
+    return {'source_design':h,'nuisance_design':b,'nuisance_columns':keys,'readouts':metadata,
+        'shared_origin_in_range_and_antenna':True,'raw_antenna_frequencies':[1,2],
+        'wet_readouts_not_duplicated_per_reference':True,'hardware_components_not_direct_total_link_observations':True,
+        'independent_values_admitted':False,'equipment_and_calibration_availability':'NOT_ESTABLISHED'}
+
+
+def whiten_observable_catalog(catalog,families,rho):
+    """Unit marginal noise; temporal/raw-frequency correlation is a scenario."""
+    if rho not in (0.,.5) or not families or not set(families)<={'range','wet','antenna'}:
+        raise ValueError('declared physical family and noise law required')
+    take=[i for i,r in enumerate(catalog['readouts']) if r['family'] in families]
+    h=np.asarray(catalog['source_design'])[take].copy();b=np.asarray(catalog['nuisance_design'])[take].copy()
+    groups={}
+    for i,j in enumerate(take):groups.setdefault(catalog['readouts'][j]['noise_group'],[]).append(i)
+    if rho:
+        for at in groups.values():
+            steps=np.array([catalog['readouts'][take[j]]['noise_step'] for j in at])
+            correlation=rho**abs(steps[:,None]-steps[None,:]);chol=np.linalg.cholesky(correlation)
+            h[at]=solve_triangular(chol,h[at],lower=True);b[at]=solve_triangular(chol,b[at],lower=True)
+    active=np.any(b!=0.,axis=0);keys=[c for c,ok in zip(catalog['nuisance_columns'],active,strict=True) if ok]
+    return h,b[:,active],keys,{'readout_count':len(take),'noise_groups':len(groups),'correlation_rho':rho,
+        'noise_law':'rho**abs(delta_t/300s) within range link/wet station; paired L1/L2 PCO rho',
+        'cross_family_random_errors_conditionally_independent':True,'physical_covariance_qualified':False}
+
+
+def calibration_level_operator(nuisance_columns,mode):
+    """Hypothetical calibration/support observations of nuisance levels."""
+    from scipy.linalg import helmert
+    if mode not in ('free','relative','anchored_relative','absolute','ideal'):
+        raise ValueError('declared calibration law required')
+    n=len(nuisance_columns);eligible=[i for i,c in enumerate(nuisance_columns) if c[0]!='frequency_difference']
+    groups={}
+    for i in eligible:
+        role,key,axis=nuisance_columns[i];groups.setdefault((role,axis),[]).append(i)
+    pieces=[];eye=np.eye(n)
+    if mode in ('relative','anchored_relative'):
+        for at in groups.values():
+            pieces.append(helmert(len(at),full=False)@eye[at])
+            if mode=='anchored_relative':pieces.append(eye[at[:1]])
+    elif mode=='absolute':pieces.append(eye[eligible])
+    c=np.vstack(pieces) if pieces else np.empty((0,n))
+    nulls=(0 if mode in ('absolute','anchored_relative','ideal') else (len(groups) if mode=='relative' else len(eligible)))
+    return c,{'mode':mode,'calibration_observation_count':len(c),'eligible_level_count':len(eligible),
+        'level_group_count':len(groups),'unobserved_level_null_count':nulls,
+        'fixed_ideal_columns':eligible if mode=='ideal' else [],
+        'anchors':[nuisance_columns[at[0]] for at in groups.values()] if mode=='anchored_relative' else [],
+        'frequency_differences_remain_free':True,'calibration_values_admitted':False}
+
+
+def profile_observable_calibration(h,b,keys,sigma_m,mode,calibration_sigma_m=None,*,response=False):
+    """Whitened readouts plus calibration rows, then joint nuisance profiling."""
+    h=np.asarray(h,float);b=np.asarray(b,float)
+    if h.ndim!=2 or b.shape!=(len(h),len(keys)) or not np.isfinite(h).all() or not np.isfinite(b).all():
+        raise ValueError('finite matched physical readout matrices required')
+    if not np.isfinite(sigma_m) or sigma_m<=0:raise ValueError('positive raw readout sigma required')
+    c,meta=calibration_level_operator(keys,mode)
+    if len(c) and (calibration_sigma_m is None or not np.isfinite(calibration_sigma_m) or calibration_sigma_m<=0):
+        raise ValueError('positive calibration observation sigma required')
+    keep=[i for i in range(len(keys)) if i not in meta['fixed_ideal_columns']]
+    design=h/sigma_m;nuisance=b[:,keep]/sigma_m
+    if len(c):
+        nuisance=np.vstack([nuisance,c[:,keep]/calibration_sigma_m])
+        design=np.vstack([design,np.zeros((len(c),h.shape[1]))])
+    norms=np.linalg.norm(nuisance,axis=0);nonzero=norms>0
+    normalized=np.divide(nuisance,norms,out=np.zeros_like(nuisance),where=nonzero)
+    if len(keep) and len(normalized):
+        u,s,v=np.linalg.svd(normalized,full_matrices=False);rank=int(sum(s>1e-12*s[0])) if len(s) and s[0]>0 else 0
+        projected=design-u[:,:rank]@(u[:,:rank].T@design)
+    else:rank=0;projected=design
+    meta.update({'raw_sigma_m':sigma_m,'calibration_sigma_m':calibration_sigma_m if len(c) else None,
+        'profiled_nuisance_rank':rank,'nuisance_rank_rtol':1e-12,
+        'nuisance_columns_normalized':True,'source_prior_admitted':False})
+    if response:
+        transfer=np.zeros((len(keys),h.shape[1]))
+        if rank:
+            fitted=-v[:rank].T@((u[:,:rank].T@design)/s[:rank,None])
+            fitted=np.divide(fitted,norms[:,None],out=np.zeros_like(fitted),where=nonzero[:,None])
+            transfer[keep]=fitted
+        meta['source_to_nuisance_response']=transfer
+    return projected,meta
+
+
+def unresolved_observable_direction(design,state_map,columns,original_scale,nuisance_response,keys):
+    """Diagnostic worst benchmark-scaled unresolved image, not an error estimate."""
+    _,s,v=np.linalg.svd(design,full_matrices=design.shape[0]<design.shape[1]);rank=int(sum(s>RTOL*original_scale));null=v[rank:].T
+    if not null.shape[1]:return {'status':'NO_SOURCE_NULL_AT_CENTRAL_CUT','rank':rank}
+    target=np.asarray(state_map);scaled=target*np.array([1.,1.,1.,1000.,1000.,1000.])[:,None]
+    _,gain,vt=np.linalg.svd(scaled@null,full_matrices=False);q=null@vt[0];z=np.asarray(nuisance_response)@q
+    return {'status':'UNRESOLVED_DIRECTION_DIAGNOSTIC','rank':rank,'source_direction_unit_l2':q,
+        'nuisance_direction_m_per_source_l2_m':z,'diagnostic_source_l2_m':.01,
+        'local_state_change_m_m_s_at_1cm':target@q*.01,
+        'benchmark_scaled_gain_per_source_m':float(gain[0]),
+        'family_l2_fractions':{f:float(np.linalg.norm(q[[i for i,c in enumerate(columns) if c[0]==f]])) for f in FAMILIES},
+        'nuisance_role_l2_per_source_m':{f:float(np.linalg.norm(z[[i for i,c in enumerate(keys) if c[0]==f]])) for f in sorted({c[0] for c in keys})},
+        'algebraic_alias_is_not_a_physical_estimate':True}
+
+
+def hardware_component_gap(columns):
+    """Independent component delays leave each unrestricted total-link remainder."""
+    from .gnss_combinations import ALPHA
+    links=[c[1] for c in columns if c[0]=='bias'];stations=sorted({k.split('/')[0] for k in links});references=sorted({k.split('/')[1] for k in links})
+    keys=[('receiver',s) for s in stations]+[('transmitter',q) for q in references];a=np.zeros((len(links),len(keys)))
+    for i,k in enumerate(links):
+        s,q=k.split('/');a[i,keys.index(('receiver',s))]=ALPHA;a[i,keys.index(('transmitter',q))]=ALPHA
+    return {'link_keys':links,'component_keys':keys,'raw_p1_to_total_if_incidence':a,
+        'unrestricted_link_remainder_count':len(links),'independent_component_readout_count':len(keys),
+        'profiled_component_information_on_total_link_bias_rank':0,
+        'law':'total_link_if=ALPHA*(receiver_P1+transmitter_P1)+unrestricted_link_remainder_IF',
+        'perfect_component_calibration_removes_link_remainder':False,'component_values_admitted':False}
+
+
+def physical_observable_case_specs():
+    """Finite exposed-data design grid; fixed before numerical outcomes."""
+    from itertools import combinations
+    families=('range','wet','antenna');modes=('free','relative','anchored_relative','absolute','ideal');specs=[]
+    def add(purpose,fs,noise,obs,mode,cal=None,link=None):
+        specs.append({'purpose':purpose,'families':fs,'rho':noise,'observation_sigma_m':obs,
+            'calibration_mode':mode,'calibration_sigma_m':None if mode in ('free','ideal') else cal,
+            'unavailable_total_link_control_sigma_if_m':link})
+    for rho in (0.,.5):
+        for obs in (.001,.01,.1):
+            for mode in modes:
+                for cal in ((None,) if mode in ('free','ideal') else (.0001,.001,.01,.1,1.)):
+                    add('full_physical_readout_design',families,rho,obs,mode,cal)
+        for size in (1,2):
+            for fs in combinations(families,size):
+                for mode in modes:add('family_ablation',fs,rho,.01,mode,.001)
+        for mode in modes:
+            for link in (.0001,.001,.01,.1,1.):add('unavailable_total_link_closure_control',families,rho,.01,mode,.001,link)
+    assert len(specs)==212
+    return specs
+
+
+def physical_observable_information(reference_design,catalog,columns,state_map,weak_direction,original_scale):
+    """Conditional information only; no raw external values or source correction."""
+    _,s,v=np.linalg.svd(reference_design,full_matrices=False);base=s[:,None]*v
+    link=np.eye(len(columns))[[i for i,c in enumerate(columns) if c[0]=='bias']]
+    cache={};results=[]
+    for spec in physical_observable_case_specs():
+        item={'specification':spec};results.append(item)
+        try:
+            key=(tuple(spec['families']),spec['rho'])
+            if key not in cache:cache[key]=whiten_observable_catalog(catalog,*key)
+            h,b,keys,noise=cache[key];mode=spec['calibration_mode'];cal=spec['calibration_sigma_m']
+            diagnostic=(spec['purpose']=='full_physical_readout_design' and spec['observation_sigma_m']==.01 and
+                (mode in ('free','ideal') or cal==.001))
+            external,meta=profile_observable_calibration(h,b,keys,spec['observation_sigma_m'],mode,cal,response=diagnostic)
+            design=np.vstack([base,external])
+            if spec['unavailable_total_link_control_sigma_if_m'] is not None:
+                design=np.vstack([design,link/spec['unavailable_total_link_control_sigma_if_m']])
+            item.update(status='PHYSICAL_OPERATOR_INFORMATION_EVALUATED',noise=noise,calibration=meta,
+                information=source_information_summary(design,state_map,weak_direction,original_scale),
+                equipment_and_independence_qualified=False,physical_covariance_qualified=False)
+            if diagnostic:
+                transfer=meta.pop('source_to_nuisance_response')
+                item['unresolved_direction']=unresolved_observable_direction(design,state_map,columns,original_scale,transfer,keys)
+                item['diagnostic_nuisance_columns']=keys
+        except (ValueError,KeyError,np.linalg.LinAlgError) as error:item.update(status='PHYSICAL_OPERATOR_CASE_FAILED',reason=str(error))
+    return results
