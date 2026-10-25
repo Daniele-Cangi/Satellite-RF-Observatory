@@ -1,4 +1,4 @@
-# Stato del progetto — 17 ottobre 2026
+# Stato del progetto — 25 ottobre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -332,6 +332,15 @@ Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
 Un'eventuale risposta FGI si valuta senza interrompere questa priorita.
+
+Il [confronto con errori RF effettivamente esclusi](../research/exploratory/mask-consistent-errors-2026-10-25/RESULTS.md)
+riusa la baseline e le coppie originali con una sola correzione condizionale.
+G19 migliora da 16,761 a 12,451 mm RMS sui suoi 38 incrementi a 300 s;
+gli altri quattro fold sono rifiutati dal controllo dell'immagine numerica
+della covarianza. Restano 836/874 coppie senza previsione della nuova variante:
+non e un miglioramento globale, una prova di insufficienza fisica o chiusura S2.
+Il primo esito resta conservato; lo scorer ora richiede supporto completo anche
+per i singoli flag di beneficio, senza rifare fit o modificare le soglie.
 
 ## Ecosistema e stato dei verticali
 

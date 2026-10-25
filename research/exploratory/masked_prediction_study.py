@@ -55,14 +55,15 @@ def summarize(scored, comparison, *, primary_method='observed_coordinates'):
     primary = result[primary_method]
     prior = comparison['direct_comparison']
     primary_rms = primary['pooled']['300']['code_phase_rms_m']
-    checks = {'complete_support':all(primary['pooled'][lag]['missing_count'] == 0 for lag in ('30','300')),
-        'primary_10_percent':primary_rms is not None and float(primary_rms[1]) <= .9 * prior['models']['wet']['300']['phase_rms_m']}
+    complete = all(primary['pooled'][lag]['missing_count'] == 0 for lag in ('30','300'))
+    checks = {'complete_support':complete,
+        'primary_10_percent':complete and primary_rms is not None and float(primary_rms[1]) <= .9 * prior['models']['wet']['300']['phase_rms_m']}
     checks['original_wet_baseline_reproduced'] = all(
         result['wet']['pooled'][lag]['code_phase_rms_m'] is not None and
         np.allclose(result['wet']['pooled'][lag]['code_phase_rms_m'],
                     [prior['models']['wet'][lag]['code_rms_m'], prior['models']['wet'][lag]['phase_rms_m']],
                     rtol=1e-8, atol=1e-10) for lag in ('30','300'))
-    checks['secondary'] = all(
+    checks['secondary'] = complete and all(
         primary['pooled'][lag]['code_phase_rms_m'] is not None and
         float(primary['pooled'][lag]['code_phase_rms_m'][axis]) <= 1.02 * min(
             model[lag][field] for model in prior['models'].values())

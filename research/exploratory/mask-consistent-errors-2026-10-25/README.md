@@ -5,6 +5,10 @@ diagnosis in #239. The original #238 transfer and its negative outcome remain
 unchanged. This is a direct native alternative, not another external retrieval,
 new measurement, prospective confirmation or candidate-orbit reconstruction.
 
+The [first execution](RESULTS.md) fails full comparison support: G19 improves,
+four folds are rejected by the covariance-image check. The original execution
+and a separate scoring-only completeness correction are retained.
+
 ## Single model and information boundary
 
 Reuse the stable RF archive at SHA-256
@@ -13,8 +17,10 @@ Keep its five existing folds and native wet-source baseline, original endpoint
 weights, fixed timing/geometry, source estimability tests and continuity law.
 No candidate products, G12 state, new acquisition or paid model call is used.
 
-The original outer hash-selected links are removed in the last third BEFORE
-numeric RF access or segmentation. Seven inner groups use the same link hash
+The archive is already exposed and decoded; this is a numerical-use boundary,
+not process-wide value blindness. The original outer hash-selected links are
+removed in the last third before their numerical use by estimation or
+segmentation. Seven inner groups use the same link hash
 modulo seven. For each group, remove its whole code/phase/MW/GF rows after two
 thirds of the outer prefix (four ninths of the full time span), refit the native
 clock/float/wet model and predict those excluded rows. Only afterward read their
