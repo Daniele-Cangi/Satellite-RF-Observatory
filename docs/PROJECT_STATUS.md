@@ -361,6 +361,12 @@ della covarianza. Restano 836/874 coppie senza previsione della nuova variante:
 non e un miglioramento globale, una prova di insufficienza fisica o chiusura S2.
 Il primo esito resta conservato; lo scorer ora richiede supporto completo anche
 per i singoli flag di beneficio, senza rifare fit o modificare le soglie.
+La [diagnosi del rifiuto](../research/exploratory/mask-consistent-errors-2026-10-25/COVARIANCE_DIAGNOSIS.md)
+mostra che il taglio numerico elimina direzioni con varianza positiva:
+G05/G11/G20 falliscono solo sul vettore completo, G21 gia nel prefisso.
+Il replay dell'operatore concorda entro 0,443 nanometri per coordinata;
+non e evidenza di nuove misure fisiche mancanti. Nessun nuovo fit correttivo,
+RMS escluso, cambio di taglio o qualificazione della covarianza viene introdotto.
 
 ## Ecosistema e stato dei verticali
 

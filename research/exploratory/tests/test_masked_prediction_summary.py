@@ -125,3 +125,42 @@ def test_diagnostic_entrypoint_writes_no_predictions_or_held_scores(tmp_path,mon
     assert not result['correction_variance_fitted']
     assert not (output/'predictions-before-scoring.json.gz').exists()
     assert not (output/'summary.json').exists()
+
+
+def test_retained_covariance_diagnosis_identifies_positive_directions_cut_by_the_guard():
+    path=study.ROOT/'research/exploratory/mask-consistent-errors-2026-10-25/covariance-diagnosis.json.gz'
+    report=json.loads(gzip.decompress(path.read_bytes()))
+    producer=report['implementation_revision']
+    assert producer=='f3d40d2212d5ba2c780f8013c7d62713b5c54b0a'
+    assert report['diagnostic_only'] and not report['held_scores_computed']
+    assert not report['correction_variance_fitted']
+    assert report['input_sha256']==study.INPUT_SHA
+    for name,wanted in report['source_sha256'].items():
+        source=subprocess.check_output(['git','show',producer+':'+name],cwd=study.ROOT)
+        assert hashlib.sha256(source).hexdigest()==wanted
+    first={'G05':'all_admitted','G11':'all_admitted','G19':None,'G20':'all_admitted','G21':'prefix'}
+    assert set(report['folds'])==set(first)
+    for fold,record in report['folds'].items():
+        assert record['first_rejection_stage']==first[fold]
+        assert not record['held_scores_computed'] and not record['correction_variance_fitted']
+        assert 'variants' not in record
+        for stage,d in record['diagnostics'].items():
+            eigen=np.asarray(d['eigenvalues_m2'])
+            components=np.asarray(d['error_eigen_components_m'])
+            keep=eigen>d['eigenvalue_cut_m2']
+            assert len(eigen)==len(components)==d['error_count']
+            assert np.min(eigen)>0.
+            assert keep.sum()==d['retained_rank']
+            assert np.isclose(np.linalg.norm(components),d['error_norm_m'],rtol=1e-10)
+            assert np.isclose(np.linalg.norm(components[~keep]),d['discarded_error_norm_m'],rtol=1e-6,atol=1e-10)
+            assert d['operator_replay_max_abs_m']<5e-10
+            if d['discarded_count']:
+                assert not d['guard_accepts']
+                assert d['positive_discarded_eigenvalues']==d['discarded_count']
+                assert d['discarded_error_norm_m']>d['image_tolerance_m']
+                assert d['operator_replay_l2_m']<1e-3*d['discarded_error_norm_m']
+                assert 0.<d['discarded_error_factor_variance_m2']<d['eigenvalue_cut_m2']
+                np.testing.assert_allclose(d['discarded_error_factor_variance_m2'],
+                    d['discarded_error_gram_variance_m2'],rtol=1e-7,atol=1e-17)
+            else:
+                assert d['guard_accepts']

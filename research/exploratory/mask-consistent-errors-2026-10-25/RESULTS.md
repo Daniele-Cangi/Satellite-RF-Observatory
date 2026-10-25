@@ -35,7 +35,10 @@ those fits; they do not establish that physical observations are insufficient,
 that the Gaussian hypothesis is statistically refuted, or that adding hardware
 is necessary. Distinguishing weak discarded directions from numerical error
 requires a separate diagnosis of the retained implementation, not lowering the
-cut until the held scores improve. No such follow-up was executed here.
+cut until the held scores improve. The subsequent
+[unchanged-guard diagnosis](COVARIANCE_DIAGNOSIS.md) reproduces the four refusals
+and identifies positive-variance directions removed by that numerical cut;
+it generates no new corrective fit or held score. This first outcome stays unchanged.
 
 All seven inner groups per fold retain their query identities and support
 terminals. Missing prefix ambiguities and clocks are not replaced; the native
