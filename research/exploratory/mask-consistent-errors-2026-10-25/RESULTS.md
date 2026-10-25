@@ -75,3 +75,10 @@ that every source parameter must be recovered, or justify another broad search
 for models. If this direction continues, the next bounded task is to diagnose
 the numerical covariance image on one named failing fold while preserving this
 outcome. S2, physical covariance and independent-data confirmation remain open.
+
+The first PR CI attempt stopped before tests: `ubuntu-latest` selected Ubuntu
+26.04, for which setup-python has no Python 3.13.5 x64 build. All five affected
+workflows now explicitly use Ubuntu 24.04; the official Python version manifest
+lists its 3.13.5 build. Python/dependency versions, test commands and Windows
+coverage remain unchanged. This infrastructure repair does not rerun or alter
+the native scientific comparison.
