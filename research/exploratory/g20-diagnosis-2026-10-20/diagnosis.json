@@ -1,0 +1,371 @@
+{
+  "kind": "exposed diagnostic, not a new forecast model or physical qualification",
+  "case": "G20, original 261 held 300-second phase increments",
+  "base_revision": "da70f92e38312044e18656440af57c54063e1e84",
+  "source_sha256": "65bae73628cef10aec14ce9859526bbd296549ee7065f761b0d4514095873fe5",
+  "input_sha256": "56b325ab32a679d89223b89bbe88633cd3850bdcf0cd605c18bea1bf62900020",
+  "score_input_sha256": "9501b48b35fa956124de24cfd098957d7fd18c57b828f2440e584dac6ddb1819",
+  "decomposition": {
+    "count": 261,
+    "baseline_rms_m": 0.014692258707518094,
+    "corrected_rms_m": 0.01540660102862586,
+    "correction_rms_m": 0.003049310389413797,
+    "error_correction_mean_product_m2": -6.101297737813607e-06,
+    "correction_energy_m2": 9.298293850986922e-06,
+    "delta_mse_m2": 2.1500889326614135e-05,
+    "worse_absolute_error_count": 139
+  },
+  "prefix_diagnostic": {
+    "rule": "last prefix epoch and 300 s earlier, all original held links",
+    "prefix_times_s": [
+      38010.0,
+      38310.0
+    ],
+    "removed_rows": 22,
+    "records": [
+      {
+        "station": "ALGO00CAN",
+        "reference": "G09",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": -8.337021781379406e-05,
+        "masked_prediction_error_increment_m": -0.00221174532132018,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.009635904654525334,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "ALGO00CAN",
+        "reference": "G11",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": -0.009226498899031155,
+        "masked_prediction_error_increment_m": -0.014488100332339604,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.007195504210356179,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "AREQ00PER",
+        "reference": "G05",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": 0.005304243532009423,
+        "masked_prediction_error_increment_m": 0.0052541962068062276,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.015660906366538257,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "AREQ00PER",
+        "reference": "G11",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "status": "MISSING_OR_DISCONTINUOUS_PREFIX_PAIR"
+      },
+      {
+        "station": "AREQ00PER",
+        "reference": "G14",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "status": "MISSING_OR_DISCONTINUOUS_PREFIX_PAIR"
+      },
+      {
+        "station": "BOGT00COL",
+        "reference": "G06",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": -0.017960876885231514,
+        "masked_prediction_error_increment_m": -0.028993517401559643,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.013821915649465204,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "BOGT00COL",
+        "reference": "G11",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": 0.0007285774014862412,
+        "masked_prediction_error_increment_m": -0.008174672057579713,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.0068625023590542615,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "BRAZ00BRA",
+        "reference": "G17",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": 0.0019991522118711913,
+        "masked_prediction_error_increment_m": 0.005405488062730335,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.009696285638667406,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "BRAZ00BRA",
+        "reference": "G22",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": 0.0003821132264738569,
+        "masked_prediction_error_increment_m": 0.002180738560307871,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.009695841146831734,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "DRAO00CAN",
+        "reference": "G11",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": 0.002154799628442561,
+        "masked_prediction_error_increment_m": -0.0022530612918671977,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.00782418852306364,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "DRAO00CAN",
+        "reference": "G31",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "UNOBSERVED_NETWORK_CLOCK",
+            "UNOBSERVED_NETWORK_CLOCK"
+          ]
+        ],
+        "status": "UNSUPPORTED_PREFIX_PREDICTION"
+      },
+      {
+        "station": "STJO00CAN",
+        "reference": "G04",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "status": "MISSING_OR_DISCONTINUOUS_PREFIX_PAIR"
+      },
+      {
+        "station": "STJO00CAN",
+        "reference": "G05",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": -0.00907080175329611,
+        "masked_prediction_error_increment_m": -0.00783269501016548,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.012797152358434687,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      },
+      {
+        "station": "STJO00CAN",
+        "reference": "G19",
+        "times_s": [
+          38010.0,
+          38310.0
+        ],
+        "prediction_statuses": [
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ],
+          [
+            "PREDICTED",
+            "PREDICTED"
+          ]
+        ],
+        "status": "DIAGNOSED",
+        "observed_training_residual_increment_m": 0.003496518379506597,
+        "masked_prediction_error_increment_m": 0.00746489813673179,
+        "in_sample_residual_response_to_20mm_intervention_m": 0.013950827980370378,
+        "masked_error_response_to_same_removed_intervention_m": 0.02
+      }
+    ],
+    "probe": "numerical nondispersive +/-10mm code+phase intervention; GF/MW unchanged, not a physical noise realization",
+    "future_held_values_used_in_new_fits": false
+  },
+  "source_output_information": {
+    "source_count": 197,
+    "resolved_rank": 129,
+    "null_count": 68,
+    "increment_count": 261,
+    "maximum_phase_increment_null_response_m_per_m_source_norm": 5.169411249369351e-09,
+    "weighted_training_error_to_phase_increment_gain_m": {
+      "min": 0.0050536691536069945,
+      "median": 0.011690533574728601,
+      "max": 0.9475723586838635
+    },
+    "maximum_native_prediction_map_replay_error_m": 2.878419724794412e-12,
+    "numerical_rank_tolerance": 1e-10,
+    "physical_noise_covariance_qualified": false
+  },
+  "weighting_scenario": {
+    "if_phase_endpoint_sigma_m": 0.02,
+    "independent_unobserved_endpoint_increment_sigma_m": 0.0282842712474619,
+    "interpretation": "Only the existing independent-error weighting scenario; not a measured irreducible-error bound or qualified physical covariance."
+  },
+  "elapsed_seconds": 12.467231000002357
+}
