@@ -1,0 +1,2 @@
+# Retained numerical reports are evidence bytes on Windows and Linux.
+*.json -text

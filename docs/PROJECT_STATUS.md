@@ -1,4 +1,4 @@
-# Stato del progetto — 17 ottobre 2026
+# Stato del progetto — 25 ottobre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -352,6 +352,28 @@ Ordine del lavoro: ricostruzione come sviluppo principale; poi RF/previsione
 orbitale verso osservatori indipendenti; PNT quando dispone dei riferimenti
 fisici adeguati. Android resta acquisizione trasversale e manutenzione.
 Un'eventuale risposta FGI si valuta senza interrompere questa priorita.
+
+Il [confronto con errori RF effettivamente esclusi](../research/exploratory/mask-consistent-errors-2026-10-25/RESULTS.md)
+riusa la baseline e le coppie originali con una sola correzione condizionale.
+G19 migliora da 16,761 a 12,451 mm RMS sui suoi 38 incrementi a 300 s;
+gli altri quattro fold sono rifiutati dal controllo dell'immagine numerica
+della covarianza. Restano 836/874 coppie senza previsione della nuova variante:
+non e un miglioramento globale, una prova di insufficienza fisica o chiusura S2.
+Il primo esito resta conservato; lo scorer ora richiede supporto completo anche
+per i singoli flag di beneficio, senza rifare fit o modificare le soglie.
+La [diagnosi del rifiuto](../research/exploratory/mask-consistent-errors-2026-10-25/COVARIANCE_DIAGNOSIS.md)
+mostra che il taglio numerico elimina direzioni con varianza positiva:
+G05/G11/G20 falliscono solo sul vettore completo, G21 gia nel prefisso.
+Il replay dell'operatore concorda entro 0,443 nanometri per coordinata;
+non e evidenza di nuove misure fisiche mancanti. La diagnosi non introduce
+nuovi fit correttivi o score; il suo esito resta conservato.
+La [riparazione numerica v2](../research/exploratory/mask-consistent-errors-2026-10-25/solver-repair-v2/RESULTS.md)
+usa equilibration, risoluzione macchina e controlli di accuratezza: tutti i
+cinque fold sono calcolabili, sulle stesse 1.248/874 coppie, senza dati mancanti.
+RMS fase 300 s da 14,567 a 14,328 mm (-1,646%): beneficio inferiore al 10%
+richiesto e solo tre fold migliorano; G20/G21 peggiorano di 0,700%/1,144%.
+Il benchmark resta fallito. Nessuna nuova ricerca di soglie o timescale;
+nessuna qualificazione fisica, ricostruzione orbitale o chiusura S2.
 
 ## Ecosistema e stato dei verticali
 
