@@ -46,3 +46,7 @@ separately under `solver-repair-v2/`, including every failure and worsening case
 Do not overwrite the first execution or alter its outcome. This is a numerical
 repair and a separately versioned exposed development result, not prospective
 confirmation, physical covariance qualification or independent orbit recovery.
+
+The [retained v2 result](solver-repair-v2/RESULTS.md) restores full numerical
+support but fails the original predictive advance criteria. No new tuning or
+second corrected execution followed.

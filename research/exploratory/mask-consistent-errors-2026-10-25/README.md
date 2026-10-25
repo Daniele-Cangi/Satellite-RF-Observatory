@@ -45,9 +45,11 @@ and each inner/outer error applies its own complete operator to that field.
 Only one common process variance is estimated by marginal likelihood on the
 excluded errors at or before the original prefix cut. A fitted variance zero
 is retained explicitly; lack of a resolved process response is unsupported.
-The broad log-variance interval [-32,20] and PSD relative image cut 1e-10 are
-numerical rules, not physical floors. A parameter optimum at the upper limit
-or values outside the retained covariance image fails explicitly.
+The broad log-variance interval [-32,20] is a numerical rule, not a physical
+floor. The first execution used the PSD relative image cut 1e-10; the
+[separate numerical repair](SOLVER_REPAIR.md) uses equilibration and
+machine-resolution rank with explicit accuracy checks. A parameter optimum at
+the upper limit or errors outside the retained image still fail explicitly.
 
 The Gaussian correction conditions on all admitted error observations, including
 other links after the prefix and later than a queried epoch. This is conditional
@@ -72,7 +74,9 @@ Save every fold's predictions before scoring any held observations or opening
 the comparison metrics. Preserve all unsupported predictions, covariance/fit
 failures and worsening cases. A failed model does not silently substitute the
 wet baseline. No alternate process, hyperparameter configuration or held-score
-tuning follows the native outcome. This exposed comparison can test usefulness
+tuning is used. The first outcome remains immutable; the separately versioned
+numerical repair keeps the same physical hypothesis and comparison criteria.
+This exposed comparison can test usefulness
 on the existing benchmark; it cannot prove population generalization, physical
 covariance, complete source identification or S2 completion.
 
@@ -84,7 +88,9 @@ The existing report command gains one option; no new executor or authority:
 python -m research.exploratory.masked_prediction_study --mask-consistent --comparison research/exploratory/missnet-transfer-2026-10-19/original-comparison.json --output data/mask-consistent-errors-2026-10-25
 ```
 
-The output directory must be new. The existing source/input identities,
+The output directory must be new. Reproduce the first execution at producer
+`12a427af47e773a91949a7b38a4524a5890d7300`; the current producer implements
+the separately retained numerical repair. The existing source/input identities,
 predictions-before-scoring artifact and native scorer bind the execution.
 Tests check the complete response against a perturbed native refit, exact
 Gaussian covariance transport with shared noise, covariance-image rejection,

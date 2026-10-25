@@ -85,3 +85,7 @@ workflows now explicitly use Ubuntu 24.04; the official Python version manifest
 lists its 3.13.5 build. Python/dependency versions, test commands and Windows
 coverage remain unchanged. This infrastructure repair does not rerun or alter
 the native scientific comparison.
+
+A separately versioned [numerical repair](SOLVER_REPAIR.md) follows the
+diagnosis. This report and its original artifacts retain the first failed
+execution; the follow-up never replaces its outcome.

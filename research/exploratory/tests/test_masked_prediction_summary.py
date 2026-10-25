@@ -2,6 +2,7 @@
 from research.exploratory.masked_prediction_study import summarize
 from research.exploratory import masked_prediction_study as study
 from research.kinematic import network_closures
+from research.exploratory.reference_network_clocks import native
 import gzip
 import hashlib
 import json
@@ -164,3 +165,56 @@ def test_retained_covariance_diagnosis_identifies_positive_directions_cut_by_the
                     d['discarded_error_gram_variance_m2'],rtol=1e-7,atol=1e-17)
             else:
                 assert d['guard_accepts']
+
+
+def test_repaired_execution_preserves_original_support_and_replays_all_scores():
+    folder=study.ROOT/'research/exploratory/mask-consistent-errors-2026-10-25/solver-repair-v2'
+    prediction=json.loads(gzip.decompress((folder/'predictions-before-scoring.json.gz').read_bytes()))
+    summary=json.loads((folder/'summary.json').read_bytes())
+    producer=prediction['implementation_revision']
+    assert producer=='5bb99767032d68174b2acdb726254b75991e79bf'
+    for name,wanted in prediction['source_sha256'].items():
+        source=subprocess.check_output(['git','show',producer+':'+name],cwd=study.ROOT)
+        assert hashlib.sha256(source).hexdigest()==wanted
+    raw=study.INPUT.read_bytes()
+    assert hashlib.sha256(raw).hexdigest()==prediction['input_sha256']==study.INPUT_SHA
+    data=json.loads(gzip.decompress(raw))
+    comparison_raw=(study.ROOT/'research/exploratory/missnet-transfer-2026-10-19/original-comparison.json').read_bytes()
+    assert hashlib.sha256(comparison_raw).hexdigest()==summary['comparison_sha256']
+    assert prediction['all_predictions_fixed_before_scoring']
+    assert not any(prediction[k] for k in ('prospective_confirmation','physical_covariance_qualified','candidate_products_used'))
+    first=json.loads(gzip.decompress((folder.parent/'predictions-before-scoring.json.gz').read_bytes()))
+    replay={}
+    scores=json.loads(gzip.decompress((folder/'native-scores.json.gz').read_bytes()))
+    assert set(prediction['folds'])==set(first['folds'])=={'G05','G11','G19','G20','G21'}
+    for fold,record in prediction['folds'].items():
+        assert record['baseline']==first['folds'][fold]['baseline']
+        methods={'wet':record['baseline'],**record['variants']}
+        replay[fold]={label:network_closures.score_future_links(p,data['candidates'][fold]['reference_rows'])
+                      for label,p in methods.items()}
+        for label,score in replay[fold].items():
+            for actual,stored in zip(score['increment_errors'],scores[fold][label]['increment_errors'],strict=True):
+                assert actual['lag_s']==stored['lag_s'] and actual['count']==stored['count']
+                assert [(r['station'],r['reference'],r['time_s']) for r in actual['rows']]==[
+                    (r['station'],r['reference'],r['time_s']) for r in stored['rows']]
+                np.testing.assert_allclose([r['z'] for r in actual['rows']],
+                                           [r['z'] for r in stored['rows']],atol=1e-12,rtol=0)
+                for field in ('code_phase_mean_error_m','code_phase_rms_error_m','code_phase_mean_outer_product_m2'):
+                    np.testing.assert_allclose(actual[field],stored[field],atol=1e-12,rtol=0)
+        if record['model_status']=='CONDITIONAL_MASK_CONSISTENT_MODEL':
+            for quality in (record['model']['prefix_numerical_solve'],record['conditional_numerical_solve']):
+                assert quality['solver']=='equilibrated-machine-resolution-v2'
+                assert quality['whitening_identity_inf_error']<=quality['whitening_identity_inf_limit']
+                assert quality['solve_relative_backward_error']<=quality['solve_relative_backward_error_limit']
+            assert record['noise_image_rank']==record['admitted_error_count']
+    actual=summarize(replay,json.loads(comparison_raw),primary_method='mask_consistent')
+    assert actual['criteria']==summary['criteria']
+    assert actual['passes_all']==summary['passes_all']
+    for method in ('wet','mask_consistent'):
+        for lag,count in (('30',1248),('300',874)):
+            result=actual['methods'][method]['pooled'][lag]
+            expected=summary['methods'][method]['pooled'][lag]
+            assert result['count']==expected['count']
+            assert result['missing_count']==expected['missing_count']
+            assert result['count']+result['missing_count']==count
+            np.testing.assert_allclose(result['code_phase_rms_m'],expected['code_phase_rms_m'],rtol=0,atol=1e-12)
