@@ -1,5 +1,9 @@
 # PNT diagnostics
 
+For a first PC report and Android recording, use the
+[diagnostic quick start](../docs/DIAGNOSTIC_QUICKSTART.md). Its synthetic ZIP
+works offline with Python 3.13 alone; scientific assumptions stay unknown.
+
 `python -m pnt analyze` turns one local receiver recording, at least two
 external recordings and a declared broadcast navigation model into one JSON
 report. It is a reusable diagnostic tool for the PNT plan's offline path.
