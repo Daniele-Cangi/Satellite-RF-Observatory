@@ -84,27 +84,63 @@ def prediction_response(network, workspace, queries, channels=(1,)):
     return records, blocks()
 
 
-def image_solve(covariance, values):
-    """Solve only in the supplied PSD image; no ridge or arbitrary null fill.
+def image_solve(covariance, values, *, return_diagnostics=False):
+    """Equilibrated PSD image solve with explicit numerical certification.
 
-    Fixed numerical rank tolerance is not a measured uncertainty threshold.
-    A right-hand side outside that image fails rather than being projected away.
+    Rank resolution follows floating-point backward error, not a fixed maximum
+    covariance condition number. Diagonal scaling changes coordinates only;
+    no ridge, raw-noise floor or process variance is added. Unresolved/null
+    components of the supplied errors still fail rather than being filled.
     """
     c = np.asarray(covariance, float)
     y = np.asarray(values, float)
-    if c.shape != (len(y), len(y)) or not np.isfinite(c).all() or not np.isfinite(y).all():
+    if y.ndim != 1 or not len(y) or c.shape != (len(y), len(y)) or not np.isfinite(c).all() or not np.isfinite(y).all():
         raise ValueError('finite covariance and matching values required')
-    eigen, vectors = eigh((c+c.T)/2, check_finite=False)
-    scale = max(float(eigen[-1]), np.finfo(float).tiny)
-    if eigen[0] < -PSD_RTOL*scale:
+    eps = np.finfo(float).eps
+    c = (c+c.T)/2
+    # Zero diagonal coordinates retain unit scale and must pass the same PSD
+    # and image checks; a negative variance is never repaired by scaling.
+    if np.any(np.diag(c) < 0.):
         raise ValueError('prediction-error covariance is not positive semidefinite')
-    keep = eigen > PSD_RTOL*scale
+    scale = np.sqrt(np.where(np.diag(c)>0., np.diag(c), 1.))
+    equilibrated = c/scale[:, None]/scale[None, :]
+    eigen, vectors = eigh(equilibrated, check_finite=False)
+    # Conservative dimension-dependent floating-point resolution for a dense
+    # symmetric eigensolve. This is fixed before any corrected held scoring.
+    resolution = 8.*eps*len(y)*max(float(np.max(abs(eigen))), np.finfo(float).tiny)
+    if eigen[0] < -resolution:
+        raise ValueError('prediction-error covariance is not positive semidefinite')
+    keep = eigen > resolution
     if not keep.any():
         raise ValueError('no resolved prediction-error covariance image')
     u = vectors[:, keep]
-    if np.linalg.norm(y-u@(u.T@y)) > 1e-7*max(np.linalg.norm(y), 1e-8):
+    scaled_y = y/scale
+    remainder = scale*(scaled_y-u@(u.T@scaled_y))
+    if np.linalg.norm(remainder) > 1e-7*max(np.linalg.norm(y), 1e-8):
         raise ValueError('prediction errors outside the covariance image')
-    return (u/eigen[keep])@(u.T@y), u/np.sqrt(eigen[keep]), int(keep.sum())
+    whitening = u/scale[:, None]/np.sqrt(eigen[keep])
+    solution = whitening@(whitening.T@y)
+    # Certification is independent of the held RF scores. Refuse a numerically
+    # inaccurate whitening or solve even if the spectral image test succeeded.
+    defect = whitening.T@(c@whitening)-np.eye(int(keep.sum()))
+    whitening_error = float(np.linalg.norm(defect, ord=np.inf))
+    denominator = np.linalg.norm(c, ord=np.inf)*np.linalg.norm(solution, ord=np.inf)+np.linalg.norm(y, ord=np.inf)
+    backward_error = float(np.linalg.norm(c@solution-y, ord=np.inf)/max(denominator, np.finfo(float).tiny))
+    if not np.isfinite(whitening_error) or whitening_error > 1e-4:
+        raise ValueError('prediction-error covariance whitening failed numerical accuracy check')
+    if not np.isfinite(backward_error) or backward_error > 64.*eps*len(y):
+        raise ValueError('prediction-error covariance solve failed backward-error check')
+    diagnostics = {'solver':'equilibrated-machine-resolution-v2',
+        'dimension':len(y), 'rank':int(keep.sum()),
+        'equilibrated_eigenvalue_resolution':resolution,
+        'equilibrated_minimum_eigenvalue':float(eigen[0]),
+        'equilibrated_maximum_eigenvalue':float(eigen[-1]),
+        'whitening_identity_inf_error':whitening_error,
+        'whitening_identity_inf_limit':1e-4,
+        'solve_relative_backward_error':backward_error,
+        'solve_relative_backward_error_limit':64.*eps*len(y)}
+    result = (solution, whitening, int(keep.sum()))
+    return (*result, diagnostics) if return_diagnostics else result
 
 
 def covariance_diagnostics(covariance, errors, factor, whitened_values):
@@ -156,7 +192,7 @@ def fit_variance(errors, noise, signal_factor):
     The fixed broad log-variance search interval is numerical, not an RF floor
     or physical amplitude bound. A solution at its upper limit is unsupported.
     """
-    _, whitening, rank = image_solve(noise, errors)
+    _, whitening, rank, numerical = image_solve(noise, errors, return_diagnostics=True)
     z = whitening.T@errors
     design = whitening.T@signal_factor
     u, s, _ = np.linalg.svd(design, full_matrices=False)
@@ -173,23 +209,35 @@ def fit_variance(errors, noise, signal_factor):
     return {'variance_zenith_m2': variance, 'sigma_zenith_m': float(np.sqrt(variance)),
             'status': 'POSITIVE_PREDICTIVE_VARIANCE' if variance else 'FITTED_ZERO_PREDICTIVE_VARIANCE',
             'prefix_error_count': len(errors), 'prefix_noise_image_rank': rank,
+            'prefix_numerical_solve':numerical,
             'fixed_correlation_s': CORRELATION_S, 'log_variance_search': [-32., 20.],
             'negative_twice_loglikelihood_change': objective(variance)-objective(0.),
             'physical_wet_covariance_qualified': False}
 
 
-def condition_errors(errors, noise, cross, signal, target_signal, variance):
+def condition_errors(errors, noise, cross, signal, target_signal, variance, *, return_diagnostics=False):
     """Joint conditional mean of the OUTER error, with its own response map."""
-    solution, whitening, rank = image_solve(noise, errors)
+    solution, whitening, rank, numerical = image_solve(noise, errors, return_diagnostics=True)
     if variance:
         # Keep the original noise image: a strong process must not raise a
         # relative joint-covariance cutoff and erase other measured directions.
-        z = whitening.T@errors
+        original_z = whitening.T@errors
+        z = original_z.copy()
         u, s, _ = np.linalg.svd(whitening.T@signal, full_matrices=False)
         projected = u.T@z
         z = z-u@projected+u@(projected/(1.+variance*s*s))
+        response = variance*(s*s)*(u.T@z)
+        residual = z+u@response-original_z
+        denominator = (1.+variance*float(np.max(s*s, initial=0.)))*np.linalg.norm(z)+np.linalg.norm(original_z)
+        error = float(np.linalg.norm(residual)/max(denominator,np.finfo(float).tiny))
+        limit = 64.*np.finfo(float).eps*len(errors)
+        if not np.isfinite(error) or error>limit:
+            raise ValueError('conditional covariance solve failed backward-error check')
+        numerical.update(conditional_relative_backward_error=error,
+                         conditional_relative_backward_error_limit=limit)
         solution = whitening@z
-    return (cross+variance*(target_signal@signal.T))@solution, rank
+    result = ((cross+variance*(target_signal@signal.T))@solution, rank)
+    return (*result, numerical) if return_diagnostics else result
 
 
 def _fit(rows, candidate, raw_covariance):
@@ -338,7 +386,8 @@ def prepare_future_links(rows, candidate, raw_covariance, *, diagnose_only=False
             raise ValueError('at least eight excluded prefix errors required')
         fitted = fit_variance(errors[prefix_rows], noise[np.ix_(prefix_rows, prefix_rows)], signal[prefix_rows])
         variance = fitted['variance_zenith_m2']
-        correction, rank = condition_errors(errors,noise,cross,signal,target_signal,variance)
+        correction, rank, numerical = condition_errors(errors,noise,cross,signal,target_signal,variance,
+                                                     return_diagnostics=True)
         if not np.isfinite(correction).all():
             raise ValueError('nonfinite conditional correction')
         for j, i in enumerate(positions):
@@ -350,6 +399,7 @@ def prepare_future_links(rows, candidate, raw_covariance, *, diagnose_only=False
                      mask_consistent_phase_correction_m=float(correction[2*j+1]))
         output.update(model_status='CONDITIONAL_MASK_CONSISTENT_MODEL', model=fitted,
             admitted_error_count=len(errors), noise_image_rank=rank,
+            conditional_numerical_solve=numerical,
             maximum_absolute_off_diagonal_noise_covariance_m2=float(np.max(abs(noise-np.diag(noise.diagonal())))),
             excluded_phase_errors_m=errors,
             error_identities=[{k:r[k] for k in ('station', 'reference', 'time_s')} for r in query])

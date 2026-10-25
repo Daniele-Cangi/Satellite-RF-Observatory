@@ -156,8 +156,9 @@ def test_diagnosis_distinguishes_discarded_nonzero_direction_from_wrong_error_op
     assert result['discarded_error_norm_m']==pytest.approx(2e-6)
     assert result['discarded_error_factor_variance_m2']==pytest.approx(1e-12)
     assert result['discarded_error_factor_projection_m']==pytest.approx(2e-6)
-    with pytest.raises(ValueError,match='outside'):
-        model.image_solve(factor@factor.T,errors)
+    solved, _, rank = model.image_solve(factor@factor.T,errors)
+    assert rank==2
+    np.testing.assert_allclose(solved, [0.,2e6],rtol=1e-12)
     # A genuinely inconsistent error has a nonzero replay defect but no raw
     # response in its rejected direction. It must not get the same diagnosis.
     factor=np.array([[1.],[0.]])
@@ -179,3 +180,42 @@ def test_diagnostic_mode_never_fits_process_or_conditions_new_corrections(monkey
     assert set(result['diagnostics'])=={'prefix','all_admitted'}
     for record in result['diagnostics'].values():
         assert record['operator_replay_max_abs_m']<1e-7
+
+
+@pytest.mark.parametrize('angle',[0., .37, 1.2])
+def test_positive_weak_covariance_modes_survive_rotation_and_unit_changes(angle):
+    rotation=np.array([[np.cos(angle),-np.sin(angle)],[np.sin(angle),np.cos(angle)]])
+    covariance=rotation@np.diag([1.,3e-11])@rotation.T
+    expected=rotation@np.array([.2,2.])
+    errors=covariance@expected
+    for units in (np.ones(2),np.array([1e-3,1e3])):
+        c=units[:,None]*covariance*units[None,:]
+        y=units*errors
+        solved,whiten,rank,quality=model.image_solve(c,y,return_diagnostics=True)
+        assert rank==2
+        np.testing.assert_allclose(solved*units,expected,rtol=2e-5,atol=2e-5)
+        assert quality['whitening_identity_inf_error']<1e-4
+        assert quality['solve_relative_backward_error']<quality['solve_relative_backward_error_limit']
+        assert quality['solver']=='equilibrated-machine-resolution-v2'
+
+
+def test_rotated_exact_null_still_rejects_unknown_errors_and_unresolved_all_zero():
+    v=np.array([1.,2.,-3.])
+    covariance=np.outer(v,v)
+    solved,whiten,rank=model.image_solve(covariance,2.*v)
+    assert rank==1
+    np.testing.assert_allclose(covariance@solved,2.*v,atol=1e-12)
+    with pytest.raises(ValueError,match='outside'):
+        model.image_solve(covariance,np.array([2.,4.,-5.]))
+    with pytest.raises(ValueError,match='no resolved'):
+        model.image_solve(np.zeros((3,3)),np.zeros(3))
+
+
+def test_numerical_certification_rejects_inaccurate_eigenvectors(monkeypatch):
+    actual=model.eigh
+    def wrong(*args,**kwargs):
+        eigen,vectors=actual(*args,**kwargs)
+        return eigen*1.01,vectors
+    monkeypatch.setattr(model,'eigh',wrong)
+    with pytest.raises(ValueError,match='accuracy check'):
+        model.image_solve(np.eye(3),np.ones(3))
