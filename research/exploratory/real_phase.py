@@ -278,7 +278,14 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--integer-ambiguity', action='store_true', help='raw wide-lane DD feasibility; output is a fresh directory')
     parser.add_argument('--target-input', type=Path)
+    parser.add_argument('--reference-mw-stability', action='store_true', help='reference-only MW block stability; fresh output directory')
     args = parser.parse_args()
+    if args.reference_mw_stability:
+        if args.cache or args.target_input is not None or args.integer_ambiguity:
+            parser.error('reference MW stability admits reference input only, without cache or target input')
+        from .reference_mw_stability import run
+        run(args.inputs, args.output)
+        raise SystemExit(0)
     if args.integer_ambiguity:
         if args.cache or args.target_input is None:
             parser.error('integer feasibility requires retained inputs/target-input, without cache extraction')

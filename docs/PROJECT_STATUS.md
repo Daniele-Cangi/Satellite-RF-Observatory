@@ -1,4 +1,4 @@
-# Stato del progetto — 17 ottobre 2026
+# Stato del progetto — 26 ottobre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -17,6 +17,17 @@ I pesi storici lasciano 5-22 interi plausibili per ciascun caso G12 valutato;
 un bias residuo libero e la componente narrow-lane restano da vincolare.
 Nessun intero viene fissato, nessuna orbita o incertezza qualificata. Prossimo
 passo: stabilita e bias MW reference-only prima di un fit orbitale intero.
+
+Lo [studio MW reference-only di bias e stabilita](../research/exploratory/reference-mw-stability-2026-10-26/RESULTS.md)
+conserva i 251 controlli originali: intervalli temporali nominali al 95%
+contengono 765/841 blocchi esclusi (90,96%); 72 controlli non hanno prefisso
+sufficiente per il modello a blocchi. Nessuna qualificazione dell'incertezza.
+Diciannove dei 31 disaccordi condividono BRAZ/G05, con un salto MW/GF alle
+10:59:30 GPST pur con LLI zero; il controllo GF esistente lo segnala a posteriori.
+Altri grandi cambiamenti attraversano buchi/riacquisizioni gia segnalate e non
+sono deriva di un bias continuo. Nessuna riparazione o esclusione retroattiva:
+serve continuita causale dell'arco prima di vincoli interi nel fit orbitale.
+Il file G12 non viene aperto; restano non qualificati bias assoluti e narrow-lane.
 
 Il [controllo fisico G12](../research/exploratory/G12_BIAS_GEOMETRY_DECISION.md)
 verifica copertura e informazione sui bias senza modificare il solver o leggere
