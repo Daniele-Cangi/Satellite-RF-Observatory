@@ -1,6 +1,8 @@
 """Reference-only temporal predictions, graph contrasts and disclosure order."""
 from copy import deepcopy
 import hashlib
+import gzip
+import math
 import json
 from pathlib import Path
 import subprocess
@@ -128,3 +130,104 @@ def test_empty_reference_support_remains_an_explicit_terminal():
     result=study.diagnose_changes({'cut_gpst_s':900.},{})
     assert result['status']=='NO_ADMITTED_REFERENCE_OBSERVATIONS'
     assert not result['observations_repaired'] and result['blocks']==[]
+
+
+def test_retained_reference_stability_replays_and_uses_only_reference_input():
+    folder=study.base.ROOT/'research/exploratory/reference-mw-stability-2026-10-26'
+    frozen=json.loads(gzip.decompress((folder/'predictions-before-scoring.json.gz').read_bytes()))
+    scores=json.loads(gzip.decompress((folder/'scores.json.gz').read_bytes()))
+    changes=json.loads(gzip.decompress((folder/'post-score-changes.json.gz').read_bytes()))
+    producer='e803092f71cbc34a18c67add0e92e87c0403bf5f'
+    assert frozen['implementation_revision']==producer
+    for source,wanted in frozen['source_sha256'].items():
+        raw=subprocess.check_output(['git','show',producer+':'+source],cwd=study.base.ROOT)
+        if source=='requirements-positioning.txt':
+            # Dependency text was checked out as CRLF when read; preserve its
+            # exact evidence bytes and separately bind its Git text content.
+            observed=(folder/'requirements-as-read.txt').read_bytes()
+            assert hashlib.sha256(observed).hexdigest()==wanted
+            assert observed.replace(b'\r\n',b'\n')==raw.replace(b'\r\n',b'\n')
+        else:
+            assert hashlib.sha256(raw).hexdigest()==wanted
+    raw=study.base.REFERENCE.read_bytes()
+    assert hashlib.sha256(raw).hexdigest()==frozen['input_sha256']==study.base.EXPECTED[0]
+    assert not frozen['target_raw_observations_used'] and not frozen['target_products_used']
+    assert frozen['predictions_fixed_before_held_scoring'] and not frozen['prospective_confirmation']
+    replay,indices=study.prepare(json.loads(raw))
+    assert len(replay['records'])==len(frozen['records'])==4851
+    from research.exploratory.tests.test_integer_phase_feasibility import assert_frozen_records
+    for a,b in zip(replay['records'],frozen['records'],strict=True):
+        assert a.keys()==b.keys()
+        # Reuse exact scientific decision checks with tolerances only for
+        # continuous reductions, including block moments and Student scales.
+        extra={'block_model','prefix_blocks','partial_prefix_blocks'}
+        assert_frozen_records([{k:v for k,v in a.items() if k not in extra}],
+                              [{k:v for k,v in b.items() if k not in extra}])
+        if 'block_model' in a:
+            assert a['partial_prefix_blocks']==b['partial_prefix_blocks']
+            for c,d in zip(a['prefix_blocks'],b['prefix_blocks'],strict=True):
+                assert c['start_s']==d['start_s'] and c['count']==d['count']
+                assert c['mean_cycles']==pytest.approx(d['mean_cycles'],abs=1e-10,rel=0)
+            for k,v in a['block_model'].items():
+                if isinstance(v,float):
+                    assert v==pytest.approx(b['block_model'][k],abs=1e-10,rel=0)
+                else:
+                    assert v==b['block_model'][k]
+    actual=study.score(replay,indices)
+    assert actual['summary']==scores['summary']
+    assert actual['summary']['original_reference_controls']['scored_configurations']==251
+    assert actual['summary']['original_integer_held_mean_agreements']==220
+    assert actual['summary']['nominal_interval_scored_blocks']==841
+    assert actual['summary']['nominal_interval_covered_blocks']==765
+    assert not actual['integer_fix_admitted']
+    for a,b in zip(actual['records'],scores['records'],strict=True):
+        assert a.keys()==b.keys()
+        assert a['stations']==b['stations'] and a['satellites']==b['satellites'] and a['status']==b['status']
+        if 'held_blocks' in a:
+            assert a['block_model_status']==b['block_model_status']
+            assert a['partial_held_blocks']==b['partial_held_blocks']
+            for c,d in zip(a['held_blocks'],b['held_blocks'],strict=True):
+                assert c['start_s']==d['start_s'] and c['count']==d['count']
+                assert c.get('within_nominal_95')==d.get('within_nominal_95')
+                np.testing.assert_allclose([c[k] for k in c if k.endswith('cycles')],
+                                           [d[k] for k in c if k.endswith('cycles')],rtol=0,atol=1e-10)
+    diagnosis=study.diagnose_changes(replay,indices)
+    assert diagnosis['post_score_only'] and not diagnosis['observations_repaired']
+    for a,b in zip(diagnosis['blocks'],changes['blocks'],strict=True):
+        assert a['start_s']==b['start_s'] and a['status']==b['status']
+        assert a.get('rank')==b.get('rank')
+        for c,d in zip(a['rows'],b['rows'],strict=True):
+            assert c['station']==d['station'] and c['reference']==d['reference']
+            for k in c:
+                if isinstance(c[k],float):
+                    assert c[k]==pytest.approx(d[k],abs=1e-9,rel=0)
+                else:
+                    assert c[k]==d[k]
+
+
+def test_post_score_braz_g05_jump_and_flagged_reacquisitions_remain_visible():
+    reference=json.loads(study.base.REFERENCE.read_bytes())['cohorts']['day']
+    rows={r['time_s']:r for r in reference['stations']['BRAZ00BRA']['rows'] if r['reference']=='G05'}
+    before,after=rows[39540.],rows[39570.]
+    assert before['lli']==after['lli']==['0','0']
+    mw_change=study.base.wide_lane(after['fields'])-study.base.wide_lane(before['fields'])
+    gf_change=after['geometry_free_phase_m']-before['geometry_free_phase_m']
+    assert mw_change==pytest.approx(-64.73627993091941,abs=1e-8)
+    assert gf_change==pytest.approx(-15.877133559435606,abs=1e-8)
+    witness=study.base.phase_continuity.segment([
+        {'station':'BRAZ00BRA','reference':'G05','time_s':r['time_s'],'segment':'POST_SCORE_ONLY',
+         'geometry_free_phase_m':r['geometry_free_phase_m']} for r in (before,after)])
+    assert witness[-1]['continuity']['break']
+    # Very large changes in separate block profiles can cross already flagged
+    # gaps. They must not be called stable-bias drift or unflagged anomalies.
+    areq={r['time_s']:r for r in reference['stations']['AREQ00PER']['rows'] if r['reference']=='G14'}
+    assert areq[38040.]['status']=='REJECTED' and areq[38040.]['lli']==['1','1']
+    stjo={r['time_s'] for r in reference['stations']['STJO00CAN']['rows'] if r['reference']=='G25'}
+    assert any(t not in stjo for t in range(37770,38371,30))
+    folder=study.base.ROOT/'research/exploratory/reference-mw-stability-2026-10-26'
+    frozen=json.loads(gzip.decompress((folder/'predictions-before-scoring.json.gz').read_bytes()))
+    scores=json.loads(gzip.decompress((folder/'scores.json.gz').read_bytes()))
+    mismatches=[a for a,b in zip(frozen['records'],scores['native_scalar_scores']['records'],strict=True)
+                if 'count' in b and math.floor(b['mean_cycles']+.5)!=a['comparison']['integer_hypothesis']]
+    assert len(mismatches)==31
+    assert sum('BRAZ00BRA' in a['stations'] and 'G05' in a['satellites'] for a in mismatches)==19
