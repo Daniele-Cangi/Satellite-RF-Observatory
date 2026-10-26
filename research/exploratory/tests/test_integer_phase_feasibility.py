@@ -4,9 +4,7 @@ import gzip
 import hashlib
 import json
 import math
-from pathlib import Path
 import subprocess
-import sys
 
 import numpy as np
 import pytest
@@ -170,3 +168,42 @@ def test_report_writes_frozen_predictions_before_held_numeric_access(tmp_path,mo
     with pytest.raises(ValueError,match='hash mismatch'):
         study.run(*paths,tmp_path/'invalid-output')
     assert not (tmp_path/'invalid-output').exists()
+
+
+def test_retained_raw_integer_feasibility_replays_with_unchanged_inputs_and_sources():
+    folder=study.ROOT/'research/exploratory/integer-phase-2026-10-26'
+    frozen=json.loads(gzip.decompress((folder/'predictions-before-scoring.json.gz').read_bytes()))
+    scores=json.loads(gzip.decompress((folder/'scores.json.gz').read_bytes()))
+    assert frozen['implementation_revision']=='91582d5b6c926f3ff4f9ef40a582b755fc7dc11b'
+    for source,wanted in frozen['source_sha256'].items():
+        original=subprocess.check_output(['git','show',frozen['implementation_revision']+':'+source],cwd=study.ROOT)
+        assert hashlib.sha256(original).hexdigest()==wanted
+    for path,wanted in zip((study.REFERENCE,study.TARGET),study.EXPECTED,strict=True):
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==wanted==frozen['input_sha256'][path.name]
+    assert frozen['predictions_fixed_before_held_scoring'] and not frozen['prospective_confirmation']
+    assert not frozen['target_products_used'] and not frozen['integer_fix_admitted']
+    assert frozen['target_raw_observations_used'] and not frozen['target_state_estimated']
+    reference,target=[json.loads(p.read_bytes()) for p in (study.REFERENCE,study.TARGET)]
+    replay,indices=study.prepare(reference,target)
+    assert replay['records']==frozen['records']
+    actual=study.score(replay,indices)
+    assert actual['summary']==scores['summary']
+    for a,b in zip(actual['records'],scores['records'],strict=True):
+        assert a['status']==b['status'] and a['stations']==b['stations'] and a['satellites']==b['satellites']
+        if 'count' in a:
+            assert a['count']==b['count']
+            np.testing.assert_allclose(a['held_values_cycles'],b['held_values_cycles'],rtol=0,atol=1e-10)
+            for k in ('mean_cycles','float_rms_cycles','integer_rms_cycles','held_minus_training_mean_cycles'):
+                assert a[k]==pytest.approx(b[k],abs=1e-10,rel=0)
+    assert len(frozen['records'])==5313
+    assert scores['summary']['G12']['configurations']==462
+    assert scores['summary']['G12']['scored_configurations']==62
+    assert scores['summary']['REFERENCE_CONTROL']['configurations']==4851
+    assert scores['summary']['REFERENCE_CONTROL']['scored_configurations']==251
+    for role,total in (('G12',62),('REFERENCE_CONTROL',251)):
+        paired=[(a,b) for a,b in zip(frozen['records'],scores['records'],strict=True) if a['role']==role and 'count' in b]
+        assert len(paired)==total
+        assert all(a['comparison']['integer_interval_delta_q_le_4'][1]>a['comparison']['integer_interval_delta_q_le_4'][0]
+                   for a,b in paired)
+        agree=sum(math.floor(b['mean_cycles']+.5)==a['comparison']['integer_hypothesis'] for a,b in paired)
+        assert agree==({'G12':62,'REFERENCE_CONTROL':220}[role])
