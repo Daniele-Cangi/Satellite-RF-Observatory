@@ -185,7 +185,7 @@ def test_retained_raw_integer_feasibility_replays_with_unchanged_inputs_and_sour
     assert frozen['target_raw_observations_used'] and not frozen['target_state_estimated']
     reference,target=[json.loads(p.read_bytes()) for p in (study.REFERENCE,study.TARGET)]
     replay,indices=study.prepare(reference,target)
-    assert replay['records']==frozen['records']
+    assert_frozen_records(replay['records'],frozen['records'])
     actual=study.score(replay,indices)
     assert actual['summary']==scores['summary']
     for a,b in zip(actual['records'],scores['records'],strict=True):
@@ -207,3 +207,36 @@ def test_retained_raw_integer_feasibility_replays_with_unchanged_inputs_and_sour
                    for a,b in paired)
         agree=sum(math.floor(b['mean_cycles']+.5)==a['comparison']['integer_hypothesis'] for a,b in paired)
         assert agree==({'G12':62,'REFERENCE_CONTROL':220}[role])
+
+
+def assert_frozen_records(actual,expected):
+    # Decisions/support/provenance are exact; floating reductions can differ
+    # by an ulp across BLAS/CPU builds (CI observed at 1e-17 cycles).
+    discrete={'training_count','integer_hypothesis','second_integer_hypothesis',
+              'integer_interval_delta_q_le_4','free_link_bias_identifiability','integer_fix_admitted'}
+    assert len(actual)==len(expected)
+    for a,b in zip(actual,expected,strict=True):
+        assert a.keys()==b.keys()
+        assert {k:v for k,v in a.items() if k!='comparison'}=={k:v for k,v in b.items() if k!='comparison'}
+        if 'comparison' in a:
+            assert a['comparison'].keys()==b['comparison'].keys()
+            for k,v in a['comparison'].items():
+                if k in discrete:
+                    assert v==b['comparison'][k]
+                else:
+                    assert v==pytest.approx(b['comparison'][k],abs=1e-12,rel=0),k
+
+
+def test_replay_allows_only_floating_roundoff_not_changed_integer_or_support():
+    record={'status':'SUPPORTED','future_tags':[30.],
+            'comparison':{'float_cycles':.2,'integer_hypothesis':0}}
+    rounding=deepcopy(record)
+    rounding['comparison']['float_cycles']=np.nextafter(.2,1.)
+    assert_frozen_records([rounding],[record])
+    for field,value in (('integer_hypothesis',1),('float_cycles',.200001)):
+        changed=deepcopy(record);changed['comparison'][field]=value
+        with pytest.raises(AssertionError):
+            assert_frozen_records([changed],[record])
+    changed=deepcopy(record);changed['future_tags']=[]
+    with pytest.raises(AssertionError):
+        assert_frozen_records([changed],[record])
