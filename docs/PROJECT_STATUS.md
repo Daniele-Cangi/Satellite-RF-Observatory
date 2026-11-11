@@ -1,4 +1,4 @@
-# Stato del progetto — 26 ottobre 2026
+# Stato del progetto — 11 novembre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -28,6 +28,12 @@ Altri grandi cambiamenti attraversano buchi/riacquisizioni gia segnalate e non
 sono deriva di un bias continuo. Nessuna riparazione o esclusione retroattiva:
 serve continuita causale dell'arco prima di vincoli interi nel fit orbitale.
 Il file G12 non viene aperto; restano non qualificati bias assoluti e narrow-lane.
+
+Il [tracker causale GF/MW](../research/exploratory/reference-arc-tracking-2026-11-11/RESULTS.md)
+chiude l'arco al salto BRAZ/G05 delle 10:59:30 GPST e apre un nuovo arco al
+campione successivo. Sul replay di 7698 righe segnala otto rotture, di cui una
+con solo MW. Il campione che attiva l'allarme resta fuori da entrambi gli
+archi. Bias assoluto, incertezza e fissaggio intero restano da qualificare.
 
 Il [controllo fisico G12](../research/exploratory/G12_BIAS_GEOMETRY_DECISION.md)
 verifica copertura e informazione sui bias senza modificare il solver o leggere
