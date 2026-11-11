@@ -17,6 +17,23 @@ MAX_GAP_S = 60.
 SOURCE = 'https://gssc.esa.int/navipedia/index.php?title=Detector_based_in_carrier_phase_data:_The_geometry-free_combination'
 
 
+def _gf_assessment(t, value, previous):
+    dt = t-previous[-1][0]
+    threshold = 1.5*(C/F2_HZ-C/F1_HZ)*(1.-.5*np.exp(-dt/60.))
+    prediction = previous[-1][1]
+    method = 'FIRST_DIFFERENCE_WARMUP'
+    if len(previous) >= HISTORY:
+        x = np.array([(p[0]-t)/STEP_S for p in previous])
+        y = np.array([p[1]-previous[-1][1] for p in previous])
+        prediction += np.polynomial.polynomial.polyfit(x, y, 2)[0]
+        method = 'QUADRATIC_PREVIOUS_TEN'
+    innovation = value-prediction
+    assessment = {'method': method, 'break': bool(abs(innovation) > threshold),
+        'innovation_m': innovation, 'threshold_m': threshold, 'elapsed_s': dt,
+        'raw_change_m': value-previous[-1][1]}
+    return assessment
+
+
 def segment(rows):
     """Return copied rows with float-ambiguity segments split at witnesses.
 
@@ -40,19 +57,7 @@ def segment(rows):
             previous = []
         assessment = {'method': 'NEW_SEGMENT', 'break': False}
         if previous:
-            dt = t-previous[-1][0]
-            threshold = 1.5*(C/F2_HZ-C/F1_HZ)*(1.-.5*np.exp(-dt/60.))
-            prediction = previous[-1][1]
-            method = 'FIRST_DIFFERENCE_WARMUP'
-            if len(previous) >= HISTORY:
-                x = np.array([(p[0]-t)/STEP_S for p in previous])
-                y = np.array([p[1]-previous[-1][1] for p in previous])
-                prediction += np.polynomial.polynomial.polyfit(x, y, 2)[0]
-                method = 'QUADRATIC_PREVIOUS_TEN'
-            innovation = value-prediction
-            assessment = {'method': method, 'break': bool(abs(innovation) > threshold),
-                'innovation_m': innovation, 'threshold_m': threshold, 'elapsed_s': dt,
-                'raw_change_m': value-previous[-1][1]}
+            assessment = _gf_assessment(t, value, previous)
             if assessment['break']:
                 previous = []
         if not previous:
@@ -81,3 +86,64 @@ def withheld_segment(row, training):
         [min(right,key=lambda r:r['time_s'])] if right else [])
     segments = {r['segment'] for r in neighbors}
     return next(iter(segments)) if len(segments)==1 else None
+
+
+class PhaseArcTracker:
+    """Track one link as observations arrive on the 30 s sampling grid.
+
+    An alert closes the current arc and quarantines its triggering observation.
+    The next usable observation starts a fresh float arc. MW compares against
+    the previous ten accepted observations with a four-sigma threshold and a
+    half-wide-lane-cycle scale floor. This is an exploratory witness rule.
+    """
+
+    def __init__(self):
+        self._history = []
+        self._last_time_s = None
+        self._arc_number = 0
+
+    def update(self, time_s, *, gf_m=None, mw_cycles=None):
+        time_s = float(time_s)
+        if not np.isfinite(time_s):
+            raise ValueError('finite epoch required')
+        if self._last_time_s is not None and time_s <= self._last_time_s:
+            raise ValueError('ordered unique link epochs required')
+        if (gf_m is None) != (mw_cycles is None):
+            raise ValueError('GF and MW must be supplied together')
+        if gf_m is not None:
+            gf_m, mw_cycles = float(gf_m), float(mw_cycles)
+            if not np.isfinite([gf_m, mw_cycles]).all():
+                raise ValueError('finite GF and MW required')
+
+        closed_arc = None
+        gap = self._last_time_s is not None and time_s-self._last_time_s > STEP_S
+        self._last_time_s = time_s
+        if gf_m is None or gap:
+            closed_arc = self._arc_number if self._history else None
+            self._history.clear()
+        if gf_m is None:
+            return {'status': 'UNAVAILABLE', 'arc': None, 'closed_arc': closed_arc}
+
+        if not self._history:
+            self._arc_number += 1
+            self._history.append((time_s, gf_m, mw_cycles))
+            return {'status': 'ARC_START', 'arc': self._arc_number,
+                    'closed_arc': closed_arc, 'gap': gap}
+
+        gf = _gf_assessment(time_s, gf_m, self._history)
+        previous_mw = np.array([row[2] for row in self._history])
+        scale = float(previous_mw.std(ddof=1)) if len(previous_mw) > 1 else 0.
+        threshold = 4. * max(.5, scale)
+        innovation = mw_cycles - float(previous_mw.mean())
+        mw = {'break': abs(innovation) > threshold, 'innovation_cycles': innovation,
+              'threshold_cycles': threshold}
+        if gf['break'] or mw['break']:
+            self._history.clear()
+            return {'status': 'ARC_BREAK', 'arc': None, 'closed_arc': self._arc_number,
+                    'gf': gf, 'mw': mw}
+
+        self._history.append((time_s, gf_m, mw_cycles))
+        if len(self._history) > HISTORY:
+            self._history.pop(0)
+        return {'status': 'ARC_CONTINUES', 'arc': self._arc_number, 'closed_arc': None,
+                'gf': gf, 'mw': mw}
