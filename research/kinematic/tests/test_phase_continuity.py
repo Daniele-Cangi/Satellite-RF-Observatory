@@ -111,3 +111,39 @@ def test_free_unknown_increment_keeps_code_and_marginalizes_correlated_noise():
     jump = np.array([[1.],[0.]])
     profiled = precision-precision@jump@np.linalg.inv(jump.T@precision@jump)@jump.T@precision
     np.testing.assert_allclose(profiled,[[0.,0.],[0.,1/3.]],atol=1e-15)
+
+
+def test_arc_tracker_detects_mw_only_step_and_starts_a_new_arc():
+    tracker = continuity.PhaseArcTracker()
+    for i in range(10):
+        assert tracker.update(30.*i, gf_m=1., mw_cycles=5.)['arc'] == 1
+
+    # A +77/+60 cycle step cancels in GF and moves MW by 17 cycles.
+    alert = tracker.update(300., gf_m=1., mw_cycles=22.)
+    assert alert['status'] == 'ARC_BREAK'
+    assert alert['closed_arc'] == 1 and alert['arc'] is None
+    assert not alert['gf']['break']
+    assert alert['mw']['break']
+    assert alert['mw']['innovation_cycles'] == 17.
+
+    # Even a one-epoch outlier cannot seed or restore the closed arc.
+    fresh = tracker.update(330., gf_m=1., mw_cycles=5.)
+    assert fresh['status'] == 'ARC_START' and fresh['arc'] == 2
+    assert tracker.update(360., gf_m=1., mw_cycles=5.)['arc'] == 2
+
+
+def test_arc_tracker_resets_for_flags_and_missing_epochs():
+    tracker = continuity.PhaseArcTracker()
+    assert tracker.update(0., gf_m=1., mw_cycles=5.)['arc'] == 1
+    unavailable = tracker.update(30.)
+    assert unavailable == {'status':'UNAVAILABLE', 'arc':None, 'closed_arc':1}
+    assert tracker.update(60., gf_m=30., mw_cycles=-5.)['arc'] == 2
+    start = tracker.update(120., gf_m=40., mw_cycles=25.)
+    assert start['status'] == 'ARC_START' and start['gap']
+    assert start['closed_arc'] == 2 and start['arc'] == 3
+
+    with pytest.raises(ValueError, match='ordered unique'):
+        tracker.update(120., gf_m=40., mw_cycles=25.)
+    with pytest.raises(ValueError, match='supplied together'):
+        tracker.update(150., gf_m=40.)
+    assert tracker.update(150., gf_m=40., mw_cycles=25.)['arc'] == 3
