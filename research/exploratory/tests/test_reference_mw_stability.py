@@ -49,7 +49,8 @@ def test_future_block_interval_includes_future_scatter_not_only_mean_precision()
     assert model['iid_block_mean_sigma_cycles']==pytest.approx(1/np.sqrt(3))
     assert not model['absolute_link_bias_bounded'] and not model['physical_coverage_qualified']
     assert study.block_model([{'mean_cycles':1.}])['status']=='INSUFFICIENT_COMPLETE_PREFIX_BLOCKS'
-    assert study.block_model([{'mean_cycles':1.}]*3)['status']=='UNRESOLVED_PREFIX_SCATTER'
+    for constant in (1., .1):
+        assert study.block_model([{'mean_cycles':constant}]*3)['status']=='UNRESOLVED_PREFIX_SCATTER'
 
 
 def test_separable_changes_cancel_in_cycles_and_nonseparable_probe_replays():
