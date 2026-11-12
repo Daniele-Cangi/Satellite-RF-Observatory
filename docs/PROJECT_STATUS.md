@@ -8,6 +8,16 @@ Poi conferma su dati nuovi (S3) e consegna utilizzabile con dominio dichiarato,
 copertura e fallimenti (S4), oppure conclusione scientifica motivata se manca
 l'informazione. I protocolli e gli esiti storici restano invariati.
 
+La [fattibilita delle ambiguita intere sui dati grezzi](../research/exploratory/integer-phase-2026-10-26/RESULTS.md)
+(26 ottobre) costruisce MW in doppia differenza senza prodotti del bersaglio.
+Su 462 configurazioni G12, 62 hanno prefisso e verifica: la media esclusa resta
+vicina all'intero scelto dal training in 62/62; sui riferimenti sono 220/251.
+Sono confronti correlati e condizionali, non 62 interi fisicamente validati.
+I pesi storici lasciano 5-22 interi plausibili per ciascun caso G12 valutato;
+un bias residuo libero e la componente narrow-lane restano da vincolare.
+Nessun intero viene fissato, nessuna orbita o incertezza qualificata. Prossimo
+passo: stabilita e bias MW reference-only prima di un fit orbitale intero.
+
 Il [controllo fisico G12](../research/exploratory/G12_BIAS_GEOMETRY_DECISION.md)
 verifica copertura e informazione sui bias senza modificare il solver o leggere
 l'orbita del bersaglio. Legare i bias fra archi aggiunge informazione locale, ma

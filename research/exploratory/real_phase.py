@@ -276,7 +276,15 @@ if __name__ == '__main__':
     parser.add_argument('--cache', type=Path)
     parser.add_argument('--inputs', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--integer-ambiguity', action='store_true', help='raw wide-lane DD feasibility; output is a fresh directory')
+    parser.add_argument('--target-input', type=Path)
     args = parser.parse_args()
+    if args.integer_ambiguity:
+        if args.cache or args.target_input is None:
+            parser.error('integer feasibility requires retained inputs/target-input, without cache extraction')
+        from .integer_phase_feasibility import run
+        run(args.inputs, args.target_input, args.output)
+        raise SystemExit(0)
     data = extract(args.cache, args.inputs) if args.cache else json.loads(args.inputs.read_bytes())
     report = analyze(data)
     report['input_sha256'] = digest(args.inputs.read_bytes())
