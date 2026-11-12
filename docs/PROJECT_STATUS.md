@@ -1,4 +1,4 @@
-# Stato del progetto — 11 novembre 2026
+# Stato del progetto — 12 novembre 2026
 
 ## Priorita attiva: ricostruzione orbitale, 12 ottobre 2026
 
@@ -34,6 +34,14 @@ chiude l'arco al salto BRAZ/G05 delle 10:59:30 GPST e apre un nuovo arco al
 campione successivo. Sul replay di 7698 righe segnala otto rotture, di cui una
 con solo MW. Il campione che attiva l'allarme resta fuori da entrambi gli
 archi. Bias assoluto, incertezza e fissaggio intero restano da qualificare.
+
+Lo [studio di incertezza wide-lane](../research/exploratory/wide-lane-uncertainty-2026-11-12/RESULTS.md)
+misura una copertura nominale al 95% di 765/829 per IID e 781/829 per AR(1)
+con correlazione 0,5 sui blocchi di riferimento rimasti nello stesso arco.
+Il salto BRAZ/G05 interrompe 12 blocchi gia fuori intervallo nello studio #243.
+Con bias DD ipotetico di 0,10 cicli, i due modelli danno lo stesso unico intero
+in 133/179 configurazioni. Il bias DD fisico resta da vincolare con evidenza
+indipendente e serve una validazione con interi noti.
 
 Il [controllo fisico G12](../research/exploratory/G12_BIAS_GEOMETRY_DECISION.md)
 verifica copertura e informazione sui bias senza modificare il solver o leggere
