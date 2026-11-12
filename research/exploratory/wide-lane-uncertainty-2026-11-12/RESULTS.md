@@ -75,3 +75,7 @@ Use a fresh output directory. The archived [prefix predictions](predictions-befo
 bind the reference extract, causal ledger and producer ea80110e12b217acc65869c8c99de73b71364c86.
 The [held scores](scores.json.gz) retain each scheduled outcome and the first
 loss epoch and link. Forty-three focused tests passed.
+
+The shared block model checks for equal means before computing scatter.
+This excludes spurious dispersion from floating-point rounding. A replay
+with the guard reproduced the archived forecasts, integer sets and scores.

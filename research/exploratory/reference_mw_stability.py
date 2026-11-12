@@ -49,6 +49,9 @@ def block_model(blocks):
     if n<2:
         return {'status':'INSUFFICIENT_COMPLETE_PREFIX_BLOCKS','block_count':n}
     y = np.array([b['mean_cycles'] for b in blocks])
+    # The computed mean of identical values can round away from those values.
+    if np.all(y == y[0]):
+        return {'status':'UNRESOLVED_PREFIX_SCATTER','block_count':n}
     sd = float(np.std(y,ddof=1))
     if not np.isfinite(sd) or sd<=0.:
         return {'status':'UNRESOLVED_PREFIX_SCATTER','block_count':n}
