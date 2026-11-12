@@ -281,7 +281,16 @@ if __name__ == '__main__':
     parser.add_argument('--reference-mw-stability', action='store_true', help='reference-only MW block stability; fresh output directory')
     parser.add_argument('--reference-arc-tracking', action='store_true',
                         help='causal GF/MW replay of the retained reference stream')
+    parser.add_argument('--wide-lane-uncertainty', action='store_true',
+                        help='reference-only scalar wide-lane uncertainty sensitivity')
     args = parser.parse_args()
+    if args.wide_lane_uncertainty:
+        if (args.cache or args.target_input is not None or args.integer_ambiguity
+                or args.reference_mw_stability or args.reference_arc_tracking):
+            parser.error('wide-lane uncertainty requires the retained reference input alone')
+        from .wide_lane_uncertainty import run
+        run(args.inputs, args.output)
+        raise SystemExit(0)
     if args.reference_arc_tracking:
         if args.cache or args.target_input is not None or args.integer_ambiguity or args.reference_mw_stability:
             parser.error('reference arc tracking requires the retained reference input alone')
