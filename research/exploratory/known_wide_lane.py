@@ -1,0 +1,213 @@
+"""Calibrate a scalar MW double difference and score against independent labels."""
+
+import argparse
+from collections import Counter
+import hashlib
+import json
+import math
+from pathlib import Path
+import random
+
+from . import integer_phase_feasibility as phase
+from .wide_lane_uncertainty import double_difference, integer_support
+
+
+def measurement(row):
+    mean, halfwidth = row['mean_cycles'], row['halfwidth_cycles']
+    if not math.isfinite(mean) or not math.isfinite(halfwidth) or halfwidth < 0:
+        raise ValueError('a finite mean and a nonnegative error halfwidth are required')
+    return mean, halfwidth
+
+
+def integer_label(value):
+    if type(value) is not int or abs(value) >= 2**53:
+        raise ValueError('ambiguity truth must be an integer exactly representable in binary64')
+    return value
+
+
+def bias_interval(anchors):
+    """Intersect jointly bounded calibration intervals for one constant DD bias."""
+    lower, upper = -math.inf, math.inf
+    for anchor in anchors:
+        mean, halfwidth = measurement(anchor)
+        residual = mean - integer_label(anchor['integer'])
+        low = math.nextafter(math.nextafter(residual, -math.inf) - halfwidth, -math.inf)
+        high = math.nextafter(math.nextafter(residual, math.inf) + halfwidth, math.inf)
+        lower, upper = max(lower, low), min(upper, high)
+    if not anchors:
+        return {'status': 'UNBOUNDED_BIAS', 'interval_cycles': None}
+    if lower > upper:
+        return {'status': 'INCONSISTENT_ANCHORS', 'interval_cycles': None}
+    return {'status': 'BOUNDED', 'interval_cycles': [lower, upper]}
+
+
+def predict(row, calibration, transfer_bound):
+    mean, halfwidth = measurement(row)
+    if transfer_bound is not None and (not math.isfinite(transfer_bound) or transfer_bound < 0):
+        raise ValueError('transfer bound must be nonnegative and finite or unknown')
+    interval = calibration['interval_cycles']
+    if interval is None or transfer_bound is None:
+        return integer_support(mean, halfwidth, None)
+    lo, hi = interval
+    center = (lo + hi) / 2
+    corrected = mean - center
+    radius = math.nextafter(max(center - lo, hi - center), math.inf)
+    radius = math.nextafter(radius + transfer_bound, math.inf)
+    radius = math.nextafter(radius + math.ulp(corrected), math.inf)
+    return integer_support(corrected, halfwidth, radius)
+
+
+def predictions(groups):
+    """Compute decisions with calibration labels only; validation truth is separate."""
+    seen = set()
+    result = []
+    for group in groups:
+        anchors = group['anchors']
+        trials = group['validation']
+        for row in [*anchors, *trials]:
+            if row['id'] in seen:
+                raise ValueError('calibration and validation observation IDs must be disjoint and unique')
+            seen.add(row['id'])
+        if any('integer' in row for row in trials):
+            raise ValueError('validation labels must be in the separate truth input')
+        calibration = bias_interval(anchors)
+        bound = group['transfer_bound_cycles']
+        result.append({
+            'id': group['id'], 'calibration': calibration, 'transfer_bound_cycles': bound,
+            'anchor_ids': [row['id'] for row in anchors],
+            'trials': [
+                {'id': row['id'], 'calibrated': predict(row, calibration, bound),
+                 'zero_bias': integer_support(*measurement(row), 0.)}
+                for row in trials
+            ],
+        })
+    return result
+
+
+def score(frozen, truth):
+    expected = {row['id'] for group in frozen for row in group['trials']}
+    if expected != truth.keys() or not expected:
+        raise ValueError('truth must label every validation observation exactly once')
+    results = []
+    for group in frozen:
+        counts = {model: Counter() for model in ('calibrated', 'zero_bias')}
+        rows = []
+        for row in group['trials']:
+            integer = integer_label(truth[row['id']])
+            outcomes = {}
+            for model, count in counts.items():
+                support = row[model]
+                status = support['status']
+                if status == 'SINGLETON':
+                    status = 'CORRECT_FIX' if support['range'][0] == integer else 'WRONG_FIX'
+                count[status] += 1
+                bounds = support['range']
+                outcomes[model] = {
+                    'status': status,
+                    'contains_truth': None if status == 'UNBOUNDED_BIAS' else bool(
+                        bounds and bounds[0] <= integer <= bounds[1]
+                    ),
+                }
+            rows.append({'id': row['id'], 'integer': integer, **outcomes})
+        results.append({'id': group['id'], 'counts': counts, 'trials': rows})
+    return results
+
+
+def synthetic_trial(rng, identifier, bias, noise_halfwidth):
+    """Forward raw GPS code/phase with separately generated integer truth."""
+    f1, f2 = phase.combo.F1_HZ, phase.combo.F2_HZ
+    c = phase.combo.C
+    wavelength = c / (f1 - f2)
+    integers = [(rng.randint(-40, 40), rng.randint(-40, 40)) for _ in range(4)]
+    expected = sum(sign * (n1 - n2) for sign, (n1, n2) in
+                   zip((1, -1, -1, 1), integers, strict=True))
+    samples = []
+    for _ in range(10):
+        endpoints = []
+        for i, (n1, n2) in enumerate(integers):
+            delay = rng.uniform(20e6, 26e6)
+            iono1 = rng.uniform(1., 15.)
+            iono2 = iono1 * (f1 / f2)**2
+            # One nonseparable code delay; other endpoint ranges and ionosphere cancel.
+            shift = -wavelength * (bias + rng.uniform(-noise_halfwidth, noise_halfwidth)) if i == 0 else 0.
+            fields = (delay + iono1 + shift, delay + iono2 + shift,
+                      (delay - iono1) * f1 / c + n1, (delay - iono2) * f2 / c + n2)
+            endpoints.append({'mw_cycles': phase.wide_lane(fields)})
+        samples.append(double_difference(endpoints))
+    # 1e-6 cycles covers rounding of the forward and reverse range arithmetic.
+    return {'id': identifier, 'mean_cycles': math.fsum(samples) / len(samples),
+            'halfwidth_cycles': noise_halfwidth + 1e-6}, expected
+
+
+def synthetic():
+    """Controlled cases specified independently of the measured MW values."""
+    scenarios = (
+        ('stable', .98, .03, .04),
+        ('broad_transfer', .98, .03, 1.10),
+        ('unknown_transfer', .98, .03, None),
+        ('unmodelled_drift', 1.98, .03, .04),
+        ('contradictory_calibration', .98, .03, .04),
+        ('no_anchor', .98, .03, .04),
+    )
+    groups, truth = [], {}
+    for index, (name, bias, noise, transfer) in enumerate(scenarios):
+        anchor_rng = random.Random(2026111200 + index)
+        validation_rng = random.Random(2026111300 + index)
+        anchors, trials = [], []
+        for number in range(0 if name == 'no_anchor' else 4):
+            anchor_bias = 1.95 if name == 'contradictory_calibration' and number == 0 else .95
+            row, label = synthetic_trial(anchor_rng, f'{name}-cal-{number}', anchor_bias, .02)
+            anchors.append({**row, 'integer': label})
+        for number in range(64):
+            row, label = synthetic_trial(validation_rng, f'{name}-held-{number}', bias, noise)
+            trials.append(row)
+            truth[row['id']] = label
+        groups.append({'id': name, 'anchors': anchors, 'transfer_bound_cycles': transfer,
+                       'validation': trials})
+    return groups, truth
+
+
+def write(path, payload):
+    raw = (json.dumps(payload, indent=2, allow_nan=False, sort_keys=True) + '\n').encode('utf-8')
+    path.write_bytes(raw)
+    return hashlib.sha256(raw).hexdigest()
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--measurements', type=Path, help='calibration and validation measurements as JSON')
+    parser.add_argument('--truth', type=Path, help='separate validation integer labels as JSON')
+    parser.add_argument('--output', type=Path, required=True, help='fresh result directory')
+    args = parser.parse_args()
+    if (args.measurements is None) != (args.truth is None):
+        parser.error('provide both input files or omit both for the synthetic exercise')
+    if args.measurements is None:
+        groups, synthetic_truth = synthetic()
+        evidence = 'synthetic'
+        measurement_sha = None
+    else:
+        raw = args.measurements.read_bytes()
+        groups = json.loads(raw)
+        evidence = 'caller_supplied'
+        measurement_sha = hashlib.sha256(raw).hexdigest()
+    frozen = predictions(groups)
+    args.output.mkdir(parents=True, exist_ok=False)
+    prediction_sha = write(args.output / 'predictions.json', {
+        'evidence': evidence, 'measurements_sha256': measurement_sha, 'groups': frozen,
+    })
+    if args.truth is None:
+        truth, truth_sha = synthetic_truth, None
+    else:
+        raw = args.truth.read_bytes()
+        truth, truth_sha = json.loads(raw), hashlib.sha256(raw).hexdigest()
+    scored = score(frozen, truth)
+    write(args.output / 'scores.json', {
+        'evidence': evidence, 'predictions_sha256': prediction_sha,
+        'truth_sha256': truth_sha, 'groups': scored,
+    })
+    for group in scored:
+        print(group['id'], json.dumps(group['counts'], sort_keys=True))
+
+
+if __name__ == '__main__':
+    main()

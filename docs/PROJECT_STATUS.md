@@ -43,6 +43,13 @@ Con bias DD ipotetico di 0,10 cicli, i due modelli danno lo stesso unico intero
 in 133/179 configurazioni. Il bias DD fisico resta da vincolare con evidenza
 indipendente e serve una validazione con interi noti.
 
+La [misura DD a baseline zero e verifica su interi noti](../research/exploratory/known-wide-lane-2026-11-12/RESULTS.md)
+trova 42/81 blocchi reali con contributo del solo codice oltre 0,10 cicli
+wide-lane in valore assoluto (massimo 0,618). La prova sintetica fissa 64/64
+interi con bias stabile e produce 64 fissaggi errati con una deriva di un
+ciclo fuori dal limite dichiarato. Mancano ancora etichette fisiche indipendenti
+e una misura trasferibile del bias DD totale. Il solver orbitale resta float.
+
 Il [controllo fisico G12](../research/exploratory/G12_BIAS_GEOMETRY_DECISION.md)
 verifica copertura e informazione sui bias senza modificare il solver o leggere
 l'orbita del bersaglio. Legare i bias fra archi aggiunge informazione locale, ma
