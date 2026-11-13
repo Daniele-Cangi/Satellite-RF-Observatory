@@ -89,6 +89,64 @@ clock and hardware term as common across satellites. Independence of a DD
 label requires evidence for that assumption at the required accuracy, or a
 calibrated bound on the noncommon term.
 
+## CASSIOPE flight observations and star-tracker geometry
+
+The [April 4 GAP archive](https://epop-data.phys.ucalgary.ca/2019/04/04/GAP/)
+offers a short-baseline flight benchmark independent of the terrestrial
+campaigns. Three GPS-0/2/3 RINEX 3.02 headers declare 1 Hz C1C/C2W/L1C/L2W.
+The archive lists repeated GPS-0/2 turn-on sessions on April 4 and 5, some
+with over an hour of nominal overlap. The
+[mission handbook](https://epop.phys.ucalgary.ca/data-handbook/gap-lv2-rinex-file/)
+documents the conversion from receiver logs, and the
+[daily attitude product](https://epop.phys.ucalgary.ca/data-handbook/cas-ephemeris-text-files/)
+identifies which interpolations use nearby star-tracker solutions. A file
+overlap establishes candidate coverage. Continuous carrier lock and
+star-tracker coverage are still to be verified.
+
+The [flight paper](https://doi.org/10.1007/s10291-019-0907-2), Tables 3–4,
+compares single-epoch code/phase fixes against DD phase interpreted using
+star-tracker attitude and antenna baselines calibrated from 2018 GPS
+observations. The star tracker provides an independent orientation.
+The [companion calibration paper](https://doi.org/10.1002/navi.348), Table 3,
+also gives the GPS-0/2 baseline from the mechanical design. Its difference
+from the dual-frequency in-flight calibration has norm 9.92 mm. For a common
+baseline error of that size, the worst first-order DD projection is 19.84 mm
+or 0.023 wide-lane cycles. This comparison sizes one geometry contribution.
+The published baseline dispersions measure repeatability, and the reported
+differential antenna phase patterns are fitted corrections. They supply no
+independent bound on the full unwrapped L1/L2 DD phase residual.
+
+The [mission operations report](https://epop.phys.ucalgary.ca/wp-content/Swarm-E_Final_Operations_Report.pdf),
+Table 4, lists RANGE (43) and PSRXYZ (243) as default GPS-0/2 messages for
+these dates. Four complete April 4 Level 1 files were hashed and inventoried
+using OEM4 frame headers and CRC32. RINEX inspection ended at END OF HEADER,
+and the packet inventory decoded no measurement payloads.
+
+| GAP Level 1 file | SHA-256 | RANGE / PSRXYZ packets |
+|---|---|---:|
+| GAP_20190404_000000_000042_RCVR_0_3.1.2.lv1 | 50e23d722724cece0434d1b6df8a4b01c1fbd9784f42c01ce3fc19c40c2876a0 | 42 / 42 |
+| GAP_20190404_000000_000043_RCVR_2_3.1.2.lv1 | 5c951d995c63eab06b8b02421e8307927908a391c8777c7b3318bd7ec1f06c36 | 44 / 44 |
+| GAP_20190404_020123_032841_RCVR_0_3.1.2.lv1 | b935c1fb097eac9571eb0d4fbd47fca1e007585556dbdce49791a0ac4962efa3 | 5230 / 5235 |
+| GAP_20190404_020126_032841_RCVR_2_3.1.2.lv1 | 8bac40fc523d3f8e86b47e08818d192d3b0040e27c9826f73fa7d9b12c78a061 | 5227 / 5223 |
+
+These files contain no clock-offset or external-event message. RANGE still
+offers lock, parity and half-cycle status for checking continuity, as
+documented in the [OEM4 manual](https://epop.phys.ucalgary.ca/wp-content/uploads/2022/09/R2-OEM4-User-Manual-Volume-2-Rev-18.pdf),
+sections 1.3 and 3.4.47. Receiver time status is internal. The
+[flight receiver qualification](https://www.dlr.de/de/rb/medien/publikationen/publikationen/gsoc-dokumente/nav_04a.pdf/@@download/file),
+Figure 4, removed the initial phase ambiguities from the displayed
+zero-baseline residuals to examine slips and noise. The demonstrated
+repeatability therefore leaves the original cycle datum unspecified.
+
+With the current public evidence, a CASSIOPE benchmark would produce labels
+conditional on a differential phase and timing model. Counting those labels
+as independently known integers would omit the link-specific cycle
+reassignment below. A same-chain unwrapped residual envelope or independently
+anchored labels from distinct turn-ons would change that decision. Even a
+successful flight benchmark would first qualify the GAP receiver pair and
+its short baseline. Transfer to the distributed G12 case needs its own
+evidence.
+
 ## What the WUT observables cannot distinguish
 
 For an aligned carrier DD on band i, write observed phase F_i = N_i + A_i
