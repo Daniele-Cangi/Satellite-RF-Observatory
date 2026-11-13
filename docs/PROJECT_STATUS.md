@@ -50,6 +50,13 @@ interi con bias stabile e produce 64 fissaggi errati con una deriva di un
 ciclo fuori dal limite dichiarato. Mancano ancora etichette fisiche indipendenti
 e una misura trasferibile del bias DD totale. Il solver orbitale resta float.
 
+Il [confronto fase–MW con correzione degli epoch](../research/exploratory/zero-baseline-phase-reference-2026-11-13/RESULTS.md)
+ottiene 81/81 etichette di fase condizionali su coppie complete, rispetto a
+12/81 con i soli epoch nominali. L'MW coincide con quelle 81 etichette.
+Per sei coppie presenti in entrambe le finestre la variazione massima
+dell'offset MW e 0,112 cicli. Per qualifica fisica servono ancora allineamento
+temporale indipendente e un riferimento metrologico di fase per banda.
+
 Il [controllo fisico G12](../research/exploratory/G12_BIAS_GEOMETRY_DECISION.md)
 verifica copertura e informazione sui bias senza modificare il solver o leggere
 l'orbita del bersaglio. Legare i bias fra archi aggiunge informazione locale, ma
