@@ -147,6 +147,46 @@ successful flight benchmark would first qualify the GAP receiver pair and
 its short baseline. Transfer to the distributed G12 case needs its own
 evidence.
 
+## Conducted RF and dual-antenna sources
+
+The [2016 WUT Spirent experiment](https://www.igig.up.wroc.pl/IAG2016/download/Prochniewicz_Stochastic.pdf)
+recorded two realizations of a 24-hour GPS scenario through a Leica
+GX1230GG and separately tested a live common antenna with two receivers.
+It lists legacy C1/P2/L1/L2 observables. Its DD noise equation subtracts
+the ambiguity term. The reported conducted L1/L2 scatter (1.376/1.515 mm)
+therefore measures variability after removing that term. The public
+report has no receiver streams or simulator phase trace. Applying this
+test to the present claim would require the original recordings, the L2
+tracking mode, and an independent mapping from the RF reference to the
+integer export convention. Repetition of the RF scenario alone leaves
+the starting phase ambiguity in each acquisition.
+
+The [Sentinel-3A engineering-model test](https://doi.org/10.1007/s00190-017-1090-2),
+section 2.4, used a common antenna with a geodetic reference receiver to
+check the integer behavior after a half-cycle correction. The cited data
+are a private communication. The
+[Sentinel-6A PODRIX laboratory comparison](https://doi.org/10.1007/s00190-021-01563-z),
+section 2, found an additional 0.073 cycles between L2C and L2 P(Y), with
+0.075 cycles estimated from a separate flight comparison. These fractional
+offsets remain unchanged if the assumed phase origin shifts by a whole
+cycle. The publication links no laboratory records for an independent
+L1C/L2W DD ambiguity assignment in the released convention.
+
+[TEXR](https://rnl-data.ae.utexas.edu/datastore/texr/readme.txt) publishes raw
+IF from a dual-antenna platform, including the L2 band. Checked all twelve
+reference/rover RINEX headers named in its archive inventory, reading
+HTTP byte ranges through END OF HEADER. All six reference exports declare
+GPS C2X/L2X. None of the twelve exports declares GPS C2W/L2W. The
+[TEXR reference trajectory](https://rnl-data.ae.utexas.edu/texr/docs/TEXR.pdf),
+section IV, uses GNSS with other sensors and supplies no independent
+per-arc integer labels. Raw IF could support different tracking software
+but would still require an independent calibration of the acquisition
+paths and the epoch and phase conventions. The
+[Fraunhofer Flexiband example](https://sdr.ion.org/Presentations_and_Publications/2019/GNSS19-0251.pdf)
+feeds the same conducted-RF recording to two software receivers and
+compares their observables, with L2C tracking. It gives no second physical
+path or independent unwrapped reference for these four GPS observables.
+
 ## What the WUT observables cannot distinguish
 
 For an aligned carrier DD on band i, write observed phase F_i = N_i + A_i
@@ -187,6 +227,17 @@ DD phase contributions or the per-arc DD integers in the receiver's reported
 convention. Attach the phase-origin mapping, sign, units, uncertainty, and
 scope for transferring the calibration. A logged epoch difference can
 qualify the timing correction but cannot, on its own, anchor a carrier cycle.
+
+For a conducted test, an RF phase or delay measurement must cover the same
+pair of signals and include the receiver channel and export convention.
+Preserve a traceable absolute delay or phase origin, including its integer
+part, at startup. A commanded phase step can check tracking and sign during
+lock, but two different starting integers predict the same step. An RF
+measurement before the receiver also needs a bound on any noncommon offset
+through the tracking channels and export, or an independent per-arc
+integer assignment in the exported convention. A test using an engineering
+unit applies to the units and firmware actually characterized. The held
+acquisition must exercise a fresh lock on the same characterized chain.
 
 As a sizing check, half a carrier cycle is approximately 95 mm on L1
 and 122 mm on L2. A per-band deterministic residual budget below half a
