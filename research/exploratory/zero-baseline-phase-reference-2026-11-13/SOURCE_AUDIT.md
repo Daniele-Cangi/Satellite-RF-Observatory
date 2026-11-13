@@ -51,6 +51,44 @@ The [NIST common-clock experiment](https://tsapps.nist.gov/publication/get_pdf.c
 removes a per-pass phase constant and measures changes. Neither publication
 provides an independent integer origin transferable to the WUT data.
 
+## Optical geometry as an independent constraint
+
+[Cortes de Pallás](https://doi.org/10.1088/1361-6501/ac6f45) provides an
+optical Mekometer distance check and two GNSS sessions on a roughly 1916 m
+line. All four [open observation files](https://doi.org/10.5281/zenodo.6566948)
+declare 1 Hz GPS C1C/C2W/L1C/L2W and use Leica GS10 receivers. Header inspection
+used byte ranges through END OF HEADER. The public record contains these
+observation files without independent per-arc labels. The companion
+[reference-frame paper](https://doi.org/10.1007/s12518-022-00481-9)
+uses GNSS-derived directions to orient the terrestrial network. Its distance
+check alone cannot supply an independently oriented baseline for phase DD,
+and the published GBDM+ distance budget does not bound each receiver's
+differential phase delay.
+
+For a short baseline of length L, an orientation error of angle theta can
+change the baseline vector by 2 L sin(theta/2). The first-order DD projection
+multiplies this by the separation of two line-of-sight unit vectors, at most 2.
+For L = 1916 m, limiting this orientation contribution to 0.025 GPS L1 cycles
+in that worst case requires theta below about 0.26 arcseconds. An independently
+measured length removes radial uncertainty from this calculation while leaving
+the orientation contribution. The 0.025-cycle allocation is illustrative,
+and the actual projection depends on the chosen pair.
+
+The [RISE laser-tracker campaign](https://doi.org/10.1007/s00190-020-01433-0)
+is a closer candidate. It reports L1 and L2 work on an approximately 7.18 m
+baseline and describes imposing external geometry to identify carrier-phase
+integers. It also reports refining the baseline azimuth with a GNSS subset.
+Using the three uncertainty magnitudes in its Table 2 simultaneously as a
+sizing check gives 2 sqrt(0.45² + 0.63² + 0.05²) = 1.55 mm for the maximum
+first-order geometric DD projection, or 0.0082 GPS L1 cycles. This is neither a
+joint-confidence statement nor a total DD phase bound. The tracker-only
+orientation, separate reacquisitions, the exact GPS signal types and the
+receiver phase/clock calibration remain to be confirmed. The authors make
+measurements available on request. The published phase model also treats the
+clock and hardware term as common across satellites. Independence of a DD
+label requires evidence for that assumption at the required accuracy, or a
+calibrated bound on the noncommon term.
+
 ## What the WUT observables cannot distinguish
 
 For an aligned carrier DD on band i, write observed phase F_i = N_i + A_i
